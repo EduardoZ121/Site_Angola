@@ -918,8 +918,17 @@ textarea {
   .listing-modal,
   .profile-grid,
   .marketplace-layout,
-  .compare-history-grid {
+  .compare-history-grid,
+  .browse-grid,
+  .tools-grid,
+  .home-search-fields,
+  .detail-layout {
     grid-template-columns: 1fr;
+  }
+
+  .main-nav,
+  .account-nav {
+    width: 100%;
   }
 
   .admin-stats,

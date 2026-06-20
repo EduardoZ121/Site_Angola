@@ -1,0 +1,193 @@
+export const ADMIN_EMAIL = 'admin@kutekalink.com'
+
+export const STORAGE_KEYS = {
+  profile: 'kuteka.market.profile',
+  listings: 'kuteka.market.listings',
+  favorites: 'kuteka.market.favorites',
+  history: 'kuteka.market.history',
+  chats: 'kuteka.market.chats',
+}
+
+export const accountTypes = [
+  'Proprietário Particular',
+  'Agente Imobiliário',
+  'Empresa Imobiliária',
+]
+
+export const provinces = {
+  Luanda: ['Belas', 'Cazenga', 'Kilamba Kiaxi', 'Talatona', 'Viana'],
+  Benguela: ['Benguela', 'Lobito', 'Catumbela'],
+  Huíla: ['Lubango', 'Chibia', 'Humpata'],
+  Huambo: ['Huambo', 'Caála', 'Bailundo'],
+}
+
+export const bairros = {
+  Belas: ['Talatona', 'Benfica', 'Morro Bento'],
+  Cazenga: ['Cazenga', '11 de Novembro', 'Hoji-ya-Henda'],
+  'Kilamba Kiaxi': ['Golfe', 'Palanca', 'Nova Vida'],
+  Talatona: ['Cidade Financeira', 'Camama', 'Lar do Patriota'],
+  Viana: ['Zango', 'Estalagem', 'Vila Flor'],
+  Benguela: ['Praia Morena', 'Compão', 'Lobito Velho'],
+  Lobito: ['Restinga', 'Compão', 'Canata'],
+  Catumbela: ['Catumbela Centro', 'Gama', 'Biópio'],
+  Lubango: ['Mapunda', 'Tchioco', 'Nambambe'],
+  Chibia: ['Cacula', 'Jau', 'Quihita'],
+  Humpata: ['Humpata Centro', 'Neves Bendinha', 'Kuvango'],
+  Huambo: ['São Pedro', 'Calomanda', 'Samissassa'],
+  'Caála': ['Sede', 'Catchiungo', 'Katchiungo'],
+  Bailundo: ['Bailundo Centro', 'Tchikala', 'Lunge'],
+}
+
+export const defaultPhoto =
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+
+export const starterListings = [
+  {
+    id: 'l-1',
+    category: 'Imóvel',
+    operation: 'Arrendamento',
+    propertyType: 'Apartamento',
+    title: 'T3 moderno no Talatona',
+    price: 850000,
+    province: 'Luanda',
+    municipality: 'Talatona',
+    neighborhood: 'Cidade Financeira',
+    bedrooms: 3,
+    bathrooms: 2,
+    area: 145,
+    ownerName: 'Adriano Manuel',
+    ownerType: 'Proprietário Particular',
+    phone: '+244923000111',
+    verifiedProfile: true,
+    verifiedPhone: true,
+    verifiedDocument: false,
+    trustSeal: 'Prata',
+    status: 'Ativo',
+    featured: true,
+    description:
+      'Apartamento com segurança 24h, estacionamento e acesso rápido à via expressa.',
+    photos: [
+      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80',
+    ],
+    lat: 0.64,
+    lng: 0.74,
+    createdAt: '2026-06-01',
+  },
+  {
+    id: 'l-2',
+    category: 'Imóvel',
+    operation: 'Venda',
+    propertyType: 'Vivenda',
+    title: 'Vivenda T4 no Kilamba',
+    price: 215000000,
+    province: 'Luanda',
+    municipality: 'Kilamba Kiaxi',
+    neighborhood: 'Nova Vida',
+    bedrooms: 4,
+    bathrooms: 4,
+    area: 280,
+    ownerName: 'Nova Era Imobiliária',
+    ownerType: 'Empresa Imobiliária',
+    phone: '+244937000222',
+    verifiedProfile: true,
+    verifiedPhone: true,
+    verifiedDocument: true,
+    trustSeal: 'Ouro',
+    status: 'Ativo',
+    featured: true,
+    description:
+      'Empreendimento com documentação em dia e financiamento possível.',
+    photos: [
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=1200&q=80',
+    ],
+    lat: 0.52,
+    lng: 0.66,
+    createdAt: '2026-06-10',
+  },
+  {
+    id: 'l-3',
+    category: 'Veículo',
+    operation: 'Venda',
+    title: 'Toyota Prado 2019',
+    price: 42000000,
+    province: 'Luanda',
+    municipality: 'Viana',
+    neighborhood: 'Zango',
+    brand: 'Toyota',
+    model: 'Prado',
+    year: 2019,
+    mileage: 68000,
+    fuel: 'Diesel',
+    gearbox: 'Automática',
+    condition: 'Semi-novo',
+    ownerName: 'Stand Kilamba Motors',
+    ownerType: 'Agente Imobiliário',
+    phone: '+244936000333',
+    verifiedProfile: true,
+    verifiedPhone: true,
+    verifiedDocument: true,
+    trustSeal: 'Ouro',
+    status: 'Ativo',
+    featured: false,
+    description:
+      'Veículo em excelente estado, revisão completa e histórico disponível.',
+    photos: [
+      'https://images.unsplash.com/photo-1550355291-bbee04a92027?auto=format&fit=crop&w=1200&q=80',
+    ],
+    lat: 0.74,
+    lng: 0.49,
+    createdAt: '2026-05-28',
+  },
+]
+
+export const emptyListing = {
+  category: 'Imóvel',
+  operation: 'Arrendamento',
+  propertyType: 'Apartamento',
+  title: '',
+  price: '',
+  province: 'Luanda',
+  municipality: 'Talatona',
+  neighborhood: 'Cidade Financeira',
+  bedrooms: '',
+  bathrooms: '',
+  area: '',
+  brand: '',
+  model: '',
+  year: '',
+  mileage: '',
+  fuel: 'Gasolina',
+  gearbox: 'Automática',
+  condition: 'Semi-novo',
+  description: '',
+  photos: [],
+}
+
+export const defaultFilters = {
+  query: '',
+  category: 'Todos',
+  operation: 'Todos',
+  province: 'Todos',
+  municipality: 'Todos',
+  neighborhood: 'Todos',
+  minPrice: '',
+  maxPrice: '',
+  brand: '',
+  model: '',
+  yearMin: '',
+  yearMax: '',
+  mileageMax: '',
+  fuel: 'Todos',
+  gearbox: 'Todos',
+  condition: 'Todos',
+}
+
+export const defaultProfile = {
+  name: '',
+  email: '',
+  phone: '',
+  type: accountTypes[0],
+  verifiedProfile: false,
+  verifiedPhone: false,
+  verifiedDocument: false,
+}
