@@ -3,6 +3,7 @@ import { Layout } from './components/Layout'
 import { MarketplaceProvider } from './context/MarketplaceContext'
 import HomePage from './pages/HomePage'
 import ListingsPage from './pages/ListingsPage'
+import FiltersMapPage from './pages/FiltersMapPage'
 import ListingDetailPage from './pages/ListingDetailPage'
 import PublishPage from './pages/PublishPage'
 import AccountPage from './pages/AccountPage'
@@ -23,8 +24,21 @@ export default function App() {
             path="comprar"
             element={
               <ListingsPage
+                basePath="comprar"
                 title="Comprar imóveis"
                 subtitle="Casas, apartamentos, terrenos e lojas para venda em Angola."
+                defaultCategory="Imóvel"
+                defaultOperation="Venda"
+              />
+            }
+          />
+          <Route
+            path="comprar/filtros"
+            element={
+              <FiltersMapPage
+                basePath="comprar"
+                title="Filtros — Comprar imóveis"
+                subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme."
                 defaultCategory="Imóvel"
                 defaultOperation="Venda"
               />
@@ -34,8 +48,21 @@ export default function App() {
             path="arrendar"
             element={
               <ListingsPage
+                basePath="arrendar"
                 title="Arrendar imóveis"
                 subtitle="Arrendamentos mensais com contacto directo ao senhorio."
+                defaultCategory="Imóvel"
+                defaultOperation="Arrendamento"
+              />
+            }
+          />
+          <Route
+            path="arrendar/filtros"
+            element={
+              <FiltersMapPage
+                basePath="arrendar"
+                title="Filtros — Arrendar imóveis"
+                subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme."
                 defaultCategory="Imóvel"
                 defaultOperation="Arrendamento"
               />
@@ -45,8 +72,21 @@ export default function App() {
             path="veiculos"
             element={
               <ListingsPage
+                basePath="veiculos"
                 title="Veículos"
                 subtitle="Carros e pickups para compra, com filtros por marca e modelo."
+                defaultCategory="Veículo"
+                defaultOperation="Todos"
+              />
+            }
+          />
+          <Route
+            path="veiculos/filtros"
+            element={
+              <FiltersMapPage
+                basePath="veiculos"
+                title="Filtros — Veículos"
+                subtitle="Escolha zona, marca, modelo e preço, depois confirme."
                 defaultCategory="Veículo"
                 defaultOperation="Todos"
                 showVehicleFilters

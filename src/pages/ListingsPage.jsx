@@ -1,78 +1,68 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
-import { defaultFilters } from '../data/constants'
+import { useMemo } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
-import { FiltersSidebar } from '../components/FiltersSidebar'
 import { ListingCard } from '../components/ListingCard'
+import { ListingSearchBar } from '../components/ListingSearchBar'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import { filterListings } from '../utils/format'
+import { filterSummary, filtersToSearchParams, searchParamsToFilters } from '../utils/filters'
 
 export default function ListingsPage({
   title,
   subtitle,
+  basePath,
   defaultCategory = 'Todos',
   defaultOperation = 'Todos',
-  showVehicleFilters = false,
 }) {
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { listings, favorites, compare, isAdmin, toggleFavorite, toggleCompare } = useMarketplace()
-  const [filters, setFilters] = useState({
-    ...defaultFilters,
-    category: defaultCategory,
-    operation: defaultOperation,
-    query: searchParams.get('q') || '',
-    province: searchParams.get('province') || 'Todos',
-  })
 
-  useEffect(() => {
-    setFilters((current) => ({
-      ...current,
-      query: searchParams.get('q') || '',
-      province: searchParams.get('province') || 'Todos',
-    }))
-  }, [searchParams])
+  const filters = useMemo(
+    () =>
+      searchParamsToFilters(searchParams, {
+        category: defaultCategory,
+        operation: defaultOperation,
+      }),
+    [searchParams, defaultCategory, defaultOperation],
+  )
 
   const filtered = useMemo(
     () => filterListings(listings, filters, isAdmin),
     [filters, listings, isAdmin],
   )
 
+  const summary = filterSummary(filters)
+
+  function updateFilters(nextFilters) {
+    const params = filtersToSearchParams({
+      ...nextFilters,
+      category: defaultCategory !== 'Todos' ? defaultCategory : nextFilters.category,
+      operation: defaultOperation !== 'Todos' ? defaultOperation : nextFilters.operation,
+    })
+    navigate(`/${basePath}?${params.toString()}`)
+  }
+
+  function handleSearch(query) {
+    updateFilters({ ...filters, query })
+  }
+
   return (
     <main className="page-main">
       <PageIntro eyebrow="Resultados" title={title} subtitle={subtitle} />
 
       <SectionBlock
-        id="filtros"
+        id="pesquisa"
         eyebrow="Pesquisa"
-        title="Filtros e mapa"
-        subtitle="Ajuste a localização e o preço nesta secção."
-        tone="muted"
+        title="Encontrar anúncios"
+        subtitle="Use a barra de pesquisa ou abra filtros e mapa numa página separada."
       >
-        <div className="marketplace-layout">
-          <FiltersSidebar
-            filters={filters}
-            setFilters={setFilters}
-            showVehicleFilters={showVehicleFilters}
-          />
-          <div className="map-panel">
-            <h3>Mapa da zona</h3>
-            <p>Clique num ponto para abrir o anúncio.</p>
-            <div className="map-canvas">
-              {filtered.map((listing) => (
-                <Link
-                  key={`map-${listing.id}`}
-                  to={`/anuncio/${listing.id}`}
-                  title={listing.title}
-                  className="map-point"
-                  style={{
-                    left: `${(listing.lng || 0.5) * 100}%`,
-                    top: `${(listing.lat || 0.5) * 100}%`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <ListingSearchBar
+          filters={filters}
+          filtersPath={`/${basePath}/filtros`}
+          onSearch={handleSearch}
+        />
+        {summary ? <p className="active-filters-line">Filtros activos: {summary}</p> : null}
       </SectionBlock>
 
       <SectionBlock
@@ -84,12 +74,13 @@ export default function ListingsPage({
             Voltar ao início
           </Link>
         }
+        tone="muted"
       >
         {filtered.length === 0 ? (
           <div className="empty-state panel-card">
             <p>Nenhum anúncio encontrado com estes filtros.</p>
-            <Link className="button primary" to="/publicar">
-              Publicar anúncio
+            <Link className="button primary" to={`/${basePath}/filtros`}>
+              Ajustar filtros e mapa
             </Link>
           </div>
         ) : (

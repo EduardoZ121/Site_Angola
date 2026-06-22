@@ -1,18 +1,20 @@
 import { bairros, provinces } from '../data/constants'
 import { FilterSelect } from './ui'
 
-export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false }) {
+export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false, hideQuery = false }) {
   return (
     <aside className="filters-panel">
       <h3>Filtros</h3>
-      <label>
-        Pesquisa
-        <input
-          placeholder="Bairro, marca, título..."
-          value={filters.query}
-          onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))}
-        />
-      </label>
+      {!hideQuery && (
+        <label>
+          Pesquisa
+          <input
+            placeholder="Bairro, marca, título..."
+            value={filters.query}
+            onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))}
+          />
+        </label>
+      )}
       <FilterSelect
         label="Província"
         value={filters.province}
