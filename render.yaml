@@ -3,9 +3,9 @@ services:
     name: kutekalink
     runtime: static
     repo: https://github.com/EduardoZ121/Site_Angola
-    branch: main
-    buildCommand: npm ci && npm run build
-    staticPublishPath: dist
+    branch: gh-pages
+    buildCommand: echo "Static site from gh-pages branch"
+    staticPublishPath: .
     autoDeploy: true
     envVars:
       - key: VITE_GOOGLE_CLIENT_ID
