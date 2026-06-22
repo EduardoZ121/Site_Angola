@@ -58,8 +58,20 @@ export function MarketplaceProvider({ children }) {
   const [compare, setCompare] = useState([])
   const [listingForm, setListingForm] = useState(emptyListing)
   const [adminEmail, setAdminEmail] = useState('')
+  const [notifications, setNotifications] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.notifications)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
 
   const isAdmin = adminEmail.trim().toLowerCase() === ADMIN_EMAIL
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.notifications, JSON.stringify(notifications))
+  }, [notifications])
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile))
@@ -121,12 +133,49 @@ export function MarketplaceProvider({ children }) {
     })
   }
 
+  function addNotification(entry) {
+    const item = {
+      id: `n-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      read: false,
+      emailSent: true,
+      createdAt: new Date().toISOString(),
+      ...entry,
+    }
+    setNotifications((prev) => [item, ...prev])
+    return item
+  }
+
+  function isListingOwner(listing) {
+    if (!listing) return false
+    if (profile.email && listing.ownerEmail && profile.email === listing.ownerEmail) return true
+    return listing.ownerName === profile.name && listing.phone === profile.phone
+  }
+
+  function getMyListings() {
+    return listings.filter((listing) => isListingOwner(listing))
+  }
+
+  function getMyNotifications() {
+    if (!profile.email) return notifications.filter((item) => item.ownerName === profile.name)
+    return notifications.filter(
+      (item) => item.ownerEmail === profile.email || item.ownerName === profile.name,
+    )
+  }
+
+  function markNotificationRead(notificationId) {
+    setNotifications((prev) =>
+      prev.map((item) => (item.id === notificationId ? { ...item, read: true } : item)),
+    )
+  }
+
   function submitListing(event) {
     event.preventDefault()
-    if (!profile.name || !profile.phone || !listingForm.title || !listingForm.price) return
+    if (!profile.name || !profile.phone || !listingForm.title || !listingForm.price) return null
+    if (!listingForm.photos.length) return null
 
+    const listingId = `l-${Date.now()}`
     const base = {
-      id: `l-${Date.now()}`,
+      id: listingId,
       category: listingForm.category,
       operation: listingForm.operation,
       title: listingForm.title,
@@ -135,6 +184,7 @@ export function MarketplaceProvider({ children }) {
       municipality: listingForm.municipality,
       neighborhood: listingForm.neighborhood,
       ownerName: profile.name,
+      ownerEmail: profile.email || '',
       ownerType: profile.type,
       phone: profile.phone,
       verifiedProfile: profile.verifiedProfile,
@@ -144,10 +194,11 @@ export function MarketplaceProvider({ children }) {
       status: 'Pendente',
       featured: false,
       description: listingForm.description,
-      photos: listingForm.photos.length ? listingForm.photos : [defaultPhoto],
+      photos: listingForm.photos,
       lat: Number((Math.random() * 0.85 + 0.08).toFixed(2)),
       lng: Number((Math.random() * 0.85 + 0.08).toFixed(2)),
       createdAt: new Date().toISOString().slice(0, 10),
+      submittedAt: new Date().toISOString(),
     }
 
     const payload =
@@ -172,7 +223,17 @@ export function MarketplaceProvider({ children }) {
 
     setListings((prev) => [payload, ...prev])
     setListingForm(emptyListing)
-    return payload.id
+
+    addNotification({
+      type: 'listing_pending',
+      listingId,
+      ownerName: profile.name,
+      ownerEmail: profile.email || '',
+      title: 'Anúncio enviado — aguarda aprovação',
+      body: `O seu anúncio "${payload.title}" foi recebido. A nossa equipa vai rever fotos e dados antes de publicar no site.`,
+    })
+
+    return listingId
   }
 
   function trackView(listingId) {
@@ -220,6 +281,47 @@ export function MarketplaceProvider({ children }) {
     setListings((prev) => prev.filter((listing) => listing.id !== listingId))
   }
 
+  function approveListing(listingId) {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing) return
+
+    updateListing(listingId, {
+      status: 'Ativo',
+      approvedAt: new Date().toISOString(),
+    })
+
+    addNotification({
+      type: 'listing_approved',
+      listingId,
+      ownerName: listing.ownerName,
+      ownerEmail: listing.ownerEmail || '',
+      title: 'Parabéns! O seu anúncio foi publicado',
+      body: `O anúncio "${listing.title}" foi aprovado pelo administrador e já está visível no Kuteka. Enviámos confirmação para ${listing.ownerEmail || 'o seu email'}.`,
+    })
+  }
+
+  function rejectListing(listingId, reason = '') {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing) return
+
+    updateListing(listingId, {
+      status: 'Rejeitado',
+      rejectedAt: new Date().toISOString(),
+      rejectReason:
+        reason ||
+        'Conteúdo não conforme (fotos pessoais, informação incorrecta ou fora das regras do marketplace).',
+    })
+
+    addNotification({
+      type: 'listing_rejected',
+      listingId,
+      ownerName: listing.ownerName,
+      ownerEmail: listing.ownerEmail || '',
+      title: 'Anúncio não aprovado',
+      body: `O anúncio "${listing.title}" não foi publicado. Motivo: ${reason || 'conteúdo não conforme com as regras Kuteka'}. Pode corrigir e enviar novamente.`,
+    })
+  }
+
   function getListing(id) {
     return listings.find((listing) => listing.id === id)
   }
@@ -241,9 +343,16 @@ export function MarketplaceProvider({ children }) {
     accountTypes,
     provinces,
     bairros,
+    notifications,
     updateListingField,
     handlePhotoUpload,
     submitListing,
+    approveListing,
+    rejectListing,
+    isListingOwner,
+    getMyListings,
+    getMyNotifications,
+    markNotificationRead,
     trackView,
     toggleFavorite,
     toggleCompare,

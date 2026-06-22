@@ -6,6 +6,7 @@ export const STORAGE_KEYS = {
   favorites: 'kuteka.market.favorites',
   history: 'kuteka.market.history',
   chats: 'kuteka.market.chats',
+  notifications: 'kuteka.market.notifications',
 }
 
 export const accountTypes = [

@@ -1106,3 +1106,176 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+.pending-banner {
+  align-items: flex-start;
+  display: flex;
+  gap: 16px;
+}
+
+.pending-banner.approved {
+  border-color: #b8e6c8;
+  background: #f3fbf6;
+}
+
+.pending-banner.rejected {
+  border-color: #f0c4c4;
+  background: #fff7f7;
+}
+
+.pending-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.status-pill {
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.status-pending,
+.status-pill.status-pendente {
+  background: #fff4db;
+  color: #9a6700;
+}
+
+.status-ativo,
+.status-pill.status-ativo {
+  background: #eef7e8;
+  color: #0f6a49;
+}
+
+.status-rejeitado,
+.status-pill.status-rejeitado {
+  background: #fdeeee;
+  color: #b42318;
+}
+
+.status-pausado,
+.status-pill.status-pausado {
+  background: #eef0f3;
+  color: #475467;
+}
+
+.profile-review-card,
+.pending-listing-preview,
+.pending-next-steps {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-review-head {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+.profile-avatar {
+  align-items: center;
+  background: #0f6a49;
+  border-radius: 999px;
+  color: #fff;
+  display: inline-flex;
+  font-weight: 900;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+}
+
+.profile-review-list {
+  color: #667369;
+  display: grid;
+  font-weight: 700;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pending-listing-preview img:first-child {
+  border-radius: 18px;
+  max-height: 280px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.preview-strip.compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preview-strip.compact img {
+  border-radius: 12px;
+  height: 72px;
+  object-fit: cover;
+  width: 72px;
+}
+
+.notifications-list,
+.admin-pending-list,
+.my-listings-list {
+  display: grid;
+  gap: 14px;
+}
+
+.notification-card.unread {
+  border-color: #f8c44f;
+}
+
+.notification-head {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.email-sent-line {
+  color: #0f6a49;
+  display: block;
+  font-weight: 700;
+}
+
+.notification-actions,
+.my-listing-row {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.my-listing-row {
+  justify-content: space-between;
+}
+
+.admin-pending-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(120px, 220px) minmax(0, 1fr);
+}
+
+.admin-pending-card {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-owner-line {
+  color: #667369;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  .admin-pending-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pending-banner {
+    flex-direction: column;
+  }
+}

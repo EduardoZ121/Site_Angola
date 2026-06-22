@@ -1,9 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function PublishPage() {
   const navigate = useNavigate()
+  const [error, setError] = useState('')
   const {
     profile,
     listingForm,
@@ -15,8 +17,21 @@ export default function PublishPage() {
   } = useMarketplace()
 
   function handleSubmit(event) {
+    setError('')
+    if (!profile.name || !profile.phone) {
+      setError('Complete o perfil (nome e telefone) antes de publicar.')
+      return
+    }
+    if (!listingForm.photos.length) {
+      setError('Adicione pelo menos uma foto do imóvel ou veículo.')
+      return
+    }
     const newId = submitListing(event)
-    if (newId) navigate(`/anuncio/${newId}`)
+    if (newId) {
+      navigate(`/publicar/enviado/${newId}`)
+      return
+    }
+    setError('Preencha título, preço e fotos para enviar.')
   }
 
   return (
@@ -24,7 +39,7 @@ export default function PublishPage() {
       <PageIntro
         eyebrow="Publicar"
         title="Coloque o seu anúncio online"
-        subtitle="Página dedicada para proprietários, agentes e empresas."
+        subtitle="Após confirmar, o anúncio fica pendente até o administrador aprovar."
       />
 
       <SectionBlock
@@ -45,6 +60,7 @@ export default function PublishPage() {
           ) : (
             <p className="success-text">
               Perfil pronto: {profile.name} • {profile.phone}
+              {profile.email ? ` • ${profile.email}` : ''}
             </p>
           )}
         </div>
@@ -57,6 +73,8 @@ export default function PublishPage() {
         subtitle="Imóvel ou veículo, fotos, preço em Kz e localização."
       >
         <form className="owner-form panel-card" onSubmit={handleSubmit}>
+          {error ? <p className="warning-text">{error}</p> : null}
+
           <div className="form-row">
             <label>
               Categoria
@@ -226,9 +244,9 @@ export default function PublishPage() {
           </label>
 
           <label className="upload-box">
-            Fotos do anúncio
+            Fotos do anúncio *
             <input accept="image/*" multiple type="file" onChange={handlePhotoUpload} />
-            <span>Escolha até 5 fotos.</span>
+            <span>Obrigatório: fotos reais do imóvel ou veículo (máx. 5).</span>
           </label>
 
           {listingForm.photos.length > 0 && (
@@ -240,7 +258,7 @@ export default function PublishPage() {
           )}
 
           <button className="button primary" type="submit">
-            Publicar para aprovação
+            Publicar — enviar para aprovação
           </button>
         </form>
       </SectionBlock>

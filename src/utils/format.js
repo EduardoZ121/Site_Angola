@@ -49,7 +49,8 @@ export function filterListings(listings, filters, isAdmin = false) {
       if (filters.gearbox !== 'Todos' && listing.gearbox !== filters.gearbox) return false
       if (filters.condition !== 'Todos' && listing.condition !== filters.condition) return false
     }
-    return listing.status !== 'Pausado' || isAdmin
+    if (!isAdmin && listing.status !== 'Ativo') return false
+    return true
   })
 }
 

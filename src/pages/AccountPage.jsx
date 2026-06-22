@@ -1,18 +1,116 @@
+import { Link } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { Toggle } from '../components/ui'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
-import { trustSealFromProfile } from '../utils/format'
+import { formatKz, trustSealFromProfile } from '../utils/format'
+
+const statusLabels = {
+  Pendente: 'Pendente',
+  Ativo: 'Publicado',
+  Pausado: 'Pausado',
+  Rejeitado: 'Rejeitado',
+}
 
 export default function AccountPage() {
-  const { profile, setProfile, accountTypes } = useMarketplace()
+  const {
+    profile,
+    setProfile,
+    accountTypes,
+    getMyListings,
+    getMyNotifications,
+    markNotificationRead,
+  } = useMarketplace()
+
+  const myListings = getMyListings()
+  const notifications = getMyNotifications()
 
   return (
     <main className="page-main">
       <PageIntro
         eyebrow="Minha conta"
         title="Perfil e verificação"
-        subtitle="Página separada para configurar o seu perfil antes de publicar."
+        subtitle="Veja mensagens, anúncios enviados e estado de aprovação."
       />
+
+      <SectionBlock id="mensagens" eyebrow="Mensagens" title="Notificações e email">
+        {notifications.length === 0 ? (
+          <div className="empty-state panel-card">
+            <p>Ainda não tem mensagens.</p>
+          </div>
+        ) : (
+          <div className="notifications-list">
+            {notifications.map((item) => (
+              <article
+                className={`notification-card panel-card ${item.read ? 'read' : 'unread'}`}
+                key={item.id}
+              >
+                <div className="notification-head">
+                  <strong>{item.title}</strong>
+                  {!item.read ? <span className="status-pill status-pending">Nova</span> : null}
+                </div>
+                <p>{item.body}</p>
+                {item.emailSent ? (
+                  <small className="email-sent-line">✉ Email enviado (demo) para {item.ownerEmail || profile.email || 'si'}</small>
+                ) : null}
+                <div className="notification-actions">
+                  {!item.read ? (
+                    <button className="text-button" type="button" onClick={() => markNotificationRead(item.id)}>
+                      Marcar como lida
+                    </button>
+                  ) : null}
+                  {item.listingId && item.type === 'listing_approved' ? (
+                    <Link className="text-button" to={`/anuncio/${item.listingId}`}>
+                      Ver anúncio publicado
+                    </Link>
+                  ) : null}
+                  {item.listingId && item.type === 'listing_pending' ? (
+                    <Link className="text-button" to={`/publicar/enviado/${item.listingId}`}>
+                      Ver pedido pendente
+                    </Link>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        )}
+      </SectionBlock>
+
+      <SectionBlock id="meus-anuncios" eyebrow="Publicações" title="Os meus anúncios" tone="muted">
+        {myListings.length === 0 ? (
+          <div className="empty-state panel-card">
+            <p>Ainda não publicou nenhum anúncio.</p>
+            <Link className="button primary" to="/publicar">
+              Publicar agora
+            </Link>
+          </div>
+        ) : (
+          <div className="my-listings-list">
+            {myListings.map((listing) => (
+              <article className="my-listing-row panel-card" key={listing.id}>
+                <div>
+                  <strong>{listing.title}</strong>
+                  <p>
+                    {formatKz(listing.price)} — {listing.neighborhood}
+                  </p>
+                </div>
+                <span className={`status-pill status-${listing.status.toLowerCase()}`}>
+                  {statusLabels[listing.status] || listing.status}
+                </span>
+                <Link
+                  className="text-button"
+                  to={
+                    listing.status === 'Ativo'
+                      ? `/anuncio/${listing.id}`
+                      : `/publicar/enviado/${listing.id}`
+                  }
+                >
+                  Abrir
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
+      </SectionBlock>
 
       <SectionBlock id="dados" eyebrow="Dados" title="Informações pessoais">
         <form className="owner-form panel-card">

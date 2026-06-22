@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useParams } from 'react-router-dom'
 import { defaultPhoto } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { TrustBadge } from '../components/ui'
@@ -8,7 +8,6 @@ import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function ListingDetailPage() {
   const { id } = useParams()
-  const navigate = useNavigate()
   const {
     getListing,
     trackView,
@@ -19,12 +18,14 @@ export default function ListingDetailPage() {
     toggleFavorite,
     toggleCompare,
     compare,
+    isAdmin,
+    isListingOwner,
   } = useMarketplace()
   const listing = getListing(id)
   const [chatInput, setChatInput] = useState('')
 
   useEffect(() => {
-    if (listing) trackView(listing.id)
+    if (listing && listing.status === 'Ativo') trackView(listing.id)
   }, [listing, trackView])
 
   if (!listing) {
@@ -40,6 +41,25 @@ export default function ListingDetailPage() {
         </SectionBlock>
       </main>
     )
+  }
+
+  if (listing.status !== 'Ativo' && !isAdmin && !isListingOwner(listing)) {
+    return (
+      <main className="page-main">
+        <PageIntro eyebrow="Anúncio" title="Não disponível" subtitle="Este anúncio ainda não foi publicado." />
+        <SectionBlock>
+          <div className="empty-state panel-card">
+            <Link className="button primary" to="/comprar">
+              Ver anúncios activos
+            </Link>
+          </div>
+        </SectionBlock>
+      </main>
+    )
+  }
+
+  if (listing.status !== 'Ativo' && isListingOwner(listing)) {
+    return <Navigate to={`/publicar/enviado/${listing.id}`} replace />
   }
 
   const messages = chatByListing[listing.id] || []
