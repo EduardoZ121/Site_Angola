@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import { defaultPhoto } from '../data/constants'
+import { useRequireLogin } from '../hooks/useRequireLogin'
 import { formatKz, whatsappLink } from '../utils/format'
 import { TrustBadge } from './ui'
 
 export function ListingCard({ listing, favorites, onFavorite, onCompare, compareIds }) {
+  const requireLogin = useRequireLogin()
+
   return (
     <article className="listing-card">
       <Link to={`/anuncio/${listing.id}`} aria-label={`Abrir ${listing.title}`}>
@@ -37,10 +40,18 @@ export function ListingCard({ listing, favorites, onFavorite, onCompare, compare
           <Link className="text-button" to={`/anuncio/${listing.id}`}>
             Ver detalhes
           </Link>
-          <button className="text-button" type="button" onClick={() => onFavorite(listing.id)}>
+          <button
+            className="text-button"
+            type="button"
+            onClick={() => requireLogin(() => onFavorite(listing.id))}
+          >
             {favorites.includes(listing.id) ? 'Remover favorito' : 'Favoritar'}
           </button>
-          <button className="text-button" type="button" onClick={() => onCompare(listing.id)}>
+          <button
+            className="text-button"
+            type="button"
+            onClick={() => requireLogin(() => onCompare(listing.id))}
+          >
             {compareIds.includes(listing.id) ? 'Remover comparação' : 'Comparar'}
           </button>
           <a href={whatsappLink(listing)} target="_blank" rel="noreferrer">

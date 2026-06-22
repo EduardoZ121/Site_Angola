@@ -1,110 +1,73 @@
+import { useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { GoogleAuthButton } from '../components/GoogleAuthButton'
 import { useMarketplace } from '../context/MarketplaceContext'
-import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
-const benefits = [
-  {
-    icon: '✉️',
-    title: 'Emails automáticos',
-    text: 'Receba avisos quando o anúncio for aprovado, rejeitado ou publicado.',
-  },
-  {
-    icon: '🔐',
-    title: 'Conta segura',
-    text: 'Entre com Google — sem criar palavra-passe extra no Kuteka.',
-  },
-  {
-    icon: '🏠',
-    title: 'Publicar imóveis e veículos',
-    text: 'Perfil ligado ao email para moderar anúncios e evitar perfis falsos.',
-  },
-  {
-    icon: '🔔',
-    title: 'Mensagens na conta',
-    text: 'Todas as notificações ficam na sua área pessoal e no email.',
-  },
-]
+const loginMessages = {
+  '/publicar': 'Entre para publicar o seu imóvel ou veículo.',
+  '/adicionar-propriedade': 'Entre para adicionar a sua propriedade.',
+  '/adicionar-propriedade/detalhes': 'Entre para completar os detalhes da propriedade.',
+  '/favoritos': 'Entre para guardar anúncios nos favoritos.',
+  '/comparar': 'Entre para comparar anúncios.',
+  '/conta': 'Entre para aceder à sua conta e mensagens.',
+  '/admin': 'Área reservada ao administrador Kuteka.',
+}
 
 export default function LoginPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { profile, loginWithGoogle, isLoggedIn } = useMarketplace()
   const redirectTo = searchParams.get('redirect') || '/conta'
+  const loginHint = loginMessages[redirectTo.split('?')[0]] || 'Entre com Google para continuar no Kuteka.'
+
+  useEffect(() => {
+    if (isLoggedIn) navigate(redirectTo, { replace: true })
+  }, [isLoggedIn, navigate, redirectTo])
 
   function handleGoogleCredential(credential) {
     const ok = loginWithGoogle(credential)
     if (ok) navigate(redirectTo, { replace: true })
   }
 
-  if (isLoggedIn) {
-    return (
-      <main className="page-main">
-        <PageIntro eyebrow="Conta" title="Já tem sessão iniciada" subtitle={`Sessão: ${profile.email}`} />
-        <SectionBlock>
-          <div className="empty-state panel-card">
-            <Link className="button primary" to="/conta">
-              Ir para Minha conta
-            </Link>
-          </div>
-        </SectionBlock>
-      </main>
-    )
-  }
+  if (isLoggedIn) return null
 
   return (
-    <main className="page-main">
-      <PageIntro
-        eyebrow="Entrar"
-        title="Criar conta com Google"
-        subtitle="Use o seu email Google para receber informações e gerir anúncios no Kuteka."
-      />
+    <div className="login-screen">
+      <div className="login-screen-panel login-screen-brand">
+        <Link className="login-brand-link" to="/">
+          <img className="brand-logo" src="/kuteka-logo.svg" alt="Kuteka" />
+        </Link>
+        <p className="eyebrow eyebrow-light">Kuteka • Angola</p>
+        <h1>Bem-vindo de volta</h1>
+        <p className="login-brand-text">
+          Compre, arrende ou publique imóveis e veículos em Angola. A sua conta Google liga
+          notificações, favoritos e publicações.
+        </p>
+        <ul className="login-brand-list">
+          <li>Ver casas e carros sem login</li>
+          <li>Login obrigatório para publicar ou guardar favoritos</li>
+          <li>Anúncios aprovados pelo administrador</li>
+        </ul>
+        <Link className="login-back-home" to="/">
+          ← Voltar ao site
+        </Link>
+      </div>
 
-      <SectionBlock id="google-login" eyebrow="Conta Google" title="Entrar ou registar" tone="muted">
-        <div className="google-login-card panel-card">
-          <div className="add-property-intro-head">
-            <span className="add-property-icon" aria-hidden="true">
-              G
-            </span>
-            <div>
-              <strong>Continuar com Google</strong>
-              <p>
-                Cria a sua conta em segundos. Usamos o email Google para enviar confirmações de
-                publicação, aprovação do administrador e alertas importantes.
-              </p>
-            </div>
-          </div>
+      <div className="login-screen-panel login-screen-form">
+        <div className="login-form-card">
+          <p className="eyebrow">Conta Google</p>
+          <h2>Entrar ou criar conta</h2>
+          <p className="login-form-lead">{loginHint}</p>
 
           <GoogleAuthButton onCredential={handleGoogleCredential} />
 
-          <ul className="google-login-notes">
-            <li>O Kuteka não publica nada sem a sua confirmação.</li>
-            <li>Anúncios passam sempre por aprovação do administrador.</li>
-            <li>Pode completar telefone e tipo de conta depois do login.</li>
-          </ul>
+          <div className="login-form-notes">
+            <p>✉ Recebe emails quando o anúncio for aprovado</p>
+            <p>🔐 Sem palavra-passe extra — usa a conta Google</p>
+            <p>🏠 Senhorios e compradores usam a mesma entrada</p>
+          </div>
         </div>
-      </SectionBlock>
-
-      <SectionBlock id="beneficios" eyebrow="Porquê Google?" title="O que ganha com a conta">
-        <div className="tools-grid google-benefits-grid">
-          {benefits.map((item) => (
-            <article className="tool-card" key={item.title}>
-              <span className="browse-icon">{item.icon}</span>
-              <strong>{item.title}</strong>
-              <span>{item.text}</span>
-            </article>
-          ))}
-        </div>
-      </SectionBlock>
-
-      <SectionBlock id="sem-google" eyebrow="Alternativa" title="Prefere continuar sem Google?" tone="muted">
-        <div className="panel-card">
-          <p>Pode preencher nome e email manualmente em Minha conta, mas não receberá emails automáticos até ligar o Google.</p>
-          <Link className="text-button" to="/conta">
-            Ir para Minha conta (manual)
-          </Link>
-        </div>
-      </SectionBlock>
-    </main>
+      </div>
+    </div>
   )
 }

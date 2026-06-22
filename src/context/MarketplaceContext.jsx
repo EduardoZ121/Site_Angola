@@ -58,7 +58,14 @@ export function MarketplaceProvider({ children }) {
   })
   const [compare, setCompare] = useState([])
   const [listingForm, setListingForm] = useState(emptyListing)
-  const [adminEmail, setAdminEmail] = useState('')
+  const [siteUsers, setSiteUsers] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.siteUsers)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
   const [notifications, setNotifications] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.notifications)
@@ -68,11 +75,13 @@ export function MarketplaceProvider({ children }) {
     }
   })
 
-  const isAdmin =
-    adminEmail.trim().toLowerCase() === ADMIN_EMAIL ||
-    profile.email?.trim().toLowerCase() === ADMIN_EMAIL
+  const isAdmin = profile.email?.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()
 
-  const isLoggedIn = Boolean(profile.googleId || (profile.email && profile.name))
+  const isLoggedIn = Boolean(profile.googleId && profile.email)
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.siteUsers, JSON.stringify(siteUsers))
+  }, [siteUsers])
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.notifications, JSON.stringify(notifications))
@@ -138,9 +147,27 @@ export function MarketplaceProvider({ children }) {
     })
   }
 
+  function registerSiteUser(googleUser) {
+    setSiteUsers((prev) => {
+      const existing = prev.find((user) => user.email === googleUser.email)
+      const entry = {
+        email: googleUser.email,
+        name: googleUser.name,
+        picture: googleUser.picture || '',
+        googleId: googleUser.googleId,
+        firstLoginAt: existing?.firstLoginAt || new Date().toISOString(),
+        lastLoginAt: new Date().toISOString(),
+        loginCount: (existing?.loginCount || 0) + 1,
+      }
+      return [entry, ...prev.filter((user) => user.email !== googleUser.email)]
+    })
+  }
+
   function loginWithGoogle(credential) {
     const googleUser = parseGoogleCredential(credential)
     if (!googleUser?.email) return false
+
+    registerSiteUser(googleUser)
 
     setProfile((current) => ({
       ...current,
@@ -365,8 +392,10 @@ export function MarketplaceProvider({ children }) {
     profile,
     setProfile,
     isLoggedIn,
+    isAdmin,
     loginWithGoogle,
     logoutAccount,
+    siteUsers,
     listings,
     favorites,
     history,
@@ -374,9 +403,6 @@ export function MarketplaceProvider({ children }) {
     compare,
     listingForm,
     setListingForm,
-    adminEmail,
-    setAdminEmail,
-    isAdmin,
     adminStats,
     accountTypes,
     provinces,

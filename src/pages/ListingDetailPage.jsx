@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import { defaultPhoto } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { TrustBadge } from '../components/ui'
+import { useRequireLogin } from '../hooks/useRequireLogin'
 import { formatKz, whatsappLink } from '../utils/format'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
@@ -22,6 +23,7 @@ export default function ListingDetailPage() {
     isListingOwner,
   } = useMarketplace()
   const listing = getListing(id)
+  const requireLogin = useRequireLogin()
   const [chatInput, setChatInput] = useState('')
 
   useEffect(() => {
@@ -65,6 +67,7 @@ export default function ListingDetailPage() {
   const messages = chatByListing[listing.id] || []
 
   function handleSendChat() {
+    if (!requireLogin()) return
     if (!chatInput.trim()) return
     sendChat(listing.id, chatInput, profile.name)
     setChatInput('')
@@ -123,10 +126,18 @@ export default function ListingDetailPage() {
               <a href={whatsappLink(listing)} target="_blank" rel="noreferrer">
                 WhatsApp
               </a>
-              <button className="text-button" type="button" onClick={() => toggleFavorite(listing.id)}>
+              <button
+                className="text-button"
+                type="button"
+                onClick={() => requireLogin(() => toggleFavorite(listing.id))}
+              >
                 {favorites.includes(listing.id) ? 'Remover favorito' : 'Favoritar'}
               </button>
-              <button className="text-button" type="button" onClick={() => toggleCompare(listing.id)}>
+              <button
+                className="text-button"
+                type="button"
+                onClick={() => requireLogin(() => toggleCompare(listing.id))}
+              >
                 {compare.includes(listing.id) ? 'Remover comparação' : 'Comparar'}
               </button>
             </div>

@@ -1,4 +1,4 @@
-export const ADMIN_EMAIL = 'admin@kutekalink.com'
+export const ADMIN_EMAIL = 'amarilinhaa@gmail.com'
 
 export const STORAGE_KEYS = {
   profile: 'kuteka.market.profile',
@@ -7,6 +7,7 @@ export const STORAGE_KEYS = {
   history: 'kuteka.market.history',
   chats: 'kuteka.market.chats',
   notifications: 'kuteka.market.notifications',
+  siteUsers: 'kuteka.market.siteUsers',
 }
 
 export const accountTypes = [

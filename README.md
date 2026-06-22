@@ -27,10 +27,10 @@ Esta primeira versao e um frontend. Os anuncios criados no formulario ficam guar
 
 ## Admin demo
 
-Enquanto o Google Login ainda nao esta ligado, o painel admin usa um email demo:
+Enquanto o Google Login esta ligado, o painel admin usa o email:
 
 ```txt
-admin@kutekalink.com
+amarilinhaa@gmail.com
 ```
 
 Quando o backend e o Google Login forem adicionados, esse valor sera trocado pelo email real do dono do site.

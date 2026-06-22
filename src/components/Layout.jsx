@@ -16,7 +16,7 @@ const accountNav = [
 ]
 
 export function Layout() {
-  const { favorites, compare, profile, isLoggedIn, logoutAccount } = useMarketplace()
+  const { favorites, compare, profile, isLoggedIn, isAdmin, logoutAccount } = useMarketplace()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const isHome = location.pathname === '/'
@@ -79,6 +79,15 @@ export function Layout() {
                   Entrar
                 </NavLink>
               )}
+              {isAdmin ? (
+                <NavLink
+                  to="/admin"
+                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                  onClick={closeMenu}
+                >
+                  Admin
+                </NavLink>
+              ) : null}
               {accountNav.map((item) => (
                 <NavLink
                   key={item.to}
@@ -114,7 +123,7 @@ export function Layout() {
             <NavLink to="/arrendar">Arrendar</NavLink>
             <NavLink to="/veiculos">Veículos</NavLink>
             <NavLink to="/publicar">Publicar</NavLink>
-            <NavLink to="/admin">Admin</NavLink>
+            {isAdmin ? <NavLink to="/admin">Admin</NavLink> : null}
           </div>
         </div>
       </footer>
