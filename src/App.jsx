@@ -11,6 +11,8 @@ import FavoritesPage from './pages/FavoritesPage'
 import ComparePage from './pages/ComparePage'
 import PricesPage from './pages/PricesPage'
 import AdminPage from './pages/AdminPage'
+import AddPropertyPage from './pages/AddPropertyPage'
+import AddPropertyDetailsPage from './pages/AddPropertyDetailsPage'
 import './layout.css'
 import './App.css'
 
@@ -94,6 +96,8 @@ export default function App() {
             }
           />
           <Route path="anuncio/:id" element={<ListingDetailPage />} />
+          <Route path="adicionar-propriedade" element={<AddPropertyPage />} />
+          <Route path="adicionar-propriedade/detalhes" element={<AddPropertyDetailsPage />} />
           <Route path="publicar" element={<PublishPage />} />
           <Route path="conta" element={<AccountPage />} />
           <Route path="favoritos" element={<FavoritesPage />} />

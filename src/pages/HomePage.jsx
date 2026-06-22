@@ -120,6 +120,38 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* SECÇÃO — Adicionar propriedade (casa, carro, etc.) */}
+      <SectionBlock
+        id="adicionar-propriedade"
+        eyebrow="Proprietários"
+        title="Adicionar ou encontrar propriedade"
+        subtitle="Registe casa, apartamento, terreno ou veículo — comece pelo endereço."
+        tone="muted"
+      >
+        <div className="home-add-property panel-card">
+          <div className="add-property-intro-head">
+            <span className="add-property-icon" aria-hidden="true">
+              🏡
+            </span>
+            <div>
+              <strong>Adicionar propriedade</strong>
+              <p>
+                Acompanhe o valor do seu imóvel ou veículo, publique no Kuteka e receba contactos
+                de compradores em Angola.
+              </p>
+            </div>
+          </div>
+          <div className="home-add-property-actions">
+            <Link className="button primary" to="/adicionar-propriedade">
+              Adicionar propriedade
+            </Link>
+            <Link className="button filter-button" to="/comprar">
+              Encontrar imóvel
+            </Link>
+          </div>
+        </div>
+      </SectionBlock>
+
       {/* SECÇÃO 2 — Navegar por área (cada card = página própria) */}
       <SectionBlock
         id="explorar"
