@@ -1,5 +1,6 @@
 import { useMarketplace } from '../context/MarketplaceContext'
 import { Toggle } from '../components/ui'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import { trustSealFromProfile } from '../utils/format'
 
 export default function AccountPage() {
@@ -7,17 +8,13 @@ export default function AccountPage() {
 
   return (
     <main className="page-main">
-      <section className="page-hero compact">
-        <div className="page-hero-inner">
-          <p className="eyebrow">Minha conta</p>
-          <h1>Perfil e verificação</h1>
-          <p className="page-subtitle">
-            Configure o seu perfil antes de publicar anúncios.
-          </p>
-        </div>
-      </section>
+      <PageIntro
+        eyebrow="Minha conta"
+        title="Perfil e verificação"
+        subtitle="Página separada para configurar o seu perfil antes de publicar."
+      />
 
-      <section className="section page-section profile-grid">
+      <SectionBlock id="dados" eyebrow="Dados" title="Informações pessoais">
         <form className="owner-form panel-card">
           <div className="form-row">
             <label>
@@ -55,31 +52,43 @@ export default function AccountPage() {
               </select>
             </label>
           </div>
-          <div className="toggle-row">
-            <Toggle
-              label="Perfil verificado"
-              checked={profile.verifiedProfile}
-              onToggle={() => setProfile((current) => ({ ...current, verifiedProfile: !current.verifiedProfile }))}
-            />
-            <Toggle
-              label="Telefone verificado"
-              checked={profile.verifiedPhone}
-              onToggle={() => setProfile((current) => ({ ...current, verifiedPhone: !current.verifiedPhone }))}
-            />
-            <Toggle
-              label="Documento validado"
-              checked={profile.verifiedDocument}
-              onToggle={() => setProfile((current) => ({ ...current, verifiedDocument: !current.verifiedDocument }))}
-            />
-          </div>
         </form>
+      </SectionBlock>
 
-        <aside className="trust-card panel-card">
-          <strong>Selo de confiança</strong>
-          <p>{trustSealFromProfile(profile)}</p>
-          <small>Anúncios com selo recebem mais contactos directos.</small>
-        </aside>
-      </section>
+      <SectionBlock
+        id="verificacao"
+        eyebrow="Confiança"
+        title="Verificação e selo"
+        subtitle="Active as verificações para aumentar contactos."
+        tone="muted"
+      >
+        <div className="profile-grid">
+          <div className="panel-card">
+            <div className="toggle-row">
+              <Toggle
+                label="Perfil verificado"
+                checked={profile.verifiedProfile}
+                onToggle={() => setProfile((current) => ({ ...current, verifiedProfile: !current.verifiedProfile }))}
+              />
+              <Toggle
+                label="Telefone verificado"
+                checked={profile.verifiedPhone}
+                onToggle={() => setProfile((current) => ({ ...current, verifiedPhone: !current.verifiedPhone }))}
+              />
+              <Toggle
+                label="Documento validado"
+                checked={profile.verifiedDocument}
+                onToggle={() => setProfile((current) => ({ ...current, verifiedDocument: !current.verifiedDocument }))}
+              />
+            </div>
+          </div>
+          <aside className="trust-card panel-card">
+            <strong>Selo de confiança</strong>
+            <p>{trustSealFromProfile(profile)}</p>
+            <small>Anúncios com selo recebem mais contactos directos.</small>
+          </aside>
+        </div>
+      </SectionBlock>
     </main>
   )
 }

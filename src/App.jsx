@@ -10,6 +10,7 @@ import FavoritesPage from './pages/FavoritesPage'
 import ComparePage from './pages/ComparePage'
 import PricesPage from './pages/PricesPage'
 import AdminPage from './pages/AdminPage'
+import './layout.css'
 import './App.css'
 
 export default function App() {

@@ -4,6 +4,7 @@ import { defaultFilters } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { FiltersSidebar } from '../components/FiltersSidebar'
 import { ListingCard } from '../components/ListingCard'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import { filterListings } from '../utils/format'
 
 export default function ListingsPage({
@@ -38,29 +39,21 @@ export default function ListingsPage({
 
   return (
     <main className="page-main">
-      <section className="page-hero compact">
-        <div className="page-hero-inner">
-          <p className="eyebrow">Resultados</p>
-          <h1>{title}</h1>
-          <p className="page-subtitle">{subtitle}</p>
-        </div>
-      </section>
+      <PageIntro eyebrow="Resultados" title={title} subtitle={subtitle} />
 
-      <section className="section page-section marketplace-layout">
-        <FiltersSidebar
-          filters={filters}
-          setFilters={setFilters}
-          showVehicleFilters={showVehicleFilters}
-        />
-
-        <div>
-          <div className="results-bar">
-            <h2>{filtered.length} anúncios encontrados</h2>
-            <Link className="text-button" to="/">
-              Voltar ao início
-            </Link>
-          </div>
-
+      <SectionBlock
+        id="filtros"
+        eyebrow="Pesquisa"
+        title="Filtros e mapa"
+        subtitle="Ajuste a localização e o preço nesta secção."
+        tone="muted"
+      >
+        <div className="marketplace-layout">
+          <FiltersSidebar
+            filters={filters}
+            setFilters={setFilters}
+            showVehicleFilters={showVehicleFilters}
+          />
           <div className="map-panel">
             <h3>Mapa da zona</h3>
             <p>Clique num ponto para abrir o anúncio.</p>
@@ -79,30 +72,41 @@ export default function ListingsPage({
               ))}
             </div>
           </div>
-
-          {filtered.length === 0 ? (
-            <div className="empty-state">
-              <p>Nenhum anúncio encontrado com estes filtros.</p>
-              <Link className="button secondary" to="/publicar">
-                Publicar anúncio
-              </Link>
-            </div>
-          ) : (
-            <div className="listing-grid">
-              {filtered.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  favorites={favorites}
-                  compareIds={compare}
-                  onFavorite={toggleFavorite}
-                  onCompare={toggleCompare}
-                />
-              ))}
-            </div>
-          )}
         </div>
-      </section>
+      </SectionBlock>
+
+      <SectionBlock
+        id="resultados"
+        eyebrow="Anúncios"
+        title={`${filtered.length} resultados encontrados`}
+        action={
+          <Link className="text-button" to="/">
+            Voltar ao início
+          </Link>
+        }
+      >
+        {filtered.length === 0 ? (
+          <div className="empty-state panel-card">
+            <p>Nenhum anúncio encontrado com estes filtros.</p>
+            <Link className="button primary" to="/publicar">
+              Publicar anúncio
+            </Link>
+          </div>
+        ) : (
+          <div className="listing-grid">
+            {filtered.map((listing) => (
+              <ListingCard
+                key={listing.id}
+                listing={listing}
+                favorites={favorites}
+                compareIds={compare}
+                onFavorite={toggleFavorite}
+                onCompare={toggleCompare}
+              />
+            ))}
+          </div>
+        )}
+      </SectionBlock>
     </main>
   )
 }

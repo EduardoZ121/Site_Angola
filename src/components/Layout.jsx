@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 
@@ -18,40 +19,60 @@ const accountNav = [
 export function Layout() {
   const { favorites, compare } = useMarketplace()
   const location = useLocation()
+  const [menuOpen, setMenuOpen] = useState(false)
   const isHome = location.pathname === '/'
+
+  function closeMenu() {
+    setMenuOpen(false)
+  }
 
   return (
     <div className="site-shell">
-      <header className={`site-header ${isHome ? 'site-header-hero' : 'site-header-compact'}`}>
-        <div className="site-header-inner">
-          <NavLink className="brand" to="/" aria-label="Kuteka início">
+      <header className={`site-header ${isHome ? 'site-header-home' : 'site-header-inner-page'}`}>
+        <div className="site-header-bar">
+          <NavLink className="brand" to="/" aria-label="Kuteka início" onClick={closeMenu}>
             <img className="brand-logo" src="/kuteka-logo.svg" alt="Kuteka" />
           </NavLink>
 
-          <nav className="main-nav" aria-label="Navegação principal">
-            {mainNav.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </nav>
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-expanded={menuOpen}
+            aria-label="Abrir menu"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            ☰
+          </button>
 
-          <nav className="account-nav" aria-label="Conta e ferramentas">
-            {accountNav.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
-              >
-                {item.label}
-                {item.to === '/favoritos' && favorites.length > 0 ? ` (${favorites.length})` : ''}
-                {item.to === '/comparar' && compare.length > 0 ? ` (${compare.length})` : ''}
-              </NavLink>
-            ))}
+          <nav className={`site-nav ${menuOpen ? 'open' : ''}`} aria-label="Navegação principal">
+            <div className="nav-group">
+              <p className="nav-group-label">Marketplace</p>
+              {mainNav.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                  onClick={closeMenu}
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+            </div>
+            <div className="nav-group">
+              <p className="nav-group-label">Conta</p>
+              {accountNav.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                  onClick={closeMenu}
+                >
+                  {item.label}
+                  {item.to === '/favoritos' && favorites.length > 0 ? ` (${favorites.length})` : ''}
+                  {item.to === '/comparar' && compare.length > 0 ? ` (${compare.length})` : ''}
+                </NavLink>
+              ))}
+            </div>
           </nav>
         </div>
       </header>
@@ -68,7 +89,7 @@ export function Layout() {
             <NavLink to="/comprar">Comprar</NavLink>
             <NavLink to="/arrendar">Arrendar</NavLink>
             <NavLink to="/veiculos">Veículos</NavLink>
-            <NavLink to="/publicar">Publicar anúncio</NavLink>
+            <NavLink to="/publicar">Publicar</NavLink>
             <NavLink to="/admin">Admin</NavLink>
           </div>
         </div>

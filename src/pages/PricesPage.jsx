@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { formatKz, zoneAverages } from '../utils/format'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function PricesPage() {
   const { listings, history } = useMarketplace()
@@ -11,42 +13,57 @@ export default function PricesPage() {
 
   return (
     <main className="page-main">
-      <section className="page-hero compact">
-        <div className="page-hero-inner">
-          <p className="eyebrow">Relatório</p>
-          <h1>Preços médios por zona</h1>
-          <p className="page-subtitle">Equivalente ao relatório de mercado do Daft, adaptado para Angola.</p>
-        </div>
-      </section>
+      <PageIntro
+        eyebrow="Relatório"
+        title="Preços médios por zona"
+        subtitle="Equivalente ao relatório de mercado do Daft, adaptado para Angola em Kz."
+      />
 
-      <section className="section page-section compare-history-grid">
+      <SectionBlock id="medias-zona" eyebrow="Mercado" title="Médias em Kz por bairro">
         <div className="zone-list panel-card">
-          <h2>Médias em Kz</h2>
-          {zones.map((row) => (
-            <div key={row.zone} className="zone-row">
-              <span>{row.zone}</span>
-              <strong>
-                {formatKz(row.avg)} ({row.count} anúncios)
-              </strong>
-            </div>
-          ))}
+          {zones.length === 0 ? (
+            <p>Ainda não há dados suficientes.</p>
+          ) : (
+            zones.map((row) => (
+              <div key={row.zone} className="zone-row">
+                <span>{row.zone}</span>
+                <strong>
+                  {formatKz(row.avg)} ({row.count} anúncios)
+                </strong>
+              </div>
+            ))
+          )}
         </div>
+      </SectionBlock>
 
+      <SectionBlock
+        id="historico"
+        eyebrow="Actividade"
+        title="Histórico de visualizações"
+        subtitle="Anúncios que visitou recentemente."
+        tone="muted"
+      >
         <div className="history-panel panel-card">
-          <h2>Histórico de visualizações</h2>
           {historyItems.length === 0 ? (
-            <p>Ainda sem histórico.</p>
+            <div className="empty-state">
+              <p>Ainda sem histórico.</p>
+              <Link className="button primary" to="/comprar">
+                Explorar anúncios
+              </Link>
+            </div>
           ) : (
             <ul className="history-list">
               {historyItems.map((item) => (
                 <li key={item.id}>
-                  {item.title} — {item.neighborhood}
+                  <Link to={`/anuncio/${item.id}`}>
+                    {item.title} — {item.neighborhood}
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
         </div>
-      </section>
+      </SectionBlock>
     </main>
   )
 }

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function PublishPage() {
   const navigate = useNavigate()
@@ -20,29 +21,41 @@ export default function PublishPage() {
 
   return (
     <main className="page-main">
-      <section className="page-hero compact">
-        <div className="page-hero-inner">
-          <p className="eyebrow">Publicar</p>
-          <h1>Coloque o seu anúncio online</h1>
-          <p className="page-subtitle">
-            Página separada para proprietários, agentes e empresas — como no Daft.
-          </p>
-        </div>
-      </section>
+      <PageIntro
+        eyebrow="Publicar"
+        title="Coloque o seu anúncio online"
+        subtitle="Página dedicada para proprietários, agentes e empresas."
+      />
 
-      <section className="section page-section owner-section">
+      <SectionBlock
+        id="perfil-check"
+        eyebrow="Passo 1"
+        title="Perfil do anunciante"
+        subtitle="Complete nome e telefone antes de publicar."
+        tone="muted"
+      >
         <div className="panel-card intro-panel">
-          <h2>Antes de publicar</h2>
-          <p>
-            Complete o seu perfil em <Link to="/conta">Minha conta</Link> com nome e telefone.
-          </p>
           {!profile.name || !profile.phone ? (
-            <p className="warning-text">Perfil incompleto — preencha nome e telefone.</p>
+            <>
+              <p className="warning-text">Perfil incompleto.</p>
+              <Link className="button primary" to="/conta">
+                Ir para Minha conta
+              </Link>
+            </>
           ) : (
-            <p className="success-text">Perfil pronto para publicar.</p>
+            <p className="success-text">
+              Perfil pronto: {profile.name} • {profile.phone}
+            </p>
           )}
         </div>
+      </SectionBlock>
 
+      <SectionBlock
+        id="formulario"
+        eyebrow="Passo 2"
+        title="Detalhes do anúncio"
+        subtitle="Imóvel ou veículo, fotos, preço em Kz e localização."
+      >
         <form className="owner-form panel-card" onSubmit={handleSubmit}>
           <div className="form-row">
             <label>
@@ -230,7 +243,7 @@ export default function PublishPage() {
             Publicar para aprovação
           </button>
         </form>
-      </section>
+      </SectionBlock>
     </main>
   )
 }

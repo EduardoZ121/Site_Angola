@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { formatKz } from '../utils/format'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function ComparePage() {
   const { listings, compare } = useMarketplace()
@@ -10,14 +11,25 @@ export default function ComparePage() {
 
   return (
     <main className="page-main">
-      <section className="page-hero compact">
-        <div className="page-hero-inner">
-          <p className="eyebrow">Comparar</p>
-          <h1>Compare até 3 anúncios</h1>
-        </div>
-      </section>
+      <PageIntro
+        eyebrow="Comparar"
+        title="Compare até 3 anúncios"
+        subtitle="Seleccione anúncios nas páginas de comprar, arrendar ou veículos."
+      />
 
-      <section className="section page-section">
+      <SectionBlock
+        id="tabela-comparacao"
+        eyebrow="Comparação"
+        title={`${items.length} de 3 selecionados`}
+        action={
+          items.length > 0 ? (
+            <Link className="text-button" to="/comprar">
+              Adicionar mais
+            </Link>
+          ) : null
+        }
+        tone="muted"
+      >
         {items.length === 0 ? (
           <div className="empty-state panel-card">
             <p>Seleccione anúncios na página de resultados para comparar.</p>
@@ -57,7 +69,7 @@ export default function ComparePage() {
             </table>
           </div>
         )}
-      </section>
+      </SectionBlock>
     </main>
   )
 }

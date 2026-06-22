@@ -889,6 +889,37 @@ textarea {
 }
 
 @media (max-width: 900px) {
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .site-nav {
+    background: #10241d;
+    border-radius: 18px;
+    display: none;
+    flex-direction: column;
+    inset: 64px 16px auto 16px;
+    padding: 16px;
+    position: absolute;
+    right: 0;
+    top: 100%;
+  }
+
+  .site-header-inner-page .site-nav {
+    background: #fff;
+    border: 1px solid #e6ebdf;
+  }
+
+  .site-nav.open {
+    display: flex;
+  }
+
+  .nav-group {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+  }
+
   .nav,
   .section-heading {
     align-items: start;
@@ -921,6 +952,7 @@ textarea {
   .compare-history-grid,
   .browse-grid,
   .tools-grid,
+  .stats-grid,
   .home-search-fields,
   .detail-layout {
     grid-template-columns: 1fr;

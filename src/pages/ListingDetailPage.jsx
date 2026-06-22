@@ -4,6 +4,7 @@ import { defaultPhoto } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { TrustBadge } from '../components/ui'
 import { formatKz, whatsappLink } from '../utils/format'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function ListingDetailPage() {
   const { id } = useParams()
@@ -29,12 +30,14 @@ export default function ListingDetailPage() {
   if (!listing) {
     return (
       <main className="page-main">
-        <section className="section page-section empty-state">
-          <h1>Anúncio não encontrado</h1>
-          <Link className="button primary" to="/comprar">
-            Ver anúncios
-          </Link>
-        </section>
+        <PageIntro eyebrow="Anúncio" title="Não encontrado" subtitle="Este anúncio já não está disponível." />
+        <SectionBlock id="nao-encontrado">
+          <div className="empty-state panel-card">
+            <Link className="button primary" to="/comprar">
+              Ver anúncios
+            </Link>
+          </div>
+        </SectionBlock>
       </main>
     )
   }
@@ -49,7 +52,13 @@ export default function ListingDetailPage() {
 
   return (
     <main className="page-main">
-      <section className="section page-section detail-page">
+      <PageIntro
+        eyebrow={listing.category}
+        title={listing.title}
+        subtitle={`${listing.province} / ${listing.municipality} / ${listing.neighborhood}`}
+      />
+
+      <SectionBlock id="detalhes" eyebrow="Detalhes" title={formatKz(listing.price)}>
         <button className="text-button back-link" type="button" onClick={() => navigate(-1)}>
           ← Voltar
         </button>
@@ -63,11 +72,6 @@ export default function ListingDetailPage() {
               <span>{listing.operation}</span>
               <TrustBadge listing={listing} />
             </div>
-            <h1>{listing.title}</h1>
-            <p>
-              {listing.province} / {listing.municipality} / {listing.neighborhood}
-            </p>
-            <strong className="detail-price">{formatKz(listing.price)}</strong>
 
             {listing.category === 'Imóvel' ? (
               <div className="detail-grid">
@@ -106,34 +110,41 @@ export default function ListingDetailPage() {
                 {compare.includes(listing.id) ? 'Remover comparação' : 'Comparar'}
               </button>
             </div>
-
-            <div className="chat-panel">
-              <h2>Chat com o anunciante</h2>
-              <div className="chat-box">
-                {messages.length === 0 ? (
-                  <p>Inicie uma conversa com o anunciante.</p>
-                ) : (
-                  messages.map((message, index) => (
-                    <p key={`${listing.id}-${index}`}>
-                      <strong>{message.who}</strong> ({message.at}): {message.text}
-                    </p>
-                  ))
-                )}
-              </div>
-              <div className="chat-input-row">
-                <input
-                  value={chatInput}
-                  onChange={(event) => setChatInput(event.target.value)}
-                  placeholder="Escrever mensagem..."
-                />
-                <button className="button primary" type="button" onClick={handleSendChat}>
-                  Enviar
-                </button>
-              </div>
-            </div>
           </div>
         </div>
-      </section>
+      </SectionBlock>
+
+      <SectionBlock
+        id="chat"
+        eyebrow="Contacto"
+        title="Chat com o anunciante"
+        subtitle="Converse directamente com quem publicou o anúncio."
+        tone="muted"
+      >
+        <div className="chat-panel panel-card">
+          <div className="chat-box">
+            {messages.length === 0 ? (
+              <p>Inicie uma conversa com o anunciante.</p>
+            ) : (
+              messages.map((message, index) => (
+                <p key={`${listing.id}-${index}`}>
+                  <strong>{message.who}</strong> ({message.at}): {message.text}
+                </p>
+              ))
+            )}
+          </div>
+          <div className="chat-input-row">
+            <input
+              value={chatInput}
+              onChange={(event) => setChatInput(event.target.value)}
+              placeholder="Escrever mensagem..."
+            />
+            <button className="button primary" type="button" onClick={handleSendChat}>
+              Enviar
+            </button>
+          </div>
+        </div>
+      </SectionBlock>
     </main>
   )
 }

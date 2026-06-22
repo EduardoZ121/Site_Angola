@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { ListingCard } from '../components/ListingCard'
+import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function FavoritesPage() {
   const { listings, favorites, compare, toggleFavorite, toggleCompare } = useMarketplace()
@@ -10,19 +11,27 @@ export default function FavoritesPage() {
 
   return (
     <main className="page-main">
-      <section className="page-hero compact">
-        <div className="page-hero-inner">
-          <p className="eyebrow">Favoritos</p>
-          <h1>Os meus anúncios guardados</h1>
-        </div>
-      </section>
+      <PageIntro
+        eyebrow="Favoritos"
+        title="Os meus anúncios guardados"
+        subtitle="Página separada — guarde imóveis e veículos para ver depois."
+      />
 
-      <section className="section page-section">
+      <SectionBlock
+        id="lista-favoritos"
+        eyebrow="Guardados"
+        title={`${items.length} favorito${items.length === 1 ? '' : 's'}`}
+        action={
+          <Link className="text-button" to="/comprar">
+            Explorar anúncios
+          </Link>
+        }
+      >
         {items.length === 0 ? (
           <div className="empty-state panel-card">
             <p>Ainda não guardou favoritos.</p>
             <Link className="button primary" to="/comprar">
-              Explorar anúncios
+              Ver imóveis
             </Link>
           </div>
         ) : (
@@ -39,7 +48,7 @@ export default function FavoritesPage() {
             ))}
           </div>
         )}
-      </section>
+      </SectionBlock>
     </main>
   )
 }
