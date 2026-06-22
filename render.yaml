@@ -9,7 +9,7 @@ services:
     autoDeploy: true
     envVars:
       - key: VITE_GOOGLE_CLIENT_ID
-        sync: false
+        value: 17788689781-3laohdt607lr8jnh30fatvqtji6htt3l.apps.googleusercontent.com
     domains:
       - kutekalink.com
       - www.kutekalink.com

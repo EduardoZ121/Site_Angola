@@ -8,7 +8,7 @@
 4. Tipo: **Aplicação Web**
 5. **Origens JavaScript autorizadas:**
    - `https://kutekalink.com`
-   - `https://www.kutekalink.com`
+   - `https://www.kutekalink.com` ← **obrigatório se usar www**
    - `http://localhost:5173` (desenvolvimento)
 6. Copie o **Client ID**
 
