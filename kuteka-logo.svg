@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 220" role="img" aria-labelledby="title desc">
+  <title id="title">Kuteka</title>
+  <desc id="desc">Logo Kuteka com simbolo K, casa e janela</desc>
+  <rect width="620" height="220" rx="30" fill="#ffffff"/>
+  <g transform="translate(58 28)">
+    <path
+      d="M15 102 78 38v45l66-66h78l-83 84 91 91h-82l-70-70v70H15V102Z"
+      fill="#08263f"
+    />
+    <path d="M116 20h36v36h-36z" fill="#08263f"/>
+    <path d="m162 79 41-41h54l-68 68-27-27Z" fill="#08263f"/>
+    <g fill="#f0a91f" transform="translate(82 120)">
+      <rect width="18" height="18" rx="3"/>
+      <rect x="25" width="18" height="18" rx="3"/>
+      <rect y="25" width="18" height="18" rx="3"/>
+      <rect x="25" y="25" width="18" height="18" rx="3"/>
+    </g>
+  </g>
+  <g fill="#08263f" transform="translate(302 71)">
+    <text
+      font-family="Inter, Montserrat, Arial, sans-serif"
+      font-size="54"
+      font-weight="900"
+      letter-spacing="4"
+    >
+      KUTEKA
+    </text>
+    <text
+      y="45"
+      font-family="Inter, Montserrat, Arial, sans-serif"
+      font-size="15"
+      font-weight="800"
+      letter-spacing="1.6"
+    >
+      O SEU LUGAR, A SUA ESCOLHA.
+    </text>
+  </g>
+</svg>
