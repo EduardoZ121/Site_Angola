@@ -532,6 +532,10 @@ textarea {
   grid-template-columns: 1fr auto;
 }
 
+.admin-users-toolbar {
+  margin-bottom: 12px;
+}
+
 .admin-actions {
   display: flex;
   flex-wrap: wrap;

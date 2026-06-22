@@ -85,7 +85,7 @@ export function Layout() {
                   className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
                   onClick={closeMenu}
                 >
-                  Admin
+                  Administrador
                 </NavLink>
               ) : null}
               {accountNav.map((item) => (
@@ -123,7 +123,7 @@ export function Layout() {
             <NavLink to="/arrendar">Arrendar</NavLink>
             <NavLink to="/veiculos">Veículos</NavLink>
             <NavLink to="/publicar">Publicar</NavLink>
-            {isAdmin ? <NavLink to="/admin">Admin</NavLink> : null}
+            {isAdmin ? <NavLink to="/admin">Administrador</NavLink> : null}
           </div>
         </div>
       </footer>

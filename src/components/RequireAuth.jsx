@@ -14,15 +14,11 @@ export function RequireAuth() {
 }
 
 export function RequireAdmin() {
-  const { isAdmin, isLoggedIn } = useMarketplace()
+  const { isLoggedIn } = useMarketplace()
   const location = useLocation()
 
   if (!isLoggedIn) {
     return <Navigate to={`/entrar?redirect=${encodeURIComponent(location.pathname)}`} replace />
-  }
-
-  if (!isAdmin) {
-    return <Navigate to="/" replace />
   }
 
   return <Outlet />

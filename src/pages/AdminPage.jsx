@@ -18,6 +18,7 @@ export default function AdminPage() {
   const {
     listings,
     siteUsers,
+    notifications,
     isAdmin,
     isLoggedIn,
     profile,
@@ -31,6 +32,15 @@ export default function AdminPage() {
 
   const pendingListings = listings.filter((listing) => listing.status === 'Pendente')
   const otherListings = listings.filter((listing) => listing.status !== 'Pendente')
+  const rejectedCount = listings.filter((listing) => listing.status === 'Rejeitado').length
+  const recentNotifications = notifications.slice(0, 12)
+
+  function copyUserEmails() {
+    const emails = siteUsers.map((user) => user.email).join(', ')
+    if (emails && navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(emails)
+    }
+  }
 
   function handleReject(listingId) {
     rejectListing(listingId, rejectReason[listingId] || '')
@@ -75,6 +85,7 @@ export default function AdminPage() {
           <span>Total anúncios: {adminStats.total}</span>
           <span>Ativos: {adminStats.active}</span>
           <span>Pendentes: {adminStats.pending}</span>
+          <span>Rejeitados: {rejectedCount}</span>
           <span>Destaques: {adminStats.featured}</span>
         </div>
       </SectionBlock>
@@ -91,7 +102,13 @@ export default function AdminPage() {
             <p>Ainda ninguém entrou com Google neste ambiente.</p>
           </div>
         ) : (
-          <div className="admin-users-table panel-card">
+          <>
+            <div className="admin-actions admin-users-toolbar">
+              <button className="button filter-button" type="button" onClick={copyUserEmails}>
+                Copiar emails
+              </button>
+            </div>
+            <div className="admin-users-table panel-card">
             <table className="compare-table">
               <thead>
                 <tr>
@@ -119,6 +136,32 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+          </>
+        )}
+      </SectionBlock>
+
+      <SectionBlock
+        id="actividade"
+        eyebrow="Actividade"
+        title="Últimas notificações"
+        subtitle="Pedidos de publicação, aprovações e rejeições (demo local)."
+      >
+        {recentNotifications.length === 0 ? (
+          <div className="empty-state panel-card">
+            <p>Sem actividade registada.</p>
+          </div>
+        ) : (
+          <div className="notifications-list">
+            {recentNotifications.map((item) => (
+              <article className="notification-card panel-card read" key={item.id}>
+                <strong>{item.title}</strong>
+                <p>{item.body}</p>
+                <small>
+                  {item.ownerEmail || item.ownerName || '—'} • {formatDate(item.createdAt)}
+                </small>
+              </article>
+            ))}
           </div>
         )}
       </SectionBlock>
