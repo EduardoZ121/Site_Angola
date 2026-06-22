@@ -1,6 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
-import { RequireAuth, RequireAdmin } from './components/RequireAuth'
+import {
+  RequireAdmin,
+  RequireAuth,
+  RequireOnboarding,
+  RootRedirect,
+} from './components/RequireAuth'
 import { MarketplaceProvider } from './context/MarketplaceContext'
 import HomePage from './pages/HomePage'
 import ListingsPage from './pages/ListingsPage'
@@ -13,7 +18,9 @@ import FavoritesPage from './pages/FavoritesPage'
 import ComparePage from './pages/ComparePage'
 import PricesPage from './pages/PricesPage'
 import AdminPage from './pages/AdminPage'
-import LoginPage from './pages/LoginPage'
+import SignupPage from './pages/SignupPage'
+import RoleSelectPage from './pages/RoleSelectPage'
+import BuyerFlowPage from './pages/BuyerFlowPage'
 import AddPropertyPage from './pages/AddPropertyPage'
 import AddPropertyDetailsPage from './pages/AddPropertyDetailsPage'
 import './layout.css'
@@ -23,34 +30,106 @@ export default function App() {
   return (
     <MarketplaceProvider>
       <Routes>
-        <Route path="/entrar" element={<LoginPage />} />
+        <Route path="/cadastro" element={<SignupPage />} />
+        <Route path="/entrar" element={<Navigate to="/cadastro?mode=entrar" replace />} />
+        <Route path="/escolher-perfil" element={<RoleSelectPage />} />
+        <Route path="/procurar" element={<BuyerFlowPage />} />
+        <Route path="/" element={<RootRedirect />} />
 
-        <Route element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="comprar" element={<ListingsPage basePath="comprar" title="Comprar imóveis" subtitle="Casas, apartamentos, terrenos e lojas para venda em Angola." defaultCategory="Imóvel" defaultOperation="Venda" />} />
-          <Route path="comprar/filtros" element={<FiltersMapPage basePath="comprar" title="Filtros — Comprar imóveis" subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme." defaultCategory="Imóvel" defaultOperation="Venda" />} />
-          <Route path="arrendar" element={<ListingsPage basePath="arrendar" title="Arrendar imóveis" subtitle="Arrendamentos mensais com contacto directo ao senhorio." defaultCategory="Imóvel" defaultOperation="Arrendamento" />} />
-          <Route path="arrendar/filtros" element={<FiltersMapPage basePath="arrendar" title="Filtros — Arrendar imóveis" subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme." defaultCategory="Imóvel" defaultOperation="Arrendamento" />} />
-          <Route path="veiculos" element={<ListingsPage basePath="veiculos" title="Veículos" subtitle="Carros e pickups para compra, com filtros por marca e modelo." defaultCategory="Veículo" defaultOperation="Todos" />} />
-          <Route path="veiculos/filtros" element={<FiltersMapPage basePath="veiculos" title="Filtros — Veículos" subtitle="Escolha zona, marca, modelo e preço, depois confirme." defaultCategory="Veículo" defaultOperation="Todos" showVehicleFilters />} />
-          <Route path="anuncio/:id" element={<ListingDetailPage />} />
-          <Route path="precos" element={<PricesPage />} />
+        <Route element={<RequireAuth />}>
+          <Route element={<RequireOnboarding />}>
+            <Route element={<Layout />}>
+              <Route path="inicio" element={<HomePage />} />
+              <Route
+                path="comprar"
+                element={
+                  <ListingsPage
+                    basePath="comprar"
+                    title="Comprar imóveis"
+                    subtitle="Casas, apartamentos, terrenos e lojas para venda em Angola."
+                    defaultCategory="Imóvel"
+                    defaultOperation="Venda"
+                  />
+                }
+              />
+              <Route
+                path="comprar/filtros"
+                element={
+                  <FiltersMapPage
+                    basePath="comprar"
+                    title="Filtros — Comprar imóveis"
+                    subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme."
+                    defaultCategory="Imóvel"
+                    defaultOperation="Venda"
+                  />
+                }
+              />
+              <Route
+                path="arrendar"
+                element={
+                  <ListingsPage
+                    basePath="arrendar"
+                    title="Arrendar imóveis"
+                    subtitle="Arrendamentos mensais com contacto directo ao senhorio."
+                    defaultCategory="Imóvel"
+                    defaultOperation="Arrendamento"
+                  />
+                }
+              />
+              <Route
+                path="arrendar/filtros"
+                element={
+                  <FiltersMapPage
+                    basePath="arrendar"
+                    title="Filtros — Arrendar imóveis"
+                    subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme."
+                    defaultCategory="Imóvel"
+                    defaultOperation="Arrendamento"
+                  />
+                }
+              />
+              <Route
+                path="veiculos"
+                element={
+                  <ListingsPage
+                    basePath="veiculos"
+                    title="Veículos"
+                    subtitle="Carros e pickups para compra, com filtros por marca e modelo."
+                    defaultCategory="Veículo"
+                    defaultOperation="Todos"
+                  />
+                }
+              />
+              <Route
+                path="veiculos/filtros"
+                element={
+                  <FiltersMapPage
+                    basePath="veiculos"
+                    title="Filtros — Veículos"
+                    subtitle="Escolha zona, marca, modelo e preço, depois confirme."
+                    defaultCategory="Veículo"
+                    defaultOperation="Todos"
+                    showVehicleFilters
+                  />
+                }
+              />
+              <Route path="anuncio/:id" element={<ListingDetailPage />} />
+              <Route path="precos" element={<PricesPage />} />
+              <Route path="conta" element={<AccountPage />} />
+              <Route path="favoritos" element={<FavoritesPage />} />
+              <Route path="comparar" element={<ComparePage />} />
+              <Route path="publicar" element={<PublishPage />} />
+              <Route path="publicar/enviado/:id" element={<PublishSubmittedPage />} />
+              <Route path="adicionar-propriedade" element={<AddPropertyPage />} />
+              <Route path="adicionar-propriedade/detalhes" element={<AddPropertyDetailsPage />} />
 
-          <Route element={<RequireAuth />}>
-            <Route path="conta" element={<AccountPage />} />
-            <Route path="favoritos" element={<FavoritesPage />} />
-            <Route path="comparar" element={<ComparePage />} />
-            <Route path="publicar" element={<PublishPage />} />
-            <Route path="publicar/enviado/:id" element={<PublishSubmittedPage />} />
-            <Route path="adicionar-propriedade" element={<AddPropertyPage />} />
-            <Route path="adicionar-propriedade/detalhes" element={<AddPropertyDetailsPage />} />
+              <Route element={<RequireAdmin />}>
+                <Route path="admin" element={<AdminPage />} />
+              </Route>
+
+              <Route path="*" element={<Navigate to="/inicio" replace />} />
+            </Route>
           </Route>
-
-          <Route element={<RequireAdmin />}>
-            <Route path="admin" element={<AdminPage />} />
-          </Route>
-
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </MarketplaceProvider>

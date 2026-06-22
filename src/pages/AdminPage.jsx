@@ -48,7 +48,7 @@ export default function AdminPage() {
   }
 
   if (!isLoggedIn) {
-    return <Navigate to="/entrar?redirect=/admin" replace />
+    return <Navigate to="/cadastro?redirect=/admin" replace />
   }
 
   if (!isAdmin) {

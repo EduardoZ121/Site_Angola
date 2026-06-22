@@ -8,6 +8,13 @@ export const STORAGE_KEYS = {
   chats: 'kuteka.market.chats',
   notifications: 'kuteka.market.notifications',
   siteUsers: 'kuteka.market.siteUsers',
+  accounts: 'kuteka.market.accounts',
+  buyerPrefs: 'kuteka.market.buyerPrefs',
+}
+
+export const userRoles = {
+  owner: 'proprietario',
+  buyer: 'comprador',
 }
 
 export const accountTypes = [
@@ -194,6 +201,31 @@ export const defaultProfile = {
   verifiedDocument: false,
   authProvider: '',
   googleId: '',
+  sessionId: '',
   picture: '',
   emailVerified: false,
+  userRole: '',
+  buyerOnboardingDone: false,
+}
+
+export const buyerPropertyTypes = [
+  { id: 'casa', label: 'Casa / Vivenda', icon: '🏠', category: 'Imóvel', propertyType: 'Vivenda' },
+  { id: 'apartamento', label: 'Apartamento', icon: '🏢', category: 'Imóvel', propertyType: 'Apartamento' },
+  { id: 'terreno', label: 'Terreno', icon: '📐', category: 'Imóvel', propertyType: 'Terreno' },
+  { id: 'loja', label: 'Loja / Escritório', icon: '🏪', category: 'Imóvel', propertyType: 'Loja' },
+  { id: 'carro', label: 'Carro', icon: '🚗', category: 'Veículo', propertyType: '' },
+  { id: 'pickup', label: 'Pickup / SUV', icon: '🛻', category: 'Veículo', propertyType: '' },
+]
+
+export const buyerOperations = [
+  { id: 'comprar', label: 'Comprar', operation: 'Venda' },
+  { id: 'arrendar', label: 'Arrendar', operation: 'Arrendamento' },
+]
+
+export const defaultBuyerPrefs = {
+  propertyTypeId: '',
+  operationId: '',
+  province: 'Luanda',
+  maxPrice: '',
+  bedrooms: '',
 }

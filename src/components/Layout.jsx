@@ -29,7 +29,7 @@ export function Layout() {
     <div className="site-shell">
       <header className={`site-header ${isHome ? 'site-header-home' : 'site-header-inner-page'}`}>
         <div className="site-header-bar">
-          <NavLink className="brand" to="/" aria-label="Kuteka início" onClick={closeMenu}>
+          <NavLink className="brand" to="/inicio" aria-label="Kuteka início" onClick={closeMenu}>
             <img className="brand-logo" src="/kuteka-logo.svg" alt="Kuteka" />
           </NavLink>
 
@@ -72,7 +72,7 @@ export function Layout() {
                 </NavLink>
               ) : (
                 <NavLink
-                  to="/entrar"
+                  to="/cadastro?mode=entrar"
                   className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
                   onClick={closeMenu}
                 >

@@ -9,7 +9,7 @@ export function useRequireLogin() {
     const target = redirectPath || window.location.pathname
 
     if (!isLoggedIn) {
-      navigate(`/entrar?redirect=${encodeURIComponent(target)}`)
+      navigate(`/cadastro?redirect=${encodeURIComponent(target)}`)
       return false
     }
 

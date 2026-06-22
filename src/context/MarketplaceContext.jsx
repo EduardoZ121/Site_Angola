@@ -9,9 +9,12 @@ import {
   emptyListing,
   provinces,
   starterListings,
+  userRoles,
+  defaultBuyerPrefs,
 } from '../data/constants'
 import { trustSealFromProfile } from '../utils/format'
 import { parseGoogleCredential } from '../utils/googleAuth'
+import { createSessionId, encodePassword, verifyPassword } from '../utils/localAuth'
 
 const MarketplaceContext = createContext(null)
 
@@ -74,10 +77,38 @@ export function MarketplaceProvider({ children }) {
       return []
     }
   })
+  const [accounts, setAccounts] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.accounts)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
+  const [buyerPrefs, setBuyerPrefs] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.buyerPrefs)
+      return raw ? JSON.parse(raw) : defaultBuyerPrefs
+    } catch {
+      return defaultBuyerPrefs
+    }
+  })
 
   const isAdmin = profile.email?.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()
 
-  const isLoggedIn = Boolean(profile.googleId && profile.email)
+  const isLoggedIn = Boolean(profile.email && (profile.googleId || profile.sessionId))
+
+  const needsRoleSelection = isLoggedIn && !profile.userRole
+
+  const needsBuyerFlow =
+    isLoggedIn &&
+    profile.userRole === userRoles.buyer &&
+    !profile.buyerOnboardingDone
+
+  const isOnboardingComplete =
+    isLoggedIn &&
+    profile.userRole &&
+    (profile.userRole === userRoles.owner || profile.buyerOnboardingDone)
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.siteUsers, JSON.stringify(siteUsers))
@@ -86,6 +117,14 @@ export function MarketplaceProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.notifications, JSON.stringify(notifications))
   }, [notifications])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.accounts, JSON.stringify(accounts))
+  }, [accounts])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.buyerPrefs, JSON.stringify(buyerPrefs))
+  }, [buyerPrefs])
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile))
@@ -147,52 +186,138 @@ export function MarketplaceProvider({ children }) {
     })
   }
 
-  function registerSiteUser(googleUser) {
+  function registerSiteUser(user) {
     setSiteUsers((prev) => {
-      const existing = prev.find((user) => user.email === googleUser.email)
+      const existing = prev.find((entry) => entry.email === user.email)
       const entry = {
-        email: googleUser.email,
-        name: googleUser.name,
-        picture: googleUser.picture || '',
-        googleId: googleUser.googleId,
+        email: user.email,
+        name: user.name,
+        picture: user.picture || '',
+        googleId: user.googleId || '',
+        authProvider: user.authProvider || 'email',
         firstLoginAt: existing?.firstLoginAt || new Date().toISOString(),
         lastLoginAt: new Date().toISOString(),
         loginCount: (existing?.loginCount || 0) + 1,
       }
-      return [entry, ...prev.filter((user) => user.email !== googleUser.email)]
+      return [entry, ...prev.filter((entry) => entry.email !== user.email)]
     })
+  }
+
+  function startSession(user, authProvider) {
+    registerSiteUser({ ...user, authProvider })
+
+    setProfile((current) => ({
+      ...current,
+      name: user.name || current.name,
+      email: user.email,
+      googleId: user.googleId || '',
+      sessionId: user.sessionId || current.sessionId,
+      picture: user.picture || current.picture,
+      emailVerified: user.emailVerified ?? current.emailVerified,
+      authProvider,
+      verifiedProfile: user.emailVerified || current.verifiedProfile,
+    }))
+
+    addNotification({
+      type: 'account_welcome',
+      ownerName: user.name,
+      ownerEmail: user.email,
+      title: 'Bem-vindo ao Kuteka',
+      body: `Olá, ${user.name}! Complete o seu perfil para começar a comprar ou publicar em Angola.`,
+    })
+  }
+
+  function registerWithEmail({ name, email, password }) {
+    const normalizedEmail = email.trim().toLowerCase()
+    if (!name.trim() || !normalizedEmail || password.length < 6) {
+      return { ok: false, error: 'Preencha nome, email válido e senha com pelo menos 6 caracteres.' }
+    }
+
+    if (accounts.some((account) => account.email === normalizedEmail)) {
+      return { ok: false, error: 'Este email já está cadastrado. Entre com a sua senha.' }
+    }
+
+    const account = {
+      email: normalizedEmail,
+      name: name.trim(),
+      passwordHash: encodePassword(password),
+      createdAt: new Date().toISOString(),
+    }
+
+    setAccounts((prev) => [account, ...prev])
+    startSession(
+      { name: account.name, email: account.email, sessionId: createSessionId(), emailVerified: false },
+      'email',
+    )
+
+    return { ok: true }
+  }
+
+  function loginWithEmail({ email, password }) {
+    const normalizedEmail = email.trim().toLowerCase()
+    const account = accounts.find((entry) => entry.email === normalizedEmail)
+
+    if (!account || !verifyPassword(password, account.passwordHash)) {
+      return { ok: false, error: 'Email ou senha incorrectos.' }
+    }
+
+    startSession(
+      {
+        name: account.name,
+        email: account.email,
+        sessionId: createSessionId(),
+        emailVerified: false,
+      },
+      'email',
+    )
+
+    return { ok: true }
   }
 
   function loginWithGoogle(credential) {
     const googleUser = parseGoogleCredential(credential)
     if (!googleUser?.email) return false
 
-    registerSiteUser(googleUser)
-
-    setProfile((current) => ({
-      ...current,
-      name: googleUser.name || current.name,
-      email: googleUser.email,
-      googleId: googleUser.googleId,
-      picture: googleUser.picture,
-      emailVerified: googleUser.emailVerified,
-      authProvider: 'google',
-      verifiedProfile: googleUser.emailVerified || current.verifiedProfile,
-    }))
-
-    addNotification({
-      type: 'account_welcome',
-      ownerName: googleUser.name,
-      ownerEmail: googleUser.email,
-      title: 'Conta Google ligada ao Kuteka',
-      body: `Bem-vindo, ${googleUser.name}! Vai receber emails em ${googleUser.email} quando publicar ou quando o administrador aprovar anúncios.`,
-    })
+    startSession(
+      {
+        name: googleUser.name,
+        email: googleUser.email,
+        googleId: googleUser.googleId,
+        picture: googleUser.picture,
+        emailVerified: googleUser.emailVerified,
+      },
+      'google',
+    )
 
     return true
   }
 
+  function setUserRole(role) {
+    setProfile((current) => ({
+      ...current,
+      userRole: role,
+      buyerOnboardingDone: role === userRoles.owner ? true : current.buyerOnboardingDone,
+    }))
+  }
+
+  function completeBuyerOnboarding(prefs) {
+    setBuyerPrefs(prefs)
+    setProfile((current) => ({
+      ...current,
+      buyerOnboardingDone: true,
+    }))
+  }
+
+  function getDefaultRoute() {
+    if (!isLoggedIn) return '/cadastro'
+    if (needsRoleSelection) return '/escolher-perfil'
+    if (needsBuyerFlow) return '/procurar'
+    return '/inicio'
+  }
+
   function logoutAccount() {
     setProfile({ ...defaultProfile })
+    setBuyerPrefs(defaultBuyerPrefs)
   }
 
   function addNotification(entry) {
@@ -393,8 +518,17 @@ export function MarketplaceProvider({ children }) {
     setProfile,
     isLoggedIn,
     isAdmin,
+    needsRoleSelection,
+    needsBuyerFlow,
+    isOnboardingComplete,
     loginWithGoogle,
+    registerWithEmail,
+    loginWithEmail,
+    setUserRole,
+    completeBuyerOnboarding,
+    getDefaultRoute,
     logoutAccount,
+    buyerPrefs,
     siteUsers,
     listings,
     favorites,

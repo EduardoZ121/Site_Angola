@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { provinces } from '../data/constants'
+import { provinces, userRoles } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { SectionBlock } from '../components/SectionBlock'
 
@@ -36,7 +36,6 @@ const sections = [
 ]
 
 const tools = [
-  { to: '/entrar', title: 'Entrar com Google', text: 'Crie conta e receba emails sobre anúncios.' },
   { to: '/conta', title: 'Minha conta', text: 'Perfil, verificação e selo de confiança.' },
   { to: '/favoritos', title: 'Favoritos', text: 'Anúncios guardados para ver depois.' },
   { to: '/comparar', title: 'Comparar', text: 'Compare até 3 imóveis ou veículos.' },
@@ -45,7 +44,8 @@ const tools = [
 
 export default function HomePage() {
   const navigate = useNavigate()
-  const { listings, favorites } = useMarketplace()
+  const { listings, favorites, profile, buyerPrefs } = useMarketplace()
+  const isOwner = profile.userRole === userRoles.owner
   const [searchTab, setSearchTab] = useState('comprar')
   const [query, setQuery] = useState('')
   const [province, setProvince] = useState('Todos')
@@ -66,10 +66,26 @@ export default function HomePage() {
       <section className="home-hero-section">
         <div className="home-hero-content">
           <p className="eyebrow eyebrow-light">Kuteka • Angola</p>
-          <h1>Encontre casa, carro ou espaço com confiança.</h1>
+          <h1>
+            {isOwner
+              ? `Olá, ${profile.name?.split(' ')[0] || 'proprietário'}! Publique e gerencie os seus anúncios.`
+              : `Olá, ${profile.name?.split(' ')[0] || 'comprador'}! Encontre o imóvel ou carro ideal.`}
+          </h1>
           <p className="home-hero-lead">
-            Cada botão abre a sua própria página — comprar, arrendar, veículos ou publicar.
+            {isOwner
+              ? 'Adicione casas, apartamentos ou veículos — a nossa equipa aprova antes de publicar.'
+              : buyerPrefs.province
+                ? `A sua pesquisa está focada em ${buyerPrefs.province}. Pode alterar abaixo ou repetir o questionário.`
+                : 'Compre, arrende ou compare anúncios em Kz com contacto directo.'}
           </p>
+
+          {!isOwner ? (
+            <div className="home-role-actions">
+              <Link className="button filter-button" to="/procurar">
+                Refazer questionário
+              </Link>
+            </div>
+          ) : null}
 
           <form className="home-search-card" onSubmit={runSearch}>
             <div className="search-tabs" role="tablist" aria-label="Tipo de pesquisa">
@@ -121,7 +137,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECÇÃO — Adicionar propriedade (casa, carro, etc.) */}
+      {/* SECÇÃO — Adicionar propriedade (proprietários) */}
+      {isOwner ? (
       <SectionBlock
         id="adicionar-propriedade"
         eyebrow="Proprietários"
@@ -152,6 +169,7 @@ export default function HomePage() {
           </div>
         </div>
       </SectionBlock>
+      ) : null}
 
       {/* SECÇÃO 2 — Navegar por área (cada card = página própria) */}
       <SectionBlock
@@ -161,7 +179,9 @@ export default function HomePage() {
         subtitle="Cada opção abre uma página separada, como no Daft."
       >
         <div className="browse-grid">
-          {sections.map((item) => (
+          {sections
+            .filter((item) => (isOwner ? true : item.to !== '/publicar'))
+            .map((item) => (
             <Link className="browse-card" key={item.to} to={item.to}>
               <span className="browse-icon">{item.icon}</span>
               <strong>{item.title}</strong>
