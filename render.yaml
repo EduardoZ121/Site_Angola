@@ -6,6 +6,9 @@ services:
     branch: main
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
+    domains:
+      - kutekalink.com
+      - www.kutekalink.com
     routes:
       - type: rewrite
         source: /*
