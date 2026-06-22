@@ -11,6 +11,7 @@ import {
   starterListings,
 } from '../data/constants'
 import { trustSealFromProfile } from '../utils/format'
+import { parseGoogleCredential } from '../utils/googleAuth'
 
 const MarketplaceContext = createContext(null)
 
@@ -67,7 +68,11 @@ export function MarketplaceProvider({ children }) {
     }
   })
 
-  const isAdmin = adminEmail.trim().toLowerCase() === ADMIN_EMAIL
+  const isAdmin =
+    adminEmail.trim().toLowerCase() === ADMIN_EMAIL ||
+    profile.email?.trim().toLowerCase() === ADMIN_EMAIL
+
+  const isLoggedIn = Boolean(profile.googleId || (profile.email && profile.name))
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.notifications, JSON.stringify(notifications))
@@ -131,6 +136,36 @@ export function MarketplaceProvider({ children }) {
     ).then((photos) => {
       setListingForm((current) => ({ ...current, photos }))
     })
+  }
+
+  function loginWithGoogle(credential) {
+    const googleUser = parseGoogleCredential(credential)
+    if (!googleUser?.email) return false
+
+    setProfile((current) => ({
+      ...current,
+      name: googleUser.name || current.name,
+      email: googleUser.email,
+      googleId: googleUser.googleId,
+      picture: googleUser.picture,
+      emailVerified: googleUser.emailVerified,
+      authProvider: 'google',
+      verifiedProfile: googleUser.emailVerified || current.verifiedProfile,
+    }))
+
+    addNotification({
+      type: 'account_welcome',
+      ownerName: googleUser.name,
+      ownerEmail: googleUser.email,
+      title: 'Conta Google ligada ao Kuteka',
+      body: `Bem-vindo, ${googleUser.name}! Vai receber emails em ${googleUser.email} quando publicar ou quando o administrador aprovar anúncios.`,
+    })
+
+    return true
+  }
+
+  function logoutAccount() {
+    setProfile({ ...defaultProfile })
   }
 
   function addNotification(entry) {
@@ -329,6 +364,9 @@ export function MarketplaceProvider({ children }) {
   const value = {
     profile,
     setProfile,
+    isLoggedIn,
+    loginWithGoogle,
+    logoutAccount,
     listings,
     favorites,
     history,

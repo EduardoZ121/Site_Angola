@@ -191,4 +191,8 @@ export const defaultProfile = {
   verifiedProfile: false,
   verifiedPhone: false,
   verifiedDocument: false,
+  authProvider: '',
+  googleId: '',
+  picture: '',
+  emailVerified: false,
 }

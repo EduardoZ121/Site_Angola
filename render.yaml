@@ -7,6 +7,9 @@ services:
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     autoDeploy: true
+    envVars:
+      - key: VITE_GOOGLE_CLIENT_ID
+        sync: false
     domains:
       - kutekalink.com
       - www.kutekalink.com

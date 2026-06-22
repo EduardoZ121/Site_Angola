@@ -36,6 +36,7 @@ const sections = [
 ]
 
 const tools = [
+  { to: '/entrar', title: 'Entrar com Google', text: 'Crie conta e receba emails sobre anúncios.' },
   { to: '/conta', title: 'Minha conta', text: 'Perfil, verificação e selo de confiança.' },
   { to: '/favoritos', title: 'Favoritos', text: 'Anúncios guardados para ver depois.' },
   { to: '/comparar', title: 'Comparar', text: 'Compare até 3 imóveis ou veículos.' },

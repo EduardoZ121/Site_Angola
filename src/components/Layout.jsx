@@ -10,14 +10,13 @@ const mainNav = [
 ]
 
 const accountNav = [
-  { to: '/conta', label: 'Conta' },
   { to: '/favoritos', label: 'Favoritos' },
   { to: '/comparar', label: 'Comparar' },
   { to: '/precos', label: 'Preços' },
 ]
 
 export function Layout() {
-  const { favorites, compare } = useMarketplace()
+  const { favorites, compare, profile, isLoggedIn, logoutAccount } = useMarketplace()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const isHome = location.pathname === '/'
@@ -60,6 +59,26 @@ export function Layout() {
             </div>
             <div className="nav-group">
               <p className="nav-group-label">Conta</p>
+              {isLoggedIn && profile.picture ? (
+                <img className="nav-user-avatar" src={profile.picture} alt="" />
+              ) : null}
+              {isLoggedIn ? (
+                <NavLink
+                  to="/conta"
+                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                  onClick={closeMenu}
+                >
+                  {profile.name?.split(' ')[0] || 'Conta'}
+                </NavLink>
+              ) : (
+                <NavLink
+                  to="/entrar"
+                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                  onClick={closeMenu}
+                >
+                  Entrar
+                </NavLink>
+              )}
               {accountNav.map((item) => (
                 <NavLink
                   key={item.to}
@@ -72,6 +91,11 @@ export function Layout() {
                   {item.to === '/comparar' && compare.length > 0 ? ` (${compare.length})` : ''}
                 </NavLink>
               ))}
+              {isLoggedIn ? (
+                <button className="nav-link subtle nav-logout" type="button" onClick={logoutAccount}>
+                  Sair
+                </button>
+              ) : null}
             </div>
           </nav>
         </div>

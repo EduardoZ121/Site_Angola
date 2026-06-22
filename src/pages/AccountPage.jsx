@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { GoogleAuthButton } from '../components/GoogleAuthButton'
 import { Toggle } from '../components/ui'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import { formatKz, trustSealFromProfile } from '../utils/format'
@@ -12,6 +13,7 @@ const statusLabels = {
 }
 
 export default function AccountPage() {
+  const navigate = useNavigate()
   const {
     profile,
     setProfile,
@@ -19,6 +21,9 @@ export default function AccountPage() {
     getMyListings,
     getMyNotifications,
     markNotificationRead,
+    isLoggedIn,
+    loginWithGoogle,
+    logoutAccount,
   } = useMarketplace()
 
   const myListings = getMyListings()
@@ -29,8 +34,54 @@ export default function AccountPage() {
       <PageIntro
         eyebrow="Minha conta"
         title="Perfil e verificação"
-        subtitle="Veja mensagens, anúncios enviados e estado de aprovação."
+        subtitle={
+          isLoggedIn
+            ? 'Conta ligada — recebe emails e notificações sobre os seus anúncios.'
+            : 'Entre com Google para receber emails automáticos e gerir anúncios.'
+        }
       />
+
+      <SectionBlock
+        id="google-conta"
+        eyebrow="Conta Google"
+        title={isLoggedIn && profile.authProvider === 'google' ? 'Sessão Google activa' : 'Criar conta com Google'}
+        tone="muted"
+      >
+        {isLoggedIn && profile.authProvider === 'google' ? (
+          <div className="google-session-card panel-card">
+            <div className="profile-review-head">
+              {profile.picture ? (
+                <img className="nav-user-avatar large" src={profile.picture} alt="" />
+              ) : (
+                <span className="profile-avatar">{profile.name?.charAt(0) || '?'}</span>
+              )}
+              <div>
+                <strong>{profile.name}</strong>
+                <p>{profile.email}</p>
+                <small>Conta Google • emails activos para notificações Kuteka</small>
+              </div>
+            </div>
+            <button className="text-button" type="button" onClick={logoutAccount}>
+              Terminar sessão Google
+            </button>
+          </div>
+        ) : (
+          <div className="google-login-card panel-card">
+            <p>
+              Ligue a conta Google para receber por email quando o administrador aprovar ou
+              rejeitar anúncios, e quando o anúncio for publicado.
+            </p>
+            <GoogleAuthButton
+              onCredential={(credential) => {
+                if (loginWithGoogle(credential)) navigate('/conta')
+              }}
+            />
+            <Link className="text-button" to="/entrar">
+              Ver todos os benefícios da conta Google
+            </Link>
+          </div>
+        )}
+      </SectionBlock>
 
       <SectionBlock id="mensagens" eyebrow="Mensagens" title="Notificações e email">
         {notifications.length === 0 ? (
@@ -126,6 +177,7 @@ export default function AccountPage() {
               Email
               <input
                 value={profile.email}
+                readOnly={profile.authProvider === 'google'}
                 onChange={(event) => setProfile((current) => ({ ...current, email: event.target.value }))}
               />
             </label>

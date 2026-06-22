@@ -63,6 +63,11 @@ export default function PublishPage() {
               {profile.email ? ` • ${profile.email}` : ''}
             </p>
           )}
+          {!profile.authProvider && (
+            <p className="warning-text">
+              <Link to="/entrar">Entre com Google</Link> para receber emails quando o anúncio for aprovado.
+            </p>
+          )}
         </div>
       </SectionBlock>
 

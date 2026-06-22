@@ -6,12 +6,13 @@ import ListingsPage from './pages/ListingsPage'
 import FiltersMapPage from './pages/FiltersMapPage'
 import ListingDetailPage from './pages/ListingDetailPage'
 import PublishPage from './pages/PublishPage'
+import PublishSubmittedPage from './pages/PublishSubmittedPage'
 import AccountPage from './pages/AccountPage'
 import FavoritesPage from './pages/FavoritesPage'
 import ComparePage from './pages/ComparePage'
 import PricesPage from './pages/PricesPage'
 import AdminPage from './pages/AdminPage'
-import PublishSubmittedPage from './pages/PublishSubmittedPage'
+import LoginPage from './pages/LoginPage'
 import AddPropertyPage from './pages/AddPropertyPage'
 import AddPropertyDetailsPage from './pages/AddPropertyDetailsPage'
 import './layout.css'
@@ -102,6 +103,7 @@ export default function App() {
           <Route path="publicar" element={<PublishPage />} />
           <Route path="publicar/enviado/:id" element={<PublishSubmittedPage />} />
           <Route path="conta" element={<AccountPage />} />
+          <Route path="entrar" element={<LoginPage />} />
           <Route path="favoritos" element={<FavoritesPage />} />
           <Route path="comparar" element={<ComparePage />} />
           <Route path="precos" element={<PricesPage />} />
