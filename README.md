@@ -25,15 +25,13 @@ Esta primeira versao e um frontend. Os anuncios criados no formulario ficam guar
 - Ideias iniciais de monetizacao.
 - Layout responsivo para desktop e telemovel.
 
-## Admin demo
+## Admin e login
 
-Enquanto o Google Login esta ligado, o painel admin usa o email:
+- **Login:** página dedicada em `/entrar` (ecrã completo, Google).
+- **Admin:** só `amarilinhaa@gmail.com` — painel em `/admin` (utilizadores, aprovar/rejeitar anúncios).
+- **Sem login:** ver casas, carros e anúncios. **Com login:** publicar, favoritos, comparar, conta.
 
-```txt
-amarilinhaa@gmail.com
-```
-
-Quando o backend e o Google Login forem adicionados, esse valor sera trocado pelo email real do dono do site.
+Guia completo: [`docs/ADMIN-E-LOGIN.md`](docs/ADMIN-E-LOGIN.md)
 
 ## Deploy no Render
 
