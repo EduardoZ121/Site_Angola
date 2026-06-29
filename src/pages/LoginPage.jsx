@@ -1,73 +1,85 @@
-import { useEffect } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AuthDivider } from '../components/auth/AuthDivider'
+import { AuthFormField } from '../components/auth/AuthFormField'
+import { AuthLayout } from '../components/auth/AuthLayout'
+import { AuthNavLinks } from '../components/auth/AuthNavLinks'
 import { GoogleAuthButton } from '../components/GoogleAuthButton'
+import { buildAuthPath, useAuthRedirect } from '../hooks/useAuthRedirect'
 import { useMarketplace } from '../context/MarketplaceContext'
 
-const loginMessages = {
-  '/publicar': 'Entre para publicar o seu imóvel ou veículo.',
-  '/adicionar-propriedade': 'Entre para adicionar a sua propriedade.',
-  '/adicionar-propriedade/detalhes': 'Entre para completar os detalhes da propriedade.',
-  '/favoritos': 'Entre para guardar anúncios nos favoritos.',
-  '/comparar': 'Entre para comparar anúncios.',
-  '/conta': 'Entre para aceder à sua conta e mensagens.',
-  '/admin': 'Área reservada ao administrador Kuteka.',
-}
-
 export default function LoginPage() {
-  const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
-  const { profile, loginWithGoogle, isLoggedIn } = useMarketplace()
-  const redirectTo = searchParams.get('redirect') || '/conta'
-  const loginHint = loginMessages[redirectTo.split('?')[0]] || 'Entre com Google para continuar no Kuteka.'
+  const { isLoggedIn, loginWithEmail, loginWithGoogle } = useMarketplace()
+  const { redirectParam } = useAuthRedirect()
 
-  useEffect(() => {
-    if (isLoggedIn) navigate(redirectTo, { replace: true })
-  }, [isLoggedIn, navigate, redirectTo])
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+
+  function handleSubmit(event) {
+    event.preventDefault()
+    setError('')
+
+    const result = loginWithEmail({ email, password })
+    if (!result.ok) setError(result.error)
+  }
 
   function handleGoogleCredential(credential) {
-    const ok = loginWithGoogle(credential)
-    if (ok) navigate(redirectTo, { replace: true })
+    loginWithGoogle(credential)
   }
 
   if (isLoggedIn) return null
 
+  const forgotPath = buildAuthPath('/recuperar-senha', redirectParam)
+  const signupPath = buildAuthPath('/cadastro', redirectParam)
+
   return (
-    <div className="login-screen">
-      <div className="login-screen-panel login-screen-brand">
-        <Link className="login-brand-link" to="/">
-          <img className="brand-logo" src="/kuteka-logo.svg" alt="Kuteka" />
-        </Link>
-        <p className="eyebrow eyebrow-light">Kuteka • Angola</p>
-        <h1>Bem-vindo de volta</h1>
-        <p className="login-brand-text">
-          Compre, arrende ou publique imóveis e veículos em Angola. A sua conta Google liga
-          notificações, favoritos e publicações.
-        </p>
-        <ul className="login-brand-list">
-          <li>Ver casas e carros sem login</li>
-          <li>Login obrigatório para publicar ou guardar favoritos</li>
-          <li>Anúncios aprovados pelo administrador</li>
-        </ul>
-        <Link className="login-back-home" to="/">
-          ← Voltar ao site
-        </Link>
-      </div>
+    <AuthLayout
+      title="Bem-vindo de volta"
+      subtitle="Entre para gerir anúncios, favoritos e contactos."
+      footnote="Ao entrar, concorda com as regras do marketplace Kuteka para anúncios em Angola."
+    >
+      <form className="auth-facebook-form" onSubmit={handleSubmit}>
+        <AuthFormField
+          id="login-email"
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          placeholder="nome@email.com"
+          autoComplete="email"
+        />
+        <AuthFormField
+          id="login-password"
+          label="Senha"
+          type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          placeholder="A sua senha"
+          autoComplete="current-password"
+          minLength={6}
+        />
 
-      <div className="login-screen-panel login-screen-form">
-        <div className="login-form-card">
-          <p className="eyebrow">Conta Google</p>
-          <h2>Entrar ou criar conta</h2>
-          <p className="login-form-lead">{loginHint}</p>
-
-          <GoogleAuthButton onCredential={handleGoogleCredential} />
-
-          <div className="login-form-notes">
-            <p>✉ Recebe emails quando o anúncio for aprovado</p>
-            <p>🔐 Sem palavra-passe extra — usa a conta Google</p>
-            <p>🏠 Senhorios e compradores usam a mesma entrada</p>
-          </div>
+        <div className="auth-form-row">
+          <Link className="auth-forgot-link" to={forgotPath}>
+            Esqueceu a senha?
+          </Link>
         </div>
-      </div>
-    </div>
+
+        {error ? <p className="auth-facebook-error">{error}</p> : null}
+
+        <button className="auth-facebook-submit auth-facebook-submit-blue" type="submit">
+          Entrar
+        </button>
+      </form>
+
+      <AuthDivider />
+
+      <GoogleAuthButton onCredential={handleGoogleCredential} label="Continuar com Google" />
+
+      <AuthNavLinks
+        primary={{ to: signupPath, label: 'Não tem conta? Cadastrar-se' }}
+      />
+    </AuthLayout>
   )
 }

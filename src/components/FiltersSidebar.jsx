@@ -1,9 +1,17 @@
 import { bairros, provinces } from '../data/constants'
 import { FilterSelect } from './ui'
 
-export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false, hideQuery = false }) {
+const propertyTypes = ['Todos', 'Apartamento', 'Vivenda', 'Terreno', 'Loja']
+
+export function FiltersSidebar({
+  filters,
+  setFilters,
+  showVehicleFilters = false,
+  showPropertyFilters = false,
+  hideQuery = false,
+}) {
   return (
-    <aside className="filters-panel">
+    <aside className="filters-panel catalog-sidebar" aria-label="Filtros de pesquisa">
       <h3>Filtros</h3>
       {!hideQuery && (
         <label>
@@ -11,9 +19,18 @@ export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false
           <input
             placeholder="Bairro, marca, título..."
             value={filters.query}
+            aria-label="Pesquisa por texto"
             onChange={(event) => setFilters((current) => ({ ...current, query: event.target.value }))}
           />
         </label>
+      )}
+      {showPropertyFilters && (
+        <FilterSelect
+          label="Tipo de imóvel"
+          value={filters.propertyType}
+          onChange={(value) => setFilters((current) => ({ ...current, propertyType: value }))}
+          options={propertyTypes}
+        />
       )}
       <FilterSelect
         label="Província"
@@ -34,21 +51,63 @@ export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false
         options={['Todos', ...new Set(Object.values(bairros).flat())]}
       />
       <label>
-        Preço mínimo
+        Preço mínimo (Kz)
         <input
           type="number"
+          min="0"
           value={filters.minPrice}
+          aria-label="Preço mínimo"
           onChange={(event) => setFilters((current) => ({ ...current, minPrice: event.target.value }))}
         />
       </label>
       <label>
-        Preço máximo
+        Preço máximo (Kz)
         <input
           type="number"
+          min="0"
           value={filters.maxPrice}
+          aria-label="Preço máximo"
           onChange={(event) => setFilters((current) => ({ ...current, maxPrice: event.target.value }))}
         />
       </label>
+      {showPropertyFilters && (
+        <>
+          <label>
+            Quartos (mín.)
+            <input
+              type="number"
+              min="0"
+              value={filters.minBedrooms}
+              aria-label="Número mínimo de quartos"
+              onChange={(event) =>
+                setFilters((current) => ({ ...current, minBedrooms: event.target.value }))
+              }
+            />
+          </label>
+          <label>
+            Casas de banho (mín.)
+            <input
+              type="number"
+              min="0"
+              value={filters.minBathrooms}
+              aria-label="Número mínimo de casas de banho"
+              onChange={(event) =>
+                setFilters((current) => ({ ...current, minBathrooms: event.target.value }))
+              }
+            />
+          </label>
+          <label>
+            Área mínima (m²)
+            <input
+              type="number"
+              min="0"
+              value={filters.minArea}
+              aria-label="Área mínima em metros quadrados"
+              onChange={(event) => setFilters((current) => ({ ...current, minArea: event.target.value }))}
+            />
+          </label>
+        </>
+      )}
       {showVehicleFilters && (
         <>
           <p className="filter-heading">Veículos</p>
@@ -56,6 +115,7 @@ export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false
             Marca
             <input
               value={filters.brand}
+              aria-label="Marca do veículo"
               onChange={(event) => setFilters((current) => ({ ...current, brand: event.target.value }))}
             />
           </label>
@@ -63,14 +123,45 @@ export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false
             Modelo
             <input
               value={filters.model}
+              aria-label="Modelo do veículo"
               onChange={(event) => setFilters((current) => ({ ...current, model: event.target.value }))}
+            />
+          </label>
+          <label>
+            Ano mínimo
+            <input
+              type="number"
+              value={filters.yearMin}
+              aria-label="Ano mínimo"
+              onChange={(event) => setFilters((current) => ({ ...current, yearMin: event.target.value }))}
+            />
+          </label>
+          <label>
+            Ano máximo
+            <input
+              type="number"
+              value={filters.yearMax}
+              aria-label="Ano máximo"
+              onChange={(event) => setFilters((current) => ({ ...current, yearMax: event.target.value }))}
+            />
+          </label>
+          <label>
+            Quilometragem máx. (km)
+            <input
+              type="number"
+              min="0"
+              value={filters.mileageMax}
+              aria-label="Quilometragem máxima"
+              onChange={(event) =>
+                setFilters((current) => ({ ...current, mileageMax: event.target.value }))
+              }
             />
           </label>
           <FilterSelect
             label="Combustível"
             value={filters.fuel}
             onChange={(value) => setFilters((current) => ({ ...current, fuel: value }))}
-            options={['Todos', 'Gasolina', 'Diesel', 'Elétrico', 'Híbrido']}
+            options={['Todos', 'Gasolina', 'Diesel', 'Eléctrico', 'Híbrido']}
           />
           <FilterSelect
             label="Caixa"
@@ -86,6 +177,36 @@ export function FiltersSidebar({ filters, setFilters, showVehicleFilters = false
           />
         </>
       )}
+      <button
+        type="button"
+        className="button ghost catalog-clear-filters"
+        onClick={() =>
+          setFilters({
+            ...filters,
+            query: '',
+            propertyType: 'Todos',
+            province: 'Todos',
+            municipality: 'Todos',
+            neighborhood: 'Todos',
+            minPrice: '',
+            maxPrice: '',
+            minBedrooms: '',
+            minBathrooms: '',
+            minArea: '',
+            brand: '',
+            model: '',
+            yearMin: '',
+            yearMax: '',
+            mileageMax: '',
+            fuel: 'Todos',
+            gearbox: 'Todos',
+            condition: 'Todos',
+            page: '1',
+          })
+        }
+      >
+        Limpar filtros
+      </button>
     </aside>
   )
 }

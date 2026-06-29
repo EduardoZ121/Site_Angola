@@ -1,7 +1,30 @@
 /* Layout multi-página Kuteka */
 .site-shell { background: #f4f7f1; min-height: 100vh; }
 .site-header { position: sticky; top: 0; z-index: 50; }
-.site-header-home { background: #10241d; }
+.site-header-home,
+.site-header-home-inicio {
+  background: transparent;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 40;
+}
+
+.site-header-home-inicio .nav-link,
+.site-header-home-inicio .nav-group-label {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.site-header-home-inicio .nav-link.subtle {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.site-header-home-inicio .menu-toggle {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
 .site-header-inner-page { background: #fff; border-bottom: 1px solid #e6ebdf; box-shadow: 0 8px 24px rgba(24, 35, 29, 0.06); }
 .site-header-bar { align-items: center; display: flex; gap: 16px; justify-content: space-between; margin: 0 auto; max-width: 1180px; padding: 14px 16px; width: calc(100% - 32px); position: relative; }
 .site-header-inner-page .nav-link { color: #17251e; }

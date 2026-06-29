@@ -102,6 +102,12 @@ export default function AccountPage() {
       </SectionBlock>
 
       <SectionBlock id="meus-anuncios" eyebrow="Publicações" title="Os meus anúncios" tone="muted">
+        <div className="panel-card intro-panel">
+          <p>Gerir todos os anúncios, estatísticas, destaques e edições no painel do proprietário.</p>
+          <Link className="button primary" to="/painel">
+            Abrir painel
+          </Link>
+        </div>
         {myListings.length === 0 ? (
           <div className="empty-state panel-card">
             <p>Ainda não publicou nenhum anúncio.</p>

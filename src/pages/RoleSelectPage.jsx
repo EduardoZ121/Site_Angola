@@ -1,25 +1,39 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { userRoles } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 
+function safeRedirectPath(value) {
+  if (!value) return '/inicio'
+  try {
+    const decoded = decodeURIComponent(value)
+    if (decoded.startsWith('/') && !decoded.startsWith('//')) return decoded
+  } catch {
+    return '/inicio'
+  }
+  return '/inicio'
+}
+
 export default function RoleSelectPage() {
   const navigate = useNavigate()
-  const { isLoggedIn, profile, setUserRole, needsRoleSelection } = useMarketplace()
+  const [searchParams] = useSearchParams()
+  const { isLoggedIn, profile, setUserRole, needsRoleSelection, logoutAccount } = useMarketplace()
+
+  const redirectTo = safeRedirectPath(searchParams.get('redirect'))
 
   useEffect(() => {
-    if (!isLoggedIn) navigate('/cadastro', { replace: true })
-    else if (!needsRoleSelection) navigate('/inicio', { replace: true })
-  }, [isLoggedIn, needsRoleSelection, navigate])
+    if (!isLoggedIn) navigate('/entrar', { replace: true })
+    else if (!needsRoleSelection) navigate(redirectTo, { replace: true })
+  }, [isLoggedIn, needsRoleSelection, navigate, redirectTo])
 
   function chooseOwner() {
     setUserRole(userRoles.owner)
-    navigate('/inicio', { replace: true })
+    navigate(redirectTo, { replace: true })
   }
 
   function chooseBuyer() {
     setUserRole(userRoles.buyer)
-    navigate('/procurar', { replace: true })
+    navigate(redirectTo === '/inicio' ? '/procurar' : redirectTo, { replace: true })
   }
 
   if (!isLoggedIn || !needsRoleSelection) return null
@@ -27,11 +41,14 @@ export default function RoleSelectPage() {
   return (
     <div className="onboarding-screen">
       <div className="onboarding-card onboarding-wide">
-        <img className="onboarding-logo" src="/kuteka-logo.svg" alt="Kuteka" />
-        <p className="eyebrow">Passo 1</p>
-        <h1>Olá{profile.name ? `, ${profile.name.split(' ')[0]}` : ''}! Como quer usar o Kuteka?</h1>
+        <Link to="/inicio" aria-label="Kuteka">
+          <img className="onboarding-logo" src="/kuteka-logo.svg" alt="Kuteka" />
+        </Link>
+        <p className="eyebrow">Antes de continuar</p>
+        <h1>Como pretende usar o Kuteka?</h1>
         <p className="onboarding-lead">
-          Escolha o seu perfil. Depois levamos-lo ao sítio certo no site.
+          Escolha o perfil que melhor se adapta à acção que quer fazer. Pode alterar mais tarde na
+          conta.
         </p>
 
         <div className="role-grid">
@@ -39,18 +56,24 @@ export default function RoleSelectPage() {
             <span className="role-icon" aria-hidden="true">
               🔍
             </span>
-            <strong>Sou comprador</strong>
-            <span>Quero comprar ou arrendar casa, terreno ou carro.</span>
-            <em>Responder questionário →</em>
+            <strong>Quero comprar ou arrendar</strong>
+            <span>Casas, terrenos, carros e outros anúncios em Angola.</span>
+            <em>Continuar →</em>
           </button>
 
           <button className="role-card role-card-owner" type="button" onClick={chooseOwner}>
             <span className="role-icon" aria-hidden="true">
               🏡
             </span>
-            <strong>Sou proprietário</strong>
-            <span>Quero publicar imóvel ou veículo e receber contactos.</span>
-            <em>Ir para área do senhorio →</em>
+            <strong>Quero anunciar imóveis ou veículos</strong>
+            <span>Publicar anúncios e receber contactos de interessados.</span>
+            <em>Continuar →</em>
+          </button>
+        </div>
+
+        <div className="onboarding-actions">
+          <button className="auth-text-button" type="button" onClick={logoutAccount}>
+            Sair da conta
           </button>
         </div>
       </div>

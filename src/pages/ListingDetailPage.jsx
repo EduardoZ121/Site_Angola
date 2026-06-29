@@ -1,16 +1,26 @@
-import { useEffect, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
-import { defaultPhoto } from '../data/constants'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
+import { ContactCard } from '../components/shared/ContactCard'
+import { ImageGallery } from '../components/shared/ImageGallery'
+import { ListingBadgeList } from '../components/shared/ListingBadge'
+import { ListingDetailSections } from '../components/shared/ListingDetailSections'
+import { MapSection } from '../components/shared/MapSection'
+import { SafetyTips } from '../components/shared/SafetyTips'
+import { SimilarListings } from '../components/shared/SimilarListings'
+import { EmptyState } from '../components/ui/EmptyState'
 import { useMarketplace } from '../context/MarketplaceContext'
-import { TrustBadge } from '../components/ui'
 import { useRequireLogin } from '../hooks/useRequireLogin'
-import { formatKz, whatsappLink } from '../utils/format'
-import { PageIntro, SectionBlock } from '../components/SectionBlock'
+import { AnalyticsEvents, trackEvent } from '../services/analytics'
+import { formatKz } from '../utils/format'
+import { getSimilarListings, normalizeListing } from '../utils/listing'
+import '../styles/listing-detail.css'
 
 export default function ListingDetailPage() {
   const { id } = useParams()
   const {
     getListing,
+    listings,
     trackView,
     chatByListing,
     sendChat,
@@ -22,160 +32,158 @@ export default function ListingDetailPage() {
     isAdmin,
     isListingOwner,
   } = useMarketplace()
-  const listing = getListing(id)
+  const rawListing = getListing(id)
+  const listing = useMemo(() => normalizeListing(rawListing), [rawListing])
+  const navigate = useNavigate()
   const requireLogin = useRequireLogin()
   const [chatInput, setChatInput] = useState('')
 
   useEffect(() => {
-    if (listing && listing.status === 'Ativo') trackView(listing.id)
+    if (listing && listing.statusLegacy === 'Ativo') {
+      trackView(listing.id)
+      trackEvent(AnalyticsEvents.VIEW_LISTING, { listingId: listing.id })
+    }
   }, [listing, trackView])
+
+  useEffect(() => {
+    if (listing) {
+      document.title = `${listing.title} | Kuteka`
+    }
+  }, [listing])
+
+  useEffect(() => {
+    if (window.location.hash === '#chat') {
+      document.getElementById('chat')?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [listing?.id])
 
   if (!listing) {
     return (
       <main className="page-main">
-        <PageIntro eyebrow="Anúncio" title="Não encontrado" subtitle="Este anúncio já não está disponível." />
-        <SectionBlock id="nao-encontrado">
-          <div className="empty-state panel-card">
-            <Link className="button primary" to="/comprar">
-              Ver anúncios
-            </Link>
-          </div>
-        </SectionBlock>
+        <EmptyState
+          title="Anúncio não encontrado"
+          description="Este anúncio já não está disponível ou foi removido."
+          actionLabel="Ver anúncios"
+          actionTo="/comprar"
+        />
       </main>
     )
   }
 
-  if (listing.status !== 'Ativo' && !isAdmin && !isListingOwner(listing)) {
+  if (listing.statusLegacy !== 'Ativo' && !isAdmin && !isListingOwner(rawListing)) {
     return (
       <main className="page-main">
-        <PageIntro eyebrow="Anúncio" title="Não disponível" subtitle="Este anúncio ainda não foi publicado." />
-        <SectionBlock>
-          <div className="empty-state panel-card">
-            <Link className="button primary" to="/comprar">
-              Ver anúncios activos
-            </Link>
-          </div>
-        </SectionBlock>
+        <EmptyState
+          title="Anúncio não disponível"
+          description="Este anúncio ainda não foi publicado."
+          actionLabel="Ver anúncios activos"
+          actionTo="/comprar"
+        />
       </main>
     )
   }
 
-  if (listing.status !== 'Ativo' && isListingOwner(listing)) {
+  if (listing.statusLegacy !== 'Ativo' && isListingOwner(rawListing)) {
     return <Navigate to={`/publicar/enviado/${listing.id}`} replace />
   }
 
   const messages = chatByListing[listing.id] || []
+  const similar = getSimilarListings(listings, rawListing)
 
   function handleSendChat() {
-    if (!requireLogin()) return
+    if (!requireLogin(undefined, `${window.location.pathname}#chat`)) return
     if (!chatInput.trim()) return
+    trackEvent(AnalyticsEvents.CONTACT_OWNER, { listingId: listing.id, channel: 'chat' })
     sendChat(listing.id, chatInput, profile.name)
     setChatInput('')
   }
 
+  function handleFavorite() {
+    toggleFavorite(listing.id)
+    trackEvent(AnalyticsEvents.SAVE_FAVORITE, { listingId: listing.id })
+  }
+
   return (
-    <main className="page-main">
-      <PageIntro
-        eyebrow={listing.category}
-        title={listing.title}
-        subtitle={`${listing.province} / ${listing.municipality} / ${listing.neighborhood}`}
+    <main className="page-main listing-detail-page">
+      <CatalogBreadcrumbs
+        items={[
+          { label: 'Início', to: '/inicio' },
+          {
+            label: listing.category === 'Veículo' ? 'Veículos' : listing.operation,
+            to: listing.category === 'Veículo' ? '/veiculos' : '/comprar',
+          },
+          { label: listing.title, to: `/anuncio/${listing.id}` },
+        ]}
       />
 
-      <SectionBlock id="detalhes" eyebrow="Detalhes" title={formatKz(listing.price)}>
+      <header className="listing-detail-header">
+        <ListingBadgeList badges={listing.badges} />
+        <h1>{listing.title}</h1>
+        <div className="listing-detail-meta">
+          <span>Ref. {listing.reference}</span>
+          <span>
+            {listing.location.province} / {listing.location.municipality} / {listing.location.neighborhood}
+          </span>
+          <span>Publicado {listing.publishedAt?.slice(0, 10) || '—'}</span>
+          <span>{listing.analytics.views} visualizações</span>
+        </div>
+        <p className="listing-price-line">{formatKz(listing.price)}</p>
         <button className="text-button back-link" type="button" onClick={() => navigate(-1)}>
           ← Voltar
         </button>
+      </header>
 
-        <div className="detail-layout">
-          <img src={listing.photos?.[0] || defaultPhoto} alt={listing.title} className="detail-photo" />
-
-          <div className="detail-content">
-            <div className="listing-meta">
-              <span>{listing.category}</span>
-              <span>{listing.operation}</span>
-              <TrustBadge listing={listing} />
-            </div>
-
-            {listing.category === 'Imóvel' ? (
-              <div className="detail-grid">
-                <span>{listing.propertyType}</span>
-                <span>{listing.bedrooms} quartos</span>
-                <span>{listing.bathrooms} WC</span>
-                <span>{listing.area} m²</span>
-              </div>
-            ) : (
-              <div className="detail-grid">
-                <span>
-                  {listing.brand} {listing.model}
-                </span>
-                <span>{listing.year}</span>
-                <span>{listing.mileage} km</span>
-                <span>
-                  {listing.fuel} • {listing.gearbox}
-                </span>
-              </div>
-            )}
-
-            <p>{listing.description}</p>
-            <p className="owner-line">
-              {listing.ownerType} • {listing.ownerName}
-            </p>
-
-            <div className="listing-actions">
-              <a href={`tel:${listing.phone}`}>Ligar</a>
-              <a href={whatsappLink(listing)} target="_blank" rel="noreferrer">
-                WhatsApp
-              </a>
-              <button
-                className="text-button"
-                type="button"
-                onClick={() => requireLogin(() => toggleFavorite(listing.id))}
-              >
-                {favorites.includes(listing.id) ? 'Remover favorito' : 'Favoritar'}
-              </button>
-              <button
-                className="text-button"
-                type="button"
-                onClick={() => requireLogin(() => toggleCompare(listing.id))}
-              >
-                {compare.includes(listing.id) ? 'Remover comparação' : 'Comparar'}
-              </button>
-            </div>
-          </div>
+      <div className="listing-detail-layout">
+        <div className="listing-detail-main">
+          <ImageGallery photos={listing.media.photos} title={listing.title} />
+          <ListingDetailSections listing={listing} />
+          <MapSection location={listing.location} />
+          <SafetyTips />
+          <SimilarListings
+            listings={similar}
+            favorites={favorites}
+            compare={compare}
+            onFavorite={toggleFavorite}
+            onCompare={toggleCompare}
+          />
         </div>
-      </SectionBlock>
 
-      <SectionBlock
-        id="chat"
-        eyebrow="Contacto"
-        title="Chat com o anunciante"
-        subtitle="Converse directamente com quem publicou o anúncio."
-        tone="muted"
-      >
-        <div className="chat-panel panel-card">
-          <div className="chat-box">
-            {messages.length === 0 ? (
-              <p>Inicie uma conversa com o anunciante.</p>
-            ) : (
-              messages.map((message, index) => (
-                <p key={`${listing.id}-${index}`}>
-                  <strong>{message.who}</strong> ({message.at}): {message.text}
-                </p>
-              ))
-            )}
-          </div>
-          <div className="chat-input-row">
-            <input
-              value={chatInput}
-              onChange={(event) => setChatInput(event.target.value)}
-              placeholder="Escrever mensagem..."
-            />
-            <button className="button primary" type="button" onClick={handleSendChat}>
-              Enviar
-            </button>
-          </div>
+        <div className="listing-detail-sidebar">
+          <ContactCard
+            listing={listing}
+            isFavorite={favorites.includes(listing.id)}
+            verifiedSeal={listing.verification.profile}
+            onFavorite={handleFavorite}
+            onMessage={() => requireLogin(undefined, `${window.location.pathname}#chat`)}
+          />
         </div>
-      </SectionBlock>
+      </div>
+
+      <section className="listing-chat-section panel-card" id="chat">
+        <h3>Chat com o anunciante</h3>
+        <div className="chat-box">
+          {messages.length === 0 ? (
+            <p>Inicie uma conversa com o anunciante.</p>
+          ) : (
+            messages.map((message, index) => (
+              <p key={`${listing.id}-${index}`}>
+                <strong>{message.who}</strong> ({message.at}): {message.text}
+              </p>
+            ))
+          )}
+        </div>
+        <div className="chat-input-row">
+          <input
+            value={chatInput}
+            onChange={(event) => setChatInput(event.target.value)}
+            placeholder="Escrever mensagem..."
+            aria-label="Mensagem para o anunciante"
+          />
+          <button className="button primary" type="button" onClick={handleSendChat}>
+            Enviar
+          </button>
+        </div>
+      </section>
     </main>
   )
 }

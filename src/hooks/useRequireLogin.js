@@ -1,19 +1,19 @@
-import { useNavigate } from 'react-router-dom'
+import { useLoginPrompt } from '../context/LoginPromptContext'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 export function useRequireLogin() {
-  const navigate = useNavigate()
   const { isLoggedIn } = useMarketplace()
+  const { openLoginPrompt } = useLoginPrompt()
 
   return function requireLogin(action, redirectPath) {
-    const target = redirectPath || window.location.pathname
+    const target = redirectPath || `${window.location.pathname}${window.location.search}`
 
-    if (!isLoggedIn) {
-      navigate(`/cadastro?redirect=${encodeURIComponent(target)}`)
-      return false
+    if (isLoggedIn) {
+      if (action) action()
+      return true
     }
 
-    if (action) action()
-    return true
+    openLoginPrompt({ redirectPath: target, onSuccess: action })
+    return false
   }
 }

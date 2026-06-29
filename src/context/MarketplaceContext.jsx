@@ -14,7 +14,17 @@ import {
 } from '../data/constants'
 import { trustSealFromProfile } from '../utils/format'
 import { parseGoogleCredential } from '../utils/googleAuth'
-import { createSessionId, encodePassword, verifyPassword } from '../utils/localAuth'
+import { draftToRawListing } from '../utils/publishDraft'
+import { rawListingToPublishDraft } from '../utils/ownerListing'
+import { LISTING_STATUS } from '../constants/listingStatus'
+import {
+  authenticateAccount,
+  buildUserSession,
+  readAccounts,
+  registerAccount,
+  requestPasswordReset as authRequestPasswordReset,
+  resetPasswordWithToken as authResetPasswordWithToken,
+} from '../services/authService'
 
 const MarketplaceContext = createContext(null)
 
@@ -213,7 +223,17 @@ export function MarketplaceProvider({ children }) {
       googleId: user.googleId || '',
       sessionId: user.sessionId || current.sessionId,
       picture: user.picture || current.picture,
+      avatar: user.avatar || user.picture || current.avatar,
       emailVerified: user.emailVerified ?? current.emailVerified,
+      phoneVerified: user.phoneVerified ?? current.phoneVerified,
+      documentsVerified: user.documentsVerified ?? current.documentsVerified,
+      verified: user.verified ?? current.verified,
+      role: user.role ?? current.role,
+      subscription: user.subscription ?? current.subscription,
+      preferredProvince: user.preferredProvince ?? current.preferredProvince,
+      language: user.language ?? current.language,
+      currency: user.currency ?? current.currency,
+      createdAt: user.createdAt || current.createdAt || new Date().toISOString(),
       authProvider,
       verifiedProfile: user.emailVerified || current.verifiedProfile,
     }))
@@ -228,49 +248,32 @@ export function MarketplaceProvider({ children }) {
   }
 
   function registerWithEmail({ name, email, password }) {
-    const normalizedEmail = email.trim().toLowerCase()
-    if (!name.trim() || !normalizedEmail || password.length < 6) {
-      return { ok: false, error: 'Preencha nome, email válido e senha com pelo menos 6 caracteres.' }
-    }
+    const result = registerAccount({ name, email, password })
+    if (!result.ok) return result
 
-    if (accounts.some((account) => account.email === normalizedEmail)) {
-      return { ok: false, error: 'Este email já está cadastrado. Entre com a sua senha.' }
-    }
-
-    const account = {
-      email: normalizedEmail,
-      name: name.trim(),
-      passwordHash: encodePassword(password),
-      createdAt: new Date().toISOString(),
-    }
-
-    setAccounts((prev) => [account, ...prev])
-    startSession(
-      { name: account.name, email: account.email, sessionId: createSessionId(), emailVerified: false },
-      'email',
-    )
-
+    setAccounts(readAccounts())
+    startSession(result.session, 'email')
     return { ok: true }
   }
 
   function loginWithEmail({ email, password }) {
-    const normalizedEmail = email.trim().toLowerCase()
-    const account = accounts.find((entry) => entry.email === normalizedEmail)
+    const result = authenticateAccount({ email, password })
+    if (!result.ok) return result
 
-    if (!account || !verifyPassword(password, account.passwordHash)) {
-      return { ok: false, error: 'Email ou senha incorrectos.' }
-    }
+    startSession(result.session, 'email')
+    return { ok: true }
+  }
 
-    startSession(
-      {
-        name: account.name,
-        email: account.email,
-        sessionId: createSessionId(),
-        emailVerified: false,
-      },
-      'email',
-    )
+  function requestPasswordReset(email) {
+    return authRequestPasswordReset(email)
+  }
 
+  function resetPasswordWithToken({ token, password, confirmPassword }) {
+    const result = authResetPasswordWithToken({ token, password, confirmPassword })
+    if (!result.ok) return result
+
+    setAccounts(readAccounts())
+    startSession(result.session, 'email')
     return { ok: true }
   }
 
@@ -279,13 +282,13 @@ export function MarketplaceProvider({ children }) {
     if (!googleUser?.email) return false
 
     startSession(
-      {
+      buildUserSession({
         name: googleUser.name,
         email: googleUser.email,
         googleId: googleUser.googleId,
         picture: googleUser.picture,
         emailVerified: googleUser.emailVerified,
-      },
+      }),
       'google',
     )
 
@@ -296,6 +299,7 @@ export function MarketplaceProvider({ children }) {
     setProfile((current) => ({
       ...current,
       userRole: role,
+      role,
       buyerOnboardingDone: role === userRoles.owner ? true : current.buyerOnboardingDone,
     }))
   }
@@ -309,9 +313,6 @@ export function MarketplaceProvider({ children }) {
   }
 
   function getDefaultRoute() {
-    if (!isLoggedIn) return '/cadastro'
-    if (needsRoleSelection) return '/escolher-perfil'
-    if (needsBuyerFlow) return '/procurar'
     return '/inicio'
   }
 
@@ -355,6 +356,132 @@ export function MarketplaceProvider({ children }) {
     )
   }
 
+  function duplicateListing(listingId) {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing || !isListingOwner(listing)) return null
+    const newId = `l-${Date.now()}`
+    const copy = {
+      ...listing,
+      id: newId,
+      title: `${listing.title} (cópia)`,
+      status: 'Pendente',
+      listingStatus: LISTING_STATUS.UNDER_REVIEW,
+      featured: false,
+      featuredUntil: undefined,
+      views: 0,
+      createdAt: new Date().toISOString().slice(0, 10),
+      submittedAt: new Date().toISOString(),
+      approvedAt: undefined,
+      rejectedAt: undefined,
+      rejectReason: undefined,
+    }
+    setListings((prev) => [copy, ...prev])
+    addNotification({
+      type: 'listing_pending',
+      listingId: newId,
+      ownerName: profile.name,
+      ownerEmail: profile.email || '',
+      title: 'Cópia enviada para revisão',
+      body: `A cópia "${copy.title}" aguarda aprovação antes de ficar pública.`,
+    })
+    return newId
+  }
+
+  function pauseListing(listingId) {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing || !isListingOwner(listing)) return
+    updateListing(listingId, {
+      status: 'Pausado',
+      listingStatus: LISTING_STATUS.ARCHIVED,
+      pausedAt: new Date().toISOString(),
+    })
+  }
+
+  function activateListing(listingId) {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing || !isListingOwner(listing)) return
+    updateListing(listingId, {
+      status: 'Ativo',
+      listingStatus: LISTING_STATUS.ACTIVE,
+      pausedAt: undefined,
+    })
+  }
+
+  function archiveListing(listingId) {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing || !isListingOwner(listing)) return
+    updateListing(listingId, {
+      status: 'Pausado',
+      listingStatus: LISTING_STATUS.ARCHIVED,
+      archivedAt: new Date().toISOString(),
+    })
+  }
+
+  function renewFeatured(listingId) {
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing || !isListingOwner(listing)) return
+    const until = new Date()
+    until.setDate(until.getDate() + 30)
+    updateListing(listingId, {
+      featured: true,
+      featuredUntil: until.toISOString().slice(0, 10),
+    })
+    addNotification({
+      type: 'featured_renewed',
+      listingId,
+      ownerName: profile.name,
+      ownerEmail: profile.email || '',
+      title: 'Destaque activado',
+      body: `O anúncio "${listing.title}" está em destaque até ${until.toISOString().slice(0, 10)}.`,
+    })
+  }
+
+  function updateOwnerListing(listingId, draft) {
+    const existing = listings.find((item) => item.id === listingId)
+    if (!existing || !isListingOwner(existing)) return null
+    const payload = draftToRawListing(draft, profile)
+    const needsReview = existing.status === 'Ativo'
+    updateListing(listingId, {
+      ...payload,
+      id: listingId,
+      status: needsReview ? 'Pendente' : existing.status,
+      listingStatus: needsReview ? LISTING_STATUS.UNDER_REVIEW : existing.listingStatus,
+      updatedAt: new Date().toISOString(),
+      views: existing.views || 0,
+      featured: existing.featured,
+      featuredUntil: existing.featuredUntil,
+      approvedAt: needsReview ? undefined : existing.approvedAt,
+    })
+    if (needsReview) {
+      addNotification({
+        type: 'listing_pending',
+        listingId,
+        ownerName: profile.name,
+        ownerEmail: profile.email || '',
+        title: 'Alterações enviadas para revisão',
+        body: `O anúncio "${payload.title}" será revisto antes de voltar a ficar público.`,
+      })
+    }
+    return listingId
+  }
+
+  function submitListingDraft(draft) {
+    if (!profile.name || !profile.phone) return null
+    const payload = draftToRawListing(draft, profile)
+    setListings((prev) => [payload, ...prev])
+
+    addNotification({
+      type: 'listing_pending',
+      listingId: payload.id,
+      ownerName: profile.name,
+      ownerEmail: profile.email || '',
+      title: 'Anúncio enviado — aguarda aprovação',
+      body: `O seu anúncio "${payload.title}" foi recebido. A nossa equipa vai rever fotos e dados antes de publicar no site.`,
+    })
+
+    return payload.id
+  }
+
   function submitListing(event) {
     event.preventDefault()
     if (!profile.name || !profile.phone || !listingForm.title || !listingForm.price) return null
@@ -379,6 +506,7 @@ export function MarketplaceProvider({ children }) {
       verifiedDocument: profile.verifiedDocument,
       trustSeal: trustSealFromProfile(profile),
       status: 'Pendente',
+      listingStatus: 'UNDER_REVIEW',
       featured: false,
       description: listingForm.description,
       photos: listingForm.photos,
@@ -425,6 +553,11 @@ export function MarketplaceProvider({ children }) {
 
   function trackView(listingId) {
     setHistory((prev) => [listingId, ...prev.filter((id) => id !== listingId)].slice(0, 20))
+    setListings((prev) =>
+      prev.map((listing) =>
+        listing.id === listingId ? { ...listing, views: (listing.views || 0) + 1 } : listing,
+      ),
+    )
   }
 
   function toggleFavorite(id) {
@@ -474,6 +607,7 @@ export function MarketplaceProvider({ children }) {
 
     updateListing(listingId, {
       status: 'Ativo',
+      listingStatus: LISTING_STATUS.ACTIVE,
       approvedAt: new Date().toISOString(),
     })
 
@@ -493,6 +627,7 @@ export function MarketplaceProvider({ children }) {
 
     updateListing(listingId, {
       status: 'Rejeitado',
+      listingStatus: LISTING_STATUS.REJECTED,
       rejectedAt: new Date().toISOString(),
       rejectReason:
         reason ||
@@ -524,6 +659,8 @@ export function MarketplaceProvider({ children }) {
     loginWithGoogle,
     registerWithEmail,
     loginWithEmail,
+    requestPasswordReset,
+    resetPasswordWithToken,
     setUserRole,
     completeBuyerOnboarding,
     getDefaultRoute,
@@ -545,6 +682,13 @@ export function MarketplaceProvider({ children }) {
     updateListingField,
     handlePhotoUpload,
     submitListing,
+    submitListingDraft,
+    duplicateListing,
+    pauseListing,
+    activateListing,
+    archiveListing,
+    renewFeatured,
+    updateOwnerListing,
     approveListing,
     rejectListing,
     isListingOwner,

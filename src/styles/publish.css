@@ -1,0 +1,235 @@
+/* Etapa 5 — Wizard de publicação */
+.publish-wizard {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.publish-wizard-header {
+  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.publish-autosave {
+  background: #ecfdf5;
+  border-radius: 999px;
+  color: #047857;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  padding: 8px 14px;
+}
+
+.publish-step-indicator {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.publish-progress-meta {
+  color: var(--color-text-muted);
+  display: flex;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  justify-content: space-between;
+}
+
+.publish-progress-bar {
+  background: var(--color-surface-muted);
+  border-radius: 999px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.publish-progress-bar span {
+  background: var(--color-brand);
+  display: block;
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
+.publish-steps-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.publish-step-pill {
+  background: var(--color-surface-muted);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 12px;
+}
+
+.publish-step-pill.active {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.publish-step-pill.done:not(.active) {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.publish-step-pill:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.publish-category-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+
+.publish-category-card {
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: grid;
+  gap: 4px;
+  padding: var(--space-4);
+  text-align: left;
+}
+
+.publish-category-card.selected {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 2px rgba(0, 77, 64, 0.15);
+}
+
+.publish-category-card span {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.publish-validation {
+  border-left: 4px solid #dc2626;
+}
+
+.publish-validation ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+}
+
+.publish-nav {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.publish-hint {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.publish-tag-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.publish-tag-picker button {
+  background: var(--color-surface-muted);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 8px 12px;
+}
+
+.publish-tag-picker button.selected {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+.publish-check {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.media-uploader {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.media-dropzone {
+  background: var(--color-surface-muted);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  padding: var(--space-5);
+  text-align: center;
+}
+
+.media-dropzone.drag-over {
+  border-color: var(--color-brand);
+  background: #ecfdf5;
+}
+
+.media-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.media-grid li {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.media-grid li.is-cover {
+  outline: 3px solid var(--color-accent);
+}
+
+.media-grid img {
+  display: block;
+  height: 120px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.media-actions {
+  display: grid;
+  gap: 4px;
+  padding: 8px;
+}
+
+.media-actions button {
+  font-size: 11px;
+  padding: 4px 6px;
+}
+
+.media-actions button.danger {
+  color: #dc2626;
+}
+
+.publish-preview-layout {
+  align-items: start;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr) 280px;
+}
+
+.publish-profile-alert {
+  border-left: 4px solid var(--color-accent);
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (max-width: 900px) {
+  .publish-preview-layout {
+    grid-template-columns: 1fr;
+  }
+}

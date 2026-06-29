@@ -2,8 +2,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 export function RootRedirect() {
-  const { getDefaultRoute } = useMarketplace()
-  return <Navigate to={getDefaultRoute()} replace />
+  return <Navigate to="/inicio" replace />
 }
 
 export function RequireAuth() {
@@ -12,41 +11,40 @@ export function RequireAuth() {
 
   if (!isLoggedIn) {
     const redirect = encodeURIComponent(`${location.pathname}${location.search}`)
-    return <Navigate to={`/cadastro?redirect=${redirect}`} replace />
+    return <Navigate to={`/entrar?redirect=${redirect}`} replace />
   }
 
   return <Outlet />
 }
 
-export function RequireOnboarding() {
-  const { isLoggedIn, needsRoleSelection, needsBuyerFlow } = useMarketplace()
+/** Exige perfil escolhido antes de publicar ou gerir anúncios. */
+export function RequireRoleForPublish() {
+  const { isLoggedIn, needsRoleSelection } = useMarketplace()
   const location = useLocation()
 
   if (!isLoggedIn) {
-    return <Navigate to="/cadastro" replace />
+    const redirect = encodeURIComponent(`${location.pathname}${location.search}`)
+    return <Navigate to={`/entrar?redirect=${redirect}`} replace />
   }
 
-  if (needsRoleSelection && location.pathname !== '/escolher-perfil') {
-    return <Navigate to="/escolher-perfil" replace />
-  }
-
-  if (needsBuyerFlow && location.pathname !== '/procurar') {
-    return <Navigate to="/procurar" replace />
-  }
-
-  if (!needsRoleSelection && location.pathname === '/escolher-perfil') {
-    return <Navigate to="/inicio" replace />
+  if (needsRoleSelection) {
+    const redirect = encodeURIComponent(`${location.pathname}${location.search}`)
+    return <Navigate to={`/escolher-perfil?redirect=${redirect}`} replace />
   }
 
   return <Outlet />
 }
 
 export function RequireAdmin() {
-  const { isLoggedIn } = useMarketplace()
+  const { isLoggedIn, isAdmin } = useMarketplace()
   const location = useLocation()
 
   if (!isLoggedIn) {
-    return <Navigate to={`/cadastro?redirect=${encodeURIComponent(location.pathname)}`} replace />
+    return <Navigate to={`/entrar?redirect=${encodeURIComponent(location.pathname)}`} replace />
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/inicio" replace />
   }
 
   return <Outlet />

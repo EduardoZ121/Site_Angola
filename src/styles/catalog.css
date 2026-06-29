@@ -1,0 +1,210 @@
+/* Etapa 3 — Catálogo / Pesquisa */
+.catalog-page .catalog-breadcrumbs {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin: 0 0 var(--space-4);
+}
+
+.catalog-breadcrumbs a {
+  color: var(--color-brand);
+  text-decoration: none;
+}
+
+.catalog-layout {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.catalog-sidebar {
+  position: sticky;
+  top: 88px;
+  align-self: start;
+  max-height: calc(100vh - 100px);
+  overflow: auto;
+}
+
+.catalog-main {
+  min-width: 0;
+}
+
+.catalog-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+  margin: var(--space-4) 0;
+}
+
+.catalog-results-count {
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.catalog-results-count strong {
+  color: var(--color-text);
+}
+
+.catalog-toolbar-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.catalog-sort {
+  align-items: center;
+  display: flex;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  gap: var(--space-2);
+}
+
+.catalog-sort select {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.catalog-view-toggle {
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  padding: 3px;
+}
+
+.catalog-view-toggle button {
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  padding: 8px 12px;
+}
+
+.catalog-view-toggle button.active {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-brand);
+}
+
+.catalog-map-link {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.catalog-pagination {
+  align-items: center;
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.catalog-pagination button {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: 700;
+  padding: 10px 16px;
+}
+
+.catalog-pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.catalog-clear-filters {
+  margin-top: var(--space-3);
+  width: 100%;
+}
+
+.listing-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.listing-row {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 220px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.listing-row-media img {
+  display: block;
+  height: 100%;
+  min-height: 160px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.listing-row-body {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+}
+
+.listing-tag {
+  background: var(--color-accent);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+}
+
+.ui-empty-state {
+  padding: var(--space-6);
+  text-align: center;
+}
+
+.ui-empty-state h3 {
+  margin: 0 0 var(--space-2);
+}
+
+.ui-empty-state p {
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-4);
+}
+
+.sr-only {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.button.compact {
+  justify-self: start;
+  padding: 8px 14px;
+  width: auto;
+}
+
+@media (max-width: 960px) {
+  .catalog-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-sidebar {
+    max-height: none;
+    position: static;
+  }
+
+  .listing-row {
+    grid-template-columns: 1fr;
+  }
+}

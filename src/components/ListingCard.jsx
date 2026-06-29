@@ -40,19 +40,18 @@ export function ListingCard({ listing, favorites, onFavorite, onCompare, compare
           <Link className="text-button" to={`/anuncio/${listing.id}`}>
             Ver detalhes
           </Link>
-          <button
-            className="text-button"
-            type="button"
-            onClick={() => requireLogin(() => onFavorite(listing.id))}
-          >
+          <button className="text-button" type="button" onClick={() => onFavorite(listing.id)}>
             {favorites.includes(listing.id) ? 'Remover favorito' : 'Favoritar'}
+          </button>
+          <button className="text-button" type="button" onClick={() => onCompare(listing.id)}>
+            {compareIds.includes(listing.id) ? 'Remover comparação' : 'Comparar'}
           </button>
           <button
             className="text-button"
             type="button"
-            onClick={() => requireLogin(() => onCompare(listing.id))}
+            onClick={() => requireLogin(undefined, `/anuncio/${listing.id}#chat`)}
           >
-            {compareIds.includes(listing.id) ? 'Remover comparação' : 'Comparar'}
+            Contactar
           </button>
           <a href={whatsappLink(listing)} target="_blank" rel="noreferrer">
             WhatsApp

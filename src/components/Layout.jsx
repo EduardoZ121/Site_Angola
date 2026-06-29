@@ -10,6 +10,7 @@ const mainNav = [
 ]
 
 const accountNav = [
+  { to: '/painel', label: 'Painel' },
   { to: '/favoritos', label: 'Favoritos' },
   { to: '/comparar', label: 'Comparar' },
   { to: '/precos', label: 'Preços' },
@@ -19,7 +20,7 @@ export function Layout() {
   const { favorites, compare, profile, isLoggedIn, isAdmin, logoutAccount } = useMarketplace()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
-  const isHome = location.pathname === '/'
+  const isHome = location.pathname === '/inicio'
 
   function closeMenu() {
     setMenuOpen(false)
@@ -27,7 +28,9 @@ export function Layout() {
 
   return (
     <div className="site-shell">
-      <header className={`site-header ${isHome ? 'site-header-home' : 'site-header-inner-page'}`}>
+      <header
+        className={`site-header ${isHome ? 'site-header-home site-header-home-inicio' : 'site-header-inner-page'}`}
+      >
         <div className="site-header-bar">
           <NavLink className="brand" to="/inicio" aria-label="Kuteka início" onClick={closeMenu}>
             <img className="brand-logo" src="/kuteka-logo.svg" alt="Kuteka" />
@@ -72,7 +75,7 @@ export function Layout() {
                 </NavLink>
               ) : (
                 <NavLink
-                  to="/cadastro?mode=entrar"
+                  to="/entrar"
                   className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
                   onClick={closeMenu}
                 >
@@ -112,21 +115,23 @@ export function Layout() {
 
       <Outlet />
 
-      <footer className="site-footer">
-        <div className="site-footer-inner">
-          <div>
-            <strong>Kuteka</strong>
-            <p>Marketplace de imóveis e veículos para Angola, em Kz.</p>
+      {!isHome ? (
+        <footer className="site-footer">
+          <div className="site-footer-inner">
+            <div>
+              <strong>Kuteka</strong>
+              <p>Marketplace de imóveis e veículos para Angola, em Kz.</p>
+            </div>
+            <div className="footer-links">
+              <NavLink to="/comprar">Comprar</NavLink>
+              <NavLink to="/arrendar">Arrendar</NavLink>
+              <NavLink to="/veiculos">Veículos</NavLink>
+              <NavLink to="/publicar">Publicar</NavLink>
+              {isAdmin ? <NavLink to="/admin">Administrador</NavLink> : null}
+            </div>
           </div>
-          <div className="footer-links">
-            <NavLink to="/comprar">Comprar</NavLink>
-            <NavLink to="/arrendar">Arrendar</NavLink>
-            <NavLink to="/veiculos">Veículos</NavLink>
-            <NavLink to="/publicar">Publicar</NavLink>
-            {isAdmin ? <NavLink to="/admin">Administrador</NavLink> : null}
-          </div>
-        </div>
-      </footer>
+        </footer>
+      ) : null}
     </div>
   )
 }

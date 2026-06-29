@@ -140,6 +140,9 @@ export default function PublishSubmittedPage() {
                 Enviar novo anúncio
               </Link>
             ) : null}
+            <Link className="button filter-button" to="/painel">
+              Ir ao painel
+            </Link>
             <Link className="button filter-button" to="/conta">
               Ver mensagens na conta
             </Link>

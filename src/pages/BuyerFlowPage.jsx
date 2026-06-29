@@ -24,7 +24,7 @@ export default function BuyerFlowPage() {
   const [prefs, setPrefs] = useState({ ...defaultBuyerPrefs })
 
   useEffect(() => {
-    if (!isLoggedIn) navigate('/cadastro', { replace: true })
+    if (!isLoggedIn) navigate('/entrar', { replace: true })
     else if (profile.userRole !== userRoles.buyer) navigate('/inicio', { replace: true })
   }, [isLoggedIn, profile.userRole, navigate])
 
