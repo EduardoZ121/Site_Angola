@@ -1,3 +1,5 @@
+import { HomeIcon } from '../icons/HomeIcon'
+
 export function AppSection() {
   return (
     <section className="hp-section">
@@ -18,7 +20,7 @@ export function AppSection() {
           </div>
         </div>
         <div className="hp-app-visual" aria-hidden="true">
-          📱
+          <HomeIcon name="mobile" />
         </div>
       </div>
     </section>

@@ -82,7 +82,7 @@ export default function ForgotPasswordPage() {
           {error ? <p className="auth-facebook-error">{error}</p> : null}
           {success ? <p className="auth-facebook-success">{success}</p> : null}
 
-          <button className="auth-facebook-submit auth-facebook-submit-blue" type="submit">
+          <button className="button primary auth-facebook-submit auth-facebook-submit-blue" type="submit">
             Guardar nova senha
           </button>
         </form>
@@ -121,7 +121,7 @@ export default function ForgotPasswordPage() {
           </div>
         ) : null}
 
-        <button className="auth-facebook-submit auth-facebook-submit-blue" type="submit">
+        <button className="button primary auth-facebook-submit auth-facebook-submit-blue" type="submit">
           Enviar pedido
         </button>
       </form>

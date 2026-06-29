@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { MenuIcon } from './icons/HomeIcon'
 
 const mainNav = [
   { to: '/comprar', label: 'Comprar' },
@@ -20,7 +21,22 @@ export function Layout() {
   const { favorites, compare, profile, isLoggedIn, isAdmin, logoutAccount } = useMarketplace()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [headerScrolled, setHeaderScrolled] = useState(false)
   const isHome = location.pathname === '/inicio'
+
+  useEffect(() => {
+    if (!isHome) {
+      setHeaderScrolled(true)
+      return undefined
+    }
+    setHeaderScrolled(false)
+    function onScroll() {
+      setHeaderScrolled(window.scrollY > 24)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [isHome])
 
   function closeMenu() {
     setMenuOpen(false)
@@ -29,11 +45,15 @@ export function Layout() {
   return (
     <div className="site-shell">
       <header
-        className={`site-header ${isHome ? 'site-header-home site-header-home-inicio' : 'site-header-inner-page'}`}
+        className={`site-header ${isHome ? 'site-header-home site-header-home-inicio' : 'site-header-inner-page'} ${headerScrolled ? 'site-header-scrolled' : ''}`}
       >
         <div className="site-header-bar">
           <NavLink className="brand" to="/inicio" aria-label="Kuteka início" onClick={closeMenu}>
-            <img className="brand-logo" src="/kuteka-logo.svg" alt="Kuteka" />
+            <img
+              className="brand-logo"
+              src={isHome && !headerScrolled ? '/kuteka-logo-hero.svg' : '/kuteka-logo.svg'}
+              alt="Kuteka"
+            />
           </NavLink>
 
           <button
@@ -43,7 +63,7 @@ export function Layout() {
             aria-label="Abrir menu"
             onClick={() => setMenuOpen((open) => !open)}
           >
-            ☰
+            <MenuIcon />
           </button>
 
           <nav className={`site-nav ${menuOpen ? 'open' : ''}`} aria-label="Navegação principal">

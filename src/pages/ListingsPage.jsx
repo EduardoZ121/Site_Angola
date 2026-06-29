@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
@@ -11,7 +11,12 @@ import { EmptyState } from '../components/ui/EmptyState'
 import { PageIntro } from '../components/SectionBlock'
 import { filterListings } from '../utils/format'
 import { paginateListings, sortListings } from '../utils/catalog'
-import { filterSummary, filtersToSearchParams, searchParamsToFilters } from '../utils/filters'
+import {
+  activeFilterCount,
+  filterSummary,
+  filtersToSearchParams,
+  searchParamsToFilters,
+} from '../utils/filters'
 import '../styles/catalog.css'
 
 export default function ListingsPage({
@@ -23,7 +28,16 @@ export default function ListingsPage({
 }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const { listings, favorites, compare, isAdmin, toggleFavorite, toggleCompare } = useMarketplace()
+
+  const filterDefaults = useMemo(
+    () => ({
+      category: defaultCategory,
+      operation: defaultOperation,
+    }),
+    [defaultCategory, defaultOperation],
+  )
 
   const filters = useMemo(
     () =>
@@ -46,10 +60,20 @@ export default function ListingsPage({
 
   const summary = filterSummary(filters)
   const showVehicleFilters = defaultCategory === 'Veículo'
+  const filterCount = activeFilterCount(filters, filterDefaults)
 
   useEffect(() => {
     document.title = `${title} | Kuteka`
   }, [title])
+
+  useEffect(() => {
+    if (!filtersOpen) return undefined
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [filtersOpen])
 
   function updateFilters(nextFilters, resetPage = true) {
     const params = filtersToSearchParams({
@@ -70,94 +94,136 @@ export default function ListingsPage({
     document.getElementById('catalog-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
+  function setFilters(updater) {
+    const next = typeof updater === 'function' ? updater(filters) : updater
+    updateFilters(next)
+  }
+
+  function closeFilters() {
+    setFiltersOpen(false)
+  }
+
   return (
     <main className="page-main catalog-page">
       <PageIntro eyebrow="Catálogo" title={title} subtitle={subtitle} />
-      <CatalogBreadcrumbs
-        items={[
-          { label: 'Início', to: '/inicio' },
-          { label: title, to: `/${basePath}` },
-        ]}
-      />
 
-      <div className="catalog-layout">
-        <FiltersSidebar
-          filters={filters}
-          setFilters={(updater) => {
-            const next = typeof updater === 'function' ? updater(filters) : updater
-            updateFilters(next)
-          }}
-          showVehicleFilters={showVehicleFilters}
-          showPropertyFilters={!showVehicleFilters}
+      <div className="catalog-page-body section-block-inner">
+        <CatalogBreadcrumbs
+          items={[
+            { label: 'Início', to: '/inicio' },
+            { label: title, to: `/${basePath}` },
+          ]}
         />
 
-        <section className="catalog-main" id="catalog-results">
-          <ListingSearchBar
-            filters={filters}
-            filtersPath={`/${basePath}/filtros`}
-            onSearch={handleSearch}
-          />
-          {summary ? <p className="active-filters-line">Filtros activos: {summary}</p> : null}
+        <button
+          type="button"
+          className="button secondary catalog-filters-toggle"
+          onClick={() => setFiltersOpen(true)}
+        >
+          Filtros
+          {filterCount > 0 ? <span className="catalog-filters-badge">{filterCount}</span> : null}
+        </button>
 
-          <CatalogToolbar
-            total={pagination.total}
-            sort={filters.sort}
-            view={filters.view}
-            mapPath={`/${basePath}/filtros`}
-            onSortChange={(sort) => updateFilters({ ...filters, sort })}
-            onViewChange={(view) => updateFilters({ ...filters, view }, false)}
-          />
+        <div
+          className={`catalog-filters-backdrop ${filtersOpen ? 'open' : ''}`}
+          onClick={closeFilters}
+          aria-hidden={!filtersOpen}
+        />
 
-          {pagination.items.length === 0 ? (
-            <EmptyState
-              title="Nenhum resultado encontrado"
-              description="Tente alterar os filtros ou pesquisar com outras palavras."
-              actionLabel="Limpar filtros"
-              actionTo={`/${basePath}`}
+        <div className="catalog-layout">
+          <div className={`catalog-sidebar-wrap ${filtersOpen ? 'is-open' : ''}`}>
+            <div className="catalog-filters-drawer-head">
+              <h3>Filtros</h3>
+              <button
+                type="button"
+                className="catalog-filters-close"
+                onClick={closeFilters}
+                aria-label="Fechar filtros"
+              >
+                ×
+              </button>
+            </div>
+
+            <FiltersSidebar
+              filters={filters}
+              setFilters={setFilters}
+              showVehicleFilters={showVehicleFilters}
+              showPropertyFilters={!showVehicleFilters}
             />
-          ) : filters.view === 'list' ? (
-            <div className="listing-list">
-              {pagination.items.map((listing) => (
-                <ListingRow key={listing.id} listing={listing} />
-              ))}
-            </div>
-          ) : (
-            <div className="listing-grid">
-              {pagination.items.map((listing) => (
-                <ListingCard
-                  key={listing.id}
-                  listing={listing}
-                  favorites={favorites}
-                  compareIds={compare}
-                  onFavorite={toggleFavorite}
-                  onCompare={toggleCompare}
-                />
-              ))}
-            </div>
-          )}
 
-          {pagination.totalPages > 1 ? (
-            <nav className="catalog-pagination" aria-label="Paginação">
-              <button
-                type="button"
-                disabled={pagination.page <= 1}
-                onClick={() => goToPage(pagination.page - 1)}
-              >
-                Anterior
-              </button>
-              <span>
-                Página {pagination.page} de {pagination.totalPages}
-              </span>
-              <button
-                type="button"
-                disabled={pagination.page >= pagination.totalPages}
-                onClick={() => goToPage(pagination.page + 1)}
-              >
-                Seguinte
-              </button>
-            </nav>
-          ) : null}
-        </section>
+            <button type="button" className="button primary catalog-filters-apply" onClick={closeFilters}>
+              Ver {pagination.total} {pagination.total === 1 ? 'resultado' : 'resultados'}
+            </button>
+          </div>
+
+          <section className="catalog-main" id="catalog-results">
+            <ListingSearchBar
+              filters={filters}
+              filtersPath={`/${basePath}/filtros`}
+              onSearch={handleSearch}
+            />
+            {summary ? <p className="active-filters-line">Filtros activos: {summary}</p> : null}
+
+            <CatalogToolbar
+              total={pagination.total}
+              sort={filters.sort}
+              view={filters.view}
+              mapPath={`/${basePath}/filtros`}
+              onSortChange={(sort) => updateFilters({ ...filters, sort })}
+              onViewChange={(view) => updateFilters({ ...filters, view }, false)}
+            />
+
+            {pagination.items.length === 0 ? (
+              <EmptyState
+                title="Nenhum resultado encontrado"
+                description="Tente alterar os filtros ou pesquisar com outras palavras."
+                actionLabel="Limpar filtros"
+                actionTo={`/${basePath}`}
+              />
+            ) : filters.view === 'list' ? (
+              <div className="listing-list">
+                {pagination.items.map((listing) => (
+                  <ListingRow key={listing.id} listing={listing} />
+                ))}
+              </div>
+            ) : (
+              <div className="listing-grid">
+                {pagination.items.map((listing) => (
+                  <ListingCard
+                    key={listing.id}
+                    listing={listing}
+                    favorites={favorites}
+                    compareIds={compare}
+                    onFavorite={toggleFavorite}
+                    onCompare={toggleCompare}
+                  />
+                ))}
+              </div>
+            )}
+
+            {pagination.totalPages > 1 ? (
+              <nav className="catalog-pagination" aria-label="Paginação">
+                <button
+                  type="button"
+                  disabled={pagination.page <= 1}
+                  onClick={() => goToPage(pagination.page - 1)}
+                >
+                  Anterior
+                </button>
+                <span>
+                  Página {pagination.page} de {pagination.totalPages}
+                </span>
+                <button
+                  type="button"
+                  disabled={pagination.page >= pagination.totalPages}
+                  onClick={() => goToPage(pagination.page + 1)}
+                >
+                  Seguinte
+                </button>
+              </nav>
+            ) : null}
+          </section>
+        </div>
       </div>
     </main>
   )

@@ -8,7 +8,7 @@ const searchTypes = [
   { id: 'veiculos', label: 'Veículos', path: '/veiculos' },
 ]
 
-export function SearchSection() {
+export function SearchSection({ embedded = false }) {
   const navigate = useNavigate()
   const [searchType, setSearchType] = useState('comprar')
   const [province, setProvince] = useState('Todos')
@@ -36,7 +36,10 @@ export function SearchSection() {
   }
 
   return (
-    <section className="hp-section hp-search-wrap" id="pesquisa">
+    <section
+      className={`hp-section hp-search-wrap ${embedded ? 'hp-search-embedded' : ''}`}
+      id="pesquisa"
+    >
       <div className="hp-container">
         <form className="hp-search-card" onSubmit={handleSubmit}>
           <div className="hp-search-tabs" role="tablist" aria-label="Tipo de pesquisa">
@@ -89,6 +92,7 @@ export function SearchSection() {
                 ))}
               </select>
             </label>
+            <div className="hp-search-grid-advanced">
             <label>
               Preço mínimo (Kz)
               <input
@@ -109,6 +113,7 @@ export function SearchSection() {
                 onChange={(event) => setMaxPrice(event.target.value)}
               />
             </label>
+            </div>
           </div>
           <button className="hp-btn hp-btn-primary hp-search-submit" type="submit">
             Pesquisar

@@ -11,7 +11,7 @@ export function FiltersSidebar({
   hideQuery = false,
 }) {
   return (
-    <aside className="filters-panel catalog-sidebar" aria-label="Filtros de pesquisa">
+    <aside className="filters-panel" aria-label="Filtros de pesquisa">
       <h3>Filtros</h3>
       {!hideQuery && (
         <label>

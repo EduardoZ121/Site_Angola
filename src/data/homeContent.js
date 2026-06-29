@@ -61,47 +61,47 @@ export const homeCategories = [
 
 export const homeBenefits = [
   {
-    icon: '✓',
+    icon: 'check',
     title: 'Anúncios verificados',
     description: 'Equipa Kuteka revê fotos e dados antes de publicar.',
   },
   {
-    icon: '⚡',
+    icon: 'bolt',
     title: 'Pesquisa rápida',
     description: 'Filtros por província, município e preço em segundos.',
   },
   {
-    icon: '📞',
+    icon: 'phone',
     title: 'Contacto directo',
     description: 'Telefone, WhatsApp e mensagens com o anunciante.',
   },
   {
-    icon: '🛡️',
+    icon: 'shield',
     title: 'Segurança',
     description: 'Selos de confiança para proprietários e imóveis.',
   },
   {
-    icon: '🔄',
+    icon: 'refresh',
     title: 'Atualizações constantes',
     description: 'Novos anúncios adicionados todos os dias.',
   },
   {
-    icon: '📱',
+    icon: 'mobile',
     title: 'Experiência móvel',
     description: 'Optimizado para telemóvel — o principal em Angola.',
   },
 ]
 
 export const homeSteps = [
-  { icon: '🔍', title: 'Pesquise', description: 'Use filtros por zona, tipo e preço em Kz.' },
-  { icon: '💬', title: 'Contacte', description: 'Fale com o proprietário por chat ou WhatsApp.' },
-  { icon: '🤝', title: 'Feche negócio', description: 'Combine visita e finalize com confiança.' },
+  { icon: 'search', title: 'Pesquise', description: 'Use filtros por zona, tipo e preço em Kz.' },
+  { icon: 'message', title: 'Contacte', description: 'Fale com o proprietário por chat ou WhatsApp.' },
+  { icon: 'handshake', title: 'Feche negócio', description: 'Combine visita e finalize com confiança.' },
 ]
 
 export const homeOwnerSteps = [
-  { icon: '📝', title: 'Publique', description: 'Crie o anúncio com fotos, preço e localização.' },
-  { icon: '📞', title: 'Receba contactos', description: 'Interessados ligam, enviam mensagem ou WhatsApp.' },
-  { icon: '✅', title: 'Arrende ou venda', description: 'Feche o negócio directamente com o comprador.' },
+  { icon: 'edit', title: 'Publique', description: 'Crie o anúncio com fotos, preço e localização.' },
+  { icon: 'phone', title: 'Receba contactos', description: 'Interessados ligam, enviam mensagem ou WhatsApp.' },
+  { icon: 'check', title: 'Arrende ou venda', description: 'Feche o negócio directamente com o comprador.' },
 ]
 
 export const homeStats = [

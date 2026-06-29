@@ -1,4 +1,5 @@
 import { homeBenefits } from '../../data/homeContent'
+import { HomeIcon } from '../icons/HomeIcon'
 
 export function BenefitsSection() {
   return (
@@ -15,7 +16,7 @@ export function BenefitsSection() {
           {homeBenefits.map((item) => (
             <article className="hp-benefit-card" key={item.title}>
               <span className="hp-benefit-icon" aria-hidden="true">
-                {item.icon}
+                <HomeIcon name={item.icon} />
               </span>
               <h3>{item.title}</h3>
               <p>{item.description}</p>

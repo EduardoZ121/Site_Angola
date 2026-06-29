@@ -98,7 +98,7 @@ export default function SignupPage() {
 
         {error ? <p className="auth-facebook-error">{error}</p> : null}
 
-        <button className="auth-facebook-submit" type="submit">
+        <button className="button primary auth-facebook-submit" type="submit">
           Cadastrar
         </button>
       </form>

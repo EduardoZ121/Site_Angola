@@ -15,8 +15,10 @@ import '../styles/home.css'
 export default function HomePage() {
   return (
     <main className="hp-page">
-      <HeroSection />
-      <SearchSection />
+      <div className="hp-hero-shell">
+        <HeroSection />
+        <SearchSection embedded />
+      </div>
       <QuickSearchSection />
       <CategoriesSection />
       <FeaturedSection />

@@ -68,7 +68,7 @@ export default function LoginPage() {
 
         {error ? <p className="auth-facebook-error">{error}</p> : null}
 
-        <button className="auth-facebook-submit auth-facebook-submit-blue" type="submit">
+        <button className="button primary auth-facebook-submit auth-facebook-submit-blue" type="submit">
           Entrar
         </button>
       </form>

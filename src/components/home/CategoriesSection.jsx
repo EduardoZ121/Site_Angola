@@ -20,8 +20,8 @@ export function CategoriesSection() {
                 <span className="hp-category-count">{item.countLabel}</span>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
-                <Link className="hp-link-btn" to={item.to}>
-                  Explorar →
+                <Link className="hp-link-btn hp-link-arrow" to={item.to}>
+                  Explorar
                 </Link>
               </div>
             </article>

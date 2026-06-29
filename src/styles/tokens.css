@@ -1,14 +1,20 @@
-/* Kuteka Design System — tokens (Etapa 2.5 OGPT) */
+/* Kuteka Design System — Etapa 4.5 */
 :root {
-  --color-brand: #0f6a49;
-  --color-brand-dark: #082726;
-  --color-accent: #f8c44f;
-  --color-text: #17251e;
-  --color-text-muted: #667369;
+  /* Paleta (menos verde dominante, mais neutros) */
+  --color-brand: #0d5c44;
+  --color-brand-dark: #0a1814;
+  --color-brand-soft: #e8f3ed;
+  --color-accent: #f5b731;
+  --color-accent-hover: #e5a820;
+  --color-text: #1a2420;
+  --color-text-muted: #5f6b66;
   --color-surface: #ffffff;
-  --color-surface-muted: #f4f7f1;
-  --color-border: #e6ebdf;
+  --color-surface-muted: #f6f8f5;
+  --color-surface-elevated: #ffffff;
+  --color-border: #dfe6df;
+  --color-border-strong: #c8d4cb;
 
+  /* Espaçamentos — escala 4/8 */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -16,19 +22,37 @@
   --space-5: 24px;
   --space-6: 32px;
   --space-7: 48px;
+  --space-8: 64px;
 
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 20px;
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
 
-  --shadow-sm: 0 4px 14px rgba(16, 36, 29, 0.06);
-  --shadow-md: 0 10px 30px rgba(16, 36, 29, 0.1);
+  /* Sombras — só 3 */
+  --shadow-sm: 0 2px 8px rgba(10, 24, 20, 0.06);
+  --shadow-md: 0 8px 24px rgba(10, 24, 20, 0.1);
+  --shadow-lg: 0 16px 48px rgba(10, 24, 20, 0.14);
 
+  /* Tipografia */
+  --font-size-xs: 11px;
   --font-size-sm: 13px;
   --font-size-base: 15px;
-  --font-size-lg: 18px;
-  --font-size-xl: 28px;
+  --font-size-md: 17px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  --font-size-3xl: 40px;
 
+  --line-height-tight: 1.15;
+  --line-height-normal: 1.5;
+
+  --bp-sm: 560px;
   --bp-md: 768px;
   --bp-lg: 1024px;
+  --bp-xl: 1440px;
+
+  --header-height: 72px;
 }

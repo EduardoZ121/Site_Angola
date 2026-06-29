@@ -31,17 +31,31 @@
 
 .brand {
   align-items: center;
-  background: rgba(255, 255, 255, 0.96);
-  border-radius: 18px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.14);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
   display: inline-flex;
-  padding: 8px 14px;
+  padding: 0;
+}
+
+.site-header-inner-page .brand {
+  padding: var(--space-1) 0;
 }
 
 .brand-logo {
   display: block;
-  height: 58px;
+  height: 44px;
+  max-width: min(200px, 52vw);
   width: auto;
+}
+
+.site-header-home-inicio:not(.site-header-scrolled) .brand-logo {
+  height: 40px;
+  max-width: min(180px, 48vw);
+}
+
+.site-header-scrolled .brand-logo {
+  height: 42px;
 }
 
 .nav-links {
@@ -1092,12 +1106,12 @@ textarea {
   }
 
   .brand {
-    padding: 7px 10px;
+    padding: 0;
   }
 
   .brand-logo {
-    height: 46px;
-    max-width: calc(100vw - 48px);
+    height: 38px;
+    max-width: min(170px, 50vw);
   }
 
   .owner-row,

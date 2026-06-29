@@ -1,0 +1,88 @@
+/* Componentes base — Etapa 4.5 */
+.button,
+.hp-btn {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  gap: var(--space-2);
+  justify-content: center;
+  line-height: 1.2;
+  min-height: 48px;
+  padding: 0 var(--space-5);
+  text-decoration: none;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.button.primary,
+.hp-btn-primary {
+  background: var(--color-accent);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-brand-dark);
+}
+
+.button.primary:hover,
+.hp-btn-primary:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+
+.button.secondary,
+.hp-btn-secondary {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text);
+}
+
+.button.ghost,
+.hp-btn-secondary.hp-btn-secondary {
+  background: transparent;
+}
+
+.button.filter-button {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.panel-card,
+.hp-search-card,
+.hp-category-card,
+.hp-benefit-card {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+input:not([type='checkbox']):not([type='radio']),
+select,
+textarea {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  width: 100%;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px rgba(13, 92, 68, 0.12);
+  outline: none;
+}
+
+label {
+  color: var(--color-text-muted);
+  display: grid;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  gap: var(--space-2);
+}

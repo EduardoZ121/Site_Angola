@@ -1,0 +1,180 @@
+/* Auth + onboarding — Etapa 4.5 (tokens Kuteka) */
+.auth-facebook {
+  background: var(--color-surface-muted);
+  min-height: 100vh;
+  padding: calc(var(--header-height) + var(--space-5)) var(--space-4) var(--space-6);
+}
+
+.auth-facebook-intro h1 {
+  color: var(--color-text);
+  font-size: clamp(var(--font-size-xl), 4vw, var(--font-size-2xl));
+  line-height: var(--line-height-tight);
+  margin: var(--space-4) 0;
+  max-width: 500px;
+}
+
+.auth-facebook-intro p {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  line-height: var(--line-height-normal);
+  max-width: 480px;
+}
+
+.auth-facebook-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+}
+
+.auth-facebook-card h2 {
+  color: var(--color-text);
+  font-size: var(--font-size-lg);
+  font-weight: 800;
+  margin: 0 0 var(--space-2);
+  text-align: center;
+}
+
+.auth-facebook-sub {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  margin: 0 0 var(--space-4);
+  text-align: center;
+}
+
+.auth-facebook-form {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.auth-form-label {
+  color: var(--color-text-muted);
+}
+
+.auth-forgot-link {
+  color: var(--color-brand);
+}
+
+.auth-facebook-submit,
+.auth-facebook-submit.auth-facebook-submit-blue {
+  background: var(--color-accent);
+  border: 0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-brand-dark);
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  width: 100%;
+}
+
+.auth-facebook-submit:hover {
+  background: var(--color-accent-hover);
+}
+
+.auth-nav-link {
+  background: var(--color-brand);
+  border-radius: var(--radius-md);
+  color: #fff;
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: 800;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  text-align: center;
+  text-decoration: none;
+}
+
+.auth-nav-link.subtle {
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.auth-facebook-success {
+  color: var(--color-brand);
+}
+
+.auth-demo-link a {
+  color: var(--color-brand);
+}
+
+.auth-facebook-foot {
+  color: var(--color-text-muted);
+}
+
+.onboarding-screen {
+  background:
+    linear-gradient(160deg, rgba(10, 24, 20, 0.94), rgba(8, 39, 38, 0.92)),
+    url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80')
+      center/cover;
+}
+
+.onboarding-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.onboarding-card h1 {
+  color: var(--color-text);
+  font-size: clamp(var(--font-size-lg), 4vw, var(--font-size-2xl));
+}
+
+.role-card {
+  background: var(--color-surface-muted);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+}
+
+.role-card:hover {
+  border-color: var(--color-brand);
+}
+
+.role-card-owner {
+  background: var(--color-brand-soft);
+}
+
+.role-icon {
+  align-items: center;
+  background: var(--color-brand-soft);
+  border-radius: var(--radius-md);
+  color: var(--color-brand);
+  display: inline-flex;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+.role-icon .hp-icon {
+  height: 24px;
+  width: 24px;
+}
+
+.role-card strong {
+  color: var(--color-text);
+}
+
+.role-card span {
+  color: var(--color-text-muted);
+}
+
+.role-card-cta {
+  color: var(--color-brand);
+  font-style: normal;
+  font-weight: 800;
+}
+
+.role-card-cta::after {
+  content: ' →';
+}
+
+@media (max-width: 768px) {
+  .role-grid {
+    grid-template-columns: 1fr;
+  }
+}

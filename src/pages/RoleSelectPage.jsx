@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { userRoles } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { HomeIcon } from '../components/icons/HomeIcon'
 
 function safeRedirectPath(value) {
   if (!value) return '/inicio'
@@ -17,7 +18,7 @@ function safeRedirectPath(value) {
 export default function RoleSelectPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { isLoggedIn, profile, setUserRole, needsRoleSelection, logoutAccount } = useMarketplace()
+  const { isLoggedIn, setUserRole, needsRoleSelection, logoutAccount } = useMarketplace()
 
   const redirectTo = safeRedirectPath(searchParams.get('redirect'))
 
@@ -54,20 +55,20 @@ export default function RoleSelectPage() {
         <div className="role-grid">
           <button className="role-card" type="button" onClick={chooseBuyer}>
             <span className="role-icon" aria-hidden="true">
-              🔍
+              <HomeIcon name="search" />
             </span>
             <strong>Quero comprar ou arrendar</strong>
             <span>Casas, terrenos, carros e outros anúncios em Angola.</span>
-            <em>Continuar →</em>
+            <em className="role-card-cta">Continuar</em>
           </button>
 
           <button className="role-card role-card-owner" type="button" onClick={chooseOwner}>
             <span className="role-icon" aria-hidden="true">
-              🏡
+              <HomeIcon name="home" />
             </span>
             <strong>Quero anunciar imóveis ou veículos</strong>
             <span>Publicar anúncios e receber contactos de interessados.</span>
-            <em>Continuar →</em>
+            <em className="role-card-cta">Continuar</em>
           </button>
         </div>
 
