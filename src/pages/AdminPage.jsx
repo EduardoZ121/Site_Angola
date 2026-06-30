@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { ADMIN_EMAIL } from '../data/constants'
 import { PendingListingsPanel } from '../components/staff/PendingListingsPanel'
+import { AdminAgentsPanel } from '../components/staff/AdminAgentsPanel'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { isListingPending } from '../constants/staff'
 import { formatKz } from '../utils/format'
@@ -29,6 +30,14 @@ export default function AdminPage() {
     rejectListing,
     deleteListing,
     updateListing,
+    agentApplications,
+    approvedAgents,
+    adminCreateAgentCandidate,
+    adminSendAgentTest,
+    adminApproveAgent,
+    adminRejectAgent,
+    adminRevokeAgent,
+    adminResetAgentTest,
   } = useMarketplace()
 
   const pendingListings = listings.filter((listing) => isListingPending(listing))
@@ -98,6 +107,25 @@ export default function AdminPage() {
           onReject={rejectListing}
           onDelete={deleteListing}
           canDelete
+        />
+      </SectionBlock>
+
+      <SectionBlock
+        id="agentes"
+        eyebrow="Equipa"
+        title="Candidatos e agentes"
+        subtitle="Convide intermediários, envie o teste de 25 perguntas e active quem passar."
+      >
+        <AdminAgentsPanel
+          siteUsers={siteUsers}
+          agentApplications={agentApplications}
+          approvedAgents={approvedAgents}
+          onCreateCandidate={adminCreateAgentCandidate}
+          onSendTest={adminSendAgentTest}
+          onApprove={adminApproveAgent}
+          onReject={adminRejectAgent}
+          onRevoke={adminRevokeAgent}
+          onRetest={adminResetAgentTest}
         />
       </SectionBlock>
 

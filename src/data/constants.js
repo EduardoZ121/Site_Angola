@@ -12,6 +12,8 @@ export const STORAGE_KEYS = {
   accounts: 'kuteka.market.accounts',
   buyerPrefs: 'kuteka.market.buyerPrefs',
   passwordResetTokens: 'kuteka.market.passwordResetTokens',
+  approvedAgents: 'kuteka.market.approvedAgents',
+  agentApplications: 'kuteka.market.agentApplications',
 }
 
 export const userRoles = {

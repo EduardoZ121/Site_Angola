@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { AGENT_APPLICATION_STATUS_LABELS } from '../constants/agentApplication'
 import { Toggle } from '../components/ui'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import { formatKz, trustSealFromProfile } from '../utils/format'
@@ -20,10 +21,14 @@ export default function AccountPage() {
     getMyNotifications,
     markNotificationRead,
     logoutAccount,
+    isAgent,
+    isAdmin,
+    getMyAgentApplication,
   } = useMarketplace()
 
   const myListings = getMyListings()
   const notifications = getMyNotifications()
+  const agentApplication = getMyAgentApplication()
 
   return (
     <main className="page-main">
@@ -57,6 +62,23 @@ export default function AccountPage() {
           </button>
         </div>
       </SectionBlock>
+
+      {!isAdmin && !isAgent ? (
+        <SectionBlock id="agente-kuteka" eyebrow="Carreira" title="Trabalhar na Kuteka" tone="muted">
+          <div className="panel-card">
+            <p>Quer ser intermediário imobiliário? Envie candidatura e complete o teste de qualificação.</p>
+            {agentApplication ? (
+              <p>
+                <strong>Estado:</strong>{' '}
+                {AGENT_APPLICATION_STATUS_LABELS[agentApplication.status] || agentApplication.status}
+              </p>
+            ) : null}
+            <Link className="button primary" to="/seja-agente">
+              Candidatar-me a agente
+            </Link>
+          </div>
+        </SectionBlock>
+      ) : null}
 
       <SectionBlock id="mensagens" eyebrow="Mensagens" title="Notificações e email">
         {notifications.length === 0 ? (

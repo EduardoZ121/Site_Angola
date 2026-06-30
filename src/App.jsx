@@ -28,6 +28,8 @@ import ComparePage from './pages/ComparePage'
 import PricesPage from './pages/PricesPage'
 import AdminPage from './pages/AdminPage'
 import AgentPage from './pages/AgentPage'
+import AgentApplyPage from './pages/AgentApplyPage'
+import AgentTestPage from './pages/AgentTestPage'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
@@ -145,7 +147,10 @@ export default function App() {
             <Route element={<RequireAuth />}>
               <Route path="conta" element={<AccountPage />} />
               <Route path="favoritos" element={<FavoritesPage />} />
+              <Route path="seja-agente" element={<AgentApplyPage />} />
             </Route>
+
+            <Route path="agente/avaliacao/:token" element={<AgentTestPage />} />
 
             <Route element={<RequireRoleForPublish />}>
               <Route path="publicar" element={<PublishPage />} />

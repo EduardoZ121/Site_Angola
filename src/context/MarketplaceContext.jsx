@@ -16,7 +16,17 @@ import { parseGoogleCredential } from '../utils/googleAuth'
 import { draftToRawListing } from '../utils/publishDraft'
 import { rawListingToPublishDraft } from '../utils/ownerListing'
 import { LISTING_STATUS } from '../constants/listingStatus'
-import { getStaffRole, isListingPending, STAFF_ROLES } from '../constants/staff'
+import { getStaffRole, isListingPending, STAFF_ROLES, createSeedApprovedAgents } from '../constants/staff'
+import { AGENT_APPLICATION_STATUS } from '../constants/agentApplication'
+import {
+  buildTestAttempt,
+  buildTestLink,
+  createApplicationId,
+  createTestToken,
+  findApplicationByToken,
+  findApplicationForProfile,
+  gradeTestAttempt,
+} from '../utils/agentApplication'
 import {
   authenticateAccount,
   buildUserSession,
@@ -103,8 +113,24 @@ export function MarketplaceProvider({ children }) {
       return defaultBuyerPrefs
     }
   })
+  const [approvedAgents, setApprovedAgents] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.approvedAgents)
+      return raw ? JSON.parse(raw) : createSeedApprovedAgents()
+    } catch {
+      return createSeedApprovedAgents()
+    }
+  })
+  const [agentApplications, setAgentApplications] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.agentApplications)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
 
-  const staffRole = getStaffRole(profile.email)
+  const staffRole = getStaffRole(profile.email, approvedAgents)
   const isAdmin = staffRole === STAFF_ROLES.admin
   const isAgent = staffRole === STAFF_ROLES.agent
   const isStaff = Boolean(staffRole)
@@ -139,6 +165,14 @@ export function MarketplaceProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.buyerPrefs, JSON.stringify(buyerPrefs))
   }, [buyerPrefs])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.approvedAgents, JSON.stringify(approvedAgents))
+  }, [approvedAgents])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.agentApplications, JSON.stringify(agentApplications))
+  }, [agentApplications])
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile))
@@ -686,6 +720,255 @@ export function MarketplaceProvider({ children }) {
     )
   }
 
+  function submitAgentApplication(message = '') {
+    if (!profile.email || !profile.name) return null
+    const existing = findApplicationForProfile(agentApplications, profile)
+    if (existing && existing.status !== AGENT_APPLICATION_STATUS.REJECTED) {
+      return existing
+    }
+
+    const application = {
+      id: createApplicationId(),
+      email: profile.email.trim().toLowerCase(),
+      username: profile.name.trim(),
+      phone: profile.phone || '',
+      message: message.trim(),
+      status: AGENT_APPLICATION_STATUS.SUBMITTED,
+      createdAt: new Date().toISOString(),
+      testToken: null,
+      testSentAt: null,
+      testAttempt: null,
+      approvedAt: null,
+      approvedBy: null,
+      rejectedAt: null,
+      rejectedBy: null,
+      rejectReason: '',
+    }
+
+    setAgentApplications((prev) => [application, ...prev.filter((item) => item.id !== existing?.id)])
+
+    addNotification({
+      type: 'staff_agent_application',
+      audience: 'staff',
+      title: 'Nova candidatura a agente',
+      body: `${profile.name} (${profile.email}) quer ser intermediário Kuteka.`,
+    })
+
+    addNotification({
+      type: 'agent_application_received',
+      ownerEmail: profile.email,
+      ownerName: profile.name,
+      title: 'Candidatura recebida',
+      body: 'A equipa Kuteka vai analisar o seu perfil. Aguarde contacto para o teste de qualificação.',
+    })
+
+    return application
+  }
+
+  function adminCreateAgentCandidate({ email, username = '', phone = '', note = '' }) {
+    if (!isAdmin) return null
+    const normalizedEmail = email?.trim().toLowerCase()
+    if (!normalizedEmail) return null
+
+    const existing = agentApplications.find((item) => item.email === normalizedEmail)
+    if (existing) return existing
+
+    const application = {
+      id: createApplicationId(),
+      email: normalizedEmail,
+      username: username.trim() || normalizedEmail.split('@')[0],
+      phone: phone.trim(),
+      message: note.trim() || 'Convite manual do administrador.',
+      status: AGENT_APPLICATION_STATUS.SUBMITTED,
+      createdAt: new Date().toISOString(),
+      testToken: null,
+      testSentAt: null,
+      testAttempt: null,
+      approvedAt: null,
+      approvedBy: null,
+      rejectedAt: null,
+      rejectedBy: null,
+      rejectReason: '',
+    }
+
+    setAgentApplications((prev) => [application, ...prev])
+    return application
+  }
+
+  function adminSendAgentTest(applicationId) {
+    if (!isAdmin) return null
+    const application = agentApplications.find((item) => item.id === applicationId)
+    if (!application) return null
+    if (application.status === AGENT_APPLICATION_STATUS.APPROVED) return null
+
+    const token = createTestToken()
+    const testSentAt = new Date().toISOString()
+    const link = buildTestLink(token)
+
+    setAgentApplications((prev) =>
+      prev.map((item) =>
+        item.id === applicationId
+          ? {
+              ...item,
+              status: AGENT_APPLICATION_STATUS.INVITED,
+              testToken: token,
+              testSentAt,
+              testAttempt: buildTestAttempt(),
+            }
+          : item,
+      ),
+    )
+
+    addNotification({
+      type: 'agent_test_invite',
+      ownerEmail: application.email,
+      ownerName: application.username,
+      title: 'Convite para teste de agente Kuteka',
+      body: `Complete a avaliação de intermediário: ${link}`,
+    })
+
+    return { token, link }
+  }
+
+  function submitAgentTest(token, answers) {
+    const application = findApplicationByToken(agentApplications, token)
+    if (!application) return { error: 'Convite inválido ou expirado.' }
+    if (application.testAttempt?.submittedAt) return { error: 'Este teste já foi submetido.' }
+    if (!profile.email) return { error: 'Inicie sessão com o email da candidatura.' }
+
+    const profileEmail = profile.email.trim().toLowerCase()
+    if (profileEmail !== application.email) {
+      return { error: 'Entre com o mesmo email associado à candidatura.' }
+    }
+
+    const attempt = gradeTestAttempt({
+      ...(application.testAttempt || buildTestAttempt()),
+      answers,
+    })
+
+    const nextStatus = attempt.passed
+      ? AGENT_APPLICATION_STATUS.PASSED
+      : AGENT_APPLICATION_STATUS.FAILED
+
+    setAgentApplications((prev) =>
+      prev.map((item) =>
+        item.id === application.id ? { ...item, status: nextStatus, testAttempt: attempt } : item,
+      ),
+    )
+
+    addNotification({
+      type: attempt.passed ? 'agent_test_passed' : 'agent_test_failed',
+      ownerEmail: application.email,
+      ownerName: application.username,
+      title: attempt.passed ? 'Teste aprovado' : 'Teste reprovado',
+      body: attempt.passed
+        ? `Obteve ${attempt.score}/25. A administração Kuteka vai confirmar a sua admissão.`
+        : `Obteve ${attempt.score}/25. Pode tentar novamente quando a administração reenviar o convite.`,
+    })
+
+    addNotification({
+      type: 'staff_agent_test_result',
+      audience: 'staff',
+      applicationId: application.id,
+      title: attempt.passed ? 'Candidato aprovou teste' : 'Candidato reprovou teste',
+      body: `${application.username} (${application.email}): ${attempt.score}/25.`,
+    })
+
+    return { applicationId: application.id, attempt }
+  }
+
+  function adminApproveAgent(applicationId) {
+    if (!isAdmin) return null
+    const application = agentApplications.find((item) => item.id === applicationId)
+    if (!application) return null
+
+    const now = new Date().toISOString()
+    setApprovedAgents((prev) => {
+      const exists = prev.some((item) => item.email === application.email)
+      if (exists) return prev
+      return [
+        {
+          email: application.email,
+          name: application.username,
+          phone: application.phone,
+          approvedAt: now,
+          approvedBy: profile.email,
+          applicationId: application.id,
+        },
+        ...prev,
+      ]
+    })
+
+    setAgentApplications((prev) =>
+      prev.map((item) =>
+        item.id === applicationId
+          ? { ...item, status: AGENT_APPLICATION_STATUS.APPROVED, approvedAt: now, approvedBy: profile.email }
+          : item,
+      ),
+    )
+
+    addNotification({
+      type: 'agent_approved',
+      ownerEmail: application.email,
+      ownerName: application.username,
+      title: 'Foi aprovado como agente Kuteka',
+      body: 'Já pode aceder ao painel de agente e aprovar anúncios, responder clientes e planear visitas.',
+    })
+
+    return application.email
+  }
+
+  function adminRejectAgent(applicationId, reason = '') {
+    if (!isAdmin) return null
+    const application = agentApplications.find((item) => item.id === applicationId)
+    if (!application) return null
+
+    const now = new Date().toISOString()
+    setAgentApplications((prev) =>
+      prev.map((item) =>
+        item.id === applicationId
+          ? {
+              ...item,
+              status: AGENT_APPLICATION_STATUS.REJECTED,
+              rejectedAt: now,
+              rejectedBy: profile.email,
+              rejectReason: reason || 'Candidatura não aprovada pela administração.',
+            }
+          : item,
+      ),
+    )
+
+    setApprovedAgents((prev) => prev.filter((item) => item.email !== application.email))
+
+    addNotification({
+      type: 'agent_rejected',
+      ownerEmail: application.email,
+      ownerName: application.username,
+      title: 'Candidatura a agente não aprovada',
+      body: reason || 'Contacte a administração Kuteka para mais informações.',
+    })
+  }
+
+  function adminRevokeAgent(email) {
+    if (!isAdmin) return
+    const normalized = email?.trim().toLowerCase()
+    setApprovedAgents((prev) => prev.filter((item) => item.email !== normalized))
+  }
+
+  function adminResetAgentTest(applicationId) {
+    if (!isAdmin) return null
+    return adminSendAgentTest(applicationId)
+  }
+
+  function getAgentApplicationByToken(token) {
+    return findApplicationByToken(agentApplications, token)
+  }
+
+  function getMyAgentApplication() {
+    if (!profile.email) return null
+    return findApplicationForProfile(agentApplications, profile)
+  }
+
   const value = {
     profile,
     setProfile,
@@ -744,6 +1027,18 @@ export function MarketplaceProvider({ children }) {
     updateListing,
     deleteListing,
     getListing,
+    approvedAgents,
+    agentApplications,
+    submitAgentApplication,
+    adminCreateAgentCandidate,
+    adminSendAgentTest,
+    submitAgentTest,
+    adminApproveAgent,
+    adminRejectAgent,
+    adminRevokeAgent,
+    adminResetAgentTest,
+    getAgentApplicationByToken,
+    getMyAgentApplication,
   }
 
   return (
