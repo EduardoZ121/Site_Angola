@@ -1,4 +1,4 @@
-import { isListingPublic } from '../constants/listingStatus'
+import { isListingPublic, normalizeListingStatus } from '../constants/listingStatus'
 
 export function normalizeListing(raw) {
   if (!raw) return null
