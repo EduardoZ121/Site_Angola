@@ -1,17 +1,19 @@
 import { Link } from 'react-router-dom'
 import { homeCategories } from '../../data/homeContent'
 
-export function CategoriesSection() {
+export function CategoriesSection({ hideHead = false }) {
   return (
     <section className="hp-section">
       <div className="hp-container">
-        <div className="hp-section-head">
-          <p className="hp-eyebrow dark">Explorar</p>
-          <h2>O que procura?</h2>
-          <p className="hp-section-lead">
-            Compre, arrende ou encontre veículos — cada secção com filtros avançados.
-          </p>
-        </div>
+        {hideHead ? null : (
+          <div className="hp-section-head">
+            <p className="hp-eyebrow dark">Explorar</p>
+            <h2>O que procura?</h2>
+            <p className="hp-section-lead">
+              Compre, arrende ou encontre veículos — cada secção com filtros avançados.
+            </p>
+          </div>
+        )}
         <div className="hp-categories-grid">
           {homeCategories.map((item) => (
             <article className="hp-category-card" key={item.to}>

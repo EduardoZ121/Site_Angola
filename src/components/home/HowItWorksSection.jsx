@@ -1,15 +1,17 @@
 import { homeOwnerSteps, homeSteps } from '../../data/homeContent'
 import { HomeIcon } from '../icons/HomeIcon'
 
-export function HowItWorksSection() {
+export function HowItWorksSection({ hideHead = false }) {
   return (
     <section className="hp-section">
       <div className="hp-container">
-        <div className="hp-section-head center">
-          <p className="hp-eyebrow dark">Simples</p>
-          <h2>Como funciona</h2>
-          <p className="hp-section-lead">Três passos para compradores e três para proprietários.</p>
-        </div>
+        {hideHead ? null : (
+          <div className="hp-section-head center">
+            <p className="hp-eyebrow dark">Simples</p>
+            <h2>Como funciona</h2>
+            <p className="hp-section-lead">Três passos para compradores e três para proprietários.</p>
+          </div>
+        )}
         <div className="hp-how-grid">
           <div className="hp-how-column">
             <h3 className="hp-how-title">Comprador</h3>

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { homeQuickSearches } from '../../data/homeContent'
 
-export function QuickSearchSection() {
+export function QuickSearchSection({ compact = false }) {
   const navigate = useNavigate()
 
   function openSearch(item) {
@@ -14,13 +14,15 @@ export function QuickSearchSection() {
   }
 
   return (
-    <section className="hp-section hp-quick-search">
+    <section className={`hp-section hp-quick-search${compact ? ' hp-quick-search-compact' : ''}`}>
       <div className="hp-container">
-        <div className="hp-section-head">
-          <p className="hp-eyebrow dark">Popular</p>
-          <h2>Pesquisas frequentes</h2>
-          <p className="hp-section-lead">Toque num cartão para abrir resultados já filtrados.</p>
-        </div>
+        {compact ? null : (
+          <div className="hp-section-head">
+            <p className="hp-eyebrow dark">Popular</p>
+            <h2>Pesquisas frequentes</h2>
+            <p className="hp-section-lead">Toque num cartão para abrir resultados já filtrados.</p>
+          </div>
+        )}
         <div className="hp-quick-grid">
           {homeQuickSearches.map((item) => (
             <button

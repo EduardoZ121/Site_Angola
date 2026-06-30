@@ -3,7 +3,7 @@ import { defaultPhoto } from '../../data/constants'
 import { useMarketplace } from '../../context/MarketplaceContext'
 import { formatKz } from '../../utils/format'
 
-export function FeaturedSection() {
+export function FeaturedSection({ hideHead = false }) {
   const { listings } = useMarketplace()
   const featured = listings
     .filter((item) => item.status === 'Ativo')
@@ -13,11 +13,13 @@ export function FeaturedSection() {
   return (
     <section className="hp-section hp-section-dark">
       <div className="hp-container">
-        <div className="hp-section-head">
-          <p className="hp-eyebrow">Destaques</p>
-          <h2>Anúncios em destaque</h2>
-          <p className="hp-section-lead light">Seleccionados pela equipa Kuteka esta semana.</p>
-        </div>
+        {hideHead ? null : (
+          <div className="hp-section-head">
+            <p className="hp-eyebrow">Destaques</p>
+            <h2>Anúncios em destaque</h2>
+            <p className="hp-section-lead light">Seleccionados pela equipa Kuteka esta semana.</p>
+          </div>
+        )}
         <div className="hp-featured-grid">
           {featured.map((listing) => (
             <article className="hp-featured-card" key={listing.id}>

@@ -37,7 +37,7 @@ function StatItem({ stat, active }) {
   )
 }
 
-export function StatsSection() {
+export function StatsSection({ hideHead = false }) {
   const ref = useRef(null)
   const [active, setActive] = useState(false)
 
@@ -57,10 +57,12 @@ export function StatsSection() {
   return (
     <section className="hp-section" ref={ref}>
       <div className="hp-container">
-        <div className="hp-section-head center">
-          <p className="hp-eyebrow dark">Números</p>
-          <h2>Kuteka em crescimento</h2>
-        </div>
+        {hideHead ? null : (
+          <div className="hp-section-head center">
+            <p className="hp-eyebrow dark">Números</p>
+            <h2>Kuteka em crescimento</h2>
+          </div>
+        )}
         <div className="hp-stats-grid">
           {homeStats.map((stat) => (
             <StatItem key={stat.label} stat={stat} active={active} />

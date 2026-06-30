@@ -9,6 +9,10 @@ import {
 import { LoginPromptProvider } from './context/LoginPromptContext'
 import { MarketplaceProvider } from './context/MarketplaceContext'
 import HomePage from './pages/HomePage'
+import ExplorePage from './pages/ExplorePage'
+import FeaturedHubPage from './pages/FeaturedHubPage'
+import HowItWorksPage from './pages/HowItWorksPage'
+import AboutPage from './pages/AboutPage'
 import ListingsPage from './pages/ListingsPage'
 import FiltersMapPage from './pages/FiltersMapPage'
 import ListingDetailPage from './pages/ListingDetailPage'
@@ -45,6 +49,10 @@ export default function App() {
 
           <Route element={<Layout />}>
             <Route path="inicio" element={<HomePage />} />
+            <Route path="explorar" element={<ExplorePage />} />
+            <Route path="destaques" element={<FeaturedHubPage />} />
+            <Route path="como-funciona" element={<HowItWorksPage />} />
+            <Route path="sobre" element={<AboutPage />} />
             <Route
               path="comprar"
               element={

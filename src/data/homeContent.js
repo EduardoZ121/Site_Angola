@@ -132,3 +132,37 @@ export const homeTestimonials = [
     text: 'Plataforma clara para Angola. Os meus clientes encontram imóveis rapidamente.',
   },
 ]
+
+export const homeHubSections = [
+  {
+    to: '/explorar',
+    icon: 'search',
+    title: 'Explorar categorias',
+    description: 'Casas, arrendamentos, veículos, terrenos e lojas.',
+  },
+  {
+    to: '/destaques',
+    icon: 'bolt',
+    title: 'Anúncios em destaque',
+    description: 'Selecção verificada pela equipa Kuteka.',
+  },
+  {
+    to: '/como-funciona',
+    icon: 'handshake',
+    title: 'Como funciona',
+    description: 'Passos simples para comprar ou publicar.',
+  },
+  {
+    to: '/sobre',
+    icon: 'shield',
+    title: 'Sobre a Kuteka',
+    description: 'Confiança, números e experiência móvel.',
+  },
+]
+
+export const homeQuickActions = [
+  { to: '/comprar', label: 'Comprar', icon: 'home' },
+  { to: '/arrendar', label: 'Arrendar', icon: 'building' },
+  { to: '/veiculos', label: 'Veículos', icon: 'car' },
+  { to: '/publicar', label: 'Publicar', icon: 'edit' },
+]
