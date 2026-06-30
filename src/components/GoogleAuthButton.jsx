@@ -51,7 +51,7 @@ export function GoogleAuthButton({ onCredential, label = 'Continuar com Google' 
           type: 'standard',
           shape: 'rectangular',
           text: 'continue_with',
-          width: Math.max(buttonRef.current.offsetWidth || 0, 320),
+          width: Math.min(Math.max(buttonRef.current.offsetWidth || 0, 280), 360),
         })
         setReady(true)
       })
