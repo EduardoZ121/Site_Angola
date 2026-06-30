@@ -1,6 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { defaultPhoto } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { HomeIcon } from '../components/icons/HomeIcon'
 import { TrustBadge } from '../components/ui'
 import { formatKz, trustSealFromProfile } from '../utils/format'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
@@ -52,7 +53,7 @@ export default function PublishSubmittedPage() {
       <SectionBlock id="estado" eyebrow="Estado" title="Situação do pedido" tone="muted">
         <div className={`pending-banner panel-card ${isRejected ? 'rejected' : isApproved ? 'approved' : ''}`}>
           <span className="pending-icon" aria-hidden="true">
-            {isApproved ? '✅' : isRejected ? '❌' : '⏳'}
+            <HomeIcon name={isApproved ? 'check' : isRejected ? 'x' : 'clock'} />
           </span>
           <div>
             <strong>

@@ -5,7 +5,8 @@ export function Toggle({ label, checked, onToggle }) {
       className={`toggle-btn ${checked ? 'active' : ''}`}
       onClick={onToggle}
     >
-      {checked ? '✓' : '○'} {label}
+      <span className="toggle-indicator" aria-hidden="true" />
+      {label}
     </button>
   )
 }

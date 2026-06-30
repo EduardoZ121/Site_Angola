@@ -50,7 +50,7 @@
 }
 
 .owner-filter-pill.active {
-  background: var(--color-brand);
+  background: var(--color-text);
   color: #fff;
 }
 

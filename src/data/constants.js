@@ -244,12 +244,12 @@ export const defaultProfile = {
 }
 
 export const buyerPropertyTypes = [
-  { id: 'casa', label: 'Casa / Vivenda', icon: '🏠', category: 'Imóvel', propertyType: 'Vivenda' },
-  { id: 'apartamento', label: 'Apartamento', icon: '🏢', category: 'Imóvel', propertyType: 'Apartamento' },
-  { id: 'terreno', label: 'Terreno', icon: '📐', category: 'Imóvel', propertyType: 'Terreno' },
-  { id: 'loja', label: 'Loja / Escritório', icon: '🏪', category: 'Imóvel', propertyType: 'Loja' },
-  { id: 'carro', label: 'Carro', icon: '🚗', category: 'Veículo', propertyType: '' },
-  { id: 'pickup', label: 'Pickup / SUV', icon: '🛻', category: 'Veículo', propertyType: '' },
+  { id: 'casa', label: 'Casa / Vivenda', icon: 'home', category: 'Imóvel', propertyType: 'Vivenda' },
+  { id: 'apartamento', label: 'Apartamento', icon: 'building', category: 'Imóvel', propertyType: 'Apartamento' },
+  { id: 'terreno', label: 'Terreno', icon: 'land', category: 'Imóvel', propertyType: 'Terreno' },
+  { id: 'loja', label: 'Loja / Escritório', icon: 'store', category: 'Imóvel', propertyType: 'Loja' },
+  { id: 'carro', label: 'Carro', icon: 'car', category: 'Veículo', propertyType: '' },
+  { id: 'pickup', label: 'Pickup / SUV', icon: 'truck', category: 'Veículo', propertyType: '' },
 ]
 
 export const buyerOperations = [

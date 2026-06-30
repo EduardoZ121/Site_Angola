@@ -7,6 +7,7 @@ import {
   provinces,
   userRoles,
 } from '../data/constants'
+import { HomeIcon } from '../components/icons/HomeIcon'
 import { useMarketplace } from '../context/MarketplaceContext'
 
 const steps = [
@@ -98,7 +99,9 @@ export default function BuyerFlowPage() {
                     nextStep()
                   }}
                 >
-                  <span className="choice-icon">{item.icon}</span>
+                  <span className="choice-icon" aria-hidden="true">
+                    <HomeIcon name={item.icon} />
+                  </span>
                   <strong>{item.label}</strong>
                 </button>
               ))}

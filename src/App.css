@@ -1142,8 +1142,25 @@ textarea {
 }
 
 .pending-icon {
-  font-size: 28px;
-  line-height: 1;
+  align-items: center;
+  background: var(--color-brand-soft);
+  border-radius: var(--radius-md);
+  color: var(--color-brand);
+  display: inline-flex;
+  flex-shrink: 0;
+  height: 48px;
+  justify-content: center;
+  width: 48px;
+}
+
+.pending-banner.approved .pending-icon {
+  background: var(--color-brand-soft);
+  color: var(--color-brand);
+}
+
+.pending-banner.rejected .pending-icon {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .status-pill {
@@ -1884,7 +1901,7 @@ textarea {
 }
 
 .flow-step-dot.active {
-  background: #0f6a49;
+  background: var(--color-accent);
 }
 
 .flow-step-dot.current {
@@ -1908,9 +1925,9 @@ textarea {
 }
 
 .choice-card {
-  background: #f8faf6;
-  border: 2px solid #e6ebdf;
-  border-radius: 16px;
+  background: var(--color-surface-muted);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
   cursor: pointer;
   display: grid;
   gap: 6px;
@@ -1920,11 +1937,15 @@ textarea {
 
 .choice-card.selected,
 .choice-card:hover {
-  border-color: #0f6a49;
+  border-color: var(--color-brand);
 }
 
 .choice-icon {
-  font-size: 28px;
+  align-items: center;
+  color: var(--color-brand);
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
 }
 
 .flow-field {

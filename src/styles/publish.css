@@ -13,9 +13,9 @@
 }
 
 .publish-autosave {
-  background: #ecfdf5;
-  border-radius: 999px;
-  color: #047857;
+  background: var(--color-brand-soft);
+  border-radius: var(--radius-pill);
+  color: var(--color-brand);
   font-size: var(--font-size-sm);
   font-weight: 700;
   padding: 8px 14px;
@@ -68,13 +68,13 @@
 }
 
 .publish-step-pill.active {
-  background: var(--color-brand);
+  background: var(--color-text);
   color: #fff;
 }
 
 .publish-step-pill.done:not(.active) {
-  background: #dbeafe;
-  color: #1e40af;
+  background: var(--color-brand-soft);
+  color: var(--color-brand);
 }
 
 .publish-step-pill:disabled {
@@ -101,7 +101,7 @@
 
 .publish-category-card.selected {
   border-color: var(--color-brand);
-  box-shadow: 0 0 0 2px rgba(0, 77, 64, 0.15);
+  box-shadow: 0 0 0 2px rgba(13, 92, 68, 0.12);
 }
 
 .publish-category-card span {
@@ -145,7 +145,7 @@
 }
 
 .publish-tag-picker button.selected {
-  background: var(--color-brand);
+  background: var(--color-text);
   color: #fff;
 }
 
@@ -170,8 +170,8 @@
 }
 
 .media-dropzone.drag-over {
+  background: var(--color-brand-soft);
   border-color: var(--color-brand);
-  background: #ecfdf5;
 }
 
 .media-grid {

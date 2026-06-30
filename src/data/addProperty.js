@@ -1,9 +1,9 @@
 export const propertyTypes = [
-  { value: 'casa', label: 'Casa / Vivenda', icon: '🏠' },
-  { value: 'apartamento', label: 'Apartamento', icon: '🏢' },
-  { value: 'terreno', label: 'Terreno', icon: '📐' },
-  { value: 'loja', label: 'Loja / Comércio', icon: '🏪' },
-  { value: 'carro', label: 'Carro / Veículo', icon: '🚗' },
+  { value: 'casa', label: 'Casa / Vivenda', icon: 'home' },
+  { value: 'apartamento', label: 'Apartamento', icon: 'building' },
+  { value: 'terreno', label: 'Terreno', icon: 'land' },
+  { value: 'loja', label: 'Loja / Comércio', icon: 'store' },
+  { value: 'carro', label: 'Carro / Veículo', icon: 'car' },
 ]
 
 export const propertyStatuses = [

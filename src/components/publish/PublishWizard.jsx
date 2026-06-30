@@ -112,15 +112,15 @@ export function PublishWizard({ editListingId }) {
 
       <div className="publish-nav">
         <button type="button" className="button ghost" onClick={goBack} disabled={stepIndex === 0}>
-          ← Anterior
+          Anterior
         </button>
         {isLast ? (
           <button type="button" className="button primary" onClick={handlePublish}>
             {editListingId ? 'Guardar alterações' : 'Publicar — enviar para revisão'}
           </button>
         ) : (
-          <button type="button" className="button primary" onClick={goNext}>
-            Seguinte →
+          <button type="button" className="button primary ui-btn-arrow" onClick={goNext}>
+            Seguinte
           </button>
         )}
       </div>

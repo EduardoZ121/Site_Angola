@@ -67,6 +67,53 @@ const icons = {
       <path d="M9 22V12h6v10" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
+  building: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <rect x="4" y="2" width="16" height="20" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 22v-4h6v4M8 6h.01M16 6h.01M12 6h.01M8 10h.01M16 10h.01M12 10h.01M8 14h.01M16 14h.01M12 14h.01" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  land: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M3 20h18M5 20V8l7-4 7 4v12" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9 20v-6h6v6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  store: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M3 9 5 3h14l2 6M3 9v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 9h18M9 22V12h6v10" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  car: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9L18 10l-2.7-5.4A2 2 0 0 0 13.5 3h-3A2 2 0 0 0 8.7 4.6L6 10l-2.5 1.1C2.7 11.3 2 12.1 2 13v3c0 .6.4 1 1 1h2" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" />
+    </svg>
+  ),
+  truck: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M10 17h4M2 17h2M20 17h2M3 17V6h11v11M14 9h4l3 4v4h-3" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="7" cy="17" r="2" /><circle cx="17" cy="17" r="2" />
+    </svg>
+  ),
+  pin: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="10" r="3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  clock: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 6v6l4 2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  x: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
 }
 
 export function HomeIcon({ name, className = '' }) {

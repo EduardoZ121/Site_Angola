@@ -7,6 +7,7 @@ import {
   propertyTypes,
   sellPlans,
 } from '../data/addProperty'
+import { HomeIcon } from '../components/icons/HomeIcon'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function AddPropertyDetailsPage() {
@@ -45,7 +46,7 @@ export default function AddPropertyDetailsPage() {
         <SectionBlock id="sucesso" title="Pedido recebido">
           <div className="empty-state panel-card add-property-success">
             <span className="add-property-icon" aria-hidden="true">
-              ✅
+              <HomeIcon name="check" />
             </span>
             <h2>Obrigado, {draft.firstName || 'proprietário'}!</h2>
             <p>

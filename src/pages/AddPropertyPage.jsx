@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ADD_PROPERTY_STORAGE_KEY, defaultAddPropertyDraft, propertyTypes } from '../data/addProperty'
 import { provinces } from '../data/constants'
+import { HomeIcon } from '../components/icons/HomeIcon'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
 export default function AddPropertyPage() {
@@ -31,7 +32,7 @@ export default function AddPropertyPage() {
         <div className="add-property-intro panel-card">
           <div className="add-property-intro-head">
             <span className="add-property-icon" aria-hidden="true">
-              📍
+              <HomeIcon name="pin" />
             </span>
             <div>
               <strong>Acompanhe e publique o seu património</strong>
@@ -52,7 +53,9 @@ export default function AddPropertyPage() {
                   className={draft.propertyType === type.value ? 'property-type-chip active' : 'property-type-chip'}
                   onClick={() => updateField('propertyType', type.value)}
                 >
-                  <span>{type.icon}</span>
+                  <span className="property-type-icon" aria-hidden="true">
+                    <HomeIcon name={type.icon} />
+                  </span>
                   {type.label}
                 </button>
               ))}
@@ -62,7 +65,7 @@ export default function AddPropertyPage() {
               Endereço ou referência da propriedade
               <div className="add-property-search-row">
                 <span className="search-lupa" aria-hidden="true">
-                  🔍
+                  <HomeIcon name="search" />
                 </span>
                 <input
                   required
