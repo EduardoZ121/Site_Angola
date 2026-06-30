@@ -12,7 +12,9 @@ export function CatalogFeaturedStrip({ listings, title = 'Destaques para arrenda
         <Link to="/destaques">Ver todos</Link>
       </div>
       <div className="catalog-featured-scroll">
-        {listings.map((listing) => (
+        {listings.map((listing) => {
+          if (!listing?.id) return null
+          return (
           <Link key={listing.id} className="catalog-featured-mini" to={`/anuncio/${listing.id}`}>
             <img src={listing.photos?.[0] || defaultPhoto} alt="" loading="lazy" />
             <div className="catalog-featured-mini-body">
@@ -23,7 +25,8 @@ export function CatalogFeaturedStrip({ listings, title = 'Destaques para arrenda
               </span>
             </div>
           </Link>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

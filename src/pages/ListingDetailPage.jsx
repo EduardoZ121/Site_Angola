@@ -49,6 +49,10 @@ export default function ListingDetailPage() {
   }, [listing])
 
   useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [id])
+
+  useEffect(() => {
     if (window.location.hash === '#chat' || window.location.hash === '#contactar') {
       document.getElementById('contactar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }

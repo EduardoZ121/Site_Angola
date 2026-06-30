@@ -6,7 +6,7 @@ import { formatKz } from '../../utils/format'
 export function FeaturedSection({ hideHead = false }) {
   const { listings } = useMarketplace()
   const featured = listings
-    .filter((item) => item.status === 'Ativo')
+    .filter((item) => item.status === 'Ativo' && item.id)
     .sort((a, b) => Number(b.featured) - Number(a.featured))
     .slice(0, 4)
 
@@ -22,12 +22,16 @@ export function FeaturedSection({ hideHead = false }) {
         )}
         <div className="hp-featured-grid">
           {featured.map((listing) => (
-            <article className="hp-featured-card" key={listing.id}>
+            <Link
+              key={listing.id}
+              className="hp-featured-card hp-featured-card-link"
+              to={`/anuncio/${listing.id}`}
+            >
               <div className="hp-featured-badges">
                 {listing.featured ? <span className="hp-badge hp-badge-featured">Destaque</span> : null}
                 {listing.verified ? <span className="hp-badge hp-badge-verified">Verificado</span> : null}
               </div>
-              <img src={listing.photos?.[0] || defaultPhoto} alt={listing.title} loading="lazy" />
+              <img src={listing.photos?.[0] || defaultPhoto} alt="" loading="lazy" />
               <div className="hp-featured-body">
                 <span className="hp-featured-tag">
                   {listing.category} • {listing.operation}
@@ -37,11 +41,9 @@ export function FeaturedSection({ hideHead = false }) {
                   {listing.province} / {listing.municipality}
                 </p>
                 <strong>{formatKz(listing.price)}</strong>
-                <Link className="hp-btn hp-btn-light" to={`/anuncio/${listing.id}`}>
-                  Ver anúncio
-                </Link>
+                <span className="hp-btn hp-btn-light hp-featured-cta">Ver anúncio</span>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>

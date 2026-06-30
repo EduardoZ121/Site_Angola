@@ -152,6 +152,14 @@ export function MarketplaceProvider({ children }) {
     localStorage.setItem(STORAGE_KEYS.chats, JSON.stringify(chatByListing))
   }, [chatByListing])
 
+  useEffect(() => {
+    setListings((prev) => {
+      const ids = new Set(prev.map((item) => item.id).filter(Boolean))
+      const missing = starterListings.filter((item) => !ids.has(item.id))
+      return missing.length ? [...prev, ...missing] : prev
+    })
+  }, [])
+
   const adminStats = useMemo(
     () => ({
       total: listings.length,
@@ -645,7 +653,14 @@ export function MarketplaceProvider({ children }) {
   }
 
   function getListing(id) {
-    return listings.find((listing) => listing.id === id)
+    if (!id) return undefined
+    return listings.find(
+      (listing) =>
+        listing.id === id ||
+        listing.slug === id ||
+        listing.reference === id ||
+        String(listing.id).toLowerCase() === String(id).toLowerCase(),
+    )
   }
 
   const value = {

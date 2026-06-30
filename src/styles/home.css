@@ -445,6 +445,26 @@
   overflow: hidden;
 }
 
+.hp-featured-card-link {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.hp-featured-card-link:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.hp-featured-cta {
+  display: inline-flex;
+  margin-top: 12px;
+  pointer-events: none;
+  width: fit-content;
+}
+
 .hp-featured-card img { height: 100%; min-height: 140px; object-fit: cover; width: 140px; }
 .hp-featured-body { display: grid; gap: 6px; padding: 16px; }
 .hp-featured-tag { color: #f8c44f; font-size: 12px; font-weight: 800; }
