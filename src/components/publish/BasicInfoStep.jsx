@@ -1,4 +1,5 @@
 import { isVehicleCategory } from '../../constants/publishCategories'
+import { AiDescriptionButton } from './AiDescriptionButton'
 import { PublishFieldHint } from './PublishFieldHint'
 
 export function BasicInfoStep({ draft, onChange }) {
@@ -44,6 +45,7 @@ export function BasicInfoStep({ draft, onChange }) {
           onChange={(event) => onChange({ description: event.target.value })}
           placeholder="Descreva o imóvel ou veículo com detalhe..."
         />
+        <AiDescriptionButton draft={draft} onGenerated={(description) => onChange({ description })} />
         <PublishFieldHint>Mencione estado, acessos, segurança e o que torna o anúncio especial.</PublishFieldHint>
       </label>
     </section>

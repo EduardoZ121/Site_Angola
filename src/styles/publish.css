@@ -1212,3 +1212,13 @@
   height: 100%;
   min-width: 8%;
 }
+
+.publish-ai-desc {
+  margin-top: 0.5rem;
+}
+
+.publish-ai-error {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: #b91c1c;
+}

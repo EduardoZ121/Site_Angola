@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
 import { PricesCrossNav } from '../components/prices/PricesCrossNav'

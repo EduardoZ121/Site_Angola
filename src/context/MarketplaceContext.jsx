@@ -39,6 +39,8 @@ import {
   requestPasswordReset as authRequestPasswordReset,
   resetPasswordWithToken as authResetPasswordWithToken,
 } from '../services/authService'
+import { loginWithGoogle as apiLoginWithGoogle, setApiToken } from '../lib/api'
+import { loadListingsFromApi } from '../utils/apiSync'
 
 const MarketplaceContext = createContext(null)
 
@@ -218,6 +220,16 @@ export function MarketplaceProvider({ children }) {
   }, [chatByListing])
 
   useEffect(() => {
+    let cancelled = false
+    loadListingsFromApi().then((apiListings) => {
+      if (!cancelled && apiListings?.length) setListings(apiListings)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
     setListings((prev) => {
       const ids = new Set(prev.map((item) => item.id).filter(Boolean))
       const missing = starterListings.filter((item) => !ids.has(item.id))
@@ -375,6 +387,8 @@ export function MarketplaceProvider({ children }) {
     const googleUser = parseGoogleCredential(credential)
     if (!googleUser?.email) return false
 
+    apiLoginWithGoogle(credential).catch(() => {})
+
     startSession(
       buildUserSession({
         name: googleUser.name,
@@ -411,6 +425,7 @@ export function MarketplaceProvider({ children }) {
   }
 
   function logoutAccount() {
+    setApiToken(null)
     setProfile({ ...defaultProfile })
     setBuyerPrefs(defaultBuyerPrefs)
   }

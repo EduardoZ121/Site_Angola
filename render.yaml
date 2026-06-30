@@ -10,6 +10,8 @@ services:
     envVars:
       - key: VITE_GOOGLE_CLIENT_ID
         value: 17788689781-3laohdt607lr8jnh30fatvqtji6htt3l.apps.googleusercontent.com
+      - key: VITE_API_URL
+        value: https://kuteka-api.onrender.com/api
     domains:
       - kutekalink.com
       - www.kutekalink.com
@@ -21,3 +23,20 @@ services:
       - path: /*
         name: Cache-Control
         value: public, max-age=0, must-revalidate
+
+  - type: web
+    name: kuteka-api
+    runtime: node
+    plan: free
+    repo: https://github.com/EduardoZ121/Site_Angola
+    branch: main
+    buildCommand: npm install
+    startCommand: npm run start:api
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://kutekalink.com,https://www.kutekalink.com,http://localhost:5173
+      - key: GOOGLE_CLIENT_ID
+        value: 17788689781-3laohdt607lr8jnh30fatvqtji6htt3l.apps.googleusercontent.com
