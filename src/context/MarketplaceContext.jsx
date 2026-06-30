@@ -26,6 +26,7 @@ import {
   findApplicationByToken,
   findApplicationForProfile,
   gradeTestAttempt,
+  validateAgentApplicationPayload,
 } from '../utils/agentApplication'
 import {
   authenticateAccount,
@@ -720,11 +721,20 @@ export function MarketplaceProvider({ children }) {
     )
   }
 
-  function submitAgentApplication(message = '') {
-    if (!profile.email || !profile.name) return null
+  function submitAgentApplication(payload = {}) {
+    if (!profile.email || !profile.name) return { error: 'Complete nome e email no perfil.' }
+
+    const description = (payload.description || payload.message || '').trim()
+    const cvText = payload.cvText?.trim() || ''
+    const cvFileName = payload.cvFileName?.trim() || ''
+    const cvFileData = payload.cvFileData || ''
+
+    const validationErrors = validateAgentApplicationPayload({ description, cvFileData, cvFileName })
+    if (validationErrors.length) return { error: validationErrors.join(' ') }
+
     const existing = findApplicationForProfile(agentApplications, profile)
     if (existing && existing.status !== AGENT_APPLICATION_STATUS.REJECTED) {
-      return existing
+      return { application: existing }
     }
 
     const application = {
@@ -732,7 +742,11 @@ export function MarketplaceProvider({ children }) {
       email: profile.email.trim().toLowerCase(),
       username: profile.name.trim(),
       phone: profile.phone || '',
-      message: message.trim(),
+      description,
+      message: description,
+      cvText,
+      cvFileName,
+      cvFileData,
       status: AGENT_APPLICATION_STATUS.SUBMITTED,
       createdAt: new Date().toISOString(),
       testToken: null,
@@ -751,7 +765,7 @@ export function MarketplaceProvider({ children }) {
       type: 'staff_agent_application',
       audience: 'staff',
       title: 'Nova candidatura a agente',
-      body: `${profile.name} (${profile.email}) quer ser intermediário Kuteka.`,
+      body: `${profile.name} (${profile.email}) enviou apresentação e ${cvText || cvFileName ? 'CV' : 'sem CV'}.`,
     })
 
     addNotification({
@@ -759,10 +773,10 @@ export function MarketplaceProvider({ children }) {
       ownerEmail: profile.email,
       ownerName: profile.name,
       title: 'Candidatura recebida',
-      body: 'A equipa Kuteka vai analisar o seu perfil. Aguarde contacto para o teste de qualificação.',
+      body: 'A administração Kuteka vai analisar a sua apresentação. Receberá o link do teste por email ou aqui em «Seja agente».',
     })
 
-    return application
+    return { application }
   }
 
   function adminCreateAgentCandidate({ email, username = '', phone = '', note = '' }) {
@@ -779,6 +793,10 @@ export function MarketplaceProvider({ children }) {
       username: username.trim() || normalizedEmail.split('@')[0],
       phone: phone.trim(),
       message: note.trim() || 'Convite manual do administrador.',
+      description: '',
+      cvText: '',
+      cvFileName: '',
+      cvFileData: '',
       status: AGENT_APPLICATION_STATUS.SUBMITTED,
       createdAt: new Date().toISOString(),
       testToken: null,

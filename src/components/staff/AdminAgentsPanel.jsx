@@ -5,7 +5,8 @@ import {
   AGENT_TEST_PASS_SCORE,
   AGENT_TEST_TOTAL_QUESTIONS,
 } from '../../constants/agentApplication'
-import { buildTestLink } from '../../utils/agentApplication'
+import { buildTestLink, buildAgentTestMailto } from '../../utils/agentApplication'
+import { AgentCandidateProfile } from './AgentCandidateProfile'
 
 function formatDate(value) {
   if (!value) return '—'
@@ -156,7 +157,8 @@ export function AdminAgentsPanel({
                   </span>
                 </div>
 
-                {application.message ? <p>{application.message}</p> : null}
+                <AgentCandidateProfile application={application} />
+
                 <p className="admin-agent-score">
                   <strong>Resultado do teste:</strong> {scoreLabel}
                 </p>
@@ -186,9 +188,17 @@ export function AdminAgentsPanel({
                     </button>
                   ) : null}
                   {application.testToken ? (
-                    <button type="button" className="button filter-button" onClick={() => copyLink(application)}>
-                      {copiedId === application.id ? 'Link copiado!' : 'Copiar link do teste'}
-                    </button>
+                    <>
+                      <button type="button" className="button filter-button" onClick={() => copyLink(application)}>
+                        {copiedId === application.id ? 'Link copiado!' : 'Copiar link do teste'}
+                      </button>
+                      <a
+                        className="button filter-button"
+                        href={buildAgentTestMailto(application, buildTestLink(application.testToken))}
+                      >
+                        Enviar link por email
+                      </a>
+                    </>
                   ) : null}
                   {application.status === AGENT_APPLICATION_STATUS.PASSED ? (
                     <button type="button" className="button primary" onClick={() => onApprove(application.id)}>

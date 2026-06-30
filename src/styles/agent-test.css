@@ -145,6 +145,69 @@
   font-size: var(--font-size-xs);
 }
 
+.agent-cv-upload input[type='file'] {
+  font-size: var(--font-size-sm);
+  max-width: 100%;
+}
+
+.agent-cv-file-line {
+  font-size: var(--font-size-sm);
+  margin: 0;
+}
+
+.agent-test-invite-box {
+  background: var(--color-brand-soft);
+  border-radius: var(--radius-lg);
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+}
+
+.agent-test-invite-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+}
+
+.agent-candidate-profile {
+  border-top: 1px solid var(--color-border);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+}
+
+.agent-candidate-profile h4 {
+  font-size: var(--font-size-sm);
+  margin: 0 0 var(--space-2);
+}
+
+.agent-candidate-block {
+  margin-bottom: var(--space-3);
+}
+
+.agent-candidate-block strong {
+  display: block;
+  font-size: var(--font-size-xs);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.agent-candidate-block p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.agent-candidate-cv {
+  background: var(--color-surface-muted);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: var(--font-size-xs);
+  margin: 0;
+  max-height: 200px;
+  overflow: auto;
+  padding: var(--space-3);
+  white-space: pre-wrap;
+}
+
 .admin-agent-applications,
 .admin-agent-invite,
 .admin-agent-users {

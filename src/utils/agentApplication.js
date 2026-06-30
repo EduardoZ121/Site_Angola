@@ -103,3 +103,35 @@ export function buildTestLink(token) {
 export function getQuestionById(id) {
   return AGENT_TEST_QUESTIONS.find((item) => item.id === id)
 }
+
+const CV_MAX_BYTES = 1_500_000
+const DESCRIPTION_MIN_LENGTH = 80
+
+export function validateAgentApplicationPayload({ description, cvFileData, cvFileName }) {
+  const errors = []
+  const cleanDescription = description?.trim() || ''
+  if (!cleanDescription) {
+    errors.push('Escreva uma apresentação pessoal.')
+  } else if (cleanDescription.length < DESCRIPTION_MIN_LENGTH) {
+    errors.push(`A apresentação deve ter pelo menos ${DESCRIPTION_MIN_LENGTH} caracteres.`)
+  }
+  if (cvFileData && cvFileData.length > CV_MAX_BYTES * 1.37) {
+    errors.push('O ficheiro CV é demasiado grande (máximo ~1,5 MB).')
+  }
+  if (cvFileName && !cvFileData) {
+    errors.push('Seleccione novamente o ficheiro CV.')
+  }
+  return errors
+}
+
+export function buildAgentTestMailto(application, link) {
+  const subject = encodeURIComponent('Teste de qualificação — Agente Kuteka')
+  const body = encodeURIComponent(
+    `Olá ${application.username},\n\n` +
+      `Segue o link para o teste de intermediário Kuteka (${AGENT_TEST_TOTAL_QUESTIONS} perguntas):\n\n` +
+      `${link}\n\n` +
+      `Entre com o email ${application.email}. Precisa de pelo menos ${AGENT_TEST_PASS_SCORE} respostas correctas.\n\n` +
+      `Equipa Kuteka`,
+  )
+  return `mailto:${application.email}?subject=${subject}&body=${body}`
+}

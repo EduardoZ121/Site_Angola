@@ -66,7 +66,7 @@ export default function AccountPage() {
       {!isAdmin && !isAgent ? (
         <SectionBlock id="agente-kuteka" eyebrow="Carreira" title="Trabalhar na Kuteka" tone="muted">
           <div className="panel-card">
-            <p>Quer ser intermediário imobiliário? Envie candidatura e complete o teste de qualificação.</p>
+            <p>Quer ser intermediário imobiliário? Envie apresentação e CV opcional.</p>
             {agentApplication ? (
               <p>
                 <strong>Estado:</strong>{' '}
