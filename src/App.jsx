@@ -9,6 +9,7 @@ import {
 import { LoginPromptProvider } from './context/LoginPromptContext'
 import { MarketplaceProvider } from './context/MarketplaceContext'
 import HomePage from './pages/HomePage'
+import { rentPropertyTypes, salePropertyTypes, vehicleBrowseTypes } from './data/constants'
 import ExplorePage from './pages/ExplorePage'
 import FeaturedHubPage from './pages/FeaturedHubPage'
 import HowItWorksPage from './pages/HowItWorksPage'
@@ -62,6 +63,9 @@ export default function App() {
                   subtitle="Casas, apartamentos, terrenos e lojas para venda em Angola."
                   defaultCategory="Imóvel"
                   defaultOperation="Venda"
+                  propertyTypes={salePropertyTypes}
+                  showFeatured
+                  featuredTitle="Destaques à venda"
                 />
               }
             />
@@ -83,9 +87,12 @@ export default function App() {
                 <ListingsPage
                   basePath="arrendar"
                   title="Arrendar imóveis"
-                  subtitle="Arrendamentos mensais com contacto directo ao senhorio."
+                  subtitle="Apartamentos, casas, quartos e lojas — arrendamento mensal em Kz."
                   defaultCategory="Imóvel"
                   defaultOperation="Arrendamento"
+                  propertyTypes={rentPropertyTypes}
+                  showFeatured
+                  featuredTitle="Destaques para arrendar"
                 />
               }
             />
@@ -107,9 +114,12 @@ export default function App() {
                 <ListingsPage
                   basePath="veiculos"
                   title="Veículos"
-                  subtitle="Carros e pickups para compra, com filtros por marca e modelo."
+                  subtitle="Carros e pickups com filtros por marca, modelo e preço."
                   defaultCategory="Veículo"
                   defaultOperation="Todos"
+                  propertyTypes={vehicleBrowseTypes}
+                  showFeatured
+                  featuredTitle="Veículos em destaque"
                 />
               }
             />

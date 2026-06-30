@@ -1,7 +1,16 @@
 import { bairros, provinces } from '../data/constants'
 import { FilterSelect } from './ui'
 
-const propertyTypes = ['Todos', 'Apartamento', 'Vivenda', 'Terreno', 'Loja']
+const propertyTypes = [
+  'Todos',
+  'Apartamento',
+  'Vivenda',
+  'Quarto',
+  'Terreno',
+  'Loja',
+  'Escritório',
+  'Armazém',
+]
 
 export function FiltersSidebar({
   filters,

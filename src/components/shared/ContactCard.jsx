@@ -34,6 +34,15 @@ export function ContactCard({ listing, onMessage, onFavorite, isFavorite, verifi
         >
           WhatsApp
         </a>
+        {listing.owner.email ? (
+          <a
+            className="button ghost"
+            href={`mailto:${listing.owner.email}?subject=${encodeURIComponent(`Kuteka — ${listing.title}`)}`}
+            onClick={() => trackEvent(AnalyticsEvents.CONTACT_OWNER, { listingId: listing.id, channel: 'email' })}
+          >
+            Email
+          </a>
+        ) : null}
         <button className="button ghost" type="button" onClick={onMessage}>
           Mensagem
         </button>

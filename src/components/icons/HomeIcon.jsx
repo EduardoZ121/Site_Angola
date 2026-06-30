@@ -146,6 +146,17 @@ const icons = {
       <path d="M16 17l5-5-5-5M21 12H9" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
+  filter: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3Z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  bed: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M2 4v16M2 8h20v4H2M6 8V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6 12h12v8H6z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
   x: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
       <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />

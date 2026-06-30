@@ -1,6 +1,6 @@
 import { defaultFilters } from '../data/constants'
 
-const URL_SKIP_DEFAULTS = { sort: 'recent', view: 'grid', page: '1' }
+const URL_SKIP_DEFAULTS = { sort: 'recent', view: 'grid', gridSize: 'md', page: '1' }
 
 export function filtersToSearchParams(filters) {
   const params = new URLSearchParams()

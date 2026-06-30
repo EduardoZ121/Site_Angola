@@ -213,6 +213,7 @@ export const defaultFilters = {
   condition: 'Todos',
   sort: 'recent',
   view: 'grid',
+  gridSize: 'md',
   page: '1',
 }
 
@@ -250,6 +251,26 @@ export const buyerPropertyTypes = [
   { id: 'loja', label: 'Loja / Escritório', icon: 'store', category: 'Imóvel', propertyType: 'Loja' },
   { id: 'carro', label: 'Carro', icon: 'car', category: 'Veículo', propertyType: '' },
   { id: 'pickup', label: 'Pickup / SUV', icon: 'truck', category: 'Veículo', propertyType: '' },
+]
+
+/** Tipos de imóvel — secção Arrendar / Comprar */
+export const rentPropertyTypes = [
+  { id: 'todos', label: 'Todos', icon: 'search', propertyType: 'Todos' },
+  { id: 'apartamento', label: 'Apartamento', icon: 'building', propertyType: 'Apartamento' },
+  { id: 'vivenda', label: 'Casa / Vivenda', icon: 'home', propertyType: 'Vivenda' },
+  { id: 'quarto', label: 'Quarto', icon: 'bed', propertyType: 'Quarto' },
+  { id: 'terreno', label: 'Terreno', icon: 'land', propertyType: 'Terreno' },
+  { id: 'loja', label: 'Loja', icon: 'store', propertyType: 'Loja' },
+  { id: 'escritorio', label: 'Escritório', icon: 'building', propertyType: 'Escritório' },
+  { id: 'armazem', label: 'Armazém', icon: 'store', propertyType: 'Armazém' },
+]
+
+export const salePropertyTypes = rentPropertyTypes
+
+export const vehicleBrowseTypes = [
+  { id: 'todos', label: 'Todos', icon: 'search', propertyType: 'Todos' },
+  { id: 'carro', label: 'Carros', icon: 'car', propertyType: 'Veículo' },
+  { id: 'pickup', label: 'Pickup / SUV', icon: 'truck', propertyType: 'Veículo' },
 ]
 
 export const buyerOperations = [

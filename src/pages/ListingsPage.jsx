@@ -2,11 +2,15 @@ import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
+import { CatalogFeaturedStrip } from '../components/catalog/CatalogFeaturedStrip'
+import { CatalogPagination } from '../components/catalog/CatalogPagination'
 import { CatalogToolbar } from '../components/catalog/CatalogToolbar'
+import { PropertyTypeGrid } from '../components/catalog/PropertyTypeGrid'
 import { FiltersSidebar } from '../components/FiltersSidebar'
 import { ListingCard } from '../components/ListingCard'
 import { ListingRow } from '../components/ListingRow'
 import { ListingSearchBar } from '../components/ListingSearchBar'
+import { HomeIcon } from '../components/icons/HomeIcon'
 import { EmptyState } from '../components/ui/EmptyState'
 import { PageIntro } from '../components/SectionBlock'
 import { filterListings } from '../utils/format'
@@ -25,6 +29,9 @@ export default function ListingsPage({
   basePath,
   defaultCategory = 'Todos',
   defaultOperation = 'Todos',
+  propertyTypes = null,
+  showFeatured = false,
+  featuredTitle = 'Destaques',
 }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -58,9 +65,23 @@ export default function ListingsPage({
     [filtered, filters.page],
   )
 
+  const featuredListings = useMemo(() => {
+    if (!showFeatured) return []
+    return listings
+      .filter(
+        (item) =>
+          item.status === 'Ativo' &&
+          item.featured &&
+          (defaultOperation === 'Todos' || item.operation === defaultOperation) &&
+          (defaultCategory === 'Todos' || item.category === defaultCategory),
+      )
+      .slice(0, 8)
+  }, [listings, showFeatured, defaultOperation, defaultCategory])
+
   const summary = filterSummary(filters)
   const showVehicleFilters = defaultCategory === 'Veículo'
   const filterCount = activeFilterCount(filters, filterDefaults)
+  const gridSize = filters.gridSize || 'md'
 
   useEffect(() => {
     document.title = `${title} | Kuteka`
@@ -99,8 +120,17 @@ export default function ListingsPage({
     updateFilters(next)
   }
 
+  function selectPropertyType(propertyType) {
+    updateFilters({ ...filters, propertyType, page: '1' })
+  }
+
   function closeFilters() {
     setFiltersOpen(false)
+  }
+
+  function applyFilters() {
+    closeFilters()
+    document.getElementById('catalog-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   return (
@@ -115,14 +145,32 @@ export default function ListingsPage({
           ]}
         />
 
-        <button
-          type="button"
-          className="button secondary catalog-filters-toggle"
-          onClick={() => setFiltersOpen(true)}
-        >
-          Filtros
-          {filterCount > 0 ? <span className="catalog-filters-badge">{filterCount}</span> : null}
-        </button>
+        {showFeatured ? (
+          <CatalogFeaturedStrip listings={featuredListings} title={featuredTitle} />
+        ) : null}
+
+        {propertyTypes ? (
+          <div className="catalog-type-section">
+            <h2 className="catalog-type-heading">Escolha o tipo</h2>
+            <PropertyTypeGrid
+              types={propertyTypes}
+              activeType={filters.propertyType}
+              onSelect={selectPropertyType}
+            />
+          </div>
+        ) : null}
+
+        <div className="catalog-toolbar-mobile">
+          <button
+            type="button"
+            className="catalog-filters-toggle"
+            onClick={() => setFiltersOpen(true)}
+          >
+            <HomeIcon name="filter" />
+            <span>Filtros</span>
+            {filterCount > 0 ? <span className="catalog-filters-badge">{filterCount}</span> : null}
+          </button>
+        </div>
 
         <div
           className={`catalog-filters-backdrop ${filtersOpen ? 'open' : ''}`}
@@ -151,8 +199,8 @@ export default function ListingsPage({
               showPropertyFilters={!showVehicleFilters}
             />
 
-            <button type="button" className="button primary catalog-filters-apply" onClick={closeFilters}>
-              Ver {pagination.total} {pagination.total === 1 ? 'resultado' : 'resultados'}
+            <button type="button" className="button primary catalog-filters-apply" onClick={applyFilters}>
+              Confirmar — ver {pagination.total} {pagination.total === 1 ? 'resultado' : 'resultados'}
             </button>
           </div>
 
@@ -168,15 +216,17 @@ export default function ListingsPage({
               total={pagination.total}
               sort={filters.sort}
               view={filters.view}
+              gridSize={gridSize}
               mapPath={`/${basePath}/filtros`}
               onSortChange={(sort) => updateFilters({ ...filters, sort })}
               onViewChange={(view) => updateFilters({ ...filters, view }, false)}
+              onGridSizeChange={(nextSize) => updateFilters({ ...filters, gridSize: nextSize }, false)}
             />
 
             {pagination.items.length === 0 ? (
               <EmptyState
                 title="Nenhum resultado encontrado"
-                description="Tente alterar os filtros ou pesquisar com outras palavras."
+                description="Tente alterar os filtros ou escolher outro tipo de imóvel."
                 actionLabel="Limpar filtros"
                 actionTo={`/${basePath}`}
               />
@@ -187,7 +237,7 @@ export default function ListingsPage({
                 ))}
               </div>
             ) : (
-              <div className="listing-grid">
+              <div className={`listing-grid listing-grid-${gridSize}`}>
                 {pagination.items.map((listing) => (
                   <ListingCard
                     key={listing.id}
@@ -201,27 +251,11 @@ export default function ListingsPage({
               </div>
             )}
 
-            {pagination.totalPages > 1 ? (
-              <nav className="catalog-pagination" aria-label="Paginação">
-                <button
-                  type="button"
-                  disabled={pagination.page <= 1}
-                  onClick={() => goToPage(pagination.page - 1)}
-                >
-                  Anterior
-                </button>
-                <span>
-                  Página {pagination.page} de {pagination.totalPages}
-                </span>
-                <button
-                  type="button"
-                  disabled={pagination.page >= pagination.totalPages}
-                  onClick={() => goToPage(pagination.page + 1)}
-                >
-                  Seguinte
-                </button>
-              </nav>
-            ) : null}
+            <CatalogPagination
+              page={pagination.page}
+              totalPages={pagination.totalPages}
+              onPageChange={goToPage}
+            />
           </section>
         </div>
       </div>

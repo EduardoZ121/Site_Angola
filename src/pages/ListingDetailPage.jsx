@@ -109,8 +109,13 @@ export default function ListingDetailPage() {
         items={[
           { label: 'Início', to: '/inicio' },
           {
-            label: listing.category === 'Veículo' ? 'Veículos' : listing.operation,
-            to: listing.category === 'Veículo' ? '/veiculos' : '/comprar',
+            label: listing.category === 'Veículo' ? 'Veículos' : listing.operation === 'Arrendamento' ? 'Arrendar' : 'Comprar',
+            to:
+              listing.category === 'Veículo'
+                ? '/veiculos'
+                : listing.operation === 'Arrendamento'
+                  ? '/arrendar'
+                  : '/comprar',
           },
           { label: listing.title, to: `/anuncio/${listing.id}` },
         ]}
