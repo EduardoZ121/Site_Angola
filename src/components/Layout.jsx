@@ -69,65 +69,79 @@ export function Layout() {
           <nav className={`site-nav ${menuOpen ? 'open' : ''}`} aria-label="Navegação principal">
             <div className="nav-group">
               <p className="nav-group-label">Marketplace</p>
-              {mainNav.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
-                  onClick={closeMenu}
-                >
-                  {item.label}
-                </NavLink>
-              ))}
+              <ul className="nav-menu-list">
+                {mainNav.map((item) => (
+                  <li key={item.to}>
+                    <NavLink
+                      to={item.to}
+                      className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}
+                      onClick={closeMenu}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div className="nav-group">
               <p className="nav-group-label">Conta</p>
-              {isLoggedIn && profile.picture ? (
-                <img className="nav-user-avatar" src={profile.picture} alt="" />
-              ) : null}
-              {isLoggedIn ? (
-                <NavLink
-                  to="/conta"
-                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
-                  onClick={closeMenu}
-                >
-                  {profile.name?.split(' ')[0] || 'Conta'}
-                </NavLink>
-              ) : (
-                <NavLink
-                  to="/entrar"
-                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
-                  onClick={closeMenu}
-                >
-                  Entrar
-                </NavLink>
-              )}
-              {isAdmin ? (
-                <NavLink
-                  to="/admin"
-                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
-                  onClick={closeMenu}
-                >
-                  Administrador
-                </NavLink>
-              ) : null}
-              {accountNav.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
-                  onClick={closeMenu}
-                >
-                  {item.label}
-                  {item.to === '/favoritos' && favorites.length > 0 ? ` (${favorites.length})` : ''}
-                  {item.to === '/comparar' && compare.length > 0 ? ` (${compare.length})` : ''}
-                </NavLink>
-              ))}
-              {isLoggedIn ? (
-                <button className="nav-link subtle nav-logout" type="button" onClick={logoutAccount}>
-                  Sair
-                </button>
-              ) : null}
+              <ul className="nav-menu-list">
+                {isLoggedIn && profile.picture ? (
+                  <li className="nav-menu-avatar">
+                    <img className="nav-user-avatar" src={profile.picture} alt="" />
+                  </li>
+                ) : null}
+                <li>
+                  {isLoggedIn ? (
+                    <NavLink
+                      to="/conta"
+                      className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                      onClick={closeMenu}
+                    >
+                      {profile.name?.split(' ')[0] || 'Conta'}
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      to="/entrar"
+                      className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                      onClick={closeMenu}
+                    >
+                      Entrar
+                    </NavLink>
+                  )}
+                </li>
+                {isAdmin ? (
+                  <li>
+                    <NavLink
+                      to="/admin"
+                      className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                      onClick={closeMenu}
+                    >
+                      Administrador
+                    </NavLink>
+                  </li>
+                ) : null}
+                {accountNav.map((item) => (
+                  <li key={item.to}>
+                    <NavLink
+                      to={item.to}
+                      className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                      onClick={closeMenu}
+                    >
+                      {item.label}
+                      {item.to === '/favoritos' && favorites.length > 0 ? ` (${favorites.length})` : ''}
+                      {item.to === '/comparar' && compare.length > 0 ? ` (${compare.length})` : ''}
+                    </NavLink>
+                  </li>
+                ))}
+                {isLoggedIn ? (
+                  <li>
+                    <button className="nav-link subtle nav-logout" type="button" onClick={logoutAccount}>
+                      Sair
+                    </button>
+                  </li>
+                ) : null}
+              </ul>
             </div>
           </nav>
         </div>
