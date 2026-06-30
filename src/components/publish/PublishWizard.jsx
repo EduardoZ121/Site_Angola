@@ -50,7 +50,7 @@ export function PublishWizard({ editListingId }) {
     patchDraft(patch)
   }
 
-  function handlePublish() {
+  async function handlePublish() {
     const stepErrors = validateAllPublishSteps(draft)
     if (stepErrors.length) {
       wizard.setErrors(stepErrors)
@@ -71,7 +71,7 @@ export function PublishWizard({ editListingId }) {
       }
       return
     }
-    const newId = submitListingDraft(draft)
+    const newId = await submitListingDraft(draft)
     if (newId) {
       clearPublishDraft()
       navigate(`/publicar/enviado/${newId}`)

@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit'
 import helmet from 'helmet'
 import morgan from 'morgan'
 import { env } from './config/env.js'
+import adminRouter from './routes/admin.js'
 import aiRouter from './routes/ai.js'
 import authRouter from './routes/auth.js'
 import emailRouter from './routes/email.js'
@@ -29,7 +30,11 @@ export function createApp() {
   app.use('/api/uploads', uploadsRouter)
   app.use('/api/email', emailRouter)
   app.use('/api/ai', aiRouter)
+  app.use('/api/admin', adminRouter)
   app.use((_req, res) => res.status(404).json({ ok: false, error: 'Rota nao encontrada' }))
-  app.use((error, _req, res, _next) => { console.error('[api]', error); res.status(500).json({ ok: false, error: 'Erro interno do servidor' }) })
+  app.use((error, _req, res, _next) => {
+    console.error('[api]', error)
+    res.status(500).json({ ok: false, error: 'Erro interno do servidor' })
+  })
   return app
 }

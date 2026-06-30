@@ -8,10 +8,9 @@ import { AdminCrossNav } from '../components/admin/AdminCrossNav'
 import { AdminInsightsBar } from '../components/admin/AdminInsightsBar'
 import { AdminModerationList } from '../components/admin/AdminModerationList'
 import { AdminQuickNav } from '../components/admin/AdminQuickNav'
-import { AdminStatsCards } from '../components/admin/AdminStatsCards'
+import { AdminSiteControl } from '../components/admin/AdminSiteControl'
 import { AdminUsersTable } from '../components/admin/AdminUsersTable'
 import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
-import { HelpTip } from '../components/ui/HelpTip'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { isListingPending } from '../constants/staff'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
@@ -30,6 +29,13 @@ export default function AdminPage() {
     rejectListing,
     deleteListing,
     updateListing,
+    adminPatchListing,
+    refreshAdminCatalog,
+    updateSiteSettings,
+    clearDemoListingsAdmin,
+    restoreDemoListingsAdmin,
+    siteSettings,
+    apiConnected,
     agentApplications,
     approvedAgents,
     adminCreateAgentCandidate,
@@ -53,13 +59,14 @@ export default function AdminPage() {
 
   useEffect(() => {
     document.title = isAdmin ? 'Admin | Kuteka' : 'Admin — acesso | Kuteka'
+    if (isAdmin) refreshAdminCatalog()
     const hash = window.location.hash
     if (!hash) return
     const target = document.querySelector(hash)
     if (target) {
       window.setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
     }
-  }, [isAdmin])
+  }, [isAdmin, refreshAdminCatalog])
 
   function copyUserEmails() {
     const emails = siteUsers.map((user) => user.email).join(', ')
@@ -116,12 +123,19 @@ export default function AdminPage() {
         />
 
         <p className="admin-help-line">
-          Aprove anúncios na fila antes de ficarem visíveis no catálogo.
-          <HelpTip
-            label="Ajuda: admin"
-            text="Tudo é local (demo). Em produção este painel geriria utilizadores reais, emails e moderação central."
-          />
+          Aprove anúncios na fila antes de ficarem visíveis no catálogo. Apagar remove na base de dados real.
         </p>
+
+        <SectionBlock id="controlo-site" eyebrow="Site" title="Controlo demo vs real" tone="light">
+          <AdminSiteControl
+            siteSettings={siteSettings}
+            apiConnected={apiConnected}
+            onUpdateSettings={updateSiteSettings}
+            onClearDemo={clearDemoListingsAdmin}
+            onRestoreDemo={restoreDemoListingsAdmin}
+            onRefreshCatalog={refreshAdminCatalog}
+          />
+        </SectionBlock>
 
         <AdminQuickNav />
         <AdminInsightsBar items={insights} />
@@ -196,6 +210,7 @@ export default function AdminPage() {
             onReactivate={handleReactivate}
             onToggleFeatured={handleToggleFeatured}
             onDelete={deleteListing}
+            onAdminPatch={adminPatchListing}
           />
         </SectionBlock>
 

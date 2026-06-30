@@ -39,8 +39,19 @@ import {
   requestPasswordReset as authRequestPasswordReset,
   resetPasswordWithToken as authResetPasswordWithToken,
 } from '../services/authService'
-import { loginWithGoogle as apiLoginWithGoogle, setApiToken } from '../lib/api'
+import { loginWithGoogle as apiLoginWithGoogle, setApiToken, fetchSiteSettings, patchSiteSettings } from '../lib/api'
 import { loadListingsFromApi } from '../utils/apiSync'
+import {
+  apiAdminUpdateListing,
+  apiClearDemoListings,
+  apiCreateListingFromDraft,
+  apiLoadAdminListings,
+  apiRestoreDemoListings,
+  apiSyncDeleteListing,
+  apiSyncPatchListing,
+  apiSyncTrackView,
+  canUseListingApi,
+} from '../services/listingApiSync'
 
 const MarketplaceContext = createContext(null)
 
@@ -56,10 +67,17 @@ export function MarketplaceProvider({ children }) {
   const [listings, setListings] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.listings)
-      return raw ? JSON.parse(raw) : starterListings
+      return raw ? JSON.parse(raw) : []
     } catch {
-      return starterListings
+      return []
     }
+  })
+  const [apiConnected, setApiConnected] = useState(false)
+  const [siteSettings, setSiteSettings] = useState({
+    useRealDataOnly: true,
+    showDemoListings: false,
+    showTestimonials: false,
+    marketingStats: {},
   })
   const [favorites, setFavorites] = useState(() => {
     try {
@@ -221,21 +239,28 @@ export function MarketplaceProvider({ children }) {
 
   useEffect(() => {
     let cancelled = false
-    loadListingsFromApi().then((apiListings) => {
-      if (!cancelled && apiListings?.length) setListings(apiListings)
-    })
+    Promise.all([loadListingsFromApi(), fetchSiteSettings().catch(() => null)]).then(
+      ([apiListings, settingsRes]) => {
+        if (cancelled) return
+        if (settingsRes?.settings) setSiteSettings(settingsRes.settings)
+        if (apiListings !== null) {
+          setApiConnected(true)
+          setListings(apiListings)
+        } else {
+          setListings((prev) => (prev.length ? prev : starterListings))
+        }
+      },
+    )
     return () => {
       cancelled = true
     }
   }, [])
 
-  useEffect(() => {
-    setListings((prev) => {
-      const ids = new Set(prev.map((item) => item.id).filter(Boolean))
-      const missing = starterListings.filter((item) => !ids.has(item.id))
-      return missing.length ? [...prev, ...missing] : prev
-    })
-  }, [])
+  async function refreshAdminCatalog() {
+    if (!canUseListingApi()) return
+    const adminListings = await apiLoadAdminListings()
+    if (adminListings) setListings(adminListings)
+  }
 
   const adminStats = useMemo(
     () => ({
@@ -593,9 +618,37 @@ export function MarketplaceProvider({ children }) {
     return listingId
   }
 
-  function submitListingDraft(draft) {
+  async function submitListingDraft(draft) {
     if (!isProfileReadyToPublish(profile)) return null
     const payload = draftToRawListing(draft, profile)
+
+    if (apiConnected && canUseListingApi()) {
+      try {
+        const created = await apiCreateListingFromDraft(payload)
+        setListings((prev) => [created, ...prev])
+        addNotification({
+          type: 'listing_pending',
+          listingId: created.id,
+          ownerName: profile.name,
+          ownerEmail: profile.email || '',
+          title: 'Anúncio enviado — aguarda aprovação',
+          body: `O seu anúncio "${created.title}" foi recebido. A equipa Kuteka vai rever fotos e dados antes de publicar no site.`,
+        })
+        addNotification({
+          type: 'staff_listing_pending',
+          audience: 'staff',
+          listingId: created.id,
+          ownerName: profile.name,
+          ownerEmail: profile.email || '',
+          title: 'Novo anúncio na fila',
+          body: `"${created.title}" de ${profile.name} aguarda aprovação.`,
+        })
+        return created.id
+      } catch {
+        /* fallback local */
+      }
+    }
+
     setListings((prev) => [payload, ...prev])
 
     addNotification({
@@ -696,6 +749,7 @@ export function MarketplaceProvider({ children }) {
         listing.id === listingId ? { ...listing, views: (listing.views || 0) + 1 } : listing,
       ),
     )
+    if (apiConnected) apiSyncTrackView(listingId)
   }
 
   function toggleFavorite(id) {
@@ -743,12 +797,37 @@ export function MarketplaceProvider({ children }) {
     }))
   }
 
-  function updateListing(listingId, patch) {
+  function updateListing(listingId, patch, options = {}) {
     setListings((prev) =>
       prev.map((listing) =>
         listing.id === listingId ? { ...listing, ...patch } : listing,
       ),
     )
+    if (apiConnected && canUseListingApi()) {
+      apiSyncPatchListing(listingId, patch, Boolean(options.notifyOwner)).then((updated) => {
+        if (updated) {
+          setListings((prev) =>
+            prev.map((listing) => (listing.id === listingId ? { ...listing, ...updated } : listing)),
+          )
+        }
+      })
+    }
+  }
+
+  function adminPatchListing(listingId, patch) {
+    if (!isAdmin) return
+    setListings((prev) =>
+      prev.map((listing) => (listing.id === listingId ? { ...listing, ...patch } : listing)),
+    )
+    if (apiConnected && canUseListingApi()) {
+      apiAdminUpdateListing(listingId, patch).then((updated) => {
+        if (updated) {
+          setListings((prev) =>
+            prev.map((listing) => (listing.id === listingId ? { ...listing, ...updated } : listing)),
+          )
+        }
+      })
+    }
   }
 
   function deleteListing(listingId) {
@@ -756,6 +835,7 @@ export function MarketplaceProvider({ children }) {
     if (!listing) return
 
     if (isAdmin) {
+      if (apiConnected && canUseListingApi()) apiSyncDeleteListing(listingId)
       setListings((prev) => prev.filter((item) => item.id !== listingId))
       return
     }
@@ -763,7 +843,50 @@ export function MarketplaceProvider({ children }) {
     if (!isListingOwner(listing)) return
     if (!['Rejeitado', 'Pausado'].includes(listing.status)) return
 
+    if (apiConnected && canUseListingApi()) apiSyncDeleteListing(listingId)
     setListings((prev) => prev.filter((item) => item.id !== listingId))
+  }
+
+  async function updateSiteSettings(patch) {
+    setSiteSettings((current) => ({ ...current, ...patch }))
+    if (apiConnected && canUseListingApi()) {
+      try {
+        const { settings } = await patchSiteSettings(patch)
+        if (settings) setSiteSettings(settings)
+      } catch {
+        /* local preview */
+      }
+    }
+    if (patch.useRealDataOnly && apiConnected) {
+      const publicListings = await loadListingsFromApi()
+      if (publicListings) setListings(publicListings)
+    }
+  }
+
+  async function clearDemoListingsAdmin() {
+    if (!isAdmin) return null
+    if (apiConnected && canUseListingApi()) {
+      const result = await apiClearDemoListings()
+      await refreshAdminCatalog()
+      return result
+    }
+    setListings((prev) => prev.filter((item) => !item.isDemo && !['l-1', 'l-2', 'l-3'].includes(item.id)))
+    return { deleted: 1 }
+  }
+
+  async function restoreDemoListingsAdmin() {
+    if (!isAdmin) return null
+    if (apiConnected && canUseListingApi()) {
+      const result = await apiRestoreDemoListings()
+      await refreshAdminCatalog()
+      return result
+    }
+    setListings((prev) => {
+      const ids = new Set(prev.map((item) => item.id))
+      const missing = starterListings.filter((item) => !ids.has(item.id))
+      return missing.length ? [...prev, ...missing.map((item) => ({ ...item, isDemo: true }))] : prev
+    })
+    return { restored: starterListings.length }
   }
 
   function approveListing(listingId) {
@@ -774,14 +897,19 @@ export function MarketplaceProvider({ children }) {
     const now = new Date().toISOString()
     const approverLabel = isAdmin ? 'administrador' : 'agente Kuteka'
 
-    updateListing(listingId, {
-      status: 'Ativo',
-      listingStatus: LISTING_STATUS.ACTIVE,
-      approvedAt: now,
-      publishedAt: now,
-      approvedBy: profile.email,
-      approvedByName: profile.name,
-    })
+    updateListing(
+      listingId,
+      {
+        status: 'Ativo',
+        listingStatus: LISTING_STATUS.ACTIVE,
+        approvedAt: now,
+        publishedAt: now,
+        approvedBy: profile.email,
+        approvedByName: profile.name,
+        rejectionReason: '',
+      },
+      { notifyOwner: true },
+    )
 
     addNotification({
       type: 'listing_approved',
@@ -798,14 +926,21 @@ export function MarketplaceProvider({ children }) {
     if (!listing) return
     if (!canModerateListings) return
 
-    updateListing(listingId, {
-      status: 'Rejeitado',
-      listingStatus: LISTING_STATUS.REJECTED,
-      rejectedAt: new Date().toISOString(),
-      rejectReason:
-        reason ||
-        'Conteúdo não conforme (fotos pessoais, informação incorrecta ou fora das regras do marketplace).',
-    })
+    const rejectionReason =
+      reason ||
+      'Conteúdo não conforme (fotos pessoais, informação incorrecta ou fora das regras do marketplace).'
+
+    updateListing(
+      listingId,
+      {
+        status: 'Rejeitado',
+        listingStatus: LISTING_STATUS.REJECTED,
+        rejectedAt: new Date().toISOString(),
+        rejectReason: rejectionReason,
+        rejectionReason,
+      },
+      { notifyOwner: true },
+    )
 
     addNotification({
       type: 'listing_rejected',
@@ -1255,6 +1390,13 @@ export function MarketplaceProvider({ children }) {
     sendChat,
     updateListing,
     deleteListing,
+    adminPatchListing,
+    refreshAdminCatalog,
+    updateSiteSettings,
+    clearDemoListingsAdmin,
+    restoreDemoListingsAdmin,
+    siteSettings,
+    apiConnected,
     getListing,
     approvedAgents,
     agentApplications,

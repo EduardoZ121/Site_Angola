@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom'
-import { ADMIN_EMAIL } from '../../data/constants'
+import { ADMIN_EMAILS } from '../../data/constants'
 
 export function AdminAccessDenied({ profileEmail }) {
   return (
     <div className="admin-access-denied panel-card">
       <strong>Sem permissão</strong>
       <p>
-        O painel admin está disponível apenas para <strong>{ADMIN_EMAIL}</strong>.
+        O painel admin está disponível apenas para:{' '}
+        <strong>{ADMIN_EMAILS.join(' · ')}</strong>.
         {profileEmail ? ` Entrou como ${profileEmail}.` : ''}
       </p>
       <div className="admin-access-actions">

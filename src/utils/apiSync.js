@@ -5,7 +5,7 @@ export async function loadListingsFromApi() {
     const health = await fetchApiHealth()
     if (health.integrations?.mongodb !== 'connected') return null
     const data = await fetchListings()
-    return data.listings?.length ? data.listings : null
+    return data.listings ?? []
   } catch {
     return null
   }

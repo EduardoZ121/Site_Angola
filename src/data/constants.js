@@ -1,4 +1,9 @@
-export const ADMIN_EMAIL = 'amarilinhaa@gmail.com'
+export const ADMIN_EMAILS = [
+  'amarilinhaa@gmail.com',
+  'vicentemakiesejb81@gmail.com',
+]
+
+export const ADMIN_EMAIL = ADMIN_EMAILS[0]
 export const AGENT_EMAIL = 'amarilinhaz@gmail.com'
 
 export const STORAGE_KEYS = {

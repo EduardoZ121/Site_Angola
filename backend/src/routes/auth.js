@@ -1,15 +1,13 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import { env } from '../config/env.js'
+import { ADMIN_EMAILS, isAdminEmail, isAgentEmail } from '../config/staff.js'
 import { requireDb } from '../middleware/db.js'
 import { requireAuth, signToken } from '../middleware/auth.js'
 import { User } from '../models/User.js'
 import { verifyGoogleCredential } from '../services/googleAuth.js'
 
 const router = Router()
-
-const ADMIN_EMAIL = 'amarilinhaa@gmail.com'
-const AGENT_EMAIL = 'amarilinhaz@gmail.com'
 
 const googleSchema = z.object({
   credential: z.string().min(10),
@@ -26,22 +24,24 @@ router.post('/google', requireDb, async (req, res) => {
     if (!verified.ok) return res.status(503).json(verified)
 
     const { user: googleUser } = verified
-    let user = await User.findOne({ email: googleUser.email })
+    const email = googleUser.email.toLowerCase()
+    let user = await User.findOne({ email })
 
     if (!user) {
       user = await User.create({
         ...googleUser,
+        email,
         authProvider: 'google',
-        isAdmin: googleUser.email === ADMIN_EMAIL,
-        isAgent: googleUser.email === AGENT_EMAIL,
+        isAdmin: isAdminEmail(email),
+        isAgent: isAgentEmail(email),
       })
     } else {
       user.name = googleUser.name || user.name
       user.googleId = googleUser.googleId
       user.picture = googleUser.picture || user.picture
       user.emailVerified = googleUser.emailVerified
-      user.isAdmin = googleUser.email === ADMIN_EMAIL
-      if (googleUser.email === AGENT_EMAIL) user.isAgent = true
+      user.isAdmin = isAdminEmail(email)
+      if (isAgentEmail(email)) user.isAgent = true
       await user.save()
     }
 
@@ -73,7 +73,7 @@ router.patch('/me', requireAuth, async (req, res) => {
 router.get('/config', (_req, res) => {
   res.json({
     googleConfigured: Boolean(env.googleClientId),
-    adminEmail: ADMIN_EMAIL,
+    adminEmails: ADMIN_EMAILS,
   })
 })
 

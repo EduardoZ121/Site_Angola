@@ -1,6 +1,7 @@
 const toneMap = {
   Destaque: 'badge-featured',
   Verificado: 'badge-verified',
+  Demo: 'badge-default',
   Novo: 'badge-new',
   Urgente: 'badge-urgent',
   Exclusivo: 'badge-exclusive',

@@ -1,10 +1,12 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import { requireDb } from '../middleware/db.js'
-import { requireAdmin, requireAuth } from '../middleware/auth.js'
+import { optionalAuth, requireAdmin, requireAuth } from '../middleware/auth.js'
 import { Listing } from '../models/Listing.js'
+import { getSiteSettings } from '../models/SiteSettings.js'
 import { sendListingStatusEmail, isEmailConfigured } from '../services/email.js'
 import { getPlanById } from '../data/plans.js'
+import { findListingByParam } from '../utils/listingLookup.js'
 
 const router = Router()
 
@@ -19,23 +21,43 @@ function toClientListing(doc) {
   }
 }
 
-router.get('/', async (req, res) => {
-  const filter = { status: 'Ativo' }
-  if (req.query.ownerEmail) filter.ownerEmail = String(req.query.ownerEmail).toLowerCase()
-  if (req.query.status) filter.status = String(req.query.status)
+router.get('/', optionalAuth, async (req, res) => {
+  const settings = await getSiteSettings()
+  const filter = {}
+
+  if (req.user?.isAdmin && req.query.all === '1') {
+    if (req.query.status) filter.status = String(req.query.status)
+  } else if (req.user && req.query.mine === '1') {
+    filter.ownerEmail = req.user.email.toLowerCase()
+    if (req.query.status) filter.status = String(req.query.status)
+  } else {
+    filter.status = 'Ativo'
+    if (settings.useRealDataOnly || !settings.showDemoListings) {
+      filter.isDemo = { $ne: true }
+      filter.legacyId = { $nin: ['l-1', 'l-2', 'l-3'] }
+    }
+  }
+
+  if (req.query.ownerEmail && req.user?.isAdmin) {
+    filter.ownerEmail = String(req.query.ownerEmail).toLowerCase()
+  }
 
   const items = await Listing.find(filter).sort({ featured: -1, createdAt: -1 }).limit(500)
   res.json({ ok: true, listings: items.map(toClientListing) })
 })
 
 router.get('/:id', async (req, res) => {
-  const query = req.params.id.match(/^[a-f0-9]{24}$/i)
-    ? { _id: req.params.id }
-    : { $or: [{ legacyId: req.params.id }, { slug: req.params.id }] }
-
-  const listing = await Listing.findOne(query)
+  const listing = await findListingByParam(req.params.id)
   if (!listing) return res.status(404).json({ ok: false, error: 'Anúncio não encontrado' })
   res.json({ ok: true, listing: toClientListing(listing) })
+})
+
+router.post('/:id/view', async (req, res) => {
+  const listing = await findListingByParam(req.params.id)
+  if (!listing) return res.status(404).json({ ok: false, error: 'Anúncio não encontrado' })
+  listing.views = (listing.views || 0) + 1
+  await listing.save()
+  res.json({ ok: true, views: listing.views })
 })
 
 const listingSchema = z.object({
@@ -54,6 +76,16 @@ const listingSchema = z.object({
   bathrooms: z.coerce.number().optional(),
   area: z.coerce.number().optional(),
   amenities: z.array(z.string()).optional(),
+  rules: z.array(z.string()).optional(),
+  brand: z.string().optional(),
+  model: z.string().optional(),
+  year: z.coerce.number().optional(),
+  mileage: z.coerce.number().optional(),
+  fuel: z.string().optional(),
+  gearbox: z.string().optional(),
+  condition: z.string().optional(),
+  lat: z.coerce.number().optional(),
+  lng: z.coerce.number().optional(),
   legacyId: z.string().optional(),
 })
 
@@ -68,17 +100,27 @@ router.post('/', requireAuth, async (req, res) => {
     ownerEmail: req.user.email,
     ownerName: req.user.name,
     ownerUserId: req.user._id,
+    ownerType: req.user.accountType || 'Proprietário Particular',
     status: 'Pendente',
+    isDemo: false,
+    verifiedProfile: false,
+    verifiedPhone: Boolean(parsed.data.phone),
+    verifiedDocument: false,
+    views: 0,
+    favoriteCount: 0,
   })
 
   res.status(201).json({ ok: true, listing: toClientListing(listing) })
 })
 
 router.patch('/:id', requireAuth, async (req, res) => {
-  const listing = await Listing.findById(req.params.id)
+  const listing = await findListingByParam(req.params.id)
   if (!listing) return res.status(404).json({ ok: false, error: 'Anúncio não encontrado' })
 
-  const isOwner = listing.ownerEmail === req.user.email || String(listing.ownerUserId) === String(req.user._id)
+  const isOwner =
+    listing.ownerEmail === req.user.email.toLowerCase() ||
+    String(listing.ownerUserId) === String(req.user._id)
+
   if (!isOwner && !req.user.isAdmin) {
     return res.status(403).json({ ok: false, error: 'Sem permissão' })
   }
@@ -86,10 +128,16 @@ router.patch('/:id', requireAuth, async (req, res) => {
   const allowed = [
     'title', 'price', 'description', 'photos', 'status', 'featured', 'featuredUntil',
     'featuredPlanId', 'phone', 'province', 'municipality', 'neighborhood', 'rejectionReason',
+    'views', 'verifiedProfile', 'verifiedPhone', 'verifiedDocument', 'trustSeal', 'isDemo',
   ]
 
   for (const key of allowed) {
-    if (req.body[key] !== undefined) listing[key] = req.body[key]
+    if (req.body[key] !== undefined) {
+      if (!req.user.isAdmin && ['views', 'verifiedProfile', 'verifiedPhone', 'verifiedDocument', 'trustSeal', 'isDemo', 'featured'].includes(key)) {
+        continue
+      }
+      listing[key] = req.body[key]
+    }
   }
 
   await listing.save()
@@ -112,15 +160,14 @@ router.post('/:id/featured', requireAuth, async (req, res) => {
     return res.status(400).json({ ok: false, error: 'Plano inválido' })
   }
 
-  const listing = await Listing.findById(req.params.id)
+  const listing = await findListingByParam(req.params.id)
   if (!listing) return res.status(404).json({ ok: false, error: 'Anúncio não encontrado' })
 
-  const isOwner = listing.ownerEmail === req.user.email
+  const isOwner = listing.ownerEmail === req.user.email.toLowerCase()
   if (!isOwner && !req.user.isAdmin) {
     return res.status(403).json({ ok: false, error: 'Sem permissão' })
   }
 
-  // Pagamento Kz pendente — admin ou modo dev activa manualmente
   if (!req.body.paymentConfirmed && !req.user.isAdmin) {
     return res.status(402).json({
       ok: false,
@@ -141,8 +188,9 @@ router.post('/:id/featured', requireAuth, async (req, res) => {
 })
 
 router.delete('/:id', requireAuth, requireAdmin, async (req, res) => {
-  const listing = await Listing.findByIdAndDelete(req.params.id)
+  const listing = await findListingByParam(req.params.id)
   if (!listing) return res.status(404).json({ ok: false, error: 'Anúncio não encontrado' })
+  await listing.deleteOne()
   res.json({ ok: true })
 })
 

@@ -15,6 +15,7 @@ export function AdminModerationList({
   onReactivate,
   onToggleFeatured,
   onDelete,
+  onAdminPatch,
 }) {
   const [filter, setFilter] = useState('all')
 
@@ -36,6 +37,20 @@ export function AdminModerationList({
   function handleDelete(listingId, title) {
     if (!window.confirm(`Apagar permanentemente «${title}»?`)) return
     onDelete(listingId)
+  }
+
+  function handleResetViews(listing) {
+    if (!onAdminPatch) return
+    onAdminPatch(listing.id, { views: 0 })
+  }
+
+  function handleToggleVerified(listing) {
+    if (!onAdminPatch) return
+    onAdminPatch(listing.id, {
+      verifiedDocument: !listing.verifiedDocument,
+      verifiedProfile: !listing.verifiedDocument,
+      trustSeal: listing.verifiedDocument ? '' : 'Prata',
+    })
   }
 
   if (!listings.length) {
@@ -82,9 +97,13 @@ export function AdminModerationList({
                     {listing.status}
                   </span>
                   {listing.featured ? <span className="admin-featured-pill">Destaque</span> : null}
+                  {listing.isDemo ? <span className="admin-featured-pill">Demo</span> : null}
                 </div>
                 <p className="admin-row-meta">
                   {listing.neighborhood} — {formatKz(listing.price)} — {listing.ownerName || listing.ownerEmail}
+                  {' · '}
+                  {listing.views || 0} views
+                  {listing.verifiedDocument ? ' · Verificado' : ''}
                 </p>
               </div>
               <div className="admin-actions">
@@ -108,6 +127,20 @@ export function AdminModerationList({
                     Ver estado
                   </Link>
                 ) : null}
+                <button
+                  type="button"
+                  className="button ghost"
+                  onClick={() => handleResetViews(listing)}
+                >
+                  Zerar views
+                </button>
+                <button
+                  type="button"
+                  className="button ghost"
+                  onClick={() => handleToggleVerified(listing)}
+                >
+                  {listing.verifiedDocument ? 'Remover verificado' : 'Marcar verificado'}
+                </button>
                 <button
                   type="button"
                   className="button secondary"

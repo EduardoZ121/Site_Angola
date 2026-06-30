@@ -2,6 +2,7 @@ import { isListingPending } from '../constants/staff'
 import { AGENT_APPLICATION_STATUS } from '../constants/agentApplication'
 
 export const ADMIN_SECTION_LINKS = [
+  { id: 'controlo-site', label: 'Site', icon: 'chart' },
   { id: 'stats', label: 'Resumo', icon: 'chart' },
   { id: 'fila-aprovacao', label: 'Fila', icon: 'clock' },
   { id: 'agentes', label: 'Agentes', icon: 'user' },

@@ -44,6 +44,7 @@ const listingSchema = new mongoose.Schema(
     year: Number,
     mileage: Number,
     rejectionReason: String,
+    isDemo: { type: Boolean, default: false, index: true },
     submittedByAgentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   { timestamps: true },

@@ -39,7 +39,7 @@ router.post('/seed', async (req, res) => {
   await Listing.insertMany(
     starterListings.map((item) => {
       const { id, ...rest } = item
-      return { ...rest, legacyId: id, favoriteCount: 0, status: 'Ativo' }
+      return { ...rest, legacyId: id, favoriteCount: 0, status: 'Ativo', isDemo: true }
     }),
   )
   res.json({ ok: true, seeded: starterListings.length })

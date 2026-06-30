@@ -79,8 +79,9 @@ export function normalizeListing(raw) {
 
 function buildBadges(raw) {
   const badges = []
+  if (raw.isDemo) badges.push('Demo')
   if (raw.featured) badges.push('Destaque')
-  if (raw.verifiedDocument) badges.push('Verificado')
+  if (!raw.isDemo && raw.verifiedDocument) badges.push('Verificado')
   if (raw.condition === 'Novo') badges.push('Novo')
   return badges
 }

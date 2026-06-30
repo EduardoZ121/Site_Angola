@@ -40,6 +40,61 @@ export async function fetchListings(params) {
   return data
 }
 
+export async function fetchMyListings() {
+  const { data } = await api.get('/listings', { params: { mine: '1' } })
+  return data
+}
+
+export async function fetchAdminListings() {
+  const { data } = await api.get('/admin/listings')
+  return data
+}
+
+export async function createListing(payload) {
+  const { data } = await api.post('/listings', payload)
+  return data
+}
+
+export async function patchListing(id, patch, notifyOwner = false) {
+  const { data } = await api.patch(`/listings/${encodeURIComponent(id)}`, { ...patch, notifyOwner })
+  return data
+}
+
+export async function deleteListingById(id) {
+  const { data } = await api.delete(`/listings/${encodeURIComponent(id)}`)
+  return data
+}
+
+export async function incrementListingView(id) {
+  const { data } = await api.post(`/listings/${encodeURIComponent(id)}/view`)
+  return data
+}
+
+export async function fetchSiteSettings() {
+  const { data } = await api.get('/admin/settings')
+  return data
+}
+
+export async function patchSiteSettings(patch) {
+  const { data } = await api.patch('/admin/settings', patch)
+  return data
+}
+
+export async function clearDemoListings() {
+  const { data } = await api.delete('/admin/demo-listings')
+  return data
+}
+
+export async function restoreDemoListings() {
+  const { data } = await api.post('/admin/demo-listings/restore')
+  return data
+}
+
+export async function adminPatchListing(id, patch) {
+  const { data } = await api.patch(`/admin/listings/${encodeURIComponent(id)}`, patch)
+  return data
+}
+
 export async function fetchPlans() {
   const { data } = await api.get('/plans')
   return data
