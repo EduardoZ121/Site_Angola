@@ -32,6 +32,7 @@ export function normalizeListing(raw) {
       name: raw.ownerName,
       type: raw.ownerType,
       phone: raw.phone,
+      email: raw.ownerEmail || raw.email || '',
       verified: Boolean(raw.verifiedProfile),
       memberSince: raw.ownerSince || raw.createdAt,
       avatar: raw.ownerAvatar || '',

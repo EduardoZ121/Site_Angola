@@ -1,12 +1,14 @@
-export function ListingDetailSections({ listing }) {
+export function ListingDetailSections({ listing, compact = false }) {
+  const blockClass = compact ? 'listing-block listing-block-compact panel-card' : 'listing-block panel-card'
+
   return (
     <>
-      <section className="listing-block panel-card">
+      <section className={blockClass}>
         <h3>Descrição</h3>
-        <p>{listing.description}</p>
+        <p className="listing-desc-text">{listing.description}</p>
       </section>
 
-      <section className="listing-block panel-card">
+      <section className={blockClass}>
         <h3>Características</h3>
         <dl className="listing-features-grid">
           {listing.features.map((item) => (
@@ -19,7 +21,7 @@ export function ListingDetailSections({ listing }) {
       </section>
 
       {listing.amenities.length ? (
-        <section className="listing-block panel-card">
+        <section className={blockClass}>
           <h3>Comodidades</h3>
           <ul className="listing-tags">
             {listing.amenities.map((item) => (
@@ -30,9 +32,9 @@ export function ListingDetailSections({ listing }) {
       ) : null}
 
       {listing.rules.length ? (
-        <section className="listing-block panel-card">
+        <section className={`${blockClass} listing-block-inline`}>
           <h3>Regras</h3>
-          <ul>
+          <ul className="listing-inline-list">
             {listing.rules.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -41,9 +43,9 @@ export function ListingDetailSections({ listing }) {
       ) : null}
 
       {listing.documentation.length ? (
-        <section className="listing-block panel-card">
+        <section className={`${blockClass} listing-block-inline`}>
           <h3>Documentação</h3>
-          <ul>
+          <ul className="listing-inline-list">
             {listing.documentation.map((item) => (
               <li key={item}>{item}</li>
             ))}
