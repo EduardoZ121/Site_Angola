@@ -1,7 +1,13 @@
+import { PublishFieldHint } from './PublishFieldHint'
+
 export function ContactStep({ draft, profile, onChange }) {
   return (
-    <section className="publish-step panel-card">
-      <h2>Contacto</h2>
+    <section className="publish-step panel-card publish-step-animate">
+      <header className="publish-step-header">
+        <h2>Contacto</h2>
+        <p>Compradores entram em contacto por telefone, WhatsApp ou mensagem na Kuteka.</p>
+      </header>
+
       <label className="publish-check">
         <input
           type="checkbox"
@@ -10,8 +16,9 @@ export function ContactStep({ draft, profile, onChange }) {
         />
         Usar telefone do perfil ({profile.phone || 'não definido'})
       </label>
+
       {!draft.useProfilePhone ? (
-        <label>
+        <label className="publish-field">
           Telefone para contacto
           <input
             value={draft.contactPhone}
@@ -20,7 +27,10 @@ export function ContactStep({ draft, profile, onChange }) {
           />
         </label>
       ) : null}
-      <p className="publish-hint">Os interessados poderão ligar, enviar WhatsApp ou mensagem.</p>
+
+      <PublishFieldHint>
+        Precisamos deste número para que compradores possam entrar em contacto consigo directamente.
+      </PublishFieldHint>
     </section>
   )
 }

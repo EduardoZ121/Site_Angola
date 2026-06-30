@@ -1,7 +1,10 @@
 export function LocationStep({ draft, provinces, bairros, onChange }) {
   return (
-    <section className="publish-step panel-card">
-      <h2>Localização</h2>
+    <section className="publish-step panel-card publish-step-animate">
+      <header className="publish-step-header">
+        <h2>Localização</h2>
+        <p>Indique onde está o imóvel ou veículo — compradores filtram por zona.</p>
+      </header>
       <div className="form-row">
         <label>
           Província

@@ -14,8 +14,11 @@ export function FeaturesStep({ draft, onChange }) {
   }
 
   return (
-    <section className="publish-step panel-card">
-      <h2>Características</h2>
+    <section className="publish-step panel-card publish-step-animate">
+      <header className="publish-step-header">
+        <h2>Características</h2>
+        <p>Detalhes que ajudam compradores a decidir mais rápido.</p>
+      </header>
       {vehicle ? (
         <div className="form-row">
           <label>

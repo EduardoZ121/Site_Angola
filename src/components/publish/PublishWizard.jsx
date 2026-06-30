@@ -1,8 +1,14 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useMarketplace } from '../../context/MarketplaceContext'
 import { usePublishWizard } from '../../hooks/usePublishWizard'
 import { clearPublishDraft, PUBLISH_DRAFT_KEY } from '../../utils/publishDraft'
-import { StepIndicator } from './StepIndicator'
+import { PublishAutosaveStatus } from './PublishAutosaveStatus'
+import { PublishBottomBar } from './PublishBottomBar'
+import { PublishHero } from './PublishHero'
+import { PublishLivePreview } from './PublishLivePreview'
+import { PublishProfileAlert } from './PublishProfileAlert'
+import { PublishTimeline } from './PublishTimeline'
+import { PublishTipsPanel } from './PublishTipsPanel'
 import { ValidationSummary } from './ValidationSummary'
 import { CategoryStep } from './CategoryStep'
 import { BasicInfoStep } from './BasicInfoStep'
@@ -19,8 +25,19 @@ export function PublishWizard({ editListingId }) {
   const { profile, provinces, bairros, submitListingDraft, updateOwnerListing, getListing } = useMarketplace()
   const listing = editListingId ? getListing(editListingId) : null
   const wizard = usePublishWizard({ editListingId, listing })
-  const { draft, patchDraft, setCategory, currentStep, stepIndex, steps, errors, goNext, goBack, completion, savedNotice } =
-    wizard
+  const {
+    draft,
+    patchDraft,
+    setCategory,
+    currentStep,
+    stepIndex,
+    steps,
+    errors,
+    goNext,
+    goBack,
+    completion,
+    savedLabel,
+  } = wizard
 
   function handlePatch(patch) {
     patchDraft(patch)
@@ -58,7 +75,9 @@ export function PublishWizard({ editListingId }) {
       case 'basic':
         return <BasicInfoStep draft={draft} onChange={handlePatch} />
       case 'location':
-        return <LocationStep draft={draft} provinces={provinces} bairros={bairros} onChange={handlePatch} />
+        return (
+          <LocationStep draft={draft} provinces={provinces} bairros={bairros} onChange={handlePatch} />
+        )
       case 'features':
         return <FeaturesStep draft={draft} onChange={handlePatch} />
       case 'media':
@@ -78,52 +97,44 @@ export function PublishWizard({ editListingId }) {
 
   return (
     <div className="publish-wizard">
-      <header className="publish-wizard-header">
-        <div>
-          <p className="eyebrow">{editListingId ? 'Editar anúncio' : 'Publicar'}</p>
-          <h1>{editListingId ? 'Actualizar anúncio' : 'Publicação profissional de anúncios'}</h1>
-          <p>
-            {editListingId
-              ? 'Altere os dados e guarde — anúncios activos voltam à fila de revisão.'
-              : 'Fluxo guiado — pode sair e continuar mais tarde. O progresso é guardado automaticamente.'}
-          </p>
-        </div>
-        {savedNotice ? <span className="publish-autosave">Rascunho guardado automaticamente</span> : null}
-      </header>
+      <PublishAutosaveStatus savedLabel={savedLabel} />
 
-      {!profile.name || !profile.phone ? (
-        <div className="panel-card publish-profile-alert">
-          <p>Complete nome e telefone antes de publicar.</p>
-          <Link className="button primary" to="/conta">
-            Ir para Minha conta
-          </Link>
-        </div>
-      ) : null}
+      <PublishHero editMode={Boolean(editListingId)} />
 
-      <StepIndicator
+      <PublishProfileAlert profile={profile} />
+
+      <PublishTimeline
         steps={steps}
         currentIndex={stepIndex}
         completion={completion}
         onStepClick={(index) => index < stepIndex && wizard.goToStep(index)}
       />
 
-      <ValidationSummary errors={errors} />
-      {renderStep()}
+      <div className="publish-layout">
+        <div className="publish-main">
+          <ValidationSummary errors={errors} />
+          <div className="publish-step-shell" key={currentStep.id}>
+            {renderStep()}
+          </div>
+        </div>
 
-      <div className="publish-nav">
-        <button type="button" className="button ghost" onClick={goBack} disabled={stepIndex === 0}>
-          Anterior
-        </button>
-        {isLast ? (
-          <button type="button" className="button primary" onClick={handlePublish}>
-            {editListingId ? 'Guardar alterações' : 'Publicar — enviar para revisão'}
-          </button>
-        ) : (
-          <button type="button" className="button primary ui-btn-arrow" onClick={goNext}>
-            Seguinte
-          </button>
-        )}
+        <aside className="publish-aside">
+          <PublishLivePreview draft={draft} />
+          <PublishTipsPanel />
+        </aside>
       </div>
+
+      <PublishBottomBar
+        stepIndex={stepIndex}
+        totalSteps={steps.length}
+        completion={completion}
+        isLast={isLast}
+        onBack={goBack}
+        onNext={goNext}
+        onPublish={handlePublish}
+        editMode={Boolean(editListingId)}
+        canGoBack={stepIndex > 0}
+      />
     </div>
   )
 }

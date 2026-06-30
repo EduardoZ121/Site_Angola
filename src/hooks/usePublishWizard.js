@@ -11,6 +11,16 @@ import {
 } from '../utils/publishDraft'
 import { rawListingToPublishDraft } from '../utils/ownerListing'
 
+function formatSavedAgo(iso) {
+  if (!iso) return 'agora'
+  const seconds = Math.max(0, Math.floor((Date.now() - new Date(iso).getTime()) / 1000))
+  if (seconds < 8) return 'agora'
+  if (seconds < 60) return `há ${seconds} segundos`
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return `há ${minutes} min`
+  return `há ${Math.floor(minutes / 60)} h`
+}
+
 export function usePublishWizard({ editListingId, listing } = {}) {
   const storageKey = editListingId ? `${PUBLISH_DRAFT_KEY}.${editListingId}` : PUBLISH_DRAFT_KEY
 
@@ -25,18 +35,26 @@ export function usePublishWizard({ editListingId, listing } = {}) {
     return readPublishDraft()
   })
   const [errors, setErrors] = useState([])
-  const [savedNotice, setSavedNotice] = useState(false)
+  const [lastSavedAt, setLastSavedAt] = useState(draft.lastSavedAt || null)
+  const [savedLabel, setSavedLabel] = useState('agora')
 
   const stepIndex = Math.min(Math.max(draft.step || 0, 0), PUBLISH_STEPS.length - 1)
   const currentStep = PUBLISH_STEPS[stepIndex]
   const completion = draftCompletionPercent(draft)
 
   useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify({ ...draft, lastSavedAt: new Date().toISOString() }))
-    setSavedNotice(true)
-    const timer = setTimeout(() => setSavedNotice(false), 2500)
-    return () => clearTimeout(timer)
+    const savedAt = new Date().toISOString()
+    localStorage.setItem(storageKey, JSON.stringify({ ...draft, lastSavedAt: savedAt }))
+    setLastSavedAt(savedAt)
   }, [draft, storageKey])
+
+  useEffect(() => {
+    setSavedLabel(formatSavedAgo(lastSavedAt))
+    const timer = window.setInterval(() => {
+      setSavedLabel(formatSavedAgo(lastSavedAt))
+    }, 4000)
+    return () => window.clearInterval(timer)
+  }, [lastSavedAt])
 
   const patchDraft = useCallback((patch) => {
     setDraft((prev) => ({ ...prev, ...patch, step: patch.step ?? prev.step }))
@@ -52,12 +70,14 @@ export function usePublishWizard({ editListingId, listing } = {}) {
     if (stepErrors.length) return false
     setDraft((prev) => ({ ...prev, step: Math.min(prev.step + 1, PUBLISH_STEPS.length - 1) }))
     setErrors([])
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     return true
   }, [currentStep.id, draft])
 
   const goBack = useCallback(() => {
     setErrors([])
     setDraft((prev) => ({ ...prev, step: Math.max(prev.step - 1, 0) }))
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const goToStep = useCallback((index) => {
@@ -86,7 +106,7 @@ export function usePublishWizard({ editListingId, listing } = {}) {
     goToStep,
     resetDraft,
     completion,
-    savedNotice,
+    savedLabel,
     validateCurrentStep: () => validatePublishStep(currentStep.id, draft),
   }
 }

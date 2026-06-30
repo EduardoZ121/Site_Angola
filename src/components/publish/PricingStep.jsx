@@ -1,8 +1,14 @@
+import { PublishFieldHint } from './PublishFieldHint'
+
 export function PricingStep({ draft, onChange }) {
   return (
-    <section className="publish-step panel-card">
-      <h2>Preço</h2>
-      <label>
+    <section className="publish-step panel-card publish-step-animate">
+      <header className="publish-step-header">
+        <h2>Preço</h2>
+        <p>Indique um valor realista — pode alterar depois de publicar.</p>
+      </header>
+
+      <label className="publish-field">
         Valor em Kwanzas (Kz)
         <input
           type="number"
@@ -11,12 +17,12 @@ export function PricingStep({ draft, onChange }) {
           onChange={(event) => onChange({ price: event.target.value })}
           placeholder="Ex: 850000"
         />
+        <PublishFieldHint>
+          {draft.operation === 'Arrendamento'
+            ? 'Valor mensal de arrendamento. Pode ajustar o preço a qualquer momento.'
+            : 'Preço de venda pretendido. Pode alterar mais tarde sem republicar.'}
+        </PublishFieldHint>
       </label>
-      <p className="publish-hint">
-        {draft.operation === 'Arrendamento'
-          ? 'Indique o valor mensal de arrendamento.'
-          : 'Indique o preço de venda pretendido.'}
-      </p>
     </section>
   )
 }

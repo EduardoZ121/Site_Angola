@@ -1,12 +1,17 @@
 import { isVehicleCategory } from '../../constants/publishCategories'
+import { PublishFieldHint } from './PublishFieldHint'
 
 export function BasicInfoStep({ draft, onChange }) {
   const vehicle = isVehicleCategory(draft.listingCategory)
   return (
-    <section className="publish-step panel-card">
-      <h2>Informações principais</h2>
+    <section className="publish-step panel-card publish-step-animate">
+      <header className="publish-step-header">
+        <h2>Informações principais</h2>
+        <p>Um título claro e uma descrição completa aumentam contactos.</p>
+      </header>
+
       <div className="form-row">
-        <label>
+        <label className="publish-field">
           Operação
           <select value={draft.operation} onChange={(event) => onChange({ operation: event.target.value })}>
             {vehicle ? (
@@ -20,15 +25,18 @@ export function BasicInfoStep({ draft, onChange }) {
           </select>
         </label>
       </div>
-      <label>
+
+      <label className="publish-field">
         Título do anúncio
         <input
           value={draft.title}
           onChange={(event) => onChange({ title: event.target.value })}
           placeholder="Ex: T3 moderno no Talatona"
         />
+        <PublishFieldHint>Use palavras que compradores pesquisam: bairro, quartos, tipo de imóvel.</PublishFieldHint>
       </label>
-      <label>
+
+      <label className="publish-field">
         Descrição
         <textarea
           rows={5}
@@ -36,6 +44,7 @@ export function BasicInfoStep({ draft, onChange }) {
           onChange={(event) => onChange({ description: event.target.value })}
           placeholder="Descreva o imóvel ou veículo com detalhe..."
         />
+        <PublishFieldHint>Mencione estado, acessos, segurança e o que torna o anúncio especial.</PublishFieldHint>
       </label>
     </section>
   )
