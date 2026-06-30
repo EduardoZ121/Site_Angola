@@ -37,6 +37,7 @@ export function MobileNavDrawer({
   onClose,
   isLoggedIn,
   isAdmin,
+  isAgent,
   profile,
   favoritesCount,
   compareCount,
@@ -141,6 +142,11 @@ export function MobileNavDrawer({
             {isAdmin ? (
               <NavRow to="/admin" icon="shield" onClick={onClose}>
                 Administrador
+              </NavRow>
+            ) : null}
+            {isAgent ? (
+              <NavRow to="/agente" icon="message" onClick={onClose}>
+                Agente
               </NavRow>
             ) : null}
             {!isLoggedIn ? (

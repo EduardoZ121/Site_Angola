@@ -4,6 +4,7 @@ import {
   RequireAdmin,
   RequireAuth,
   RequireRoleForPublish,
+  RequireStaff,
   RootRedirect,
 } from './components/RequireAuth'
 import { LoginPromptProvider } from './context/LoginPromptContext'
@@ -26,6 +27,7 @@ import FavoritesPage from './pages/FavoritesPage'
 import ComparePage from './pages/ComparePage'
 import PricesPage from './pages/PricesPage'
 import AdminPage from './pages/AdminPage'
+import AgentPage from './pages/AgentPage'
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
@@ -156,6 +158,10 @@ export default function App() {
 
             <Route element={<RequireAdmin />}>
               <Route path="admin" element={<AdminPage />} />
+            </Route>
+
+            <Route element={<RequireStaff />}>
+              <Route path="agente" element={<AgentPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/inicio" replace />} />

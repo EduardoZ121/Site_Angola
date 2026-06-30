@@ -19,7 +19,7 @@ const accountNav = [
 ]
 
 export function Layout() {
-  const { favorites, compare, profile, isLoggedIn, isAdmin, logoutAccount } = useMarketplace()
+  const { favorites, compare, profile, isLoggedIn, isAdmin, isAgent, logoutAccount } = useMarketplace()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
@@ -121,6 +121,14 @@ export function Layout() {
                   Administrador
                 </NavLink>
               ) : null}
+              {isAgent ? (
+                <NavLink
+                  to="/agente"
+                  className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
+                >
+                  Agente
+                </NavLink>
+              ) : null}
               {accountNav.map((item) => (
                 <NavLink
                   key={item.to}
@@ -147,6 +155,7 @@ export function Layout() {
         onClose={closeMenu}
         isLoggedIn={isLoggedIn}
         isAdmin={isAdmin}
+        isAgent={isAgent}
         profile={profile}
         favoritesCount={favorites.length}
         compareCount={compare.length}
@@ -168,6 +177,7 @@ export function Layout() {
               <NavLink to="/veiculos">Veículos</NavLink>
               <NavLink to="/publicar">Publicar</NavLink>
               {isAdmin ? <NavLink to="/admin">Administrador</NavLink> : null}
+              {isAgent ? <NavLink to="/agente">Agente</NavLink> : null}
             </div>
           </div>
         </footer>

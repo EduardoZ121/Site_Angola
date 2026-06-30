@@ -16,7 +16,10 @@ export function MediaUploader({ photos = [], coverIndex = 0, onChange, max = 8 }
             reader.readAsDataURL(file)
           }),
       ),
-    ).then((items) => onChange([...photos, ...items].slice(0, max)))
+    ).then((items) => {
+      onChange([...photos, ...items].slice(0, max))
+      if (inputRef.current) inputRef.current.value = ''
+    })
   }
 
   function removePhoto(index) {
@@ -74,7 +77,7 @@ export function MediaUploader({ photos = [], coverIndex = 0, onChange, max = 8 }
           {photos.map((photo, index) => (
             <li key={`${photo.slice(0, 24)}-${index}`} className={index === coverIndex ? 'is-cover' : ''}>
               <img src={photo} alt={`Foto ${index + 1}`} loading="lazy" />
-              <div className="media-actions">
+              <div className="media-actions" onClick={(event) => event.stopPropagation()}>
                 <button type="button" onClick={() => onChange(photos, index)}>
                   {index === coverIndex ? 'Capa' : 'Definir capa'}
                 </button>

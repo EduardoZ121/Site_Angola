@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useMarketplace } from '../../context/MarketplaceContext'
 import { usePublishWizard } from '../../hooks/usePublishWizard'
-import { clearPublishDraft, PUBLISH_DRAFT_KEY } from '../../utils/publishDraft'
+import { clearPublishDraft, PUBLISH_DRAFT_KEY, validateAllPublishSteps } from '../../utils/publishDraft'
 import { PublishAutosaveStatus } from './PublishAutosaveStatus'
 import { PublishBottomBar } from './PublishBottomBar'
 import { PublishHero } from './PublishHero'
@@ -44,7 +44,7 @@ export function PublishWizard({ editListingId }) {
   }
 
   function handlePublish() {
-    const stepErrors = wizard.validateCurrentStep()
+    const stepErrors = validateAllPublishSteps(draft)
     if (stepErrors.length) {
       wizard.setErrors(stepErrors)
       return

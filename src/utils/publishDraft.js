@@ -1,5 +1,10 @@
 import { LISTING_STATUS } from '../constants/listingStatus'
-import { getCategoryConfig, isPropertyWithRooms, isVehicleCategory } from '../constants/publishCategories'
+import {
+  getCategoryConfig,
+  isPropertyWithRooms,
+  isVehicleCategory,
+  PUBLISH_STEPS,
+} from '../constants/publishCategories'
 import { trustSealFromProfile } from './format'
 
 export const PUBLISH_DRAFT_KEY = 'kuteka.market.publishDraft'
@@ -100,6 +105,11 @@ export function validatePublishStep(stepId, draft) {
   return errors
 }
 
+export function validateAllPublishSteps(draft) {
+  const stepIds = PUBLISH_STEPS.map((step) => step.id).filter((id) => id !== 'preview')
+  return stepIds.flatMap((stepId) => validatePublishStep(stepId, draft))
+}
+
 export function draftCompletionPercent(draft) {
   const checks = [
     Boolean(draft.listingCategory),
@@ -133,6 +143,7 @@ export function draftToRawListing(draft, profile) {
   }
 
   const phone = draft.useProfilePhone ? profile.phone : draft.contactPhone
+  const now = new Date().toISOString()
   const base = {
     id: `l-${Date.now()}`,
     category: config.category,
@@ -159,8 +170,8 @@ export function draftToRawListing(draft, profile) {
     rules: draft.rules || [],
     lat: draft.lat ? Number(draft.lat) : Number((Math.random() * 0.85 + 0.08).toFixed(2)),
     lng: draft.lng ? Number(draft.lng) : Number((Math.random() * 0.85 + 0.08).toFixed(2)),
-    createdAt: new Date().toISOString().slice(0, 10),
-    submittedAt: new Date().toISOString(),
+    createdAt: now.slice(0, 10),
+    submittedAt: now,
     propertyType: config.propertyType,
   }
 

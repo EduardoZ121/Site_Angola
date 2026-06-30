@@ -1,3 +1,5 @@
+import { isListingPublic } from '../constants/listingStatus'
+
 export function parseStorage(key, fallback) {
   try {
     const raw = localStorage.getItem(key)
@@ -53,7 +55,9 @@ export function filterListings(listings, filters, isAdmin = false) {
       if (filters.gearbox !== 'Todos' && listing.gearbox !== filters.gearbox) return false
       if (filters.condition !== 'Todos' && listing.condition !== filters.condition) return false
     }
-    if (!isAdmin && listing.status !== 'Ativo') return false
+    if (!isAdmin && listing.status !== 'Ativo' && !isListingPublic(listing.listingStatus || listing.status)) {
+      return false
+    }
     return true
   })
 }

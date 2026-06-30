@@ -1205,9 +1205,33 @@ textarea {
 
 .notifications-list,
 .admin-pending-list,
-.my-listings-list {
+.my-listings-list,
+.staff-inquiry-list {
   display: grid;
   gap: 14px;
+}
+
+.staff-inquiry-card {
+  align-items: start;
+  display: grid;
+  gap: 12px;
+}
+
+.staff-inquiry-msg {
+  color: var(--color-text-muted);
+  margin: 6px 0;
+}
+
+.staff-soon-card strong {
+  display: block;
+  margin-bottom: 6px;
+}
+
+@media (min-width: 640px) {
+  .staff-inquiry-card {
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
 }
 
 .notification-card.unread {

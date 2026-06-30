@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import {
-  ADMIN_EMAIL,
   STORAGE_KEYS,
   accountTypes,
   bairros,
@@ -17,6 +16,7 @@ import { parseGoogleCredential } from '../utils/googleAuth'
 import { draftToRawListing } from '../utils/publishDraft'
 import { rawListingToPublishDraft } from '../utils/ownerListing'
 import { LISTING_STATUS } from '../constants/listingStatus'
+import { getStaffRole, isListingPending, STAFF_ROLES } from '../constants/staff'
 import {
   authenticateAccount,
   buildUserSession,
@@ -104,7 +104,11 @@ export function MarketplaceProvider({ children }) {
     }
   })
 
-  const isAdmin = profile.email?.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase()
+  const staffRole = getStaffRole(profile.email)
+  const isAdmin = staffRole === STAFF_ROLES.admin
+  const isAgent = staffRole === STAFF_ROLES.agent
+  const isStaff = Boolean(staffRole)
+  const canModerateListings = isStaff
 
   const isLoggedIn = Boolean(profile.email && (profile.googleId || profile.sessionId))
 
@@ -164,7 +168,7 @@ export function MarketplaceProvider({ children }) {
     () => ({
       total: listings.length,
       active: listings.filter((listing) => listing.status === 'Ativo').length,
-      pending: listings.filter((listing) => listing.status === 'Pendente').length,
+      pending: listings.filter((listing) => isListingPending(listing)).length,
       featured: listings.filter((listing) => listing.featured).length,
     }),
     [listings],
@@ -484,7 +488,17 @@ export function MarketplaceProvider({ children }) {
       ownerName: profile.name,
       ownerEmail: profile.email || '',
       title: 'Anúncio enviado — aguarda aprovação',
-      body: `O seu anúncio "${payload.title}" foi recebido. A nossa equipa vai rever fotos e dados antes de publicar no site.`,
+      body: `O seu anúncio "${payload.title}" foi recebido. A equipa Kuteka vai rever fotos e dados antes de publicar no site.`,
+    })
+
+    addNotification({
+      type: 'staff_listing_pending',
+      audience: 'staff',
+      listingId: payload.id,
+      ownerName: profile.name,
+      ownerEmail: profile.email || '',
+      title: 'Novo anúncio na fila',
+      body: `"${payload.title}" de ${profile.name} aguarda aprovação.`,
     })
 
     return payload.id
@@ -606,17 +620,25 @@ export function MarketplaceProvider({ children }) {
   }
 
   function deleteListing(listingId) {
+    if (!isAdmin) return
     setListings((prev) => prev.filter((listing) => listing.id !== listingId))
   }
 
   function approveListing(listingId) {
     const listing = listings.find((item) => item.id === listingId)
     if (!listing) return
+    if (!canModerateListings) return
+
+    const now = new Date().toISOString()
+    const approverLabel = isAdmin ? 'administrador' : 'agente Kuteka'
 
     updateListing(listingId, {
       status: 'Ativo',
       listingStatus: LISTING_STATUS.ACTIVE,
-      approvedAt: new Date().toISOString(),
+      approvedAt: now,
+      publishedAt: now,
+      approvedBy: profile.email,
+      approvedByName: profile.name,
     })
 
     addNotification({
@@ -625,13 +647,14 @@ export function MarketplaceProvider({ children }) {
       ownerName: listing.ownerName,
       ownerEmail: listing.ownerEmail || '',
       title: 'Parabéns! O seu anúncio foi publicado',
-      body: `O anúncio "${listing.title}" foi aprovado pelo administrador e já está visível no Kuteka. Enviámos confirmação para ${listing.ownerEmail || 'o seu email'}.`,
+      body: `O anúncio "${listing.title}" foi aprovado pela ${approverLabel} e já está visível no Kuteka.`,
     })
   }
 
   function rejectListing(listingId, reason = '') {
     const listing = listings.find((item) => item.id === listingId)
     if (!listing) return
+    if (!canModerateListings) return
 
     updateListing(listingId, {
       status: 'Rejeitado',
@@ -668,6 +691,10 @@ export function MarketplaceProvider({ children }) {
     setProfile,
     isLoggedIn,
     isAdmin,
+    isAgent,
+    isStaff,
+    staffRole,
+    canModerateListings,
     needsRoleSelection,
     needsBuyerFlow,
     isOnboardingComplete,

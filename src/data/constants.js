@@ -1,4 +1,5 @@
 export const ADMIN_EMAIL = 'amarilinhaa@gmail.com'
+export const AGENT_EMAIL = 'amarilinhaz@gmail.com'
 
 export const STORAGE_KEYS = {
   profile: 'kuteka.market.profile',

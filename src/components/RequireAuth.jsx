@@ -49,3 +49,18 @@ export function RequireAdmin() {
 
   return <Outlet />
 }
+
+export function RequireStaff() {
+  const { isLoggedIn, isStaff } = useMarketplace()
+  const location = useLocation()
+
+  if (!isLoggedIn) {
+    return <Navigate to={`/entrar?redirect=${encodeURIComponent(location.pathname)}`} replace />
+  }
+
+  if (!isStaff) {
+    return <Navigate to="/inicio" replace />
+  }
+
+  return <Outlet />
+}

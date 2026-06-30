@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { ADMIN_EMAIL } from '../data/constants'
+import { PendingListingsPanel } from '../components/staff/PendingListingsPanel'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { isListingPending } from '../constants/staff'
 import { formatKz } from '../utils/format'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 
@@ -28,10 +30,9 @@ export default function AdminPage() {
     deleteListing,
     updateListing,
   } = useMarketplace()
-  const [rejectReason, setRejectReason] = useState({})
 
-  const pendingListings = listings.filter((listing) => listing.status === 'Pendente')
-  const otherListings = listings.filter((listing) => listing.status !== 'Pendente')
+  const pendingListings = listings.filter((listing) => isListingPending(listing))
+  const otherListings = listings.filter((listing) => !isListingPending(listing))
   const rejectedCount = listings.filter((listing) => listing.status === 'Rejeitado').length
   const recentNotifications = notifications.slice(0, 12)
 
@@ -40,11 +41,6 @@ export default function AdminPage() {
     if (emails && navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(emails)
     }
-  }
-
-  function handleReject(listingId) {
-    rejectListing(listingId, rejectReason[listingId] || '')
-    setRejectReason((current) => ({ ...current, [listingId]: '' }))
   }
 
   if (!isLoggedIn) {
@@ -62,7 +58,7 @@ export default function AdminPage() {
               O painel admin está disponível apenas para <strong>{ADMIN_EMAIL}</strong>.
               {profile.email ? ` Entrou como ${profile.email}.` : ''}
             </p>
-            <Link className="button primary" to="/">
+            <Link className="button primary" to="/inicio">
               Voltar ao início
             </Link>
           </div>
@@ -72,11 +68,11 @@ export default function AdminPage() {
   }
 
   return (
-    <main className="page-main">
+    <main className="page-main staff-page">
       <PageIntro
         eyebrow="Administrador"
         title="Painel Kuteka"
-        subtitle={`Sessão: ${profile.email} — aprovar anúncios e ver utilizadores.`}
+        subtitle={`Sessão: ${profile.email} — controlo total do site, utilizadores e moderação.`}
       />
 
       <SectionBlock id="stats" eyebrow="Resumo" title="Números do site">
@@ -88,6 +84,21 @@ export default function AdminPage() {
           <span>Rejeitados: {rejectedCount}</span>
           <span>Destaques: {adminStats.featured}</span>
         </div>
+      </SectionBlock>
+
+      <SectionBlock
+        id="fila-aprovacao"
+        eyebrow="Prioridade"
+        title={`Aprovar anúncios (${pendingListings.length})`}
+        subtitle="Revise fotos e perfil — rejeite fotos pessoais ou conteúdo inválido."
+      >
+        <PendingListingsPanel
+          pendingListings={pendingListings}
+          onApprove={approveListing}
+          onReject={rejectListing}
+          onDelete={deleteListing}
+          canDelete
+        />
       </SectionBlock>
 
       <SectionBlock
@@ -109,34 +120,34 @@ export default function AdminPage() {
               </button>
             </div>
             <div className="admin-users-table panel-card">
-            <table className="compare-table">
-              <thead>
-                <tr>
-                  <th>Utilizador</th>
-                  <th>Email</th>
-                  <th>Primeiro login</th>
-                  <th>Último login</th>
-                  <th>Vezes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {siteUsers.map((user) => (
-                  <tr key={user.email}>
-                    <td>
-                      <span className="admin-user-cell">
-                        {user.picture ? <img className="nav-user-avatar" src={user.picture} alt="" /> : null}
-                        {user.name}
-                      </span>
-                    </td>
-                    <td>{user.email}</td>
-                    <td>{formatDate(user.firstLoginAt)}</td>
-                    <td>{formatDate(user.lastLoginAt)}</td>
-                    <td>{user.loginCount}</td>
+              <table className="compare-table">
+                <thead>
+                  <tr>
+                    <th>Utilizador</th>
+                    <th>Email</th>
+                    <th>Primeiro login</th>
+                    <th>Último login</th>
+                    <th>Vezes</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {siteUsers.map((user) => (
+                    <tr key={user.email}>
+                      <td>
+                        <span className="admin-user-cell">
+                          {user.picture ? <img className="nav-user-avatar" src={user.picture} alt="" /> : null}
+                          {user.name}
+                        </span>
+                      </td>
+                      <td>{user.email}</td>
+                      <td>{formatDate(user.firstLoginAt)}</td>
+                      <td>{formatDate(user.lastLoginAt)}</td>
+                      <td>{user.loginCount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </>
         )}
       </SectionBlock>
@@ -160,73 +171,6 @@ export default function AdminPage() {
                 <small>
                   {item.ownerEmail || item.ownerName || '—'} • {formatDate(item.createdAt)}
                 </small>
-              </article>
-            ))}
-          </div>
-        )}
-      </SectionBlock>
-
-      <SectionBlock
-        id="fila-aprovacao"
-        eyebrow="Prioridade"
-        title={`Aprovar anúncios (${pendingListings.length})`}
-        subtitle="Revise fotos e perfil — rejeite fotos pessoais ou conteúdo inválido."
-      >
-        {pendingListings.length === 0 ? (
-          <div className="empty-state panel-card">
-            <p>Nenhum anúncio pendente.</p>
-          </div>
-        ) : (
-          <div className="admin-pending-list">
-            {pendingListings.map((listing) => (
-              <article className="admin-pending-card panel-card" key={listing.id}>
-                <div className="admin-pending-grid">
-                  <div className="preview-strip compact">
-                    {listing.photos?.slice(0, 4).map((photo, index) => (
-                      <img src={photo} alt={`Foto ${index + 1}`} key={`${listing.id}-p-${index}`} />
-                    ))}
-                  </div>
-                  <div>
-                    <div className="listing-meta">
-                      <span className="status-pill status-pending">Pendente</span>
-                      <span>{listing.category}</span>
-                      <span>{listing.operation}</span>
-                    </div>
-                    <strong>{listing.title}</strong>
-                    <p>
-                      {listing.neighborhood} — {formatKz(listing.price)}
-                    </p>
-                    <p className="admin-owner-line">
-                      {listing.ownerName} • {listing.ownerType} • {listing.phone}
-                      {listing.ownerEmail ? ` • ${listing.ownerEmail}` : ''}
-                    </p>
-                    <p>{listing.description}</p>
-                  </div>
-                </div>
-                <label>
-                  Motivo de rejeição (opcional)
-                  <input
-                    placeholder="Ex.: fotos pessoais, não é imóvel..."
-                    value={rejectReason[listing.id] || ''}
-                    onChange={(event) =>
-                      setRejectReason((current) => ({
-                        ...current,
-                        [listing.id]: event.target.value,
-                      }))
-                    }
-                  />
-                </label>
-                <div className="admin-actions">
-                  <button className="button primary" type="button" onClick={() => approveListing(listing.id)}>
-                    Aprovar e publicar
-                  </button>
-                  <button className="button filter-button" type="button" onClick={() => handleReject(listing.id)}>
-                    Rejeitar
-                  </button>
-                  <button type="button" onClick={() => deleteListing(listing.id)}>
-                    Apagar
-                  </button>
-                </div>
               </article>
             ))}
           </div>

@@ -120,22 +120,27 @@ export default function PublishSubmittedPage() {
 
         <div className="pending-next-steps panel-card">
           <strong>O que acontece a seguir?</strong>
-          {isPending ? (
+          {isApproved ? (
+            <p>O anúncio está activo e já aparece em Arrendar e Comprar.</p>
+          ) : isRejected ? (
+            <p>Corrija fotos e descrição e publique novamente em Publicar anúncio.</p>
+          ) : (
             <ol>
               <li>O administrador vê o pedido no painel de moderação.</li>
               <li>Se estiver conforme, clica em Aprovar e o anúncio fica público.</li>
               <li>Recebe uma mensagem (email demo) a confirmar a publicação.</li>
             </ol>
-          ) : isApproved ? (
-            <p>O anúncio está activo. Pode partilhar o link ou gerir na sua conta.</p>
-          ) : (
-            <p>Corrija fotos e descrição e publique novamente em Publicar anúncio.</p>
           )}
           <div className="add-property-success-actions">
             {isApproved ? (
-              <Link className="button primary" to={`/anuncio/${listing.id}`}>
-                Ver anúncio publicado
-              </Link>
+              <>
+                <Link className="button primary" to={`/anuncio/${listing.id}`}>
+                  Ver anúncio publicado
+                </Link>
+                <Link className="button filter-button" to="/arrendar">
+                  Ver no catálogo
+                </Link>
+              </>
             ) : isRejected ? (
               <Link className="button primary" to="/publicar">
                 Enviar novo anúncio

@@ -1,4 +1,15 @@
 export function LocationStep({ draft, provinces, bairros, onChange }) {
+  function handleProvinceChange(province) {
+    const municipality = provinces[province]?.[0] || ''
+    const neighborhood = bairros[municipality]?.[0] || ''
+    onChange({ province, municipality, neighborhood })
+  }
+
+  function handleMunicipalityChange(municipality) {
+    const neighborhood = bairros[municipality]?.[0] || ''
+    onChange({ municipality, neighborhood })
+  }
+
   return (
     <section className="publish-step panel-card publish-step-animate">
       <header className="publish-step-header">
@@ -8,7 +19,7 @@ export function LocationStep({ draft, provinces, bairros, onChange }) {
       <div className="form-row">
         <label>
           Província
-          <select value={draft.province} onChange={(event) => onChange({ province: event.target.value })}>
+          <select value={draft.province} onChange={(event) => handleProvinceChange(event.target.value)}>
             {Object.keys(provinces).map((province) => (
               <option key={province}>{province}</option>
             ))}
@@ -18,7 +29,7 @@ export function LocationStep({ draft, provinces, bairros, onChange }) {
           Município
           <select
             value={draft.municipality}
-            onChange={(event) => onChange({ municipality: event.target.value })}
+            onChange={(event) => handleMunicipalityChange(event.target.value)}
           >
             {(provinces[draft.province] || []).map((municipality) => (
               <option key={municipality}>{municipality}</option>

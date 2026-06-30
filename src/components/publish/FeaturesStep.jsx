@@ -5,11 +5,12 @@ const AMENITY_OPTIONS = ['Estacionamento', 'Segurança 24h', 'Elevador', 'Piscin
 export function FeaturesStep({ draft, onChange }) {
   const vehicle = isVehicleCategory(draft.listingCategory)
   const withRooms = isPropertyWithRooms(draft.listingCategory)
+  const amenities = draft.amenities || []
 
   function toggleAmenity(item) {
-    const next = draft.amenities.includes(item)
-      ? draft.amenities.filter((value) => value !== item)
-      : [...draft.amenities, item]
+    const next = amenities.includes(item)
+      ? amenities.filter((value) => value !== item)
+      : [...amenities, item]
     onChange({ amenities: next })
   }
 
@@ -103,7 +104,7 @@ export function FeaturesStep({ draft, onChange }) {
               <button
                 key={item}
                 type="button"
-                className={draft.amenities.includes(item) ? 'selected' : ''}
+                className={amenities.includes(item) ? 'selected' : ''}
                 onClick={() => toggleAmenity(item)}
               >
                 {item}
