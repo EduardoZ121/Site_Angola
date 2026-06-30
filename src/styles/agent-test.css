@@ -209,6 +209,26 @@
   color: #991b1b;
 }
 
+.admin-agent-review {
+  margin-top: var(--space-2);
+}
+
+.admin-agent-review-list {
+  display: grid;
+  font-size: var(--font-size-xs);
+  gap: 6px;
+  margin: var(--space-2) 0 0;
+  padding-left: 18px;
+}
+
+.admin-agent-review-list .ok {
+  color: #166534;
+}
+
+.admin-agent-review-list .bad {
+  color: #991b1b;
+}
+
 @media (min-width: 640px) {
   .agent-test-result {
     grid-template-columns: auto 1fr;
