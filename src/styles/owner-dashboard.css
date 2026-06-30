@@ -85,6 +85,25 @@
   justify-content: space-between;
 }
 
+.owner-reject-reason {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  padding: var(--space-3);
+}
+
+.owner-reject-reason strong {
+  color: #991b1b;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.owner-reject-reason p {
+  color: #7f1d1d;
+  margin: 0;
+}
+
 .owner-listing-stats {
   color: var(--color-text-muted);
   display: flex;

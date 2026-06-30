@@ -71,6 +71,31 @@
 .nav-link.subtle { color: rgba(255, 255, 255, 0.65); font-size: 15px; font-weight: 600; }
 .nav-link.active, .nav-link:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
 .site-header-inner-page .nav-link.active, .site-header-inner-page .nav-link:hover { background: #eef7e8; color: #0f6a49; }
+
+.nav-link {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+}
+
+.nav-badge {
+  background: #dc2626;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+  min-width: 18px;
+  padding: 3px 6px;
+  text-align: center;
+}
+
+.mobile-nav-row-label {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+}
+
 .page-main { min-height: 60vh; }
 .page-intro {
   background: linear-gradient(155deg, #141a17 0%, #1f2a25 45%, #2d3832 100%);

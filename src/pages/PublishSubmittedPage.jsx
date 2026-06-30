@@ -78,6 +78,18 @@ export default function PublishSubmittedPage() {
         </div>
       </SectionBlock>
 
+      {isRejected ? (
+        <SectionBlock id="motivo" eyebrow="Acção necessária" title="Motivo da rejeição">
+          <div className="owner-reject-reason panel-card">
+            <p>{listing.rejectReason || 'Conteúdo não conforme com as regras Kuteka.'}</p>
+            <p>Corrija fotos, descrição ou preço e reenvie para nova revisão.</p>
+            <Link className="button primary" to={`/painel/editar/${listing.id}`}>
+              Corrigir e reenviar
+            </Link>
+          </div>
+        </SectionBlock>
+      ) : null}
+
       <SectionBlock id="perfil" eyebrow="Anunciante" title="Perfil enviado para revisão">
         <div className="profile-review-card panel-card">
           <div className="profile-review-head">
@@ -123,7 +135,7 @@ export default function PublishSubmittedPage() {
           {isApproved ? (
             <p>O anúncio está activo e já aparece em Arrendar e Comprar.</p>
           ) : isRejected ? (
-            <p>Corrija fotos e descrição e publique novamente em Publicar anúncio.</p>
+            <p>Corrija o anúncio com base no motivo acima e clique em «Corrigir e reenviar».</p>
           ) : (
             <ol>
               <li>O administrador vê o pedido no painel de moderação.</li>
@@ -142,9 +154,14 @@ export default function PublishSubmittedPage() {
                 </Link>
               </>
             ) : isRejected ? (
-              <Link className="button primary" to="/publicar">
-                Enviar novo anúncio
-              </Link>
+              <>
+                <Link className="button primary" to={`/painel/editar/${listing.id}`}>
+                  Corrigir e reenviar
+                </Link>
+                <Link className="button filter-button" to="/painel">
+                  Ir ao painel
+                </Link>
+              </>
             ) : null}
             <Link className="button filter-button" to="/painel">
               Ir ao painel

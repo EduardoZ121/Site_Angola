@@ -745,6 +745,11 @@
   min-width: 120px;
 }
 
+.publish-bottom-next:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 /* Validação + media (legado) */
 .publish-validation {
   animation: publishSlideDown 0.3s ease;

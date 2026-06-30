@@ -1,7 +1,16 @@
 import { NavLink } from 'react-router-dom'
 import { HomeIcon } from './icons/HomeIcon'
 
-function NavRow({ to, icon, children, onClick, end = false }) {
+function NavBadge({ count }) {
+  if (!count || count <= 0) return null
+  return (
+    <span className="nav-badge" aria-label={`${count} pendente${count === 1 ? '' : 's'}`}>
+      {count > 99 ? '99+' : count}
+    </span>
+  )
+}
+
+function NavRow({ to, icon, children, onClick, end = false, badge = 0 }) {
   return (
     <li>
       <NavLink
@@ -13,7 +22,10 @@ function NavRow({ to, icon, children, onClick, end = false }) {
         <span className="mobile-nav-row-icon" aria-hidden="true">
           <HomeIcon name={icon} />
         </span>
-        <span className="mobile-nav-row-label">{children}</span>
+        <span className="mobile-nav-row-label">
+          {children}
+          <NavBadge count={badge} />
+        </span>
       </NavLink>
     </li>
   )
@@ -41,6 +53,7 @@ export function MobileNavDrawer({
   profile,
   favoritesCount,
   compareCount,
+  staffBadges,
   onLogout,
 }) {
   const initials = profile.name
@@ -140,12 +153,12 @@ export function MobileNavDrawer({
 
           <ul className="mobile-nav-list">
             {isAdmin ? (
-              <NavRow to="/admin" icon="shield" onClick={onClose}>
+              <NavRow to="/admin" icon="shield" onClick={onClose} badge={staffBadges?.adminTotal}>
                 Administrador
               </NavRow>
             ) : null}
             {isAgent ? (
-              <NavRow to="/agente" icon="message" onClick={onClose}>
+              <NavRow to="/agente" icon="message" onClick={onClose} badge={staffBadges?.pendingListings}>
                 Agente
               </NavRow>
             ) : null}

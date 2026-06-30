@@ -190,8 +190,10 @@ export default function AccountPage() {
               Telefone (+244...)
               <input
                 value={profile.phone}
+                placeholder="+244 923 456 789"
                 onChange={(event) => setProfile((current) => ({ ...current, phone: event.target.value }))}
               />
+              <small>Obrigatório para publicar anúncios — número móvel angolano (9XX).</small>
             </label>
             <label>
               Tipo de conta

@@ -1,13 +1,16 @@
 import { Link } from 'react-router-dom'
 import { HomeIcon } from '../icons/HomeIcon'
+import { isValidAngolaPhone } from '../../utils/profile'
 
 export function PublishProfileAlert({ profile }) {
-  if (profile.name && profile.phone) return null
+  if (profile.name?.trim() && isValidAngolaPhone(profile.phone)) return null
 
-  const needsPhone = !profile.phone
-  const message = needsPhone
-    ? 'Para publicar um anúncio precisamos apenas do seu telefone.'
-    : 'Falta o seu nome para identificar o anúncio junto dos compradores.'
+  const needsPhone = !profile.phone?.trim() || !isValidAngolaPhone(profile.phone)
+  const message = !profile.name?.trim()
+    ? 'Indique o seu nome para identificar o anúncio junto dos compradores.'
+    : !profile.phone?.trim()
+      ? 'Para publicar precisamos do seu telefone angolano (+244 9XX XXX XXX).'
+      : 'Telefone inválido — use um número móvel angolano com 9 dígitos.'
 
   return (
     <div className="publish-alert-card" role="alert">

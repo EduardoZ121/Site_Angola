@@ -23,6 +23,7 @@ export function OwnerListingCard({
   const isActive = listing.status === 'Ativo'
   const isPaused = listing.status === 'Pausado'
   const isPending = listing.status === 'Pendente'
+  const isRejected = listing.status === 'Rejeitado'
   const canEdit = !isPending
 
   return (
@@ -38,6 +39,13 @@ export function OwnerListingCard({
           </div>
           <ListingStatusBadge listing={listing} />
         </div>
+
+        {isRejected && listing.rejectReason ? (
+          <div className="owner-reject-reason" role="alert">
+            <strong>Motivo da rejeição</strong>
+            <p>{listing.rejectReason}</p>
+          </div>
+        ) : null}
 
         <div className="owner-listing-stats">
           <span>{listing.views || 0} visualizações</span>
@@ -56,6 +64,11 @@ export function OwnerListingCard({
           ) : isPending ? (
             <Link className="button ghost" to={`/publicar/enviado/${listing.id}`}>
               Ver pedido
+            </Link>
+          ) : null}
+          {isRejected ? (
+            <Link className="button primary" to={`/painel/editar/${listing.id}`}>
+              Corrigir e reenviar
             </Link>
           ) : null}
           {canEdit ? (
@@ -91,7 +104,7 @@ export function OwnerListingCard({
               Arquivar
             </button>
           ) : null}
-          {listing.status === 'Rejeitado' ? (
+          {isRejected ? (
             <button type="button" className="button ghost danger-text" onClick={() => onDelete(listing.id)}>
               Eliminar
             </button>

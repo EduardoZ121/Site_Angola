@@ -11,7 +11,7 @@ import {
   userRoles,
   defaultBuyerPrefs,
 } from '../data/constants'
-import { trustSealFromProfile } from '../utils/format'
+import { isProfileReadyToPublish } from '../utils/profile'
 import { parseGoogleCredential } from '../utils/googleAuth'
 import { draftToRawListing } from '../utils/publishDraft'
 import { rawListingToPublishDraft } from '../utils/ownerListing'
@@ -208,6 +208,22 @@ export function MarketplaceProvider({ children }) {
     }),
     [listings],
   )
+
+  const staffBadges = useMemo(() => {
+    const pendingListings = listings.filter((listing) => isListingPending(listing)).length
+    const agentQueue = agentApplications.filter((item) =>
+      [
+        AGENT_APPLICATION_STATUS.SUBMITTED,
+        AGENT_APPLICATION_STATUS.INVITED,
+        AGENT_APPLICATION_STATUS.PASSED,
+      ].includes(item.status),
+    ).length
+    return {
+      pendingListings,
+      agentQueue,
+      adminTotal: pendingListings + agentQueue,
+    }
+  }, [listings, agentApplications])
 
   function updateListingField(key, value) {
     setListingForm((prev) => {
@@ -487,17 +503,21 @@ export function MarketplaceProvider({ children }) {
     const existing = listings.find((item) => item.id === listingId)
     if (!existing || !isListingOwner(existing)) return null
     const payload = draftToRawListing(draft, profile)
-    const needsReview = existing.status === 'Ativo'
+    const wasRejected = existing.status === 'Rejeitado'
+    const needsReview = existing.status === 'Ativo' || wasRejected
     updateListing(listingId, {
       ...payload,
       id: listingId,
       status: needsReview ? 'Pendente' : existing.status,
       listingStatus: needsReview ? LISTING_STATUS.UNDER_REVIEW : existing.listingStatus,
       updatedAt: new Date().toISOString(),
+      submittedAt: needsReview ? new Date().toISOString() : existing.submittedAt,
       views: existing.views || 0,
       featured: existing.featured,
       featuredUntil: existing.featuredUntil,
       approvedAt: needsReview ? undefined : existing.approvedAt,
+      rejectReason: wasRejected ? undefined : existing.rejectReason,
+      rejectedAt: wasRejected ? undefined : existing.rejectedAt,
     })
     if (needsReview) {
       addNotification({
@@ -505,15 +525,26 @@ export function MarketplaceProvider({ children }) {
         listingId,
         ownerName: profile.name,
         ownerEmail: profile.email || '',
-        title: 'Alterações enviadas para revisão',
-        body: `O anúncio "${payload.title}" será revisto antes de voltar a ficar público.`,
+        title: wasRejected ? 'Anúncio corrigido — nova revisão' : 'Alterações enviadas para revisão',
+        body: wasRejected
+          ? `O anúncio "${payload.title}" foi reenviado e aguarda aprovação.`
+          : `O anúncio "${payload.title}" será revisto antes de voltar a ficar público.`,
       })
+      if (wasRejected) {
+        addNotification({
+          type: 'staff_listing_pending',
+          audience: 'staff',
+          listingId,
+          title: 'Anúncio reenviado após rejeição',
+          body: `"${payload.title}" de ${profile.name} voltou à fila de aprovação.`,
+        })
+      }
     }
     return listingId
   }
 
   function submitListingDraft(draft) {
-    if (!profile.name || !profile.phone) return null
+    if (!isProfileReadyToPublish(profile)) return null
     const payload = draftToRawListing(draft, profile)
     setListings((prev) => [payload, ...prev])
 
@@ -1018,6 +1049,7 @@ export function MarketplaceProvider({ children }) {
     listingForm,
     setListingForm,
     adminStats,
+    staffBadges,
     accountTypes,
     provinces,
     bairros,

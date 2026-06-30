@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useMarketplace } from '../../context/MarketplaceContext'
 import { usePublishWizard } from '../../hooks/usePublishWizard'
+import { getProfilePublishErrors, isProfileReadyToPublish } from '../../utils/profile'
 import { clearPublishDraft, PUBLISH_DRAFT_KEY, validateAllPublishSteps } from '../../utils/publishDraft'
 import { PublishAutosaveStatus } from './PublishAutosaveStatus'
 import { PublishBottomBar } from './PublishBottomBar'
@@ -49,15 +50,18 @@ export function PublishWizard({ editListingId }) {
       wizard.setErrors(stepErrors)
       return
     }
-    if (!profile.name || !profile.phone) {
-      wizard.setErrors(['Complete o perfil (nome e telefone) em Minha conta.'])
+    const profileErrors = getProfilePublishErrors(profile)
+    if (profileErrors.length) {
+      wizard.setErrors(profileErrors)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
     if (editListingId) {
+      const wasRejected = listing?.status === 'Rejeitado'
       const updatedId = updateOwnerListing(editListingId, draft)
       if (updatedId) {
         localStorage.removeItem(`${PUBLISH_DRAFT_KEY}.${editListingId}`)
-        navigate('/painel')
+        navigate(wasRejected ? `/publicar/enviado/${editListingId}` : '/painel')
       }
       return
     }
@@ -94,6 +98,7 @@ export function PublishWizard({ editListingId }) {
   }
 
   const isLast = stepIndex === steps.length - 1
+  const profileReady = isProfileReadyToPublish(profile)
 
   return (
     <div className="publish-wizard">
@@ -134,6 +139,10 @@ export function PublishWizard({ editListingId }) {
         onPublish={handlePublish}
         editMode={Boolean(editListingId)}
         canGoBack={stepIndex > 0}
+        publishDisabled={isLast && !profileReady}
+        publishLabel={
+          editListingId && listing?.status === 'Rejeitado' ? 'Reenviar para revisão →' : undefined
+        }
       />
     </div>
   )

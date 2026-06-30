@@ -8,6 +8,8 @@ export function PublishBottomBar({
   onPublish,
   editMode,
   canGoBack,
+  publishDisabled = false,
+  publishLabel,
 }) {
   return (
     <footer className="publish-bottom-bar">
@@ -24,8 +26,14 @@ export function PublishBottomBar({
         </div>
 
         {isLast ? (
-          <button type="button" className="button primary publish-bottom-next" onClick={onPublish}>
-            {editMode ? 'Guardar alterações' : 'Publicar anúncio →'}
+          <button
+            type="button"
+            className="button primary publish-bottom-next"
+            onClick={onPublish}
+            disabled={publishDisabled}
+            title={publishDisabled ? 'Complete nome e telefone em Minha conta' : undefined}
+          >
+            {editMode ? publishLabel || 'Guardar alterações' : publishLabel || 'Publicar anúncio →'}
           </button>
         ) : (
           <button type="button" className="button primary publish-bottom-next" onClick={onNext}>

@@ -19,7 +19,8 @@ const accountNav = [
 ]
 
 export function Layout() {
-  const { favorites, compare, profile, isLoggedIn, isAdmin, isAgent, logoutAccount } = useMarketplace()
+  const { favorites, compare, profile, isLoggedIn, isAdmin, isAgent, staffBadges, logoutAccount } =
+    useMarketplace()
   const location = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
   const [headerScrolled, setHeaderScrolled] = useState(false)
@@ -119,6 +120,9 @@ export function Layout() {
                   className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
                 >
                   Administrador
+                  {staffBadges.adminTotal > 0 ? (
+                    <span className="nav-badge">{staffBadges.adminTotal > 99 ? '99+' : staffBadges.adminTotal}</span>
+                  ) : null}
                 </NavLink>
               ) : null}
               {isAgent ? (
@@ -127,6 +131,11 @@ export function Layout() {
                   className={({ isActive }) => (isActive ? 'nav-link subtle active' : 'nav-link subtle')}
                 >
                   Agente
+                  {staffBadges.pendingListings > 0 ? (
+                    <span className="nav-badge">
+                      {staffBadges.pendingListings > 99 ? '99+' : staffBadges.pendingListings}
+                    </span>
+                  ) : null}
                 </NavLink>
               ) : null}
               {accountNav.map((item) => (
@@ -159,6 +168,7 @@ export function Layout() {
         profile={profile}
         favoritesCount={favorites.length}
         compareCount={compare.length}
+        staffBadges={staffBadges}
         onLogout={logoutAccount}
       />
 
