@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 220" role="img" aria-labelledby="title desc">
   <title id="title">Kuteka</title>
   <desc id="desc">Logo Kuteka com simbolo K, casa e janela</desc>
-  <rect width="620" height="220" rx="30" fill="#ffffff"/>
   <g transform="translate(58 28)">
     <path
       d="M15 102 78 38v45l66-66h78l-83 84 91 91h-82l-70-70v70H15V102Z"
