@@ -31,7 +31,13 @@
 
 ---
 
-## Alterações recentes (mobile homepage)
+## Alterações recentes (mobile)
+
+### Login / cadastro (`/entrar`, `/cadastro`)
+- **Bug:** `App.css` tinha CSS Facebook (azul) que anulava `auth.css` — login não mudava.
+- **Telemóvel:** formulário primeiro; logo pequeno; botão dourado Kuteka.
+
+### Homepage `/inicio`
 
 - Hero deixa de ocupar ecrã inteiro no telemóvel (`min-height: auto` no shell).
 - Padding das secções reduzido (56px → 32px / 24px).
