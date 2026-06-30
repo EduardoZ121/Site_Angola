@@ -26,7 +26,7 @@ jobs:
           cache: npm
 
       - name: Install and build
-        run: npm ci && npm run build
+        run: npm install && npm run build
         env:
           VITE_GOOGLE_CLIENT_ID: 17788689781-3laohdt607lr8jnh30fatvqtji6htt3l.apps.googleusercontent.com
 
