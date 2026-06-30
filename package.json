@@ -16,6 +16,7 @@
     "mongo:host": "node scripts/set-mongo-host.js",
     "mongo:uri": "node scripts/set-mongo-uri.js",
     "aws:provision": "powershell -ExecutionPolicy Bypass -File scripts/aws-provision-kuteka.ps1",
+    "mongo:provision": "powershell -ExecutionPolicy Bypass -File scripts/aws-provision-mongo-ec2.ps1",
     "lint": "eslint .",
     "preview": "vite preview"
   },

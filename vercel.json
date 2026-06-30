@@ -1,0 +1,1 @@
+{"buildCommand":"echo api-only","installCommand":"npm install","experimentalServices":{"kuteka-api":{"entrypoint":"server.js","mount":"/"}}}

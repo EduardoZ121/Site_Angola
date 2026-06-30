@@ -1,0 +1,8 @@
+{
+  "experimentalServices": {
+    "kuteka-api": {
+      "entrypoint": "server.js",
+      "mount": "/"
+    }
+  }
+}

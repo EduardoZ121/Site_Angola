@@ -2,6 +2,8 @@ import { Router } from 'express'
 import mongoose from 'mongoose'
 import { env, getMissingProductionVars } from '../config/env.js'
 import { isOpenAiConfigured } from '../services/openai.js'
+import { Listing } from '../models/Listing.js'
+import { starterListings } from '../../../src/data/constants.js'
 
 const router = Router()
 
@@ -21,6 +23,26 @@ router.get('/', (_req, res) => {
     },
     missingProductionVars: env.nodeEnv === 'production' ? getMissingProductionVars() : [],
   })
+})
+
+router.post('/seed', async (req, res) => {
+  if (req.headers['x-seed-key'] !== env.jwtSecret) {
+    return res.status(403).json({ ok: false, error: 'Forbidden' })
+  }
+  if (mongoose.connection.readyState !== 1) {
+    return res.status(503).json({ ok: false, error: 'MongoDB indisponivel' })
+  }
+  const count = await Listing.countDocuments()
+  if (count > 0) {
+    return res.json({ ok: true, seeded: 0, message: `Ja existem ${count} anuncios` })
+  }
+  await Listing.insertMany(
+    starterListings.map((item) => {
+      const { id, ...rest } = item
+      return { ...rest, legacyId: id, favoriteCount: 0, status: 'Ativo' }
+    }),
+  )
+  res.json({ ok: true, seeded: starterListings.length })
 })
 
 export default router

@@ -3,8 +3,10 @@ import { fileURLToPath } from 'url'
 import path from 'path'
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..')
-config({ path: path.join(rootDir, '.env') })
-config({ path: path.join(rootDir, '.env.local'), override: true })
+if (!process.env.VERCEL) {
+  config({ path: path.join(rootDir, '.env') })
+  config({ path: path.join(rootDir, '.env.local'), override: true })
+}
 
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',

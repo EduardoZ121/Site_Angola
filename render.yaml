@@ -11,7 +11,7 @@ services:
       - key: VITE_GOOGLE_CLIENT_ID
         value: 17788689781-3laohdt607lr8jnh30fatvqtji6htt3l.apps.googleusercontent.com
       - key: VITE_API_URL
-        value: https://kuteka-api.onrender.com/api
+        value: https://kuteka-api.vercel.app/api
     domains:
       - kutekalink.com
       - www.kutekalink.com

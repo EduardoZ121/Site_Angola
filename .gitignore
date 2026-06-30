@@ -9,3 +9,5 @@ backend/uploads
 *.log
 aws-login.log
 atlas-login.log
+.mongo-ec2.json
+.vercel
