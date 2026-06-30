@@ -114,5 +114,20 @@ export function getSimilarListings(listings, current, limit = 4) {
         item.category === current.category &&
         (item.status === 'Ativo' || isListingPublic(item.listingStatus || item.status)),
     )
+    .map((item) => ({ item, score: scoreSimilarity(item, current) }))
+    .sort((a, b) => b.score - a.score)
+    .map(({ item }) => item)
     .slice(0, limit)
+}
+
+function scoreSimilarity(item, current) {
+  let score = 0
+  if (item.operation === current.operation) score += 4
+  if (item.province === current.province) score += 3
+  if (item.municipality === current.municipality) score += 2
+  if (item.neighborhood === current.neighborhood) score += 1
+  if (item.propertyType && item.propertyType === current.propertyType) score += 2
+  if (item.category === 'Veículo' && item.brand && item.brand === current.brand) score += 2
+  if (item.featured) score += 1
+  return score
 }

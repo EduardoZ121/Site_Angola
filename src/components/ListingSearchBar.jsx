@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { activeFilterCount, filtersToSearchParams } from '../utils/filters'
 
-export function ListingSearchBar({ filters, filtersPath, onSearch }) {
+export function ListingSearchBar({ filters, filtersPath, onSearch, placeholder = 'Bairro, zona, título do imóvel...' }) {
   const [query, setQuery] = useState(filters.query || '')
   const filterCount = activeFilterCount(filters, {
     category: filters.category,
@@ -26,7 +26,7 @@ export function ListingSearchBar({ filters, filtersPath, onSearch }) {
         <label className="listing-search-field">
           <span className="sr-only">Pesquisar</span>
           <input
-            placeholder="Bairro, zona, título do imóvel..."
+            placeholder={placeholder}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />

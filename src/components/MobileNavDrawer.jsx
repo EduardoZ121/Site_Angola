@@ -158,7 +158,7 @@ export function MobileNavDrawer({
               </NavRow>
             ) : null}
             {isAgent ? (
-              <NavRow to="/agente" icon="message" onClick={onClose} badge={staffBadges?.pendingListings}>
+              <NavRow to="/agente" icon="message" onClick={onClose} badge={staffBadges?.agentTotal}>
                 Agente
               </NavRow>
             ) : null}

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { homeOwnerSteps, homeSteps } from '../../data/homeContent'
 import { HomeIcon } from '../icons/HomeIcon'
 
@@ -24,6 +25,11 @@ export function HowItWorksSection({ hideHead = false }) {
                   </span>
                   <h4>{step.title}</h4>
                   <p>{step.description}</p>
+                  {step.to && step.actionLabel ? (
+                    <Link className="hp-step-link text-button" to={step.to}>
+                      {step.actionLabel}
+                    </Link>
+                  ) : null}
                 </article>
               ))}
             </div>
@@ -39,6 +45,11 @@ export function HowItWorksSection({ hideHead = false }) {
                   </span>
                   <h4>{step.title}</h4>
                   <p>{step.description}</p>
+                  {step.to && step.actionLabel ? (
+                    <Link className="hp-step-link text-button" to={step.to}>
+                      {step.actionLabel}
+                    </Link>
+                  ) : null}
                 </article>
               ))}
             </div>

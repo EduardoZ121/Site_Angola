@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { AuthDivider } from '../components/auth/AuthDivider'
 import { AuthFormField } from '../components/auth/AuthFormField'
+import { AuthGuestLink } from '../components/auth/AuthGuestLink'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { AuthNavLinks } from '../components/auth/AuthNavLinks'
 import { GoogleAuthButton } from '../components/GoogleAuthButton'
@@ -9,17 +10,24 @@ import { buildAuthPath, useAuthRedirect } from '../hooks/useAuthRedirect'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { validateRegistration } from '../services/authService'
 
+const PASSWORD_TIP =
+  'Mínimo 6 caracteres. Use letras e números para uma senha mais segura.'
+
 export default function SignupPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { isLoggedIn, registerWithEmail, loginWithGoogle } = useMarketplace()
-  useAuthRedirect()
+  const { redirectParam } = useAuthRedirect()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    document.title = 'Criar conta | Kuteka'
+  }, [])
 
   useEffect(() => {
     if (searchParams.get('mode') === 'entrar') {
@@ -48,13 +56,13 @@ export default function SignupPage() {
 
   if (isLoggedIn) return null
 
-  const loginPath = buildAuthPath('/entrar')
+  const loginPath = buildAuthPath('/entrar', redirectParam)
 
   return (
     <AuthLayout
       title="Crie gratuitamente a sua conta Kuteka"
       subtitle="Sem custos. Leva menos de 1 minuto. Depois escolhe o perfil quando quiser publicar ou procurar."
-      footnote="Ao cadastrar, concorda com as regras do marketplace Kuteka para anúncios em Angola."
+      redirectPath={redirectParam}
     >
       <form className="auth-facebook-form" onSubmit={handleSubmit}>
         <AuthFormField
@@ -84,6 +92,7 @@ export default function SignupPage() {
           placeholder="Mínimo 6 caracteres"
           autoComplete="new-password"
           minLength={6}
+          tip={PASSWORD_TIP}
         />
         <AuthFormField
           id="signup-confirm"
@@ -108,6 +117,8 @@ export default function SignupPage() {
       <GoogleAuthButton onCredential={handleGoogleCredential} label="Continuar com Google" />
 
       <AuthNavLinks primary={{ to: loginPath, label: 'Já tem conta? Entrar' }} />
+
+      <AuthGuestLink />
     </AuthLayout>
   )
 }

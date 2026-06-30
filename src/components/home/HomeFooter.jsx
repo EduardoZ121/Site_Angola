@@ -25,28 +25,34 @@ export function HomeFooter() {
           <strong>Empresa</strong>
           <Link to="/sobre">Sobre a Kuteka</Link>
           <Link to="/precos">Preços por zona</Link>
-          <span className="hp-footer-soon">Blog — Em breve</span>
+          <Link to="/explorar">Explorar categorias</Link>
         </div>
         <div>
           <strong>Ajuda</strong>
+          <Link to="/como-funciona">Como funciona</Link>
           <Link to="/entrar">Entrar</Link>
           <Link to="/cadastro">Criar conta</Link>
-          <span className="hp-footer-soon">Centro de ajuda — Em breve</span>
+          <Link to="/conta">Minha conta</Link>
         </div>
         <div>
-          <strong>Contacto</strong>
-          <a href="mailto:contacto@kutekalink.com">contacto@kutekalink.com</a>
+          <strong>Legal</strong>
+          <Link to="/sobre#termos">Termos de uso</Link>
+          <Link to="/sobre#privacidade">Privacidade</Link>
+          <a href="mailto:contacto@kutekalink.com">Contacto</a>
+        </div>
+        <div>
+          <strong>Redes</strong>
           <a href="https://wa.me/244923000000" target="_blank" rel="noreferrer">
             WhatsApp
           </a>
-          <span className="hp-footer-soon">Facebook • Instagram</span>
+          <span className="hp-footer-soon">Facebook e Instagram — em breve</span>
         </div>
       </div>
       <div className="hp-container hp-footer-bottom">
         <span>© {new Date().getFullYear()} Kuteka. Todos os direitos reservados.</span>
         <div className="hp-footer-legal">
-          <span>Termos de uso</span>
-          <span>Privacidade</span>
+          <Link to="/sobre#termos">Termos</Link>
+          <Link to="/sobre#privacidade">Privacidade</Link>
         </div>
       </div>
     </footer>

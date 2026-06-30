@@ -12,6 +12,9 @@ import {
   defaultBuyerPrefs,
 } from '../data/constants'
 import { isProfileReadyToPublish } from '../utils/profile'
+import { trustSealFromProfile } from '../utils/format'
+import { VISIT_STATUS } from '../constants/visits'
+import { createVisitId, formatVisitLocation } from '../utils/visits'
 import { parseGoogleCredential } from '../utils/googleAuth'
 import { draftToRawListing } from '../utils/publishDraft'
 import { rawListingToPublishDraft } from '../utils/ownerListing'
@@ -80,7 +83,14 @@ export function MarketplaceProvider({ children }) {
       return {}
     }
   })
-  const [compare, setCompare] = useState([])
+  const [compare, setCompare] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.compare)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
   const [listingForm, setListingForm] = useState(emptyListing)
   const [siteUsers, setSiteUsers] = useState(() => {
     try {
@@ -125,6 +135,14 @@ export function MarketplaceProvider({ children }) {
   const [agentApplications, setAgentApplications] = useState(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEYS.agentApplications)
+      return raw ? JSON.parse(raw) : []
+    } catch {
+      return []
+    }
+  })
+  const [scheduledVisits, setScheduledVisits] = useState(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEYS.scheduledVisits)
       return raw ? JSON.parse(raw) : []
     } catch {
       return []
@@ -176,6 +194,10 @@ export function MarketplaceProvider({ children }) {
   }, [agentApplications])
 
   useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.scheduledVisits, JSON.stringify(scheduledVisits))
+  }, [scheduledVisits])
+
+  useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile))
   }, [profile])
   useEffect(() => {
@@ -184,6 +206,10 @@ export function MarketplaceProvider({ children }) {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(favorites))
   }, [favorites])
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.compare, JSON.stringify(compare))
+  }, [compare])
   useEffect(() => {
     localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(history))
   }, [history])
@@ -218,12 +244,17 @@ export function MarketplaceProvider({ children }) {
         AGENT_APPLICATION_STATUS.PASSED,
       ].includes(item.status),
     ).length
+    const upcomingVisits = scheduledVisits.filter(
+      (visit) => visit.status === VISIT_STATUS.SCHEDULED && new Date(visit.scheduledAt) >= new Date(),
+    ).length
     return {
       pendingListings,
       agentQueue,
+      upcomingVisits,
       adminTotal: pendingListings + agentQueue,
+      agentTotal: pendingListings + upcomingVisits,
     }
-  }, [listings, agentApplications])
+  }, [listings, agentApplications, scheduledVisits])
 
   function updateListingField(key, value) {
     setListingForm((prev) => {
@@ -417,6 +448,10 @@ export function MarketplaceProvider({ children }) {
     setNotifications((prev) =>
       prev.map((item) => (item.id === notificationId ? { ...item, read: true } : item)),
     )
+  }
+
+  function markAllNotificationsRead() {
+    setNotifications((prev) => prev.map((item) => ({ ...item, read: true })))
   }
 
   function duplicateListing(listingId) {
@@ -654,12 +689,28 @@ export function MarketplaceProvider({ children }) {
     )
   }
 
+  function clearFavorites() {
+    setFavorites([])
+  }
+
+  function pruneStaleFavorites() {
+    setFavorites((prev) => prev.filter((id) => listings.some((listing) => listing.id === id)))
+  }
+
   function toggleCompare(id) {
     setCompare((prev) => {
       if (prev.includes(id)) return prev.filter((value) => value !== id)
       if (prev.length >= 3) return prev
       return [...prev, id]
     })
+  }
+
+  function clearCompare() {
+    setCompare([])
+  }
+
+  function pruneStaleCompare() {
+    setCompare((prev) => prev.filter((id) => listings.some((listing) => listing.id === id)))
   }
 
   function sendChat(listingId, messageText, senderName) {
@@ -686,8 +737,18 @@ export function MarketplaceProvider({ children }) {
   }
 
   function deleteListing(listingId) {
-    if (!isAdmin) return
-    setListings((prev) => prev.filter((listing) => listing.id !== listingId))
+    const listing = listings.find((item) => item.id === listingId)
+    if (!listing) return
+
+    if (isAdmin) {
+      setListings((prev) => prev.filter((item) => item.id !== listingId))
+      return
+    }
+
+    if (!isListingOwner(listing)) return
+    if (!['Rejeitado', 'Pausado'].includes(listing.status)) return
+
+    setListings((prev) => prev.filter((item) => item.id !== listingId))
   }
 
   function approveListing(listingId) {
@@ -1018,6 +1079,104 @@ export function MarketplaceProvider({ children }) {
     return findApplicationForProfile(agentApplications, profile)
   }
 
+  function scheduleVisit(payload) {
+    if (!canModerateListings) return { error: 'Sem permissão.' }
+    const listing = listings.find((item) => item.id === payload.listingId)
+    if (!listing) return { error: 'Anúncio não encontrado.' }
+
+    const when = new Date(payload.scheduledAt)
+    if (Number.isNaN(when.getTime())) return { error: 'Data inválida.' }
+
+    const visit = {
+      id: createVisitId(),
+      listingId: listing.id,
+      listingTitle: listing.title,
+      agentEmail: profile.email?.trim().toLowerCase(),
+      agentName: profile.name,
+      agentPhone: profile.phone || '',
+      ownerName: listing.ownerName,
+      ownerEmail: listing.ownerEmail || '',
+      ownerPhone: listing.phone,
+      buyerName: payload.buyerName || '',
+      buyerPhone: payload.buyerPhone || '',
+      scheduledAt: payload.scheduledAt,
+      durationMinutes: payload.durationMinutes || 60,
+      notes: payload.notes || '',
+      location: formatVisitLocation(listing),
+      status: VISIT_STATUS.SCHEDULED,
+      createdAt: new Date().toISOString(),
+    }
+
+    setScheduledVisits((prev) => [visit, ...prev])
+
+    const whenLabel = when.toLocaleString('pt-PT')
+    addNotification({
+      type: 'visit_scheduled',
+      listingId: listing.id,
+      visitId: visit.id,
+      ownerName: listing.ownerName,
+      ownerEmail: listing.ownerEmail || '',
+      title: 'Visita agendada ao seu anúncio',
+      body: `${profile.name} marcou visita para ${whenLabel} em ${visit.location}. Confirme disponibilidade.`,
+      emailSent: Boolean(listing.ownerEmail),
+    })
+
+    addNotification({
+      type: 'staff_visit_scheduled',
+      audience: 'staff',
+      visitId: visit.id,
+      title: 'Visita agendada',
+      body: `${listing.title} — ${whenLabel}`,
+    })
+
+    return { visit, listing }
+  }
+
+  function cancelVisit(visitId) {
+    if (!canModerateListings) return
+    const visit = scheduledVisits.find((item) => item.id === visitId)
+    if (!visit) return
+
+    setScheduledVisits((prev) =>
+      prev.map((item) =>
+        item.id === visitId ? { ...item, status: VISIT_STATUS.CANCELLED, cancelledAt: new Date().toISOString() } : item,
+      ),
+    )
+
+    if (visit.ownerEmail || visit.ownerName) {
+      addNotification({
+        type: 'visit_cancelled',
+        visitId,
+        ownerName: visit.ownerName,
+        ownerEmail: visit.ownerEmail,
+        title: 'Visita cancelada',
+        body: `A visita a «${visit.listingTitle}» (${new Date(visit.scheduledAt).toLocaleString('pt-PT')}) foi cancelada.`,
+        emailSent: Boolean(visit.ownerEmail),
+      })
+    }
+  }
+
+  function completeVisit(visitId) {
+    if (!canModerateListings) return
+    setScheduledVisits((prev) =>
+      prev.map((item) =>
+        item.id === visitId ? { ...item, status: VISIT_STATUS.COMPLETED, completedAt: new Date().toISOString() } : item,
+      ),
+    )
+  }
+
+  function getAgentVisits() {
+    const email = profile.email?.trim().toLowerCase()
+    if (!email) return scheduledVisits
+    return scheduledVisits.filter((visit) => visit.agentEmail === email || isAdmin)
+  }
+
+  function getMyVisits() {
+    const email = profile.email?.trim().toLowerCase()
+    if (!email) return []
+    return scheduledVisits.filter((visit) => visit.ownerEmail?.toLowerCase() === email)
+  }
+
   const value = {
     profile,
     setProfile,
@@ -1070,9 +1229,14 @@ export function MarketplaceProvider({ children }) {
     getMyListings,
     getMyNotifications,
     markNotificationRead,
+    markAllNotificationsRead,
     trackView,
     toggleFavorite,
+    clearFavorites,
+    pruneStaleFavorites,
     toggleCompare,
+    clearCompare,
+    pruneStaleCompare,
     sendChat,
     updateListing,
     deleteListing,
@@ -1089,6 +1253,12 @@ export function MarketplaceProvider({ children }) {
     adminResetAgentTest,
     getAgentApplicationByToken,
     getMyAgentApplication,
+    scheduledVisits,
+    scheduleVisit,
+    cancelVisit,
+    completeVisit,
+    getAgentVisits,
+    getMyVisits,
   }
 
   return (

@@ -1,10 +1,11 @@
 import { HomeIcon } from '../icons/HomeIcon'
 
-export function PropertyTypeGrid({ types, activeType, onSelect }) {
+export function PropertyTypeGrid({ types, activeType, onSelect, counts = {}, ariaLabel = 'Tipo de imóvel' }) {
   return (
-    <div className="catalog-type-grid" role="group" aria-label="Tipo de imóvel">
+    <div className="catalog-type-grid" role="group" aria-label={ariaLabel}>
       {types.map((item) => {
         const isActive = activeType === item.propertyType
+        const count = counts[item.propertyType]
         return (
           <button
             key={item.id}
@@ -17,6 +18,9 @@ export function PropertyTypeGrid({ types, activeType, onSelect }) {
               <HomeIcon name={item.icon} />
             </span>
             <span className="catalog-type-chip-label">{item.label}</span>
+            {count !== undefined ? (
+              <span className="catalog-type-chip-count">{count}</span>
+            ) : null}
           </button>
         )
       })}

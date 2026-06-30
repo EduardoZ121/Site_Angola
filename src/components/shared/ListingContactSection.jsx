@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HomeIcon } from '../icons/HomeIcon'
 import { AnalyticsEvents, trackEvent } from '../../services/analytics'
 import { whatsappLink } from '../../utils/format'
@@ -13,8 +13,13 @@ export function ListingContactSection({
   isFavorite,
   onFavorite,
   verifiedSeal,
+  initialChatOpen = false,
 }) {
-  const [chatOpen, setChatOpen] = useState(false)
+  const [chatOpen, setChatOpen] = useState(initialChatOpen)
+
+  useEffect(() => {
+    if (initialChatOpen) setChatOpen(true)
+  }, [initialChatOpen])
   const owner = listing.owner
   const phone = owner.phone || listing.phone
 
@@ -94,7 +99,8 @@ export function ListingContactSection({
 
       <div className="listing-contact-secondary">
         <button type="button" className="listing-contact-fav" onClick={onFavorite}>
-          {isFavorite ? '★ Guardado' : '☆ Guardar anúncio'}
+          <HomeIcon name="heart" />
+          <span>{isFavorite ? 'Guardado nos favoritos' : 'Guardar nos favoritos'}</span>
         </button>
       </div>
 

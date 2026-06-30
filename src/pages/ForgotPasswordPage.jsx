@@ -1,16 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AuthFormField } from '../components/auth/AuthFormField'
+import { AuthGuestLink } from '../components/auth/AuthGuestLink'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { AuthNavLinks } from '../components/auth/AuthNavLinks'
-import { useAuthRedirect } from '../hooks/useAuthRedirect'
+import { buildAuthPath, buildRecoveryPath, useAuthRedirect } from '../hooks/useAuthRedirect'
 import { useMarketplace } from '../context/MarketplaceContext'
+
+const PASSWORD_TIP =
+  'Mínimo 6 caracteres. Use letras e números para uma senha mais segura.'
 
 export default function ForgotPasswordPage() {
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
   const { isLoggedIn, requestPasswordReset, resetPasswordWithToken } = useMarketplace()
-  useAuthRedirect()
+  const { redirectParam } = useAuthRedirect()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -18,6 +22,10 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [demoLink, setDemoLink] = useState('')
+
+  useEffect(() => {
+    document.title = token ? 'Nova senha | Kuteka' : 'Recuperar senha | Kuteka'
+  }, [token])
 
   function handleRequest(event) {
     event.preventDefault()
@@ -32,7 +40,7 @@ export default function ForgotPasswordPage() {
     }
 
     setSuccess('Pedido recebido. Em produção enviaríamos um email com o link de recuperação.')
-    setDemoLink(`/recuperar-senha?token=${result.token}`)
+    setDemoLink(buildRecoveryPath(result.token, redirectParam))
   }
 
   function handleReset(event) {
@@ -51,11 +59,15 @@ export default function ForgotPasswordPage() {
 
   if (isLoggedIn) return null
 
+  const loginPath = buildAuthPath('/entrar', redirectParam)
+  const signupPath = buildAuthPath('/cadastro', redirectParam)
+
   if (token) {
     return (
       <AuthLayout
         title="Definir nova senha"
         subtitle="Escolha uma senha segura com pelo menos 6 caracteres."
+        redirectPath={redirectParam}
       >
         <form className="auth-facebook-form" onSubmit={handleReset}>
           <AuthFormField
@@ -67,6 +79,7 @@ export default function ForgotPasswordPage() {
             placeholder="Nova senha"
             autoComplete="new-password"
             minLength={6}
+            tip={PASSWORD_TIP}
           />
           <AuthFormField
             id="reset-confirm"
@@ -87,7 +100,7 @@ export default function ForgotPasswordPage() {
           </button>
         </form>
 
-        <AuthNavLinks primary={{ to: '/entrar', label: 'Voltar ao login' }} />
+        <AuthNavLinks primary={{ to: loginPath, label: 'Voltar ao login' }} />
       </AuthLayout>
     )
   }
@@ -96,6 +109,7 @@ export default function ForgotPasswordPage() {
     <AuthLayout
       title="Recuperar senha"
       subtitle="Indique o email da sua conta. Enviaremos instruções para redefinir a senha."
+      redirectPath={redirectParam}
     >
       <form className="auth-facebook-form" onSubmit={handleRequest}>
         <AuthFormField
@@ -127,9 +141,11 @@ export default function ForgotPasswordPage() {
       </form>
 
       <AuthNavLinks
-        primary={{ to: '/entrar', label: 'Voltar ao login' }}
-        secondary={{ to: '/cadastro', label: 'Criar conta' }}
+        primary={{ to: loginPath, label: 'Voltar ao login' }}
+        secondary={{ to: signupPath, label: 'Criar conta' }}
       />
+
+      <AuthGuestLink />
     </AuthLayout>
   )
 }

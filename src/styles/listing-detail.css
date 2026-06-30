@@ -465,6 +465,190 @@
   font-weight: 800;
 }
 
+.listing-contact-fav {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--color-brand);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  gap: 6px;
+  padding: 0;
+}
+
+.listing-contact-fav .hp-icon {
+  height: 14px;
+  width: 14px;
+}
+
+.listing-detail-toolbar {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.listing-detail-toolbar-actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.listing-detail-tool-btn {
+  align-items: center;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+  gap: 6px;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 10px;
+  text-decoration: none;
+}
+
+.listing-detail-tool-btn.active {
+  background: var(--color-brand-soft);
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.listing-detail-tool-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.listing-detail-tool-btn .hp-icon {
+  height: 16px;
+  width: 16px;
+}
+
+.listing-detail-tool-link {
+  grid-column: 1 / -1;
+}
+
+.listing-detail-share-note,
+.listing-detail-notice {
+  color: var(--color-brand);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.listing-detail-contact-cta {
+  width: 100%;
+}
+
+.listing-detail-meta-strip {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.listing-detail-meta-item {
+  align-items: center;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.listing-detail-meta-label {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.listing-detail-meta-item strong {
+  font-size: var(--font-size-sm);
+}
+
+.listing-detail-meta-link {
+  margin-left: auto;
+}
+
+.listing-detail-cross-nav {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.listing-detail-cross-label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+}
+
+.listing-detail-cross-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.listing-detail-cross-link {
+  align-items: center;
+  background: var(--color-surface-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  display: inline-flex;
+  font-size: 11px;
+  font-weight: 700;
+  gap: 6px;
+  padding: 8px 12px;
+  text-decoration: none;
+}
+
+.listing-detail-cross-link .hp-icon {
+  height: 14px;
+  width: 14px;
+}
+
+.listing-map-head {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.listing-map-head h3 {
+  margin: 0;
+}
+
+.listing-map-placeholder .hp-icon {
+  color: var(--color-brand);
+  height: 28px;
+  width: 28px;
+}
+
+.listing-similar-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.listing-similar-head h2 {
+  margin: 0;
+}
+
+@media (min-width: 560px) {
+  .listing-detail-toolbar-actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .listing-detail-tool-link {
+    grid-column: auto;
+  }
+}
+
 @media (min-width: 720px) {
   .listing-detail-wrap {
     gap: var(--space-4);

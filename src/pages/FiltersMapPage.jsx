@@ -2,10 +2,13 @@ import { useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { defaultFilters } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
 import { FiltersSidebar } from '../components/FiltersSidebar'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import { filterListings } from '../utils/format'
 import { filtersToSearchParams, searchParamsToFilters } from '../utils/filters'
+import { getCatalogSection } from '../utils/catalogConfig'
+import '../styles/catalog.css'
 
 export default function FiltersMapPage({
   title,
@@ -56,13 +59,32 @@ export default function FiltersMapPage({
     })
   }
 
+  const sectionConfig = getCatalogSection(basePath)
+  const cancelParams = filtersToSearchParams(
+    searchParamsToFilters(searchParams, {
+      category: defaultCategory,
+      operation: defaultOperation,
+    }),
+  )
+  const cancelQuery = cancelParams.toString()
+  const cancelLink = cancelQuery ? `/${basePath}?${cancelQuery}` : `/${basePath}`
+
   return (
-    <main className="page-main">
+    <main className="page-main catalog-filters-page">
       <PageIntro
         eyebrow="Pesquisa avançada"
         title={title}
         subtitle={subtitle || 'Escolha zona no mapa, ajuste filtros e confirme para ver resultados.'}
       />
+
+      <div className="section-block-inner">
+        <CatalogBreadcrumbs
+          items={[
+            { label: 'Início', to: '/inicio' },
+            { label: sectionConfig?.breadcrumbLabel || title, to: `/${basePath}` },
+            { label: 'Filtros e mapa' },
+          ]}
+        />
 
       <SectionBlock
         id="filtros-mapa"
@@ -76,6 +98,7 @@ export default function FiltersMapPage({
             filters={filters}
             setFilters={setFilters}
             showVehicleFilters={showVehicleFilters}
+            showPropertyFilters={!showVehicleFilters}
             hideQuery
           />
           <div className="map-panel">
@@ -99,13 +122,16 @@ export default function FiltersMapPage({
             <p className="map-selection">
               Selecção: {filters.province} / {filters.municipality} / {filters.neighborhood}
             </p>
-            <p className="map-preview-count">{preview.length} anúncios com estes filtros</p>
+            <p className="map-preview-count">
+              {preview.length}{' '}
+              {preview.length === 1 ? 'anúncio encontrado' : 'anúncios encontrados'} com estes filtros
+            </p>
           </div>
         </div>
 
         <div className="filters-map-actions">
-          <Link className="text-button" to={`/${basePath}`}>
-            Cancelar
+          <Link className="text-button" to={cancelLink}>
+            Voltar ao catálogo
           </Link>
           <button className="text-button" type="button" onClick={handleReset}>
             Limpar filtros
@@ -115,6 +141,7 @@ export default function FiltersMapPage({
           </button>
         </div>
       </SectionBlock>
+      </div>
     </main>
   )
 }

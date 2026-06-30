@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
+import { CatalogActiveFilters } from '../components/catalog/CatalogActiveFilters'
 import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
+import { CatalogCrossNav } from '../components/catalog/CatalogCrossNav'
 import { CatalogFeaturedStrip } from '../components/catalog/CatalogFeaturedStrip'
+import { CatalogInsightsBar } from '../components/catalog/CatalogInsightsBar'
 import { CatalogPagination } from '../components/catalog/CatalogPagination'
 import { CatalogToolbar } from '../components/catalog/CatalogToolbar'
 import { PropertyTypeGrid } from '../components/catalog/PropertyTypeGrid'
@@ -12,12 +15,15 @@ import { ListingRow } from '../components/ListingRow'
 import { ListingSearchBar } from '../components/ListingSearchBar'
 import { HomeIcon } from '../components/icons/HomeIcon'
 import { EmptyState } from '../components/ui/EmptyState'
+import { HelpTip } from '../components/ui/HelpTip'
 import { PageIntro } from '../components/SectionBlock'
 import { filterListings } from '../utils/format'
 import { paginateListings, sortListings } from '../utils/catalog'
+import { getCatalogSection, isCatalogSection } from '../utils/catalogConfig'
+import { computeCatalogPriceInsight, countCatalogByPropertyType } from '../utils/catalogStats'
+import { countVehicleBySegment } from '../utils/vehicleCatalog'
 import {
   activeFilterCount,
-  filterSummary,
   filtersToSearchParams,
   searchParamsToFilters,
 } from '../utils/filters'
@@ -78,10 +84,36 @@ export default function ListingsPage({
       .slice(0, 8)
   }, [listings, showFeatured, defaultOperation, defaultCategory])
 
-  const summary = filterSummary(filters)
+  const filtersForTypeCounts = useMemo(
+    () => ({ ...filters, propertyType: 'Todos' }),
+    [filters],
+  )
+
+  const listingsForTypeCounts = useMemo(
+    () => filterListings(listings, filtersForTypeCounts, isAdmin),
+    [listings, filtersForTypeCounts, isAdmin],
+  )
+
+  const propertyTypeCounts = useMemo(() => {
+    if (defaultCategory === 'Veículo') {
+      return countVehicleBySegment(listingsForTypeCounts)
+    }
+    return countCatalogByPropertyType(listingsForTypeCounts, {
+      operation: defaultOperation,
+      category: defaultCategory,
+    })
+  }, [listingsForTypeCounts, defaultOperation, defaultCategory])
+
+  const priceInsight = useMemo(
+    () => (isCatalogSection(basePath) ? computeCatalogPriceInsight(filtered) : null),
+    [filtered, basePath],
+  )
+
+  const sectionConfig = getCatalogSection(basePath)
   const showVehicleFilters = defaultCategory === 'Veículo'
   const filterCount = activeFilterCount(filters, filterDefaults)
   const gridSize = filters.gridSize || 'md'
+  const mapPath = `/${basePath}/filtros?${filtersToSearchParams(filters).toString()}`
 
   useEffect(() => {
     document.title = `${title} | Kuteka`
@@ -148,17 +180,30 @@ export default function ListingsPage({
           ]}
         />
 
+        <CatalogCrossNav basePath={basePath} />
+
         {showFeatured ? (
           <CatalogFeaturedStrip listings={featuredListings} title={featuredTitle} />
         ) : null}
 
         {propertyTypes ? (
           <div className="catalog-type-section">
-            <h2 className="catalog-type-heading">Escolha o tipo</h2>
+            <h2 className="catalog-type-heading">
+              {sectionConfig?.typeHeading || 'Escolha o tipo'}
+              <HelpTip
+                label={`Ajuda: ${sectionConfig?.typeGridLabel || 'tipos'}`}
+                text={
+                  sectionConfig?.typeHelp ||
+                  'Números actualizados com base nos filtros de localização e preço activos.'
+                }
+              />
+            </h2>
             <PropertyTypeGrid
               types={propertyTypes}
               activeType={filters.propertyType}
               onSelect={selectPropertyType}
+              counts={propertyTypeCounts}
+              ariaLabel={sectionConfig?.typeGridLabel || 'Tipo de imóvel'}
             />
           </div>
         ) : null}
@@ -212,27 +257,54 @@ export default function ListingsPage({
               filters={filters}
               filtersPath={`/${basePath}/filtros`}
               onSearch={handleSearch}
+              placeholder={sectionConfig?.searchPlaceholder}
             />
-            {summary ? <p className="active-filters-line">Filtros activos: {summary}</p> : null}
+
+            <CatalogActiveFilters
+              filters={filters}
+              defaults={filterDefaults}
+              basePath={basePath}
+              onUpdate={updateFilters}
+            />
+
+            {sectionConfig ? (
+              <CatalogInsightsBar insight={priceInsight} basePath={basePath} total={pagination.total} />
+            ) : null}
 
             <CatalogToolbar
               total={pagination.total}
               sort={filters.sort}
               view={filters.view}
               gridSize={gridSize}
-              mapPath={`/${basePath}/filtros`}
+              mapPath={mapPath}
               onSortChange={(sort) => updateFilters({ ...filters, sort })}
               onViewChange={(view) => updateFilters({ ...filters, view }, false)}
               onGridSizeChange={(nextSize) => updateFilters({ ...filters, gridSize: nextSize }, false)}
             />
 
             {pagination.items.length === 0 ? (
-              <EmptyState
-                title="Nenhum resultado encontrado"
-                description="Tente alterar os filtros ou escolher outro tipo de imóvel."
-                actionLabel="Limpar filtros"
-                actionTo={`/${basePath}`}
-              />
+              <div className="catalog-empty-wrap">
+                <EmptyState
+                  title="Nenhum resultado encontrado"
+                  description={
+                    sectionConfig?.emptyDescription ||
+                    (showVehicleFilters
+                      ? 'Tente alterar marca, preço ou localização.'
+                      : 'Tente alterar os filtros ou escolher outro tipo de imóvel.')
+                  }
+                  actionLabel="Limpar filtros"
+                  actionTo={`/${basePath}`}
+                />
+                {sectionConfig?.emptyLinks?.length ? (
+                  <div className="catalog-empty-links">
+                    {sectionConfig.emptyLinks.map((link) => (
+                      <Link key={link.to} className="text-button" to={link.to}>
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
             ) : filters.view === 'list' ? (
               <div className="listing-list">
                 {pagination.items.map((listing) => (

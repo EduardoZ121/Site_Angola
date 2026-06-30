@@ -1,31 +1,33 @@
 import { useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { AuthCrossNav } from '../components/auth/AuthCrossNav'
+import { AuthRedirectBanner } from '../components/auth/AuthRedirectBanner'
+import { HelpTip } from '../components/ui/HelpTip'
 import { userRoles } from '../data/constants'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { HomeIcon } from '../components/icons/HomeIcon'
-
-function safeRedirectPath(value) {
-  if (!value) return '/inicio'
-  try {
-    const decoded = decodeURIComponent(value)
-    if (decoded.startsWith('/') && !decoded.startsWith('//')) return decoded
-  } catch {
-    return '/inicio'
-  }
-  return '/inicio'
-}
+import { buildAuthPath } from '../hooks/useAuthRedirect'
+import { safeRedirectPath } from '../utils/auth'
 
 export default function RoleSelectPage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { isLoggedIn, setUserRole, needsRoleSelection, logoutAccount } = useMarketplace()
 
-  const redirectTo = safeRedirectPath(searchParams.get('redirect'))
+  const redirectParam = safeRedirectPath(searchParams.get('redirect'))
+  const redirectTo = redirectParam || '/inicio'
 
   useEffect(() => {
-    if (!isLoggedIn) navigate('/entrar', { replace: true })
-    else if (!needsRoleSelection) navigate(redirectTo, { replace: true })
-  }, [isLoggedIn, needsRoleSelection, navigate, redirectTo])
+    document.title = 'Escolher perfil | Kuteka'
+  }, [])
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate(buildAuthPath('/entrar', redirectParam), { replace: true })
+    } else if (!needsRoleSelection) {
+      navigate(redirectTo, { replace: true })
+    }
+  }, [isLoggedIn, needsRoleSelection, navigate, redirectParam, redirectTo])
 
   function chooseOwner() {
     setUserRole(userRoles.owner)
@@ -45,8 +47,17 @@ export default function RoleSelectPage() {
         <Link to="/inicio" aria-label="Kuteka">
           <img className="onboarding-logo" src="/kuteka-logo.svg" alt="Kuteka" />
         </Link>
+
+        {redirectParam ? <AuthRedirectBanner redirectPath={redirectParam} /> : null}
+
         <p className="eyebrow">Antes de continuar</p>
-        <h1>Como pretende usar o Kuteka?</h1>
+        <h1>
+          Como pretende usar o Kuteka?
+          <HelpTip
+            label="Perfis Kuteka"
+            text="Comprador: procura e guarda anúncios. Proprietário: publica imóveis ou veículos. Pode alterar depois na conta."
+          />
+        </h1>
         <p className="onboarding-lead">
           Escolha o perfil que melhor se adapta à acção que quer fazer. Pode alterar mais tarde na
           conta.
@@ -71,6 +82,8 @@ export default function RoleSelectPage() {
             <em className="role-card-cta">Continuar</em>
           </button>
         </div>
+
+        <AuthCrossNav />
 
         <div className="onboarding-actions">
           <button className="auth-text-button" type="button" onClick={logoutAccount}>

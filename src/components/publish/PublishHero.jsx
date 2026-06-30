@@ -7,13 +7,35 @@ const TRUST_ITEMS = [
   { icon: 'message', text: 'Suporte da equipa Kuteka' },
 ]
 
-const STATS = [
+const FALLBACK_STATS = [
   { icon: 'bolt', value: '2.400+', label: 'Anúncios publicados' },
   { icon: 'user', value: '850+', label: 'Proprietários activos' },
   { icon: 'clock', value: '< 4 h', label: 'Resposta média' },
 ]
 
-export function PublishHero({ editMode = false }) {
+function buildStats(marketStats) {
+  if (!marketStats?.activeCount) return FALLBACK_STATS
+
+  return [
+    {
+      icon: 'bolt',
+      value: `${marketStats.activeCount}+`,
+      label: marketStats.activeCount === 1 ? 'Anúncio activo' : 'Anúncios activos',
+    },
+    {
+      icon: 'user',
+      value: marketStats.ownerCount ? `${marketStats.ownerCount}+` : '—',
+      label: marketStats.ownerCount === 1 ? 'Proprietário activo' : 'Proprietários activos',
+    },
+    {
+      icon: 'clock',
+      value: marketStats.pendingCount ? `${marketStats.pendingCount}` : '< 4 h',
+      label: marketStats.pendingCount ? 'Em revisão agora' : 'Resposta média',
+    },
+  ]
+}
+
+export function PublishHero({ editMode = false, marketStats }) {
   if (editMode) {
     return (
       <header className="publish-hero publish-hero-compact">
@@ -23,6 +45,8 @@ export function PublishHero({ editMode = false }) {
       </header>
     )
   }
+
+  const stats = buildStats(marketStats)
 
   return (
     <header className="publish-hero">
@@ -43,7 +67,7 @@ export function PublishHero({ editMode = false }) {
       </ul>
 
       <div className="publish-stats-row">
-        {STATS.map((item) => (
+        {stats.map((item) => (
           <article key={item.label} className="publish-stat-card">
             <span className="publish-stat-icon" aria-hidden="true">
               <HomeIcon name={item.icon} />

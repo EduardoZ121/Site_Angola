@@ -1,21 +1,22 @@
-import { useState } from 'react'
-import { Link, Navigate } from 'react-router-dom'
-import { ADMIN_EMAIL } from '../data/constants'
+import { useEffect, useMemo } from 'react'
+import { Navigate } from 'react-router-dom'
 import { PendingListingsPanel } from '../components/staff/PendingListingsPanel'
 import { AdminAgentsPanel } from '../components/staff/AdminAgentsPanel'
+import { AdminAccessDenied } from '../components/admin/AdminAccessDenied'
+import { AdminActivityFeed } from '../components/admin/AdminActivityFeed'
+import { AdminCrossNav } from '../components/admin/AdminCrossNav'
+import { AdminInsightsBar } from '../components/admin/AdminInsightsBar'
+import { AdminModerationList } from '../components/admin/AdminModerationList'
+import { AdminQuickNav } from '../components/admin/AdminQuickNav'
+import { AdminStatsCards } from '../components/admin/AdminStatsCards'
+import { AdminUsersTable } from '../components/admin/AdminUsersTable'
+import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
+import { HelpTip } from '../components/ui/HelpTip'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { isListingPending } from '../constants/staff'
-import { formatKz } from '../utils/format'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
-
-function formatDate(value) {
-  if (!value) return '—'
-  try {
-    return new Date(value).toLocaleString('pt-PT')
-  } catch {
-    return value
-  }
-}
+import { computeAdminInsights, computeExtendedAdminStats } from '../utils/admin'
+import '../styles/admin.css'
 
 export default function AdminPage() {
   const {
@@ -25,7 +26,6 @@ export default function AdminPage() {
     isAdmin,
     isLoggedIn,
     profile,
-    adminStats,
     approveListing,
     rejectListing,
     deleteListing,
@@ -42,8 +42,24 @@ export default function AdminPage() {
 
   const pendingListings = listings.filter((listing) => isListingPending(listing))
   const otherListings = listings.filter((listing) => !isListingPending(listing))
-  const rejectedCount = listings.filter((listing) => listing.status === 'Rejeitado').length
   const recentNotifications = notifications.slice(0, 12)
+
+  const stats = useMemo(
+    () => computeExtendedAdminStats(listings, siteUsers, agentApplications, approvedAgents),
+    [listings, siteUsers, agentApplications, approvedAgents],
+  )
+
+  const insights = useMemo(() => computeAdminInsights(stats), [stats])
+
+  useEffect(() => {
+    document.title = isAdmin ? 'Admin | Kuteka' : 'Admin — acesso | Kuteka'
+    const hash = window.location.hash
+    if (!hash) return
+    const target = document.querySelector(hash)
+    if (target) {
+      window.setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80)
+    }
+  }, [isAdmin])
 
   function copyUserEmails() {
     const emails = siteUsers.map((user) => user.email).join(', ')
@@ -52,199 +68,139 @@ export default function AdminPage() {
     }
   }
 
+  function handlePause(listingId) {
+    updateListing(listingId, { status: 'Pausado' })
+  }
+
+  function handleReactivate(listingId) {
+    approveListing(listingId)
+  }
+
+  function handleToggleFeatured(listingId, featured) {
+    updateListing(listingId, { featured })
+  }
+
   if (!isLoggedIn) {
     return <Navigate to="/entrar?redirect=%2Fadmin" replace />
   }
 
   if (!isAdmin) {
     return (
-      <main className="page-main">
-        <PageIntro eyebrow="Admin" title="Acesso negado" subtitle="Esta área é só para o administrador Kuteka." />
-        <SectionBlock>
-          <div className="locked-admin panel-card">
-            <strong>Sem permissão</strong>
-            <p>
-              O painel admin está disponível apenas para <strong>{ADMIN_EMAIL}</strong>.
-              {profile.email ? ` Entrou como ${profile.email}.` : ''}
-            </p>
-            <Link className="button primary" to="/inicio">
-              Voltar ao início
-            </Link>
-          </div>
-        </SectionBlock>
+      <main className="page-main admin-page">
+        <PageIntro
+          eyebrow="Admin"
+          title="Acesso negado"
+          subtitle="Esta área é só para o administrador Kuteka."
+        />
+        <div className="admin-page-body section-block-inner">
+          <AdminAccessDenied profileEmail={profile.email} />
+        </div>
       </main>
     )
   }
 
   return (
-    <main className="page-main staff-page">
+    <main className="page-main admin-page staff-page">
       <PageIntro
         eyebrow="Administrador"
         title="Painel Kuteka"
-        subtitle={`Sessão: ${profile.email} — controlo total do site, utilizadores e moderação.`}
+        subtitle={`Sessão: ${profile.email} — moderação, agentes e utilizadores.`}
       />
 
-      <SectionBlock id="stats" eyebrow="Resumo" title="Números do site">
-        <div className="admin-stats panel-card">
-          <span>Utilizadores: {siteUsers.length}</span>
-          <span>Total anúncios: {adminStats.total}</span>
-          <span>Ativos: {adminStats.active}</span>
-          <span>Pendentes: {adminStats.pending}</span>
-          <span>Rejeitados: {rejectedCount}</span>
-          <span>Destaques: {adminStats.featured}</span>
-        </div>
-      </SectionBlock>
-
-      <SectionBlock
-        id="fila-aprovacao"
-        eyebrow="Prioridade"
-        title={`Aprovar anúncios (${pendingListings.length})`}
-        subtitle="Revise fotos e perfil — rejeite fotos pessoais ou conteúdo inválido."
-      >
-        <PendingListingsPanel
-          pendingListings={pendingListings}
-          onApprove={approveListing}
-          onReject={rejectListing}
-          onDelete={deleteListing}
-          canDelete
+      <div className="admin-page-body section-block-inner">
+        <CatalogBreadcrumbs
+          items={[
+            { label: 'Início', to: '/inicio' },
+            { label: 'Admin', to: '/admin' },
+          ]}
         />
-      </SectionBlock>
 
-      <SectionBlock
-        id="agentes"
-        eyebrow="Equipa"
-        title="Candidatos e agentes"
-        subtitle="Convide intermediários, envie o teste de 25 perguntas e active quem passar."
-      >
-        <AdminAgentsPanel
-          siteUsers={siteUsers}
-          agentApplications={agentApplications}
-          approvedAgents={approvedAgents}
-          onCreateCandidate={adminCreateAgentCandidate}
-          onSendTest={adminSendAgentTest}
-          onApprove={adminApproveAgent}
-          onReject={adminRejectAgent}
-          onRevoke={adminRevokeAgent}
-          onRetest={adminResetAgentTest}
-        />
-      </SectionBlock>
+        <p className="admin-help-line">
+          Aprove anúncios na fila antes de ficarem visíveis no catálogo.
+          <HelpTip
+            label="Ajuda: admin"
+            text="Tudo é local (demo). Em produção este painel geriria utilizadores reais, emails e moderação central."
+          />
+        </p>
 
-      <SectionBlock
-        id="utilizadores"
-        eyebrow="Contas"
-        title={`Utilizadores que entraram (${siteUsers.length})`}
-        subtitle="Emails e logins via Google registados neste browser/dispositivo."
-        tone="muted"
-      >
-        {siteUsers.length === 0 ? (
-          <div className="empty-state panel-card">
-            <p>Ainda ninguém entrou com Google neste ambiente.</p>
-          </div>
-        ) : (
-          <>
-            <div className="admin-actions admin-users-toolbar">
-              <button className="button filter-button" type="button" onClick={copyUserEmails}>
-                Copiar emails
-              </button>
-            </div>
-            <div className="admin-users-table panel-card">
-              <table className="compare-table">
-                <thead>
-                  <tr>
-                    <th>Utilizador</th>
-                    <th>Email</th>
-                    <th>Primeiro login</th>
-                    <th>Último login</th>
-                    <th>Vezes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {siteUsers.map((user) => (
-                    <tr key={user.email}>
-                      <td>
-                        <span className="admin-user-cell">
-                          {user.picture ? <img className="nav-user-avatar" src={user.picture} alt="" /> : null}
-                          {user.name}
-                        </span>
-                      </td>
-                      <td>{user.email}</td>
-                      <td>{formatDate(user.firstLoginAt)}</td>
-                      <td>{formatDate(user.lastLoginAt)}</td>
-                      <td>{user.loginCount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </>
-        )}
-      </SectionBlock>
+        <AdminQuickNav />
+        <AdminInsightsBar items={insights} />
 
-      <SectionBlock
-        id="actividade"
-        eyebrow="Actividade"
-        title="Últimas notificações"
-        subtitle="Pedidos de publicação, aprovações e rejeições (demo local)."
-      >
-        {recentNotifications.length === 0 ? (
-          <div className="empty-state panel-card">
-            <p>Sem actividade registada.</p>
-          </div>
-        ) : (
-          <div className="notifications-list">
-            {recentNotifications.map((item) => (
-              <article className="notification-card panel-card read" key={item.id}>
-                <strong>{item.title}</strong>
-                <p>{item.body}</p>
-                <small>
-                  {item.ownerEmail || item.ownerName || '—'} • {formatDate(item.createdAt)}
-                </small>
-              </article>
-            ))}
-          </div>
-        )}
-      </SectionBlock>
+        <SectionBlock id="stats" eyebrow="Resumo" title="Números do site" tone="light">
+          <AdminStatsCards stats={stats} />
+        </SectionBlock>
 
-      <SectionBlock
-        id="moderacao"
-        eyebrow="Anúncios"
-        title="Todos os anúncios"
-        subtitle="Gerir activos, pausados e rejeitados."
-        tone="muted"
-      >
-        <div className="admin-list">
-          {otherListings.map((listing) => (
-            <div className="admin-row panel-card" key={listing.id}>
-              <div>
-                <strong>{listing.title}</strong>
-                <span>
-                  {listing.status} — {listing.neighborhood} — {formatKz(listing.price)}
-                </span>
-              </div>
-              <div className="admin-actions">
-                {listing.status === 'Ativo' ? (
-                  <button type="button" onClick={() => updateListing(listing.id, { status: 'Pausado' })}>
-                    Pausar
-                  </button>
-                ) : listing.status === 'Pausado' ? (
-                  <button type="button" onClick={() => approveListing(listing.id)}>
-                    Reativar
-                  </button>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => updateListing(listing.id, { featured: !listing.featured })}
-                >
-                  {listing.featured ? 'Remover destaque' : 'Destacar'}
-                </button>
-                <button type="button" onClick={() => deleteListing(listing.id)}>
-                  Apagar
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </SectionBlock>
+        <SectionBlock
+          id="fila-aprovacao"
+          eyebrow="Prioridade"
+          title={`Aprovar anúncios (${pendingListings.length})`}
+          subtitle="Revise fotos e perfil — rejeite fotos pessoais ou conteúdo inválido."
+        >
+          <PendingListingsPanel
+            pendingListings={pendingListings}
+            onApprove={approveListing}
+            onReject={rejectListing}
+            onDelete={deleteListing}
+            canDelete
+          />
+        </SectionBlock>
+
+        <SectionBlock
+          id="agentes"
+          eyebrow="Equipa"
+          title="Candidatos e agentes"
+          subtitle="Convide intermediários, envie o teste de 25 perguntas e active quem passar."
+        >
+          <AdminAgentsPanel
+            siteUsers={siteUsers}
+            agentApplications={agentApplications}
+            approvedAgents={approvedAgents}
+            onCreateCandidate={adminCreateAgentCandidate}
+            onSendTest={adminSendAgentTest}
+            onApprove={adminApproveAgent}
+            onReject={adminRejectAgent}
+            onRevoke={adminRevokeAgent}
+            onRetest={adminResetAgentTest}
+          />
+        </SectionBlock>
+
+        <SectionBlock
+          id="utilizadores"
+          eyebrow="Contas"
+          title={`Utilizadores registados (${siteUsers.length})`}
+          subtitle="Emails e logins guardados neste browser (demo)."
+          tone="muted"
+        >
+          <AdminUsersTable users={siteUsers} onCopyEmails={copyUserEmails} />
+        </SectionBlock>
+
+        <SectionBlock
+          id="actividade"
+          eyebrow="Actividade"
+          title="Últimas notificações"
+          subtitle="Pedidos de publicação, aprovações e rejeições."
+        >
+          <AdminActivityFeed notifications={recentNotifications} />
+        </SectionBlock>
+
+        <SectionBlock
+          id="moderacao"
+          eyebrow="Anúncios"
+          title="Moderação geral"
+          subtitle="Gerir activos, pausados e rejeitados fora da fila."
+          tone="muted"
+        >
+          <AdminModerationList
+            listings={otherListings}
+            onPause={handlePause}
+            onReactivate={handleReactivate}
+            onToggleFeatured={handleToggleFeatured}
+            onDelete={deleteListing}
+          />
+        </SectionBlock>
+
+        <AdminCrossNav />
+      </div>
     </main>
   )
 }

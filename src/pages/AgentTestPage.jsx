@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { useMarketplace } from '../context/MarketplaceContext'
 import {
@@ -7,13 +7,21 @@ import {
   AGENT_TEST_TOTAL_QUESTIONS,
 } from '../constants/agentApplication'
 import { getQuestionById, getTestSummaryMessage } from '../utils/agentApplication'
+import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
+import { AgentApplyCrossNav } from '../components/agent/AgentApplyCrossNav'
+import { HelpTip } from '../components/ui/HelpTip'
 import { PageIntro, SectionBlock } from '../components/SectionBlock'
 import '../styles/agent-test.css'
+import '../styles/agent.css'
 
 export default function AgentTestPage() {
   const { token } = useParams()
   const { isLoggedIn, profile, getAgentApplicationByToken, submitAgentTest } = useMarketplace()
   const application = getAgentApplicationByToken(token)
+
+  useEffect(() => {
+    document.title = application ? 'Teste agente | Kuteka' : 'Avaliação | Kuteka'
+  }, [application])
 
   const [answers, setAnswers] = useState({})
   const [step, setStep] = useState(0)
@@ -33,15 +41,16 @@ export default function AgentTestPage() {
 
   if (!application) {
     return (
-      <main className="page-main">
+      <main className="page-main agent-test-page">
         <PageIntro eyebrow="Avaliação" title="Convite inválido" subtitle="Este link não existe ou expirou." />
-        <SectionBlock>
+        <div className="agent-page-body section-block-inner">
           <div className="empty-state panel-card">
             <Link className="button primary" to="/seja-agente">
               Saber como ser agente
             </Link>
           </div>
-        </SectionBlock>
+          <AgentApplyCrossNav />
+        </div>
       </main>
     )
   }
@@ -74,12 +83,20 @@ export default function AgentTestPage() {
 
   if (emailMismatch) {
     return (
-      <main className="page-main">
+      <main className="page-main agent-test-page">
         <PageIntro
           eyebrow="Avaliação Kuteka"
           title="Email incorrecto"
           subtitle={`Este teste foi enviado para ${application.email}. Entrou como ${profile.email}.`}
         />
+        <div className="agent-page-body section-block-inner">
+          <div className="panel-card agent-access-denied">
+            <p>Termine sessão e entre com o email correcto para responder ao teste.</p>
+            <Link className="button primary" to={`/entrar?redirect=${encodeURIComponent(`/agente/avaliacao/${token}`)}`}>
+              Entrar com {application.email}
+            </Link>
+          </div>
+        </div>
       </main>
     )
   }
@@ -94,7 +111,15 @@ export default function AgentTestPage() {
           subtitle={getTestSummaryMessage(attempt.score, attempt.passed)}
         />
 
-        <SectionBlock title="Resumo" id="resultado">
+        <div className="agent-page-body section-block-inner">
+          <CatalogBreadcrumbs
+            items={[
+              { label: 'Seja agente', to: '/seja-agente' },
+              { label: 'Resultado', to: `/agente/avaliacao/${token}` },
+            ]}
+          />
+
+          <SectionBlock title="Resumo" id="resultado">
           <div className={`agent-test-result panel-card ${attempt.passed ? 'passed' : 'failed'}`}>
             <div className="agent-test-score-ring">
               <strong>{attempt.score}</strong>
@@ -130,11 +155,19 @@ export default function AgentTestPage() {
               </article>
             ))}
           </div>
-        </SectionBlock>
+          </SectionBlock>
 
-        <Link className="button primary" to="/conta">
-          Voltar à conta
-        </Link>
+          <div className="agent-test-result-actions">
+            <Link className="button primary" to="/conta">
+              Voltar à conta
+            </Link>
+            <Link className="button filter-button" to="/seja-agente">
+              Estado da candidatura
+            </Link>
+          </div>
+
+          <AgentApplyCrossNav />
+        </div>
       </main>
     )
   }
@@ -147,7 +180,23 @@ export default function AgentTestPage() {
         subtitle="Estilo avaliação teórica — atendimento, ética, imóveis e veículos em Angola."
       />
 
-      <div className="agent-test-progress panel-card">
+      <div className="agent-page-body section-block-inner">
+        <CatalogBreadcrumbs
+          items={[
+            { label: 'Seja agente', to: '/seja-agente' },
+            { label: 'Teste', to: `/agente/avaliacao/${token}` },
+          ]}
+        />
+
+        <p className="agent-help-line">
+          Responda todas as perguntas — mínimo {AGENT_TEST_PASS_SCORE} correctas para passar.
+          <HelpTip
+            label="Ajuda: teste"
+            text={`${AGENT_TEST_TOTAL_QUESTIONS} perguntas sobre ética, imóveis e veículos em Angola. Máximo ${AGENT_TEST_MAX_ERRORS} erros.`}
+          />
+        </p>
+
+        <div className="agent-test-progress panel-card">
         <div className="agent-test-progress-bar">
           <span style={{ width: `${((step + 1) / AGENT_TEST_TOTAL_QUESTIONS) * 100}%` }} />
         </div>
@@ -190,6 +239,7 @@ export default function AgentTestPage() {
             Submeter teste
           </button>
         )}
+      </div>
       </div>
     </main>
   )

@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { CatalogBreadcrumbs } from '../components/catalog/CatalogBreadcrumbs'
+import { ListingDetailCrossNav } from '../components/listing/ListingDetailCrossNav'
+import { ListingDetailMetaStrip } from '../components/listing/ListingDetailMetaStrip'
+import { ListingDetailToolbar } from '../components/listing/ListingDetailToolbar'
 import { ImageGallery } from '../components/shared/ImageGallery'
 import { ListingBadgeList } from '../components/shared/ListingBadge'
 import { ListingContactSection } from '../components/shared/ListingContactSection'
@@ -11,6 +14,13 @@ import { EmptyState } from '../components/ui/EmptyState'
 import { useMarketplace } from '../context/MarketplaceContext'
 import { useRequireLogin } from '../hooks/useRequireLogin'
 import { AnalyticsEvents, trackEvent } from '../services/analytics'
+import {
+  buildCatalogFiltersLink,
+  buildSimilarCatalogLink,
+  formatDetailPrice,
+  getCatalogLabelForListing,
+  getCatalogPathForListing,
+} from '../utils/listingDetail'
 import { formatKz } from '../utils/format'
 import { getSimilarListings, normalizeListing } from '../utils/listing'
 import '../styles/listing-detail.css'
@@ -25,7 +35,9 @@ export default function ListingDetailPage() {
     sendChat,
     profile,
     favorites,
+    compare,
     toggleFavorite,
+    toggleCompare,
     isAdmin,
     isListingOwner,
   } = useMarketplace()
@@ -34,6 +46,11 @@ export default function ListingDetailPage() {
   const navigate = useNavigate()
   const requireLogin = useRequireLogin()
   const [chatInput, setChatInput] = useState('')
+  const [compareNotice, setCompareNotice] = useState('')
+
+  const openChatFromHash =
+    typeof window !== 'undefined' &&
+    (window.location.hash === '#chat' || window.location.hash === '#contactar')
 
   useEffect(() => {
     if (listing && listing.statusLegacy === 'Ativo') {
@@ -53,10 +70,10 @@ export default function ListingDetailPage() {
   }, [id])
 
   useEffect(() => {
-    if (window.location.hash === '#chat' || window.location.hash === '#contactar') {
+    if (openChatFromHash) {
       document.getElementById('contactar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
-  }, [listing?.id])
+  }, [listing?.id, openChatFromHash])
 
   if (!listing) {
     return (
@@ -64,12 +81,15 @@ export default function ListingDetailPage() {
         <EmptyState
           title="Anúncio não encontrado"
           description="Este anúncio já não está disponível ou foi removido."
-          actionLabel="Ver anúncios"
-          actionTo="/arrendar"
+          actionLabel="Explorar marketplace"
+          actionTo="/explorar"
         />
       </main>
     )
   }
+
+  const catalogPath = getCatalogPathForListing(listing)
+  const catalogLabel = getCatalogLabelForListing(listing)
 
   if (listing.statusLegacy !== 'Ativo' && !isAdmin && !isListingOwner(rawListing)) {
     return (
@@ -77,8 +97,8 @@ export default function ListingDetailPage() {
         <EmptyState
           title="Anúncio não disponível"
           description="Este anúncio ainda não foi publicado."
-          actionLabel="Ver anúncios activos"
-          actionTo="/arrendar"
+          actionLabel={`Ver ${catalogLabel.toLowerCase()}`}
+          actionTo={catalogPath}
         />
       </main>
     )
@@ -90,6 +110,10 @@ export default function ListingDetailPage() {
 
   const messages = chatByListing[listing.id] || []
   const similar = getSimilarListings(listings, rawListing, 4)
+  const isFavorite = favorites.includes(listing.id)
+  const isCompared = compare.includes(listing.id)
+  const compareFull = compare.length >= 3
+  const mapFiltersLink = buildCatalogFiltersLink(listing)
 
   function handleSendChat() {
     if (!requireLogin(undefined, `${window.location.pathname}#contactar`)) return
@@ -100,16 +124,29 @@ export default function ListingDetailPage() {
   }
 
   function handleFavorite() {
+    if (!requireLogin(undefined, window.location.pathname)) return
     toggleFavorite(listing.id)
     trackEvent(AnalyticsEvents.SAVE_FAVORITE, { listingId: listing.id })
   }
 
-  const catalogPath =
-    listing.category === 'Veículo'
-      ? '/veiculos'
-      : listing.operation === 'Arrendamento'
-        ? '/arrendar'
-        : '/comprar'
+  function handleCompare() {
+    if (isCompared) {
+      toggleCompare(listing.id)
+      setCompareNotice('')
+      return
+    }
+    if (compareFull) {
+      setCompareNotice('Já tem 3 anúncios na comparação. Remova um em Comparar.')
+      return
+    }
+    toggleCompare(listing.id)
+    setCompareNotice('Adicionado à comparação.')
+    window.setTimeout(() => setCompareNotice(''), 2500)
+  }
+
+  function scrollToContact() {
+    document.getElementById('contactar')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <main className="page-main listing-detail-page">
@@ -117,10 +154,7 @@ export default function ListingDetailPage() {
         <CatalogBreadcrumbs
           items={[
             { label: 'Início', to: '/inicio' },
-            {
-              label: listing.category === 'Veículo' ? 'Veículos' : listing.operation === 'Arrendamento' ? 'Arrendar' : 'Comprar',
-              to: catalogPath,
-            },
+            { label: catalogLabel, to: catalogPath },
             { label: listing.title, to: `/anuncio/${listing.id}` },
           ]}
         />
@@ -134,17 +168,34 @@ export default function ListingDetailPage() {
         <header className="listing-detail-header">
           <ListingBadgeList badges={listing.badges} />
           <h1>{listing.title}</h1>
-          <p className="listing-price-line">{formatKz(listing.price)}</p>
+          <p className="listing-price-line">{formatDetailPrice(listing, formatKz)}</p>
           <div className="listing-detail-meta">
-            <span>{listing.location.municipality}, {listing.location.province}</span>
+            <span>
+              {listing.location.neighborhood}, {listing.location.municipality},{' '}
+              {listing.location.province}
+            </span>
             <span>Ref. {listing.reference}</span>
             {listing.operation === 'Arrendamento' ? <span>Arrendamento mensal</span> : null}
+            {listing.category === 'Veículo' ? <span>Venda</span> : null}
           </div>
         </header>
 
+        <ListingDetailToolbar
+          listing={listing}
+          isFavorite={isFavorite}
+          isCompared={isCompared}
+          compareFull={compareFull}
+          onFavorite={handleFavorite}
+          onCompare={handleCompare}
+          onContact={scrollToContact}
+        />
+        {compareNotice ? <p className="listing-detail-notice">{compareNotice}</p> : null}
+
+        <ListingDetailMetaStrip listing={listing} />
+
         <ListingDetailSections listing={listing} compact />
 
-        <MapSection location={listing.location} />
+        <MapSection location={listing.location} filtersLink={mapFiltersLink} />
 
         <ListingContactSection
           listing={listing}
@@ -153,12 +204,15 @@ export default function ListingDetailPage() {
           onChatInput={setChatInput}
           onSendChat={handleSendChat}
           onMessageFocus={() => requireLogin(undefined, `${window.location.pathname}#contactar`)}
-          isFavorite={favorites.includes(listing.id)}
+          isFavorite={isFavorite}
           onFavorite={handleFavorite}
           verifiedSeal={listing.verification.profile}
+          initialChatOpen={openChatFromHash}
         />
 
-        <SimilarListings listings={similar.slice(0, 3)} />
+        <SimilarListings listings={similar.slice(0, 3)} seeAllLink={buildSimilarCatalogLink(listing)} />
+
+        <ListingDetailCrossNav listing={listing} />
       </div>
     </main>
   )

@@ -135,6 +135,8 @@ export function Layout() {
                     <span className="nav-badge">
                       {staffBadges.pendingListings > 99 ? '99+' : staffBadges.pendingListings}
                     </span>
+                  ) : staffBadges.upcomingVisits > 0 ? (
+                    <span className="nav-badge nav-badge-muted">{staffBadges.upcomingVisits}</span>
                   ) : null}
                 </NavLink>
               ) : null}

@@ -106,7 +106,7 @@ export default function App() {
                 <FiltersMapPage
                   basePath="arrendar"
                   title="Filtros — Arrendar imóveis"
-                  subtitle="Escolha a zona no mapa, ajuste preço e localização, depois confirme."
+                  subtitle="Escolha a zona no mapa, ajuste a renda mensal e localização, depois confirme."
                   defaultCategory="Imóvel"
                   defaultOperation="Arrendamento"
                 />

@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom'
-import { getOwnerStatusLabel, getOwnerStatusTone } from '../../utils/ownerListing'
+import {
+  formatListingUpdated,
+  getOwnerStatusLabel,
+  getOwnerStatusTone,
+} from '../../utils/ownerListing'
+import { canOwnerDeleteListing } from '../../utils/ownerDashboard'
+import { buildCatalogSearchLink, getCatalogLabelForListing } from '../../utils/listingDetail'
 import { formatKz } from '../../utils/format'
 import { defaultPhoto } from '../../data/constants'
 
@@ -13,6 +19,7 @@ export function ListingStatusBadge({ listing }) {
 export function OwnerListingCard({
   listing,
   favoriteCount = 0,
+  messageCount = 0,
   onDuplicate,
   onPause,
   onActivate,
@@ -25,15 +32,29 @@ export function OwnerListingCard({
   const isPending = listing.status === 'Pendente'
   const isRejected = listing.status === 'Rejeitado'
   const canEdit = !isPending
+  const canDelete = canOwnerDeleteListing(listing)
+  const catalogLink = isActive ? buildCatalogSearchLink(listing) : null
+  const catalogLabel = getCatalogLabelForListing(listing)
+
+  function handleDelete() {
+    if (!window.confirm('Eliminar este anúncio permanentemente? Esta acção não pode ser desfeita.')) {
+      return
+    }
+    onDelete(listing.id)
+  }
 
   return (
     <article className="owner-listing-card panel-card">
-      <img src={listing.photos?.[0] || defaultPhoto} alt="" className="owner-listing-thumb" />
+      <div className="owner-listing-media">
+        <img src={listing.photos?.[0] || defaultPhoto} alt="" className="owner-listing-thumb" />
+        {listing.featured ? <span className="owner-featured-tag">Destaque</span> : null}
+      </div>
+
       <div className="owner-listing-body">
         <div className="owner-listing-head">
           <div>
             <strong>{listing.title}</strong>
-            <p>
+            <p className="owner-listing-meta">
               {formatKz(listing.price)} · {listing.province} / {listing.neighborhood}
             </p>
           </div>
@@ -50,22 +71,15 @@ export function OwnerListingCard({
         <div className="owner-listing-stats">
           <span>{listing.views || 0} visualizações</span>
           <span>{favoriteCount} favoritos</span>
-          {listing.featured ? <span className="owner-featured-tag">Destaque</span> : null}
-          {listing.featuredUntil ? (
-            <span>Destaque até {listing.featuredUntil.slice(0, 10)}</span>
-          ) : null}
+          <span>{messageCount} mensagens</span>
+          <span>Actualizado {formatListingUpdated(listing)}</span>
         </div>
 
+        {listing.featuredUntil ? (
+          <p className="owner-listing-note">Destaque até {listing.featuredUntil.slice(0, 10)}</p>
+        ) : null}
+
         <div className="owner-listing-actions">
-          {isActive ? (
-            <Link className="button ghost" to={`/anuncio/${listing.id}`}>
-              Ver público
-            </Link>
-          ) : isPending ? (
-            <Link className="button ghost" to={`/publicar/enviado/${listing.id}`}>
-              Ver pedido
-            </Link>
-          ) : null}
           {isRejected ? (
             <Link className="button primary" to={`/painel/editar/${listing.id}`}>
               Corrigir e reenviar
@@ -74,6 +88,20 @@ export function OwnerListingCard({
           {canEdit ? (
             <Link className="button ghost" to={`/painel/editar/${listing.id}`}>
               Editar
+            </Link>
+          ) : null}
+          {isActive ? (
+            <>
+              <Link className="button ghost" to={`/anuncio/${listing.id}`}>
+                Ver público
+              </Link>
+              <Link className="button ghost" to={catalogLink}>
+                Ver em {catalogLabel}
+              </Link>
+            </>
+          ) : isPending ? (
+            <Link className="button ghost" to={`/publicar/enviado/${listing.id}`}>
+              Ver pedido
             </Link>
           ) : null}
           <button type="button" className="button ghost" onClick={() => onDuplicate(listing.id)}>
@@ -104,8 +132,8 @@ export function OwnerListingCard({
               Arquivar
             </button>
           ) : null}
-          {isRejected ? (
-            <button type="button" className="button ghost danger-text" onClick={() => onDelete(listing.id)}>
+          {canDelete ? (
+            <button type="button" className="button ghost danger-text" onClick={handleDelete}>
               Eliminar
             </button>
           ) : null}

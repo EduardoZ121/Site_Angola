@@ -32,7 +32,12 @@ export function getOwnerStatusTone(listing) {
   return 'default'
 }
 
-export function computeOwnerStats(listings, favorites = []) {
+export function computeOwnerStats(listings, favorites = [], chatByListing = {}) {
+  let totalMessages = 0
+  listings.forEach((listing) => {
+    totalMessages += (chatByListing[listing.id] || []).length
+  })
+
   return {
     total: listings.length,
     active: listings.filter((item) => item.status === 'Ativo').length,
@@ -45,7 +50,24 @@ export function computeOwnerStats(listings, favorites = []) {
       (sum, item) => sum + (favorites.includes(item.id) ? 1 : 0),
       0,
     ),
+    totalMessages,
   }
+}
+
+export function formatListingUpdated(listing) {
+  const raw = listing.updatedAt || listing.approvedAt || listing.submittedAt || listing.createdAt
+  if (!raw) return '—'
+  try {
+    return new Date(raw).toLocaleDateString('pt-PT', { day: 'numeric', month: 'short', year: 'numeric' })
+  } catch {
+    return String(raw)
+  }
+}
+
+export function getOwnerFirstName(profile) {
+  const name = String(profile?.name || '').trim()
+  if (!name) return 'Proprietário'
+  return name.split(/\s+/)[0]
 }
 
 export function rawListingToPublishDraft(listing) {

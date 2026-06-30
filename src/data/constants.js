@@ -5,6 +5,7 @@ export const STORAGE_KEYS = {
   profile: 'kuteka.market.profile',
   listings: 'kuteka.market.listings',
   favorites: 'kuteka.market.favorites',
+  compare: 'kuteka.market.compare',
   history: 'kuteka.market.history',
   chats: 'kuteka.market.chats',
   notifications: 'kuteka.market.notifications',
@@ -14,6 +15,7 @@ export const STORAGE_KEYS = {
   passwordResetTokens: 'kuteka.market.passwordResetTokens',
   approvedAgents: 'kuteka.market.approvedAgents',
   agentApplications: 'kuteka.market.agentApplications',
+  scheduledVisits: 'kuteka.market.scheduledVisits',
 }
 
 export const userRoles = {
@@ -275,8 +277,8 @@ export const salePropertyTypes = rentPropertyTypes
 
 export const vehicleBrowseTypes = [
   { id: 'todos', label: 'Todos', icon: 'search', propertyType: 'Todos' },
-  { id: 'carro', label: 'Carros', icon: 'car', propertyType: 'Veículo' },
-  { id: 'pickup', label: 'Pickup / SUV', icon: 'truck', propertyType: 'Veículo' },
+  { id: 'carro', label: 'Carros', icon: 'car', propertyType: 'Carro' },
+  { id: 'pickup', label: 'Pickup / SUV', icon: 'truck', propertyType: 'Pickup' },
 ]
 
 export const buyerOperations = [

@@ -75,7 +75,13 @@ export function PendingListingsPanel({
               Rejeitar
             </button>
             {canDelete && onDelete ? (
-              <button type="button" onClick={() => onDelete(listing.id)}>
+              <button
+                type="button"
+                onClick={() => {
+                  if (!window.confirm(`Apagar permanentemente «${listing.title}»?`)) return
+                  onDelete(listing.id)
+                }}
+              >
                 Apagar
               </button>
             ) : null}

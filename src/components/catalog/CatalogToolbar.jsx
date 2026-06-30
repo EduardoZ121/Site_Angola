@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { SORT_OPTIONS } from '../../utils/catalog'
 import { HomeIcon } from '../icons/HomeIcon'
 
@@ -24,9 +25,9 @@ export function CatalogToolbar({
       </p>
       <div className="catalog-toolbar-actions">
         {mapPath ? (
-          <a className="catalog-map-link" href={mapPath}>
+          <Link className="catalog-map-link" to={mapPath}>
             Mapa
-          </a>
+          </Link>
         ) : null}
         <label className="catalog-sort">
           <span className="sr-only">Ordenar por</span>

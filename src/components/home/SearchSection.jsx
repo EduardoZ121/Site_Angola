@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { provinces } from '../../data/constants'
+import { HelpTip } from '../ui/HelpTip'
 
 const searchTypes = [
-  { id: 'comprar', label: 'Comprar', path: '/comprar' },
-  { id: 'arrendar', label: 'Arrendar', path: '/arrendar' },
-  { id: 'veiculos', label: 'Veículos', path: '/veiculos' },
+  { id: 'comprar', label: 'Comprar', path: '/comprar', filtersPath: '/comprar/filtros' },
+  { id: 'arrendar', label: 'Arrendar', path: '/arrendar', filtersPath: '/arrendar/filtros' },
+  { id: 'veiculos', label: 'Veículos', path: '/veiculos', filtersPath: '/veiculos/filtros' },
 ]
 
 export function SearchSection({ embedded = false }) {
@@ -35,6 +36,8 @@ export function SearchSection({ embedded = false }) {
     navigate(`${type.path}${query ? `?${query}` : ''}`)
   }
 
+  const activeType = searchTypes.find((item) => item.id === searchType) || searchTypes[0]
+
   return (
     <section
       className={`hp-section hp-search-wrap ${embedded ? 'hp-search-embedded' : ''}`}
@@ -56,7 +59,13 @@ export function SearchSection({ embedded = false }) {
           </div>
           <div className="hp-search-grid">
             <label className="hp-search-keyword">
-              Palavra-chave
+              <span className="hp-search-label-row">
+                Palavra-chave
+                <HelpTip
+                  label="Ajuda: palavra-chave"
+                  text="Pesquise por bairro, tipo (T3, terreno), marca ou modelo de carro."
+                />
+              </span>
               <input
                 type="search"
                 placeholder="Ex: T3, Prado, terreno..."
@@ -115,9 +124,14 @@ export function SearchSection({ embedded = false }) {
             </label>
             </div>
           </div>
-          <button className="hp-btn hp-btn-primary hp-search-submit" type="submit">
-            Pesquisar
-          </button>
+          <div className="hp-search-footer">
+            <Link className="hp-search-advanced" to={activeType.filtersPath}>
+              Filtros avançados e mapa
+            </Link>
+            <button className="hp-btn hp-btn-primary hp-search-submit" type="submit">
+              Pesquisar
+            </button>
+          </div>
         </form>
       </div>
     </section>

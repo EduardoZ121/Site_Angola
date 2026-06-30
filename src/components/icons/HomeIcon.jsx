@@ -162,6 +162,18 @@ const icons = {
       <path d="M18 6 6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
+  chart: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M3 3v18h18" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7 16V9M12 16V5M17 16v-4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  share: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16 6l-4-4-4 4M12 2v13" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
 }
 
 export function HomeIcon({ name, className = '' }) {

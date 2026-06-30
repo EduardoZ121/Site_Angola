@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AuthDivider } from '../components/auth/AuthDivider'
 import { AuthFormField } from '../components/auth/AuthFormField'
+import { AuthGuestLink } from '../components/auth/AuthGuestLink'
 import { AuthLayout } from '../components/auth/AuthLayout'
 import { AuthNavLinks } from '../components/auth/AuthNavLinks'
 import { GoogleAuthButton } from '../components/GoogleAuthButton'
@@ -15,6 +16,10 @@ export default function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    document.title = 'Entrar | Kuteka'
+  }, [])
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -37,7 +42,7 @@ export default function LoginPage() {
     <AuthLayout
       title="Bem-vindo de volta"
       subtitle="Entre para gerir anúncios, favoritos e contactos."
-      footnote="Ao entrar, concorda com as regras do marketplace Kuteka para anúncios em Angola."
+      redirectPath={redirectParam}
     >
       <form className="auth-facebook-form" onSubmit={handleSubmit}>
         <AuthFormField
@@ -77,9 +82,9 @@ export default function LoginPage() {
 
       <GoogleAuthButton onCredential={handleGoogleCredential} label="Continuar com Google" />
 
-      <AuthNavLinks
-        primary={{ to: signupPath, label: 'Não tem conta? Cadastrar-se' }}
-      />
+      <AuthNavLinks primary={{ to: signupPath, label: 'Não tem conta? Cadastrar-se' }} />
+
+      <AuthGuestLink />
     </AuthLayout>
   )
 }

@@ -93,15 +93,75 @@ export const homeBenefits = [
 ]
 
 export const homeSteps = [
-  { icon: 'search', title: 'Pesquise', description: 'Use filtros por zona, tipo e preço em Kz.' },
-  { icon: 'message', title: 'Contacte', description: 'Fale com o proprietário por chat ou WhatsApp.' },
-  { icon: 'handshake', title: 'Feche negócio', description: 'Combine visita e finalize com confiança.' },
+  {
+    icon: 'search',
+    title: 'Pesquise',
+    description: 'Use filtros por zona, tipo e preço em Kz — imóveis ou veículos.',
+    to: '/explorar',
+    actionLabel: 'Explorar',
+  },
+  {
+    icon: 'message',
+    title: 'Contacte',
+    description: 'Fale com o anunciante por telefone, WhatsApp ou mensagem na Kuteka.',
+    to: '/comprar',
+    actionLabel: 'Ver anúncios',
+  },
+  {
+    icon: 'handshake',
+    title: 'Feche negócio',
+    description: 'Compare opções, guarde favoritos e combine visita com confiança.',
+    to: '/comparar',
+    actionLabel: 'Comparar',
+  },
 ]
 
 export const homeOwnerSteps = [
-  { icon: 'edit', title: 'Publique', description: 'Crie o anúncio com fotos, preço e localização.' },
-  { icon: 'phone', title: 'Receba contactos', description: 'Interessados ligam, enviam mensagem ou WhatsApp.' },
-  { icon: 'check', title: 'Arrende ou venda', description: 'Feche o negócio directamente com o comprador.' },
+  {
+    icon: 'edit',
+    title: 'Publique',
+    description: 'Crie o anúncio com fotos, preço e localização em poucos minutos.',
+    to: '/publicar',
+    actionLabel: 'Publicar',
+  },
+  {
+    icon: 'phone',
+    title: 'Receba contactos',
+    description: 'Interessados ligam, enviam mensagem ou WhatsApp — tudo no painel.',
+    to: '/painel',
+    actionLabel: 'Ir ao painel',
+  },
+  {
+    icon: 'check',
+    title: 'Arrende ou venda',
+    description: 'Feche directamente com o comprador e renove destaque se quiser.',
+    to: '/destaques',
+    actionLabel: 'Planos destaque',
+  },
+]
+
+export const homeAgentSteps = [
+  {
+    icon: 'user',
+    title: 'Candidate-se',
+    description: 'Conta verificada, apresentação pessoal e CV opcional.',
+    to: '/seja-agente',
+    actionLabel: 'Candidatar',
+  },
+  {
+    icon: 'shield',
+    title: 'Teste de qualificação',
+    description: 'Questionário da equipa Kuteka após convite da administração.',
+    to: '/seja-agente',
+    actionLabel: 'Ver processo',
+  },
+  {
+    icon: 'handshake',
+    title: 'Painel agente',
+    description: 'Gerir visitas, anúncios e contactos após aprovação.',
+    to: '/agente',
+    actionLabel: 'Painel agente',
+  },
 ]
 
 export const homeStats = [

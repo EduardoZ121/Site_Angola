@@ -1,11 +1,15 @@
+import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMarketplace } from '../../context/MarketplaceContext'
 import { usePublishWizard } from '../../hooks/usePublishWizard'
+import { computePublishMarketStats } from '../../utils/publish'
 import { getProfilePublishErrors, isProfileReadyToPublish } from '../../utils/profile'
 import { clearPublishDraft, PUBLISH_DRAFT_KEY, validateAllPublishSteps } from '../../utils/publishDraft'
 import { PublishAutosaveStatus } from './PublishAutosaveStatus'
 import { PublishBottomBar } from './PublishBottomBar'
+import { PublishCrossNav } from './PublishCrossNav'
 import { PublishHero } from './PublishHero'
+import { PublishInsightsBar } from './PublishInsightsBar'
 import { PublishLivePreview } from './PublishLivePreview'
 import { PublishProfileAlert } from './PublishProfileAlert'
 import { PublishTimeline } from './PublishTimeline'
@@ -23,8 +27,10 @@ import '../../styles/publish.css'
 
 export function PublishWizard({ editListingId }) {
   const navigate = useNavigate()
-  const { profile, provinces, bairros, submitListingDraft, updateOwnerListing, getListing } = useMarketplace()
+  const { profile, provinces, bairros, listings, submitListingDraft, updateOwnerListing, getListing } =
+    useMarketplace()
   const listing = editListingId ? getListing(editListingId) : null
+  const marketStats = useMemo(() => computePublishMarketStats(listings), [listings])
   const wizard = usePublishWizard({ editListingId, listing })
   const {
     draft,
@@ -104,7 +110,9 @@ export function PublishWizard({ editListingId }) {
     <div className="publish-wizard">
       <PublishAutosaveStatus savedLabel={savedLabel} />
 
-      <PublishHero editMode={Boolean(editListingId)} />
+      <PublishHero editMode={Boolean(editListingId)} marketStats={marketStats} />
+
+      <PublishInsightsBar stats={marketStats} />
 
       <PublishProfileAlert profile={profile} />
 
@@ -128,6 +136,8 @@ export function PublishWizard({ editListingId }) {
           <PublishTipsPanel />
         </aside>
       </div>
+
+      <PublishCrossNav />
 
       <PublishBottomBar
         stepIndex={stepIndex}

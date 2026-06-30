@@ -1,4 +1,5 @@
 import { isListingPublic } from '../constants/listingStatus'
+import { matchesVehicleTypeFilter } from './vehicleCatalog'
 
 export function parseStorage(key, fallback) {
   try {
@@ -41,7 +42,13 @@ export function filterListings(listings, filters, isAdmin = false) {
     if (filters.neighborhood !== 'Todos' && listing.neighborhood !== filters.neighborhood) return false
     if (filters.minPrice && Number(listing.price) < Number(filters.minPrice)) return false
     if (filters.maxPrice && Number(listing.price) > Number(filters.maxPrice)) return false
-    if (filters.propertyType !== 'Todos' && listing.propertyType !== filters.propertyType) return false
+    if (filters.propertyType !== 'Todos') {
+      if (listing.category === 'Veículo') {
+        if (!matchesVehicleTypeFilter(listing, filters.propertyType)) return false
+      } else if (listing.propertyType !== filters.propertyType) {
+        return false
+      }
+    }
     if (filters.minBedrooms && Number(listing.bedrooms || 0) < Number(filters.minBedrooms)) return false
     if (filters.minBathrooms && Number(listing.bathrooms || 0) < Number(filters.minBathrooms)) return false
     if (filters.minArea && Number(listing.area || 0) < Number(filters.minArea)) return false
