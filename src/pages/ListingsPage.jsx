@@ -122,6 +122,9 @@ export default function ListingsPage({
 
   function selectPropertyType(propertyType) {
     updateFilters({ ...filters, propertyType, page: '1' })
+    window.setTimeout(() => {
+      document.getElementById('catalog-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
   }
 
   function closeFilters() {

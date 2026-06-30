@@ -309,25 +309,7 @@ textarea {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.listing-card {
-  overflow: hidden;
-}
-
-.listing-card button {
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  display: block;
-  padding: 0;
-  width: 100%;
-}
-
-.listing-card img {
-  aspect-ratio: 1.25;
-  display: block;
-  object-fit: cover;
-  width: 100%;
-}
+/* Cartões de catálogo — estilos em styles/listing-card.css */
 
 .listing-body {
   padding: 22px;
