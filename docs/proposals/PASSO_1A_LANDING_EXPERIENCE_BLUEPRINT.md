@@ -2,7 +2,7 @@
 
 **Documento:** Blueprint de experiência da Landing Page  
 **Versão:** 1.0  
-**Estado:** Aguardando revisão e aprovação  
+**Estado:** Aprovado oficialmente  
 **Código:** Proibido nesta fase  
 **Complementa:** `PASSO_1_LANDING_PAGE_SPEC.md`  
 **Referências obrigatórias:**
