@@ -2,7 +2,7 @@
 
 **Documento:** Especificação oficial de produto / UX / UI  
 **Versão:** 1.0  
-**Estado:** Aguardando revisão e aprovação  
+**Estado:** Aprovado oficialmente  
 **Código:** Proibido nesta fase  
 **Dependências aprovadas:**
 - Manual Operacional da Kuteka  
