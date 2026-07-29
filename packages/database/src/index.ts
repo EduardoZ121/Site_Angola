@@ -50,3 +50,4 @@ export function createServiceRoleClient(env: {
 }
 
 export { createBrowserClient, createServerClient, createClient };
+export { fetchAuthorizationContext, writeAuditLog, type WriteAuditLogInput } from './authorization';

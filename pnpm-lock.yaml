@@ -149,6 +149,12 @@ importers:
 
   packages/database:
     dependencies:
+      '@kuteka/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@kuteka/types':
+        specifier: workspace:*
+        version: link:../types
       '@supabase/ssr':
         specifier: ^0.6.1
         version: 0.6.1(@supabase/supabase-js@2.111.0)
@@ -171,6 +177,9 @@ importers:
       typescript:
         specifier: ^5.8.3
         version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.1)(jiti@2.6.1)(jsdom@26.1.0)(yaml@2.9.0)
 
   packages/shared:
     dependencies:

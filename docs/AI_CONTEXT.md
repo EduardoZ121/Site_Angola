@@ -121,7 +121,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 0 Fundação (docs + identidade) — **concluída**  
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
 1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
-2 Autenticação (PRD-001) — **bloqueada até backlog P0** (`docs/backlog/P0_PRE_AUTH.md`)  
+2 Autenticação (PRD-001) — após validação do P0 (`docs/backlog/P0_PRE_AUTH.md` · ADR-003)  
 3 Shell da plataforma  
 4 Parceiro Patrimonial (PRD-002)  
 5 Cliente (PRD-003)  

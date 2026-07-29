@@ -1,5 +1,6 @@
--- Seed official base roles + skeleton permissions (FASE 1)
--- Future roles (evaluator, lawyer, notary, …) are supported by schema; add via later migrations/PRDs.
+-- Official role → permission mappings (SOURCE OF TRUTH for product roles).
+-- Do not duplicate this matrix in application TypeScript.
+-- App code must resolve permissions via public.get_user_permission_codes / tables.
 
 insert into public.roles (code, name, description, is_system)
 values

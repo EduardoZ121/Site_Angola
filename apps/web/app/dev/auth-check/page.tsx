@@ -26,7 +26,15 @@ export default function DevAuthCheckPage() {
         </div>
         <div className="flex justify-between gap-4 border-b border-slate-200 py-2 dark:border-slate-800">
           <dt>Session</dt>
-          <dd>not wired (FASE 2)</dd>
+          <dd>not wired (PRD-001)</dd>
+        </div>
+        <div className="flex justify-between gap-4 border-b border-slate-200 py-2 dark:border-slate-800">
+          <dt>RBAC source</dt>
+          <dd>PostgreSQL RPCs (P0-1)</dd>
+        </div>
+        <div className="flex justify-between gap-4 border-b border-slate-200 py-2 dark:border-slate-800">
+          <dt>Audit writes</dt>
+          <dd>write_audit_log only (P0-2)</dd>
         </div>
       </dl>
       <Link href="/" className="text-sm text-brand-600 hover:underline">

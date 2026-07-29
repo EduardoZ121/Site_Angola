@@ -1,15 +1,5 @@
-# GitHub Workflows (templates)
+# GitHub Workflows
 
-Os ficheiros aqui são a definição oficial de CI para KEOS.
-
-O token desta sessão Cloud Agent **não** tem scope `workflow`, por isso os YAML
-não foram escritos directamente em `.github/workflows/`.
-
-Para activar:
-
-```bash
-cp docs/engineering/github-workflows/ci.yml .github/workflows/ci.yml
-# Opcional: desactivar o deploy Vite legado após Vercel estar activo
-```
-
-Depois faça commit com uma conta/token com scope `workflow`.
+- **Activo:** `.github/workflows/ci.yml` — lint, typecheck, test, build, e2e smoke
+- **Legado:** `deploy.yml` (Vite) — não usar para KEOS
+- **Cópia de referência:** este directório pode manter notas; a fonte operativa é `.github/workflows/`

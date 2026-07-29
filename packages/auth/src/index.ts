@@ -1,60 +1,57 @@
 import type { PermissionCode, RoleCode } from '@kuteka/types';
 
-/** Initial permission matrix skeleton (FASE 1) — extend via PRDs */
-export const ROLE_PERMISSIONS: Record<string, readonly PermissionCode[]> = {
-  client: ['platform.access'],
-  patrimonial_partner: ['platform.access'],
-  certified_agent: ['platform.access'],
-  administrator: ['platform.access', 'admin.panel'],
-};
-
-export function permissionsForRoles(roles: readonly RoleCode[]): Set<PermissionCode> {
-  const set = new Set<PermissionCode>();
-  for (const role of roles) {
-    const perms = ROLE_PERMISSIONS[role];
-    if (!perms) continue;
-    for (const p of perms) set.add(p);
-  }
-  return set;
+/**
+ * Authorization context resolved from the official source (PostgreSQL).
+ * Never invent permissions in the client — load via get_user_* RPCs / queries.
+ */
+export interface AuthorizationContext {
+  userId: string;
+  email: string | null;
+  roles: RoleCode[];
+  permissions: PermissionCode[];
 }
+
+/** @deprecated Use AuthorizationContext — kept as alias during P0 transition */
+export type SessionLike = AuthorizationContext;
 
 export function userHasRole(roles: readonly RoleCode[], role: RoleCode): boolean {
   return roles.includes(role);
 }
 
-export function userHasPermission(roles: readonly RoleCode[], permission: PermissionCode): boolean {
-  return permissionsForRoles(roles).has(permission);
+export function userHasPermission(
+  permissions: readonly PermissionCode[],
+  permission: PermissionCode,
+): boolean {
+  return permissions.includes(permission);
 }
 
 export function userHasAnyPermission(
-  roles: readonly RoleCode[],
-  permissions: readonly PermissionCode[],
+  owned: readonly PermissionCode[],
+  required: readonly PermissionCode[],
 ): boolean {
-  const owned = permissionsForRoles(roles);
-  return permissions.some((p) => owned.has(p));
+  return required.some((p) => owned.includes(p));
 }
 
 export function userHasAllPermissions(
-  roles: readonly RoleCode[],
-  permissions: readonly PermissionCode[],
+  owned: readonly PermissionCode[],
+  required: readonly PermissionCode[],
 ): boolean {
-  const owned = permissionsForRoles(roles);
-  return permissions.every((p) => owned.has(p));
+  return required.every((p) => owned.includes(p));
 }
 
-/** Session helpers are thin wrappers — wire to Supabase in apps/web */
-export interface SessionLike {
-  userId: string;
-  email: string | null;
-  roles: RoleCode[];
+export function canAccessPlatform(ctx: AuthorizationContext | null | undefined): boolean {
+  if (!ctx) return false;
+  return userHasPermission(ctx.permissions, 'platform.access');
 }
 
-export function canAccessPlatform(session: SessionLike | null): boolean {
-  if (!session) return false;
-  return userHasPermission(session.roles, 'platform.access');
+export function canAccessAdminPanel(ctx: AuthorizationContext | null | undefined): boolean {
+  if (!ctx) return false;
+  return userHasPermission(ctx.permissions, 'admin.panel');
 }
 
-export function canAccessAdminPanel(session: SessionLike | null): boolean {
-  if (!session) return false;
-  return userHasPermission(session.roles, 'admin.panel');
+export function emptyAuthorizationContext(
+  userId: string,
+  email: string | null = null,
+): AuthorizationContext {
+  return { userId, email, roles: [], permissions: [] };
 }
