@@ -41,15 +41,16 @@ Impedir adulteração da trilha de auditoria por clientes autenticados.
 
 ---
 
-## Decisão 3 — CI em `.github/workflows/ci.yml`
+## Decisão 3 — CI oficial versionado + activação em `.github/workflows/`
 
 ### Escolha
 
-Activar o workflow oficial de qualidade (lint, typecheck, test, build, e2e smoke).
+- Definição canónica em `docs/engineering/github-workflows/ci.yml`
+- Activação em `.github/workflows/ci.yml` via `scripts/enable-github-ci.sh` (requer scope GitHub `workflow`)
 
 ### Motivo
 
-Gates automáticos antes de `main` / PRs — requisito P0-3.
+Gates automáticos (lint, typecheck, test, build, e2e). Tokens sem scope `workflow` não podem criar workflows — daí o passo de activação explícito.
 
 ---
 

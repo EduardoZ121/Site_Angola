@@ -27,15 +27,16 @@
 | Migration + checklist            | `0002_…sql` + `docs/security/AUDIT_LOGS_CHECKLIST.md` |
 | Documentação                     | ADR-003                                               |
 
-### P0-3 — CI activo ✅ (código) / ⏳ (confirmação no GitHub)
+### P0-3 — CI ✅ definição / ⏳ activação no GitHub
 
-| Critério                         | Evidência                                          |
-| -------------------------------- | -------------------------------------------------- |
-| `ci.yml` em `.github/workflows/` | Ficheiro adicionado                                |
-| Pipeline verde                   | Depende de push com scope `workflow` + run Actions |
-| Docs actualizadas                | `docs/engineering/github-workflows/README.md`      |
+| Critério                             | Evidência                                          |
+| ------------------------------------ | -------------------------------------------------- |
+| Definição CI                         | `docs/engineering/github-workflows/ci.yml`         |
+| Script de activação                  | `scripts/enable-github-ci.sh`                      |
+| `.github/workflows/ci.yml` no remote | **Pendente** — token do agent sem scope `workflow` |
+| Pipeline verde                       | Após maintainer activar o workflow                 |
 
-> **Nota operacional:** se o push for rejeitado por falta de scope `workflow` no token, o ficheiro permanece no branch e deve ser confirmado por um maintainer com permissões adequadas.
+> **Acção humana (única restante):** `./scripts/enable-github-ci.sh` + commit/push com PAT que inclua `workflow`.
 
 ---
 

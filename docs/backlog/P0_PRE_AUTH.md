@@ -40,8 +40,9 @@
 
 **Critérios de conclusão:**
 
-- [x] `ci.yml` em `.github/workflows/`
-- [ ] Pipeline verde na branch (confirmar após push/Actions)
+- [x] Definição oficial pronta (`docs/engineering/github-workflows/ci.yml` + `scripts/enable-github-ci.sh`)
+- [ ] Ficheiro activo em `.github/workflows/ci.yml` (requer push com scope `workflow`)
+- [ ] Pipeline verde na branch (após activação)
 - [x] Documentação do workflow actualizada
 
 ---
