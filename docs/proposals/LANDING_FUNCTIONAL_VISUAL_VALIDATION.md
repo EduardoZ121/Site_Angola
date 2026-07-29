@@ -84,4 +84,6 @@ Nenhum problema estrutural relevante encontrado.
 
 A Landing Page é a **experiência pública oficial** da Kuteka e esta fase considera-se **encerrada**.
 
-Próximo foco do roadmap: concluir `docs/backlog/P0_PRE_AUTH.md`, depois PRD-001 Authentication — sem novas regras globais de processo, salvo necessidade excepcional.
+**Aprovação de produto (2026-07-29):** encerramento oficial confirmado pela equipa após revisão da validação funcional e visual e dos quatro níveis.
+
+Próximo foco do roadmap: concluir `docs/backlog/P0_PRE_AUTH.md`, depois PRD-001 Authentication — sem novas regras globais de processo.

@@ -1,8 +1,9 @@
 # Backlog P0 — Pré-requisitos do PRD-001 (Authentication)
 
-**Estado:** Aberto · Obrigatório  
-**Origem:** FASE 1 Technical Review + aprovação oficial de encerramento da FASE 1  
-**Regra:** Nenhum fluxo autenticado de negócio pode ser desenvolvido antes destes três itens estarem **concluídos e validados**.
+**Estado:** Aberto · Obrigatório · **Próximo trabalho técnico antes do PRD-001**  
+**Origem:** FASE 1 Technical Review + encerramento FASE 1 + encerramento Landing (2026-07-29)  
+**Regra:** Nenhum fluxo autenticado de negócio pode ser desenvolvido antes destes três itens estarem **concluídos e validados**.  
+**Contexto:** Fundação (FASE 1 + Landing) está construída e validada. Foco seguinte = resolver este backlog, depois PRD-001.
 
 ---
 
