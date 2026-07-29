@@ -1,9 +1,20 @@
 # P0_PRE_AUTH — Relatório Final (Auto-revisão + Testes)
 
-**Estado:** Implementação concluída · Aguarda validação de produto  
-**Branch:** `cursor/p0-pre-auth-f96b`  
+**Estado:** P0-1 e P0-2 **aprovados tecnicamente** · Encerramento oficial **condicionado à activação do CI**  
+**Branch:** `cursor/p0-pre-auth-f96b` · PR: https://github.com/EduardoZ121/Site_Angola/pull/3  
 **ADR:** `docs/architecture/ADR-003-p0-pre-auth-hardening.md`  
+**Runbook final:** `docs/backlog/P0_ACTIVATION_RUNBOOK.md`  
 **Âmbito:** Exclusivamente desbloquear PRD-001 — sem novas funcionalidades de negócio
+
+---
+
+## Validação de produto (2026-07-29)
+
+| Item                          | Decisão                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| P0-1 Fonte única RBAC         | **Aprovado tecnicamente**                                                                                           |
+| P0-2 Integridade `audit_logs` | **Aprovado tecnicamente**                                                                                           |
+| P0-3 CI GitHub Actions        | Implementação pronta · **encerramento oficial após** `.github/workflows/ci.yml` publicado + primeiro pipeline verde |
 
 ---
 
@@ -29,31 +40,33 @@
 
 ### P0-3 — CI ✅ definição / ⏳ activação no GitHub
 
-| Critério                             | Evidência                                          |
-| ------------------------------------ | -------------------------------------------------- |
-| Definição CI                         | `docs/engineering/github-workflows/ci.yml`         |
-| Script de activação                  | `scripts/enable-github-ci.sh`                      |
-| `.github/workflows/ci.yml` no remote | **Pendente** — token do agent sem scope `workflow` |
-| Pipeline verde                       | Após maintainer activar o workflow                 |
-
-> **Acção humana (única restante):** `./scripts/enable-github-ci.sh` + commit/push com PAT que inclua `workflow`.
+| Critério                             | Evidência                                             |
+| ------------------------------------ | ----------------------------------------------------- |
+| Definição CI                         | `docs/engineering/github-workflows/ci.yml`            |
+| Script de activação                  | `scripts/enable-github-ci.sh`                         |
+| `.github/workflows/ci.yml` no remote | **Pendente** — token do ambiente sem scope `workflow` |
+| Pipeline verde                       | Após activação (ver runbook)                          |
 
 ---
 
-## 2. Auto-revisão técnica
+## 2. Sequência para encerramento oficial do P0
+
+1. Aplicar migration `0002` no Supabase
+2. Activar workflow GitHub (token com scope `workflow`)
+3. Confirmar primeiro pipeline CI verde
+4. Actualizar este relatório → estado **Encerrado oficialmente**
+5. Iniciar **PRD-001**
+
+Detalhe operacional: `docs/backlog/P0_ACTIVATION_RUNBOOK.md`.
+
+---
+
+## 3. Auto-revisão técnica
 
 ### Conformidade
 
 - Arquitectura base **não** alterada (monorepo, multi-role N:N, API-first mantidos).
 - Apenas hardening e clarificação da fonte de verdade.
-
-### Riscos analisados (sem mudança estrutural adicional)
-
-| Risco                           | Decisão                                                   |
-| ------------------------------- | --------------------------------------------------------- |
-| Gerar TS a partir do seed em CI | Adiado — BD já é autoridade; geração é optimização futura |
-| Admin policies em `user_roles`  | Fora de P0 — PRD-001 / admin module                       |
-| Storage RLS                     | Fora de P0 — quando houver uploads                        |
 
 ### Qualidade (executado nesta branch)
 
@@ -66,30 +79,23 @@
 
 ---
 
-## 3. Como validar no Supabase
-
-```bash
-supabase db reset   # aplica 0001 + 0002 + seeds
-# Seguir docs/security/AUDIT_LOGS_CHECKLIST.md
-```
-
----
-
 ## 4. Checklist de encerramento P0
 
-| Nível                         | Estado                              |
-| ----------------------------- | ----------------------------------- |
-| Implementação                 | ✅                                  |
-| Auto-revisão técnica          | ✅ (este documento)                 |
-| Testes                        | ✅ (unit; e2e smoke da web intacto) |
-| Validação funcional / produto | ⏳                                  |
+| Nível                           | Estado      |
+| ------------------------------- | ----------- |
+| Implementação                   | ✅          |
+| Auto-revisão técnica            | ✅          |
+| Testes                          | ✅          |
+| Validação P0-1 / P0-2           | ✅ Aprovada |
+| Activação CI + pipeline verde   | ⏳          |
+| Encerramento oficial do backlog | ⏳          |
 
 ---
 
-## 5. Próximo passo após aprovação
+## 5. Após encerramento oficial
 
-Iniciar **PRD-001 – Authentication & User Management** sobre esta base:
+Iniciar **PRD-001 – Authentication & User Management** (primeiro módulo funcional), usando:
 
-- carregar sessão + `fetchAuthorizationContext`
-- emitir eventos com `writeAuditLog`
-- CI a correr em cada PR
+- `fetchAuthorizationContext`
+- `writeAuditLog`
+- CI activo em cada PR

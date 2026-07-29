@@ -1,16 +1,14 @@
 # Backlog P0 — Pré-requisitos do PRD-001 (Authentication)
 
-**Estado:** Implementado · Aguarda validação de produto  
+**Estado:** P0-1/P0-2 aprovados · Encerramento oficial **após activação CI**  
 **Branch:** `cursor/p0-pre-auth-f96b`  
 **Relatório:** `docs/backlog/P0_COMPLETION_REPORT.md`  
-**ADR:** `docs/architecture/ADR-003-p0-pre-auth-hardening.md`  
-**Regra:** Nenhum fluxo autenticado de negócio até validação deste P0.
+**Runbook:** `docs/backlog/P0_ACTIVATION_RUNBOOK.md`  
+**ADR:** `docs/architecture/ADR-003-p0-pre-auth-hardening.md`
 
 ---
 
 ## P0-1 — Fonte única de verdade do RBAC
-
-**Objectivo:** Uma única fonte oficial (PostgreSQL) para papéis e permissões.
 
 **Critérios de conclusão:**
 
@@ -18,12 +16,11 @@
 - [x] Sessão/autorização resolve permissions a partir da fonte oficial
 - [x] Testes cobrem papéis multi-role e `admin.panel`
 - [x] Documentação / ADR actualizado
+- [x] **Aprovação técnica de produto (2026-07-29)**
 
 ---
 
 ## P0-2 — Integridade de `audit_logs`
-
-**Objectivo:** Impedir adulteração da auditoria.
 
 **Critérios de conclusão:**
 
@@ -31,12 +28,11 @@
 - [x] Existe API/função server-side controlada para eventos auditáveis
 - [x] Migration + testes/checklist de segurança
 - [x] Documentação actualizada
+- [x] **Aprovação técnica de produto (2026-07-29)**
 
 ---
 
 ## P0-3 — CI activo em `.github/workflows/`
-
-**Objectivo:** Activar CI de qualidade no GitHub Actions.
 
 **Critérios de conclusão:**
 
@@ -49,8 +45,8 @@
 
 ## Relação com fases
 
-| Fase                           | Relação com P0                           |
-| ------------------------------ | ---------------------------------------- |
-| Landing Page                   | Encerrada — não dependia do P0           |
-| PRD-001 Authentication         | **Desbloqueada após validação deste P0** |
-| Fluxos autenticados de negócio | Após PRD-001                             |
+| Fase                           | Relação com P0                                              |
+| ------------------------------ | ----------------------------------------------------------- |
+| Landing Page                   | Encerrada                                                   |
+| PRD-001 Authentication         | **Autorizado a iniciar após encerramento oficial deste P0** |
+| Fluxos autenticados de negócio | Após PRD-001                                                |
