@@ -2,9 +2,10 @@
 
 **Documento:** Fundação técnica oficial da plataforma Kuteka  
 **Versão:** 1.0  
-**Estado:** Aprovada · Implementação concluída · Revisão técnica entregue (`FASE_1_TECHNICAL_REVIEW.md`)  
-**Código:** Permitido — FASE 1 implementada em KEOS  
-**Âmbito:** Apenas infraestrutura — **sem funcionalidades de negócio**
+**Estado:** **Encerrada oficialmente** (revisão técnica aprovada)  
+**Código:** Fundação estável — alterações estruturais só com justificação clara  
+**Âmbito:** Apenas infraestrutura — **sem funcionalidades de negócio**  
+**Backlog obrigatório pré-Auth:** `docs/backlog/P0_PRE_AUTH.md`
 
 **Referências obrigatórias:**
 

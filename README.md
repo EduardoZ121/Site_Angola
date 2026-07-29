@@ -72,7 +72,10 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 
 ## Fases
 
-1. **FASE 1 — Infraestrutura** (esta base) → revisão técnica
-2. Landing Page (PASSO 1 + 1A)
-3. FASE 2 — Auth de produto (PRD-001)
-4. Shell, domínios, KAI, …
+1. **FASE 1 — Infraestrutura** — **encerrada**
+2. **Landing Page** (PASSO 1 + 1A) — em validação
+3. **P0 pré-Auth** — `docs/backlog/P0_PRE_AUTH.md` (obrigatório)
+4. FASE 2 — Auth de produto (PRD-001) — bloqueada até P0
+5. Shell, domínios, KAI, …
+
+Processo oficial: `docs/engineering/DEVELOPMENT_PROCESS.md`

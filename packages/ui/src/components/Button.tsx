@@ -10,6 +10,8 @@ const buttonVariants = cva(
         primary: 'bg-brand-600 text-white hover:bg-brand-700',
         secondary:
           'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700',
+        outline:
+          'border border-slate-300 bg-transparent text-slate-900 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-50 dark:hover:bg-slate-900',
         ghost:
           'bg-transparent text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800',
         danger: 'bg-danger text-white hover:bg-red-700',

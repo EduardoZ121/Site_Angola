@@ -18,3 +18,40 @@ body {
 body {
   @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50;
 }
+
+/* Landing hero entrance — ≤250ms, staggered (PASSO 1 / 1A) */
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.landing-hero-item {
+  opacity: 0;
+  animation: landing-fade-up 220ms ease-out forwards;
+}
+
+.landing-hero-delay-1 {
+  animation-delay: 70ms;
+}
+
+.landing-hero-delay-2 {
+  animation-delay: 140ms;
+}
+
+.landing-hero-delay-3 {
+  animation-delay: 210ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-hero-item {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}

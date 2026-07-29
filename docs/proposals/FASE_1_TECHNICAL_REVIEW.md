@@ -11,6 +11,8 @@
 
 **Objectivo deste documento:** confirmar conformidade **e** expor riscos reais da fundação — não emitir um “tudo OK” acrítico.
 
+**Decisão oficial (pós-revisão):** FASE 1 **encerrada**. Landing autorizada. Riscos P0 → `docs/backlog/P0_PRE_AUTH.md` (bloqueiam PRD-001).
+
 ---
 
 ## Veredicto executivo

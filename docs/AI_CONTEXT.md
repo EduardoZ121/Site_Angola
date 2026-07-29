@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (FASE 0 concluída · FASE 1 infra implementada)  
+**Estado:** Activo (FASE 0 concluída · FASE 1 infra **encerrada** · Landing em curso)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação
 
@@ -102,20 +102,26 @@ O projecto React/Vite actual é **protótipo legado**, não base de produção.
 ## 11. Metodologia da equipa
 
 ```
-Especificação → Revisão → Aprovação → Desenvolvimento → Testes → Validação
+Especificação → Aprovação → Implementação → Auto-Revisão Técnica
+→ Testes → Validação → Aprovação Final → Próxima Fase
 ```
+
+Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 
 - Um PRD por módulo seguinte (não 100 documentos à frente)
 - Qualidade acima da velocidade
 - Cada passo deve parecer produto final
 - Propor melhorias **antes** de implementar
 - Aguardar aprovação explícita entre passos
+- Documentação evolui com o código (ADRs / specs / PRDs)
+- Arquitectura base **congelada** — alterações estruturais só com benefício claro (segurança, desempenho, escalabilidade, manutenção)
 
 ## 12. Fases de produto (ordem)
 
 0 Fundação (docs + identidade) — **concluída**  
-1 Infraestrutura (monorepo, DS base)  
-2 Autenticação (PRD-001)  
+1 Infraestrutura (monorepo, DS base) — **encerrada**  
+1b Landing Page (PASSO 1 + 1A) — **em implementação**  
+2 Autenticação (PRD-001) — **bloqueada até backlog P0** (`docs/backlog/P0_PRE_AUTH.md`)  
 3 Shell da plataforma  
 4 Parceiro Patrimonial (PRD-002)  
 5 Cliente (PRD-003)  
