@@ -38,8 +38,18 @@ Imagem atmosférica de arquitectura residencial contemporânea em `public/images
 Catálogo continua em `/dev/ui`; Landing usa primitivos do DS.  
 **Motivo:** ADR-001 — evitar overhead; foco na experiência pública.
 
+## Ajustes pós-validação visual (2026-07-29)
+
+- Title SEO com `absolute` (evita sufixo duplicado do layout).
+- Reveal com fallback temporal + show imediato se já no viewport.
+- Topbar glass claro nas secções claras após scroll.
+
 ## Não decidido / futuro
 
 - `/explorar` público real
 - JSON-LD Organization (quando dados legais fechados)
 - Instrumentação analytics (`landing_view`, CTAs)
+
+## Encerramento
+
+Módulo Landing encerrado após validação funcional e visual — ver `docs/proposals/LANDING_FUNCTIONAL_VISUAL_VALIDATION.md`.

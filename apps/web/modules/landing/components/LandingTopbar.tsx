@@ -9,31 +9,47 @@ import { landingContent } from '../content';
 
 const c = landingContent;
 
+/**
+ * Topbar: transparent over hero → glass on scroll.
+ * Past the hero, switches to a light glass so it stays discreet on white sections (PASSO 1 §A).
+ */
 export function LandingTopbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [overLight, setOverLight] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      // Approximate first viewport — light sections begin after hero
+      setOverLight(y > window.innerHeight * 0.72);
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  const light = overLight;
+
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-150',
+        'fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color,color] duration-150',
         scrolled
-          ? 'border-b border-white/10 bg-slate-950/70 backdrop-blur-md'
-          : 'border-b border-transparent bg-transparent',
+          ? light
+            ? 'border-b border-slate-200/80 bg-white/80 text-slate-900 backdrop-blur-md'
+            : 'border-b border-white/10 bg-slate-950/70 text-white backdrop-blur-md'
+          : 'border-b border-transparent bg-transparent text-white',
       )}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
         <Link
           href="/"
-          className="flex items-center gap-2 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className={cn(
+            'flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2',
+            light ? 'focus-visible:ring-offset-white' : 'focus-visible:ring-offset-slate-950',
+          )}
         >
-          {/* Decorative mark; brand name is the accessible name of the link */}
           <Image
             src="/kuteka-logo.svg"
             alt=""
@@ -49,7 +65,10 @@ export function LandingTopbar() {
         <nav aria-label="Principal" className="flex items-center gap-2 sm:gap-3">
           <Link
             href={c.routes.enter}
-            className="hidden min-h-11 items-center px-3 text-sm font-medium text-slate-200 transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline-flex"
+            className={cn(
+              'hidden min-h-11 items-center px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline-flex',
+              light ? 'text-slate-600 hover:text-slate-900' : 'text-slate-200 hover:text-white',
+            )}
           >
             {c.topbar.enter}
           </Link>

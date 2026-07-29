@@ -1,8 +1,9 @@
 # Landing Page — Implementation Notes
 
-**Estado:** Implementada · Aguarda Auto-Revisão / Validação  
+**Estado:** **Encerrada** (4 níveis aprovados)  
 **Branch:** `cursor/landing-page-f96b`  
-**Contrato:** PASSO 0 · PASSO 1 · PASSO 1A
+**Contrato:** PASSO 0 · PASSO 1 · PASSO 1A  
+**Validação final:** `LANDING_FUNCTIONAL_VISUAL_VALIDATION.md`
 
 ## Entregue
 

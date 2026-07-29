@@ -2,8 +2,8 @@
 
 **Documento:** Blueprint de experiência da Landing Page  
 **Versão:** 1.0  
-**Estado:** Aprovado oficialmente · Em implementação  
-**Código:** Autorizado após encerramento da FASE 1  
+**Estado:** Aprovado oficialmente · **Implementação encerrada**  
+**Código:** Entregue em `apps/web` · Validação: `LANDING_FUNCTIONAL_VISUAL_VALIDATION.md`  
 **Complementa:** `PASSO_1_LANDING_PAGE_SPEC.md`  
 **Referências obrigatórias:**
 

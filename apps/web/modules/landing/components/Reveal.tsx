@@ -9,7 +9,11 @@ interface RevealProps {
   delayMs?: number;
 }
 
-/** Scroll reveal — respects prefers-reduced-motion (PASSO 1 / 1A). */
+/**
+ * Scroll reveal with progressive enhancement.
+ * Content remains visible if motion is reduced or observer cannot run —
+ * avoids permanently hidden sections (a11y + reliability).
+ */
 export function Reveal({ children, className, delayMs = 0 }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -24,18 +28,34 @@ export function Reveal({ children, className, delayMs = 0 }: RevealProps) {
       return;
     }
 
+    const show = () => setVisible(true);
+
+    // Already in / near viewport on mount
+    const initial = node.getBoundingClientRect();
+    if (initial.top < window.innerHeight * 0.92) {
+      show();
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry?.isIntersecting) {
-          setVisible(true);
+          show();
           observer.disconnect();
         }
       },
-      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
+      { threshold: 0.12, rootMargin: '0px 0px -24px 0px' },
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
+
+    // Safety: never leave content permanently hidden
+    const fallback = window.setTimeout(show, 1200);
+
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   return (
@@ -46,7 +66,7 @@ export function Reveal({ children, className, delayMs = 0 }: RevealProps) {
         visible ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0',
         className,
       )}
-      style={visible || delayMs === 0 ? undefined : { transitionDelay: `${delayMs}ms` }}
+      style={visible && delayMs > 0 ? { transitionDelay: `${delayMs}ms` } : undefined}
     >
       {children}
     </div>

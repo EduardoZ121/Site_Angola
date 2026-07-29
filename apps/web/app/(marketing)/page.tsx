@@ -3,7 +3,9 @@ import { LandingPage } from '@/modules/landing/LandingPage';
 import { landingContent } from '@/modules/landing/content';
 
 export const metadata: Metadata = {
-  title: landingContent.seo.title,
+  title: {
+    absolute: landingContent.seo.title,
+  },
   description: landingContent.seo.description,
   alternates: {
     canonical: '/',

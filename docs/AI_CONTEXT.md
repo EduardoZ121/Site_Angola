@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (FASE 0 concluída · FASE 1 infra **encerrada** · Landing em curso)  
+**Estado:** Activo (FASE 0 concluída · FASE 1 encerrada · Landing **encerrada**)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação
 
@@ -120,7 +120,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 
 0 Fundação (docs + identidade) — **concluída**  
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
-1b Landing Page (PASSO 1 + 1A) — **em implementação**  
+1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
 2 Autenticação (PRD-001) — **bloqueada até backlog P0** (`docs/backlog/P0_PRE_AUTH.md`)  
 3 Shell da plataforma  
 4 Parceiro Patrimonial (PRD-002)  

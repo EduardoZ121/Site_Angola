@@ -2,8 +2,8 @@
 
 **Documento:** Especificação oficial de produto / UX / UI  
 **Versão:** 1.0  
-**Estado:** Aprovado oficialmente · Em implementação  
-**Código:** Autorizado após encerramento da FASE 1  
+**Estado:** Aprovado oficialmente · **Implementação encerrada**  
+**Código:** Entregue em `apps/web` · Validação: `LANDING_FUNCTIONAL_VISUAL_VALIDATION.md`  
 **Dependências aprovadas:**
 
 - Manual Operacional da Kuteka
