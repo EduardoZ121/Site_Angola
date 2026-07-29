@@ -2,7 +2,7 @@
 
 **Documento:** Fundação de Marca, Experiência e Linguagem  
 **Versão:** 1.0  
-**Estado:** Aguardando aprovação  
+**Estado:** Aprovado oficialmente  
 **Código:** Não aplicável — este passo não inclui desenvolvimento  
 **Fontes oficiais (não substituídas):**
 1. Manual Operacional da Kuteka  
