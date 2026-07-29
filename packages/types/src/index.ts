@@ -1,0 +1,80 @@
+/** Official role codes — extensible via DB, not a closed product enum forever */
+export type RoleCode =
+  'client' | 'patrimonial_partner' | 'certified_agent' | 'administrator' | (string & {});
+
+/** Permission codes — capabilities, not roles */
+export type PermissionCode = 'platform.access' | 'admin.panel' | (string & {});
+
+export interface Role {
+  id: string;
+  code: RoleCode;
+  name: string;
+  description: string | null;
+  isSystem: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Permission {
+  id: string;
+  code: PermissionCode;
+  description: string | null;
+}
+
+export interface UserRole {
+  userId: string;
+  roleId: string;
+  roleCode: RoleCode;
+  assignedAt: string;
+  assignedBy: string | null;
+}
+
+export interface Profile {
+  id: string;
+  displayName: string | null;
+  avatarUrl: string | null;
+  locale: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface User {
+  id: string;
+  email: string | null;
+  profile: Profile | null;
+  roles: RoleCode[];
+}
+
+export type AppErrorCode =
+  | 'INTERNAL_ERROR'
+  | 'UNAUTHORIZED'
+  | 'FORBIDDEN'
+  | 'NOT_FOUND'
+  | 'VALIDATION_ERROR'
+  | 'SERVICE_UNAVAILABLE';
+
+export interface AppError {
+  code: AppErrorCode;
+  message: string;
+  status: number;
+  details?: unknown;
+}
+
+export type Result<T, E = AppError> = { ok: true; value: T } | { ok: false; error: E };
+
+export interface AuditLogEntry {
+  id: string;
+  actorId: string | null;
+  action: string;
+  entityType: string | null;
+  entityId: string | null;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
+}
+
+export interface HealthResponse {
+  status: 'ok' | 'degraded' | 'error';
+  version: string;
+  timestamp: string;
+}

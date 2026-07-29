@@ -1,73 +1,78 @@
-# Kuteka
+# Kuteka — KEOS
 
-Site marketplace inspirado em portais como Daft, adaptado para Angola, moeda Kz e dominio `kutekalink.com`.
-Isto e um site React/Vite, nao e APK.
+Monorepo oficial da plataforma Kuteka (**Kuteka Engineering Operating System**).
 
-- casas e apartamentos;
-- quartos;
-- carros;
-- terrenos;
-- lojas e outros alugueres ou vendas.
+> PropTech africana de gestão de património, confiança e habitação digna — **não** um site de classificados.
 
-Esta primeira versao e um frontend. Os anuncios criados no formulario ficam guardados no `localStorage` do navegador, permitindo visualizar o fluxo imediatamente sem backend.
+## Stack oficial
 
-## Funcionalidades
+- **Next.js 15** (App Router) + React 19 + TypeScript strict
+- **pnpm** workspaces + **Turborepo**
+- **Tailwind CSS** + Design System `@kuteka/ui` (Kuteka Orange / Slate)
+- **Supabase** (Auth, PostgreSQL, Storage, RLS)
+- Deploy alvo: **Vercel** + Cloudflare (DNS adiado até infra estável)
 
-- Landing page para Angola com moeda Kz.
-- Pesquisa por texto, categoria, provincia e preco maximo.
-- Cards de anuncios com foto, localizacao, preco, telefone e WhatsApp.
-- Formulario para proprietarios publicarem anuncios.
-- Upload de ate 5 fotos com pre-visualizacao local.
-- Modal de detalhes do anuncio.
-- Categorias principais.
-- Painel do proprietario em modo local.
-- Painel admin demo por email.
-- Ideias iniciais de monetizacao.
-- Layout responsivo para desktop e telemovel.
+Ver `docs/architecture/ADR-001-foundation-architecture-decisions.md` e `docs/AI_CONTEXT.md`.
 
-## Admin e login
+## Estrutura
 
-- **Login:** página dedicada em `/entrar` (ecrã completo, Google).
-- **Admin:** só `amarilinhaa@gmail.com` — painel em `/admin` (utilizadores, aprovar/rejeitar anúncios).
-- **Sem login:** ver casas, carros e anúncios. **Com login:** publicar, favoritos, comparar, conta.
-
-Guia completo: [`docs/ADMIN-E-LOGIN.md`](docs/ADMIN-E-LOGIN.md)
-
-## Deploy no Render
-
-1. Enviar este codigo para `https://github.com/EduardoZ121/Site_Angola`.
-2. No Render Dashboard, criar um **Static Site** ligado a esse repositorio.
-3. Usar:
-   - Build Command: `npm ci && npm run build`
-   - Publish Directory: `dist`
-4. Adicionar rewrite `/* -> /index.html` para SPA.
-5. Ligar o dominio `kutekalink.com` no Render.
-
-Este repositorio ja inclui `render.yaml` para Blueprint.
-
-
-```bash
-npm install
-npm run dev
+```
+apps/web          Produto principal
+apps/admin        Reservado
+apps/landing      Reservado (Landing = route group em web)
+packages/*        ui, config, types, validation, database, auth, shared
+supabase/         Migrations + seeds
+legacy/           Protótipo Vite (não produção)
+docs/             ADRs, specs, AI_CONTEXT
 ```
 
-Para gerar build de producao:
+## Arranque local
 
 ```bash
-npm run build
+pnpm install
+cp .env.example apps/web/.env.local   # ajustar valores
+pnpm dev                              # http://localhost:3000
 ```
 
-Para visualizar o build:
+### Scripts
+
+| Comando          | Descrição                                    |
+| ---------------- | -------------------------------------------- |
+| `pnpm dev`       | Next.js em desenvolvimento                   |
+| `pnpm build`     | Build do monorepo                            |
+| `pnpm lint`      | ESLint                                       |
+| `pnpm typecheck` | TypeScript                                   |
+| `pnpm test`      | Testes unitários (Vitest)                    |
+| `pnpm test:e2e`  | Smoke Playwright (requer build prévio em CI) |
+
+### Design System
+
+Catálogo em desenvolvimento: [http://localhost:3000/dev/ui](http://localhost:3000/dev/ui)
+
+### Supabase
 
 ```bash
-npm run preview
+# Com Supabase CLI
+supabase start
+supabase db reset
 ```
 
-## Proximos passos para producao
+## Legado
 
-1. Adicionar Google Login para clientes, proprietarios e admin.
-2. Criar backend/API para anuncios.
-3. Guardar dados em banco de dados.
-4. Guardar imagens em S3 ou servico equivalente.
-5. Configurar email real do admin.
-6. Ligar o deploy da Vercel ao repositorio `EduardoZ121/meu12`.
+O protótipo Vite/React está em `legacy/`. Não usar como base de novas features.
+
+## Documentação chave
+
+- `docs/AI_CONTEXT.md`
+- `docs/architecture/ADR-001-foundation-architecture-decisions.md`
+- `docs/proposals/FASE_1_INFRAESTRUTURA_SPEC.md` (aprovada)
+- `docs/proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`
+- `docs/proposals/PASSO_1_LANDING_PAGE_SPEC.md`
+- `docs/proposals/PASSO_1A_LANDING_EXPERIENCE_BLUEPRINT.md`
+
+## Fases
+
+1. **FASE 1 — Infraestrutura** (esta base) → revisão técnica
+2. Landing Page (PASSO 1 + 1A)
+3. FASE 2 — Auth de produto (PRD-001)
+4. Shell, domínios, KAI, …

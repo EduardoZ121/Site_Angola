@@ -1,0 +1,9 @@
+{
+  "extends": "@kuteka/config/typescript/react-library",
+  "compilerOptions": {
+    "rootDir": "src",
+    "noEmit": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
+  },
+  "include": ["src"]
+}

@@ -1,48 +1,46 @@
 {
-  "name": "kutekalink",
+  "name": "kuteka",
   "private": true,
   "version": "0.1.0",
-  "type": "module",
-  "workspaces": [
-    "backend"
-  ],
-  "scripts": {
-    "dev": "concurrently -n web,api -c blue,green \"npm run dev:web\" \"npm run dev:api\"",
-    "dev:web": "vite",
-    "dev:api": "npm run dev --workspace=kuteka-api",
-    "build": "vite build && node scripts/copy-spa-fallback.js",
-    "start:api": "npm run start --workspace=kuteka-api",
-    "seed": "node backend/scripts/seed-listings.js",
-    "mongo:host": "node scripts/set-mongo-host.js",
-    "mongo:uri": "node scripts/set-mongo-uri.js",
-    "aws:provision": "powershell -ExecutionPolicy Bypass -File scripts/aws-provision-kuteka.ps1",
-    "mongo:provision": "powershell -ExecutionPolicy Bypass -File scripts/aws-provision-mongo-ec2.ps1",
-    "lint": "eslint .",
-    "preview": "vite preview"
+  "description": "KEOS — Kuteka Engineering Operating System",
+  "packageManager": "pnpm@10.33.3",
+  "engines": {
+    "node": ">=22"
   },
-  "dependencies": {
-    "@tanstack/react-query": "^5.80.7",
-    "axios": "^1.9.0",
-    "browser-image-compression": "^2.0.2",
-    "date-fns": "^4.1.0",
-    "leaflet": "^1.9.4",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-leaflet": "^5.0.0",
-    "react-router-dom": "^7.18.0",
-    "sonner": "^2.0.3",
-    "zod": "^3.25.67"
+  "scripts": {
+    "dev": "turbo run dev --filter=@kuteka/web",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "pnpm --filter @kuteka/web test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,yml,yaml}\"",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "concurrently": "^9.1.2",
-    "eslint": "^10.3.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.6.0",
-    "vite": "^8.0.12"
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "eslint": "^9.30.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+      "prettier --write"
+    ],
+    "*.{json,md,css,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp",
+      "unrs-resolver"
+    ]
   }
 }

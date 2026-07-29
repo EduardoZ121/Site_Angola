@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (FASE 0 concluída)  
+**Estado:** Activo (FASE 0 concluída · FASE 1 infra implementada)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação
 
@@ -19,83 +19,85 @@ Ser a PropTech africana de referência em gestão de património habitacional, c
 
 ## 3. O que a Kuteka não é
 
-- Website de classificados  
-- Cópia de Airbnb, Booking ou Idealista  
-- Ferramenta agressiva de “vender rápido”  
-- Produto descartável de MVP sem arquitectura  
+- Website de classificados
+- Cópia de Airbnb, Booking ou Idealista
+- Ferramenta agressiva de “vender rápido”
+- Produto descartável de MVP sem arquitectura
 
 ## 4. Stakeholders principais
 
-| Papel oficial | Função |
-|---|---|
-| Cliente | Compra / arrendamento / jornada habitacional |
-| Parceiro Patrimonial | Activa e gere património |
-| Agente Certificado | Representa a Kuteka no terreno |
-| Administrador | Valida, governa, audita |
+| Papel oficial        | Função                                       |
+| -------------------- | -------------------------------------------- |
+| Cliente              | Compra / arrendamento / jornada habitacional |
+| Parceiro Patrimonial | Activa e gere património                     |
+| Agente Certificado   | Representa a Kuteka no terreno               |
+| Administrador        | Valida, governa, audita                      |
 
 Uma conta pode ter **múltiplos papéis** (RBAC / `user_roles`).
 
 ## 5. Conceitos de produto obrigatórios
 
-- Ativar Património (não “publicar anúncio”)  
-- Passaporte Digital do Imóvel  
-- Índice Kuteka / KTK Score  
-- Sistema de Confiança Kuteka (SCK)  
-- KAI — presença constante, nunca página escondida  
-- Códigos `KID`, `KTK-IMM-…`  
+- Ativar Património (não “publicar anúncio”)
+- Passaporte Digital do Imóvel
+- Índice Kuteka / KTK Score
+- Sistema de Confiança Kuteka (SCK)
+- KAI — presença constante, nunca página escondida
+- Códigos `KID`, `KTK-IMM-…`
 
 ## 6. Documentos oficiais (hierarquia)
 
-1. Manual Operacional da Kuteka  
-2. Software Architecture Blueprint  
-3. Design System & UX Blueprint (Nº 003)  
-4. Identidade Oficial da Kuteka (PASSO 0)  
-5. Este `AI_CONTEXT.md`  
-6. PRDs por módulo (PRD-001, PRD-002, …)  
+1. Manual Operacional da Kuteka
+2. Software Architecture Blueprint
+3. Design System & UX Blueprint (Nº 003)
+4. Identidade Oficial da Kuteka (PASSO 0)
+5. Este `AI_CONTEXT.md`
+6. PRDs por módulo (PRD-001, PRD-002, …)
 
 Nunca contradizer 1–4. Em conflito, prevalece o documento de nível superior.
 
 ## 7. Stack oficial
 
-- Next.js (App Router)  
-- TypeScript  
-- Tailwind CSS  
-- Supabase (Auth, Storage)  
-- PostgreSQL  
-- Deploy alvo: Vercel + Cloudflare  
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Supabase (Auth, Storage)
+- PostgreSQL
+- Deploy alvo: Vercel + Cloudflare
 
 O projecto React/Vite actual é **protótipo legado**, não base de produção.
 
 ## 8. Arquitectura
 
-- Monorepo KEOS (`apps/`, `packages/`, `docs/`, `supabase/`)  
-- Desenvolvimento por **domínios**, não por páginas soltas  
-- Clean Architecture / SOLID / Repository Pattern  
-- API First  
-- Auditoria e logs desde o primeiro dia  
-- Escala pensada para o futuro, complexidade controlada no MVP  
+- Monorepo KEOS (`apps/`, `packages/`, `docs/`, `supabase/`) — pnpm + Turborepo
+- Desenvolvimento por **domínios**, não por páginas soltas
+- Clean Architecture / SOLID / Repository Pattern
+- API First
+- Multi-Role: Utilizador = identidade; papéis = permissões (N:N); RBAC por capacidades
+- Auditoria e logs desde o primeiro dia
+- Escala pensada para o futuro, complexidade controlada no MVP
+- ADR-001: `docs/architecture/ADR-001-foundation-architecture-decisions.md`
 
 ## 9. Design System (resumo)
 
-- Primary: **Kuteka Orange**  
-- Secondary: Slate  
-- Success / Warning / Danger / Info conforme Doc Nº 003  
-- Tipografia: Inter + JetBrains Mono  
-- Espaçamento: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96  
-- App shell: Sidebar + Topbar + Main + Widgets  
-- Motion &lt; 250 ms  
-- Mobile first  
-- WCAG 2.2 AA  
+- Primary: **Kuteka Orange**
+- Secondary: Slate
+- Success / Warning / Danger / Info conforme Doc Nº 003
+- Tipografia: Inter + JetBrains Mono
+- Espaçamento: 4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96
+- App shell: Sidebar + Topbar + Main + Widgets
+- Motion &lt; 250 ms
+- Mobile first
+- WCAG 2.2 AA
 
 ## 10. Princípios UX
 
-1. Nunca obrigar o utilizador a pensar  
-2. Cada clique aproxima do objectivo  
-3. Um ecrã = uma missão  
-4. Mostrar só o necessário  
-5. Antecipar necessidades  
-6. Tudo transmite confiança  
-7. A plataforma ensina-se a si própria  
+1. Nunca obrigar o utilizador a pensar
+2. Cada clique aproxima do objectivo
+3. Um ecrã = uma missão
+4. Mostrar só o necessário
+5. Antecipar necessidades
+6. Tudo transmite confiança
+7. A plataforma ensina-se a si própria
 
 ## 11. Metodologia da equipa
 
@@ -103,11 +105,11 @@ O projecto React/Vite actual é **protótipo legado**, não base de produção.
 Especificação → Revisão → Aprovação → Desenvolvimento → Testes → Validação
 ```
 
-- Um PRD por módulo seguinte (não 100 documentos à frente)  
-- Qualidade acima da velocidade  
-- Cada passo deve parecer produto final  
-- Propor melhorias **antes** de implementar  
-- Aguardar aprovação explícita entre passos  
+- Um PRD por módulo seguinte (não 100 documentos à frente)
+- Qualidade acima da velocidade
+- Cada passo deve parecer produto final
+- Propor melhorias **antes** de implementar
+- Aguardar aprovação explícita entre passos
 
 ## 12. Fases de produto (ordem)
 
@@ -119,34 +121,34 @@ Especificação → Revisão → Aprovação → Desenvolvimento → Testes → 
 5 Cliente (PRD-003)  
 6 Agente (PRD-004)  
 7 Administração (PRD-005)  
-8 Contratos → 9 Wallet → 10 Marketplace → 11 KAI → 12 BI  
+8 Contratos → 9 Wallet → 10 Marketplace → 11 KAI → 12 BI
 
 ## 13. Segurança (mínimos)
 
-- Passwords nunca em texto simples  
-- Auth via Supabase  
-- RBAC por permissões  
-- RLS no PostgreSQL  
-- Auditoria de acções críticas  
-- Sem dados falsos em produção  
+- Passwords nunca em texto simples
+- Auth via Supabase
+- RBAC por permissões
+- RLS no PostgreSQL
+- Auditoria de acções críticas
+- Sem dados falsos em produção
 
 ## 14. Convenções de nomenclatura
 
-- Ficheiros/funções: nomes explícitos (`CreateProperty`, não `novo2`)  
-- Variáveis: `propertyPrice`, `partnerId`, `kutekaScore`  
-- UI: glossário oficial (Parceiro Patrimonial, Ativar Património, …)  
-- Branches: `cursor/<nome>-f96b` quando aplicável ao fluxo Cursor  
+- Ficheiros/funções: nomes explícitos (`CreateProperty`, não `novo2`)
+- Variáveis: `propertyPrice`, `partnerId`, `kutekaScore`
+- UI: glossário oficial (Parceiro Patrimonial, Ativar Património, …)
+- Branches: `cursor/<nome>-f96b` quando aplicável ao fluxo Cursor
 
 ## 15. Regra de ouro para o Cursor
 
 Antes de escrever código:
 
-1. Ler este `AI_CONTEXT.md`  
-2. Ler o PRD / especificação do passo actual  
-3. Confirmar alinhamento com Manual, Blueprint e Design System  
-4. Não implementar fora do âmbito aprovado  
-5. Terminar entregas com critérios de aprovação objectivos  
+1. Ler este `AI_CONTEXT.md`
+2. Ler o PRD / especificação do passo actual
+3. Confirmar alinhamento com Manual, Blueprint e Design System
+4. Não implementar fora do âmbito aprovado
+5. Terminar entregas com critérios de aprovação objectivos
 
 ---
 
-*Memória institucional Kuteka — FASE 0.*
+_Memória institucional Kuteka — FASE 0._

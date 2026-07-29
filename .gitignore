@@ -1,13 +1,43 @@
+# Dependencies
 node_modules
+.pnpm-store
+
+# Builds
 dist
-.DS_Store
-*.log
+build
+.next
+out
+.turbo
+coverage
+playwright-report
+test-results
+blob-report
+
+# Env
 .env
 .env.local
 .env.*.local
-backend/uploads
+!.env.example
+
+# OS / IDE
+.DS_Store
 *.log
-aws-login.log
-atlas-login.log
+.vscode
+.idea
+
+# Legacy / local tooling
+legacy/node_modules
+legacy/dist
+legacy/backend/uploads
+legacy/backend/node_modules
 .mongo-ec2.json
 .vercel
+aws-login.log
+atlas-login.log
+
+# Supabase
+supabase/.branches
+supabase/.temp
+
+# Misc
+*.tsbuildinfo
