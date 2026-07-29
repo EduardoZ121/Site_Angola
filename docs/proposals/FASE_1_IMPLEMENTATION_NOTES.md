@@ -27,4 +27,5 @@
 
 ## Próximo passo
 
-Revisão técnica → só então implementação Landing (PASSO 1 + 1A).
+Revisão técnica → `docs/proposals/FASE_1_TECHNICAL_REVIEW.md` (aguarda decisão de encerramento).  
+Se aprovada: implementação Landing (PASSO 1 + 1A). FASE 2 Auth só após correcções P0 da revisão.
