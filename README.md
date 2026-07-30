@@ -64,6 +64,7 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 ## Documentação chave
 
 - `docs/README.md` — índice
+- `CONTRIBUTING.md` — como contribuir
 - `docs/AI_CONTEXT.md`
 - `docs/engineering/DEVELOPMENT_PROCESS.md`
 - `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` — **v1.0** (Aprovação Funcional)
