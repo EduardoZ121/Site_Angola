@@ -1,5 +1,7 @@
 import type { NextConfig } from 'next';
 
+const isStaticExport = process.env.STATIC_EXPORT === '1';
+
 const nextConfig: NextConfig = {
   transpilePackages: [
     '@kuteka/ui',
@@ -13,8 +15,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [],
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
+    unoptimized: isStaticExport,
   },
   poweredByHeader: false,
+  ...(isStaticExport
+    ? {
+        output: 'export' as const,
+        trailingSlash: true,
+      }
+    : {}),
 };
 
 export default nextConfig;

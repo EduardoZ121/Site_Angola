@@ -9,14 +9,16 @@
   },
   "scripts": {
     "dev": "turbo run dev --filter=@kuteka/web",
-    "build": "turbo run build",
+    "build": "bash scripts/build-for-render.sh",
+    "build:turbo": "turbo run build",
+    "build:static": "bash scripts/build-static-web.sh",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "test:e2e": "pnpm --filter @kuteka/web test:e2e",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,yml,yaml}\"",
-    "prepare": "husky"
+    "prepare": "husky || true"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",

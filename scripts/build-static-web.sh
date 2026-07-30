@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Build a static export of apps/web for GitHub Pages / static hosts.
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+WEB="$ROOT/apps/web"
+cd "$WEB"
+
+cleanup() {
+  if [[ -f middleware.ts.staticbak ]]; then
+    mv -f middleware.ts.staticbak middleware.ts
+  fi
+  if [[ -d "$WEB/.staticbak/api" ]]; then
+    rm -rf app/api
+    mv "$WEB/.staticbak/api" app/api
+  fi
+  rmdir "$WEB/.staticbak" 2>/dev/null || true
+}
+trap cleanup EXIT
+
+# Clean leftovers from failed runs
+rm -rf app/api.staticbak
+mkdir -p "$WEB/.staticbak"
+
+# Static export is incompatible with middleware + Route Handlers
+if [[ -f middleware.ts ]]; then
+  mv middleware.ts middleware.ts.staticbak
+fi
+if [[ -d app/api ]]; then
+  mv app/api "$WEB/.staticbak/api"
+fi
+
+export STATIC_EXPORT=1
+export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://kutekalink.com}"
+export NEXT_PUBLIC_ENABLE_DEV_TOOLS=false
+
+# Clear previous Next output that may still reference bak routes
+rm -rf .next out
+
+pnpm exec next build
+
+if [[ ! -f out/404.html && -f out/index.html ]]; then
+  cp out/index.html out/404.html
+fi
+
+echo 'kutekalink.com' > out/CNAME
+
+echo "Static export ready at apps/web/out"
+ls -la out | head
