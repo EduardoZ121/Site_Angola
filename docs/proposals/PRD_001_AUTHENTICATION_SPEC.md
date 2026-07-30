@@ -1796,7 +1796,7 @@ sequenceDiagram
 4. Relatório 4 níveis
 5. Actualização AI_CONTEXT / gate
 
-**Nesta entrega (v0.2):** apenas especificação.
+**Nesta entrega (v1.0-rc4):** apenas especificação (Blocos 1–3 encerrados; Bloco 4 candidata).
 
 ---
 
