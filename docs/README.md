@@ -20,6 +20,7 @@
 | [`backlog/PRD_001_ENGINEERING_GATE.md`](backlog/PRD_001_ENGINEERING_GATE.md)                                             | Gate técnico pré-implementação (aberto até P1+P2)           |
 | [`backlog/PHASE_GATE_BEFORE_PRD001.md`](backlog/PHASE_GATE_BEFORE_PRD001.md)                                             | Gate de fase pré-spec (histórico + ponteiros)               |
 | [`architecture/ADR-001-foundation-architecture-decisions.md`](architecture/ADR-001-foundation-architecture-decisions.md) | Fundação                                                    |
+| [`architecture/README.md`](architecture/README.md)                                                                       | Índice de ADRs                                              |
 | [`architecture/ADR-002-landing-page-implementation.md`](architecture/ADR-002-landing-page-implementation.md)             | Landing                                                     |
 | [`architecture/ADR-003-p0-pre-auth-hardening.md`](architecture/ADR-003-p0-pre-auth-hardening.md)                         | P0 RBAC/audit                                               |
 | [`database/PERMISSIONS_MATRIX.md`](database/PERMISSIONS_MATRIX.md)                                                       | Matriz de permissões                                        |
