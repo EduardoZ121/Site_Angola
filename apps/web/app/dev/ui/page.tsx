@@ -105,16 +105,14 @@ export default function DevUiCatalogPage() {
             </Button>
           </Tooltip>
         </div>
-        <Alert variant="info">
-          KAI estará sempre presente no shell autenticado (fases seguintes).
-        </Alert>
+        <Alert variant="info">Exemplo de alerta informativo — sem lógica de domínio.</Alert>
       </section>
 
       <section className="space-y-4">
         <Heading level={2}>Card</Heading>
         <Card>
           <CardHeader>
-            <CardTitle>Passaporte Digital</CardTitle>
+            <CardTitle>Exemplo de cartão</CardTitle>
           </CardHeader>
           <CardContent>
             <Text>Componente de contentor — sem lógica de domínio.</Text>
