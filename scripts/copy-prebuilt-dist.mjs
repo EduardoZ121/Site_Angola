@@ -4,7 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const src = path.join(root, 'prebuilt', 'web-out');
-const dest = path.join(root, 'dist');
+const dest = process.env.STATIC_PUBLISH_DIR
+  ? path.resolve(process.cwd(), process.env.STATIC_PUBLISH_DIR)
+  : path.join(root, 'dist');
 
 function copyDir(from, to) {
   fs.mkdirSync(to, { recursive: true });
@@ -18,11 +20,11 @@ function copyDir(from, to) {
 }
 
 if (!fs.existsSync(path.join(src, 'index.html'))) {
-  console.error('Missing prebuilt/web-out/index.html — run scripts/build-static-web.sh first');
+  console.error('Missing prebuilt/web-out/index.html');
   process.exit(1);
 }
 
 fs.rmSync(dest, { recursive: true, force: true });
 copyDir(src, dest);
-console.log('Static publish ready at ./dist (node copy from prebuilt/web-out)');
+console.log(`Static publish ready at ${dest}`);
 console.log(fs.readdirSync(dest).join(', '));
