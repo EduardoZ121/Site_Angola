@@ -23,7 +23,7 @@
 | Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                        |
 | Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8                  |
 | Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                        |
-| Bloco 4 — Critérios finais + wireframes  | ▶️ Candidata (§16–§18)                                    |
+| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18                    |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
