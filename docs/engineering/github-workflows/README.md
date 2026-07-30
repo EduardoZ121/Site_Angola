@@ -1,12 +1,17 @@
 # GitHub Workflows
 
-## Estado P0-3
+## Estado (P1 do Engineering Gate)
 
-O workflow oficial está definido em:
+| Item                                 | Estado                                          |
+| ------------------------------------ | ----------------------------------------------- |
+| Definição CI                         | ✅ `docs/engineering/github-workflows/ci.yml`   |
+| Activo em `.github/workflows/ci.yml` | ❌ Ainda não (só `deploy.yml` no remote)        |
+| Scope necessário para activar        | GitHub token com **`workflow`** (+ `repo`)      |
+| Gate                                 | `docs/backlog/PRD_001_ENGINEERING_GATE.md` §8.1 |
 
-`docs/engineering/github-workflows/ci.yml`
+Última verificação objectiva: **2026-07-30** — Actions listadas: Deploy Kuteka + pages-build-deployment; **sem** workflow CI de quality.
 
-Activar no repositório (requer token GitHub com scope **`workflow`**):
+## Activar CI
 
 ```bash
 ./scripts/enable-github-ci.sh
@@ -15,8 +20,12 @@ git commit -m "ci: enable KEOS quality workflow"
 git push
 ```
 
-O agent Cloud actual **não** consegue fazer push de ficheiros em `.github/workflows/` sem esse scope.
+O agente Cloud **não** marca P1 como concluído sem evidência (ficheiro no remote + run verde). Tokens só com scope `repo` **não** bastam para push de workflows.
 
 ## Conteúdo do CI
 
 lint · typecheck · test · build `apps/web` · Playwright smoke
+
+## Deploy
+
+`deploy.yml` — publicação Landing → `gh-pages` (já activo).

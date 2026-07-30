@@ -77,21 +77,15 @@ Spec oficial: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0)
 
 ## 6. Metodologia
 
-Mantém-se:
+Ver documento canónico: `docs/engineering/DEVELOPMENT_PROCESS.md`.
 
 ```
-Especificação → Aprovação → Implementação → Auto-Revisão Técnica
-→ Testes → Validação → Aprovação Final → Próxima Fase
+Especificação → Aprovação Funcional → Engineering Gate
+→ Autorização de Implementação → Implementação → …
 ```
 
----
-
-## Metodologia (2026-07-30)
-
-O agente actua como **Arquitecto Principal e Guardião da Consistência** — ver `docs/engineering/DEVELOPMENT_PROCESS.md`.
-
-- Auto-revisão obrigatória antes de cada versão candidata.
-- Autoavaliação com **maturidade N1–N5** + confiança %; se confiança < 95%, listar factores.
-- PO só em decisões de negócio / conflitos / estratégia.
-- PRDs: **Aprovação Funcional** ≠ **Autorização de Implementação** (`DEVELOPMENT_PROCESS.md`).
-- Implementação do PRD-001 **bloqueada** até Engineering Gate + Fase 2.
+- Papel: Arquitecto Principal, Guardião da Consistência e **Líder Técnico**
+- Autoavaliação N1–N5; se confiança < 95%, listar factores
+- PRDs: **Aprovação Funcional** ≠ **Autorização de Implementação**
+- Implementação do PRD-001 **bloqueada** até Engineering Gate (P1+P2) + Fase 2
+- Índice: `docs/README.md`
