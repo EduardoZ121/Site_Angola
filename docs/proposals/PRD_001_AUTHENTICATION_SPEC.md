@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.8  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1–F4 ✅ · F5 ▶️ · **Implementação não autorizada**  
+**Versão:** 0.9  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1–F5 ✅ · F6 ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | Em curso · F1–F4 ✅ · F5 a seguir — ver §6 |
+| Bloco 2 — Fluxos principais | Em curso · F1–F5 ✅ · F6 a seguir — ver §6 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -55,12 +55,13 @@ A autenticação **não** é apenas um mecanismo de acesso. É o **primeiro cont
 
 8. **Recuperação guiada em erros (plataforma):** sempre que ocorrer um erro, a Kuteka deve (a) **explicar o problema**, (b) **indicar como resolver**, e (c) **mostrar o próximo passo** — imediatamente. Aplica-se a Login, Recuperação, Onboarding e a todos os módulos futuros.
 
-9. **Narrativa oficial da autenticação Kuteka** (referência para todos os fluxos auth futuros):
+9. **Narrativa oficial da autenticação Kuteka** (referência para todos os desenvolvimentos auth futuros):
    - **F1 Registo** → criar **confiança**
    - **F2 Verificar email** → reforçar **segurança**
    - **F3 Login** → transmitir **continuidade**
    - **F4 Logout** → devolver o **controlo** ao utilizador
-   - F5–F6 e evoluções futuras devem manter esta filosofia.
+   - **F5 Recuperação de conta** → **restaurar a confiança** e devolver o acesso
+   - F6 e evoluções futuras devem manter esta filosofia.
 
 
 
@@ -745,76 +746,106 @@ Controlo operável por teclado; confirmação anunciável a leitores de ecrã.
 
 ### 6.5 F5 — Recuperação de conta (password)
 
+**Estado da revisão UX:** ✅ **Aprovado** (2026-07-30) com refinamentos de empatia, segurança e continuidade.
+
 #### Objectivo do fluxo
 
-Permitir recuperar o acesso à **mesma conta** com simplicidade e sem expor se o email existe, mantendo confiança e controlo.
+Ajudar o utilizador a **recuperar o acesso à mesma conta** de forma segura e calma — restaurar confiança e devolver o controlo, sem culpa e sem sugerir criar outra conta.
+
+#### Objectivo emocional de UX (explícito)
+
+O utilizador deve terminar este processo com a sensação de **alívio**, **confiança** e **controlo recuperado**.
 
 #### Condições de entrada
 
 | Condição | Entrada |
 | -------- | ------- |
-| Link “Esqueceu a password?” | `/auth/recuperar` |
+| “Esqueceu a password?” (Login / erro F3) | `/auth/recuperar` |
 | Link do email de reset | `/auth/recuperar/confirmar` |
-| Sem acesso ao email | Direccionar para contacto humano (MVP) |
+| Sem acesso ao email | `/contacto` (MVP humano) |
+
+#### Narrativa UX — acompanhar o utilizador
+
+| Pergunta | Resposta |
+| -------- | -------- |
+| O que pretende? | Voltar à sua conta com uma nova password |
+| O que vê? | Empatia + motivo de segurança + passos claros |
+| O que o sistema faz? | Email de reset (anti-enumeração); token de uso único e validade limitada; actualiza password |
+| Se correr bem? | Mensagem positiva → Entrar / continuidade |
+| Se falhar? | Problema + solução + próximo passo |
+| Como recupera? | Reenviar, novo link, corrigir password, ou contacto se sem email |
 
 #### Sequência passo a passo
 
-**Pedido de reset**
+**A — Pedido (`/auth/recuperar`)**
 
-1. Explicar: vamos enviar instruções se existir conta; próximo passo = verificar email.
-2. Campo email + validação em tempo real.
-3. Submit → sempre UI de sucesso genérico (anti-enumeração).
-4. Audit `auth.password_reset_requested` quando aplicável server-side sem vazar.
+1. Mensagem inicial empática (conceito aprovado): *“Não se preocupe. Vamos ajudá-lo a recuperar o acesso à sua conta de forma segura.”*
+2. Explicar porque enviamos email (conceito aprovado): *“Enviamos um email porque apenas o proprietário da conta deve poder redefinir a palavra-passe.”*
+3. Campo email + validação em tempo real; CTA nos 5 estados.
+4. Submit → sucesso **genérico** (anti-enumeração) + próximo passo (abrir email; spam/promoções).
+5. Preservar email em erro de rede.
 
-**Nova password**
+**B — Email**
 
-5. Token válido → formulário nova password + confirmação (validação em tempo real).
-6. Sucesso → audit `auth.password_reset_completed` → Entrar (ou sessão conforme Supabase).
+6. Link Kuteka; token de **utilização única** e **validade limitada**.
 
-#### Estados possíveis
+**C — Nova password (`/auth/recuperar/confirmar`)**
 
-| Estado | UI |
-| ------ | -- |
-| Pedido | Formulário email |
-| Pedido enviado (genérico) | Sucesso + próximos passos |
-| Token OK | Formulário nova password |
-| Token inválido | Erro + pedir novo link |
-| Sem acesso ao email | Link para `/contacto` |
+7. Checklist em tempo real (como F1); Mostrar/Ocultar; colar; password managers.
+8. **Boa prática (não obrigatória no MVP):** incentivar escolher uma password **diferente da anterior** (recomendação na UI/copy).
+9. Sucesso (conceito aprovado): *“A sua palavra-passe foi atualizada com sucesso. Já pode voltar a entrar na Kuteka.”*
+10. Continuidade → Entrar / retomar destino.
 
-#### Mensagens principais ao utilizador
+**D — Sem acesso ao email**
 
-| Momento | Mensagem (orientação) |
-| ------- | --------------------- |
-| Título pedido | Recuperar acesso |
-| Corpo | Indique o email da conta. Se existir, enviamos instruções. |
-| Sucesso genérico | Se existir uma conta com esse email, enviámos instruções. Verifique a caixa de entrada. |
-| Nova password | Defina uma nova password para voltar a entrar. |
-| Sem email | Não tem acesso ao email? Contacte a Kuteka. |
+11. Explicar limite do self-serve → Contactar Kuteka. **Nunca** sugerir criar nova conta.
 
-#### Casos de erro e comportamento
+#### Decisão arquitectural futura (documentada, não MVP)
 
-| Erro | Comportamento |
-| ---- | ------------- |
-| Email inválido | Inline |
-| Token expirado | “Este link expirou. Peça novas instruções.” |
-| Password fraca / mismatch | Inline orientado |
-| Rede | Retry |
+Após alteração da password, fica previsto que, numa **evolução futura**, seja possível **terminar automaticamente outras sessões activas** por motivos de segurança. Não implementar agora; o comportamento futuro fica registado.
+
+#### Segurança (reforço)
+
+- Anti-enumeração em todas as mensagens do pedido.
+- Nunca revelar informação técnica (tokens, internals).
+- Links de recuperação: **uso único** + **validade limitada**.
+- Tentativas inválidas: sempre **problema + solução + próximo passo**.
+- Rate limiting (ou equivalente) no pedido de reset.
+
+#### Auditoria e privacidade
+
+`auth.password_reset_requested` / `auth.password_reset_completed`: timestamps consistentes; metadata mínima; mesma política de privacidade dos restantes eventos auth. Sem passwords/tokens em metadata.
+
+#### Mensagens (tom PASSO 0 · i18n-ready)
+
+| Momento | Copy (orientação aprovada) |
+| ------- | -------------------------- |
+| Empatia | Não se preocupe. Vamos ajudá-lo a recuperar o acesso à sua conta de forma segura. |
+| Porque email | Enviamos um email porque apenas o proprietário da conta deve poder redefinir a palavra-passe. |
+| Sucesso genérico pedido | Se existir conta com este email, enviámos instruções… |
+| Password diferente | Recomendação (não bloqueante) |
+| Sucesso redefinição | A sua palavra-passe foi atualizada com sucesso. Já pode voltar a entrar na Kuteka. |
+| Sem email | Contacte a Kuteka — sem sugerir nova conta |
 
 #### Critérios de aceitação
 
-- [ ] Sucesso genérico no pedido (anti-enumeração)
-- [ ] Fluxo completa até nova password
-- [ ] Utilizador sabe sempre o próximo passo
-- [ ] MVP: suporte humano se sem acesso ao email
+- [ ] Empatia e tranquilidade no primeiro ecrã
+- [ ] Utilizador compreende porque enviamos o email (protecção)
+- [ ] Sensação final: alívio, confiança, controlo recuperado
+- [ ] Nunca sugerir criação de nova conta
+- [ ] Conclusão sem apoio externo **quando tem acesso ao email**
+- [ ] Checklist + Mostrar/Ocultar; recomendação password diferente (não obrigatória)
+- [ ] Mensagem positiva pós-redefinição + caminho para Entrar
+- [ ] Anti-enumeração; links uso único / validade limitada
+- [ ] Erros no padrão das 3 perguntas
+- [ ] Futuro documentado: terminar outras sessões após reset
+- [ ] Tom Identidade Oficial Kuteka; copy i18n-ready
+- [ ] Auditoria mínima / privacidade
 
 #### Oportunidades futuras
 
-| Evolução | Nota |
-| -------- | ---- |
-| Recuperação por telefone verificado no perfil | Após telefone no perfil |
-| Códigos MFA de recuperação | Com MFA |
-| KYC / reivindicação documental | Trust + suporte |
-| Self-serve avançado sem email | Só com controlos fortes |
+- Encerrar outras sessões após reset (já decidido como evolução)
+- Telefone no perfil; MFA recovery; KYC/reivindicação documental
 
 ---
 
@@ -1227,7 +1258,7 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 └──────────────────────────────────────────────┘
 ```
 
-### 18.4 Recuperar — `/auth/recuperar`
+### 18.4 Recuperar — `/auth/recuperar` (F5 aprovado)
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -1374,7 +1405,8 @@ sequenceDiagram
 | 0.5 | 2026-07-30 | F1 Registo **aprovado** |
 | 0.6 | 2026-07-30 | F2 Verify **aprovado**; erro guiado; i18n-ready |
 | 0.7 | 2026-07-30 | F3 Login **aprovado** (continuidade; narrativa F1–F3) |
-| 0.8 | 2026-07-30 | F4 Logout **aprovado**; narrativa oficial F1–F4; logout vs sessão expirada |
+| 0.8 | 2026-07-30 | F4 Logout **aprovado**; narrativa oficial F1–F4 |
+| 0.9 | 2026-07-30 | F5 Recuperação **aprovada**; narrativa F1–F5; sessões futuras pós-reset |
 
 ---
 
@@ -1388,13 +1420,13 @@ sequenceDiagram
 | 2 · F2 Verificar email | Segurança | ✅ **Aprovado** |
 | 2 · F3 Login | Continuidade | ✅ **Aprovado** |
 | 2 · F4 Logout | Controlo | ✅ **Aprovado** |
-| 2 · F5 Recuperação | — | ▶️ A seguir |
-| 2 · F6 Onboarding | — | Pendente |
-| 2 · Revisão global | Consistência entre fluxos | Após F1–F6 |
+| 2 · F5 Recuperação | Restaurar confiança / acesso | ✅ **Aprovado** |
+| 2 · F6 Onboarding | — | ▶️ A seguir |
+| 2 · Revisão global | Consistência entre fluxos | Após F6 |
 | 3 | Casos limite (detalhe) | Pendente |
 | 4 | Critérios + wireframes finais | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** rever **F5 — Recuperação de conta** no formato de acompanhamento do utilizador.
+**Pedido imediato:** rever **F6 — Onboarding** no formato de acompanhamento do utilizador.
 
 Até aprovação integral: **nenhuma implementação**.
