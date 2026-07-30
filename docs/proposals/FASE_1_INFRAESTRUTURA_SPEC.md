@@ -546,16 +546,16 @@ Documentar no README: legado vs KEOS.
 
 ## 19. Padrões de documentação
 
-| Documento      | Local                                | Quando              |
-| -------------- | ------------------------------------ | ------------------- |
-| AI_CONTEXT     | `docs/AI_CONTEXT.md`                 | Já existe — manter  |
-| ADR-xxx        | `docs/architecture/`                 | Cada decisão infra  |
-| README root    | Como correr monorepo                 | FASE 1              |
-| Package README | Cada `packages/*`                    | FASE 1              |
-| PRDs           | `docs/product/`                      | Por módulo futuro   |
-| PASSOs / Specs | `docs/proposals/` ou `docs/product/` | Já em curso         |
-| CDD            | `docs/database/`                     | Referenciar CDD-001 |
-| Prompts        | `docs/prompts/`                      | Stubs na FASE 1     |
+| Documento      | Local                        | Quando              |
+| -------------- | ---------------------------- | ------------------- |
+| AI_CONTEXT     | `docs/AI_CONTEXT.md`         | Já existe — manter  |
+| ADR-xxx        | `docs/architecture/`         | Cada decisão infra  |
+| README root    | Como correr monorepo         | FASE 1              |
+| Package README | Cada `packages/*`            | FASE 1              |
+| PRDs           | `docs/proposals/` (canónico) | Ex.: PRD-001 v1.0   |
+| PASSOs / Specs | `docs/proposals/`            | Já em curso         |
+| CDD            | `docs/database/`             | Referenciar CDD-001 |
+| Prompts        | `docs/prompts/`              | Stubs na FASE 1     |
 
 **Regra:** código sem README de package = incompleto na FASE 1.
 

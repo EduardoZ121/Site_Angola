@@ -33,6 +33,8 @@
 
 Landing, FASE 1, P0 reports e propostas UX antigas em `proposals/` e `backlog/` — úteis para rastreio; a autoridade de auth é só o PRD-001 v1.0.
 
+Pastas vazias reservadas (`api/`, `business/`, `decisions/`, `glossary/`, `playbooks/`, `product/`, `prompts/`, `vision/`) **não** são fontes de verdade — ver `product/README.md`.
+
 ## Legado (não usar para produto KEOS)
 
 `DEPLOY-RENDER.md`, `GOOGLE-LOGIN.md`, `ADMIN-E-LOGIN.md`, `SETUP-CONTAS.md`, `OGPT-MOBILE-FIRST.md` — contexto legado Vite; **proibido** reutilizar para auth KEOS.
