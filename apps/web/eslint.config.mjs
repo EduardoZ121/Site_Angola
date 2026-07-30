@@ -20,6 +20,7 @@ const config = [
   {
     ignores: [
       '.next/**',
+      'out/**',
       'node_modules/**',
       'playwright-report/**',
       'test-results/**',
