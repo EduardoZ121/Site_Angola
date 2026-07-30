@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.4  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2 (fluxos) ▶️ · **Implementação não autorizada**  
+**Versão:** 0.5  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1 ✅ · F2 ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | **Em revisão** (v0.4) — ver §6 |
+| Bloco 2 — Fluxos principais | Em curso · **F1 aprovado** · F2 a seguir — ver §6 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -267,75 +267,130 @@ flowchart TD
 
 ### 6.1 F1 — Registo (email + password)
 
+**Estado da revisão UX:** ✅ **Aprovado** (2026-07-30) com ajustes de experiência incorporados abaixo.
+
 #### Objectivo do fluxo
 
-Criar a **única conta Kuteka** da pessoa, com aceite dos Termos, e conduzi-la com clareza ao próximo passo (verificação de email) — transmitindo simplicidade e confiança desde o primeiro ecrã.
+Criar a **única conta Kuteka** da pessoa, transmitir o **propósito** da plataforma antes do primeiro campo, obter aceite dos Termos, e conduzir com clareza ao próximo passo (verificação de email) — com simplicidade, confiança e controlo.
 
 #### Condições de entrada
 
 | Condição | Comportamento |
 | -------- | ------------- |
-| Visitante anónimo | Mostrar formulário de registo |
+| Visitante anónimo | Mostrar ecrã de registo com proposta de valor |
 | Sessão activa, verify + papéis OK | Redirect app (§9.2) — sem re-registo |
 | Sessão activa, onboarding incompleto | Ir para o passo em falta |
 | Entrada | `/auth`, `/auth/registar`, CTA **Começar** |
 
+#### Narrativa UX — acompanhar o utilizador
+
+| Pergunta | Resposta |
+| -------- | -------- |
+| O que pretende? | Criar a sua única conta Kuteka e perceber **porquê** vale a pena |
+| O que vê? | Propósito + formulário curto + motivos do email + checklist de password em tempo real |
+| O que o sistema faz? | Valida em tempo real; no submit cria identidade/perfil; audita só o necessário; nunca grava password em audit |
+| Se correr bem? | Entende que o próximo passo é verificar o email → F2 |
+| Se falhar? | Erro claro no sítio certo; dados preservados; caminhos Entrar / Recuperar se email existir |
+| Como recupera? | Corrige no mesmo ecrã, faz retry, ou usa Entrar/Recuperar sem “voltar atrás” manual confuso |
+| Simplicidade / confiança | Propósito primeiro; poucos campos; linguagem PASSO 0; a11y; botão com estados consistentes |
+
 #### Sequência passo a passo
 
-1. Utilizador vê título + frase curta do que vai acontecer e qual o próximo passo após criar conta.
-2. Preenche **email**, **password**, **confirmar password**; aceita **Termos e Privacidade**.
-3. Validação em tempo real (formato email; regras de password; match da confirmação; checkbox).
-4. Submete → loading imediato no CTA (evitar duplo submit).
-5. `signUp` Supabase → trigger cria `profiles`.
-6. Audits: `auth.signup`, `auth.terms_accepted`.
-7. Passa ao ecrã / fluxo **F2 Verificar email** (não entra em `(app)` ainda).
+1. **Chegada (Passo 0):** mensagem de propósito (não só “formulário”). Conceito aprovado: *“Crie a sua conta Kuteka e comece a gerir, encontrar e valorizar patrimónios com segurança e transparência.”* Indicar que a seguir pediremos confirmação do email.
+2. **Email:** campo + microcopy: *“O seu email será utilizado para proteger a sua conta e permitir a recuperação de acesso.”*
+3. **Password:** checklist em **tempo real** dos critérios cumpridos (ex.: ✓ ≥8 caracteres · ✓ maiúscula · ✓ número · ✓ símbolo *se adotado na política*). Evitar tentativas cegas.
+4. **Confirmar password** + **Termos/Privacidade**.
+5. Validação contínua; CTA só activo quando o formulário estiver válido (**Desativado** enquanto incompleto).
+6. Submit → estado **Loading** no botão (sem duplo submit).
+7. `signUp` → perfil via trigger; audits necessários (ver Auditoria).
+8. Sucesso → feedback breve (**Sucesso**) → **F2 Verificar email** (sem entrar em `(app)`).
 
 #### Estados possíveis
 
 | Estado | UI |
 | ------ | -- |
-| Vazio / edição | Formulário editável |
-| Validação local inválida | Campos com erro inline; CTA disabled ou submit bloqueado |
-| A submeter | CTA loading |
-| Sucesso | Transição para F2 |
-| Erro de servidor | Mensagem orientada para solução; formulário preservado (exceto password se política assim o exigir) |
+| Vazio / edição | Formulário; CTA **Desativado** se incompleto |
+| Validação local inválida | Erros inline; foco no primeiro erro; CTA desativado |
+| A submeter | CTA **Loading** |
+| Sucesso | CTA/estado **Sucesso** breve → F2 |
+| Erro de servidor / rede | CTA/estado **Erro** + mensagem; **dados preservados** |
 
-#### Mensagens principais ao utilizador
+#### Estados do botão CTA (padrão de plataforma)
 
-| Momento | Mensagem (orientação de copy) |
-| ------- | ----------------------------- |
-| Título | Criar conta |
-| Apoio | Entre na plataforma de património e confiança. Depois pediremos que confirme o seu email. |
+| Estado | Quando |
+| ------ | ------ |
+| **Normal** | Formulário válido, pronto a submeter |
+| **Desativado** | Formulário incompleto ou inválido |
+| **Loading** | Pedido em curso |
+| **Sucesso** | Conta criada (transição imediata para F2) |
+| **Erro** | Falha recuperável; permite nova tentativa |
+
+*Estes cinco estados aplicam-se de forma consistente nos CTAs dos fluxos auth (e, por extensão, na plataforma).*
+
+#### Mensagens principais ao utilizador (tom PASSO 0)
+
+Tom: **humano, profissional, tranquilizador, transparente** — sem jargão técnico nem burocracia.
+
+| Momento | Copy (orientação aprovada) |
+| ------- | -------------------------- |
+| Propósito | Crie a sua conta Kuteka e comece a gerir, encontrar e valorizar patrimónios com segurança e transparência. |
+| Porque o email | O seu email será utilizado para proteger a sua conta e permitir a recuperação de acesso. |
+| Password | Checklist visual dos critérios (cumprido / por cumprir) |
 | Termos | Li e aceito os Termos de utilização e a Política de privacidade |
 | CTA | Criar conta |
-| Link secundário | Já tem conta? Entrar |
-| Password help | Indicar requisitos de forma simples (ex.: mínimo de caracteres) |
+| Secundário | Já tem conta? Entrar |
+| Pós-sucesso (para F2) | Deve ficar claro **porque** precisa de verificar o email (proteger a conta) |
+
+**Proibido ao utilizador final:** mensagens técnicas (stack traces, códigos HTTP, jargão de API).
 
 #### Casos de erro e comportamento
 
 | Erro | Comportamento |
 | ---- | ------------- |
-| Email inválido | Inline: “Indique um email válido.” |
-| Passwords não coincidem | Inline imediato |
-| Termos não aceites | Inline / impedir submit |
-| Email já registado | Mensagem segura + links **Entrar** e **Recuperar acesso** (sem vazar detalhes desnecessários) |
-| Rede / 5xx | “Não foi possível criar a conta. Tente novamente.” + retry |
-| Password fraca (servidor) | Mostrar requisitos e focar o campo |
+| Campo inválido | Inline + **foco automático no primeiro erro**; linguagem simples e positiva |
+| Email já registado | Mensagem segura + **opções imediatas no mesmo ecrã:** **Entrar** · **Recuperar acesso** (sem obrigar a “voltar atrás” manualmente) |
+| Rede / 5xx | “Não foi possível criar a conta. Tente novamente.” · **preservar todos os dados** do formulário · estado botão Erro → Normal/Desativado conforme validade |
+| Password fraca (servidor) | Alinhar checklist; focar password |
+
+#### Auditoria (segurança e conformidade)
+
+Registar **apenas** eventos necessários — sem informação sensível desnecessária:
+
+| Evento | Inclui | Não inclui |
+| ------ | ------ | ---------- |
+| `auth.signup` | user id / metadata mínima | password, tokens |
+| `auth.terms_accepted` | timestamp / versão Termos se existir | conteúdo irrelevante |
+
+Nunca armazenar passwords, tokens ou PII extra em `metadata` de audit.
+
+#### Acessibilidade (critério de qualidade)
+
+- [ ] Navegação completa por teclado
+- [ ] Labels acessíveis em todos os campos
+- [ ] Mensagens compatíveis com leitores de ecrã
+- [ ] Foco automático no primeiro erro
 
 #### Critérios de aceitação
 
-- [ ] Apenas campos essenciais no MVP (sem questionário longo)
-- [ ] Validação em tempo real nos campos críticos
-- [ ] Termos obrigatórios
-- [ ] Após sucesso, utilizador entende que o **próximo passo é verificar o email**
-- [ ] Não há acesso a `(app)` antes de verify + papéis
-- [ ] Uma conta por pessoa; sem caminho para “segunda conta”
+- [ ] Propósito da Kuteka visível **antes** do primeiro campo
+- [ ] Utilizador compreende **porque** pedimos o email
+- [ ] Checklist de password em tempo real
+- [ ] Estados do botão: Normal · Desativado · Loading · Sucesso · Erro
+- [ ] Email duplicado → Entrar + Recuperar no mesmo ecrã
+- [ ] Erro de rede/servidor → dados preservados
+- [ ] Utilizador compreende claramente **porque** precisa de verificar o email a seguir
+- [ ] Nenhuma mensagem técnica ao utilizador final
+- [ ] Linguagem simples, positiva, tom PASSO 0
+- [ ] Fluxo concluível em **menos de dois minutos** por utilizador sem experiência prévia
+- [ ] Acessibilidade (§ acima)
+- [ ] Auditoria mínima sem dados sensíveis
+- [ ] Sem acesso `(app)` antes de verify + papéis
+- [ ] Uma conta por pessoa
 
 #### Oportunidades futuras
 
-- OAuth (Google, Apple, …) como alternativa de criação de conta na mesma identidade
+- OAuth (Google, Apple, …) na mesma identidade
 - Telefone no perfil (não como auth inicial)
-- Preferências de produto após valor (não no registo)
 
 ---
 
@@ -926,36 +981,40 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 
 > Wireframes de baixa fidelidade para revisão de negócio. Visual final = Design System (Orange / Slate, tipografia oficial). Sem cards decorativos no hero de auth; um ecrã = uma missão.
 
-### 18.1 Registo — `/auth/registar`
+### 18.1 Registo — `/auth/registar` (F1 aprovado)
 
 ```
 ┌──────────────────────────────────────────────┐
 │  Kuteka                                      │
 │                                              │
 │  Criar conta                                 │
-│  Entre na plataforma de património e         │
-│  confiança.                                  │
+│  Crie a sua conta Kuteka e comece a gerir,   │
+│  encontrar e valorizar patrimónios com       │
+│  segurança e transparência.                  │
 │                                              │
 │  Email                                       │
 │  ┌────────────────────────────────────────┐  │
 │  │                                        │  │
 │  └────────────────────────────────────────┘  │
+│  O seu email protege a conta e permite       │
+│  recuperar o acesso.                         │
+│                                              │
 │  Password                                    │
 │  ┌────────────────────────────────────────┐  │
 │  │                                        │  │
 │  └────────────────────────────────────────┘  │
-│  Confirmar password                          │
-│  ┌────────────────────────────────────────┐  │
-│  │                                        │  │
-│  └────────────────────────────────────────┘  │
+│  ✓ Pelo menos 8 caracteres                   │
+│  ○ Uma letra maiúscula                       │
+│  ○ Um número                                 │
+│  ○ Um símbolo (se adotado)                   │
 │                                              │
-│  [ ] Li e aceito os Termos e a Privacidade   │
+│  Confirmar password · Termos [ ]             │
 │                                              │
-│  [ Criar conta          ]  (primário Orange) │
-│                                              │
+│  [ Criar conta ]  (Desativado até válido)    │
 │  Já tem conta? Entrar                        │
 └──────────────────────────────────────────────┘
 ```
+*(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)*
 
 ### 18.2 Verificar email — `/auth/verificar`
 
@@ -1139,7 +1198,8 @@ sequenceDiagram
 | 0.1 | 2026-07-30 | Rascunho inicial |
 | 0.2 | 2026-07-30 | Spec completa para revisão de negócio |
 | 0.3 | 2026-07-30 | Bloco 1: D1–D12 fechados; princípios uma-conta/multi-papel |
-| 0.4 | 2026-07-30 | Princípio UX simplicidade/confiança/controlo; Bloco 2 fluxos F1–F6 no template §0.3 |
+| 0.4 | 2026-07-30 | Princípio UX + template fluxos F1–F6 |
+| 0.5 | 2026-07-30 | F1 Registo **aprovado** (proposta de valor, checklist password, estados CTA, a11y, audit mínima, copy PASSO 0) |
 
 ---
 
@@ -1148,11 +1208,15 @@ sequenceDiagram
 | Bloco | Conteúdo | Estado |
 | ----- | ------- | ------ |
 | 1 | Decisões D1–D12 + princípios de plataforma | ✅ **Encerrado** |
-| 2 | Fluxos principais (F1–F6) + princípio UX | ▶️ **Em revisão** (v0.4) |
+| 2 | Fluxos principais (validação UX) | ▶️ Em curso |
+| 2 · F1 Registo | Validação experiência | ✅ **Aprovado** |
+| 2 · F2 Verificar email | Validação experiência | ▶️ A seguir |
+| 2 · F3–F6 | — | Pendente (um de cada vez) |
+| 2 · Revisão global | Consistência entre fluxos | Após F1–F6 |
 | 3 | Casos limite (detalhe) | Pendente |
-| 4 | Critérios de aceitação + UX wireframes | Pendente |
+| 4 | Critérios + wireframes finais | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** rever os fluxos F1–F6 (§6) quanto a objectivo, passos, mensagens, erros e critérios; indicar ajustes de negócio.
+**Pedido imediato:** rever **F2 — Verificação de email** no formato de acompanhamento do utilizador.
 
 Até aprovação integral: **nenhuma implementação**.
