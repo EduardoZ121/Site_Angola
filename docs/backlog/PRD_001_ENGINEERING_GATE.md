@@ -45,17 +45,18 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 ## 2. Itens concluídos
 
-| ID  | Item                                                       | Evidência                                                  |
-| --- | ---------------------------------------------------------- | ---------------------------------------------------------- |
-| C1  | Fundação KEOS (monorepo, packages, Landing) em `main`      | PHASE_GATE §1                                              |
-| C2  | P0 técnico (RBAC + audit) aprovado e em `main`             | ADR-003, P0 reports                                        |
-| C3  | Migration `0002` **escrita e versionada** no repo          | `supabase/migrations/0002_p0_rbac_and_audit_hardening.sql` |
-| C4  | Spec PRD-001 **Aprovação Funcional** oficial               | PO 2026-07-30 · v1.0                                       |
-| C5  | Critérios de aceitação, R1–R12, L\*, wireframes            | PRD §§15–18                                                |
-| C6  | Publish path Landing → `gh-pages` operativo                | Deploy Kuteka verde                                        |
-| C7  | Workflow de **deploy** Pages activo                        | `.github/workflows/deploy.yml`                             |
-| C8  | Definição do workflow CI (lint/typecheck/test/build/smoke) | `docs/engineering/github-workflows/ci.yml`                 |
-| C9  | Script de activação CI documentado                         | `scripts/enable-github-ci.sh` + README workflows           |
+| ID  | Item                                                                 | Evidência                                                  |
+| --- | -------------------------------------------------------------------- | ---------------------------------------------------------- |
+| C1  | Fundação KEOS (monorepo, packages, Landing) em `main`                | PHASE_GATE §1                                              |
+| C2  | P0 técnico (RBAC + audit) aprovado e em `main`                       | ADR-003, P0 reports                                        |
+| C3  | Migration `0002` **escrita e versionada** no repo                    | `supabase/migrations/0002_p0_rbac_and_audit_hardening.sql` |
+| C4  | Spec PRD-001 **Aprovação Funcional** oficial                         | PO 2026-07-30 · v1.0                                       |
+| C5  | Critérios de aceitação, R1–R12, L\*, wireframes                      | PRD §§15–18                                                |
+| C6  | Publish path Landing → `gh-pages` operativo                          | Deploy Kuteka verde                                        |
+| C7  | Workflow de **deploy** Pages activo                                  | `.github/workflows/deploy.yml`                             |
+| C8  | Definição do workflow CI (lint/typecheck/test/build/smoke)           | `docs/engineering/github-workflows/ci.yml`                 |
+| C9  | Script de activação CI documentado                                   | `scripts/enable-github-ci.sh` + README workflows           |
+| C10 | Baseline de qualidade local verde (lint · format · typecheck · test) | Verificado pelo Líder Técnico; prepara P1                  |
 
 ---
 

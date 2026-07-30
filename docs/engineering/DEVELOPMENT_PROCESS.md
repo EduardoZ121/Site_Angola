@@ -2,7 +2,7 @@
 
 **Estado:** Activo  
 **Aprovado:** Encerramento FASE 1 (2026-07-29)  
-**Actualização:** 2026-07-30 — Líder Técnico + autonomia operacional (limites PO explícitos)
+**Actualização:** 2026-07-30 — Autorização permanente de fluxo autónomo (limites PO inalterados)
 
 ## Ciclo padrão (todos os módulos)
 
@@ -175,16 +175,27 @@ Regras:
 
 ### Comunicação com o Product Owner
 
+**Autorização permanente (2026-07-30):** o Líder Técnico prossegue autonomamente até à conclusão do projecto **sem** pedir confirmação / “OK” em cada etapa intermédia, desde que respeite os documentos oficiais e os limites da autonomia.
+
+Prosseguir automaticamente para a próxima tarefa lógica quando:
+
+1. Estiver de acordo com os documentos oficiais da Kuteka
+2. Não alterar decisões de negócio já aprovadas
+3. Não modificar a arquitectura estratégica
+4. Não exigir decisão exclusiva do Product Owner
+
 **Não** enviar actualizações periódicas só para confirmar pendências ops conhecidas (ex.: P1/P2 ainda abertos).
 
 Comunicar **apenas** quando ocorrer um destes eventos:
 
 1. Pré-requisitos de Engineering Gate (ex.: P1 e P2) **objectivamente** concluídos — actualizar o Gate e pedir Autorização de Implementação
-2. Decisão que dependa do Product Owner (limites da autonomia)
-3. Risco **crítico** que possa comprometer o projecto
-4. Marco relevante que exija **aprovação formal**
+2. Decisão de negócio / conflito entre requisitos ou documentos oficiais
+3. Impacto na visão, arquitectura estratégica ou identidade da Kuteka
+4. Autorização formal para implementação, produção ou outro marco reservado ao PO
+5. Risco **crítico** não resolúvel dentro da autonomia
+6. Marco relevante concluído ou resultado final de uma fase importante
 
-Caso contrário: conduzir tecnicamente em silêncio operacional e avançar.
+Caso contrário: conduzir tecnicamente em fluxo contínuo e avançar.
 
 ### Documentos oficiais a confrontar (mínimo)
 

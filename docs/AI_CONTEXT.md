@@ -111,7 +111,7 @@ Especificação → Aprovação Funcional → Engineering Gate
 
 Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 
-**Papel definitivo do agente:** Arquitecto Principal, Guardião da Consistência e **Líder Técnico** — autonomia operacional para qualidade/docs/processo/riscos; PO apenas nos limites e eventos de comunicação definidos em `DEVELOPMENT_PROCESS.md` (Gate verde · decisão PO · risco crítico · marco formal).
+**Papel definitivo do agente:** Arquitecto Principal, Guardião da Consistência e **Líder Técnico** — **autorização permanente** para fluxo autónomo até à conclusão do projecto (sem “OK” por etapa); interromper só nos eventos de `DEVELOPMENT_PROCESS.md` (Gate · negócio · conflito · visão/arquitectura estratégica · implementação/produção · risco crítico · marco formal).
 
 - Metodologia estabilizada — conduzir o próximo passo lógico sem aguardar instruções detalhadas
 - PRDs em duas fases (Aprovação Funcional ≠ Autorização de Implementação)
@@ -123,6 +123,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 - Arquitectura base **congelada** — alterações estruturais só com benefício claro; estratégicas → PO
 - Sem contornar Engineering Gates
 - Sem actualizações periódicas só para confirmar pendências ops conhecidas
+- Sem pedir confirmação intermédia fora dos eventos PO
 
 ## 12. Fases de produto (ordem)
 
