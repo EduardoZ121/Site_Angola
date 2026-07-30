@@ -1,325 +1,749 @@
 # PRD-001 — Authentication & User Management
 
-**Documento:** Especificação de produto (aprovação obrigatória antes de código)  
-**Versão:** 0.1 (rascunho para aprovação)  
-**Estado:** ⏸ Aguarda aprovação · **Implementação proibida** até gate P0 oficial + aprovação desta spec  
-**Módulo:** `apps/web/modules/authentication`  
-**Dependências:** FASE 1 ✅ · Landing ✅ · P0-1/P0-2 em `main` ✅ · P0 encerramento oficial ⏳  
-**Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md` · `docs/backlog/P0_ACTIVATION_RUNBOOK.md`  
-**Hierarquia:** Manual > Blueprint > Design System > PASSO 0 > `AI_CONTEXT` > este PRD
+**Documento:** Especificação funcional e técnica para revisão de negócio  
+**Versão:** 0.2  
+**Estado:** 📄 Em revisão de negócio · **Implementação não autorizada**  
+**Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
+**Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
+**Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
+**Pré-implementação obrigatória:** CI activo · migration `0002` no remoto · aprovação desta spec
 
 ---
 
-## 1. Contexto
+## 0. Registo de autorização (2026-07-30)
 
-A Kuteka já tem fundação KEOS (Next.js, Supabase/PostgreSQL, RBAC N:N, auditoria controlada) e Landing oficial com CTAs **Começar** / **Entrar** a apontar para `/auth` (placeholder).
+| Item | Decisão |
+| ---- | ------- |
+| Fase anterior (dev) | Concluída |
+| P0 técnico | Concluído |
+| Pendências CI / migration 0002 / domínio | Infra/ops — resolver antes de implementar |
+| Elaboração desta spec | **Autorizada** |
+| Implementação | **Não autorizada** até aprovação oficial da spec |
 
-O PRD-001 é o **primeiro módulo funcional**: identidade, sessão, onboarding mínimo de perfil/papéis e redirect pós-login — sem dashboards de negócio, sem patrimónios, sem KAI de produto.
+---
+
+## 1. Objectivos do módulo
 
 ### 1.1 Objectivo de negócio
 
-Permitir que um visitante se torne **utilizador autenticado** na plataforma de confiança Kuteka, com papéis oficiais e permissões resolvidas na base de dados — de forma segura, auditável e alinhada ao Design System.
+Transformar um visitante da Landing num **utilizador autenticado da plataforma de património e confiança Kuteka**, com identidade única, um ou mais papéis oficiais, permissões resolvidas na base de dados e rastos de auditoria — sem parecer um site de classificados.
 
-### 1.2 Fora de missão
+### 1.2 Objectivos específicos
 
-Não transformar a Kuteka num site de classificados; não portar o auth legado Vite/Google/`localStorage`.
+1. **Identidade** — criar e gerir conta (email + password no MVP) via Supabase Auth.
+2. **Sessão** — login, logout, refresh SSR-safe, protecção de rotas `(app)`.
+3. **Confiança na entrada** — verificação de email, Termos, mensagens claras, zero fricção desnecessária.
+4. **Multi-papel** — modelo N:N (`user_roles`); onboarding que activa papéis permitidos.
+5. **Autorização** — consumir apenas a fonte oficial P0 (`fetchAuthorizationContext` / RPCs).
+6. **Auditoria** — eventos auth só via `writeAuditLog`.
+7. **Preparar o futuro** — contratos de identidade compatíveis com Passaporte Digital, SCK e KAI (sem implementar esses produtos neste PRD).
+8. **Substituir** o placeholder `/auth` pelos fluxos reais ligados aos CTAs da Landing.
 
----
+### 1.3 Métricas de sucesso (pós-lançamento do módulo)
 
-## 2. Objectivos
+| Métrica | Intenção |
+| ------- | -------- |
+| Taxa registo → email verificado | Medir fricção do verify |
+| Taxa verify → papel activado | Medir abandono no onboarding |
+| Tempo até primeiro acesso `(app)` | Simplicidade do fluxo |
+| Taxa de recuperação concluída | Qualidade do reset |
+| Incidentes de auth / locks indevidos | Segurança vs usabilidade |
 
-1. Fluxos de **registo**, **verificação de email**, **login**, **logout** e **recuperação de password** com Supabase Auth.
-2. Sessão SSR-compatible (cookies) + middleware de refresh; rotas `(app)` protegidas.
-3. Consumir **apenas** a fonte oficial de RBAC: `fetchAuthorizationContext` / RPCs P0 (sem matriz TS).
-4. Registar eventos críticos de auth via `writeAuditLog` (sem INSERT directo em `audit_logs`).
-5. Onboarding mínimo: perfil + aceitação de Termos + activação de papel(is) inicial(is).
-6. Redirect inteligente pós-login conforme permissões (`platform.access`, `admin.panel`).
-7. Substituir o placeholder `/auth` pelos ecrãs reais, mantendo CTAs da Landing.
-
----
-
-## 3. Não-objectivos (explícitos)
-
-| Item | Motivo |
-| ---- | ------ |
-| MFA | Pós-MVP (UX redesign) |
-| KYC completo | Pós-MVP |
-| Shell / dashboards de negócio | FASE 3 / PRDs seguintes |
-| Patrimónios, contratos, wallet, visitas, KAI produto | Fora do PRD-001 |
-| Consola admin de gestão de utilizadores | Mais tarde (`admin.panel` só gated) |
-| Portar Google OAuth do legado Vite | Re-especificar só se aprovado via Supabase Auth |
-| Alterar modelo Multi-Role / monorepo | Arquitectura congelada (ADR-001) |
-| Mudança de DNS | Operações; fora deste PRD |
+*(Instrumentação detalhada pode ficar para um follow-up analítico; o módulo deve emitir eventos audit nomeados.)*
 
 ---
 
-## 4. Atores e modelo de identidade
+## 2. Fora de âmbito (não-objectivos)
 
-### 4.1 Identidade
+| Fora do PRD-001 | Onde vive |
+| --------------- | --------- |
+| MFA | Pós-MVP / PRD futuro |
+| KYC completo / verificação documental de pessoa | Pós-MVP / Trust |
+| Shell completo, sidebars, dashboards de negócio | FASE 3+ |
+| Passaporte Digital do Imóvel (produto) | PRD património / Trust |
+| KAI conversacional / dock completo | Fase KAI |
+| Activar património, visitas, contratos, wallet | PRDs 002+ |
+| Consola admin de gestão massiva de users | PRD-005 |
+| Auth legado Vite / Google client-side | `legacy/` — não reutilizar |
+| Alteração DNS / Render | Ops (paralelo) |
 
-- Fonte: `auth.users` + `profiles` (1:1; trigger `handle_new_user` já cria perfil).
-- Papéis: tabela `roles` + `user_roles` (N:N). **Nunca** coluna única `role` como fonte de verdade.
-- Autorização: `can(permission)` sobre permissions resolvidas na BD.
-
-### 4.2 Papéis oficiais (seed)
-
-| Código | Nome | Permissions seed |
-| ------ | ---- | ---------------- |
-| `client` | Cliente | `platform.access` |
-| `patrimonial_partner` | Parceiro Patrimonial | `platform.access` |
-| `certified_agent` | Agente Certificado | `platform.access` |
-| `administrator` | Administrador | `platform.access` + `admin.panel` |
-
-### 4.3 Personas do fluxo
-
-- Visitante anónimo (Landing)
-- Novo registado (email não verificado → verificado)
-- Utilizador com 0 papéis (estado transitório pós-registo)
-- Utilizador com 1+ papéis activos
-- Administrador (`admin.panel`)
+**Regra:** o PRD-001 **prepara ganchos** para Passaporte e KAI; **não entrega** esses produtos.
 
 ---
 
-## 5. Decisões de produto propostas (para aprovação)
+## 3. Perfis de utilizador e multi-papel
 
-| ID | Decisão proposta | Alternativa | Recomendação |
-| -- | ---------------- | ----------- | ------------ |
-| D1 | MVP auth = **email + password** (+ verificação email) | Incluir Google OAuth no MVP | **Email+password no MVP**; OAuth = follow-up opcional |
-| D2 | Telefone | Obrigatório / opcional / fora | **Fora do MVP** |
-| D3 | Papel inicial | Auto-`client` vs picker obrigatório | **Picker leve** após verify (“Como quer usar a Kuteka hoje?”) com opção Cliente pré-seleccionada; permitir Parceiro Patrimonial; Agente/Admin **não** self-serve |
-| D4 | Quem atribui `certified_agent` / `administrator` | Self-serve | **Apenas service_role / processo admin** (RPC privilegiada) |
-| D5 | Pós-login sem shell FASE 3 | Stub `(app)` mínimo | **Sim** — página `(app)` placeholder por permissão (não dashboard de negócio) |
-| D6 | Rotas | `/auth?mode=` vs nested | **Nested:** `/auth/entrar`, `/auth/registar`, `/auth/recuperar`, `/auth/verificar`; aliases Landing: `/auth` → registar, `/auth?mode=entrar` → entrar |
-| D7 | MFA | Incluir | **Fora** — listar como PRD futuro |
-| D8 | Switcher multi-papel | No auth MVP | **Adiar para Shell**; no MVP basta activar ≥1 papel no onboarding |
-| D9 | UI idioma | pt-only | **pt-AO** no MVP (`profiles.locale` default `pt`) |
-| D10 | Termos | Checkbox obrigatório no registo | **Sim** + evento audit `auth.terms_accepted` |
+### 3.1 Conceitos
 
-*Estas decisões são propostas; a aprovação da spec confirma ou altera D1–D10.*
+| Conceito | Definição Kuteka |
+| -------- | ---------------- |
+| **Utilizador** | Identidade (`auth.users` + `profiles`) |
+| **Papel** | Função na plataforma (`roles.code`) |
+| **Permissão** | Capacidade (`permissions.code`) |
+| **Atribuição** | Ligação N:N em `user_roles` |
+| **Papel activo (UX)** | No MVP = conjunto de papéis atribuídos; switcher “Actuar como…” → Shell |
+
+### 3.2 Papéis oficiais (seed actual)
+
+| Código | Nome de produto | Pode self-activar no onboarding MVP? | Permissions iniciais |
+| ------ | --------------- | ------------------------------------ | -------------------- |
+| `client` | Cliente | ✅ Sim (preseleccionado) | `platform.access` |
+| `patrimonial_partner` | Parceiro Patrimonial | ✅ Sim | `platform.access` |
+| `certified_agent` | Agente Certificado | ❌ Não — convite / processo Kuteka | `platform.access` |
+| `administrator` | Administrador | ❌ Não — apenas processo interno | `platform.access` + `admin.panel` |
+
+### 3.3 Regras de multi-papel
+
+1. Uma conta **pode** ter vários papéis ao longo do tempo.
+2. Autorização **nunca** usa `if (role === 'admin')` — usa `can(permission)`.
+3. União de permissions de todos os papéis atribuídos = contexto efectivo.
+4. Novos papéis futuros (Avaliador, Advogado, …) = rows + seed, sem mudar o modelo.
+5. Utilizador **sem** nenhum papel após verify → obrigado a concluir onboarding de papéis antes de `(app)`.
+6. Agente e Admin **não** aparecem como opções self-serve; copy: “Estes papéis são atribuídos pela Kuteka.”
+
+### 3.4 Perfis (dados mínimos MVP)
+
+| Campo | Origem | Obrigatório MVP |
+| ----- | ------ | --------------- |
+| Email | Auth | Sim |
+| Password | Auth | Sim (registo email) |
+| `display_name` | `profiles` | Sim no onboarding se vazio |
+| `locale` | `profiles` (default `pt`) | Default |
+| `avatar_url` | `profiles` | Não (opcional; storage policies = risco P1) |
+| Aceitação Termos | audit + (proposto) `profiles.terms_accepted_at` | Sim no registo |
+| Email verificado | Auth | Sim antes de `(app)` |
 
 ---
 
-## 6. Fluxos de utilizador
+## 4. Permissões
 
-### 6.1 Registo
+### 4.1 Fonte de verdade
 
-1. Landing → **Começar** → `/auth` (registar).
-2. Email + password (+ confirmar password) + aceitar Termos/Privacidade.
-3. `signUp` Supabase → perfil criado pelo trigger.
-4. Ecrã “Verifique o seu email” (reenviar permitido com rate limit UX).
-5. Link mágico / token Supabase → `/auth/verificar` → sucesso.
-6. Onboarding: nome de exibição (se vazio) + escolha de papel inicial permitido (D3).
-7. Atribuição de papel via **RPC controlada** (nova — ver §8) + audit `auth.role_activated`.
-8. Redirect para stub `(app)` com `platform.access`.
+- Seed / tabelas PostgreSQL (`docs/database/PERMISSIONS_MATRIX.md`)
+- Runtime: `get_user_permission_codes` → `fetchAuthorizationContext`
+- App: `@kuteka/auth` avalia arrays já resolvidos — **proibida** matriz TS paralela
 
-### 6.2 Login
+### 4.2 Matriz MVP (actual)
 
-1. Landing → **Entrar** → `/auth/entrar` (ou `/auth?mode=entrar`).
-2. Email + password → `signInWithPassword`.
-3. Se email não verificado → bloquear entrada na app e mostrar reenvio.
-4. Carregar `fetchAuthorizationContext`.
-5. Se sem papéis → onboarding de papéis (não dashboard).
-6. Se `admin.panel` e path admin futuro → permitir acesso admin stub; senão stub app.
-7. Audit `auth.login` (sucesso); falhas sem vazar se a conta existe (mensagem genérica).
+| Permissão | client | patrimonial_partner | certified_agent | administrator |
+| --------- | ------ | ------------------- | --------------- | ------------- |
+| `platform.access` | ✓ | ✓ | ✓ | ✓ |
+| `admin.panel` | | | | ✓ |
 
-### 6.3 Logout
+### 4.3 Uso no PRD-001
+
+| Permissão | Efeito UX |
+| --------- | --------- |
+| Ausência de qualquer papel / sem `platform.access` | Bloqueia `(app)` → onboarding |
+| `platform.access` | Acesso ao stub autenticado `/app` |
+| `admin.panel` | Acesso a stub `/app/admin` (sem consola real) |
+
+Novas permissions de negócio (ex. `passport.read`, `kai.use`) **não** entram no MVP auth; ficam reservadas para PRDs futuros, documentadas como extensão do mesmo modelo.
+
+---
+
+## 5. Segurança
+
+### 5.1 Princípios
+
+1. Passwords **nunca** em texto simples na aplicação; só Supabase Auth.
+2. Service role **nunca** no browser.
+3. RLS mantido; writes privilegiados via RPC `SECURITY DEFINER` auditada.
+4. Auditoria auth **só** por `write_audit_log` / `writeAuditLog`.
+5. Mensagens de erro genéricas no login (não revelar se o email existe).
+6. Rate limiting: confiar nos controlos Supabase + UX de reenvio com cooldown.
+7. `robots: noindex` em `/auth/*`.
+8. Sessão via cookies HTTP (`@supabase/ssr`); middleware refresca tokens.
+9. Logger já bloqueia campos `password` / `token` — manter.
+10. HTTPS em todos os ambientes públicos.
+
+### 5.2 Ameaças e controlos
+
+| Ameaça | Controlo |
+| ------ | -------- |
+| Enumeração de contas | Copy genérica no login/reset |
+| Session fixation / XSS roubo de sessão | Cookies seguros, CSP base existente, sem tokens em `localStorage` de produto |
+| Privilege escalation self-serve | RPC de activação rejeita agent/admin |
+| Tamper `audit_logs` | P0-2 (sem INSERT directo) |
+| Bypass de verify | Middleware + server checks: email confirmado obrigatório para `(app)` |
+| Open redirect em `?next=` | Allowlist de paths relativos internos |
+
+### 5.3 Checklist pré-produção (implementação futura)
+
+- [ ] Migration `0002` aplicada
+- [ ] Providers Auth (email) configurados no Supabase
+- [ ] Templates de email (verify / reset) com marca Kuteka
+- [ ] URLs de redirect allowlist no Supabase
+- [ ] CI verde no PR
+
+---
+
+## 6. Fluxos completos de autenticação
+
+### 6.1 Mapa geral
+
+```mermaid
+flowchart TD
+  L[Landing] -->|Começar| R[Registo]
+  L -->|Entrar| I[Login]
+  R --> V[Verificar email]
+  V --> O[Onboarding papéis]
+  O --> A["/app stub"]
+  I -->|ok + papéis| A
+  I -->|ok sem papéis| O
+  I -->|não verificado| V
+  I -->|esqueci| P[Recuperar password]
+  P --> P2[Nova password]
+  P2 --> I
+  A --> X[Logout] --> L
+```
+
+### 6.2 Registo (email + password)
+
+**Entrada:** `/auth` ou `/auth/registar` (CTA Começar).
+
+**Passos:**
+
+1. Utilizador preenche email, password, confirmação, checkbox Termos/Privacidade.
+2. Validação client + server (password mínima: política Supabase documentada na implementação; UX mostra regras).
+3. `signUp` → trigger cria `profiles`.
+4. Audit `auth.signup` + `auth.terms_accepted`.
+5. Ecrã “Verifique o seu email” com reenvio (cooldown visual).
+6. Não entra em `(app)` antes de verify + papel.
+
+### 6.3 Verificação de email
+
+1. Link do email → `/auth/verificar` (troca de token Supabase).
+2. Sucesso → audit `auth.email_verified` → onboarding se sem papéis.
+3. Token inválido/expirado → pedir reenvio.
+4. Já verificado e com papéis → `/app`.
+
+### 6.4 Login
+
+**Entrada:** `/auth/entrar` ou `/auth?mode=entrar`.
+
+1. Email + password → `signInWithPassword`.
+2. Falha → mensagem genérica; audit opcional `auth.login_failed` sem PII sensível em excesso.
+3. Sucesso → audit `auth.login` → carregar autorização.
+4. Regras de destino: ver §8 Redirect.
+
+### 6.5 Logout
 
 1. Acção explícita na UI autenticada.
-2. `signOut` + limpar cookies de sessão.
-3. Redirect `/` (Landing).
-4. Audit `auth.logout`.
+2. `signOut` + invalidação cookies.
+3. Audit `auth.logout`.
+4. Redirect `/`.
 
-### 6.4 Recuperação de password
+### 6.6 Sessão e middleware
 
-1. `/auth/recuperar` → email → `resetPasswordForEmail`.
-2. Email Supabase → `/auth/recuperar/confirmar` (ou hash route Supabase) → nova password.
-3. Audit `auth.password_reset_requested` / `auth.password_reset_completed`.
-
-### 6.5 Sessão expirada / middleware
-
-- Middleware refresca sessão Supabase em rotas relevantes.
-- Acesso a `(app)/*` sem sessão → redirect `/auth/entrar?next=…`.
-- Sem `platform.access` após login → onboarding de papéis, não conteúdo de negócio.
+- Refresh em rotas `(auth)` relevantes e todas `(app)`.
+- Sem sessão em `(app)` → `/auth/entrar?next=<path>`.
+- `next` sanitizado (só paths relativos da app).
 
 ---
 
-## 7. UI / UX
+## 7. Recuperação de conta
 
-### 7.1 Princípios
+### 7.1 Esqueci a password
 
-- Segurança sem fricção (PASSO 0).
-- Design System `@kuteka/ui` (tipografia, Orange primário, Slate).
-- Sem cards decorativos desnecessários; um trabalho por ecrã.
-- Mobile-first; focus rings; `prefers-reduced-motion`.
-- Copy em `modules/authentication/content.ts` (separado da estrutura), pt-AO.
+1. `/auth/recuperar` — pede email.
+2. Sempre mostra sucesso genérico (“Se existir conta, enviámos instruções”) — anti-enumeração.
+3. Audit `auth.password_reset_requested` (quando aplicável server-side sem vazar).
+4. Email Supabase → `/auth/recuperar/confirmar`.
+5. Nova password + confirmar → sucesso → audit `auth.password_reset_completed` → login.
 
-### 7.2 Ecrãs MVP
+### 7.2 Conta sem acesso ao email
 
-| Ecrã | Rota | Conteúdo mínimo |
-| ---- | ---- | --------------- |
-| Registar | `/auth`, `/auth/registar` | Email, password, termos, CTA, link Entrar |
-| Entrar | `/auth/entrar` | Email, password, CTA, links Registar / Recuperar |
-| Verificar email | `/auth/verificar` | Estado + reenviar |
-| Recuperar | `/auth/recuperar` | Email |
-| Nova password | `/auth/recuperar/confirmar` | Password + confirmar |
-| Onboarding papéis | `/auth/onboarding/papeis` | Escolha leve D3 |
-| Stub app | `/app` (grupo `(app)`) | Placeholder autenticado (sem módulos de negócio) |
+- **MVP:** suporte humano / processo operacional (fora do self-serve).
+- Spec reserva mensagem: “Não tem acesso ao email? Contacte a Kuteka.” → `/contacto`.
 
-### 7.3 Estados de erro
+### 7.3 Fora do MVP
 
-- Credenciais inválidas: mensagem genérica.
-- Rate limit / email: mensagem clara + retry.
-- Rede: retry.
-- Nunca logar password/token (logger existente).
+- Recuperação por telefone / MFA recovery codes.
 
 ---
 
-## 8. Modelo de dados e APIs
+## 8. Onboarding
 
-### 8.1 Reutilizar (obrigatório)
+### 8.1 Princípio
 
-| Artefacto | Uso |
-| --------- | --- |
-| RPCs `get_user_role_codes`, `get_user_permission_codes`, `user_has_permission` | Autorização |
-| `write_audit_log` / `writeAuditLog` | Auditoria |
-| `fetchAuthorizationContext` | Contexto de sessão app |
-| `@kuteka/auth` helpers | `userHasPermission`, `canAccessPlatform`, `canAccessAdminPanel` |
-| `profileUpdateSchema` | Validação perfil |
-| Trigger `handle_new_user` | Criação de `profiles` |
+Um ecrã = uma missão. Não forçar questionário longo antes de valor (Manual / UX). O onboarding do PRD-001 é **só** o necessário para identidade e papel.
 
-### 8.2 Novos (a especificar na implementação pós-aprovação)
+### 8.2 Sequência pós-verify
 
-| Artefacto | Necessidade |
-| --------- | ----------- |
-| RPC `activate_initial_roles(role_codes text[])` (security definer, regras D3/D4) | Self-serve seguro de papéis iniciais |
-| Policy/RLS complementar se necessário | Sem abrir INSERT livre em `user_roles` |
-| Helpers sessão em `apps/web/lib/auth/*` | `getSession`, `requireUser`, `requirePermission`, `signOut` |
-| Middleware session refresh | Cookies Supabase SSR |
-| Migration `0003_…` | Apenas o estritamente necessário para role activation + (opcional) `terms_accepted_at` em `profiles` |
-
-### 8.3 Eventos de auditoria (nomes canónicos)
-
-`auth.signup` · `auth.login` · `auth.logout` · `auth.email_verified` · `auth.password_reset_requested` · `auth.password_reset_completed` · `auth.terms_accepted` · `auth.role_activated`
-
----
-
-## 9. Arquitectura de pastas
-
-```
-apps/web/
-  app/(auth)/auth/...          # rotas UI
-  app/(app)/...                # stub autenticado
-  modules/authentication/      # components, hooks, services, validators, tests, content.ts
-  lib/auth/                    # session + authorization wrappers
-  middleware.ts                # refresh + guards
-packages/auth, database, types, validation  # reutilizar / estender tipos
-supabase/migrations/0003_*.sql # se necessário
+```mermaid
+flowchart LR
+  V[Email verificado] --> N{display_name?}
+  N -->|vazio| P[Nome de exibição]
+  N -->|ok| R[Escolha de papéis]
+  P --> R
+  R --> S[Activar via RPC]
+  S --> A["/app"]
 ```
 
-Sem recriar auth no legado Vite.
+### 8.3 Escolha de papéis (MVP)
+
+**Título:** “Como quer usar a Kuteka hoje?”
+
+| Opção | Copy curta |
+| ----- | ---------- |
+| Cliente | Encontrar e avançar com confiança na habitação |
+| Parceiro Patrimonial | Activar e acompanhar o meu património |
+| (Info) Agente / Admin | Atribuídos pela Kuteka — não seleccionáveis |
+
+- Permite seleccionar **um ou ambos** Cliente + Parceiro.
+- CTA: Continuar (disabled até ≥1 selecção).
+- RPC `activate_initial_roles` (nome final na implementação) aplica regras §3.2.
+- Audit `auth.role_activated` por papel (ou um evento com metadata da lista).
+
+### 8.4 O que o onboarding **não** pede no MVP
+
+- Preferências de zona / orçamento (Cliente → PRD-003)
+- Dados de imóvel (Parceiro → PRD-002)
+- Upload de documentos KYC
+- Telefone obrigatório
 
 ---
 
-## 10. Segurança
+## 9. Redirect inteligente pós-login
 
-1. Supabase Auth apenas — passwords nunca em plaintext na BD app.
-2. Service role **nunca** no browser.
-3. Permissions só via BD (P0).
-4. Audit só via `write_audit_log`.
-5. RLS mantido; testes de regressão P0.
-6. CSRF/session conforme padrão `@supabase/ssr` no App Router.
-7. `robots: noindex` nas rotas `/auth/*`.
-8. Variáveis: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`; secrets de service só server-side.
+| Estado | Destino |
+| ------ | ------- |
+| Não autenticado a aceder `(app)` | `/auth/entrar?next=…` |
+| Autenticado, email não verificado | `/auth/verificar` |
+| Verificado, 0 papéis | `/auth/onboarding/papeis` |
+| `platform.access`, sem `admin.panel` | `/app` |
+| `admin.panel` e `next` admin ou escolha admin | `/app/admin` stub |
+| `next` válido | Honorar após checks acima |
 
----
-
-## 11. Critérios de aceitação
-
-### 11.1 Gate pré-implementação
-
-- [ ] P0 encerrado oficialmente (migration `0002` aplicada + CI verde + docs P0 actualizados)
-- [ ] Este PRD **aprovado** (D1–D10 fechados)
-
-### 11.2 Funcional
-
-- [ ] Registo email+password + Termos
-- [ ] Verificação de email end-to-end
-- [ ] Login / logout com sessão SSR
-- [ ] Recuperação de password end-to-end
-- [ ] Onboarding de papéis conforme D3/D4
-- [ ] Redirect pós-login: sem papel → onboarding; com `platform.access` → `/app`; admin stub só com `admin.panel`
-- [ ] Landing Começar/Entrar abrem fluxos reais (deixam de ser placeholder)
-- [ ] Utilizador sem `platform.access` não acede conteúdo `(app)`
-
-### 11.3 Segurança / arquitectura
-
-- [ ] Sem matriz `ROLE_PERMISSIONS` em TypeScript
-- [ ] Eventos auth em `audit_logs` via caminho controlado
-- [ ] Testes unitários multi-role + e2e smoke (registo/login/logout em ambiente de teste)
-- [ ] CI obrigatório no PR de implementação
-
-### 11.4 UX / qualidade
-
-- [ ] Lint, typecheck, test, build verdes
-- [ ] A11y básica (labels, focus, erros associados a campos)
-- [ ] Copy pt-AO; sem emojis; alinhado DS
-
-### 11.5 Quatro níveis (metodologia)
-
-1. Implementação  
-2. Auto-revisão técnica  
-3. Testes  
-4. Validação funcional/visual + **aprovação final**  
+Landing visitada já autenticada: opcional redirect suave para `/app` (decisão D11 abaixo) — **não** esconder a Landing por completo no MVP.
 
 ---
 
-## 12. Plano de testes (alto nível)
+## 10. Integração com o Passaporte Kuteka
 
-| Tipo | Casos |
-| ---- | ----- |
-| Unit | Permissions union multi-role; guards; validators |
-| Integration | RPC `activate_initial_roles` rejeita admin/agent self-serve |
-| E2E | Registo→verify(stub)→onboarding→app; login→logout; reset request UI |
-| Segurança | Tentativa INSERT directo `audit_logs` falha; service key ausente no client bundle |
+### 10.1 O que é (produto)
 
----
+O **Passaporte Digital do Imóvel** é a memória permanente de um património (histórico, confiança, documentos, score). Pertence ao domínio de património / Trust — **não** é um ecrã do PRD-001.
 
-## 13. Riscos
+### 10.2 O que o PRD-001 deve garantir (contrato)
 
-| Risco | Mitigação |
-| ----- | --------- |
-| P0-3 / migration não activos | Gate §11.1 |
-| Utilizador sem papéis preso | Onboarding obrigatório + mensagens claras |
-| Scope creep para dashboards | Stub `/app` apenas |
-| Email Supabase mal configurado | Checklist env no ADR de implementação |
-| Confusão com auth legado | Proibido reutilizar `legacy/` auth |
+Para o Passaporte funcionar depois, a auth deve:
 
----
+1. Garantir **identidade estável** (`user_id` / `profiles.id` = `auth.users.id`).
+2. Garantir **papéis correctos** (Parceiro activa património; Cliente consulta; Agente opera; Admin governa).
+3. Garantir **auditoria** de quem acedeu / alterou (padrão `writeAuditLog` reutilizável em `passport.*` no futuro).
+4. **Não** criar atalhos de permissão ad hoc que o Passaporte tenha de contornar.
 
-## 14. Entregáveis da fase de implementação (após aprovação)
+### 10.3 Ganchos explícitos (sem UI de Passaporte)
 
-1. Código em branch `cursor/prd-001-authentication-f96b` (nome final na altura)
-2. Migration `0003` se necessário
-3. ADR-004 (decisões de auth de produto)
-4. Relatório de auto-revisão + validação (4 níveis)
-5. Actualização `AI_CONTEXT` / notas de módulo
+| Gancho | Descrição |
+| ------ | --------- |
+| `AuthorizationContext` | Base para `passport.read` / `passport.write` futuros |
+| Eventos audit com `actor_id` | Mesmo actor do Passaporte |
+| Onboarding Parceiro | Copy pode mencionar “mais tarde poderá activar património e construir o Passaporte” — **sem** CTA falso de produto inexistente |
+| Proibir | Inventar selos SCK / KTK Score no ecrã de auth |
 
-**Não incluído nesta entrega de especificação:** qualquer implementação.
+### 10.4 Fora deste PRD
+
+UI Passaporte, histórico do imóvel, documentos do activo, KTK Score no património.
 
 ---
 
-## 15. Histórico
+## 11. Integração futura com o KAI
 
-| Data | Evento |
+### 11.1 Princípio de identidade
+
+KAI é presença constante na **App**, nunca página escondida (PASSO 0). No PRD-001 **ainda não há App shell** — logo **não há dock KAI** neste módulo.
+
+### 11.2 O que preparar agora
+
+| Preparação | Detalhe |
+| ---------- | ------- |
+| Identidade do utilizador | KAI futuro personaliza por `userId`, papéis e locale |
+| Contexto de autorização | KAI não deve burlar RBAC; age no contexto do utilizador |
+| Eventos | Reservar namespace `kai.*` para audits futuros; auth não os emite ainda |
+| Copy auth | Tom alinhado ao KAI (consultivo, concreto) — sem chatbot no registo |
+| Stub `/app` | Pode incluir nota discreta “O KAI estará disponível na plataforma” **sem** botão morto que finja chat |
+
+### 11.3 Explicitamente não fazer no PRD-001
+
+- Widget/chat KAI
+- Endpoints de IA
+- Prometer respostas de KAI no onboarding
+
+---
+
+## 12. Rotas e arquitectura técnica (resumo)
+
+### 12.1 Rotas
+
+| Rota | Função |
 | ---- | ------ |
-| 2026-07-30 | Spec v0.1 criada para aprovação · implementação bloqueada |
+| `/auth` · `/auth/registar` | Registo |
+| `/auth/entrar` | Login (`?mode=entrar` alias) |
+| `/auth/verificar` | Verify email |
+| `/auth/recuperar` | Pedido reset |
+| `/auth/recuperar/confirmar` | Nova password |
+| `/auth/onboarding/papeis` | Multi-papel inicial |
+| `/auth/onboarding/perfil` | Nome se necessário (pode fundir-se no fluxo) |
+| `/app` | Stub autenticado |
+| `/app/admin` | Stub admin (`admin.panel`) |
+
+### 12.2 Packages
+
+Reutilizar: `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/types`, `@kuteka/ui`.
+
+### 12.3 Novos (só após aprovação + implementação)
+
+- RPC activação papéis iniciais  
+- Migration `0003` se `terms_accepted_at` / ajustes RLS  
+- Session helpers + middleware refresh  
+- ADR-004  
 
 ---
 
-## 16. Pedido de aprovação
+## 13. Eventos de auditoria (canónicos)
 
-Pedimos decisão explícita sobre:
+| Evento | Quando |
+| ------ | ------ |
+| `auth.signup` | Conta criada |
+| `auth.terms_accepted` | Checkbox Termos |
+| `auth.email_verified` | Verify OK |
+| `auth.login` | Login OK |
+| `auth.login_failed` | Opcional, sem vazar segredos |
+| `auth.logout` | Logout |
+| `auth.password_reset_requested` | Pedido reset |
+| `auth.password_reset_completed` | Password alterada |
+| `auth.role_activated` | Papel(is) initial |
 
-1. Aprovação global desta spec **ou** alterações a D1–D10  
-2. Confirmação do gate P0 (CI + migration) antes do kickoff de código  
-3. Autorização posterior para iniciar implementação sob metodologia oficial
+---
+
+## 14. Decisões propostas para aprovação de negócio (D1–D12)
+
+| ID | Proposta | Precisa de sim/não |
+| -- | -------- | ------------------ |
+| D1 | MVP = email+password (sem OAuth) | ☐ |
+| D2 | Telefone fora do MVP | ☐ |
+| D3 | Self-serve só Cliente + Parceiro | ☐ |
+| D4 | Agente/Admin só atribuição Kuteka | ☐ |
+| D5 | Stub `/app` até FASE 3 | ☐ |
+| D6 | Rotas nested `/auth/...` + aliases Landing | ☐ |
+| D7 | MFA fora | ☐ |
+| D8 | Switcher multi-papel adiado ao Shell | ☐ |
+| D9 | UI pt-AO | ☐ |
+| D10 | Termos obrigatórios no registo | ☐ |
+| D11 | Utilizador já logado na Landing: **permanece na Landing** (sem force redirect) | ☐ |
+| D12 | Google OAuth: **follow-up** pós-MVP auth | ☐ |
+
+---
+
+## 15. Casos limite (edge cases)
+
+| # | Caso | Comportamento esperado |
+| - | ---- | ---------------------- |
+| E1 | Registo com email já existente | Mensagem segura; oferecer Entrar / Recuperar |
+| E2 | Login com email não verificado | Bloquear `(app)`; forçar `/auth/verificar` + reenvio |
+| E3 | Token verify expirado | Erro claro + reenvio |
+| E4 | Token reset expirado | Idem |
+| E5 | Utilizador verificado sem papéis (falha RPC a meio) | Ficar em onboarding; retry; suporte |
+| E6 | Tentativa self-activar `administrator` | RPC rejeita; audit de segurança opcional |
+| E7 | Sessão expirada a meio do onboarding | Re-login; retomar onboarding |
+| E8 | `?next=https://evil.com` | Ignorar; ir para `/app` |
+| E9 | `?next=/app/admin` sem `admin.panel` | Ir para `/app` |
+| E10 | Duplo submit registo | Idempotência UX (disabled button + loading) |
+| E11 | Password nos critérios mínimos falha | Inline validation antes do submit |
+| E12 | Utilizador desactiva conta (soft delete futuro) | Fora MVP; reservar `profiles.deleted_at` já no schema |
+| E13 | Multi-tab logout | Sessão invalidada; próximo request → login |
+| E14 | Landing CTA com sessão activa | Mostrar Entrar como “Ir para a plataforma” **ou** manter Entrar→`/app` (fechar em D11) |
+| E15 | Locale `en` no perfil | MVP UI pt; campo existe para futuro |
+| E16 | Supabase email delay | Copy “pode demorar alguns minutos”; reenvio com cooldown |
+| E17 | Utilizador Cliente+Parceiro | Permissions unidas; stub `/app` único no MVP |
+| E18 | Falha de rede no login | Toast/erro recuperável |
+| E19 | Aceder `/auth/onboarding/papeis` sem verify | Redirect verify |
+| E20 | Aceder `/auth/*` já com papéis e sessão | Redirect `/app` (exceto logout/recuperar) |
+
+---
+
+## 16. Critérios de aceitação
+
+### 16.1 Gate pré-código
+
+- [ ] Spec aprovada (D1–D12 fechados)
+- [ ] CI definitivamente activo e verde
+- [ ] Migration `0002` aplicada no remoto
+- [ ] Autorização explícita de implementação
+
+### 16.2 Funcional
+
+- [ ] Registo + Termos + verify + onboarding + `/app`
+- [ ] Login / logout
+- [ ] Recuperação de password completa
+- [ ] Landing Começar/Entrar → fluxos reais
+- [ ] Regras de redirect §8
+- [ ] Self-serve papéis só Cliente/Parceiro
+- [ ] Admin/Agent não self-serve
+
+### 16.3 Segurança / arquitectura
+
+- [ ] Sem matriz TS de permissions
+- [ ] Audits canónicos presentes
+- [ ] Sem service role no client
+- [ ] Open-redirect protegido
+- [ ] Testes unit + e2e smoke
+
+### 16.4 Produto / confiança
+
+- [ ] Copy pt-AO alinhada PASSO 0 (sem linguagem de classificados)
+- [ ] Sem UI falsa de Passaporte/KAI/SCK
+- [ ] Ganchos §10–§11 documentados no ADR de implementação
+
+### 16.5 Quatro níveis (após implementação futura)
+
+Implementação → Auto-revisão → Testes → Validação funcional/visual + aprovação final
+
+---
+
+## 17. Riscos
+
+| Risco | Impacto | Mitigação |
+| ----- | ------- | --------- |
+| Implementar sem CI / sem `0002` | Regressões, RPCs em falta | Gate 16.1 |
+| Scope creep (dashboards, KAI, Passaporte UI) | Atraso, qualidade | Não-objectivos §2 |
+| Fricção no verify email | Abandono | Copy + reenvio + métrica |
+| Onboarding confuso multi-papel | Contas sem papel / papel errado | UI simples D3 + defaults |
+| Enumeração de contas | Privacidade | Mensagens genéricas |
+| Policies storage avatar | Upload inseguro | Avatar opcional / adiar upload |
+| Confusão com legado | Dévida técnica | Proibir `legacy/` auth |
+| Email deliverability | Contas bloqueadas em verify | Templates + domínio sender (ops) |
+
+---
+
+## 18. Wireframes dos fluxos principais
+
+> Wireframes de baixa fidelidade para revisão de negócio. Visual final = Design System (Orange / Slate, tipografia oficial). Sem cards decorativos no hero de auth; um ecrã = uma missão.
+
+### 18.1 Registo — `/auth/registar`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka                                      │
+│                                              │
+│  Criar conta                                 │
+│  Entre na plataforma de património e         │
+│  confiança.                                  │
+│                                              │
+│  Email                                       │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│  Password                                    │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│  Confirmar password                          │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│                                              │
+│  [ ] Li e aceito os Termos e a Privacidade   │
+│                                              │
+│  [ Criar conta          ]  (primário Orange) │
+│                                              │
+│  Já tem conta? Entrar                        │
+└──────────────────────────────────────────────┘
+```
+
+### 18.2 Verificar email — `/auth/verificar`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka                                      │
+│                                              │
+│  Verifique o seu email                       │
+│  Enviámos um link para confirmar a conta.    │
+│                                              │
+│  [ Reenviar email ]   (cooldown 60s)         │
+│                                              │
+│  Errado o email? Voltar ao registo           │
+└──────────────────────────────────────────────┘
+```
+
+### 18.3 Login — `/auth/entrar`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka                                      │
+│                                              │
+│  Entrar                                      │
+│                                              │
+│  Email                                       │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│  Password                                    │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│                                              │
+│  [ Entrar               ]                    │
+│                                              │
+│  Esqueceu a password?                        │
+│  Criar conta                                 │
+└──────────────────────────────────────────────┘
+```
+
+### 18.4 Recuperar — `/auth/recuperar`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka                                      │
+│                                              │
+│  Recuperar acesso                            │
+│  Indique o email da conta. Se existir,       │
+│  enviamos instruções.                        │
+│                                              │
+│  Email                                       │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│                                              │
+│  [ Enviar instruções    ]                    │
+│                                              │
+│  Voltar a Entrar                             │
+│  Sem acesso ao email? Contacto               │
+└──────────────────────────────────────────────┘
+```
+
+### 18.5 Nova password — `/auth/recuperar/confirmar`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka                                      │
+│                                              │
+│  Nova password                               │
+│                                              │
+│  Password                                    │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│  Confirmar                                   │
+│  ┌────────────────────────────────────────┐  │
+│  │                                        │  │
+│  └────────────────────────────────────────┘  │
+│                                              │
+│  [ Guardar e entrar     ]                    │
+└──────────────────────────────────────────────┘
+```
+
+### 18.6 Onboarding papéis — `/auth/onboarding/papeis`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka                                      │
+│                                              │
+│  Como quer usar a Kuteka hoje?               │
+│  Pode escolher mais do que um.               │
+│                                              │
+│  ┌────────────────────────────────────────┐  │
+│  │ ( ) Cliente                            │  │
+│  │     Habitação com confiança            │  │
+│  └────────────────────────────────────────┘  │
+│  ┌────────────────────────────────────────┐  │
+│  │ ( ) Parceiro Patrimonial               │  │
+│  │     Activar e acompanhar património    │  │
+│  └────────────────────────────────────────┘  │
+│                                              │
+│  Agente Certificado e Administrador são      │
+│  atribuídos pela Kuteka.                     │
+│                                              │
+│  [ Continuar            ]  (disabled se 0)   │
+└──────────────────────────────────────────────┘
+```
+
+### 18.7 Stub autenticado — `/app`
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka          [Terminar sessão]           │
+│                                              │
+│  Bem-vindo, {display_name}                   │
+│                                              │
+│  A sua conta está activa.                    │
+│  A plataforma (patrimónios, Passaporte e     │
+│  KAI) será disponibilizada nas próximas      │
+│  fases — com a mesma identidade e papéis.    │
+│                                              │
+│  (Sem dock KAI neste PRD — preparado §11)    │
+└──────────────────────────────────────────────┘
+```
+
+### 18.8 Fluxo condensado (sequência de ecrãs)
+
+```mermaid
+sequenceDiagram
+  actor U as Utilizador
+  participant L as Landing
+  participant A as Auth UI
+  participant S as Supabase Auth
+  participant DB as PostgreSQL RBAC
+
+  U->>L: Começar
+  L->>A: /auth/registar
+  U->>A: email + password + termos
+  A->>S: signUp
+  S->>DB: trigger profiles
+  A->>U: Verificar email
+  U->>A: link verify
+  A->>S: exchange token
+  A->>U: Onboarding papéis
+  U->>A: Cliente e/ou Parceiro
+  A->>DB: activate_initial_roles
+  A->>DB: write_audit_log
+  A->>U: /app stub
+```
+
+---
+
+## 19. Plano de testes (para a fase de implementação futura)
+
+| Camada | Foco |
+| ------ | ---- |
+| Unit | Validators, permission helpers, sanitização `next` |
+| Integration | RPC rejeita admin/agent; audit path |
+| E2E | Registo→verify(test hooks)→onboarding→app; login; reset UI |
+| Segurança | Sem INSERT audit directo; sem open redirect |
+
+---
+
+## 20. Entregáveis quando a implementação for autorizada
+
+1. Branch de implementação (ex. `cursor/prd-001-authentication-f96b`)  
+2. Código + migration `0003` se necessário  
+3. ADR-004  
+4. Relatório 4 níveis  
+5. Actualização AI_CONTEXT / gate  
+
+**Nesta entrega (v0.2):** apenas especificação.
+
+---
+
+## 21. Histórico
+
+| Versão | Data | Notas |
+| ------ | ---- | ----- |
+| 0.1 | 2026-07-30 | Rascunho inicial |
+| 0.2 | 2026-07-30 | Spec completa para revisão de negócio (fluxos, Passaporte/KAI, edges, wireframes); autorização só de especificação |
+
+---
+
+## 22. Pedido à revisão de negócio
+
+Pedimos:
+
+1. **Aprovação ou correcção** das decisões D1–D12  
+2. Validação dos wireframes e da copy de papéis  
+3. Confirmação dos limites Passaporte (§10) e KAI (§11)  
+4. Após aprovação + infra (CI, `0002`, domínio conforme ops): **autorização explícita de implementação**
+
+Até lá: **nenhuma implementação**.
