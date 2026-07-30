@@ -23,8 +23,11 @@
 | [`architecture/ADR-002-landing-page-implementation.md`](architecture/ADR-002-landing-page-implementation.md)             | Landing                                                     |
 | [`architecture/ADR-003-p0-pre-auth-hardening.md`](architecture/ADR-003-p0-pre-auth-hardening.md)                         | P0 RBAC/audit                                               |
 | [`database/PERMISSIONS_MATRIX.md`](database/PERMISSIONS_MATRIX.md)                                                       | Matriz de permissões                                        |
-| [`security/AUDIT_LOGS_CHECKLIST.md`](security/AUDIT_LOGS_CHECKLIST.md)                                                   | Checklist audit                                             |
+| [`security/AUDIT_LOGS_CHECKLIST.md`](security/AUDIT_LOGS_CHECKLIST.md)                                                   | Checklist P0 audit + RBAC                                   |
 | [`engineering/github-workflows/README.md`](engineering/github-workflows/README.md)                                       | Activação CI (P1)                                           |
+| [`engineering/CODE_REVIEW.md`](engineering/CODE_REVIEW.md)                                                               | Checklist de code review                                    |
+| [`engineering/DEPLOY_STATUS_2026-07-30.md`](engineering/DEPLOY_STATUS_2026-07-30.md)                                     | Estado domínio / Pages (ops)                                |
+| [`backlog/P0_ACTIVATION_RUNBOOK.md`](backlog/P0_ACTIVATION_RUNBOOK.md)                                                   | Atalho ops P1/P2 → Gate §8                                  |
 
 ## Encerrados / histórico (não substituem o PRD-001)
 

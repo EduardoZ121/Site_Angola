@@ -139,16 +139,29 @@ Passos:
    ```
    Alternativa: copiar manualmente `docs/engineering/github-workflows/ci.yml` → `.github/workflows/ci.yml` via UI GitHub.
 2. Confirmar Actions → workflow **CI** verde em `main` (e idealmente neste branch).
-3. Registar neste documento: URL do run + data → marcar P1 ✅.
+3. Registar neste documento → marcar P1 ✅:
+
+| Campo      | Valor      |
+| ---------- | ---------- |
+| Run URL    | _pendente_ |
+| Commit SHA | _pendente_ |
+| Data       | _pendente_ |
 
 Última re-verificação objectiva P1 (Líder Técnico): **2026-07-30** — `.github/workflows/ci.yml` ausente; Actions API: apenas Deploy Kuteka + pages-build-deployment. P1 permanece ❌.
 
 ### 8.2 P2 — Migration `0002` no Supabase remoto (bloqueante)
 
 1. Abrir o projecto Supabase de destino (staging/prod conforme política).
-2. Aplicar `supabase/migrations/0002_p0_rbac_and_audit_hardening.sql` (SQL Editor ou CLI `supabase db push` / migration runner oficial).
-3. Validar checklist P0 / `docs/security/AUDIT_LOGS_CHECKLIST.md` (RPCs RBAC + `write_audit_log`).
-4. Registar neste documento: project ref + data + quem aplicou → marcar P2 ✅.
+2. Aplicar `supabase/migrations/0002_p0_rbac_and_audit_hardening.sql` (SQL Editor ou CLI `supabase db push`).
+3. Validar `docs/security/AUDIT_LOGS_CHECKLIST.md` (RBAC + audit). Auxílio: `scripts/verify-p0-migration.sql`.
+4. Registar neste documento → marcar P2 ✅:
+
+| Campo        | Valor      |
+| ------------ | ---------- |
+| Project ref  | _pendente_ |
+| Data         | _pendente_ |
+| Aplicado por | _pendente_ |
+| Checklist    | _pendente_ |
 
 Última re-verificação objectiva P2 (Líder Técnico): **2026-07-30** — sem credenciais Supabase neste ambiente; aplicação remota **não comprovável**. P2 permanece ❌.
 

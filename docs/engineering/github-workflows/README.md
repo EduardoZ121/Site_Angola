@@ -9,9 +9,9 @@
 | Scope necessário para activar        | GitHub token com **`workflow`** (+ `repo`)      |
 | Gate                                 | `docs/backlog/PRD_001_ENGINEERING_GATE.md` §8.1 |
 
-Última verificação objectiva: **2026-07-30** — Actions listadas: Deploy Kuteka + pages-build-deployment; **sem** workflow CI de quality.
+Última verificação objectiva: **2026-07-30** — Actions: Deploy Kuteka + pages-build-deployment; **sem** workflow CI de quality.
 
-## Activar CI
+## Activar CI (P1)
 
 ```bash
 ./scripts/enable-github-ci.sh
@@ -20,12 +20,19 @@ git commit -m "ci: enable KEOS quality workflow"
 git push
 ```
 
-O agente Cloud **não** marca P1 como concluído sem evidência (ficheiro no remote + run verde). Tokens só com scope `repo` **não** bastam para push de workflows.
+Evidência mínima no Gate §8.1: **URL do run** · **SHA** · **data**.  
+O agente Cloud **não** marca P1 ✅ sem essa evidência. Tokens só com `repo` não bastam.
 
 ## Conteúdo do CI
 
 lint · typecheck · test · build `apps/web` · Playwright smoke
 
-## Deploy
+## Deploy (nota de drift)
 
-`deploy.yml` — publicação Landing → `gh-pages` (já activo).
+| Ficheiro                                              | Papel                                                           |
+| ----------------------------------------------------- | --------------------------------------------------------------- |
+| `.github/workflows/deploy.yml` (activo)               | ≈ caminho prebuilt / legado Pages (`prebuilt/web-out` → `dist`) |
+| `docs/engineering/github-workflows/deploy.yml`        | Caminho KEOS desejado (pnpm + `scripts/build-static-web.sh`)    |
+| `docs/engineering/github-workflows/deploy-legacy.yml` | Referência do path legado                                       |
+
+Sincronizar o deploy activo com o KEOS desejado também exige scope `workflow` — **opcional** e **separado** de P1 (P1 = apenas o workflow **CI** de quality).

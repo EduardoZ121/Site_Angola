@@ -16,4 +16,4 @@ Load context with `@kuteka/database` → `fetchAuthorizationContext`.
 - Roles assigned via `user_roles` (N:N)
 - Authorization by **permission / capability**, not `if (role === …)` in UI
 
-Full auth UI belongs to PRD-001 (after P0 complete).
+Full auth UI belongs to PRD-001 — only after Engineering Gate + Autorização de Implementação (`docs/backlog/PRD_001_ENGINEERING_GATE.md`).

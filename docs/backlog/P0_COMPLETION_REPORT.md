@@ -51,13 +51,13 @@
 
 ## 2. Sequência para encerramento oficial do P0
 
-1. Aplicar migration `0002` no Supabase
-2. Activar workflow GitHub (token com scope `workflow`)
-3. Confirmar primeiro pipeline CI verde
-4. Actualizar este relatório → estado **Encerrado oficialmente**
-5. Iniciar **PRD-001**
+1. Aplicar migration `0002` no Supabase **remoto** (evidência no Engineering Gate)
+2. Activar workflow GitHub CI (token `workflow`) + pipeline verde
+3. Actualizar este relatório → estado **Encerrado oficialmente**
+4. Actualizar `PRD_001_ENGINEERING_GATE.md` (P1/P2 ✅)
+5. PO: **Autorização de Implementação** do PRD-001 (spec já aprovada funcionalmente)
 
-Detalhe operacional: `docs/backlog/P0_ACTIVATION_RUNBOOK.md`.
+Detalhe operacional: `docs/backlog/P0_ACTIVATION_RUNBOOK.md` → Gate §8.
 
 ---
 
@@ -92,10 +92,12 @@ Detalhe operacional: `docs/backlog/P0_ACTIVATION_RUNBOOK.md`.
 
 ---
 
-## 5. Após encerramento oficial
+## 5. Após encerramento oficial do P0 (ops)
 
-Iniciar **PRD-001 – Authentication & User Management** (primeiro módulo funcional), usando:
+Com Engineering Gate verde + **Autorização de Implementação** do PO, implementar PRD-001 usando:
 
 - `fetchAuthorizationContext`
 - `writeAuditLog`
 - CI activo em cada PR
+
+Spec oficial: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0).

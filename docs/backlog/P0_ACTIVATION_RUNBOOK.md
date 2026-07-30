@@ -1,61 +1,58 @@
 # P0 — Runbook de activação final
 
-**Objectivo:** Encerrar oficialmente `P0_PRE_AUTH`  
-**Pré-condição:** P0-1 e P0-2 **aprovados tecnicamente** (2026-07-29)
+**Objectivo:** Fechar ops remanescentes do P0 (CI + migration `0002` remoto)  
+**Pré-condição:** P0-1 e P0-2 **aprovados tecnicamente**  
+**Autoridade de estado do Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` §8
+
+Este runbook é um atalho operacional. O Engineering Gate é a fonte de verdade para marcar P1/P2 como ✅.
 
 ---
 
-## 1. Aplicar migration `0002` no Supabase
-
-No projecto Supabase da Kuteka (CLI ligado ou SQL Editor):
+## 1. P2 — Migration `0002` no Supabase remoto
 
 ```bash
-# Opção A — CLI (recomendado)
+# Opção A — CLI ligado ao projecto remoto
 supabase db push
-# ou, em ambiente local limpo:
-supabase db reset
+
+# NÃO usar só `db reset` local como prova do remoto
 ```
 
-Opção B — SQL Editor: executar o conteúdo de  
+Opção B — SQL Editor: executar  
 `supabase/migrations/0002_p0_rbac_and_audit_hardening.sql`
 
-Depois: seguir `docs/security/AUDIT_LOGS_CHECKLIST.md`.
+Validar: `docs/security/AUDIT_LOGS_CHECKLIST.md` (+ checks RBAC no mesmo ficheiro).  
+Registar evidência no Engineering Gate §8.2 (project ref, data, quem).
 
 ---
 
-## 2. Activar o workflow GitHub CI
+## 2. P1 — Activar workflow GitHub CI
 
-Requer Personal Access Token (ou conta) com scope **`workflow`** (+ `repo`).
+Requer token com scope **`workflow`** (+ `repo`). Branch actual ou `main` (não a branch histórica `p0-pre-auth`).
 
 ```bash
-git checkout cursor/p0-pre-auth-f96b
 ./scripts/enable-github-ci.sh
 git add .github/workflows/ci.yml
 git commit -m "ci: enable KEOS quality workflow"
-git push origin cursor/p0-pre-auth-f96b
+git push
 ```
 
----
+Confirmar Actions → workflow **CI** verde.  
+Registar evidência no Engineering Gate §8.1 (URL do run, SHA, data).
 
-## 3. Confirmar o primeiro pipeline
-
-1. Abrir Actions no repositório `EduardoZ121/Site_Angola`
-2. Verificar o workflow **CI** no push/PR da branch
-3. Confirmar: lint · typecheck · test · build · e2e smoke = **verde**
+Detalhe: `docs/engineering/github-workflows/README.md`.
 
 ---
 
-## 4. Encerrar o P0 na documentação
+## 3. Documentação P0
 
-Actualizar `docs/backlog/P0_COMPLETION_REPORT.md` e `docs/backlog/P0_PRE_AUTH.md`:
-
-- marcar P0-3 checkboxes
-- estado = **Encerrado oficialmente**
-- data + link do run Actions bem-sucedido
+Actualizar `P0_COMPLETION_REPORT.md` / `P0_PRE_AUTH.md` checkboxes P0-3 quando P1+P2 tiverem evidência no Gate.
 
 ---
 
-## 5. Desbloquear PRD-001
+## 4. Depois de P1+P2 ✅
 
-Só após o passo 4: iniciar especificação/implementação do  
-**PRD-001 – Authentication & User Management**.
+1. Engineering Gate actualizado (verde operacional)
+2. PO emite **Autorização de Implementação** (Fase 2 do processo)
+3. **Só então** código do PRD-001
+
+A especificação PRD-001 **já** tem Aprovação Funcional — não reiniciar a spec.

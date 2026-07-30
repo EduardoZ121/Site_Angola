@@ -45,8 +45,10 @@
 
 ## Relação com fases
 
-| Fase                           | Relação com P0                                              |
-| ------------------------------ | ----------------------------------------------------------- |
-| Landing Page                   | Encerrada                                                   |
-| PRD-001 Authentication         | **Autorizado a iniciar após encerramento oficial deste P0** |
-| Fluxos autenticados de negócio | Após PRD-001                                                |
+| Fase                           | Relação com P0                                                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Landing Page                   | Encerrada                                                                                                               |
+| PRD-001 Authentication         | **Aprovação Funcional** já concedida (v1.0). **Código** só após Engineering Gate (P1+P2) + Autorização de Implementação |
+| Fluxos autenticados de negócio | Após implementação autorizada do PRD-001                                                                                |
+
+Gate: `docs/backlog/PRD_001_ENGINEERING_GATE.md`

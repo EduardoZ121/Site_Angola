@@ -34,6 +34,15 @@ Só após os quatro o módulo está oficialmente encerrado (**N5**).
 
 A partir de 2026-07-30, **todos** os PRDs seguem duas fases distintas. Aprovação funcional **não** autoriza código.
 
+### Glossário rápido (evitar colisões de nome)
+
+| Termo                                    | Significado                                        |
+| ---------------------------------------- | -------------------------------------------------- |
+| **Fase 1 / Fase 2** (neste processo)     | Aprovação Funcional · Autorização de Implementação |
+| **FASE 1 / FASE 2** (roadmap de produto) | Infraestrutura · Auth de produto (PRD-001), etc.   |
+| **Engineering Gate**                     | Prontidão técnica entre as duas fases do processo  |
+| **N1–N5**                                | Escala de maturidade documental / de módulo        |
+
 ### Fase 1 — Aprovação Funcional
 
 Confirma que:
