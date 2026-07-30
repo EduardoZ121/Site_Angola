@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 **v1.0** Aprovação Funcional ✅ · Engineering Gate ▶️ · implementação ❌)  
+**Estado:** Activo (PRD-001 **v1.0** Aprovação Funcional ✅ · Engineering Gate diagnóstico ✅ / fecho ▶️ P1+P2 · implementação ❌)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0) · Fase prévia: `PHASE_GATE_BEFORE_PRD001.md`
@@ -103,21 +103,24 @@ O projecto React/Vite actual é **protótipo legado**, não base de produção.
 ## 11. Metodologia da equipa
 
 ```
-Especificação → Aprovação → Implementação → Auto-Revisão Técnica
-→ Testes → Validação → Aprovação Final → Próxima Fase
+Especificação → Aprovação Funcional → Engineering Gate
+→ Autorização de Implementação → Implementação → Auto-Revisão
+→ Testes → Validação → Encerramento → Próxima Fase
 ```
 
 Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 
-**Papel do agente (desde 2026-07-30):** Arquitecto Principal e Guardião da Consistência. PRDs em **duas fases** (Aprovação Funcional ≠ Autorização de Implementação). Autoavaliação N1–N5 + confiança % (se < 95%, factores). Ver `DEVELOPMENT_PROCESS.md`.
+**Papel definitivo do agente:** Arquitecto Principal, Guardião da Consistência e **Líder Técnico** — autonomia operacional para qualidade/docs/processo/riscos; PO apenas para limites de negócio, requisitos aprovados, novas features, arquitectura estratégica, autorização de implementação e produção.
 
+- Metodologia estabilizada — conduzir o próximo passo lógico sem aguardar instruções detalhadas
+- PRDs em duas fases (Aprovação Funcional ≠ Autorização de Implementação)
+- Autoavaliação N1–N5 + confiança % (se < 95%, factores)
 - Um PRD por módulo seguinte (não 100 documentos à frente)
-- Qualidade acima da velocidade
+- Qualidade acima da velocidade; simplicidade sem complexidade injustificada
 - Cada passo deve parecer produto final
-- Propor melhorias **antes** de implementar
-- Aguardar aprovação explícita entre passos
 - Documentação evolui com o código (ADRs / specs / PRDs)
-- Arquitectura base **congelada** — alterações estruturais só com benefício claro (segurança, desempenho, escalabilidade, manutenção)
+- Arquitectura base **congelada** — alterações estruturais só com benefício claro; estratégicas → PO
+- Sem contornar Engineering Gates
 
 ## 12. Fases de produto (ordem)
 

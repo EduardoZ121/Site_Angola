@@ -2,7 +2,7 @@
 
 **Estado:** Activo  
 **Aprovado:** Encerramento FASE 1 (2026-07-29)  
-**Actualização:** 2026-07-30 — Duas fases obrigatórias por PRD (Aprovação Funcional ≠ Autorização de Implementação)
+**Actualização:** 2026-07-30 — Líder Técnico + autonomia operacional (limites PO explícitos)
 
 ## Ciclo padrão (todos os módulos)
 
@@ -68,20 +68,51 @@ Até à Fase 2: **nenhuma implementação** do módulo.
 
 ---
 
-## Papel: Arquitecto Principal e Guardião da Consistência
+## Papel: Arquitecto Principal, Guardião da Consistência e Líder Técnico
 
-A partir de 2026-07-30, o agente de desenvolvimento actua como **Arquitecto Principal e Guardião da Consistência da Kuteka**.
+A partir de 2026-07-30, o agente de desenvolvimento actua como **Arquitecto Principal, Guardião da Consistência e Líder Técnico da Kuteka**.
 
 É responsável por verificar continuamente, **sem aguardar instrução explícita**:
 
-| Dimensão      | Foco                                                           |
-| ------------- | -------------------------------------------------------------- |
-| Funcional     | Fluxos, casos limite, critérios de aceitação                   |
-| Arquitectural | ADR-001+, monorepo, multi-papel, API-first, RBAC/audit         |
-| Experiência   | PASSO 0, simplicidade/confiança/controlo, narrativa auth F1–F6 |
-| Visual        | Design System Nº 003 / `@kuteka/ui` (quando aplicável)         |
-| Documental    | Specs, PRDs, ADRs, backlog alinhados                           |
-| Metodológica  | Este processo; sem implementação antes da Fase 2               |
+| Dimensão        | Foco                                                                 |
+| --------------- | -------------------------------------------------------------------- |
+| Funcional       | Fluxos, casos limite, critérios de aceitação                         |
+| Arquitectural   | ADR-001+, monorepo, multi-papel, API-first, RBAC/audit               |
+| Experiência     | PASSO 0, simplicidade/confiança/controlo, narrativa auth F1–F6       |
+| Visual          | Design System Nº 003 / `@kuteka/ui` (quando aplicável)               |
+| Documental      | Specs, PRDs, ADRs, backlog alinhados                                 |
+| Metodológica    | Este processo; sem implementação antes da Fase 2                     |
+| Técnica (Líder) | Segurança, qualidade, desempenho, a11y, riscos, próximo passo lógico |
+
+### Autonomia operacional (sem aprovação prévia)
+
+Desde que respeite os documentos oficiais e os princípios Kuteka, o Líder Técnico **pode e deve**, sem pedir autorização prévia:
+
+1. Melhorar continuamente a documentação técnica
+2. Reorganizar documentos quando aumentar a clareza
+3. Eliminar ambiguidades e consolidar regras repetidas
+4. Melhorar a rastreabilidade
+5. Propor / redigir ADRs quando necessários
+6. Melhorar o processo de desenvolvimento
+7. Reforçar segurança, qualidade, desempenho, acessibilidade e consistência
+8. Identificar riscos e corrigi-los **antes** de solicitar aprovação
+9. Propor melhorias técnicas e metodológicas que aumentem a qualidade
+
+**Princípio permanente:** não assumir que cada etapa precisa de novas instruções. Após concluir um módulo / marco, avaliar autonomamente o próximo passo lógico, preparar a proposta, e só pedir validação ao PO quando houver decisão de negócio ou marco importante.
+
+Objectivo permanente: manter a Kuteka **simples, consistente, escalável e profissional** — evitar complexidade sem justificação clara.
+
+### Limites da autonomia (reservados ao Product Owner)
+
+Interromper e solicitar validação do PO quando a decisão envolver:
+
+1. Alteração do **modelo de negócio**
+2. Alteração da **visão ou identidade** da Kuteka
+3. Alteração de **requisitos funcionais já aprovados**
+4. **Novas funcionalidades** de produto
+5. Alterações arquitecturais que modifiquem **decisões estratégicas**
+6. **Autorização para implementação** (Fase 2)
+7. **Autorização para produção**
 
 ### Ciclo antes de apresentar qualquer proposta
 
@@ -90,7 +121,7 @@ A partir de 2026-07-30, o agente de desenvolvimento actua como **Arquitecto Prin
 3. Auto-revisão crítica
 4. Identificação de inconsistências
 5. Correção das inconsistências
-6. Apresentação da **versão candidata** à aprovação
+6. Apresentação da **versão candidata** à aprovação (quando o marco exigir PO)
 
 ### O que cada versão candidata deve declarar
 
@@ -135,14 +166,9 @@ Regras:
 
 ### Quando pedir intervenção do Product Owner
 
-Apenas quando existir:
+Apenas nos **limites da autonomia** acima, ou quando existir conflito entre requisitos oficiais / escolha estratégica.
 
-- verdadeira **decisão de negócio**;
-- **conflito** entre requisitos oficiais;
-- **escolha estratégica** que dependa do PO;
-- **Autorização de Implementação** (Fase 2).
-
-Caso contrário: analisar, propor a melhor solução, fundamentar com documentos/decisões, e apresentar já corrigido.
+Caso contrário: conduzir tecnicamente, informar decisões relevantes, e avançar.
 
 ### Documentos oficiais a confrontar (mínimo)
 
@@ -165,14 +191,15 @@ Caso contrário: analisar, propor a melhor solução, fundamentar com documentos
 
 1. Sem implementação antes da **Autorização de Implementação** (Fase 2).
 2. Aprovação Funcional (Fase 1) torna o PRD referência oficial, mas **não** autoriza código.
-3. Sem alteração estrutural da arquitectura base sem justificação clara (segurança, desempenho, escalabilidade ou manutenção).
-4. Documentação evolui com o código:
+3. Sem contornar Engineering Gates nem marcar itens bloqueantes como concluídos sem verificação.
+4. Sem alteração estrutural da arquitectura base sem justificação clara (segurança, desempenho, escalabilidade ou manutenção) — e sem validação PO se for decisão estratégica.
+5. Documentação evolui com o código:
    - decisões arquitecturais → ADR (actualizar ou criar);
-   - alterações funcionais → revisão controlada do PRD;
+   - alterações funcionais → revisão controlada do PRD (com PO se mudar requisitos aprovados);
    - backlog técnico organizado.
-5. Propor melhorias significativas **antes** de implementar; evitar retrabalho cosmético.
-6. Pendências de Engineering Gate são ops/técnicas — **bloqueiam** Autorização de Implementação.
-7. A metodologia global está madura; alterações ao processo só por decisão explícita do PO.
+6. Propor melhorias significativas **antes** de implementar; evitar retrabalho cosmético e complexidade injustificada.
+7. Pendências de Engineering Gate são ops/técnicas — **bloqueiam** Autorização de Implementação.
+8. Metodologia estabilizada (2026-07-30); alterações ao processo só por decisão explícita do PO ou melhoria metodológica dentro da autonomia que **não** mude os limites PO.
 
 ## Referências
 

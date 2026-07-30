@@ -5,8 +5,8 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** ▶️ Candidata à aprovação do Gate · **Autorização de Implementação ainda não emitida**  
-**Maturidade deste documento:** **N3 — Candidato**
+**Estado:** Diagnóstico ✅ **aprovado pelo PO** (2026-07-30) · Gate **permanece ABERTO** até P1+P2 · Autorização de Implementação ❌  
+**Maturidade deste documento:** Diagnóstico N3 aprovado · Gate operacional **não verde**
 
 ---
 
@@ -122,37 +122,70 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 ## 8. Plano para fechar o Gate (ordem sugerida)
 
-1. **Humano / ops:** activar CI (`./scripts/enable-github-ci.sh` ou cópia manual de `docs/engineering/github-workflows/ci.yml` → `.github/workflows/ci.yml`) e confirmar run verde em `main`.
-2. **Humano / ops:** aplicar `0002_p0_rbac_and_audit_hardening.sql` no Supabase remoto; registar evidência (data, project ref, checklist P0).
-3. **Ops (paralelo):** configurar templates Auth + redirect URLs (P4).
-4. **Ops (paralelo, não bloqueante de código):** DNS `kutekalink.com` → Pages (P5).
-5. Actualizar este documento: marcar P1–P2 (e P4 se possível) como ✅.
-6. PO emite **Autorização de Implementação** (Fase 2) → maturidade PRD **N4**.
-7. Só então abrir branch de implementação (ex. `cursor/prd-001-authentication-f96b`).
+> **Regra:** não contornar P1/P2; não alterar o estado do Gate para “verde” sem verificação objectiva.
+
+### 8.1 P1 — Activar CI (bloqueante)
+
+**Evidência actual (2026-07-30):** `.github/workflows/` no repo contém apenas `deploy.yml`. O token GitHub disponível ao agente tem scope `repo` **sem** `workflow` — push de workflows falharia ou seria rejeitado. Activação = acção **humana** com token adequado.
+
+Passos:
+
+1. Com token que inclua scope **`workflow`** (PAT clássico ou fine-grained com Workflows):
+   ```bash
+   ./scripts/enable-github-ci.sh
+   git add .github/workflows/ci.yml
+   git commit -m "ci: enable KEOS quality workflow"
+   git push origin HEAD
+   ```
+   Alternativa: copiar manualmente `docs/engineering/github-workflows/ci.yml` → `.github/workflows/ci.yml` via UI GitHub.
+2. Confirmar Actions → workflow **CI** verde em `main` (e idealmente neste branch).
+3. Registar neste documento: URL do run + data → marcar P1 ✅.
+
+### 8.2 P2 — Migration `0002` no Supabase remoto (bloqueante)
+
+1. Abrir o projecto Supabase de destino (staging/prod conforme política).
+2. Aplicar `supabase/migrations/0002_p0_rbac_and_audit_hardening.sql` (SQL Editor ou CLI `supabase db push` / migration runner oficial).
+3. Validar checklist P0 / `docs/security/AUDIT_LOGS_CHECKLIST.md` (RPCs RBAC + `write_audit_log`).
+4. Registar neste documento: project ref + data + quem aplicou → marcar P2 ✅.
+
+### 8.3 Paralelo (não fecha o Gate sozinho)
+
+3. **P4:** templates Auth (verify/reset) + redirect URLs allowlisted.
+4. **P5:** DNS `kutekalink.com` → GitHub Pages (não bloqueia começar código _após_ Fase 2, bloqueia QA na URL pública).
+
+### 8.4 Após P1+P2 ✅
+
+5. Actualizar este documento (P1/P2 verdes + evidências).
+6. PO emite **Autorização de Implementação** (Fase 2) → maturidade **N4**.
+7. Abrir branch de implementação (ex. `cursor/prd-001-authentication-f96b`).
 
 ---
 
 ## 9. Autoavaliação do Arquitecto — Engineering Gate PRD-001
 
-| Campo                               | Conteúdo                                                                                                                                                                                                                                                                                                                                                    |
-| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Nível de maturidade**             | **N3 — Candidato** (diagnóstico completo; Gate ainda não verde)                                                                                                                                                                                                                                                                                             |
-| **Nível de confiança**              | **88%**                                                                                                                                                                                                                                                                                                                                                     |
-| **Factores < 95%**                  | (1) Aplicação remota de `0002` **não verificável** neste ambiente sem acesso Supabase. (2) CI ainda não existe em `.github/workflows/` no remote — só a definição em `docs/engineering/`. (3) Estado exacto dos templates Auth Supabase desconhecido daqui. (4) Domínio público ainda desalinhado (impacto ops, não da exactidão do diagnóstico de código). |
-| **Principais riscos remanescentes** | Pressão para codificar antes de P1/P2; falha silenciosa de RPC; QA no domínio legado                                                                                                                                                                                                                                                                        |
-| **Dívidas técnicas ou documentais** | Evidência escrita pós-aplicação `0002`; run CI verde linkado; Manual/Blueprint/DS Nº 003 ainda fora do repo (não bloqueia Gate técnico, bloqueia confiança visual)                                                                                                                                                                                          |
-| **Decisões adiadas**                | Autorização de Implementação; ADR-004 + RPC na fase de código; P5 pode correr em paralelo                                                                                                                                                                                                                                                                   |
-| **Recomendação**                    | **Aprovar** este Engineering Gate como **registo oficial de prontidão (diagnóstico)**. **Não aprovar** o fecho do Gate nem a Autorização de Implementação até P1 + P2 (mínimo) estarem ✅.                                                                                                                                                                  |
+| Campo                               | Conteúdo                                                                                                                                                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Nível de maturidade**             | Diagnóstico **aprovado** · Gate operacional **aberto** (não N4)                                                                                                                                              |
+| **Nível de confiança**              | **90%** (diagnóstico); prontidão para implementar **~40%** até P1+P2                                                                                                                                         |
+| **Factores < 95% (diagnóstico)**    | (1) `0002` remoto não verificável daqui. (2) CI inactivo — confirmado: sem `ci.yml` em `.github/workflows/` e token sem scope `workflow`. (3) Templates Auth desconhecidos. (4) Domínio público desalinhado. |
+| **Principais riscos remanescentes** | Contornar P1/P2; implementar sem rede CI; RPC em falta no remoto                                                                                                                                             |
+| **Dívidas técnicas ou documentais** | Evidências P1/P2; Manual/Blueprint/DS fora do repo                                                                                                                                                           |
+| **Decisões adiadas**                | Autorização de Implementação; ADR-004 na fase de código                                                                                                                                                      |
+| **Recomendação**                    | Diagnóstico **aprovado** (cumprido). Manter Gate **aberto**. Executar §8.1–§8.2. **Não** autorizar implementação.                                                                                            |
 
 ---
 
 ## 10. Estado resumido
 
-| Dimensão                     | Estado                            |
-| ---------------------------- | --------------------------------- |
-| Aprovação Funcional PRD-001  | ✅ Oficial                        |
-| Engineering Gate             | ▶️ Aberto (diagnóstico candidata) |
-| Autorização de Implementação | ❌ Não emitida                    |
-| Maturidade do módulo auth    | Pré-N4                            |
+| Dimensão                         | Estado                                                          |
+| -------------------------------- | --------------------------------------------------------------- |
+| Aprovação Funcional PRD-001      | ✅ Oficial                                                      |
+| Diagnóstico Engineering Gate     | ✅ **Aprovado pelo PO** (2026-07-30)                            |
+| Engineering Gate (fecho / verde) | ▶️ **Aberto** — aguarda P1 + P2                                 |
+| Autorização de Implementação     | ❌ Não emitida                                                  |
+| Maturidade do módulo auth        | Pré-N4                                                          |
+| Papel técnico                    | Arquitecto Principal + Líder Técnico (`DEVELOPMENT_PROCESS.md`) |
 
-**Pedido ao PO:** validar este diagnóstico; autorizar a equipa ops a fechar P1–P2; **não** autorizar implementação até nova versão deste documento com Gate verde.
+**Próximo passo lógico (condução técnica):** fecho operacional de **P1** e **P2** por quem tenha credenciais (`workflow` + Supabase). O Líder Técnico reavaliará o Gate assim que existirem evidências — sem marcar verde por antecipação.
+
+Até P1+P2 verificados + Fase 2: **nenhuma implementação**.
