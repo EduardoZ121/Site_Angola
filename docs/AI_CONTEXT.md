@@ -2,11 +2,11 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 v1.0 Funcional ✅ · Impl. **condicional** c/ P1+P2 · Gate aberto · código ❌ até evidência)  
+**Estado:** Activo (PRD-001 v1.0 Funcional ✅ · Impl. **condicional** c/ P1+P2 · Gate aberto · P1/P2 = só credenciais/ops · código ❌ até evidência)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  
-**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0) · Fase prévia: `PHASE_GATE_BEFORE_PRD001.md`
+**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0) · Readiness: `PRD_001_IMPLEMENTATION_READINESS.md` · Fase prévia: `PHASE_GATE_BEFORE_PRD001.md`
 
 ---
 

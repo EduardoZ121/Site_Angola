@@ -51,8 +51,10 @@ Actualizar `P0_COMPLETION_REPORT.md` / `P0_PRE_AUTH.md` checkboxes P0-3 quando P
 
 ## 4. Depois de P1+P2 ✅
 
-1. Engineering Gate actualizado (verde operacional)
-2. PO emite **Autorização de Implementação** (Fase 2 do processo)
-3. **Só então** código do PRD-001
+1. Engineering Gate actualizado (verde operacional) — §8.1 e §8.2 com evidência
+2. Autorização de Implementação **já pré-emitida** (condicional PO 2026-07-30) → activa-se automaticamente
+3. Activar `docs/backlog/PRD_001_IMPLEMENTATION_READINESS.md`
+4. Implementar PRD-001 até N5 (branch `cursor/prd-001-authentication-f96b`)
 
-A especificação PRD-001 **já** tem Aprovação Funcional — não reiniciar a spec.
+A especificação PRD-001 **já** tem Aprovação Funcional — não reiniciar a spec.  
+**Não** pedir nova autorização ao PO quando P1+P2 estiverem evidentes.

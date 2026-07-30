@@ -1,11 +1,14 @@
-# PRD-001 — Implementation Readiness Pack (diferido)
+# PRD-001 — Implementation Readiness Pack
 
-**Estado:** 📦 Preparado · **Activação** quando Gate P1+P2 ✅ (Autorização de Implementação **já pré-emitida** pelo PO em 2026-07-30)  
+**Estado:** 📦 Preparado · **Activação automática** quando Gate P1+P2 ✅  
+**Autorização:** Condicional pré-emitida pelo PO (2026-07-30) — activa com evidência no Gate  
 **Spec oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` v1.0  
 **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
-**ADR futuro:** `docs/architecture/ADR-004-authentication-module-deferred.md`
+**ADR futuro:** `docs/architecture/ADR-004-authentication-module-deferred.md`  
+**Inventário de copy:** `docs/backlog/PRD_001_CONTENT_INVENTORY.md`  
+**Protocolo pós-evidência:** `scripts/on-prd001-gate-green.sh`
 
-Este documento activa-se **automaticamente** quando o Engineering Gate registar P1+P2 com evidência. A Fase 2 foi pré-autorizada pelo PO (2026-07-30) sob essa condição.
+Este pack **activa-se automaticamente** quando o Engineering Gate registar P1+P2 com evidência. Não pedir nova confirmação ao PO.
 
 ---
 
@@ -21,22 +24,50 @@ Este documento activa-se **automaticamente** quando o Engineering Gate registar 
 
 ---
 
-## 1. Branch e entregáveis (quando autorizado)
+## 1. Protocolo de activação (quando P1+P2 ✅)
 
-1. Branch: `cursor/prd-001-authentication-f96b` (a partir de `main` actualizado)
-2. Código módulo `apps/web/modules/authentication` + rotas `(auth)` / `(app)`
-3. Migration RPC `activate_self_serve_roles` (+ grants) — seguir §16.5
-4. ADR-004 (substituir o placeholder diferido)
-5. Testes: unit (R4/R5/`next`) · integration RPC · e2e smoke F1→F2→F6→`/app`
-6. Relatório 4 níveis (`DEVELOPMENT_PROCESS.md`)
-7. Actualizar AI_CONTEXT / Gate → maturidade **N4** depois **N5**
+1. Actualizar Gate §8.1–§8.2 + estado → **verde**
+2. Marcar este pack como **Activo**
+3. Branch: `cursor/prd-001-authentication-f96b` a partir de `main` actualizado
+4. Implementar até conclusão do módulo (N5)
+5. Interromper só por decisão de negócio, alteração estratégica ou risco crítico
+
+Helper: `./scripts/on-prd001-gate-green.sh` (checklist + verificação objectiva de P1 via `gh`).
 
 ---
 
-## 2. Ordem de implementação sugerida (técnico)
+## 2. Branch e entregáveis
+
+1. Código módulo `apps/web/modules/authentication` + rotas `(auth)` / stubs `(app)`
+2. Migration RPC `activate_self_serve_roles` (+ grants) — seguir §16.5
+3. ADR-004 (substituir o placeholder diferido)
+4. Testes: unit (R4/R5/`next`) · integration RPC · e2e smoke F1→F2→F6→`/app`
+5. Relatório 4 níveis (`DEVELOPMENT_PROCESS.md`)
+6. Actualizar AI_CONTEXT / Gate → maturidade **N4** depois **N5**
+
+---
+
+## 3. Mapa de ficheiros previsto (não criar até activação)
+
+| Área                  | Destino típico                                                                          |
+| --------------------- | --------------------------------------------------------------------------------------- |
+| Rotas F1–F6           | `apps/web/app/(auth)/auth/...` (§12.1)                                                  |
+| Stub autenticado      | `apps/web/app/(app)/...`                                                                |
+| Módulo                | `apps/web/modules/authentication/{components,services,hooks,types,validators}`          |
+| Content i18n-ready    | `apps/web/modules/authentication/content/` (pt-AO; chaves EN reservadas)                |
+| Session / middleware  | helpers + refresh cookies (R1 / R11)                                                    |
+| `next` allowlist      | util puro conforme §16.6 / R3                                                           |
+| RPC papéis            | `supabase/migrations/0003_*.sql` (ou extensão pós-0002)                                 |
+| Packages a reutilizar | `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/types`, `@kuteka/ui` |
+
+**Proibido:** implementar em `legacy/`.
+
+---
+
+## 4. Ordem de implementação sugerida
 
 1. Session helpers + middleware refresh (R1 / R11)
-2. Content centralizado i18n-ready (copy F1–F6)
+2. Content centralizado i18n-ready (ver inventário de copy)
 3. F1 Registo → F2 Verify → F3 Login → F4 Logout → F5 Recuperação → F6 Onboarding
 4. RPC papéis + audit canónico §13
 5. Landing CTAs D11 (sessão → app sem re-auth)
@@ -47,23 +78,37 @@ Este documento activa-se **automaticamente** quando o Engineering Gate registar 
 
 ---
 
-## 3. Fora de âmbito (não fazer nesta implementação)
+## 5. Matriz de testes mínima (aceitar módulo)
+
+| Camada      | Cobertura mínima                                                                  |
+| ----------- | --------------------------------------------------------------------------------- |
+| Unit        | Password rules R4; `next` allowlist §16.6; anti-enum messaging R6                 |
+| Integration | `activate_self_serve_roles` (§16.5) + `write_audit_log` eventos §13               |
+| E2E smoke   | F1→F2→F6→`/app`; login F3; logout F4; recuperar F5; CTA Landing autenticado (D11) |
+| a11y / UX   | Um ecrã = uma missão; erros guiados; sem cards decorativos no hero auth (§18)     |
+
+Checklist funcional completo: PRD §16.2–§16.4.
+
+---
+
+## 6. Fora de âmbito (não fazer nesta implementação)
 
 - Passaporte / KAI / SCK na UI
 - OAuth / MFA / telefone auth
 - Dashboards / Shell completo
-- UI gestão de papéis
-- Contornar Gate ou implementar sem Fase 2
+- UI gestão de papéis (pós-MVP)
+- Contornar Gate ou implementar sem P1+P2 evidentes
 
 ---
 
-## 4. Checklist de arranque (copiar para o PR de implementação)
+## 7. Checklist de arranque (copiar para o PR de implementação)
 
 - [ ] Gate P1 ✅ com URL do run
 - [ ] Gate P2 ✅ com project ref
-- [ ] Autorização de Implementação do PO colada no PR / Gate
+- [ ] Autorização condicional activa (P1+P2)
 - [ ] Branch de implementação criada
 - [ ] ADR-004 aberto em rascunho N2
+- [ ] Content keys alinhadas ao inventário
 
 ---
 

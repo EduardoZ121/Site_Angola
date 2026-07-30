@@ -1,6 +1,6 @@
 # Acção mínima do PO/Ops — fechar Engineering Gate (P1 + P2)
 
-**Contexto:** o agente Cloud **já tentou** activar CI e aplicar a migration sozinho (Gate §13) e **falhou por credenciais**. Isto é o único trabalho humano que falta para a implementação do PRD-001 arrancar (autorização condicional já emitida).
+**Contexto:** o agente Cloud **já tentou** activar CI e aplicar a migration sozinho (Gate §13) e **falhou por credenciais**. O PO confirmou (Gate §14) que **não** se deve contornar P1/P2 — são dependências exclusivas de credenciais/infra; o PO trata da obtenção.
 
 **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
 **Após P1+P2:** o Líder Técnico implementa auth até N5 **sem nova confirmação**.

@@ -190,7 +190,7 @@ Prosseguir automaticamente para a próxima tarefa lógica quando:
 
 Comunicar **apenas** quando ocorrer um destes eventos:
 
-1. Pré-requisitos de Engineering Gate (ex.: P1 e P2) **objectivamente** concluídos — actualizar o Gate e pedir Autorização de Implementação
+1. Pré-requisitos de Engineering Gate (ex.: P1 e P2) **objectivamente** concluídos — actualizar o Gate; se a Autorização de Implementação já estiver **condicional** e a condição cumprida, **activar** o Implementation Readiness Pack e iniciar implementação (sem nova confirmação); caso contrário, pedir Autorização de Implementação ao PO
 2. Decisão de negócio / conflito entre requisitos ou documentos oficiais
 3. Impacto na visão, arquitectura estratégica ou identidade da Kuteka
 4. Autorização formal para implementação, produção ou outro marco reservado ao PO

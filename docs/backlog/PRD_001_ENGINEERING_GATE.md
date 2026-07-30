@@ -226,15 +226,21 @@ O Líder Técnico esgotou o trabalho **seguro e útil** que pode fazer **sem** c
 | Índice docs, CONTRIBUTING, ADR-004 diferido, readiness pack | ✅     |
 | Qualidade local (lint / format / typecheck / test)          | ✅     |
 | Correcções de consistência / legado / naming                | ✅     |
+| Tentativa P1/P2 + documentação de limites (§13)             | ✅     |
+| Confirmação PO: P1/P2 só credenciais; sem contornar (§14)   | ✅     |
+| Content inventory + protocolo `on-prd001-gate-green.sh`     | ✅     |
 
-| Bloqueado fora desta autonomia         | Owner                                                 |
-| -------------------------------------- | ----------------------------------------------------- |
-| P1 — activar CI (`workflow` scope)     | Ops / humano com PAT adequado                         |
-| P2 — aplicar `0002` no Supabase remoto | Ops / humano com acesso Supabase                      |
-| P3 — Autorização de Implementação      | ✅ Condicional (§12); activa com P1+P2                |
-| P4/P5 — templates Auth / DNS           | Ops (P4 desejável; P5 não bloqueia código pós-Fase 2) |
+| Bloqueado fora desta autonomia         | Owner                                               |
+| -------------------------------------- | --------------------------------------------------- |
+| P1 — activar CI (`workflow` scope)     | PO / Ops (credenciais) — **não contornar** (§14)    |
+| P2 — aplicar `0002` no Supabase remoto | PO / Ops (credenciais) — **não contornar** (§14)    |
+| P3 — Autorização de Implementação      | ✅ Condicional (§12); activa com P1+P2              |
+| P4/P5 — templates Auth / DNS           | Ops (P4 desejável; P5 não bloqueia código pós-Gate) |
+| Código do módulo auth                  | Bloqueado até Gate verde                            |
 
-**Próximo passo do projecto:** fecho operacional de **P1 + P2** → actualizar este Gate (verde) → **Autorização de Implementação activa-se** → activar `PRD_001_IMPLEMENTATION_READINESS.md` e implementar até N5.
+**Paralelo permitido (§14):** docs, scripts de verificação, qualidade, consistência — sem alterar D1–D12 / arquitectura aprovada.
+
+**Próximo passo do projecto:** PO obtém credenciais → P1+P2 com evidência → Gate verde → readiness activo → implementar até N5 (sem nova confirmação).
 
 Até P1+P2 com evidência: **nenhum código** de auth. Com P1+P2 ✅: iniciar implementação de imediato (autorização já dada).
 
@@ -278,3 +284,25 @@ Pedido do PO: executar P1/P2 sem esperar passos manuais. O Líder Técnico esgot
 **Conclusão:** o tecto autónomo para fechar o Gate **foi atingido**. P1 e P2 só fecham com acção humana mínima documentada em `docs/backlog/PO_ACTION_P1_P2.md` (estimativa: poucos minutos com PAT `workflow` + acesso SQL Supabase).
 
 Após o PO colar evidências em §8.1–§8.2 (ou o Líder Técnico as verificar via API), a implementação arranca sem nova confirmação.
+
+---
+
+## 14. Confirmação PO — bloqueios só de credenciais (2026-07-30)
+
+O Product Owner confirma que a tentativa autónom (§13) foi correcta: limitações documentadas, sem evidências inventadas, sem contornar o Gate.
+
+**Ordens permanentes a partir desta confirmação:**
+
+1. **Não** procurar mais contornar P1 nem P2.
+2. Tratar P1 e P2 como dependências **exclusivas** de credenciais / infraestrutura (owner: PO/Ops).
+3. O PO trata da obtenção das permissões (`workflow` + Supabase remoto).
+4. Assim que as evidências estiverem disponíveis: actualizar este Gate (§8.1–§8.2 → ✅), activar automaticamente `PRD_001_IMPLEMENTATION_READINESS.md`, e **iniciar a implementação** do PRD-001 sob a autorização condicional §12 — **sem nova confirmação**.
+5. Entretanto: continuar autonomamente em trabalho que **não** dependa dessas credenciais e acrescente valor, **sem** alterar decisões de negócio nem a arquitectura aprovada, e **sem** código do módulo auth.
+
+| Item                       | Estado                                      |
+| -------------------------- | ------------------------------------------- |
+| Contornar P1/P2            | ❌ Proibido (ordem PO)                      |
+| Owner P1/P2                | PO / Ops (credenciais)                      |
+| Trabalho autónomo paralelo | ✅ Docs, scripts, qualidade, consistência   |
+| Código auth até Gate verde | ❌                                          |
+| Pós-evidência P1+P2        | Gate verde → readiness → implementar até N5 |

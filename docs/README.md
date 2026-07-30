@@ -7,7 +7,7 @@
 
 1. Ler `AI_CONTEXT.md` antes de especificar ou implementar.
 2. Seguir `engineering/DEVELOPMENT_PROCESS.md` (duas fases PRD + papel do Líder Técnico).
-3. Para auth: spec oficial → Engineering Gate → só então implementação.
+3. Para auth: spec oficial → Engineering Gate (P1+P2) → readiness activo → implementação (autorização condicional já emitida).
 
 ## Oficiais / activos
 
@@ -19,7 +19,8 @@
 | [`proposals/PRD_001_AUTHENTICATION_SPEC.md`](proposals/PRD_001_AUTHENTICATION_SPEC.md)                                   | **PRD-001 v1.0** — referência oficial (Aprovação Funcional)        |
 | [`backlog/PRD_001_ENGINEERING_GATE.md`](backlog/PRD_001_ENGINEERING_GATE.md)                                             | Gate técnico pré-implementação (aberto até P1+P2)                  |
 | [`backlog/PO_ACTION_P1_P2.md`](backlog/PO_ACTION_P1_P2.md)                                                               | Checklist mínimo humano para fechar P1+P2 (após tentativa autónom) |
-| [`backlog/PRD_001_IMPLEMENTATION_READINESS.md`](backlog/PRD_001_IMPLEMENTATION_READINESS.md)                             | Pack de arranque (diferido — só após Fase 2)                       |
+| [`backlog/PRD_001_IMPLEMENTATION_READINESS.md`](backlog/PRD_001_IMPLEMENTATION_READINESS.md)                             | Pack de arranque (activa-se com P1+P2)                             |
+| [`backlog/PRD_001_CONTENT_INVENTORY.md`](backlog/PRD_001_CONTENT_INVENTORY.md)                                           | Inventário de copy i18n-ready (prep; sem UI)                       |
 | [`backlog/PHASE_GATE_BEFORE_PRD001.md`](backlog/PHASE_GATE_BEFORE_PRD001.md)                                             | Gate de fase pré-spec (histórico + ponteiros)                      |
 | [`architecture/ADR-001-foundation-architecture-decisions.md`](architecture/ADR-001-foundation-architecture-decisions.md) | Fundação                                                           |
 | [`architecture/README.md`](architecture/README.md)                                                                       | Índice de ADRs                                                     |
