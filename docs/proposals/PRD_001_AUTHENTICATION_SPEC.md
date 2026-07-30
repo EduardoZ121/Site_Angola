@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.3  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 (D1–D12) **fechado** · Bloco 2 (fluxos) a seguir · **Implementação não autorizada**  
+**Versão:** 0.4  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2 (fluxos) ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | A iniciar após v0.3 |
+| Bloco 2 — Fluxos principais | **Em revisão** (v0.4) — ver §6 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -32,6 +32,39 @@ Assumidos em **toda** a Kuteka a partir deste PRD — não só no módulo auth:
 4. **Nenhuma funcionalidade futura** deve obrigar o utilizador a criar uma segunda conta.
 5. **Uma identidade, um perfil** (`auth.users` + `profiles`); papéis vivem em `user_roles`.
 6. A autenticação deve **escalar** para OAuth, MFA, telefone no perfil e módulos futuros **sem redesenhar** o módulo — apenas estender.
+
+### 0.2 Princípio de experiência — primeiro contacto com o ecossistema
+
+A autenticação **não** é apenas um mecanismo de acesso. É o **primeiro contacto** do utilizador com o ecossistema Kuteka e deve transmitir, desde o primeiro momento, três sensações:
+
+| Sensação | Significado na prática |
+| -------- | ---------------------- |
+| **Simplicidade** | Poucos campos; etapas curtas; sem questionários longos no MVP |
+| **Confiança** | Linguagem clara; o utilizador sabe o que acontece e porquê; tom de património/confiança (não de classificados) |
+| **Controlo** | O utilizador percebe o próximo passo; pode voltar, reenviar, recuperar; erros orientados para a solução |
+
+**Regras de UX dos fluxos (MVP):**
+
+1. Progressão por **etapas** (um ecrã = uma missão).
+2. **Feedback imediato** (loading, sucesso, estados vazios).
+3. **Linguagem simples** (pt-AO).
+4. **Validação em tempo real** nos campos (sem esperar só pelo submit, quando fizer sentido).
+5. **Mensagens de erro claras** e orientadas para a solução.
+6. Explicar sempre: **o que** está a acontecer, **porquê**, e **qual o próximo passo**.
+7. Privilegiar redução de fricção sobre formulários longos.
+
+### 0.3 Template de documentação de cada fluxo (Bloco 2+)
+
+Cada fluxo principal é descrito com:
+
+1. Objectivo do fluxo  
+2. Condições de entrada  
+3. Sequência passo a passo  
+4. Estados possíveis  
+5. Mensagens principais ao utilizador  
+6. Casos de erro e comportamento  
+7. Critérios de aceitação  
+8. Oportunidades futuras (quando aplicável)
 
 ---
 
@@ -207,142 +240,458 @@ Novas permissions de negócio (ex. `passport.read`, `kai.use`) **não** entram n
 
 ---
 
-## 6. Fluxos completos de autenticação
+## 6. Fluxos principais (Bloco 2)
 
-### 6.1 Mapa geral
+> Cada fluxo segue o template §0.3 e o princípio de UX §0.2 (simplicidade, confiança, controlo).
+> Regras de navegação transversais: §9.
+
+### 6.0 Mapa geral
 
 ```mermaid
 flowchart TD
-  L[Landing] -->|Começar| R[Registo]
-  L -->|Entrar| I[Login]
-  R --> V[Verificar email]
-  V --> O[Onboarding papéis]
+  L[Landing] -->|Começar| R[F1 Registo]
+  L -->|Entrar| I[F3 Login]
+  R --> V[F2 Verificar email]
+  V --> O[F6 Onboarding]
   O --> A["/app stub"]
   I -->|ok + papéis| A
   I -->|ok sem papéis| O
   I -->|não verificado| V
-  I -->|esqueci| P[Recuperar password]
+  I -->|esqueci| P[F5 Recuperar]
   P --> P2[Nova password]
   P2 --> I
-  A --> X[Logout] --> L
+  A --> X[F4 Logout] --> L
 ```
-
-### 6.2 Registo (email + password)
-
-**Entrada:** `/auth` ou `/auth/registar` (CTA Começar).
-
-**Passos:**
-
-1. Utilizador preenche email, password, confirmação, checkbox Termos/Privacidade.
-2. Validação client + server (password mínima: política Supabase documentada na implementação; UX mostra regras).
-3. `signUp` → trigger cria `profiles`.
-4. Audit `auth.signup` + `auth.terms_accepted`.
-5. Ecrã “Verifique o seu email” com reenvio (cooldown visual).
-6. Não entra em `(app)` antes de verify + papel.
-
-### 6.3 Verificação de email
-
-1. Link do email → `/auth/verificar` (troca de token Supabase).
-2. Sucesso → audit `auth.email_verified` → onboarding se sem papéis.
-3. Token inválido/expirado → pedir reenvio.
-4. Já verificado e com papéis → `/app`.
-
-### 6.4 Login
-
-**Entrada:** `/auth/entrar` ou `/auth?mode=entrar` (pode incluir `?next=`).
-
-1. Se **já autenticado** com verify + papéis → redirect app / `next` (não mostrar formulário).
-2. Email + password → `signInWithPassword`.
-3. Falha → mensagem genérica.
-4. Sucesso → audit `auth.login` → carregar autorização.
-5. Destino conforme §9 (honrar `next` após verify/papéis; stub `/app` se sem `next`).
-
-### 6.5 Logout
-
-1. Acção explícita na UI autenticada.
-2. `signOut` + invalidação cookies.
-3. Audit `auth.logout`.
-4. Redirect `/`.
-
-### 6.6 Sessão e middleware
-
-- Refresh em rotas `(auth)` relevantes e todas `(app)`.
-- Sem sessão em `(app)` → `/auth/entrar?next=<path>`.
-- `next` sanitizado (só paths relativos da app).
 
 ---
 
-## 7. Recuperação de conta
+### 6.1 F1 — Registo (email + password)
 
-### 7.1 Esqueci a password
+#### Objectivo do fluxo
 
-1. `/auth/recuperar` — pede email.
-2. Sempre mostra sucesso genérico (“Se existir conta, enviámos instruções”) — anti-enumeração.
-3. Audit `auth.password_reset_requested` (quando aplicável server-side sem vazar).
-4. Email Supabase → `/auth/recuperar/confirmar`.
-5. Nova password + confirmar → sucesso → audit `auth.password_reset_completed` → login.
+Criar a **única conta Kuteka** da pessoa, com aceite dos Termos, e conduzi-la com clareza ao próximo passo (verificação de email) — transmitindo simplicidade e confiança desde o primeiro ecrã.
 
-### 7.2 Conta sem acesso ao email
+#### Condições de entrada
 
-- **MVP:** suporte humano / processo operacional (fora do self-serve).
-- Mensagem: “Não tem acesso ao email? Contacte a Kuteka.” → `/contacto`.
+| Condição | Comportamento |
+| -------- | ------------- |
+| Visitante anónimo | Mostrar formulário de registo |
+| Sessão activa, verify + papéis OK | Redirect app (§9.2) — sem re-registo |
+| Sessão activa, onboarding incompleto | Ir para o passo em falta |
+| Entrada | `/auth`, `/auth/registar`, CTA **Começar** |
 
-### 7.3 Evoluções futuras (documentadas, não MVP)
+#### Sequência passo a passo
+
+1. Utilizador vê título + frase curta do que vai acontecer e qual o próximo passo após criar conta.
+2. Preenche **email**, **password**, **confirmar password**; aceita **Termos e Privacidade**.
+3. Validação em tempo real (formato email; regras de password; match da confirmação; checkbox).
+4. Submete → loading imediato no CTA (evitar duplo submit).
+5. `signUp` Supabase → trigger cria `profiles`.
+6. Audits: `auth.signup`, `auth.terms_accepted`.
+7. Passa ao ecrã / fluxo **F2 Verificar email** (não entra em `(app)` ainda).
+
+#### Estados possíveis
+
+| Estado | UI |
+| ------ | -- |
+| Vazio / edição | Formulário editável |
+| Validação local inválida | Campos com erro inline; CTA disabled ou submit bloqueado |
+| A submeter | CTA loading |
+| Sucesso | Transição para F2 |
+| Erro de servidor | Mensagem orientada para solução; formulário preservado (exceto password se política assim o exigir) |
+
+#### Mensagens principais ao utilizador
+
+| Momento | Mensagem (orientação de copy) |
+| ------- | ----------------------------- |
+| Título | Criar conta |
+| Apoio | Entre na plataforma de património e confiança. Depois pediremos que confirme o seu email. |
+| Termos | Li e aceito os Termos de utilização e a Política de privacidade |
+| CTA | Criar conta |
+| Link secundário | Já tem conta? Entrar |
+| Password help | Indicar requisitos de forma simples (ex.: mínimo de caracteres) |
+
+#### Casos de erro e comportamento
+
+| Erro | Comportamento |
+| ---- | ------------- |
+| Email inválido | Inline: “Indique um email válido.” |
+| Passwords não coincidem | Inline imediato |
+| Termos não aceites | Inline / impedir submit |
+| Email já registado | Mensagem segura + links **Entrar** e **Recuperar acesso** (sem vazar detalhes desnecessários) |
+| Rede / 5xx | “Não foi possível criar a conta. Tente novamente.” + retry |
+| Password fraca (servidor) | Mostrar requisitos e focar o campo |
+
+#### Critérios de aceitação
+
+- [ ] Apenas campos essenciais no MVP (sem questionário longo)
+- [ ] Validação em tempo real nos campos críticos
+- [ ] Termos obrigatórios
+- [ ] Após sucesso, utilizador entende que o **próximo passo é verificar o email**
+- [ ] Não há acesso a `(app)` antes de verify + papéis
+- [ ] Uma conta por pessoa; sem caminho para “segunda conta”
+
+#### Oportunidades futuras
+
+- OAuth (Google, Apple, …) como alternativa de criação de conta na mesma identidade
+- Telefone no perfil (não como auth inicial)
+- Preferências de produto após valor (não no registo)
+
+---
+
+### 6.2 F2 — Verificação de email
+
+#### Objectivo do fluxo
+
+Confirmar que o utilizador controla o email da conta, com fricção mínima e feedback claro sobre o que fazer a seguir.
+
+#### Condições de entrada
+
+| Condição | Comportamento |
+| -------- | ------------- |
+| Após registo bem-sucedido | Ecrã “Verifique o seu email” |
+| Clique no link do email | `/auth/verificar` com token |
+| Login com email não verificado | Redireccionado para este fluxo |
+| Já verificado | Saltar para F6 ou app conforme papéis |
+
+#### Sequência passo a passo
+
+1. **Estado pendente:** explicar que foi enviado um email, porque é necessário, e o próximo passo (abrir a caixa de correio e clicar no link).
+2. Opção **Reenviar email** com cooldown visível.
+3. Utilizador clica no link → troca de token Supabase.
+4. Sucesso → audit `auth.email_verified`.
+5. Se sem papéis → **F6 Onboarding**; se já tem papéis → destino §9.
+
+#### Estados possíveis
+
+| Estado | UI |
+| ------ | -- |
+| Aguardando verificação | Instruções + reenvio |
+| A processar token | Loading breve |
+| Verificado com sucesso | Confirmação curta → redirect |
+| Token inválido / expirado | Erro + reenvio / pedir novo link |
+| Cooldown de reenvio | CTA disabled com contagem |
+
+#### Mensagens principais ao utilizador
+
+| Momento | Mensagem (orientação) |
+| ------- | --------------------- |
+| Título | Verifique o seu email |
+| Corpo | Enviámos um link para confirmar a sua conta. É um passo de segurança — depois continua o seu acesso. |
+| Reenviar | Reenviar email |
+| Sucesso | Email confirmado. A seguir, escolha como quer usar a Kuteka. |
+| Link auxiliar | Email errado? Voltar ao registo / contacto |
+
+#### Casos de erro e comportamento
+
+| Erro | Comportamento |
+| ---- | ------------- |
+| Email não chegou (percepção) | Copy: pode demorar alguns minutos; verificar spam; reenviar |
+| Token expirado | “Este link expirou. Peça um novo email.” |
+| Token inválido / já usado | Mensagem clara + caminho para reenvio ou login |
+| Rate limit reenvio | Respeitar cooldown; explicar “aguarde Xs” |
+| Rede | Retry |
+
+#### Critérios de aceitação
+
+- [ ] Utilizador compreende o quê / porquê / próximo passo
+- [ ] Reenvio com cooldown e feedback imediato
+- [ ] Sucesso conduz a onboarding ou app conforme estado
+- [ ] Sem acesso `(app)` sem email verificado
+
+#### Oportunidades futuras
+
+- Magic link como único passo (passwordless)
+- Verify por SMS quando existir telefone no perfil
+
+---
+
+### 6.3 F3 — Login (Entrar)
+
+#### Objectivo do fluxo
+
+Reconhecer o utilizador da **mesma conta**, com o mínimo de fricção, e devolvê-lo ao sítio onde pretendia continuar (`next`) ou ao stub `/app`.
+
+#### Condições de entrada
+
+| Condição | Comportamento |
+| -------- | ------------- |
+| Anónimo | Formulário Entrar |
+| Autenticado completo | Redirect app / `next` — **sem** formulário |
+| Autenticado incompleto | Passo em falta (F2/F6) |
+| Entrada | `/auth/entrar`, `/auth?mode=entrar`, CTA **Entrar**; opcional `?next=` |
+
+#### Sequência passo a passo
+
+1. Se já completo → redirect (§9); senão mostrar formulário.
+2. Email + password; validação em tempo real básica.
+3. Submit → loading.
+4. `signInWithPassword` → audit `auth.login` se sucesso.
+5. Carregar autorização; aplicar §9 (verify → onboarding → `next` → `/app`).
+
+#### Estados possíveis
+
+| Estado | UI |
+| ------ | -- |
+| Formulário | Edição |
+| Loading | CTA em progresso |
+| Sucesso | Redirect sem ecrãs intermédios desnecessários |
+| Credenciais inválidas | Erro genérico orientado para retry / recuperar |
+
+#### Mensagens principais ao utilizador
+
+| Momento | Mensagem (orientação) |
+| ------- | --------------------- |
+| Título | Entrar |
+| Apoio | Aceda à sua conta Kuteka. |
+| CTA | Entrar |
+| Links | Esqueceu a password? · Criar conta |
+
+#### Casos de erro e comportamento
+
+| Erro | Comportamento |
+| ---- | ------------- |
+| Credenciais inválidas | “Email ou password incorrectos. Tente novamente ou recupere o acesso.” (anti-enumeração) |
+| Email não verificado | Não entregar `(app)`; ir a F2 com explicação |
+| Sem papéis | Ir a F6 |
+| Rede | Retry |
+| Conta indisponível (futuro soft-delete) | Mensagem + contacto |
+
+#### Critérios de aceitação
+
+- [ ] Honra `next` seguro após checks
+- [ ] Não re-autentica quem já tem sessão completa (Landing CTAs → app)
+- [ ] Erros claros e orientados para solução
+- [ ] Feedback imediato no submit
+
+#### Oportunidades futuras
+
+- OAuth “Continuar com Google/Apple”
+- MFA step-up
+- “Lembrar neste dispositivo” (avaliar segurança)
+
+---
+
+### 6.4 F4 — Logout
+
+#### Objectivo do fluxo
+
+Terminar a sessão de forma explícita e compreensível, devolvendo controlo ao utilizador.
+
+#### Condições de entrada
+
+- Utilizador autenticado na UI `(app)` (ou futuras áreas autenticadas).
+- Acção explícita “Terminar sessão”.
+
+#### Sequência passo a passo
+
+1. Utilizador activa “Terminar sessão”.
+2. Feedback imediato (loading breve se necessário).
+3. `signOut` + invalidação de cookies de sessão.
+4. Audit `auth.logout`.
+5. Redirect `/` (Landing).
+
+#### Estados possíveis
+
+| Estado | UI |
+| ------ | -- |
+| Confirmado / em curso | Controlo disabled ou spinner |
+| Concluído | Landing pública |
+
+*(MVP: sem diálogo de confirmação obrigatório — evitar fricção; pode adicionar-se se produto o pedir.)*
+
+#### Mensagens principais ao utilizador
+
+| Momento | Mensagem |
+| ------- | -------- |
+| Acção | Terminar sessão |
+| Opcional pós-logout na Landing | (nenhuma obrigatória) |
+
+#### Casos de erro e comportamento
+
+| Erro | Comportamento |
+| ---- | ------------- |
+| Falha parcial de signOut | Forçar limpeza local de sessão + redirect Landing; retry silencioso se aplicável |
+
+#### Critérios de aceitação
+
+- [ ] Sessão inválida após logout
+- [ ] Acesso seguinte a `(app)` pede Entrar
+- [ ] Multi-tab: pedidos subsequentes tratam sessão como expirada
+
+#### Oportunidades futuras
+
+- “Terminar sessão em todos os dispositivos”
+- Confirmação se houver trabalho não guardado (módulos futuros)
+
+---
+
+### 6.5 F5 — Recuperação de conta (password)
+
+#### Objectivo do fluxo
+
+Permitir recuperar o acesso à **mesma conta** com simplicidade e sem expor se o email existe, mantendo confiança e controlo.
+
+#### Condições de entrada
+
+| Condição | Entrada |
+| -------- | ------- |
+| Link “Esqueceu a password?” | `/auth/recuperar` |
+| Link do email de reset | `/auth/recuperar/confirmar` |
+| Sem acesso ao email | Direccionar para contacto humano (MVP) |
+
+#### Sequência passo a passo
+
+**Pedido de reset**
+
+1. Explicar: vamos enviar instruções se existir conta; próximo passo = verificar email.
+2. Campo email + validação em tempo real.
+3. Submit → sempre UI de sucesso genérico (anti-enumeração).
+4. Audit `auth.password_reset_requested` quando aplicável server-side sem vazar.
+
+**Nova password**
+
+5. Token válido → formulário nova password + confirmação (validação em tempo real).
+6. Sucesso → audit `auth.password_reset_completed` → Entrar (ou sessão conforme Supabase).
+
+#### Estados possíveis
+
+| Estado | UI |
+| ------ | -- |
+| Pedido | Formulário email |
+| Pedido enviado (genérico) | Sucesso + próximos passos |
+| Token OK | Formulário nova password |
+| Token inválido | Erro + pedir novo link |
+| Sem acesso ao email | Link para `/contacto` |
+
+#### Mensagens principais ao utilizador
+
+| Momento | Mensagem (orientação) |
+| ------- | --------------------- |
+| Título pedido | Recuperar acesso |
+| Corpo | Indique o email da conta. Se existir, enviamos instruções. |
+| Sucesso genérico | Se existir uma conta com esse email, enviámos instruções. Verifique a caixa de entrada. |
+| Nova password | Defina uma nova password para voltar a entrar. |
+| Sem email | Não tem acesso ao email? Contacte a Kuteka. |
+
+#### Casos de erro e comportamento
+
+| Erro | Comportamento |
+| ---- | ------------- |
+| Email inválido | Inline |
+| Token expirado | “Este link expirou. Peça novas instruções.” |
+| Password fraca / mismatch | Inline orientado |
+| Rede | Retry |
+
+#### Critérios de aceitação
+
+- [ ] Sucesso genérico no pedido (anti-enumeração)
+- [ ] Fluxo completa até nova password
+- [ ] Utilizador sabe sempre o próximo passo
+- [ ] MVP: suporte humano se sem acesso ao email
+
+#### Oportunidades futuras
 
 | Evolução | Nota |
 | -------- | ---- |
-| Recuperação por telefone verificado no perfil | Após telefone existir no perfil |
-| Códigos de recuperação MFA | Com MFA |
-| Verificação de identidade (KYC) para desbloqueio | Trust / suporte avançado |
-| Reivindicação de conta com provas documentais | Processo operacional + audit |
-
-### 7.4 Fora do MVP imediato
-
-- Self-serve completo sem email; MFA recovery codes.
+| Recuperação por telefone verificado no perfil | Após telefone no perfil |
+| Códigos MFA de recuperação | Com MFA |
+| KYC / reivindicação documental | Trust + suporte |
+| Self-serve avançado sem email | Só com controlos fortes |
 
 ---
 
-## 8. Onboarding
+### 6.6 F6 — Onboarding (perfil mínimo + papéis)
 
-### 8.1 Princípio
+#### Objectivo do fluxo
 
-Um ecrã = uma missão. Não forçar questionário longo antes de valor (Manual / UX). O onboarding do PRD-001 é **só** o necessário para identidade e papel.
+Activar a conta para uso na plataforma **sem formulários longos**: garantir nome (se em falta) e pelo menos um papel self-serve, respeitando multi-papel na **mesma conta**.
 
-### 8.2 Sequência pós-verify
+#### Condições de entrada
+
+| Condição | Comportamento |
+| -------- | ------------- |
+| Email verificado e 0 papéis | Obrigatório antes de `(app)` |
+| Após F2 com sucesso | Entrada natural |
+| Login de conta sem papéis | Redireccionado para aqui |
+| Já tem ≥1 papel | Não reapresentar (salvo gestão futura de papéis) |
+
+#### Sequência passo a passo
+
+1. Se `display_name` vazio → etapa curta “Como prefere ser chamado?” (um campo).
+2. Etapa papéis: “Como quer usar a Kuteka hoje?” — Cliente e/ou Parceiro.
+3. Explicar em uma frase: pode escolher um ou ambos; Agente/Admin são atribuídos pela Kuteka.
+4. CTA Continuar (disabled até ≥1 papel).
+5. RPC de activação + audit `auth.role_activated`.
+6. Destino: `/app` (ou `next` se veio de Entrar após completar onboarding — §9 / E21).
 
 ```mermaid
 flowchart LR
   V[Email verificado] --> N{display_name?}
-  N -->|vazio| P[Nome de exibição]
-  N -->|ok| R[Escolha de papéis]
+  N -->|vazio| P[Nome]
+  N -->|ok| R[Papéis]
   P --> R
-  R --> S[Activar via RPC]
-  S --> A["/app"]
+  R --> S[Activar RPC]
+  S --> A["/app ou next"]
 ```
 
-### 8.3 Escolha de papéis (MVP)
+#### Estados possíveis
 
-**Título:** “Como quer usar a Kuteka hoje?”
+| Estado | UI |
+| ------ | -- |
+| Etapa nome | Um campo + Continuar |
+| Etapa papéis | Selecção multi + Continuar |
+| A activar | Loading |
+| Sucesso | Redirect |
+| Falha RPC | Erro + retry; permanece no onboarding |
 
-| Opção | Copy curta |
-| ----- | ---------- |
-| Cliente | Encontrar e avançar com confiança na habitação |
-| Parceiro Patrimonial | Activar e acompanhar o meu património |
-| (Info) Agente / Admin | Atribuídos pela Kuteka — não seleccionáveis |
+#### Mensagens principais ao utilizador
 
-- Permite seleccionar **um ou ambos** Cliente + Parceiro (coexistência confirmada).
-- CTA: Continuar (disabled até ≥1 selecção).
-- RPC `activate_initial_roles` (nome final na implementação) aplica regras §3.2–§3.3.
-- Audit `auth.role_activated` (metadata com lista de papéis).
-- Copy discreta (opcional): papéis podem ser geridos mais tarde na mesma conta — **sem** prometer ecrã que ainda não existe.
+| Momento | Mensagem (orientação) |
+| ------- | --------------------- |
+| Nome | Como prefere ser chamado? |
+| Papéis título | Como quer usar a Kuteka hoje? |
+| Apoio | Pode escolher mais do que um. É a mesma conta. |
+| Cliente | Habitação com confiança |
+| Parceiro | Activar e acompanhar património |
+| Nota Agente/Admin | Agente Certificado e Administrador são atribuídos pela Kuteka. |
+| CTA | Continuar |
 
-### 8.4 O que o onboarding **não** pede no MVP
+#### Casos de erro e comportamento
 
-- Preferências de zona / orçamento (Cliente → PRD-003)
-- Dados de imóvel (Parceiro → PRD-002)
-- Upload de documentos KYC
-- Telefone
-- Qualquer menção visual a Passaporte / KAI / SCK / KTK Score
+| Erro | Comportamento |
+| ---- | ------------- |
+| Nenhum papel seleccionado | CTA disabled + hint |
+| Tentativa de papéis não self-serve | UI não oferece; RPC rejeita se forçado |
+| Falha RPC a meio | Mensagem + retry; sem acesso `(app)` até sucesso |
+| Sessão expirada a meio | Re-login → retomar onboarding |
+
+#### Critérios de aceitação
+
+- [ ] Sem questionário longo; só nome (se preciso) + papéis
+- [ ] Cliente e Parceiro podem coexistir
+- [ ] Explica o quê / porquê / próximo passo
+- [ ] Sem copy de Passaporte / KAI / SCK
+- [ ] Após sucesso, utilizador entra na app (stub) com feedback de conta activa
+
+#### Oportunidades futuras
+
+- UI para **adicionar/remover** papéis self-serve na mesma conta
+- Switcher visual de contexto de actuação (Shell)
+- Onboarding de valor por papel (após módulos 002/003) — nunca forçar no auth inicial
+
+---
+
+### 6.7 Sessão e middleware (transversal)
+
+Não é um “ecrã”, mas condiciona todos os fluxos:
+
+| Regra | Comportamento |
+| ----- | ------------- |
+| Refresh | Middleware refresca sessão em `(auth)` relevante e `(app)` |
+| Sem sessão em `(app)` | `/auth/entrar?next=<path>` |
+| `next` | Apenas paths relativos internos allowlisted |
+| Mensagem (quando redirect por sessão expirada) | “A sua sessão terminou. Entre novamente para continuar.” (opcional, se não aumentar ruído) |
 
 ---
 
@@ -789,7 +1138,8 @@ sequenceDiagram
 | ------ | ---- | ----- |
 | 0.1 | 2026-07-30 | Rascunho inicial |
 | 0.2 | 2026-07-30 | Spec completa para revisão de negócio |
-| 0.3 | 2026-07-30 | Bloco 1: D1–D12 fechados; princípios uma-conta/multi-papel; redirects D5/D11; Passaporte/KAI só contrato discreto; evoluções de recuperação |
+| 0.3 | 2026-07-30 | Bloco 1: D1–D12 fechados; princípios uma-conta/multi-papel |
+| 0.4 | 2026-07-30 | Princípio UX simplicidade/confiança/controlo; Bloco 2 fluxos F1–F6 no template §0.3 |
 
 ---
 
@@ -797,12 +1147,12 @@ sequenceDiagram
 
 | Bloco | Conteúdo | Estado |
 | ----- | ------- | ------ |
-| 1 | Decisões D1–D12 + princípios | ✅ **Encerrado** |
-| 2 | Fluxos principais | ▶️ A seguir |
+| 1 | Decisões D1–D12 + princípios de plataforma | ✅ **Encerrado** |
+| 2 | Fluxos principais (F1–F6) + princípio UX | ▶️ **Em revisão** (v0.4) |
 | 3 | Casos limite (detalhe) | Pendente |
 | 4 | Critérios de aceitação + UX wireframes | Pendente |
-| — | Aprovação oficial integral → implementação | Bloqueada até fecho de todos os blocos |
+| — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** validar se a v0.3 reflecte correctamente as decisões do Bloco 1; em seguida iniciar Bloco 2 (fluxos).
+**Pedido imediato:** rever os fluxos F1–F6 (§6) quanto a objectivo, passos, mensagens, erros e critérios; indicar ajustes de negócio.
 
 Até aprovação integral: **nenhuma implementação**.
