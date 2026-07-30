@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 1.0-rc1  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1–F6 ✅ · revisão global ▶️ · **Implementação não autorizada**  
+**Versão:** 1.0-rc2  
+**Estado:** 📄 Em revisão · Blocos 1–2 ✅ · Bloco 3 candidata · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -952,7 +952,7 @@ Não é um “ecrã”, mas condiciona todos os fluxos:
 
 ### 6.8 Revisão global do Bloco 2 — consistência F1–F6
 
-**Estado:** ▶️ Em validação de negócio (após aprovação individual de F1–F6).
+**Estado:** ✅ **Encerrado** (aprovação global 2026-07-30). Autorizado Bloco 3.
 
 #### Experiência oficial (arco narrativo)
 
@@ -991,11 +991,10 @@ Não é um “ecrã”, mas condiciona todos os fluxos:
 
 #### Critério de fecho do Bloco 2
 
-- [ ] F1–F6 aprovados individualmente ✅
-- [ ] Arco narrativo oficial aceite
-- [ ] Checklist transversal validada
-- [ ] Ajustes pontuais de consistência (se houver) incorporados na spec
-- [ ] Autorização para avançar ao **Bloco 3 — casos limite**
+- [x] F1–F6 aprovados individualmente
+- [x] Arco narrativo oficial aceite (aprovação global)
+- [x] Checklist transversal validada pelo PO
+- [x] Autorização para o **Bloco 3 — casos limite**
 
 ---
 
@@ -1144,32 +1143,161 @@ Reutilizar: `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/t
 
 ---
 
-## 15. Casos limite (edge cases)
+## 15. Bloco 3 — Casos limite (versão candidata)
 
-| # | Caso | Comportamento esperado |
-| - | ---- | ---------------------- |
-| E1 | Registo com email já existente | Mensagem segura; oferecer Entrar / Recuperar |
-| E2 | Login com email não verificado | Bloquear `(app)`; forçar `/auth/verificar` + reenvio |
-| E3 | Token verify expirado | Erro claro + reenvio |
-| E4 | Token reset expirado | Idem |
-| E5 | Utilizador verificado sem papéis (falha RPC a meio) | Ficar em onboarding; retry; suporte |
-| E6 | Tentativa self-activar `administrator` | RPC rejeita; audit de segurança opcional |
-| E7 | Sessão expirada a meio do onboarding | Re-login; retomar onboarding |
-| E8 | `?next=https://evil.com` | Ignorar; ir para `/app` |
-| E9 | `?next=/app/admin` sem `admin.panel` | Ir para `/app` |
-| E10 | Duplo submit registo | Idempotência UX (disabled button + loading) |
-| E11 | Password nos critérios mínimos falha | Inline validation antes do submit |
-| E12 | Utilizador desactiva conta (soft delete futuro) | Fora MVP; reservar `profiles.deleted_at` já no schema |
-| E13 | Multi-tab logout | Sessão invalidada; próximo request → login |
-| E14 | Landing CTA Começar/Entrar **com sessão activa** | Ir para `/app` (ou verify/onboarding se incompleto) — **sem** re-mostrar formulário de login |
-| E15 | Locale `en` no perfil | MVP UI pt-AO; campo existe para i18n futuro |
-| E16 | Supabase email delay | Copy “pode demorar alguns minutos”; reenvio com cooldown |
-| E17 | Utilizador Cliente+Parceiro | Permissions unidas; uma conta; stub `/app` único no MVP |
-| E18 | Falha de rede no login | Erro recuperável |
-| E19 | Aceder `/auth/onboarding/papeis` sem verify | Redirect verify |
-| E20 | Aceder `/auth/registar` ou `/auth/entrar` já completo (sessão + papéis) | Redirect `/app` (exceto recuperar) |
-| E21 | Entrar com `?next=/algum/path` após onboarding em falta | Completar onboarding **depois** honrar `next` |
-| E22 | Pedido futuro de “segunda conta para ser Parceiro” | Recusar por princípio; oferecer activar papel na mesma conta |
+**Estado:** ▶️ Candidata à aprovação · Implementação bloqueada  
+**Metodologia:** Arquitecto Principal / Guardião da Consistência (`DEVELOPMENT_PROCESS.md`)
+
+### 15.0 Meta da versão candidata
+
+#### Documentos consultados
+
+| Documento | Uso nesta proposta |
+| --------- | ------------------ |
+| `PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md` | Tom, confiança, simplicidade |
+| `AI_CONTEXT.md` | Uma conta, multi-papel, hierarquia, fases |
+| `ADR-001` / `ADR-003` | Identidade, RBAC, audit, sem matriz TS |
+| `PERMISSIONS_MATRIX.md` | platform.access / admin.panel |
+| `PRD_001` §§0–6, 9–14 (D1–D12, F1–F6) | Decisões e fluxos aprovados |
+| `PHASE_GATE_BEFORE_PRD001.md` | Gate infra vs spec |
+| `DEVELOPMENT_PROCESS.md` | Novo ciclo de auto-revisão |
+| UX redesign / FASE_1 (in-repo) | Multi-papel, auth MVP vs pós-MVP |
+| Manual Operacional / Blueprint / DS Nº 003 | **Não presentes como ficheiros completos no repo** — princípios aplicados via AI_CONTEXT + PASSO 0 + ADRs |
+
+#### Verificações realizadas
+
+1. Cada caso mapeado a um fluxo F1–F6 ou regra transversal (§9, sessão).  
+2. Mensagens alinhadas ao padrão **problema + solução + próximo passo**.  
+3. Anti-enumeração, uma conta, logout ≠ expiração, `next` seguro.  
+4. Sem UI Passaporte/KAI; MFA/OAuth só como “futuro”.  
+5. Coerência com auditoria mínima (ADR-003).  
+6. Remoção/fusão de casos redundantes da tabela antiga E1–E22.
+
+#### Conflitos / ambiguidades e resolução
+
+| Achado | Resolução proposta | Fundamento |
+| ------ | ------------------ | ---------- |
+| Soft-delete de conta (E12 antigo) sem produto | Manter como **fora do MVP**; schema já tem `deleted_at` — comportamento UX diferido | AI_CONTEXT segurança; não inventar fluxo sem decisão PO |
+| “Suporte” em falha RPC onboarding | Preferir **retry** + contacto só se persistir — evita empurrar suporte cedo demais | Princípio UX F2/F6 “sem suporte no caminho feliz” |
+| Rate limit messages vs tranquilizar | Copy calma + tempo de espera; sem detalhes técnicos exploráveis | F3 aprovado + segurança |
+| Manual/Blueprint não no repo | Declarar lacuna; não inventar regras fora de PASSO 0/AI_CONTEXT/ADRs | Honestidade documental |
+
+**Nível de confiança:** **Alta (≈90%)** para alinhamento com decisões F1–F6 e princípios oficiais **in-repo**. Residual: Manual/Blueprint completos não versionados aqui.
+
+---
+
+### 15.1 Princípios que governam todos os casos limite
+
+1. Uma pessoa = uma conta; nunca sugerir segunda conta.  
+2. Erro = o que aconteceu + como resolver + o que fazer agora.  
+3. Tom PASSO 0; zero jargão técnico ao utilizador.  
+4. Logout voluntário ≠ sessão expirada.  
+5. Sessão válida → nunca pedir auth duas vezes.  
+6. Anti-enumeração em registo/login/recuperação.  
+7. Preservar dados do formulário em erros de rede sempre que possível.
+
+---
+
+### 15.2 Matriz de casos limite (por fluxo)
+
+#### F1 — Registo
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| L1.1 | Email já registado | Mensagem segura + **Entrar** e **Recuperar** no mesmo ecrã |
+| L1.2 | Duplo submit | CTA Loading; um único pedido |
+| L1.3 | Rede/5xx a meio | Erro guiado; **preservar todos os campos** |
+| L1.4 | Password não cumpre checklist | Inline + checklist; foco no primeiro erro |
+| L1.5 | Termos não aceites | Impedir submit; hint claro |
+| L1.6 | Utilizador tenta “criar outra conta para ser Parceiro” | Recusar por princípio; orientar activar papel na mesma conta (F6 / definições futuras) |
+
+#### F2 — Verificar email
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| L2.1 | Token expirado/inválido | Linguagem humana + reenviar; sem detalhes de token |
+| L2.2 | Link já usado / já confirmado | **Não é erro:** “conta já confirmada” + Entrar na Kuteka |
+| L2.3 | Email “não chegou” | Spam/Promoções + reenvio com cooldown |
+| L2.4 | Rate limit reenvio | Cooldown visível e calmo |
+| L2.5 | Login com email não verificado | Redireccionar a F2 com explicação de protecção |
+
+#### F3 — Login
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| L3.1 | Credenciais inválidas | Mensagem única (não revelar email vs password) + retry / Recuperar / Criar |
+| L3.2 | Rate limiting | Aguardar e tentar de novo; tom tranquilizador |
+| L3.3 | Sessão já válida (qualquer entry point) | Redirect app/`next` sem formulário |
+| L3.4 | `next` externo ou open-redirect | Ignorar → `/app` |
+| L3.5 | `next` admin sem `admin.panel` | `/app` |
+| L3.6 | Rede | Preservar email (e password se política UX o permitir com segurança) + retry |
+| L3.7 | Após F2/F6 em falta com `next` | Completar F2/F6 **depois** honrar `next` |
+
+#### F4 — Logout
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| L4.1 | Logout voluntário OK | Landing + confirmação discreta positiva |
+| L4.2 | Botão Voltar do browser após logout | Sem conteúdo autenticado; exige nova auth |
+| L4.3 | Multi-tab após logout | Próximos pedidos tratam sessão como inválida |
+| L4.4 | Falha parcial signOut | Retry; se necessário limpar sessão local + Landing + mensagem guiada |
+| L4.5 | Sessão expirada (sistema) | **Copy distinta** do logout voluntário; convidar a Entrar |
+
+#### F5 — Recuperação
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| L5.1 | Pedido reset (email exista ou não) | Sucesso genérico anti-enumeração |
+| L5.2 | Token reset expirado/inválido/já usado | Pedir novas instruções; sem jargão |
+| L5.3 | Sem acesso ao email | Contacto Kuteka; **nunca** “crie outra conta” |
+| L5.4 | Nova password fraca / mismatch | Checklist + foco |
+| L5.5 | Rede no pedido ou na confirmação | Preservar dados + retry |
+| L5.6 | Pós-reset (futuro) | Documentado: poder terminar outras sessões — não MVP |
+
+#### F6 — Onboarding
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| L6.1 | Zero papéis seleccionados | CTA desativado + hint |
+| L6.2 | Cliente + Parceiro | Ambos OK; permissions unidas; uma conta |
+| L6.3 | Tentativa agent/admin self-serve | UI não oferece; RPC rejeita |
+| L6.4 | Falha RPC activação | Retry; sem `/app` até sucesso |
+| L6.5 | Sessão expira a meio | Re-entrar; **retomar** onboarding |
+| L6.6 | Já tem papéis e reabre URL onboarding | Redirect `/app` (ou definições futuras) |
+| L6.7 | Acede onboarding sem verify | Redirect F2 |
+
+#### Transversal / Landing / App
+
+| ID | Caso | Comportamento esperado |
+| -- | ---- | ---------------------- |
+| LT.1 | Landing + sessão completa + Começar/Entrar | App directa (sem re-auth) |
+| LT.2 | Landing + sessão incompleta + CTA | Passo em falta (F2/F6) |
+| LT.3 | Soft-delete futuro (`profiles.deleted_at`) | Fora MVP; quando existir: bloquear auth com copy humana + contacto |
+| LT.4 | Locale ≠ pt | MVP UI pt-AO; strings i18n-ready |
+| LT.5 | Utilizador pede segunda conta | Recusar; activar papel na mesma conta |
+
+---
+
+### 15.3 Casos explicitamente fora do MVP (registados)
+
+| Tema | Nota |
+| ---- | ---- |
+| MFA / recovery codes | Preparação arquitectural apenas |
+| OAuth falhas de provider | Quando D12 for implementado |
+| Encerrar todas as sessões pós-reset | Evolução documentada em F5 |
+| UI definições de papéis | Pós-onboarding; princípio já em F6 |
+| KYC / reivindicação de conta | Trust / suporte avançado |
+
+---
+
+### 15.4 Critérios de aceitação do Bloco 3
+
+- [ ] Matriz L\* cobre F1–F6 + transversal
+- [ ] Cada caso respeita erro guiado e uma-conta
+- [ ] Logout ≠ expiração explícito
+- [ ] Open-redirect e privilege paths cobertos
+- [ ] Fora-MVP listado sem ambiguidade
+- [ ] Nenhuma contradição com F1–F6 aprovados
 
 ---
 
@@ -1464,7 +1592,8 @@ sequenceDiagram
 | 0.7 | 2026-07-30 | F3 Login **aprovado** (continuidade; narrativa F1–F3) |
 | 0.8 | 2026-07-30 | F4 Logout **aprovado**; narrativa oficial F1–F4 |
 | 0.9 | 2026-07-30 | F5 Recuperação **aprovada**; narrativa F1–F5 |
-| 1.0-rc1 | 2026-07-30 | F6 Onboarding **aprovado**; experiência oficial F1–F6; §6.8 revisão global |
+| 1.0-rc1 | 2026-07-30 | F6 aprovado; §6.8 revisão global aberta |
+| 1.0-rc2 | 2026-07-30 | Bloco 2 **encerrado**; Bloco 3 casos limite (candidata); metodologia Arquitecto Principal |
 
 ---
 
@@ -1472,13 +1601,13 @@ sequenceDiagram
 
 | Bloco | Conteúdo | Estado |
 | ----- | ------- | ------ |
-| 1 | Decisões D1–D12 + princípios de plataforma | ✅ **Encerrado** |
-| 2 · F1–F6 | Validação UX individual | ✅ **Aprovados** |
-| 2 · Revisão global | Consistência F1–F6 (§6.8) | ▶️ **Em curso** |
-| 3 | Casos limite (detalhe) | Pendente |
-| 4 | Critérios + wireframes finais | Pendente |
+| 1 | D1–D12 + princípios | ✅ Encerrado |
+| 2 | Fluxos F1–F6 + revisão global | ✅ **Encerrado** |
+| 3 | Casos limite (§15) | ▶️ **Candidata** à aprovação |
+| 4 | Critérios finais + wireframes | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
+| Metodologia | Arquitecto Principal / Guardião Consistência | ✅ Activa |
 
-**Pedido imediato:** validar a **revisão global do Bloco 2** (§6.8).
+**Pedido:** aprovar Bloco 3 (§15) ou indicar conflitos de negócio. Em seguida Bloco 4.
 
 Até aprovação integral: **nenhuma implementação**.

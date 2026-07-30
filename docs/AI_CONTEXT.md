@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 **spec v1.0-rc1** em revisão · Bloco 1 ✅ · Bloco 2 F1–F6✅ revisão global Bloco 2 · implementação **não** autorizada)  
+**Estado:** Activo (PRD-001 **spec v1.0-rc2** em revisão · Bloco 1 ✅ · Bloco 2 F1–F6✅ Bloco2 encerrado · Bloco3 candidata · implementação **não** autorizada)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`
@@ -109,6 +109,8 @@ Especificação → Aprovação → Implementação → Auto-Revisão Técnica
 
 Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 
+**Papel do agente (desde 2026-07-30):** Arquitecto Principal e Guardião da Consistência — auto-revisão obrigatória contra documentos oficiais antes de apresentar qualquer proposta; intervenção do PO só em decisões de negócio / conflitos / escolhas estratégicas.
+
 - Um PRD por módulo seguinte (não 100 documentos à frente)
 - Qualidade acima da velocidade
 - Cada passo deve parecer produto final
@@ -122,7 +124,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 0 Fundação (docs + identidade) — **concluída**  
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
 1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
-2 Autenticação (PRD-001) — spec v1.0-rc1 (Bloco 2 fluxos em revisão); implementar só após aprovação integral + CI + migration `0002`  
+2 Autenticação (PRD-001) — spec v1.0-rc2 (Bloco 2 fluxos em revisão); implementar só após aprovação integral + CI + migration `0002`  
 3 Shell da plataforma  
 4 Parceiro Patrimonial (PRD-002)  
 5 Cliente (PRD-003)  

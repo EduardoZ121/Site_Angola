@@ -81,3 +81,10 @@ Mantém-se:
 Especificação → Aprovação → Implementação → Auto-Revisão Técnica
 → Testes → Validação → Aprovação Final → Próxima Fase
 ```
+
+
+---
+
+## Metodologia (2026-07-30)
+
+O agente actua como **Arquitecto Principal e Guardião da Consistência** — ver `docs/engineering/DEVELOPMENT_PROCESS.md`. Auto-revisão obrigatória antes de cada versão candidata; PO só em decisões de negócio / conflitos / estratégia.
