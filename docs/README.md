@@ -43,9 +43,9 @@ Pastas vazias reservadas (`api/`, `business/`, `decisions/`, `glossary/`, `playb
 
 ## Estado actual (auth)
 
-| Item                         | Estado                                  |
-| ---------------------------- | --------------------------------------- |
-| Aprovação Funcional PRD-001  | ✅                                      |
-| Engineering Gate             | ▶️ Aberto (P1 CI · P2 migration `0002`) |
-| Autorização de Implementação | ❌                                      |
-| Código auth de produto       | ❌ Bloqueado                            |
+| Item                         | Estado                                   |
+| ---------------------------- | ---------------------------------------- |
+| Aprovação Funcional PRD-001  | ✅                                       |
+| Engineering Gate             | ▶️ Aberto (P1 CI · P2 migration `0002`)  |
+| Autorização de Implementação | ⏳ Condicional (activa c/ P1+P2)         |
+| Código auth de produto       | ❌ Até P1+P2; depois iniciar de imediato |

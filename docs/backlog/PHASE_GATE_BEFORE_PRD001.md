@@ -68,8 +68,8 @@ Estas pendências **devem ser resolvidas antes da implementação do PRD-001**, 
 | Elaboração da especificação (Blocos 1–4)  | ✅ **Concluída**                              |
 | **Aprovação Funcional** (Fase 1)          | ✅ **Oficial** (2026-07-30)                   |
 | Engineering Gate                          | ▶️ `docs/backlog/PRD_001_ENGINEERING_GATE.md` |
-| **Autorização de Implementação** (Fase 2) | ❌ Não emitida                                |
-| Código de auth de produto                 | ❌ Bloqueado até Fase 2                       |
+| **Autorização de Implementação** (Fase 2) | ⏳ Condicional (activa com P1+P2 no Eng Gate) |
+| Código de auth de produto                 | ❌ Até P1+P2; depois autorizado de imediato   |
 
 Spec oficial: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0)
 

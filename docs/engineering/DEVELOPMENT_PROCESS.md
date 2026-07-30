@@ -57,7 +57,9 @@ Alterações posteriores = **revisões controladas** do PRD (com rastreabilidade
 
 ### Fase 2 — Autorização de Implementação
 
-Só pode ocorrer quando:
+O PO pode emitir autorização **condicional** (ex.: PRD-001): activa-se automaticamente quando o Engineering Gate registar evidência objectiva dos pré-requisitos (ex.: P1+P2), sem nova confirmação intermédia.
+
+Só pode ocorrer quando (ou quando a condição pré-emitida se cumprir):
 
 1. O **Engineering Gate** do módulo estiver concluído e aprovado
 2. Os pré-requisitos técnicos estiverem satisfeitos

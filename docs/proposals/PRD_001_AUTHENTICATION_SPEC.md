@@ -2,7 +2,7 @@
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
 **Versão:** 1.0  
-**Estado:** ✅ **Aprovação Funcional oficial** · Autorização de Implementação ❌ · **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
+**Estado:** ✅ Aprovação Funcional · ⏳ Autorização de Implementação **condicional** (activa com P1+P2) · Gate aberto · **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
 **Maturidade do documento:** Aprovado funcionalmente · **pré-N4** (N4 = Engineering Gate + Autorização de Implementação)  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
@@ -13,19 +13,19 @@
 
 ## 0. Registo de autorização e revisão
 
-| Item                                     | Decisão                                            |
-| ---------------------------------------- | -------------------------------------------------- |
-| Fase anterior (dev)                      | Concluída                                          |
-| P0 técnico                               | Concluído                                          |
-| Pendências CI / migration 0002 / domínio | Infra/ops — resolver antes de implementar          |
-| Elaboração / ajuste desta spec           | **Autorizada**                                     |
-| Aprovação Funcional (Fase 1)             | ✅ **Oficial** (2026-07-30) — referência do módulo |
-| Autorização de Implementação (Fase 2)    | ❌ Bloqueada — ver Engineering Gate                |
-| Implementação                            | ❌ Bloqueada até Fase 2                            |
-| Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                 |
-| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8           |
-| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                 |
-| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18             |
+| Item                                     | Decisão                                                                 |
+| ---------------------------------------- | ----------------------------------------------------------------------- |
+| Fase anterior (dev)                      | Concluída                                                               |
+| P0 técnico                               | Concluído                                                               |
+| Pendências CI / migration 0002 / domínio | Infra/ops — resolver antes de implementar                               |
+| Elaboração / ajuste desta spec           | **Autorizada**                                                          |
+| Aprovação Funcional (Fase 1)             | ✅ **Oficial** (2026-07-30) — referência do módulo                      |
+| Autorização de Implementação (Fase 2)    | ⏳ **Condicional** (PO 2026-07-30) — activa com P1+P2 evidentes no Gate |
+| Implementação                            | ❌ Até P1+P2 ✅; depois iniciar de imediato (autorização pré-emitida)   |
+| Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                                      |
+| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8                                |
+| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                                      |
+| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18                                  |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 

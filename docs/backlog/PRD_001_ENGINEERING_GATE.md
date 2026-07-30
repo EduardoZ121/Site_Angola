@@ -5,8 +5,8 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** Diagnóstico ✅ · Gate **ABERTO** (P1+P2) · Tecto autónomo do Líder Técnico **atingido** · Autorização de Implementação ❌  
-**Maturidade deste documento:** Diagnóstico N3 aprovado · Gate operacional **não verde**
+**Estado:** Diagnóstico ✅ · Gate **ABERTO** (aguarda P1+P2) · **Autorização de Implementação CONDICIONAL** emitida pelo PO (2026-07-30) — activa-se automaticamente quando P1+P2 tiverem evidência objectiva  
+**Maturidade deste documento:** Diagnóstico aprovado · Gate operacional **não verde** até P1+P2
 
 ---
 
@@ -171,11 +171,15 @@ Passos:
 3. **P4:** templates Auth (verify/reset) + redirect URLs allowlisted.
 4. **P5:** DNS `kutekalink.com` → GitHub Pages (não bloqueia começar código _após_ Fase 2, bloqueia QA na URL pública).
 
-### 8.4 Após P1+P2 ✅
+### 8.4 Após P1+P2 ✅ (Autorização de Implementação já pré-emitida)
 
-5. Actualizar este documento (P1/P2 verdes + evidências).
-6. PO emite **Autorização de Implementação** (Fase 2) → maturidade **N4**.
-7. Abrir branch de implementação (ex. `cursor/prd-001-authentication-f96b`).
+Decisão PO (2026-07-30): **assim que P1 e P2 tiverem evidência objectiva neste Gate, a Autorização de Implementação considera-se emitida** — sem nova confirmação intermédia.
+
+5. Actualizar este documento (P1/P2 ✅ + evidências nas tabelas §8.1–§8.2).
+6. Marcar Gate como **verde** e Fase 2 como **activa**.
+7. Activar `docs/backlog/PRD_001_IMPLEMENTATION_READINESS.md`.
+8. Abrir branch `cursor/prd-001-authentication-f96b` e implementar até conclusão do módulo (N5), em autonomia.
+9. Interromper só por decisão de negócio, alteração estratégica ou risco crítico.
 
 ---
 
@@ -230,6 +234,26 @@ O Líder Técnico esgotou o trabalho **seguro e útil** que pode fazer **sem** c
 | P3 — Autorização de Implementação      | **Product Owner**                                     |
 | P4/P5 — templates Auth / DNS           | Ops (P4 desejável; P5 não bloqueia código pós-Fase 2) |
 
-**Próximo passo do projecto:** fecho operacional de **P1 + P2** → actualizar este Gate → PO emite **Autorização de Implementação** → activar `PRD_001_IMPLEMENTATION_READINESS.md`.
+**Próximo passo do projecto:** fecho operacional de **P1 + P2** → actualizar este Gate (verde) → **Autorização de Implementação activa-se** → activar `PRD_001_IMPLEMENTATION_READINESS.md` e implementar até N5.
 
-Até lá, o fluxo autónomo no eixo PRD-001 **não pode avançar para código** sem violar a metodologia.
+Até P1+P2 com evidência: **nenhum código** de auth. Com P1+P2 ✅: iniciar implementação de imediato (autorização já dada).
+
+---
+
+## 12. Autorização de Implementação condicional (PO 2026-07-30)
+
+O Product Owner:
+
+1. Confirma o estado actual e o tecto autónomo atingido.
+2. Mantém o Engineering Gate **aberto** até P1 e P2 objectivos.
+3. **Proíbe** iniciar implementação antes de P1+P2.
+4. **Emite desde já** a Autorização de Implementação sob condição:
+   > Quando existirem evidências objectivas de P1 e P2 neste documento, a autorização para iniciar a implementação do PRD-001 considera-se emitida **sem nova confirmação intermédia**.
+5. Nesse momento o Líder Técnico deve: activar o Implementation Readiness Pack, implementar conforme PRD-001 v1.0, e seguir autonomamente até à conclusão do módulo.
+6. Interromper só se surgir decisão de negócio, alteração estratégica ou risco crítico.
+
+| Item                              | Estado                          |
+| --------------------------------- | ------------------------------- |
+| Autorização condicional registada | ✅ 2026-07-30                   |
+| Condição                          | P1 ✅ + P2 ✅ (evidência em §8) |
+| Implementação agora               | ❌ (condição não cumprida)      |

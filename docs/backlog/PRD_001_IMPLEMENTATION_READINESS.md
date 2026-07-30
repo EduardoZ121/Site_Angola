@@ -1,23 +1,23 @@
 # PRD-001 — Implementation Readiness Pack (diferido)
 
-**Estado:** 📦 Preparado · **Activação proibida** até Engineering Gate verde + Autorização de Implementação (Fase 2)  
+**Estado:** 📦 Preparado · **Activação** quando Gate P1+P2 ✅ (Autorização de Implementação **já pré-emitida** pelo PO em 2026-07-30)  
 **Spec oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` v1.0  
 **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
 **ADR futuro:** `docs/architecture/ADR-004-authentication-module-deferred.md`
 
-Este documento **não** autoriza código. Existe para eliminar atrito no dia em que a Fase 2 for emitida.
+Este documento activa-se **automaticamente** quando o Engineering Gate registar P1+P2 com evidência. A Fase 2 foi pré-autorizada pelo PO (2026-07-30) sob essa condição.
 
 ---
 
 ## 0. Pré-condições (todas obrigatórias)
 
-| #   | Pré-condição                                | Evidência |
-| --- | ------------------------------------------- | --------- |
-| 1   | Aprovação Funcional PRD-001                 | ✅ v1.0   |
-| 2   | P1 CI activo + verde                        | Gate §8.1 |
-| 3   | P2 migration `0002` no remoto               | Gate §8.2 |
-| 4   | Autorização de Implementação (PO)           | Explícita |
-| 5   | (Recomendado) P4 templates Auth + redirects | Gate §8.3 |
+| #   | Pré-condição                                | Evidência                                                 |
+| --- | ------------------------------------------- | --------------------------------------------------------- |
+| 1   | Aprovação Funcional PRD-001                 | ✅ v1.0                                                   |
+| 2   | P1 CI activo + verde                        | Gate §8.1                                                 |
+| 3   | P2 migration `0002` no remoto               | Gate §8.2                                                 |
+| 4   | Autorização de Implementação (PO)           | ✅ Condicional pré-emitida (2026-07-30); activa com P1+P2 |
+| 5   | (Recomendado) P4 templates Auth + redirects | Gate §8.3                                                 |
 
 ---
 
@@ -67,4 +67,4 @@ Este documento **não** autoriza código. Existe para eliminar atrito no dia em 
 
 ---
 
-**Autonomia:** este pack pode ser actualizado pelo Líder Técnico; **activar** o trabalho de código exige o evento PO da Fase 2.
+**Autonomia:** actualizar este pack livremente; **activar código** assim que Gate §8.1 e §8.2 estiverem ✅ — sem nova confirmação PO.
