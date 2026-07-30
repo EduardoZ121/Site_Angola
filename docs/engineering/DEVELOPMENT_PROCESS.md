@@ -2,7 +2,7 @@
 
 **Estado:** Activo  
 **Aprovado:** Encerramento FASE 1 (2026-07-29)  
-**Actualização:** 2026-07-30 — Metodologia Arquitecto Principal / Guardião da Consistência
+**Actualização:** 2026-07-30 — Arquitecto Principal + Autoavaliação obrigatória por bloco
 
 ## Ciclo padrão (todos os módulos)
 
@@ -34,31 +34,45 @@ A partir de 2026-07-30, o agente de desenvolvimento actua como **Arquitecto Prin
 
 É responsável por verificar continuamente, **sem aguardar instrução explícita**:
 
-| Dimensão | Foco |
-| -------- | ---- |
-| Funcional | Fluxos, casos limite, critérios de aceitação |
-| Arquitectural | ADR-001+, monorepo, multi-papel, API-first, RBAC/audit |
-| Experiência | PASSO 0, simplicidade/confiança/controlo, narrativa auth F1–F6 |
-| Visual | Design System Nº 003 / `@kuteka/ui` (quando aplicável) |
-| Documental | Specs, PRDs, ADRs, backlog alinhados |
-| Metodológica | Este processo; sem implementação antes de aprovação |
+| Dimensão      | Foco                                                           |
+| ------------- | -------------------------------------------------------------- |
+| Funcional     | Fluxos, casos limite, critérios de aceitação                   |
+| Arquitectural | ADR-001+, monorepo, multi-papel, API-first, RBAC/audit         |
+| Experiência   | PASSO 0, simplicidade/confiança/controlo, narrativa auth F1–F6 |
+| Visual        | Design System Nº 003 / `@kuteka/ui` (quando aplicável)         |
+| Documental    | Specs, PRDs, ADRs, backlog alinhados                           |
+| Metodológica  | Este processo; sem implementação antes de aprovação            |
 
 ### Ciclo antes de apresentar qualquer proposta
 
-1. Análise dos documentos oficiais Kuteka  
-2. Produção da proposta  
-3. Auto-revisão crítica  
-4. Identificação de inconsistências  
-5. Correção das inconsistências  
-6. Apresentação da **versão candidata** à aprovação  
+1. Análise dos documentos oficiais Kuteka
+2. Produção da proposta
+3. Auto-revisão crítica
+4. Identificação de inconsistências
+5. Correção das inconsistências
+6. Apresentação da **versão candidata** à aprovação
 
 ### O que cada versão candidata deve declarar
 
-1. Documentos consultados  
-2. Verificações realizadas  
-3. Conflitos / ambiguidades encontrados  
-4. Como foram resolvidos (e fundamento)  
-5. Nível de confiança de alinhamento com a visão Kuteka  
+1. Documentos consultados
+2. Verificações realizadas
+3. Conflitos / ambiguidades encontrados
+4. Como foram resolvidos (e fundamento)
+5. Nível de confiança de alinhamento com a visão Kuteka
+
+### Autoavaliação do Arquitecto (obrigatória ao fechar um bloco importante)
+
+Sempre que um bloco relevante de especificação / PRD / ADR de produto for concluído ou apresentado como candidata final, incluir secção **«Autoavaliação do Arquitecto»** com:
+
+| Campo                           | Conteúdo                                                 |
+| ------------------------------- | -------------------------------------------------------- |
+| Nível de confiança              | Percentagem (0–100%)                                     |
+| Principais riscos remanescentes | Lista curta e concreta                                   |
+| Dívidas técnicas ou documentais | Lacunas conhecidas (ex.: docs não versionados)           |
+| Decisões adiadas                | O que fica para fases futuras (e porquê)                 |
+| Recomendação                    | **Aprovar** · **Aprovar com reservas** · **Não aprovar** |
+
+Esta autoavaliação faz parte do processo normal de revisão da Kuteka — não é opcional.
 
 ### Quando pedir intervenção do Product Owner
 
@@ -72,17 +86,17 @@ Caso contrário: analisar, propor a melhor solução, fundamentar com documentos
 
 ### Documentos oficiais a confrontar (mínimo)
 
-| Documento | Local / nota |
-| --------- | ------------ |
-| Manual Operacional | Hierarquia AI_CONTEXT (fonte externa se não no repo) |
-| Software Architecture Blueprint | Hierarquia AI_CONTEXT |
-| Identidade Oficial | `docs/proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md` |
+| Documento                           | Local / nota                                           |
+| ----------------------------------- | ------------------------------------------------------ |
+| Manual Operacional                  | Hierarquia AI_CONTEXT (fonte externa se não no repo)   |
+| Software Architecture Blueprint     | Hierarquia AI_CONTEXT                                  |
+| Identidade Oficial                  | `docs/proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`  |
 | UX Blueprint / Design System Nº 003 | Referenciados; DS parcial em `@kuteka/ui` + AI_CONTEXT |
-| AI_CONTEXT | `docs/AI_CONTEXT.md` |
-| ADRs | `docs/architecture/` |
-| PRDs / specs | `docs/proposals/` |
-| Decisões aprovadas | Ex.: D1–D12 e F1–F6 no PRD-001 |
-| Este processo | Este ficheiro |
+| AI_CONTEXT                          | `docs/AI_CONTEXT.md`                                   |
+| ADRs                                | `docs/architecture/`                                   |
+| PRDs / specs                        | `docs/proposals/`                                      |
+| Decisões aprovadas                  | Ex.: D1–D12 e F1–F6 no PRD-001                         |
+| Este processo                       | Este ficheiro                                          |
 
 ---
 
