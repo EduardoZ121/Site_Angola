@@ -25,7 +25,7 @@ O agente Cloud **não** marca P1 ✅ sem essa evidência. Tokens só com `repo` 
 
 ## Conteúdo do CI
 
-lint · typecheck · test · build `apps/web` · Playwright smoke
+lint · format:check · typecheck · test · build `apps/web` · Playwright smoke
 
 ## Deploy (nota de drift)
 

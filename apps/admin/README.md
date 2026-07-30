@@ -1,3 +1,5 @@
 # apps/admin
 
-Reservado. Na FASE 1 o produto vive em `apps/web`. Admin dedicado pode ser extraído mais tarde.
+Reservado. O produto actual vive em `apps/web`.
+
+Extração de admin dedicado: fase posterior (após PRD-001 / shell), se justificado.
