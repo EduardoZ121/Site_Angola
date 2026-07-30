@@ -1,28 +1,40 @@
-# Deploy status — 2026-07-30
+# Deploy status — 2026-07-30 (actualizado 13:40 UTC)
 
-## Done
+## Feito (automático)
 
-- `main` has KEOS + Landing static publish path.
-- GitHub Actions **Deploy Kuteka** is green again.
-- Branch **`gh-pages`** serves the new Landing (`Kuteka — Património. Confiança. Habitação.`).
-- Verified: `Host: kutekalink.com` against GitHub Pages IPs returns the new title.
+| Alvo | Estado |
+|------|--------|
+| `main` | Actualizado (`08a556d`) — KEOS Landing + publish path |
+| GitHub Actions Deploy Kuteka | Verde |
+| `gh-pages` | Landing nova no ar |
+| GitHub Pages (IP + Host kutekalink.com) | Título: **Kuteka — Património. Confiança. Habitação.** |
 
-## Blocked on production DNS (kutekalink.com)
+## Bloqueado: kutekalink.com / kutekalink.onrender.com
 
-- Apex still resolves to Render (`216.24.57.1`) and serves the **legacy Vite** marketplace (`last-modified: 2026-06-30`).
-- Render deploy hooks accept requests, but the live static service does **not** change content (builds failing or service stuck; API keys for Render/GoDaddy available in older agent env are unauthorized).
+- DNS A `@` → `216.24.57.1` (origem Render)
+- Conteúdo: marketplace Vite legado (`last-modified: 2026-06-30`)
+- Deploy hooks Render aceitam (`200` + deploy id), mas o serviço **não publica** builds novos
+- `RENDER_API_KEY` e `GODADDY_KEY` no ambiente → **401 Unauthorized**
 
-## What unlocks kutekalink.com
+## Desbloqueio (manual — 2 min)
 
-Pick one:
+### Opção A — DNS para GitHub Pages (recomendado agora)
 
-1. **DNS → GitHub Pages (fastest)**  
-   Point `@` A records to `185.199.108.153` / `.109.` / `.110.` / `.111.` and `www` CNAME to `eduardoz121.github.io`.  
-   Script: `legacy/scripts/configure-godaddy-dns-github.sh` (needs valid GoDaddy production API keys).
+No painel GoDaddy → DNS do `kutekalink.com`:
 
-2. **Fix Render dashboard**  
-   Open service `kutekalink` (`srv-d8ov5g6gvqtc738m4jpg`), inspect latest deploy logs, set Node 20+, ensure build `npm install && npm run build` and publish path `dist`.  
-   Root `package.json` build copies `prebuilt/web-out` → `dist`.
+1. Apagar A de `@` que aponta para `216.24.57.1`
+2. Criar A `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+3. CNAME `www` → `eduardoz121.github.io`
 
-3. **Vercel (target architecture)**  
-   Connect `apps/web` with a Vercel token and move the domain.
+Ou com API válida: `legacy/scripts/configure-godaddy-dns-github.sh`
+
+### Opção B — Reparar Render
+
+Dashboard → static `kutekalink` (`srv-d8ov5g6gvqtc738m4jpg`):
+
+- Ver logs do último deploy (provável falha/suspensão)
+- Build: `npm install && npm run build`
+- Publish: `dist`
+- Node ≥ 20
+
+O build em `main` copia `prebuilt/web-out` → `dist` (e o mesmo via `legacy/` se Root Directory = legacy).
