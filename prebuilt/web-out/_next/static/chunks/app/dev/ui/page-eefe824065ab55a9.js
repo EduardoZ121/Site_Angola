@@ -1,0 +1,561 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([
+  [85],
+  {
+    3417: (e, t, a) => {
+      'use strict';
+      a.d(t, { cn: () => l });
+      var s = a(6744),
+        r = a(4800);
+      function l() {
+        for (var e = arguments.length, t = Array(e), a = 0; a < e; a++) t[a] = arguments[a];
+        return (0, r.QP)((0, s.$)(t));
+      }
+    },
+    3940: (e, t, a) => {
+      'use strict';
+      a.d(t, { Tooltip: () => n });
+      var s = a(6458),
+        r = a(5122),
+        l = a(3417);
+      function n(e) {
+        let { content: t, children: a, className: n, ...i } = e,
+          d = (0, r.useId)(),
+          [o, c] = (0, r.useState)(!1);
+        return (0, s.jsxs)('span', {
+          className: (0, l.cn)('relative inline-flex', n),
+          onMouseEnter: () => c(!0),
+          onMouseLeave: () => c(!1),
+          onFocus: () => c(!0),
+          onBlur: () => c(!1),
+          ...i,
+          children: [
+            (0, s.jsx)('span', { 'aria-describedby': o ? d : void 0, children: a }),
+            o
+              ? (0, s.jsx)('span', {
+                  id: d,
+                  role: 'tooltip',
+                  className:
+                    'absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-kuteka bg-slate-900 px-2 py-1 text-xs text-white shadow-sm',
+                  children: t,
+                })
+              : null,
+          ],
+        });
+      }
+    },
+    4051: (e, t, a) => {
+      'use strict';
+      (a.r(t), a.d(t, { default: () => d }));
+      var s = a(6458),
+        r = a(8903),
+        l = a(1614),
+        n = a.n(l);
+      function i() {
+        let { theme: e, toggleTheme: t } = (0, r.DP)();
+        return (0, s.jsxs)(r.$n, { variant: 'secondary', onClick: t, children: ['Tema: ', e] });
+      }
+      function d() {
+        return (0, s.jsxs)('main', {
+          className: 'mx-auto max-w-4xl space-y-10 px-6 py-12',
+          children: [
+            (0, s.jsxs)('div', {
+              className: 'flex flex-wrap items-center justify-between gap-4',
+              children: [
+                (0, s.jsxs)('div', {
+                  children: [
+                    (0, s.jsx)('p', {
+                      className: 'font-mono text-sm text-brand-600',
+                      children: '@kuteka/ui',
+                    }),
+                    (0, s.jsx)(r.DZ, { level: 1, children: 'Cat\xe1logo do Design System' }),
+                    (0, s.jsx)(r.EY, {
+                      children: 'Primitivos oficiais FASE 1 — sem regras de neg\xf3cio.',
+                    }),
+                  ],
+                }),
+                (0, s.jsxs)('div', {
+                  className: 'flex gap-2',
+                  children: [
+                    (0, s.jsx)(i, {}),
+                    (0, s.jsx)(n(), {
+                      href: '/',
+                      className:
+                        'inline-flex h-10 items-center rounded-kuteka px-4 text-sm text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800',
+                      children: 'Voltar',
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, s.jsxs)('section', {
+              className: 'space-y-4',
+              children: [
+                (0, s.jsx)(r.DZ, { level: 2, children: 'Buttons' }),
+                (0, s.jsxs)('div', {
+                  className: 'flex flex-wrap gap-3',
+                  children: [
+                    (0, s.jsx)(r.$n, { children: 'Primary' }),
+                    (0, s.jsx)(r.$n, { variant: 'secondary', children: 'Secondary' }),
+                    (0, s.jsx)(r.$n, { variant: 'ghost', children: 'Ghost' }),
+                    (0, s.jsx)(r.$n, { variant: 'danger', children: 'Danger' }),
+                    (0, s.jsx)(r.$n, { loading: !0, children: 'Loading' }),
+                    (0, s.jsx)(r.$n, { disabled: !0, children: 'Disabled' }),
+                  ],
+                }),
+              ],
+            }),
+            (0, s.jsxs)('section', {
+              className: 'space-y-4',
+              children: [
+                (0, s.jsx)(r.DZ, { level: 2, children: 'Forms' }),
+                (0, s.jsxs)('div', {
+                  className: 'grid gap-4 sm:grid-cols-2',
+                  children: [
+                    (0, s.jsxs)('div', {
+                      className: 'space-y-2',
+                      children: [
+                        (0, s.jsx)(r.JU, { htmlFor: 'name', children: 'Nome' }),
+                        (0, s.jsx)(r.pd, { id: 'name', placeholder: 'Parceiro Patrimonial' }),
+                      ],
+                    }),
+                    (0, s.jsxs)('div', {
+                      className: 'space-y-2',
+                      children: [
+                        (0, s.jsx)(r.JU, { htmlFor: 'notes', children: 'Notas' }),
+                        (0, s.jsx)(r.TM, { id: 'notes', placeholder: 'Observa\xe7\xf5es' }),
+                      ],
+                    }),
+                    (0, s.jsxs)('label', {
+                      className: 'flex items-center gap-2 text-sm',
+                      children: [(0, s.jsx)(r.Sc, { defaultChecked: !0 }), ' Aceito os termos'],
+                    }),
+                    (0, s.jsxs)('div', {
+                      className: 'flex gap-4 text-sm',
+                      children: [
+                        (0, s.jsxs)('label', {
+                          className: 'flex items-center gap-2',
+                          children: [
+                            (0, s.jsx)(r.sx, { name: 'role', defaultChecked: !0 }),
+                            ' Cliente',
+                          ],
+                        }),
+                        (0, s.jsxs)('label', {
+                          className: 'flex items-center gap-2',
+                          children: [(0, s.jsx)(r.sx, { name: 'role' }), ' Agente'],
+                        }),
+                      ],
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            (0, s.jsxs)('section', {
+              className: 'space-y-4',
+              children: [
+                (0, s.jsx)(r.DZ, { level: 2, children: 'Feedback' }),
+                (0, s.jsxs)('div', {
+                  className: 'flex flex-wrap items-center gap-3',
+                  children: [
+                    (0, s.jsx)(r.Ex, { variant: 'brand', children: 'Brand' }),
+                    (0, s.jsx)(r.Ex, { variant: 'success', children: 'Success' }),
+                    (0, s.jsx)(r.Ex, { variant: 'warning', children: 'Warning' }),
+                    (0, s.jsx)(r.Ex, { variant: 'danger', children: 'Danger' }),
+                    (0, s.jsx)(r.eu, { fallback: 'KT' }),
+                    (0, s.jsx)(r.y$, {}),
+                    (0, s.jsx)(r.EA, { className: 'h-8 w-32' }),
+                    (0, s.jsx)(r.m_, {
+                      content: 'Ajuda Kuteka',
+                      children: (0, s.jsx)(r.$n, {
+                        variant: 'ghost',
+                        size: 'sm',
+                        children: 'Tooltip',
+                      }),
+                    }),
+                  ],
+                }),
+                (0, s.jsx)(r.Fc, {
+                  variant: 'info',
+                  children: 'KAI estar\xe1 sempre presente no shell autenticado (fases seguintes).',
+                }),
+              ],
+            }),
+            (0, s.jsxs)('section', {
+              className: 'space-y-4',
+              children: [
+                (0, s.jsx)(r.DZ, { level: 2, children: 'Card' }),
+                (0, s.jsxs)(r.Zp, {
+                  children: [
+                    (0, s.jsx)(r.aR, {
+                      children: (0, s.jsx)(r.ZB, { children: 'Passaporte Digital' }),
+                    }),
+                    (0, s.jsx)(r.Wu, {
+                      children: (0, s.jsx)(r.EY, {
+                        children: 'Componente de contentor — sem l\xf3gica de dom\xednio.',
+                      }),
+                    }),
+                  ],
+                }),
+              ],
+            }),
+          ],
+        });
+      }
+    },
+    5020: (e, t, a) => {
+      Promise.resolve().then(a.bind(a, 4051));
+    },
+    5370: (e, t, a) => {
+      'use strict';
+      a.d(t, { F: () => n });
+      var s = a(6744);
+      let r = (e) => ('boolean' == typeof e ? `${e}` : 0 === e ? '0' : e),
+        l = s.$,
+        n = (e, t) => (a) => {
+          var s;
+          if ((null == t ? void 0 : t.variants) == null)
+            return l(e, null == a ? void 0 : a.class, null == a ? void 0 : a.className);
+          let { variants: n, defaultVariants: i } = t,
+            d = Object.keys(n).map((e) => {
+              let t = null == a ? void 0 : a[e],
+                s = null == i ? void 0 : i[e];
+              if (null === t) return null;
+              let l = r(t) || r(s);
+              return n[e][l];
+            }),
+            o =
+              a &&
+              Object.entries(a).reduce((e, t) => {
+                let [a, s] = t;
+                return (void 0 === s || (e[a] = s), e);
+              }, {});
+          return l(
+            e,
+            d,
+            null == t || null == (s = t.compoundVariants)
+              ? void 0
+              : s.reduce((e, t) => {
+                  let { class: a, className: s, ...r } = t;
+                  return Object.entries(r).every((e) => {
+                    let [t, a] = e;
+                    return Array.isArray(a)
+                      ? a.includes({ ...i, ...o }[t])
+                      : { ...i, ...o }[t] === a;
+                  })
+                    ? [...e, a, s]
+                    : e;
+                }, []),
+            null == a ? void 0 : a.class,
+            null == a ? void 0 : a.className,
+          );
+        };
+    },
+    8694: (e, t, a) => {
+      'use strict';
+      a.d(t, { ThemeProvider: () => i, useTheme: () => d });
+      var s = a(6458),
+        r = a(5122);
+      let l = (0, r.createContext)(null),
+        n = 'kuteka-theme';
+      function i(e) {
+        let { children: t } = e,
+          [a, i] = (0, r.useState)('light'),
+          [d, o] = (0, r.useState)(!1);
+        ((0, r.useEffect)(() => {
+          (i(
+            (function () {
+              let e = window.localStorage.getItem(n);
+              return 'light' === e || 'dark' === e
+                ? e
+                : window.matchMedia('(prefers-color-scheme: dark)').matches
+                  ? 'dark'
+                  : 'light';
+            })(),
+          ),
+            o(!0));
+        }, []),
+          (0, r.useEffect)(() => {
+            d &&
+              (document.documentElement.classList.toggle('dark', 'dark' === a),
+              window.localStorage.setItem(n, a));
+          }, [a, d]));
+        let c = (0, r.useCallback)((e) => {
+            i(e);
+          }, []),
+          x = (0, r.useCallback)(() => {
+            i((e) => ('light' === e ? 'dark' : 'light'));
+          }, []),
+          u = (0, r.useMemo)(() => ({ theme: a, setTheme: c, toggleTheme: x }), [a, c, x]);
+        return (0, s.jsx)(l.Provider, { value: u, children: t });
+      }
+      function d() {
+        let e = (0, r.useContext)(l);
+        if (!e) throw Error('useTheme must be used within ThemeProvider');
+        return e;
+      }
+    },
+    8903: (e, t, a) => {
+      'use strict';
+      a.d(t, {
+        Fc: () => C,
+        eu: () => g,
+        Ex: () => h,
+        $n: () => d,
+        Zp: () => p,
+        Wu: () => k,
+        aR: () => v,
+        ZB: () => j,
+        Sc: () => u,
+        DZ: () => T,
+        pd: () => o,
+        JU: () => x,
+        sx: () => b,
+        EA: () => w,
+        y$: () => y,
+        EY: () => $,
+        TM: () => c,
+        NP: () => D.ThemeProvider,
+        lc: () => z,
+        m_: () => P.Tooltip,
+        ru: () => i,
+        DP: () => D.useTheme,
+      });
+      var s = a(6458),
+        r = a(5370),
+        l = a(5122),
+        n = a(3417);
+      let i = (0, r.F)(
+          'inline-flex items-center justify-center gap-2 rounded-kuteka text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+          {
+            variants: {
+              variant: {
+                primary: 'bg-brand-600 text-white hover:bg-brand-700',
+                secondary:
+                  'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700',
+                outline:
+                  'border border-slate-300 bg-transparent text-slate-900 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-50 dark:hover:bg-slate-900',
+                ghost:
+                  'bg-transparent text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800',
+                danger: 'bg-danger text-white hover:bg-red-700',
+              },
+              size: { sm: 'h-8 px-3', md: 'h-10 px-4', lg: 'h-12 px-6 text-base' },
+            },
+            defaultVariants: { variant: 'primary', size: 'md' },
+          },
+        ),
+        d = (0, l.forwardRef)((e, t) => {
+          let { className: a, variant: r, size: l, loading: d, disabled: o, children: c, ...x } = e;
+          return (0, s.jsxs)('button', {
+            ref: t,
+            className: (0, n.cn)(i({ variant: r, size: l }), a),
+            disabled: o || d,
+            'aria-busy': d || void 0,
+            ...x,
+            children: [
+              d
+                ? (0, s.jsx)('span', {
+                    className:
+                      'size-4 animate-spin rounded-full border-2 border-current border-r-transparent',
+                    'aria-hidden': !0,
+                  })
+                : null,
+              c,
+            ],
+          });
+        });
+      d.displayName = 'Button';
+      let o = (0, l.forwardRef)((e, t) => {
+        let { className: a, invalid: r, ...l } = e;
+        return (0, s.jsx)('input', {
+          ref: t,
+          className: (0, n.cn)(
+            'flex h-10 w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50',
+            r && 'border-danger focus-visible:ring-danger',
+            a,
+          ),
+          'aria-invalid': r || void 0,
+          ...l,
+        });
+      });
+      o.displayName = 'Input';
+      let c = (0, l.forwardRef)((e, t) => {
+        let { className: a, invalid: r, ...l } = e;
+        return (0, s.jsx)('textarea', {
+          ref: t,
+          className: (0, n.cn)(
+            'flex min-h-24 w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50',
+            r && 'border-danger focus-visible:ring-danger',
+            a,
+          ),
+          'aria-invalid': r || void 0,
+          ...l,
+        });
+      });
+      c.displayName = 'Textarea';
+      let x = (0, l.forwardRef)((e, t) => {
+        let { className: a, ...r } = e;
+        return (0, s.jsx)('label', {
+          ref: t,
+          className: (0, n.cn)('text-sm font-medium text-slate-700 dark:text-slate-200', a),
+          ...r,
+        });
+      });
+      x.displayName = 'Label';
+      let u = (0, l.forwardRef)((e, t) => {
+        let { className: a, ...r } = e;
+        return (0, s.jsx)('input', {
+          ref: t,
+          type: 'checkbox',
+          className: (0, n.cn)(
+            'size-4 rounded border-slate-300 text-brand-600 focus:ring-brand-600 disabled:opacity-50',
+            a,
+          ),
+          ...r,
+        });
+      });
+      u.displayName = 'Checkbox';
+      let b = (0, l.forwardRef)((e, t) => {
+        let { className: a, ...r } = e;
+        return (0, s.jsx)('input', {
+          ref: t,
+          type: 'radio',
+          className: (0, n.cn)(
+            'size-4 border-slate-300 text-brand-600 focus:ring-brand-600 disabled:opacity-50',
+            a,
+          ),
+          ...r,
+        });
+      });
+      b.displayName = 'Radio';
+      let m = (0, r.F)('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', {
+        variants: {
+          variant: {
+            default: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100',
+            brand: 'bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-200',
+            success: 'bg-green-100 text-green-800',
+            warning: 'bg-amber-100 text-amber-800',
+            danger: 'bg-red-100 text-red-800',
+            info: 'bg-blue-100 text-blue-800',
+          },
+        },
+        defaultVariants: { variant: 'default' },
+      });
+      function h(e) {
+        let { className: t, variant: a, ...r } = e;
+        return (0, s.jsx)('span', { className: (0, n.cn)(m({ variant: a }), t), ...r });
+      }
+      let f = { sm: 'size-8 text-xs', md: 'size-10 text-sm', lg: 'size-12 text-base' };
+      function g(e) {
+        let { src: t, alt: a = '', fallback: r = '?', size: l = 'md', className: i, ...d } = e;
+        return (0, s.jsx)('div', {
+          className: (0, n.cn)(
+            'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200 font-medium text-slate-700 dark:bg-slate-700 dark:text-slate-100',
+            f[l],
+            i,
+          ),
+          ...d,
+          children: t
+            ? (0, s.jsx)('img', { src: t, alt: a, className: 'size-full object-cover' })
+            : (0, s.jsx)('span', { 'aria-hidden': !0, children: r.slice(0, 2).toUpperCase() }),
+        });
+      }
+      function p(e) {
+        let { className: t, ...a } = e;
+        return (0, s.jsx)('div', {
+          className: (0, n.cn)(
+            'rounded-kuteka border border-slate-200 bg-white text-slate-900 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50',
+            t,
+          ),
+          ...a,
+        });
+      }
+      function v(e) {
+        let { className: t, ...a } = e;
+        return (0, s.jsx)('div', { className: (0, n.cn)('flex flex-col gap-1.5 p-6', t), ...a });
+      }
+      function j(e) {
+        let { className: t, ...a } = e;
+        return (0, s.jsx)('h3', {
+          className: (0, n.cn)('text-lg font-semibold leading-none', t),
+          ...a,
+        });
+      }
+      function k(e) {
+        let { className: t, ...a } = e;
+        return (0, s.jsx)('div', { className: (0, n.cn)('p-6 pt-0', t), ...a });
+      }
+      let N = { sm: 'size-4 border-2', md: 'size-6 border-2', lg: 'size-8 border-[3px]' };
+      function y(e) {
+        let { size: t = 'md', className: a, ...r } = e;
+        return (0, s.jsx)('div', {
+          role: 'status',
+          'aria-label': 'Loading',
+          className: (0, n.cn)(
+            'animate-spin rounded-full border-brand-600 border-r-transparent',
+            N[t],
+            a,
+          ),
+          ...r,
+        });
+      }
+      function w(e) {
+        let { className: t, ...a } = e;
+        return (0, s.jsx)('div', {
+          className: (0, n.cn)('animate-pulse rounded-kuteka bg-slate-200 dark:bg-slate-800', t),
+          ...a,
+        });
+      }
+      let E = (0, r.F)('rounded-kuteka border px-4 py-3 text-sm', {
+        variants: {
+          variant: {
+            default:
+              'border-slate-200 bg-slate-50 text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100',
+            success: 'border-green-200 bg-green-50 text-green-900',
+            warning: 'border-amber-200 bg-amber-50 text-amber-900',
+            danger: 'border-red-200 bg-red-50 text-red-900',
+            info: 'border-blue-200 bg-blue-50 text-blue-900',
+          },
+        },
+        defaultVariants: { variant: 'default' },
+      });
+      function C(e) {
+        let { className: t, variant: a, ...r } = e;
+        return (0, s.jsx)('div', {
+          role: 'alert',
+          className: (0, n.cn)(E({ variant: a }), t),
+          ...r,
+        });
+      }
+      function z(e) {
+        let { children: t } = e;
+        return (0, s.jsx)(s.Fragment, { children: t });
+      }
+      var P = a(3940);
+      function T(e) {
+        let { level: t = 1, className: a, ...r } = e;
+        return (0, s.jsx)('h'.concat(t), {
+          className: (0, n.cn)(
+            {
+              1: 'text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-50',
+              2: 'text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50',
+              3: 'text-2xl font-semibold text-slate-900 dark:text-slate-50',
+              4: 'text-xl font-semibold text-slate-900 dark:text-slate-50',
+            }[t],
+            a,
+          ),
+          ...r,
+        });
+      }
+      function $(e) {
+        let { className: t, ...a } = e;
+        return (0, s.jsx)('p', {
+          className: (0, n.cn)('text-base leading-relaxed text-slate-600 dark:text-slate-300', t),
+          ...a,
+        });
+      }
+      var D = a(8694);
+    },
+  },
+  (e) => {
+    (e.O(0, [573, 614, 387, 120, 358], () => e((e.s = 5020))), (_N_E = e.O()));
+  },
+]);

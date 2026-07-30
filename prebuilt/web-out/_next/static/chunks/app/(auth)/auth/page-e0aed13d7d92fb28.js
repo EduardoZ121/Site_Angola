@@ -1,0 +1,459 @@
+(self.webpackChunk_N_E = self.webpackChunk_N_E || []).push([
+  [693],
+  {
+    789: (e, t, a) => {
+      'use strict';
+      a.d(t, { default: () => c });
+      var r = a(6458),
+        s = a(1614),
+        l = a.n(s),
+        n = a(8903),
+        d = a(3417),
+        i = a(7931),
+        o = a(5122);
+      function u() {
+        let e = 'entrar' === (0, i.useSearchParams)().get('mode') ? 'Entrar' : 'Come\xe7ar';
+        return (0, r.jsxs)('main', {
+          className: 'mx-auto flex min-h-screen max-w-lg flex-col justify-center gap-6 px-6 py-16',
+          children: [
+            (0, r.jsx)('p', {
+              className: 'font-mono text-sm font-medium tracking-wide text-brand-600',
+              children: 'KUTEKA',
+            }),
+            (0, r.jsx)(n.DZ, { level: 1, children: e }),
+            (0, r.jsx)(n.EY, {
+              children:
+                'A autentica\xe7\xe3o de produto ser\xe1 implementada no PRD-001, ap\xf3s a conclus\xe3o do backlog P0 (fonte \xfanica de RBAC, integridade de auditoria e CI activo).',
+            }),
+            (0, r.jsx)(n.EY, {
+              className: 'text-sm text-slate-500',
+              children: 'Nenhum fluxo autenticado de neg\xf3cio est\xe1 dispon\xedvel nesta fase.',
+            }),
+            (0, r.jsxs)('div', {
+              className: 'flex flex-wrap gap-3',
+              children: [
+                (0, r.jsx)(l(), {
+                  href: '/',
+                  className: (0, d.cn)((0, n.ru)({ variant: 'primary' })),
+                  children: 'Voltar \xe0 Landing',
+                }),
+                (0, r.jsx)(l(), {
+                  href: '/#diferenca',
+                  className: (0, d.cn)((0, n.ru)({ variant: 'secondary' })),
+                  children: 'Explorar a Kuteka',
+                }),
+              ],
+            }),
+          ],
+        });
+      }
+      function c() {
+        return (0, r.jsx)(o.Suspense, {
+          fallback: (0, r.jsx)('main', {
+            className: 'mx-auto flex min-h-screen max-w-lg items-center px-6',
+            children: (0, r.jsx)('p', { className: 'text-slate-500', children: 'A carregar…' }),
+          }),
+          children: (0, r.jsx)(u, {}),
+        });
+      }
+    },
+    2318: (e, t, a) => {
+      Promise.resolve().then(a.bind(a, 789));
+    },
+    3417: (e, t, a) => {
+      'use strict';
+      a.d(t, { cn: () => l });
+      var r = a(6744),
+        s = a(4800);
+      function l() {
+        for (var e = arguments.length, t = Array(e), a = 0; a < e; a++) t[a] = arguments[a];
+        return (0, s.QP)((0, r.$)(t));
+      }
+    },
+    3940: (e, t, a) => {
+      'use strict';
+      a.d(t, { Tooltip: () => n });
+      var r = a(6458),
+        s = a(5122),
+        l = a(3417);
+      function n(e) {
+        let { content: t, children: a, className: n, ...d } = e,
+          i = (0, s.useId)(),
+          [o, u] = (0, s.useState)(!1);
+        return (0, r.jsxs)('span', {
+          className: (0, l.cn)('relative inline-flex', n),
+          onMouseEnter: () => u(!0),
+          onMouseLeave: () => u(!1),
+          onFocus: () => u(!0),
+          onBlur: () => u(!1),
+          ...d,
+          children: [
+            (0, r.jsx)('span', { 'aria-describedby': o ? i : void 0, children: a }),
+            o
+              ? (0, r.jsx)('span', {
+                  id: i,
+                  role: 'tooltip',
+                  className:
+                    'absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-kuteka bg-slate-900 px-2 py-1 text-xs text-white shadow-sm',
+                  children: t,
+                })
+              : null,
+          ],
+        });
+      }
+    },
+    5370: (e, t, a) => {
+      'use strict';
+      a.d(t, { F: () => n });
+      var r = a(6744);
+      let s = (e) => ('boolean' == typeof e ? `${e}` : 0 === e ? '0' : e),
+        l = r.$,
+        n = (e, t) => (a) => {
+          var r;
+          if ((null == t ? void 0 : t.variants) == null)
+            return l(e, null == a ? void 0 : a.class, null == a ? void 0 : a.className);
+          let { variants: n, defaultVariants: d } = t,
+            i = Object.keys(n).map((e) => {
+              let t = null == a ? void 0 : a[e],
+                r = null == d ? void 0 : d[e];
+              if (null === t) return null;
+              let l = s(t) || s(r);
+              return n[e][l];
+            }),
+            o =
+              a &&
+              Object.entries(a).reduce((e, t) => {
+                let [a, r] = t;
+                return (void 0 === r || (e[a] = r), e);
+              }, {});
+          return l(
+            e,
+            i,
+            null == t || null == (r = t.compoundVariants)
+              ? void 0
+              : r.reduce((e, t) => {
+                  let { class: a, className: r, ...s } = t;
+                  return Object.entries(s).every((e) => {
+                    let [t, a] = e;
+                    return Array.isArray(a)
+                      ? a.includes({ ...d, ...o }[t])
+                      : { ...d, ...o }[t] === a;
+                  })
+                    ? [...e, a, r]
+                    : e;
+                }, []),
+            null == a ? void 0 : a.class,
+            null == a ? void 0 : a.className,
+          );
+        };
+    },
+    8694: (e, t, a) => {
+      'use strict';
+      a.d(t, { ThemeProvider: () => d, useTheme: () => i });
+      var r = a(6458),
+        s = a(5122);
+      let l = (0, s.createContext)(null),
+        n = 'kuteka-theme';
+      function d(e) {
+        let { children: t } = e,
+          [a, d] = (0, s.useState)('light'),
+          [i, o] = (0, s.useState)(!1);
+        ((0, s.useEffect)(() => {
+          (d(
+            (function () {
+              let e = window.localStorage.getItem(n);
+              return 'light' === e || 'dark' === e
+                ? e
+                : window.matchMedia('(prefers-color-scheme: dark)').matches
+                  ? 'dark'
+                  : 'light';
+            })(),
+          ),
+            o(!0));
+        }, []),
+          (0, s.useEffect)(() => {
+            i &&
+              (document.documentElement.classList.toggle('dark', 'dark' === a),
+              window.localStorage.setItem(n, a));
+          }, [a, i]));
+        let u = (0, s.useCallback)((e) => {
+            d(e);
+          }, []),
+          c = (0, s.useCallback)(() => {
+            d((e) => ('light' === e ? 'dark' : 'light'));
+          }, []),
+          x = (0, s.useMemo)(() => ({ theme: a, setTheme: u, toggleTheme: c }), [a, u, c]);
+        return (0, r.jsx)(l.Provider, { value: x, children: t });
+      }
+      function i() {
+        let e = (0, s.useContext)(l);
+        if (!e) throw Error('useTheme must be used within ThemeProvider');
+        return e;
+      }
+    },
+    8903: (e, t, a) => {
+      'use strict';
+      a.d(t, {
+        Fc: () => z,
+        eu: () => p,
+        Ex: () => f,
+        $n: () => i,
+        Zp: () => h,
+        Wu: () => j,
+        aR: () => v,
+        ZB: () => k,
+        Sc: () => x,
+        DZ: () => T,
+        pd: () => o,
+        JU: () => c,
+        sx: () => b,
+        EA: () => y,
+        y$: () => w,
+        EY: () => R,
+        TM: () => u,
+        NP: () => A.ThemeProvider,
+        lc: () => C,
+        m_: () => P.Tooltip,
+        ru: () => d,
+        DP: () => A.useTheme,
+      });
+      var r = a(6458),
+        s = a(5370),
+        l = a(5122),
+        n = a(3417);
+      let d = (0, s.F)(
+          'inline-flex items-center justify-center gap-2 rounded-kuteka text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+          {
+            variants: {
+              variant: {
+                primary: 'bg-brand-600 text-white hover:bg-brand-700',
+                secondary:
+                  'bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-50 dark:hover:bg-slate-700',
+                outline:
+                  'border border-slate-300 bg-transparent text-slate-900 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-50 dark:hover:bg-slate-900',
+                ghost:
+                  'bg-transparent text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800',
+                danger: 'bg-danger text-white hover:bg-red-700',
+              },
+              size: { sm: 'h-8 px-3', md: 'h-10 px-4', lg: 'h-12 px-6 text-base' },
+            },
+            defaultVariants: { variant: 'primary', size: 'md' },
+          },
+        ),
+        i = (0, l.forwardRef)((e, t) => {
+          let { className: a, variant: s, size: l, loading: i, disabled: o, children: u, ...c } = e;
+          return (0, r.jsxs)('button', {
+            ref: t,
+            className: (0, n.cn)(d({ variant: s, size: l }), a),
+            disabled: o || i,
+            'aria-busy': i || void 0,
+            ...c,
+            children: [
+              i
+                ? (0, r.jsx)('span', {
+                    className:
+                      'size-4 animate-spin rounded-full border-2 border-current border-r-transparent',
+                    'aria-hidden': !0,
+                  })
+                : null,
+              u,
+            ],
+          });
+        });
+      i.displayName = 'Button';
+      let o = (0, l.forwardRef)((e, t) => {
+        let { className: a, invalid: s, ...l } = e;
+        return (0, r.jsx)('input', {
+          ref: t,
+          className: (0, n.cn)(
+            'flex h-10 w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50',
+            s && 'border-danger focus-visible:ring-danger',
+            a,
+          ),
+          'aria-invalid': s || void 0,
+          ...l,
+        });
+      });
+      o.displayName = 'Input';
+      let u = (0, l.forwardRef)((e, t) => {
+        let { className: a, invalid: s, ...l } = e;
+        return (0, r.jsx)('textarea', {
+          ref: t,
+          className: (0, n.cn)(
+            'flex min-h-24 w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-50',
+            s && 'border-danger focus-visible:ring-danger',
+            a,
+          ),
+          'aria-invalid': s || void 0,
+          ...l,
+        });
+      });
+      u.displayName = 'Textarea';
+      let c = (0, l.forwardRef)((e, t) => {
+        let { className: a, ...s } = e;
+        return (0, r.jsx)('label', {
+          ref: t,
+          className: (0, n.cn)('text-sm font-medium text-slate-700 dark:text-slate-200', a),
+          ...s,
+        });
+      });
+      c.displayName = 'Label';
+      let x = (0, l.forwardRef)((e, t) => {
+        let { className: a, ...s } = e;
+        return (0, r.jsx)('input', {
+          ref: t,
+          type: 'checkbox',
+          className: (0, n.cn)(
+            'size-4 rounded border-slate-300 text-brand-600 focus:ring-brand-600 disabled:opacity-50',
+            a,
+          ),
+          ...s,
+        });
+      });
+      x.displayName = 'Checkbox';
+      let b = (0, l.forwardRef)((e, t) => {
+        let { className: a, ...s } = e;
+        return (0, r.jsx)('input', {
+          ref: t,
+          type: 'radio',
+          className: (0, n.cn)(
+            'size-4 border-slate-300 text-brand-600 focus:ring-brand-600 disabled:opacity-50',
+            a,
+          ),
+          ...s,
+        });
+      });
+      b.displayName = 'Radio';
+      let m = (0, s.F)('inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium', {
+        variants: {
+          variant: {
+            default: 'bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100',
+            brand: 'bg-brand-100 text-brand-800 dark:bg-brand-950 dark:text-brand-200',
+            success: 'bg-green-100 text-green-800',
+            warning: 'bg-amber-100 text-amber-800',
+            danger: 'bg-red-100 text-red-800',
+            info: 'bg-blue-100 text-blue-800',
+          },
+        },
+        defaultVariants: { variant: 'default' },
+      });
+      function f(e) {
+        let { className: t, variant: a, ...s } = e;
+        return (0, r.jsx)('span', { className: (0, n.cn)(m({ variant: a }), t), ...s });
+      }
+      let g = { sm: 'size-8 text-xs', md: 'size-10 text-sm', lg: 'size-12 text-base' };
+      function p(e) {
+        let { src: t, alt: a = '', fallback: s = '?', size: l = 'md', className: d, ...i } = e;
+        return (0, r.jsx)('div', {
+          className: (0, n.cn)(
+            'relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-slate-200 font-medium text-slate-700 dark:bg-slate-700 dark:text-slate-100',
+            g[l],
+            d,
+          ),
+          ...i,
+          children: t
+            ? (0, r.jsx)('img', { src: t, alt: a, className: 'size-full object-cover' })
+            : (0, r.jsx)('span', { 'aria-hidden': !0, children: s.slice(0, 2).toUpperCase() }),
+        });
+      }
+      function h(e) {
+        let { className: t, ...a } = e;
+        return (0, r.jsx)('div', {
+          className: (0, n.cn)(
+            'rounded-kuteka border border-slate-200 bg-white text-slate-900 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-50',
+            t,
+          ),
+          ...a,
+        });
+      }
+      function v(e) {
+        let { className: t, ...a } = e;
+        return (0, r.jsx)('div', { className: (0, n.cn)('flex flex-col gap-1.5 p-6', t), ...a });
+      }
+      function k(e) {
+        let { className: t, ...a } = e;
+        return (0, r.jsx)('h3', {
+          className: (0, n.cn)('text-lg font-semibold leading-none', t),
+          ...a,
+        });
+      }
+      function j(e) {
+        let { className: t, ...a } = e;
+        return (0, r.jsx)('div', { className: (0, n.cn)('p-6 pt-0', t), ...a });
+      }
+      let N = { sm: 'size-4 border-2', md: 'size-6 border-2', lg: 'size-8 border-[3px]' };
+      function w(e) {
+        let { size: t = 'md', className: a, ...s } = e;
+        return (0, r.jsx)('div', {
+          role: 'status',
+          'aria-label': 'Loading',
+          className: (0, n.cn)(
+            'animate-spin rounded-full border-brand-600 border-r-transparent',
+            N[t],
+            a,
+          ),
+          ...s,
+        });
+      }
+      function y(e) {
+        let { className: t, ...a } = e;
+        return (0, r.jsx)('div', {
+          className: (0, n.cn)('animate-pulse rounded-kuteka bg-slate-200 dark:bg-slate-800', t),
+          ...a,
+        });
+      }
+      let E = (0, s.F)('rounded-kuteka border px-4 py-3 text-sm', {
+        variants: {
+          variant: {
+            default:
+              'border-slate-200 bg-slate-50 text-slate-800 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100',
+            success: 'border-green-200 bg-green-50 text-green-900',
+            warning: 'border-amber-200 bg-amber-50 text-amber-900',
+            danger: 'border-red-200 bg-red-50 text-red-900',
+            info: 'border-blue-200 bg-blue-50 text-blue-900',
+          },
+        },
+        defaultVariants: { variant: 'default' },
+      });
+      function z(e) {
+        let { className: t, variant: a, ...s } = e;
+        return (0, r.jsx)('div', {
+          role: 'alert',
+          className: (0, n.cn)(E({ variant: a }), t),
+          ...s,
+        });
+      }
+      function C(e) {
+        let { children: t } = e;
+        return (0, r.jsx)(r.Fragment, { children: t });
+      }
+      var P = a(3940);
+      function T(e) {
+        let { level: t = 1, className: a, ...s } = e;
+        return (0, r.jsx)('h'.concat(t), {
+          className: (0, n.cn)(
+            {
+              1: 'text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-50',
+              2: 'text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-50',
+              3: 'text-2xl font-semibold text-slate-900 dark:text-slate-50',
+              4: 'text-xl font-semibold text-slate-900 dark:text-slate-50',
+            }[t],
+            a,
+          ),
+          ...s,
+        });
+      }
+      function R(e) {
+        let { className: t, ...a } = e;
+        return (0, r.jsx)('p', {
+          className: (0, n.cn)('text-base leading-relaxed text-slate-600 dark:text-slate-300', t),
+          ...a,
+        });
+      }
+      var A = a(8694);
+    },
+  },
+  (e) => {
+    (e.O(0, [573, 614, 387, 120, 358], () => e((e.s = 2318))), (_N_E = e.O()));
+  },
+]);
