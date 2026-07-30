@@ -1388,7 +1388,7 @@ _(Aceites com o encerramento do Bloco 3 pelo PO.)_
 
 ## 16. Bloco 4 — Critérios finais de aceitação
 
-**Estado:** ✅ **Encerrado** (aprovação PO 2026-07-30) · Implementação bloqueada até aprovação integral + gate 16.1  
+**Estado:** ✅ **Encerrado** (aprovação PO 2026-07-30) · Implementação bloqueada até Engineering Gate + Fase 2  
 **Âmbito:** consolidar critérios de aceitação, contrato técnico mínimo (RPC), rastreabilidade e wireframes alinhados — **sem** novas funcionalidades nem alteração de D1–D12 / F1–F6 / §15.
 
 ### 16.0 Meta da versão candidata
@@ -1799,7 +1799,7 @@ sequenceDiagram
 4. Relatório 4 níveis
 5. Actualização AI_CONTEXT / gate
 
-**Nesta entrega (v1.0-rc4):** apenas especificação (Blocos 1–3 encerrados; Bloco 4 candidata).
+**Nesta entrega (v1.0):** especificação com **Aprovação Funcional** oficial; implementação bloqueada (Engineering Gate).
 
 ---
 
