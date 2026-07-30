@@ -1,9 +1,9 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 1.0-rc4  
-**Estado:** 📄 Em revisão · Blocos 1–3 ✅ · Bloco 4 candidata · **Implementação não autorizada**  
-**Maturidade do documento:** **N3 — Candidato** (N4 só após aprovação integral + gate infra)  
+**Versão:** 1.0-rc5  
+**Estado:** 📄 Blocos 1–4 ✅ · Candidata à **aprovação integral** · **Implementação não autorizada**  
+**Maturidade do documento:** **N3 — Candidato** (especificação por blocos concluída; N4 = aprovação integral + gate 16.1)  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -1384,9 +1384,9 @@ _(Aceites com o encerramento do Bloco 3 pelo PO.)_
 
 ---
 
-## 16. Bloco 4 — Critérios finais de aceitação (versão candidata)
+## 16. Bloco 4 — Critérios finais de aceitação
 
-**Estado:** ▶️ Candidata à aprovação · Implementação bloqueada  
+**Estado:** ✅ **Encerrado** (aprovação PO 2026-07-30) · Implementação bloqueada até aprovação integral + gate 16.1  
 **Âmbito:** consolidar critérios de aceitação, contrato técnico mínimo (RPC), rastreabilidade e wireframes alinhados — **sem** novas funcionalidades nem alteração de D1–D12 / F1–F6 / §15.
 
 ### 16.0 Meta da versão candidata
@@ -1538,7 +1538,7 @@ Implementação → Auto-revisão técnica → Testes → Validação funcional/
 
 ---
 
-## 18. Bloco 4 — Wireframes dos fluxos principais (versão candidata)
+## 18. Bloco 4 — Wireframes dos fluxos principais
 
 > Baixa fidelidade para revisão de negócio. Visual final = Design System (Orange / Slate, tipografia oficial). Sem cards decorativos no hero de auth; um ecrã = uma missão. Alinhados a F1–F6 aprovados e a R1–R12.
 
@@ -1767,13 +1767,13 @@ sequenceDiagram
 
 | Campo                               | Conteúdo                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Nível de maturidade**             | **N3 — Candidato**                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Nível de maturidade**             | **N3 — Candidato** (à data da autoavaliação); bloco **aprovado/encerrado** pelo PO em seguida                                                                                                                                                                                                                                                                                                                                                                            |
 | **Nível de confiança**              | **91%**                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | **Factores < 95%**                  | (1) Manual Operacional, Software Architecture Blueprint e Design System Nº 003 **não versionados** no repo — tokens visuais finais não verificáveis aqui. (2) Assinatura SQL exacta / grants da RPC ficam para ADR-004 na implementação (contrato comportamental §16.5 está fixo). (3) Gate infra (CI + migration `0002`) ainda aberto — impede maturidade N4 do PRD. (4) Templates de email e TTL de tokens = configuração Supabase (ops), fora do controlo desta spec. |
 | **Principais riscos remanescentes** | Implementação do middleware R1; interpretação incorrecta da allowlist §16.6; deliverability de email; desvio visual se DS oficial divergir do que está implícito em `@kuteka/ui`.                                                                                                                                                                                                                                                                                        |
 | **Dívidas técnicas ou documentais** | Versionar Manual/Blueprint/DS no repo; ADR-004 + migration da RPC na fase de implementação; activação CI / `0002`.                                                                                                                                                                                                                                                                                                                                                       |
 | **Decisões adiadas**                | As de §15.3; dashboards reais; UI gestão de papéis; OAuth/MFA.                                                                                                                                                                                                                                                                                                                                                                                                           |
-| **Recomendação**                    | **Aprovar** o Bloco 4 — critérios e wireframes suficientes para MVP. Após aprovação do Bloco 4, pedir **aprovação integral** do PRD-001 (ainda **sem** implementar até N4 = spec aprovada **e** gate 16.1).                                                                                                                                                                                                                                                              |
+| **Recomendação**                    | **Aprovar** — **cumprida** (PO 2026-07-30). Segue pedido de **aprovação integral** do PRD-001.                                                                                                                                                                                                                                                                                                                                                                           |
 
 ---
 
@@ -1822,16 +1822,29 @@ sequenceDiagram
 
 ## 22. Estado da revisão de negócio
 
-| Bloco       | Conteúdo                                   | Estado                           |
-| ----------- | ------------------------------------------ | -------------------------------- |
-| 1           | D1–D12 + princípios                        | ✅ Encerrado                     |
-| 2           | Fluxos F1–F6 + revisão global              | ✅ Encerrado                     |
-| 3           | Casos limite (§15)                         | ✅ **Encerrado** (PO 2026-07-30) |
-| 4           | Critérios finais + wireframes (§16–§18)    | ▶️ **Candidata**                 |
-| —           | Aprovação oficial integral → implementação | Bloqueada                        |
-| Documento   | Maturidade                                 | **N3 — Candidato**               |
-| Metodologia | Arquitecto + Autoavaliação N1–N5           | ✅ Activa                        |
+| Bloco       | Conteúdo                                  | Estado                                                                  |
+| ----------- | ----------------------------------------- | ----------------------------------------------------------------------- |
+| 1           | D1–D12 + princípios                       | ✅ Encerrado                                                            |
+| 2           | Fluxos F1–F6 + revisão global             | ✅ Encerrado                                                            |
+| 3           | Casos limite (§15)                        | ✅ Encerrado                                                            |
+| 4           | Critérios finais + wireframes (§16–§18)   | ✅ **Encerrado** (PO 2026-07-30)                                        |
+| —           | Aprovação oficial **integral** do PRD-001 | ▶️ Pendente                                                             |
+| —           | Implementação                             | ❌ Bloqueada até aprovação integral + gate 16.1                         |
+| Documento   | Maturidade                                | **N3 — Candidato** (N4 após aprovação integral + CI + migration `0002`) |
+| Metodologia | Arquitecto + Autoavaliação N1–N5          | ✅ Activa                                                               |
 
-**Pedido:** aprovar Bloco 4 (§16–§18) ou indicar conflitos. Em seguida: aprovação integral do PRD-001 (ainda sem código até gate 16.1).
+### Autoavaliação do Arquitecto — PRD-001 (especificação completa por blocos)
 
-Até aprovação integral: **nenhuma implementação**.
+| Campo                               | Conteúdo                                                                                                                                                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nível de maturidade**             | **N3 — Candidato** à aprovação integral                                                                                                                                                     |
+| **Nível de confiança**              | **91%**                                                                                                                                                                                     |
+| **Factores < 95%**                  | (1) Manual / Blueprint / DS Nº 003 não versionados no repo. (2) Detalhe SQL da RPC → ADR-004 na implementação. (3) Gate infra (CI + `0002`) aberto. (4) Templates/TTL email = ops Supabase. |
+| **Principais riscos remanescentes** | Middleware R1; allowlist `next`; deliverability; desvio visual vs DS oficial                                                                                                                |
+| **Dívidas técnicas ou documentais** | Versionar docs oficiais externos; activar CI; aplicar migration `0002`; ADR-004 na implementação                                                                                            |
+| **Decisões adiadas**                | §15.3; Shell/dashboards; OAuth/MFA; UI gestão de papéis                                                                                                                                     |
+| **Recomendação**                    | **Aprovar** a especificação integral do PRD-001 para fecho documental. **Não** autorizar implementação até gate 16.1 (CI + `0002` + autorização explícita).                                 |
+
+**Pedido:** aprovação oficial **integral** do PRD-001 (D1–D12 · F1–F6 · §15 · §16–§18).
+
+Até essa aprovação **e** o gate 16.1: **nenhuma implementação**.

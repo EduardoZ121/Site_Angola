@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 **spec v1.0-rc4** · Blocos 1–3 ✅ · Bloco 4 candidata · implementação **não** autorizada)  
+**Estado:** Activo (PRD-001 **spec v1.0-rc5** · Blocos 1–4 ✅ · candidata a aprovação integral · implementação **não** autorizada)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`
@@ -124,7 +124,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 0 Fundação (docs + identidade) — **concluída**  
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
 1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
-2 Autenticação (PRD-001) — spec v1.0-rc4 (Blocos 1–3 ✅ · Bloco 4 candidata); implementar só após aprovação integral + CI + migration `0002`  
+2 Autenticação (PRD-001) — spec v1.0-rc5 (Blocos 1–4 ✅ · candidata a aprovação integral); implementar só após aprovação integral + CI + migration `0002`  
 3 Shell da plataforma  
 4 Parceiro Patrimonial (PRD-002)  
 5 Cliente (PRD-003)  

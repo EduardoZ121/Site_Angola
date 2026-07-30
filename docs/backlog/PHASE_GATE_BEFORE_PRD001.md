@@ -63,13 +63,13 @@ Estas pendências **devem ser resolvidas antes da implementação do PRD-001**, 
 
 ## 5. Autorização PRD-001
 
-| Actividade                                                       | Autorizado?                                              |
-| ---------------------------------------------------------------- | -------------------------------------------------------- |
-| Elaboração / aprofundamento da especificação funcional e técnica | ✅ **Sim**                                               |
-| Revisão de negócio da spec                                       | ✅ **Sim** (próximo passo após entrega)                  |
-| Qualquer implementação / código de auth de produto               | ❌ **Não** — até aprovação oficial da spec + infra acima |
+| Actividade                                         | Autorizado?                                       |
+| -------------------------------------------------- | ------------------------------------------------- |
+| Elaboração da especificação (Blocos 1–4)           | ✅ **Concluída**                                  |
+| Aprovação oficial **integral** da spec             | ▶️ Pendente (decisão PO)                          |
+| Qualquer implementação / código de auth de produto | ❌ **Não** — até aprovação integral + infra acima |
 
-Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`
+Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0-rc5)
 
 ---
 
