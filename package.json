@@ -2,7 +2,7 @@
   "name": "kuteka",
   "private": true,
   "version": "0.1.0",
-  "description": "KEOS — Kuteka Engineering Operating System",
+  "description": "KEOS \u2014 Kuteka Engineering Operating System",
   "packageManager": "pnpm@10.33.3",
   "engines": {
     "node": ">=22"
@@ -31,10 +31,10 @@
     "typescript": "^5.8.3"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,jsx,mjs,cjs}": [
+    "!(prebuilt)/**/*.{ts,tsx,js,jsx,mjs,cjs}": [
       "prettier --write"
     ],
-    "*.{json,md,css,yml,yaml}": [
+    "!(prebuilt)/**/*.{json,md,css,yml,yaml}": [
       "prettier --write"
     ]
   },
