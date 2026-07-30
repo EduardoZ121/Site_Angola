@@ -20,20 +20,21 @@
 
 ## O que o Cursor (dev) deve fazer em cada tarefa
 
-| Regra | Detalhe |
-|-------|---------|
-| Desenhar mobile primeiro | CSS com `@media (max-width: …)` a compactar, não só a empilhar |
-| Testar 3 larguras | ~390px (telefone), 768px (tablet), 1280px (desktop) |
-| Tokens de espaço | Usar `--space-*` — menos padding no telemóvel que no desktop |
-| Secção “Números” | Grelha **2×2** no telemóvel, números menores, cartões compactos |
-| Hero homepage | No telemóvel: **não** forçar `100dvh` — hero + pesquisa cabem sem dominar 90% do ecrã |
-| Screenshots para OGPT | Guardar em `docs/screenshots/` com sufixo `-mobile` quando for telemóvel |
+| Regra                    | Detalhe                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| Desenhar mobile primeiro | CSS com `@media (max-width: …)` a compactar, não só a empilhar                        |
+| Testar 3 larguras        | ~390px (telefone), 768px (tablet), 1280px (desktop)                                   |
+| Tokens de espaço         | Usar `--space-*` — menos padding no telemóvel que no desktop                          |
+| Secção “Números”         | Grelha **2×2** no telemóvel, números menores, cartões compactos                       |
+| Hero homepage            | No telemóvel: **não** forçar `100dvh` — hero + pesquisa cabem sem dominar 90% do ecrã |
+| Screenshots para OGPT    | Guardar em `docs/screenshots/` com sufixo `-mobile` quando for telemóvel              |
 
 ---
 
 ## Alterações recentes (mobile)
 
 ### Login / cadastro (`/entrar`, `/cadastro`)
+
 - **Bug:** `App.css` tinha CSS Facebook (azul) que anulava `auth.css` — login não mudava.
 - **Telemóvel:** formulário primeiro; logo pequeno; botão dourado Kuteka.
 

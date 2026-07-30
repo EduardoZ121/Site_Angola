@@ -2,10 +2,10 @@
 
 ## Servicos
 
-| Servico | URL | Tipo |
-|---------|-----|------|
-| kutekalink | https://kutekalink.com | Static (Vite) |
-| kuteka-api | https://kuteka-api.onrender.com | Node API |
+| Servico    | URL                             | Tipo          |
+| ---------- | ------------------------------- | ------------- |
+| kutekalink | https://kutekalink.com          | Static (Vite) |
+| kuteka-api | https://kuteka-api.onrender.com | Node API      |
 
 Push para main = auto-deploy.
 

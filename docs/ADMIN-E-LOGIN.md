@@ -25,7 +25,7 @@ amarilinhaa@gmail.com
 No painel `/admin` (só visível para este email):
 
 1. **Utilizadores** — quem entrou com Google (nome, email, datas de login).
-2. **Aprovar anúncios** — casas, carros, etc. com status *Pendente* até aprovação.
+2. **Aprovar anúncios** — casas, carros, etc. com status _Pendente_ até aprovação.
 3. **Rejeitar** — com motivo opcional.
 4. **Gerir anúncios** — pausar, destacar ou apagar.
 5. **Actividade** — últimas notificações do site (demo local).

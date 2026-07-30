@@ -73,10 +73,10 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 
 ## Fases (estado actual)
 
-1. **FASE 1 — Infraestrutura** — ✅ encerrada  
-2. **Landing Page** (PASSO 1 + 1A) — ✅ encerrada  
-3. **P0 pré-Auth** — P0-1/P0-2 ✅ técnicos; P0-3 (CI + `0002` remoto) ⏳ ops  
-4. **PRD-001 Auth** — Aprovação Funcional ✅ · Engineering Gate ▶️ (P1+P2) · implementação ❌ até Fase 2 do processo  
+1. **FASE 1 — Infraestrutura** — ✅ encerrada
+2. **Landing Page** (PASSO 1 + 1A) — ✅ encerrada
+3. **P0 pré-Auth** — P0-1/P0-2 ✅ técnicos; P0-3 (CI + `0002` remoto) ⏳ ops
+4. **PRD-001 Auth** — Aprovação Funcional ✅ · Engineering Gate ▶️ (P1+P2) · implementação ❌ até Fase 2 do processo
 5. Shell, domínios de produto, KAI, …
 
 > **Nota de nomenclatura:** “FASE 2” no roadmap de produto (auth) ≠ **Fase 2 do processo** (= Autorização de Implementação). Ver `DEVELOPMENT_PROCESS.md`.

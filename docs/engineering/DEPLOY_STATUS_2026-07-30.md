@@ -2,11 +2,11 @@
 
 ## Feito (automático)
 
-| Alvo | Estado |
-|------|--------|
-| `main` | Actualizado (`08a556d`) — KEOS Landing + publish path |
-| GitHub Actions Deploy Kuteka | Verde |
-| `gh-pages` | Landing nova no ar |
+| Alvo                                    | Estado                                                 |
+| --------------------------------------- | ------------------------------------------------------ |
+| `main`                                  | Actualizado (`08a556d`) — KEOS Landing + publish path  |
+| GitHub Actions Deploy Kuteka            | Verde                                                  |
+| `gh-pages`                              | Landing nova no ar                                     |
 | GitHub Pages (IP + Host kutekalink.com) | Título: **Kuteka — Património. Confiança. Habitação.** |
 
 ## Bloqueado: kutekalink.com / kutekalink.onrender.com

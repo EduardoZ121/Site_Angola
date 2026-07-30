@@ -1,14 +1,14 @@
 # Configuração de contas — Kuteka
 
-| # | Serviço | Variável | Estado |
-|---|---------|----------|--------|
-| 1 | MongoDB (local dev) | `MONGODB_URI` | **feito** — `127.0.0.1:27017` |
-| 2 | OpenAI | `OPENAI_API_KEY` | **feito** |
-| 3 | AWS S3 | `AWS_*` | **feito** — `kuteka-uploads-prod` |
-| 4 | Resend (email) | `RESEND_API_KEY` | **feito** |
-| 5 | Google OAuth | `VITE_GOOGLE_CLIENT_ID` | **feito** |
-| 6 | JWT | `JWT_SECRET` | **feito** |
-| 7 | Pagamentos Kz | TBD | **último** (não Stripe) |
+| #   | Serviço             | Variável                | Estado                            |
+| --- | ------------------- | ----------------------- | --------------------------------- |
+| 1   | MongoDB (local dev) | `MONGODB_URI`           | **feito** — `127.0.0.1:27017`     |
+| 2   | OpenAI              | `OPENAI_API_KEY`        | **feito**                         |
+| 3   | AWS S3              | `AWS_*`                 | **feito** — `kuteka-uploads-prod` |
+| 4   | Resend (email)      | `RESEND_API_KEY`        | **feito**                         |
+| 5   | Google OAuth        | `VITE_GOOGLE_CLIENT_ID` | **feito**                         |
+| 6   | JWT                 | `JWT_SECRET`            | **feito**                         |
+| 7   | Pagamentos Kz       | TBD                     | **último** (não Stripe)           |
 
 ## Render (produção)
 
