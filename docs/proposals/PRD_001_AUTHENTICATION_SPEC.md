@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.7  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1 ✅ · F2 ✅ · F3 ✅ · F4 ▶️ · **Implementação não autorizada**  
+**Versão:** 0.8  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1–F4 ✅ · F5 ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | Em curso · F1✅ F2✅ F3✅ · F4 a seguir — ver §6 |
+| Bloco 2 — Fluxos principais | Em curso · F1–F4 ✅ · F5 a seguir — ver §6 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -55,11 +55,12 @@ A autenticação **não** é apenas um mecanismo de acesso. É o **primeiro cont
 
 8. **Recuperação guiada em erros (plataforma):** sempre que ocorrer um erro, a Kuteka deve (a) **explicar o problema**, (b) **indicar como resolver**, e (c) **mostrar o próximo passo** — imediatamente. Aplica-se a Login, Recuperação, Onboarding e a todos os módulos futuros.
 
-9. **Narrativa emocional da autenticação (aprovada na revisão):**
-   - **F1 Registo** → cria **confiança**
-   - **F2 Verificar email** → reforça **segurança**
-   - **F3 Login** → transmite **continuidade**
-   - Fluxos seguintes (F4–F6) devem manter a mesma filosofia.
+9. **Narrativa oficial da autenticação Kuteka** (referência para todos os fluxos auth futuros):
+   - **F1 Registo** → criar **confiança**
+   - **F2 Verificar email** → reforçar **segurança**
+   - **F3 Login** → transmitir **continuidade**
+   - **F4 Logout** → devolver o **controlo** ao utilizador
+   - F5–F6 e evoluções futuras devem manter esta filosofia.
 
 
 
@@ -644,57 +645,101 @@ Teclado, labels, leitores de ecrã, foco no primeiro erro; controlo Mostrar/Ocul
 
 ---
 
-### 6.4 F4 — Logout
+### 6.4 F4 — Logout (Terminar sessão)
+
+**Estado da revisão UX:** ✅ **Aprovado** (2026-07-30) com refinamentos de controlo e distinção de sessão expirada.
 
 #### Objectivo do fluxo
 
-Terminar a sessão de forma explícita e compreensível, devolvendo controlo ao utilizador.
+Permitir ao utilizador **terminar a sessão por vontade própria**, com encerramento tranquilo, confirmação discreta e regresso natural à Landing — a porta de entrada pública da Kuteka.
+
+#### Objectivo emocional de UX (explícito)
+
+| Deve sentir | Não deve sentir |
+| ----------- | --------------- |
+| Controlo total da sessão | Que foi “expulsado” da plataforma |
+| Encerramento tranquilo | Alarme, erro ou porta fechada |
+| Que pode regressar quando quiser | Fricção ou punição |
+
+**Regra:** o Logout é **sempre** uma acção **voluntária** do utilizador. A Kuteka nunca transmite a sensação de o ter expulsado.
+
+#### Distinção de cenários (obrigatória na spec)
+
+| Cenário | Quem inicia | Experiência / mensagens |
+| ------- | ----------- | ----------------------- |
+| **Logout voluntário** | Utilizador (F4) | Tom de controlo e confirmação positiva discreta |
+| **Sessão expirada** (inatividade / TTL) | Sistema | Experiência **diferente** — explicar que a sessão terminou por tempo; convidar a Entrar de novo para continuar. *Implementação da expiração automática pode ser fase posterior; a spec já reconhece a diferença.* |
+
+Não reutilizar a copy de Logout voluntário para expiração automática.
 
 #### Condições de entrada
 
-- Utilizador autenticado na UI `(app)` (ou futuras áreas autenticadas).
-- Acção explícita “Terminar sessão”.
+- Sessão válida numa área autenticada.
+- Acção explícita **Terminar sessão** (nunca logout silencioso “punitivo”).
+
+#### Narrativa UX — acompanhar o utilizador
+
+| Pergunta | Resposta |
+| -------- | -------- |
+| O que pretende? | Sair com controlo |
+| O que vê? | Controlo claro; depois Landing + confirmação discreta |
+| O que o sistema faz? | Encerra sessão; impede voltar a `(app)` sem nova auth; audita o mínimo |
+| Se correr bem? | Landing aberta e acolhedora + “pode voltar a entrar” |
+| Se falhar? | Problema + como resolver + próximo passo |
+| Controlo | Foi **ele** quem decidiu terminar |
 
 #### Sequência passo a passo
 
-1. Utilizador activa “Terminar sessão”.
-2. Feedback imediato (loading breve se necessário).
-3. `signOut` + invalidação de cookies de sessão.
-4. Audit `auth.logout`.
-5. Redirect `/` (Landing).
+1. Utilizador activa **Terminar sessão** (rótulo humano, acessível).
+2. MVP: um clique (sem diálogo obrigatório).
+3. Encerramento: Loading → sucesso; `signOut` + invalidação de sessão/cookies.
+4. Redirect `/` (Landing) com **todo o conteúdo público acessível normalmente** — a plataforma não “fecha”.
+5. Feedback discreto e positivo na Landing (conceito aprovado): *“Terminou a sua sessão com sucesso. Pode voltar a entrar sempre que desejar.”* — sem alerta chamativo.
+6. Qualquer novo acesso a conteúdo protegido inicia de novo o fluxo de autenticação (F3, com `next` se aplicável).
 
-#### Estados possíveis
+#### Segurança pós-logout
 
-| Estado | UI |
-| ------ | -- |
-| Confirmado / em curso | Controlo disabled ou spinner |
-| Concluído | Landing pública |
+- O utilizador **não** consegue regressar a áreas autenticadas só com o botão **Voltar** do navegador sem **nova autenticação** (páginas autenticadas não devem servir conteúdo protegido a partir de cache/histórico sem sessão válida).
+- Qualquer tentativa de acesso a conteúdo protegido → fluxo de autenticação de novo.
 
-*(MVP: sem diálogo de confirmação obrigatório — evitar fricção; pode adicionar-se se produto o pedir.)*
+#### Mensagens (tom PASSO 0 · i18n-ready)
 
-#### Mensagens principais ao utilizador
-
-| Momento | Mensagem |
-| ------- | -------- |
+| Momento | Copy (orientação) |
+| ------- | ----------------- |
 | Acção | Terminar sessão |
-| Opcional pós-logout na Landing | (nenhuma obrigatória) |
+| Confirmação na Landing | Terminou a sua sessão com sucesso. Pode voltar a entrar sempre que desejar. |
+| Sessão expirada (cenário distinto) | A sua sessão terminou. Entre novamente para continuar. *(não usar copy de logout voluntário)* |
 
-#### Casos de erro e comportamento
+Erros: padrão das 3 perguntas (o que aconteceu / como resolver / o que fazer agora).
 
-| Erro | Comportamento |
-| ---- | ------------- |
-| Falha parcial de signOut | Forçar limpeza local de sessão + redirect Landing; retry silencioso se aplicável |
+#### Auditoria e privacidade
+
+`auth.logout` com a **mesma política** dos restantes eventos auth: timestamps consistentes; apenas informação **estritamente necessária**; sem dados sensíveis — alinhado à privacidade da plataforma.
+
+#### Acessibilidade
+
+Controlo operável por teclado; confirmação anunciável a leitores de ecrã.
 
 #### Critérios de aceitação
 
-- [ ] Sessão inválida após logout
-- [ ] Acesso seguinte a `(app)` pede Entrar
-- [ ] Multi-tab: pedidos subsequentes tratam sessão como expirada
+- [ ] Logout sempre voluntário; nunca sensação de expulsão
+- [ ] Objectivo emocional: encerramento tranquilo + controlo total
+- [ ] Confirmação discreta positiva na Landing
+- [ ] Landing continua pública e acolhedora (porta de entrada)
+- [ ] Distinção documentada logout voluntário vs sessão expirada
+- [ ] Sem acesso autenticado via “Voltar” sem nova auth
+- [ ] Acesso protegido pós-logout → re-auth
+- [ ] Utilizador compreende imediatamente que terminou a sessão
+- [ ] Regresso à Landing natural, sem sensação de erro
+- [ ] Tom Identidade Oficial Kuteka; copy i18n-ready
+- [ ] Auditoria mínima / mesma política de privacidade
+- [ ] Conclusão sem suporte
 
 #### Oportunidades futuras
 
-- “Terminar sessão em todos os dispositivos”
+- Terminar sessão em todos os dispositivos
 - Confirmação se houver trabalho não guardado (módulos futuros)
+- UX completa de expiração por inatividade
 
 ---
 
@@ -1328,7 +1373,8 @@ sequenceDiagram
 | 0.4 | 2026-07-30 | Princípio UX + template fluxos F1–F6 |
 | 0.5 | 2026-07-30 | F1 Registo **aprovado** |
 | 0.6 | 2026-07-30 | F2 Verify **aprovado**; erro guiado; i18n-ready |
-| 0.7 | 2026-07-30 | F3 Login **aprovado** (continuidade, password UX, rate limit, narrativa F1–F3) |
+| 0.7 | 2026-07-30 | F3 Login **aprovado** (continuidade; narrativa F1–F3) |
+| 0.8 | 2026-07-30 | F4 Logout **aprovado**; narrativa oficial F1–F4; logout vs sessão expirada |
 
 ---
 
@@ -1341,13 +1387,14 @@ sequenceDiagram
 | 2 · F1 Registo | Confiança | ✅ **Aprovado** |
 | 2 · F2 Verificar email | Segurança | ✅ **Aprovado** |
 | 2 · F3 Login | Continuidade | ✅ **Aprovado** |
-| 2 · F4 Logout | — | ▶️ A seguir |
-| 2 · F5–F6 | — | Pendente |
+| 2 · F4 Logout | Controlo | ✅ **Aprovado** |
+| 2 · F5 Recuperação | — | ▶️ A seguir |
+| 2 · F6 Onboarding | — | Pendente |
 | 2 · Revisão global | Consistência entre fluxos | Após F1–F6 |
 | 3 | Casos limite (detalhe) | Pendente |
 | 4 | Critérios + wireframes finais | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** rever **F4 — Logout** no formato de acompanhamento do utilizador.
+**Pedido imediato:** rever **F5 — Recuperação de conta** no formato de acompanhamento do utilizador.
 
 Até aprovação integral: **nenhuma implementação**.
