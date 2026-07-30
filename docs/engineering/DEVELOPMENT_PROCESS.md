@@ -173,11 +173,18 @@ Regras:
 2. **Não** aumentar artificialmente a percentagem de confiança.
 3. Se confiança < 95%, os factores devem ser específicos e verificáveis.
 
-### Quando pedir intervenção do Product Owner
+### Comunicação com o Product Owner
 
-Apenas nos **limites da autonomia** acima, ou quando existir conflito entre requisitos oficiais / escolha estratégica.
+**Não** enviar actualizações periódicas só para confirmar pendências ops conhecidas (ex.: P1/P2 ainda abertos).
 
-Caso contrário: conduzir tecnicamente, informar decisões relevantes, e avançar.
+Comunicar **apenas** quando ocorrer um destes eventos:
+
+1. Pré-requisitos de Engineering Gate (ex.: P1 e P2) **objectivamente** concluídos — actualizar o Gate e pedir Autorização de Implementação
+2. Decisão que dependa do Product Owner (limites da autonomia)
+3. Risco **crítico** que possa comprometer o projecto
+4. Marco relevante que exija **aprovação formal**
+
+Caso contrário: conduzir tecnicamente em silêncio operacional e avançar.
 
 ### Documentos oficiais a confrontar (mínimo)
 
