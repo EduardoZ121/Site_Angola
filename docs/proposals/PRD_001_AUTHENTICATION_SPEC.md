@@ -1,29 +1,31 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 1.0-rc5  
-**Estado:** 📄 Blocos 1–4 ✅ · Candidata à **aprovação integral** · **Implementação não autorizada**  
-**Maturidade do documento:** **N3 — Candidato** (especificação por blocos concluída; N4 = aprovação integral + gate 16.1)  
+**Versão:** 1.0  
+**Estado:** ✅ **Aprovação Funcional oficial** · Autorização de Implementação ❌ · **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
+**Maturidade do documento:** Aprovado funcionalmente · **pré-N4** (N4 = Engineering Gate + Autorização de Implementação)  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
-**Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
-**Pré-implementação obrigatória:** CI activo · migration `0002` no remoto · aprovação integral desta spec
+**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` (fase prévia: `PHASE_GATE_BEFORE_PRD001.md`)  
+**Pré-implementação obrigatória:** Engineering Gate aprovado · CI activo · migration `0002` no remoto · Autorização de Implementação explícita do PO
 
 ---
 
 ## 0. Registo de autorização e revisão
 
-| Item                                     | Decisão                                                   |
-| ---------------------------------------- | --------------------------------------------------------- |
-| Fase anterior (dev)                      | Concluída                                                 |
-| P0 técnico                               | Concluído                                                 |
-| Pendências CI / migration 0002 / domínio | Infra/ops — resolver antes de implementar                 |
-| Elaboração / ajuste desta spec           | **Autorizada**                                            |
-| Implementação                            | **Não autorizada** até aprovação oficial integral da spec |
-| Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                        |
-| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8                  |
-| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                        |
-| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18                    |
+| Item                                     | Decisão                                            |
+| ---------------------------------------- | -------------------------------------------------- |
+| Fase anterior (dev)                      | Concluída                                          |
+| P0 técnico                               | Concluído                                          |
+| Pendências CI / migration 0002 / domínio | Infra/ops — resolver antes de implementar          |
+| Elaboração / ajuste desta spec           | **Autorizada**                                     |
+| Aprovação Funcional (Fase 1)             | ✅ **Oficial** (2026-07-30) — referência do módulo |
+| Autorização de Implementação (Fase 2)    | ❌ Bloqueada — ver Engineering Gate                |
+| Implementação                            | ❌ Bloqueada até Fase 2                            |
+| Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                 |
+| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8           |
+| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                 |
+| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18             |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -1424,10 +1426,11 @@ _(Aceites com o encerramento do Bloco 3 pelo PO.)_
 
 ### 16.1 Gate pré-código (obrigatório antes de qualquer commit de auth)
 
-- [ ] Spec integralmente aprovada (Blocos 1–4 + aprovação oficial)
+- [x] Spec com **Aprovação Funcional** oficial (Blocos 1–4)
+- [ ] Engineering Gate aprovado / verde (`PRD_001_ENGINEERING_GATE.md`)
 - [ ] CI definitivamente activo e verde
 - [ ] Migration `0002` aplicada no remoto
-- [ ] Autorização explícita de implementação pelo PO
+- [ ] Autorização explícita de implementação (Fase 2) pelo PO
 - [ ] Templates de email (verify / reset) configuráveis no Supabase (ops)
 - [ ] Redirect URLs allowlisted no Supabase Auth
 
@@ -1817,34 +1820,40 @@ sequenceDiagram
 | 1.0-rc2 | 2026-07-30 | Bloco 2 **encerrado**; Bloco 3 casos limite (candidata); metodologia Arquitecto Principal  |
 | 1.0-rc3 | 2026-07-30 | Bloco 3 auto-revisão crítica: §15.5 R1–R12; lacunas L\*; Autoavaliação; sem alterar D1–D12 |
 | 1.0-rc4 | 2026-07-30 | Bloco 3 **encerrado**; Bloco 4 critérios+wireframes (candidata); maturidade N1–N5          |
+| 1.0-rc5 | 2026-07-30 | Bloco 4 **encerrado**; candidata a aprovação integral                                      |
+| 1.0     | 2026-07-30 | **Aprovação Funcional oficial**; Engineering Gate aberto; implementação bloqueada          |
 
 ---
 
 ## 22. Estado da revisão de negócio
 
-| Bloco       | Conteúdo                                  | Estado                                                                  |
-| ----------- | ----------------------------------------- | ----------------------------------------------------------------------- |
-| 1           | D1–D12 + princípios                       | ✅ Encerrado                                                            |
-| 2           | Fluxos F1–F6 + revisão global             | ✅ Encerrado                                                            |
-| 3           | Casos limite (§15)                        | ✅ Encerrado                                                            |
-| 4           | Critérios finais + wireframes (§16–§18)   | ✅ **Encerrado** (PO 2026-07-30)                                        |
-| —           | Aprovação oficial **integral** do PRD-001 | ▶️ Pendente                                                             |
-| —           | Implementação                             | ❌ Bloqueada até aprovação integral + gate 16.1                         |
-| Documento   | Maturidade                                | **N3 — Candidato** (N4 após aprovação integral + CI + migration `0002`) |
-| Metodologia | Arquitecto + Autoavaliação N1–N5          | ✅ Activa                                                               |
+| Bloco       | Conteúdo                                  | Estado                                                                 |
+| ----------- | ----------------------------------------- | ---------------------------------------------------------------------- |
+| 1           | D1–D12 + princípios                       | ✅ Encerrado                                                           |
+| 2           | Fluxos F1–F6 + revisão global             | ✅ Encerrado                                                           |
+| 3           | Casos limite (§15)                        | ✅ Encerrado                                                           |
+| 4           | Critérios finais + wireframes (§16–§18)   | ✅ Encerrado                                                           |
+| —           | **Aprovação Funcional** (Fase 1)          | ✅ **Oficial** (2026-07-30)                                            |
+| —           | Engineering Gate                          | ▶️ `docs/backlog/PRD_001_ENGINEERING_GATE.md`                          |
+| —           | **Autorização de Implementação** (Fase 2) | ❌ Não emitida                                                         |
+| Documento   | Papel                                     | **Referência oficial** do módulo Autenticação & Gestão de Utilizadores |
+| Documento   | Maturidade                                | Aprovado funcionalmente · **pré-N4**                                   |
+| Metodologia | Duas fases PRD + Arquitecto + N1–N5       | ✅ Activa                                                              |
 
-### Autoavaliação do Arquitecto — PRD-001 (especificação completa por blocos)
+### Autoavaliação do Arquitecto — após Aprovação Funcional
 
-| Campo                               | Conteúdo                                                                                                                                                                                    |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Nível de maturidade**             | **N3 — Candidato** à aprovação integral                                                                                                                                                     |
-| **Nível de confiança**              | **91%**                                                                                                                                                                                     |
-| **Factores < 95%**                  | (1) Manual / Blueprint / DS Nº 003 não versionados no repo. (2) Detalhe SQL da RPC → ADR-004 na implementação. (3) Gate infra (CI + `0002`) aberto. (4) Templates/TTL email = ops Supabase. |
-| **Principais riscos remanescentes** | Middleware R1; allowlist `next`; deliverability; desvio visual vs DS oficial                                                                                                                |
-| **Dívidas técnicas ou documentais** | Versionar docs oficiais externos; activar CI; aplicar migration `0002`; ADR-004 na implementação                                                                                            |
-| **Decisões adiadas**                | §15.3; Shell/dashboards; OAuth/MFA; UI gestão de papéis                                                                                                                                     |
-| **Recomendação**                    | **Aprovar** a especificação integral do PRD-001 para fecho documental. **Não** autorizar implementação até gate 16.1 (CI + `0002` + autorização explícita).                                 |
+| Campo                               | Conteúdo                                                                                                                                                    |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nível de maturidade**             | Aprovado funcionalmente · **pré-N4** (N4 exige Engineering Gate + Autorização de Implementação)                                                             |
+| **Nível de confiança**              | **93%** (alinhamento funcional)                                                                                                                             |
+| **Factores < 95%**                  | (1) Manual / Blueprint / DS Nº 003 não versionados no repo. (2) Detalhe SQL da RPC → ADR-004 na implementação. (3) Gate técnico ainda aberto (CI / `0002`). |
+| **Principais riscos remanescentes** | Tentativa de implementar antes do Gate; desvio em revisões futuras sem controlo de versão do PRD                                                            |
+| **Dívidas técnicas ou documentais** | Fechar Engineering Gate; versionar docs oficiais externos                                                                                                   |
+| **Decisões adiadas**                | §15.3; Autorização de Implementação                                                                                                                         |
+| **Recomendação**                    | Manter PRD como referência oficial. **Não** implementar até Gate + Fase 2.                                                                                  |
 
-**Pedido:** aprovação oficial **integral** do PRD-001 (D1–D12 · F1–F6 · §15 · §16–§18).
+**Alterações futuras:** revisões controladas deste PRD, com rastreabilidade.
 
-Até essa aprovação **e** o gate 16.1: **nenhuma implementação**.
+**Próximo passo:** fechar e aprovar `docs/backlog/PRD_001_ENGINEERING_GATE.md`. Só depois: Autorização de Implementação.
+
+Até Fase 2: **nenhuma implementação**.

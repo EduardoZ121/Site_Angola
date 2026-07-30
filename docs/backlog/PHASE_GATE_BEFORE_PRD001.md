@@ -63,13 +63,15 @@ Estas pendências **devem ser resolvidas antes da implementação do PRD-001**, 
 
 ## 5. Autorização PRD-001
 
-| Actividade                                         | Autorizado?                                       |
-| -------------------------------------------------- | ------------------------------------------------- |
-| Elaboração da especificação (Blocos 1–4)           | ✅ **Concluída**                                  |
-| Aprovação oficial **integral** da spec             | ▶️ Pendente (decisão PO)                          |
-| Qualquer implementação / código de auth de produto | ❌ **Não** — até aprovação integral + infra acima |
+| Actividade                                | Autorizado?                                   |
+| ----------------------------------------- | --------------------------------------------- |
+| Elaboração da especificação (Blocos 1–4)  | ✅ **Concluída**                              |
+| **Aprovação Funcional** (Fase 1)          | ✅ **Oficial** (2026-07-30)                   |
+| Engineering Gate                          | ▶️ `docs/backlog/PRD_001_ENGINEERING_GATE.md` |
+| **Autorização de Implementação** (Fase 2) | ❌ Não emitida                                |
+| Código de auth de produto                 | ❌ Bloqueado até Fase 2                       |
 
-Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0-rc5)
+Spec oficial: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0)
 
 ---
 
@@ -91,4 +93,5 @@ O agente actua como **Arquitecto Principal e Guardião da Consistência** — ve
 - Auto-revisão obrigatória antes de cada versão candidata.
 - Autoavaliação com **maturidade N1–N5** + confiança %; se confiança < 95%, listar factores.
 - PO só em decisões de negócio / conflitos / estratégia.
-- Implementação do PRD-001 **bloqueada** até aprovação integral da spec + pendências infra acima.
+- PRDs: **Aprovação Funcional** ≠ **Autorização de Implementação** (`DEVELOPMENT_PROCESS.md`).
+- Implementação do PRD-001 **bloqueada** até Engineering Gate + Fase 2.
