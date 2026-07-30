@@ -2,9 +2,10 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (FASE 0 concluída · FASE 1 encerrada · Landing **encerrada**)  
+**Estado:** Activo (FASE 0–1 + Landing encerradas · P0 código em `main` · PRD-001 **spec** pronta, implementação bloqueada ao gate)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
-**Uso:** Consultar antes de qualquer especificação, PRD ou implementação
+**Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
+**Gate actual:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`
 
 ---
 
