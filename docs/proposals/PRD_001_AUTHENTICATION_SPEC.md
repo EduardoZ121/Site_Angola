@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.5  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1 ✅ · F2 ▶️ · **Implementação não autorizada**  
+**Versão:** 0.6  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1 ✅ · F2 ✅ · F3 ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | Em curso · **F1 aprovado** · F2 a seguir — ver §6 |
+| Bloco 2 — Fluxos principais | Em curso · F1✅ F2✅ · F3 a seguir — ver §6 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -52,6 +52,9 @@ A autenticação **não** é apenas um mecanismo de acesso. É o **primeiro cont
 5. **Mensagens de erro claras** e orientadas para a solução.
 6. Explicar sempre: **o que** está a acontecer, **porquê**, e **qual o próximo passo**.
 7. Privilegiar redução de fricção sobre formulários longos.
+
+8. **Recuperação guiada em erros (plataforma):** sempre que ocorrer um erro, a Kuteka deve (a) **explicar o problema**, (b) **indicar como resolver**, e (c) **mostrar o próximo passo** — imediatamente. Aplica-se a Login, Recuperação, Onboarding e a todos os módulos futuros.
+
 
 ### 0.3 Template de documentação de cada fluxo (Bloco 2+)
 
@@ -396,68 +399,120 @@ Nunca armazenar passwords, tokens ou PII extra em `metadata` de audit.
 
 ### 6.2 F2 — Verificação de email
 
+**Estado da revisão UX:** ✅ **Aprovado** (2026-07-30) com refinamentos de confiança incorporados abaixo.
+
 #### Objectivo do fluxo
 
-Confirmar que o utilizador controla o email da conta, com fricção mínima e feedback claro sobre o que fazer a seguir.
+Confirmar que o email pertence ao utilizador, **proteger a conta**, reduzir ansiedade, e conduzir com clareza ao próximo passo (onboarding ou app) — com simplicidade, confiança e controlo.
 
 #### Condições de entrada
 
 | Condição | Comportamento |
 | -------- | ------------- |
-| Após registo bem-sucedido | Ecrã “Verifique o seu email” |
+| Após F1 bem-sucedido | Ecrã pendente “Verifique o seu email” |
 | Clique no link do email | `/auth/verificar` com token |
 | Login com email não verificado | Redireccionado para este fluxo |
 | Já verificado | Saltar para F6 ou app conforme papéis |
 
+#### Narrativa UX — acompanhar o utilizador
+
+| Pergunta | Resposta |
+| -------- | -------- |
+| O que pretende? | Confirmar o email e sentir que a conta está segura |
+| O que vê? | Mensagem tranquilizadora; email mascarado; reenvio claro; confirmação positiva |
+| O que o sistema faz? | Envia/reenvia email; valida token; audita o mínimo; nunca expõe tokens |
+| Se correr bem? | “Conta confirmada” → próximo passo óbvio (F6 / app) |
+| Se falhar? | Linguagem humana; problema + como resolver + próximo passo |
+| Como recupera? | Reenviar, verificar spam, ou Entrar se já confirmado |
+| Confiança | Tom PASSO 0; sem jargão; estados de botão consistentes com F1 |
+
 #### Sequência passo a passo
 
-1. **Estado pendente:** explicar que foi enviado um email, porque é necessário, e o próximo passo (abrir a caixa de correio e clicar no link).
-2. Opção **Reenviar email** com cooldown visível.
-3. Utilizador clica no link → troca de token Supabase.
-4. Sucesso → audit `auth.email_verified`.
-5. Se sem papéis → **F6 Onboarding**; se já tem papéis → destino §9.
+1. **Ecrã pendente:** mensagem principal tranquilizadora (conceito aprovado): *“Estamos quase lá. Só precisamos confirmar que este email pertence realmente a si para proteger a sua conta.”*
+2. Mostrar o email **parcialmente mascarado** (ex.: `ma*****@gmail.com`) para o utilizador validar que usou o endereço certo.
+3. Indicar o próximo passo: abrir a caixa de correio e clicar no link.
+4. CTA **Reenviar email** com estados Normal · Desativado (cooldown) · Loading · Sucesso · Erro.
+5. Após reenvio com sucesso: *“Enviámos um novo email de confirmação.”* + *“Se não encontrar a mensagem, verifique também a pasta Spam ou Promoções.”*
+6. Utilizador clica no link → ecrã de progresso humano: *“Estamos a confirmar a sua conta…”* (não apenas “A confirmar…”).
+7. Sucesso → audit mínimo `auth.email_verified` → se sem papéis **F6**; senão app/`next` (§9).
+8. Se o link **já tinha sido usado** / conta já confirmada: **não tratar como erro**. Mensagem: *“A sua conta já se encontra confirmada.”* + botão **Entrar na Kuteka**.
 
 #### Estados possíveis
 
 | Estado | UI |
 | ------ | -- |
-| Aguardando verificação | Instruções + reenvio |
-| A processar token | Loading breve |
-| Verificado com sucesso | Confirmação curta → redirect |
-| Token inválido / expirado | Erro + reenvio / pedir novo link |
-| Cooldown de reenvio | CTA disabled com contagem |
+| Aguardando verificação | Instruções tranquilizadoras + email mascarado + reenvio |
+| Cooldown de reenvio | CTA **Desativado** com tempo restante |
+| Reenvio OK | Confirmação positiva + dica spam/promoções |
+| A validar token | “Estamos a confirmar a sua conta…” |
+| Confirmado (primeira vez) | Sucesso + próximo passo explícito |
+| Já confirmado anteriormente | Mensagem positiva + **Entrar na Kuteka** |
+| Token inválido / expirado | Problema + como resolver + próximo passo (pedir novo email) |
 
-#### Mensagens principais ao utilizador
+#### Mensagens principais (tom PASSO 0 · i18n-ready)
 
-| Momento | Mensagem (orientação) |
-| ------- | --------------------- |
-| Título | Verifique o seu email |
-| Corpo | Enviámos um link para confirmar a sua conta. É um passo de segurança — depois continua o seu acesso. |
-| Reenviar | Reenviar email |
-| Sucesso | Email confirmado. A seguir, escolha como quer usar a Kuteka. |
-| Link auxiliar | Email errado? Voltar ao registo / contacto |
+Todas as strings deste fluxo devem viver em **content centralizado** (ex. `modules/authentication/content.ts`) — pt-AO no MVP, preparado para internacionalização (não embutir textos soltos na implementação futura).
+
+| Momento | Copy (orientação aprovada) |
+| ------- | -------------------------- |
+| Principal | Estamos quase lá. Só precisamos confirmar que este email pertence realmente a si para proteger a sua conta. |
+| Email mascarado | Mostrar `ma*****@domínio` |
+| Reenvio OK | Enviámos um novo email de confirmação. |
+| Ajuda entrega | Se não encontrar a mensagem, verifique também a pasta Spam ou Promoções. |
+| Em validação | Estamos a confirmar a sua conta… |
+| Já confirmado | A sua conta já se encontra confirmada. · CTA: Entrar na Kuteka |
+| Pós-sucesso | Conta protegida / email confirmado · próximo passo: onboarding ou app |
+
+#### Segurança de mensagens (explícito)
+
+- O sistema **nunca** revela informação técnica sobre tokens.
+- **Nunca** apresenta mensagens exploráveis para ataques (ex.: detalhes internos de validação).
+- Todos os erros de validação são **traduzidos** para linguagem compreensível.
+- Em qualquer erro: **problema → como resolver → próximo passo** (princípio §0.2.8).
 
 #### Casos de erro e comportamento
 
-| Erro | Comportamento |
-| ---- | ------------- |
-| Email não chegou (percepção) | Copy: pode demorar alguns minutos; verificar spam; reenviar |
-| Token expirado | “Este link expirou. Peça um novo email.” |
-| Token inválido / já usado | Mensagem clara + caminho para reenvio ou login |
-| Rate limit reenvio | Respeitar cooldown; explicar “aguarde Xs” |
-| Rede | Retry |
+| Situação | Comportamento |
+| -------- | ------------- |
+| Email “não chegou” | Orientar spam/promoções + reenviar (cooldown) |
+| Token expirado / inválido | Linguagem humana + pedir novo email de confirmação |
+| Já confirmado / link reutilizado | Mensagem positiva + Entrar na Kuteka (não “erro”) |
+| Rede no reenvio | Erro simples + retry; contexto preservado |
+| Rate limit | Cooldown visível e compreensível |
+
+#### Auditoria
+
+Apenas informação **mínima** para segurança e conformidade:
+
+| Evento | Inclui | Não inclui |
+| ------ | ------ | ---------- |
+| `auth.email_verified` | user id / timestamp | token, link, headers sensíveis |
+| Reenvio (se auditado) | metadata mínima | conteúdo do email / tokens |
+
+#### Acessibilidade
+
+Mesmos padrões do F1: teclado, labels, leitores de ecrã, foco no primeiro erro / acção principal.
 
 #### Critérios de aceitação
 
-- [ ] Utilizador compreende o quê / porquê / próximo passo
-- [ ] Reenvio com cooldown e feedback imediato
-- [ ] Sucesso conduz a onboarding ou app conforme estado
+- [ ] Mensagem inicial tranquilizadora (protecção da conta, não só “obrigatório”)
+- [ ] Email mascarado visível quando possível
+- [ ] Feedback “Estamos a confirmar a sua conta…” ao validar o link
+- [ ] Link já usado → mensagem positiva + Entrar na Kuteka
+- [ ] Reenvio com confirmação positiva + dica spam/promoções
+- [ ] Sem exposição técnica de tokens; erros humanizados
+- [ ] Utilizador compreende que a conta está **protegida** após confirmação
+- [ ] Nunca fica em dúvida sobre o próximo passo
+- [ ] Conclui sem contactar suporte
+- [ ] Tom humano, profissional, tranquilizador (PASSO 0)
+- [ ] Copy centralizada / preparada para i18n
+- [ ] Auditoria mínima sem dados sensíveis
 - [ ] Sem acesso `(app)` sem email verificado
 
 #### Oportunidades futuras
 
-- Magic link como único passo (passwordless)
-- Verify por SMS quando existir telefone no perfil
+- Magic link / passwordless
+- Verificação por telefone quando existir no perfil
 
 ---
 
@@ -1016,18 +1071,28 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 ```
 *(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)*
 
-### 18.2 Verificar email — `/auth/verificar`
+### 18.2 Verificar email — `/auth/verificar` (F2 aprovado)
 
 ```
 ┌──────────────────────────────────────────────┐
 │  Kuteka                                      │
 │                                              │
 │  Verifique o seu email                       │
-│  Enviámos um link para confirmar a conta.    │
+│  Estamos quase lá. Só precisamos confirmar   │
+│  que este email pertence realmente a si      │
+│  para proteger a sua conta.                  │
 │                                              │
-│  [ Reenviar email ]   (cooldown 60s)         │
+│  Enviado para: ma*****@gmail.com             │
 │                                              │
-│  Errado o email? Voltar ao registo           │
+│  [ Reenviar email ]                          │
+│  (após reenvio: confirmação + dica Spam)     │
+│                                              │
+│  Ao abrir o link:                            │
+│  "Estamos a confirmar a sua conta…"          │
+│                                              │
+│  Se já confirmado:                           │
+│  "A sua conta já se encontra confirmada."    │
+│  [ Entrar na Kuteka ]                        │
 └──────────────────────────────────────────────┘
 ```
 
@@ -1199,7 +1264,8 @@ sequenceDiagram
 | 0.2 | 2026-07-30 | Spec completa para revisão de negócio |
 | 0.3 | 2026-07-30 | Bloco 1: D1–D12 fechados; princípios uma-conta/multi-papel |
 | 0.4 | 2026-07-30 | Princípio UX + template fluxos F1–F6 |
-| 0.5 | 2026-07-30 | F1 Registo **aprovado** (proposta de valor, checklist password, estados CTA, a11y, audit mínima, copy PASSO 0) |
+| 0.5 | 2026-07-30 | F1 Registo **aprovado** |
+| 0.6 | 2026-07-30 | F2 Verify **aprovado**; princípio global de erro guiado; i18n-ready copy |
 
 ---
 
@@ -1210,13 +1276,14 @@ sequenceDiagram
 | 1 | Decisões D1–D12 + princípios de plataforma | ✅ **Encerrado** |
 | 2 | Fluxos principais (validação UX) | ▶️ Em curso |
 | 2 · F1 Registo | Validação experiência | ✅ **Aprovado** |
-| 2 · F2 Verificar email | Validação experiência | ▶️ A seguir |
-| 2 · F3–F6 | — | Pendente (um de cada vez) |
+| 2 · F2 Verificar email | Validação experiência | ✅ **Aprovado** |
+| 2 · F3 Login | Validação experiência | ▶️ A seguir |
+| 2 · F4–F6 | — | Pendente (um de cada vez) |
 | 2 · Revisão global | Consistência entre fluxos | Após F1–F6 |
 | 3 | Casos limite (detalhe) | Pendente |
 | 4 | Critérios + wireframes finais | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** rever **F2 — Verificação de email** no formato de acompanhamento do utilizador.
+**Pedido imediato:** rever **F3 — Login** no formato de acompanhamento do utilizador.
 
 Até aprovação integral: **nenhuma implementação**.
