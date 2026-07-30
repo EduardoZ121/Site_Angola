@@ -1,3 +1,5 @@
+> **Legado Vite — não usar para produto KEOS.** Auth oficial: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`.
+
 # Admin e login (Kuteka)
 
 ## Login (`/entrar`)
