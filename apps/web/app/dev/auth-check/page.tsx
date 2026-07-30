@@ -16,8 +16,8 @@ export default function DevAuthCheckPage() {
     <main className="mx-auto max-w-xl space-y-6 px-6 py-16">
       <Heading level={1}>Auth check</Heading>
       <Text>
-        Página técnica de desenvolvimento. A UI de autenticação de produto pertence à FASE 2 /
-        PRD-001.
+        Página técnica de desenvolvimento. A UI de autenticação de produto pertence ao PRD-001 (após
+        Engineering Gate + Autorização de Implementação).
       </Text>
       <dl className="space-y-2 font-mono text-sm">
         <div className="flex justify-between gap-4 border-b border-slate-200 py-2 dark:border-slate-800">

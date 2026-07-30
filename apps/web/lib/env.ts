@@ -32,7 +32,7 @@ function readEnv(): AppEnv {
   return parsed.data;
 }
 
-/** Parsed env — safe for build without Supabase keys (optional until Auth FASE 2) */
+/** Parsed env — safe for build without Supabase keys (optional until PRD-001 implementation) */
 export const env = readEnv();
 
 export function requireSupabasePublicEnv(): {
