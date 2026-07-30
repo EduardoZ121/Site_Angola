@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.9  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1–F5 ✅ · F6 ▶️ · **Implementação não autorizada**  
+**Versão:** 1.0-rc1  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1–F6 ✅ · revisão global ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | Em curso · F1–F5 ✅ · F6 a seguir — ver §6 |
+| Bloco 2 — Fluxos principais | F1–F6 ✅ · **revisão global** ▶️ — ver §6 e §6.8 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -55,13 +55,14 @@ A autenticação **não** é apenas um mecanismo de acesso. É o **primeiro cont
 
 8. **Recuperação guiada em erros (plataforma):** sempre que ocorrer um erro, a Kuteka deve (a) **explicar o problema**, (b) **indicar como resolver**, e (c) **mostrar o próximo passo** — imediatamente. Aplica-se a Login, Recuperação, Onboarding e a todos os módulos futuros.
 
-9. **Narrativa oficial da autenticação Kuteka** (referência para todos os desenvolvimentos auth futuros):
+9. **Experiência oficial de autenticação Kuteka** (narrativa de referência permanente):
    - **F1 Registo** → criar **confiança**
    - **F2 Verificar email** → reforçar **segurança**
    - **F3 Login** → transmitir **continuidade**
-   - **F4 Logout** → devolver o **controlo** ao utilizador
-   - **F5 Recuperação de conta** → **restaurar a confiança** e devolver o acesso
-   - F6 e evoluções futuras devem manter esta filosofia.
+   - **F4 Logout** → devolver o **controlo**
+   - **F5 Recuperação de conta** → **restaurar o acesso e a confiança**
+   - **F6 Onboarding** → criar **pertença** e dar **direcção**
+   - Esta sequência marca o início da relação utilizador–plataforma; evoluções futuras devem mantê-la.
 
 
 
@@ -851,82 +852,87 @@ Após alteração da password, fica previsto que, numa **evolução futura**, se
 
 ### 6.6 F6 — Onboarding (perfil mínimo + papéis)
 
+**Estado da revisão UX:** ✅ **Aprovado** (2026-07-30) com refinamentos de boas-vindas, clareza de papéis e pertença.
+
 #### Objectivo do fluxo
 
-Activar a conta para uso na plataforma **sem formulários longos**: garantir nome (se em falta) e pelo menos um papel self-serve, respeitando multi-papel na **mesma conta**.
+Integrar o utilizador no ecossistema Kuteka: confirmar que a conta existe, concluir uma configuração rápida (nome se preciso + papéis) e deixá-lo com **pertença, clareza e entusiasmo** para começar — na **mesma conta**, sem questionário longo.
+
+> Este fluxo **não encerra apenas a autenticação**: marca o **início da relação** entre o utilizador e a plataforma.
+
+#### Objectivo emocional de UX (explícito)
+
+O utilizador deve terminar o Onboarding com **pertença**, **clareza** e **entusiasmo** para utilizar a Kuteka.
 
 #### Condições de entrada
 
 | Condição | Comportamento |
 | -------- | ------------- |
-| Email verificado e 0 papéis | Obrigatório antes de `(app)` |
-| Após F2 com sucesso | Entrada natural |
-| Login de conta sem papéis | Redireccionado para aqui |
-| Já tem ≥1 papel | Não reapresentar (salvo gestão futura de papéis) |
+| Email verificado e 0 papéis | Fluxo obrigatório antes de `(app)` |
+| Após F2 / F3 incompleto | Entrada natural |
+| Já tem ≥1 papel | Não reapresentar (alterações futuras nas definições) |
+
+#### Narrativa UX — acompanhar o utilizador
+
+| Pergunta | Resposta |
+| -------- | -------- |
+| O que pretende? | Começar a usar a Kuteka do jeito certo para si |
+| O que vê? | Boas-vindas + papéis explicados + conta única + liberdade de alterar depois |
+| O que o sistema faz? | Guarda nome; activa papéis self-serve; audita o mínimo |
+| Se correr bem? | “Conta pronta” → `/app` ou `next` |
+| Se falhar? | Problema + solução + próximo passo; permanece no onboarding |
+| Pertença | Sente que a plataforma está preparada para si |
 
 #### Sequência passo a passo
 
-1. Se `display_name` vazio → etapa curta “Como prefere ser chamado?” (um campo).
-2. Etapa papéis: “Como quer usar a Kuteka hoje?” — Cliente e/ou Parceiro.
-3. Explicar em uma frase: pode escolher um ou ambos; Agente/Admin são atribuídos pela Kuteka.
-4. CTA Continuar (disabled até ≥1 papel).
-5. RPC de activação + audit `auth.role_activated`.
-6. Destino: `/app` (ou `next` se veio de Entrar após completar onboarding — §9 / E21).
+1. **Boas-vindas (não parece só formulário)** — conceito aprovado:  
+   *“Bem-vindo à Kuteka. A sua conta está quase pronta. Vamos apenas concluir uma configuração rápida para adaptar a plataforma à forma como pretende utilizá-la.”*
+2. **Nome** (só se `display_name` vazio) — “Como prefere ser chamado?”
+3. **Antes da escolha:** explicar papéis em linguagem simples:  
+   - **Cliente** — Quero procurar, reservar ou gerir imóveis e serviços.  
+   - **Parceiro Patrimonial** — Quero disponibilizar e gerir patrimónios na plataforma.  
+   O utilizador **nunca** escolhe um papel sem compreender o significado.
+4. **Conta única (destaque estratégico):**  
+   *“Pode utilizar a mesma conta para desempenhar um ou vários papéis. Não será necessário criar outra conta no futuro.”*
+5. Selecção: um ou ambos; Agente/Admin atribuídos pela Kuteka (nota calma).
+6. **Reversibilidade explícita:**  
+   *“Os papéis escolhidos durante o Onboarding poderão ser alterados posteriormente nas definições da conta.”*
+7. CTA Continuar (Desativado até ≥1 papel) → Loading → activação RPC + audit mínima.
+8. **Feedback positivo curto:** *“A sua conta está pronta. Bem-vindo à Kuteka.”* — sem animações exageradas.
+9. Destino: `/app` ou `next` (§9).
 
-```mermaid
-flowchart LR
-  V[Email verificado] --> N{display_name?}
-  N -->|vazio| P[Nome]
-  N -->|ok| R[Papéis]
-  P --> R
-  R --> S[Activar RPC]
-  S --> A["/app ou next"]
-```
+#### Preparação para crescimento (arquitectura)
 
-#### Estados possíveis
+A especificação regista explicitamente que **novos papéis** poderão ser adicionados no futuro **sem alterar este fluxo** nem exigir **nova conta** — apenas extensão do modelo `roles` / `user_roles` e copy de onboarding.
 
-| Estado | UI |
-| ------ | -- |
-| Etapa nome | Um campo + Continuar |
-| Etapa papéis | Selecção multi + Continuar |
-| A activar | Loading |
-| Sucesso | Redirect |
-| Falha RPC | Erro + retry; permanece no onboarding |
+#### Estados, erros, a11y, auditoria
 
-#### Mensagens principais ao utilizador
-
-| Momento | Mensagem (orientação) |
-| ------- | --------------------- |
-| Nome | Como prefere ser chamado? |
-| Papéis título | Como quer usar a Kuteka hoje? |
-| Apoio | Pode escolher mais do que um. É a mesma conta. |
-| Cliente | Habitação com confiança |
-| Parceiro | Activar e acompanhar património |
-| Nota Agente/Admin | Agente Certificado e Administrador são atribuídos pela Kuteka. |
-| CTA | Continuar |
-
-#### Casos de erro e comportamento
-
-| Erro | Comportamento |
-| ---- | ------------- |
-| Nenhum papel seleccionado | CTA disabled + hint |
-| Tentativa de papéis não self-serve | UI não oferece; RPC rejeita se forçado |
-| Falha RPC a meio | Mensagem + retry; sem acesso `(app)` até sucesso |
-| Sessão expirada a meio | Re-login → retomar onboarding |
+- Estados de botão do padrão da plataforma.
+- Erros: padrão das 3 perguntas; preservar selecção; sessão expirada ≠ logout voluntário.
+- A11y: teclado, labels, leitores de ecrã, foco no erro.
+- Audit `auth.role_activated`: metadata mínima; sem PII extra.
+- Copy centralizada / i18n-ready; tom PASSO 0.
+- Sem expectativas visuais Passaporte / KAI / SCK.
 
 #### Critérios de aceitação
 
-- [ ] Sem questionário longo; só nome (se preciso) + papéis
-- [ ] Cliente e Parceiro podem coexistir
-- [ ] Explica o quê / porquê / próximo passo
-- [ ] Sem copy de Passaporte / KAI / SCK
-- [ ] Após sucesso, utilizador entra na app (stub) com feedback de conta activa
+- [ ] Boas-vindas com sensação de pertença (conta quase pronta)
+- [ ] Utilizador compreende claramente o significado de cada papel
+- [ ] Percebe que pode ter vários papéis na **mesma conta**
+- [ ] Sabe que pode alterar papéis depois (definições)
+- [ ] Feedback “conta pronta / bem-vindo”
+- [ ] Termina com sensação de que a plataforma está preparada para si
+- [ ] Conclusão em poucos minutos, sem apoio externo
+- [ ] Objectivo emocional: pertença, clareza, entusiasmo
+- [ ] Novos papéis futuros sem redesenhar o fluxo / sem segunda conta
+- [ ] Sem Passaporte/KAI/SCK na UI
+- [ ] Erros guiados; a11y; audit mínima
 
 #### Oportunidades futuras
 
-- UI para **adicionar/remover** papéis self-serve na mesma conta
-- Switcher visual de contexto de actuação (Shell)
-- Onboarding de valor por papel (após módulos 002/003) — nunca forçar no auth inicial
+- UI de definições para adicionar/remover papéis
+- Switcher de contexto (Shell)
+- Onboarding de valor por módulo (002/003) — nunca no auth inicial
 
 ---
 
@@ -939,9 +945,60 @@ Não é um “ecrã”, mas condiciona todos os fluxos:
 | Refresh | Middleware refresca sessão em `(auth)` relevante e `(app)` |
 | Sem sessão em `(app)` | `/auth/entrar?next=<path>` |
 | `next` | Apenas paths relativos internos allowlisted |
-| Mensagem (quando redirect por sessão expirada) | “A sua sessão terminou. Entre novamente para continuar.” (opcional, se não aumentar ruído) |
+| Sessão expirada | Copy distinta do logout voluntário (§6.4) |
+| Mensagem (opcional) | “A sua sessão terminou. Entre novamente para continuar.” |
 
 ---
+
+### 6.8 Revisão global do Bloco 2 — consistência F1–F6
+
+**Estado:** ▶️ Em validação de negócio (após aprovação individual de F1–F6).
+
+#### Experiência oficial (arco narrativo)
+
+| Fluxo | Promessa ao utilizador |
+| ----- | ---------------------- |
+| F1 Registo | Confiança |
+| F2 Verificar email | Segurança |
+| F3 Login | Continuidade |
+| F4 Logout | Controlo |
+| F5 Recuperação | Restaurar acesso e confiança |
+| F6 Onboarding | Pertença e direcção |
+
+#### Checklist de consistência transversal
+
+| Tema | Esperado em todos os fluxos |
+| ---- | --------------------------- |
+| Tom PASSO 0 | Humano, profissional, tranquilizador, transparente |
+| Simplicidade / confiança / controlo | §0.2 |
+| Erro guiado | Problema + solução + próximo passo |
+| Estados CTA | Normal · Desativado · Loading · Sucesso · Erro |
+| Copy | Centralizada, i18n-ready; zero jargão técnico ao utilizador |
+| A11y | Teclado, labels, leitores de ecrã, foco no erro |
+| Auditoria | Mínima, timestamps consistentes, sem dados sensíveis |
+| Uma conta | Nunca empurrar segunda conta |
+| Multi-papel | Arquitectura desde o dia 1; F6 explica e torna reversível |
+| Landing | Pública; CTAs com sessão → app sem re-auth |
+| Extensibilidade | OAuth/MFA/novos papéis sem redesenhar o módulo |
+
+#### Riscos de inconsistência a vigiar na revisão global
+
+1. Tom diferente entre “erro de login” e “erro de recuperação”.
+2. Intermédios desnecessários após F3 quando F2/F6 já estão OK.
+3. Copy de Passaporte/KAI a “escapar” no stub pós-F6.
+4. Confundir logout voluntário com sessão expirada.
+5. Onboarding a parecer formulário burocrático (já mitigado com boas-vindas).
+
+#### Critério de fecho do Bloco 2
+
+- [ ] F1–F6 aprovados individualmente ✅
+- [ ] Arco narrativo oficial aceite
+- [ ] Checklist transversal validada
+- [ ] Ajustes pontuais de consistência (se houver) incorporados na spec
+- [ ] Autorização para avançar ao **Bloco 3 — casos limite**
+
+---
+
 
 ## 9. Redirect e navegação (contexto)
 
@@ -1301,7 +1358,7 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 └──────────────────────────────────────────────┘
 ```
 
-### 18.6 Onboarding papéis — `/auth/onboarding/papeis`
+### 18.6 Onboarding — `/auth/onboarding/papeis` (F6 aprovado)
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -1406,7 +1463,8 @@ sequenceDiagram
 | 0.6 | 2026-07-30 | F2 Verify **aprovado**; erro guiado; i18n-ready |
 | 0.7 | 2026-07-30 | F3 Login **aprovado** (continuidade; narrativa F1–F3) |
 | 0.8 | 2026-07-30 | F4 Logout **aprovado**; narrativa oficial F1–F4 |
-| 0.9 | 2026-07-30 | F5 Recuperação **aprovada**; narrativa F1–F5; sessões futuras pós-reset |
+| 0.9 | 2026-07-30 | F5 Recuperação **aprovada**; narrativa F1–F5 |
+| 1.0-rc1 | 2026-07-30 | F6 Onboarding **aprovado**; experiência oficial F1–F6; §6.8 revisão global |
 
 ---
 
@@ -1415,18 +1473,12 @@ sequenceDiagram
 | Bloco | Conteúdo | Estado |
 | ----- | ------- | ------ |
 | 1 | Decisões D1–D12 + princípios de plataforma | ✅ **Encerrado** |
-| 2 | Fluxos principais (validação UX) | ▶️ Em curso |
-| 2 · F1 Registo | Confiança | ✅ **Aprovado** |
-| 2 · F2 Verificar email | Segurança | ✅ **Aprovado** |
-| 2 · F3 Login | Continuidade | ✅ **Aprovado** |
-| 2 · F4 Logout | Controlo | ✅ **Aprovado** |
-| 2 · F5 Recuperação | Restaurar confiança / acesso | ✅ **Aprovado** |
-| 2 · F6 Onboarding | — | ▶️ A seguir |
-| 2 · Revisão global | Consistência entre fluxos | Após F6 |
+| 2 · F1–F6 | Validação UX individual | ✅ **Aprovados** |
+| 2 · Revisão global | Consistência F1–F6 (§6.8) | ▶️ **Em curso** |
 | 3 | Casos limite (detalhe) | Pendente |
 | 4 | Critérios + wireframes finais | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** rever **F6 — Onboarding** no formato de acompanhamento do utilizador.
+**Pedido imediato:** validar a **revisão global do Bloco 2** (§6.8).
 
 Até aprovação integral: **nenhuma implementação**.
