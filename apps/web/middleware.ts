@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
 /**
- * Middleware prepared for FASE 2 auth guards.
- * Currently: correlation id + pass-through. Session refresh when Supabase is configured.
+ * Middleware prepared for PRD-001 auth guards (session refresh, route protection).
+ * Currently: correlation id + pass-through. Session refresh when Supabase is configured
+ * and Autorização de Implementação do PRD-001 estiver emitida.
  */
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
