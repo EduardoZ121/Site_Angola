@@ -5,11 +5,11 @@
   "description": "KEOS \u2014 Kuteka Engineering Operating System",
   "packageManager": "pnpm@10.33.3",
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "scripts": {
     "dev": "turbo run dev --filter=@kuteka/web",
-    "build": "bash scripts/build-for-render.sh",
+    "build": "node scripts/copy-prebuilt-dist.mjs",
     "build:turbo": "turbo run build",
     "build:static": "bash scripts/build-static-web.sh",
     "lint": "turbo run lint",
@@ -18,7 +18,8 @@
     "test:e2e": "pnpm --filter @kuteka/web test:e2e",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mjs,cjs,json,md,css,yml,yaml}\"",
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "build:full": "bash scripts/build-for-render.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
