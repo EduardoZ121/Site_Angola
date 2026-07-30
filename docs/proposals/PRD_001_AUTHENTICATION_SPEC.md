@@ -1,8 +1,8 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 0.6  
-**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1 ✅ · F2 ✅ · F3 ▶️ · **Implementação não autorizada**  
+**Versão:** 0.7  
+**Estado:** 📄 Em revisão de negócio · Bloco 1 ✅ · Bloco 2: F1 ✅ · F2 ✅ · F3 ✅ · F4 ▶️ · **Implementação não autorizada**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,7 +20,7 @@
 | Elaboração / ajuste desta spec | **Autorizada** |
 | Implementação | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12 | **Fechado** (2026-07-30) — ver §14 |
-| Bloco 2 — Fluxos principais | Em curso · F1✅ F2✅ · F3 a seguir — ver §6 |
+| Bloco 2 — Fluxos principais | Em curso · F1✅ F2✅ F3✅ · F4 a seguir — ver §6 |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -54,6 +54,13 @@ A autenticação **não** é apenas um mecanismo de acesso. É o **primeiro cont
 7. Privilegiar redução de fricção sobre formulários longos.
 
 8. **Recuperação guiada em erros (plataforma):** sempre que ocorrer um erro, a Kuteka deve (a) **explicar o problema**, (b) **indicar como resolver**, e (c) **mostrar o próximo passo** — imediatamente. Aplica-se a Login, Recuperação, Onboarding e a todos os módulos futuros.
+
+9. **Narrativa emocional da autenticação (aprovada na revisão):**
+   - **F1 Registo** → cria **confiança**
+   - **F2 Verificar email** → reforça **segurança**
+   - **F3 Login** → transmite **continuidade**
+   - Fluxos seguintes (F4–F6) devem manter a mesma filosofia.
+
 
 
 ### 0.3 Template de documentação de cada fluxo (Bloco 2+)
@@ -518,67 +525,122 @@ Mesmos padrões do F1: teclado, labels, leitores de ecrã, foco no primeiro erro
 
 ### 6.3 F3 — Login (Entrar)
 
+**Estado da revisão UX:** ✅ **Aprovado** (2026-07-30) com refinamentos de continuidade e segurança.
+
 #### Objectivo do fluxo
 
-Reconhecer o utilizador da **mesma conta**, com o mínimo de fricção, e devolvê-lo ao sítio onde pretendia continuar (`next`) ou ao stub `/app`.
+Fazer o utilizador **continuar** o que estava a fazer — regressar ao seu espaço na Kuteka com familiaridade, sem ansiedade e sem páginas intermédias desnecessárias. A autenticação é o meio; a **continuidade** é o fim.
+
+#### Objectivo emocional de UX (explícito)
+
+| Deve sentir | Não deve sentir |
+| ----------- | --------------- |
+| Familiaridade e continuidade | Ansiedade ao “entrar num sistema” |
+| Que retomou a sua atividade | Que iniciou um processo novo e pesado |
+| Que regressa ao seu espaço Kuteka | Que está a ser interrogado |
 
 #### Condições de entrada
 
 | Condição | Comportamento |
 | -------- | ------------- |
 | Anónimo | Formulário Entrar |
-| Autenticado completo | Redirect app / `next` — **sem** formulário |
-| Autenticado incompleto | Passo em falta (F2/F6) |
-| Entrada | `/auth/entrar`, `/auth?mode=entrar`, CTA **Entrar**; opcional `?next=` |
+| Sessão válida completa (qualquer entry point) | **Nunca** pedir autenticação de novo → app / `next` |
+| Sessão válida incompleta | F2 ou F6 (passo em falta), não o formulário |
+| Entrada | Landing **Entrar**, `/auth/entrar`, deep links, redirects de `(app)` com `?next=` |
+
+**Regra de plataforma:** a Kuteka **nunca** pede autenticação duas vezes para a **mesma sessão válida**, independentemente do ponto de entrada.
+
+#### Narrativa UX — acompanhar o utilizador
+
+| Pergunta | Resposta |
+| -------- | -------- |
+| O que pretende? | Continuar / regressar ao seu espaço |
+| O que vê? | Formulário curto **ou** redirect directo se já autenticado |
+| O que o sistema faz? | Autentica; aplica rate limiting; resolve destino; audita o mínimo |
+| Se correr bem? | Chega **directamente** ao destino (app ou `next`) em poucos segundos |
+| Se falhar? | Problema + como resolver + próximo passo |
+| Como recupera? | Retry, Recuperar acesso, Criar conta, ou F2/F6 |
+| Continuidade | Sem ecrãs intermédios desnecessários quando tudo está OK |
 
 #### Sequência passo a passo
 
-1. Se já completo → redirect (§9); senão mostrar formulário.
-2. Email + password; validação em tempo real básica.
-3. Submit → loading.
-4. `signInWithPassword` → audit `auth.login` se sucesso.
-5. Carregar autorização; aplicar §9 (verify → onboarding → `next` → `/app`).
+1. Se sessão válida completa → redirect imediato ao destino (§9) — **sem formulário**.
+2. Caso contrário: ecrã “Entrar” com tom tranquilizador (regressar à conta / continuar).
+3. Email + password com:
+   - botão **Mostrar / Ocultar** password;
+   - suporte a **gestores de passwords** (autocomplete adequado);
+   - permitir **colar** passwords normalmente.
+4. CTA: Desativado se incompleto → Normal → Loading no submit.
+5. Sucesso → **sem páginas intermédias desnecessárias** → destino directo (`next` seguro ou `/app`), salvo F2/F6 se obrigatório.
+6. Preservar contexto de navegação (`next`) em todo o percurso.
 
-#### Estados possíveis
+#### Campo password — requisitos UX
 
-| Estado | UI |
-| ------ | -- |
-| Formulário | Edição |
-| Loading | CTA em progresso |
-| Sucesso | Redirect sem ecrãs intermédios desnecessários |
-| Credenciais inválidas | Erro genérico orientado para retry / recuperar |
+| Requisito | Detalhe |
+| --------- | ------- |
+| Mostrar/Ocultar | Controlo explícito e acessível |
+| Password managers | `autocomplete` correcto; não bloquear preenchimento automático |
+| Colar | Permitido (não impedir paste) |
 
-#### Mensagens principais ao utilizador
+#### Estados do botão
 
-| Momento | Mensagem (orientação) |
-| ------- | --------------------- |
-| Título | Entrar |
-| Apoio | Aceda à sua conta Kuteka. |
-| CTA | Entrar |
-| Links | Esqueceu a password? · Criar conta |
+**Normal · Desativado · Loading · Sucesso · Erro** (padrão F1/F2).
 
-#### Casos de erro e comportamento
+#### Mensagens e erros (padrão de três perguntas)
 
-| Erro | Comportamento |
-| ---- | ------------- |
-| Credenciais inválidas | “Email ou password incorrectos. Tente novamente ou recupere o acesso.” (anti-enumeração) |
-| Email não verificado | Não entregar `(app)`; ir a F2 com explicação |
-| Sem papéis | Ir a F6 |
-| Rede | Retry |
-| Conta indisponível (futuro soft-delete) | Mensagem + contacto |
+Cada erro responde sempre:
+
+1. **O que aconteceu?**  
+2. **Como posso resolver?**  
+3. **O que devo fazer agora?**  
+
+| Situação | Comportamento |
+| -------- | ------------- |
+| Credenciais inválidas | Mensagem humana única — **nunca** revelar se foi email ou password; oferecer retry + Recuperar + Criar conta |
+| Email não verificado | Explicar protecção da conta → F2 |
+| Sem papéis | Explicar escolha de uso → F6 |
+| Rede / servidor | Explicar + retry; **preservar dados** |
+| Rate limiting / tentativas repetidas | Mensagem tranquilizadora de “aguarde um momento e tente de novo” — sem detalhes técnicos exploráveis |
+
+Tom: Identidade Oficial Kuteka (humano, profissional, tranquilizador, transparente). Copy em content centralizado (i18n-ready). Zero mensagens técnicas ao utilizador.
+
+#### Segurança
+
+- Protecção contra tentativas repetidas (**rate limiting** ou equivalente).
+- Nunca revelar se o erro foi email ou password.
+- Mesmo tom humano em todos os estados de erro.
+- Sem exposição de tokens, códigos internos ou stack traces.
+
+#### Auditoria e privacidade
+
+Eventos relevantes de autenticação (ex. `auth.login`, e falhas se registadas) usam:
+
+- **timestamps consistentes** (UTC / padrão da plataforma);
+- **metadados mínimos** necessários para segurança e conformidade;
+- **sem** passwords, tokens ou PII desnecessária — alinhado aos princípios de privacidade da plataforma.
+
+#### Acessibilidade
+
+Teclado, labels, leitores de ecrã, foco no primeiro erro; controlo Mostrar/Ocultar acessível.
 
 #### Critérios de aceitação
 
-- [ ] Honra `next` seguro após checks
-- [ ] Não re-autentica quem já tem sessão completa (Landing CTAs → app)
-- [ ] Erros claros e orientados para solução
-- [ ] Feedback imediato no submit
+- [ ] Objectivo emocional: familiaridade e continuidade registados e cumpridos na UX
+- [ ] Sessão válida → sem segundo pedido de auth em **qualquer** entry point
+- [ ] Destino directo quando condições OK (sem intermédios desnecessários)
+- [ ] Utilizador **nunca perde o contexto** de navegação após auth (`next`)
+- [ ] Login em **poucos segundos** com credenciais correctas
+- [ ] Mostrar/Ocultar password; paste; password managers
+- [ ] Erros no padrão das 3 perguntas; anti-enumeração email/password
+- [ ] Rate limiting (ou equivalente) activo
+- [ ] Mensagens = Identidade Oficial Kuteka; i18n-ready
+- [ ] Auditoria com timestamps consistentes + metadata mínima
+- [ ] Utilizador sente que **retomou** a atividade, não que iniciou um processo novo
+- [ ] Conclusão sem suporte
 
 #### Oportunidades futuras
 
-- OAuth “Continuar com Google/Apple”
-- MFA step-up
-- “Lembrar neste dispositivo” (avaliar segurança)
+- OAuth; MFA; gestão de sessões em múltiplos dispositivos
 
 ---
 
@@ -1096,27 +1158,27 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 └──────────────────────────────────────────────┘
 ```
 
-### 18.3 Login — `/auth/entrar`
+### 18.3 Login — `/auth/entrar` (F3 aprovado)
 
 ```
 ┌──────────────────────────────────────────────┐
 │  Kuteka                                      │
 │                                              │
 │  Entrar                                      │
+│  Regresse ao seu espaço na Kuteka.           │
 │                                              │
 │  Email                                       │
 │  ┌────────────────────────────────────────┐  │
 │  │                                        │  │
 │  └────────────────────────────────────────┘  │
-│  Password                                    │
+│  Password                    [ Mostrar ]     │
 │  ┌────────────────────────────────────────┐  │
-│  │                                        │  │
+│  │  (colar e password managers OK)        │  │
 │  └────────────────────────────────────────┘  │
 │                                              │
-│  [ Entrar               ]                    │
+│  [ Entrar ]  → destino directo se tudo OK    │
 │                                              │
-│  Esqueceu a password?                        │
-│  Criar conta                                 │
+│  Esqueceu a password? · Criar conta          │
 └──────────────────────────────────────────────┘
 ```
 
@@ -1265,7 +1327,8 @@ sequenceDiagram
 | 0.3 | 2026-07-30 | Bloco 1: D1–D12 fechados; princípios uma-conta/multi-papel |
 | 0.4 | 2026-07-30 | Princípio UX + template fluxos F1–F6 |
 | 0.5 | 2026-07-30 | F1 Registo **aprovado** |
-| 0.6 | 2026-07-30 | F2 Verify **aprovado**; princípio global de erro guiado; i18n-ready copy |
+| 0.6 | 2026-07-30 | F2 Verify **aprovado**; erro guiado; i18n-ready |
+| 0.7 | 2026-07-30 | F3 Login **aprovado** (continuidade, password UX, rate limit, narrativa F1–F3) |
 
 ---
 
@@ -1275,15 +1338,16 @@ sequenceDiagram
 | ----- | ------- | ------ |
 | 1 | Decisões D1–D12 + princípios de plataforma | ✅ **Encerrado** |
 | 2 | Fluxos principais (validação UX) | ▶️ Em curso |
-| 2 · F1 Registo | Validação experiência | ✅ **Aprovado** |
-| 2 · F2 Verificar email | Validação experiência | ✅ **Aprovado** |
-| 2 · F3 Login | Validação experiência | ▶️ A seguir |
-| 2 · F4–F6 | — | Pendente (um de cada vez) |
+| 2 · F1 Registo | Confiança | ✅ **Aprovado** |
+| 2 · F2 Verificar email | Segurança | ✅ **Aprovado** |
+| 2 · F3 Login | Continuidade | ✅ **Aprovado** |
+| 2 · F4 Logout | — | ▶️ A seguir |
+| 2 · F5–F6 | — | Pendente |
 | 2 · Revisão global | Consistência entre fluxos | Após F1–F6 |
 | 3 | Casos limite (detalhe) | Pendente |
 | 4 | Critérios + wireframes finais | Pendente |
 | — | Aprovação oficial integral → implementação | Bloqueada |
 
-**Pedido imediato:** rever **F3 — Login** no formato de acompanhamento do utilizador.
+**Pedido imediato:** rever **F4 — Logout** no formato de acompanhamento do utilizador.
 
 Até aprovação integral: **nenhuma implementação**.
