@@ -13,7 +13,7 @@ A equipa concorda que:
 2. Os bloqueios remanescentes são **exclusivamente de infraestrutura e operacionalização** — não de arquitectura nem de implementação de produto.
 3. O **P0 está concluído do ponto de vista técnico** (P0-1 / P0-2 aprovados e em `main`).
 4. A **especificação do PRD-001** está autorizada a continuar / aprofundar.
-5. A **implementação do PRD-001 não está autorizada** até revisão e aprovação oficial da spec **e** resolução das pendências de infra listadas abaixo.
+5. A **implementação do PRD-001 não está autorizada** até **Engineering Gate** (P1+P2) + **Autorização de Implementação** (Fase 2). A **Aprovação Funcional** (Fase 1) já foi concedida (v1.0).
 
 ---
 

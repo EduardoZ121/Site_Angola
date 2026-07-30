@@ -1149,7 +1149,7 @@ Reutilizar: `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/t
 
 ## 15. Bloco 3 — Casos limite
 
-**Estado:** ✅ **Encerrado** (aprovação PO 2026-07-30) · Implementação bloqueada até aprovação integral  
+**Estado:** ✅ **Encerrado** (aprovação PO 2026-07-30) · Implementação bloqueada até Engineering Gate + Fase 2  
 **Metodologia:** Arquitecto Principal / Guardião da Consistência (`DEVELOPMENT_PROCESS.md`)  
 **Âmbito da revisão que fechou o bloco:** consistência, desambiguação e implementabilidade — **sem** novas funcionalidades nem alteração de D1–D12 / F1–F6.
 
@@ -1776,7 +1776,7 @@ sequenceDiagram
 | **Principais riscos remanescentes** | Implementação do middleware R1; interpretação incorrecta da allowlist §16.6; deliverability de email; desvio visual se DS oficial divergir do que está implícito em `@kuteka/ui`.                                                                                                                                                                                                                                                                                        |
 | **Dívidas técnicas ou documentais** | Versionar Manual/Blueprint/DS no repo; ADR-004 + migration da RPC na fase de implementação; activação CI / `0002`.                                                                                                                                                                                                                                                                                                                                                       |
 | **Decisões adiadas**                | As de §15.3; dashboards reais; UI gestão de papéis; OAuth/MFA.                                                                                                                                                                                                                                                                                                                                                                                                           |
-| **Recomendação**                    | **Aprovar** — **cumprida** (PO 2026-07-30). Segue pedido de **aprovação integral** do PRD-001.                                                                                                                                                                                                                                                                                                                                                                           |
+| **Recomendação**                    | **Aprovar** — **cumprida** (PO 2026-07-30). Aprovação Funcional do PRD concedida em seguida; implementação só após Engineering Gate + Fase 2.                                                                                                                                                                                                                                                                                                                            |
 
 ---
 
