@@ -39,7 +39,7 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 2. Presença real de workflow CI no remote vs ficheiro-fonte em `docs/engineering/`.
 3. Estado documental da migration `0002` (existe no repo; aplicação no **remoto** não verificável daqui sem credenciais Supabase).
 4. Domínio `kutekalink.com` vs Landing em `gh-pages`.
-5. Separação Aprovação Funcional (já concedida) vs Autorização de Implementação (pendente).
+5. Separação Aprovação Funcional (já concedida) vs Autorização de Implementação (condicional §12; activa com P1+P2).
 
 ---
 
