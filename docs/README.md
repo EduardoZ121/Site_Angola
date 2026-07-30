@@ -11,25 +11,26 @@
 
 ## Oficiais / activos
 
-| Documento                                                                                                                | Função                                                      |
-| ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
-| [`AI_CONTEXT.md`](AI_CONTEXT.md)                                                                                         | Memória permanente da equipa                                |
-| [`engineering/DEVELOPMENT_PROCESS.md`](engineering/DEVELOPMENT_PROCESS.md)                                               | Processo, autonomia, N1–N5, duas fases PRD                  |
-| [`proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`](proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md)                       | Identidade oficial                                          |
-| [`proposals/PRD_001_AUTHENTICATION_SPEC.md`](proposals/PRD_001_AUTHENTICATION_SPEC.md)                                   | **PRD-001 v1.0** — referência oficial (Aprovação Funcional) |
-| [`backlog/PRD_001_ENGINEERING_GATE.md`](backlog/PRD_001_ENGINEERING_GATE.md)                                             | Gate técnico pré-implementação (aberto até P1+P2)           |
-| [`backlog/PRD_001_IMPLEMENTATION_READINESS.md`](backlog/PRD_001_IMPLEMENTATION_READINESS.md)                             | Pack de arranque (diferido — só após Fase 2)                |
-| [`backlog/PHASE_GATE_BEFORE_PRD001.md`](backlog/PHASE_GATE_BEFORE_PRD001.md)                                             | Gate de fase pré-spec (histórico + ponteiros)               |
-| [`architecture/ADR-001-foundation-architecture-decisions.md`](architecture/ADR-001-foundation-architecture-decisions.md) | Fundação                                                    |
-| [`architecture/README.md`](architecture/README.md)                                                                       | Índice de ADRs                                              |
-| [`architecture/ADR-002-landing-page-implementation.md`](architecture/ADR-002-landing-page-implementation.md)             | Landing                                                     |
-| [`architecture/ADR-003-p0-pre-auth-hardening.md`](architecture/ADR-003-p0-pre-auth-hardening.md)                         | P0 RBAC/audit                                               |
-| [`database/PERMISSIONS_MATRIX.md`](database/PERMISSIONS_MATRIX.md)                                                       | Matriz de permissões                                        |
-| [`security/AUDIT_LOGS_CHECKLIST.md`](security/AUDIT_LOGS_CHECKLIST.md)                                                   | Checklist P0 audit + RBAC                                   |
-| [`engineering/github-workflows/README.md`](engineering/github-workflows/README.md)                                       | Activação CI (P1)                                           |
-| [`engineering/CODE_REVIEW.md`](engineering/CODE_REVIEW.md)                                                               | Checklist de code review                                    |
-| [`engineering/DEPLOY_STATUS_2026-07-30.md`](engineering/DEPLOY_STATUS_2026-07-30.md)                                     | Estado domínio / Pages (ops)                                |
-| [`backlog/P0_ACTIVATION_RUNBOOK.md`](backlog/P0_ACTIVATION_RUNBOOK.md)                                                   | Atalho ops P1/P2 → Gate §8                                  |
+| Documento                                                                                                                | Função                                                             |
+| ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ |
+| [`AI_CONTEXT.md`](AI_CONTEXT.md)                                                                                         | Memória permanente da equipa                                       |
+| [`engineering/DEVELOPMENT_PROCESS.md`](engineering/DEVELOPMENT_PROCESS.md)                                               | Processo, autonomia, N1–N5, duas fases PRD                         |
+| [`proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`](proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md)                       | Identidade oficial                                                 |
+| [`proposals/PRD_001_AUTHENTICATION_SPEC.md`](proposals/PRD_001_AUTHENTICATION_SPEC.md)                                   | **PRD-001 v1.0** — referência oficial (Aprovação Funcional)        |
+| [`backlog/PRD_001_ENGINEERING_GATE.md`](backlog/PRD_001_ENGINEERING_GATE.md)                                             | Gate técnico pré-implementação (aberto até P1+P2)                  |
+| [`backlog/PO_ACTION_P1_P2.md`](backlog/PO_ACTION_P1_P2.md)                                                               | Checklist mínimo humano para fechar P1+P2 (após tentativa autónom) |
+| [`backlog/PRD_001_IMPLEMENTATION_READINESS.md`](backlog/PRD_001_IMPLEMENTATION_READINESS.md)                             | Pack de arranque (diferido — só após Fase 2)                       |
+| [`backlog/PHASE_GATE_BEFORE_PRD001.md`](backlog/PHASE_GATE_BEFORE_PRD001.md)                                             | Gate de fase pré-spec (histórico + ponteiros)                      |
+| [`architecture/ADR-001-foundation-architecture-decisions.md`](architecture/ADR-001-foundation-architecture-decisions.md) | Fundação                                                           |
+| [`architecture/README.md`](architecture/README.md)                                                                       | Índice de ADRs                                                     |
+| [`architecture/ADR-002-landing-page-implementation.md`](architecture/ADR-002-landing-page-implementation.md)             | Landing                                                            |
+| [`architecture/ADR-003-p0-pre-auth-hardening.md`](architecture/ADR-003-p0-pre-auth-hardening.md)                         | P0 RBAC/audit                                                      |
+| [`database/PERMISSIONS_MATRIX.md`](database/PERMISSIONS_MATRIX.md)                                                       | Matriz de permissões                                               |
+| [`security/AUDIT_LOGS_CHECKLIST.md`](security/AUDIT_LOGS_CHECKLIST.md)                                                   | Checklist P0 audit + RBAC                                          |
+| [`engineering/github-workflows/README.md`](engineering/github-workflows/README.md)                                       | Activação CI (P1)                                                  |
+| [`engineering/CODE_REVIEW.md`](engineering/CODE_REVIEW.md)                                                               | Checklist de code review                                           |
+| [`engineering/DEPLOY_STATUS_2026-07-30.md`](engineering/DEPLOY_STATUS_2026-07-30.md)                                     | Estado domínio / Pages (ops)                                       |
+| [`backlog/P0_ACTIVATION_RUNBOOK.md`](backlog/P0_ACTIVATION_RUNBOOK.md)                                                   | Atalho ops P1/P2 → Gate §8                                         |
 
 ## Encerrados / histórico (não substituem o PRD-001)
 

@@ -66,7 +66,7 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 | --- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
 | P1  | Activar `.github/workflows/ci.yml` no remote e obter pipeline **verde**                           | **Bloqueante**                                                              | Requer token GitHub com scope `workflow`; agent Cloud sem esse scope não consegue activar sozinho |
 | P2  | Aplicar migration `0002` no **Supabase remoto** (ambientes relevantes)                            | **Bloqueante**                                                              | Ficheiro existe; aplicação remota não confirmada neste ambiente                                   |
-| P3  | Autorização explícita do PO para implementação (Fase 2)                                           | **Bloqueante**                                                              | Só após este Gate estar verde / aprovado                                                          |
+| P3  | Autorização de Implementação (Fase 2)                                                             | **Condicional ✅** (PO 2026-07-30)                                          | Activa-se automaticamente com P1+P2 evidentes (§12); sem nova confirmação                         |
 | P4  | Templates de email Auth (verify / reset) com marca Kuteka + redirect URLs allowlisted no Supabase | **Bloqueante para go-live auth**; desejável antes de começar UI se possível | Ops Supabase (§16.1 / §5.3)                                                                       |
 | P5  | `kutekalink.com` a servir Landing KEOS (DNS / Render)                                             | **Não bloqueante** para começar código auth em preview                      | Bloqueia experiência pública coerente; ver DEPLOY_STATUS                                          |
 
@@ -92,19 +92,19 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 | GitHub token com scope `workflow`                      | Ops / admin repo | ⏳ Necessário para P1                  |
 | Projecto Supabase (remoto) + permissão para migrations | Ops / backend    | ⏳ Necessário para P2 / P4             |
 | DNS GoDaddy ou reparação Render                        | Ops              | ⏳ P5 (não bloqueia código em preview) |
-| Aprovação PO Fase 2                                    | Product Owner    | ⏳ Após Gate                           |
+| Autorização PO Fase 2 (condicional)                    | Product Owner    | ✅ Pré-emitida (§12); activa com P1+P2 |
 
 ---
 
 ## 6. Mapa Gate 16.1 (PRD)
 
-| Critério §16.1                                               | Estado                               |
-| ------------------------------------------------------------ | ------------------------------------ |
-| Spec integralmente aprovada (Blocos 1–4 + aprovação oficial) | ✅ **Aprovação Funcional** concedida |
-| CI definitivamente activo e verde                            | ❌ Pendente (P1)                     |
-| Migration `0002` aplicada no remoto                          | ❌ Não confirmado (P2)               |
-| Autorização explícita de implementação                       | ❌ Pendente (P3)                     |
-| Templates email + redirect allowlist Supabase                | ❌ Pendente (P4)                     |
+| Critério §16.1                                               | Estado                                  |
+| ------------------------------------------------------------ | --------------------------------------- |
+| Spec integralmente aprovada (Blocos 1–4 + aprovação oficial) | ✅ **Aprovação Funcional** concedida    |
+| CI definitivamente activo e verde                            | ❌ Pendente (P1)                        |
+| Migration `0002` aplicada no remoto                          | ❌ Não confirmado (P2)                  |
+| Autorização de implementação                                 | ⏳ Condicional (§12) — activa com P1+P2 |
+| Templates email + redirect allowlist Supabase                | ❌ Pendente (P4)                        |
 
 **Conclusão parcial:** a metade **funcional** do gate está fechada; a metade **técnica/ops** está aberta.
 
@@ -112,12 +112,12 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 ## 7. Recomendação técnica final
 
-| Pergunta                                    | Resposta                                                                                                                                                           |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| O PRD-001 está aprovado funcionalmente?     | **Sim** — referência oficial                                                                                                                                       |
-| O Engineering Gate está pronto para fechar? | **Não** — P1 e P2 (e P3) em aberto                                                                                                                                 |
-| Pode iniciar-se a implementação agora?      | **Não**                                                                                                                                                            |
-| Recomendação                                | **Não aprovar** a Autorização de Implementação até P1 + P2 estarem verificados. Aprovar este documento como **diagnóstico oficial** do Gate e executar o plano §8. |
+| Pergunta                                    | Resposta                                                                                                                                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| O PRD-001 está aprovado funcionalmente?     | **Sim** — referência oficial                                                                                                             |
+| O Engineering Gate está pronto para fechar? | **Não** — P1 e P2 em aberto (P3 já condicional)                                                                                          |
+| Pode iniciar-se a implementação agora?      | **Não** — falta evidência P1+P2 (autorização condicional já emitida)                                                                     |
+| Recomendação                                | Fechar **P1 + P2** com evidência objectiva (§8). A Autorização de Implementação **já está pré-emitida** (§12) e activa-se nesse momento. |
 
 ---
 
@@ -148,7 +148,7 @@ Passos:
 | Commit SHA | _pendente_ |
 | Data       | _pendente_ |
 
-Última re-verificação objectiva P1 (Líder Técnico): **2026-07-30** — `.github/workflows/ci.yml` ausente; Actions API: apenas Deploy Kuteka + pages-build-deployment. P1 permanece ❌.
+Última re-verificação objectiva P1 (Líder Técnico): **2026-07-30 (tarde)** — tentativa autónom falhada (§13). Commit local `ci: enable KEOS quality workflow` preparado; **push rejeitado** (`refusing to allow a Personal Access Token to create or update workflow … without workflow scope`). Token activo: scopes `repo` apenas. Actions API: só Deploy Kuteka + pages-build-deployment. P1 permanece ❌.
 
 ### 8.2 P2 — Migration `0002` no Supabase remoto (bloqueante)
 
@@ -164,7 +164,7 @@ Passos:
 | Aplicado por | _pendente_ |
 | Checklist    | _pendente_ |
 
-Última re-verificação objectiva P2 (Líder Técnico): **2026-07-30** — sem credenciais Supabase neste ambiente; aplicação remota **não comprovável**. P2 permanece ❌.
+Última re-verificação objectiva P2 (Líder Técnico): **2026-07-30 (tarde)** — `apps/web/.env.local` só placeholders; sem `SUPABASE_*` reais no ambiente Cloud; Docker ausente (não há stack local substituto do remoto); Render API / GoDaddy API → **401**. P2 permanece ❌.
 
 ### 8.3 Paralelo (não fecha o Gate sozinho)
 
@@ -193,7 +193,7 @@ Decisão PO (2026-07-30): **assim que P1 e P2 tiverem evidência objectiva neste
 | **Principais riscos remanescentes** | Contornar P1/P2; implementar sem rede CI; RPC em falta no remoto                                                                                                                                             |
 | **Dívidas técnicas ou documentais** | Evidências P1/P2; Manual/Blueprint/DS fora do repo                                                                                                                                                           |
 | **Decisões adiadas**                | Autorização de Implementação; ADR-004 na fase de código                                                                                                                                                      |
-| **Recomendação**                    | Diagnóstico **aprovado** (cumprido). Manter Gate **aberto**. Executar §8.1–§8.2. **Não** autorizar implementação.                                                                                            |
+| **Recomendação**                    | Diagnóstico **aprovado**. Manter Gate **aberto**. Executar §8.1–§8.2 via `PO_ACTION_P1_P2.md`. Autorização já condicional (§12) — **não** implementar até P1+P2.                                             |
 
 ---
 
@@ -204,13 +204,13 @@ Decisão PO (2026-07-30): **assim que P1 e P2 tiverem evidência objectiva neste
 | Aprovação Funcional PRD-001      | ✅ Oficial                                                      |
 | Diagnóstico Engineering Gate     | ✅ **Aprovado pelo PO** (2026-07-30)                            |
 | Engineering Gate (fecho / verde) | ▶️ **Aberto** — aguarda P1 + P2                                 |
-| Autorização de Implementação     | ❌ Não emitida                                                  |
+| Autorização de Implementação     | ⏳ Condicional (§12) — aguarda P1+P2                            |
 | Maturidade do módulo auth        | Pré-N4                                                          |
 | Papel técnico                    | Arquitecto Principal + Líder Técnico (`DEVELOPMENT_PROCESS.md`) |
 
-**Próximo passo lógico (condução técnica):** fecho operacional de **P1** e **P2** por quem tenha credenciais (`workflow` + Supabase). O Líder Técnico reavaliará o Gate assim que existirem evidências — sem marcar verde por antecipação.
+**Próximo passo lógico (condução técnica):** fecho operacional de **P1** e **P2** por quem tenha credenciais (`workflow` + Supabase). Checklist mínimo: `docs/backlog/PO_ACTION_P1_P2.md`. O Líder Técnico reavaliará o Gate assim que existirem evidências — sem marcar verde por antecipação.
 
-Até P1+P2 verificados + Fase 2: **nenhuma implementação**.
+Até P1+P2 verificados: **nenhuma implementação**. Com P1+P2 ✅: implementação inicia de imediato (§12).
 
 ---
 
@@ -231,7 +231,7 @@ O Líder Técnico esgotou o trabalho **seguro e útil** que pode fazer **sem** c
 | -------------------------------------- | ----------------------------------------------------- |
 | P1 — activar CI (`workflow` scope)     | Ops / humano com PAT adequado                         |
 | P2 — aplicar `0002` no Supabase remoto | Ops / humano com acesso Supabase                      |
-| P3 — Autorização de Implementação      | **Product Owner**                                     |
+| P3 — Autorização de Implementação      | ✅ Condicional (§12); activa com P1+P2                |
 | P4/P5 — templates Auth / DNS           | Ops (P4 desejável; P5 não bloqueia código pós-Fase 2) |
 
 **Próximo passo do projecto:** fecho operacional de **P1 + P2** → actualizar este Gate (verde) → **Autorização de Implementação activa-se** → activar `PRD_001_IMPLEMENTATION_READINESS.md` e implementar até N5.
@@ -257,3 +257,24 @@ O Product Owner:
 | Autorização condicional registada | ✅ 2026-07-30                   |
 | Condição                          | P1 ✅ + P2 ✅ (evidência em §8) |
 | Implementação agora               | ❌ (condição não cumprida)      |
+
+---
+
+## 13. Tentativa autónom “faça você mesmo” (2026-07-30)
+
+Pedido do PO: executar P1/P2 sem esperar passos manuais. O Líder Técnico esgotou as vias disponíveis neste ambiente Cloud:
+
+| Tentativa                                             | Resultado                                                       |
+| ----------------------------------------------------- | --------------------------------------------------------------- |
+| `./scripts/enable-github-ci.sh` + commit `ci.yml`     | ✅ Local                                                        |
+| `git push` com PAT EduardoZ121                        | ❌ Rejeitado — falta scope **`workflow`** (só `repo`)           |
+| Push / Contents API com token `cursor[bot]`           | ❌ 403 — sem permissão no repo                                  |
+| Secrets GitHub do repo                                | Só `RENDER_DEPLOY_HOOK_URL` — sem Supabase                      |
+| Env Cloud (`SUPABASE_*`, `.env.local`)                | Placeholders / ausentes                                         |
+| Docker + Supabase local como proxy de P2              | Docker **não instalado**; P2 exige **remoto** de qualquer forma |
+| Render API (`RENDER_API_KEY`) / GoDaddy (`GODADDY_*`) | **401 Unauthorized** — credenciais inválidas ou expiradas       |
+| Marcar P1/P2 ✅ sem evidência                         | **Recusado** (regra do Gate)                                    |
+
+**Conclusão:** o tecto autónomo para fechar o Gate **foi atingido**. P1 e P2 só fecham com acção humana mínima documentada em `docs/backlog/PO_ACTION_P1_P2.md` (estimativa: poucos minutos com PAT `workflow` + acesso SQL Supabase).
+
+Após o PO colar evidências em §8.1–§8.2 (ou o Líder Técnico as verificar via API), a implementação arranca sem nova confirmação.
