@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 **v1.0** Aprovação Funcional ✅ · Engineering Gate diagnóstico ✅ / fecho ▶️ P1+P2 · implementação ❌)  
+**Estado:** Activo (PRD-001 v1.0 Aprovação Funcional ✅ · Eng Gate aberto P1+P2 · tecto autónomo no eixo auth atingido · implementação ❌)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  

@@ -5,7 +5,7 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** Diagnóstico ✅ **aprovado pelo PO** (2026-07-30) · Gate **permanece ABERTO** até P1+P2 · Autorização de Implementação ❌  
+**Estado:** Diagnóstico ✅ · Gate **ABERTO** (P1+P2) · Tecto autónomo do Líder Técnico **atingido** · Autorização de Implementação ❌  
 **Maturidade deste documento:** Diagnóstico N3 aprovado · Gate operacional **não verde**
 
 ---
@@ -207,3 +207,29 @@ Passos:
 **Próximo passo lógico (condução técnica):** fecho operacional de **P1** e **P2** por quem tenha credenciais (`workflow` + Supabase). O Líder Técnico reavaliará o Gate assim que existirem evidências — sem marcar verde por antecipação.
 
 Até P1+P2 verificados + Fase 2: **nenhuma implementação**.
+
+---
+
+## 11. Tecto da autonomia técnica (2026-07-30)
+
+O Líder Técnico esgotou o trabalho **seguro e útil** que pode fazer **sem** contornar P1/P2 e **sem** Autorização de Implementação:
+
+| Feito sob autonomia                                         | Estado |
+| ----------------------------------------------------------- | ------ |
+| Spec PRD-001 Aprovação Funcional + blocos 1–4               | ✅     |
+| Metodologia (duas fases, N1–N5, autonomia permanente)       | ✅     |
+| Diagnóstico Engineering Gate + runbooks P1/P2               | ✅     |
+| Índice docs, CONTRIBUTING, ADR-004 diferido, readiness pack | ✅     |
+| Qualidade local (lint / format / typecheck / test)          | ✅     |
+| Correcções de consistência / legado / naming                | ✅     |
+
+| Bloqueado fora desta autonomia         | Owner                                                 |
+| -------------------------------------- | ----------------------------------------------------- |
+| P1 — activar CI (`workflow` scope)     | Ops / humano com PAT adequado                         |
+| P2 — aplicar `0002` no Supabase remoto | Ops / humano com acesso Supabase                      |
+| P3 — Autorização de Implementação      | **Product Owner**                                     |
+| P4/P5 — templates Auth / DNS           | Ops (P4 desejável; P5 não bloqueia código pós-Fase 2) |
+
+**Próximo passo do projecto:** fecho operacional de **P1 + P2** → actualizar este Gate → PO emite **Autorização de Implementação** → activar `PRD_001_IMPLEMENTATION_READINESS.md`.
+
+Até lá, o fluxo autónomo no eixo PRD-001 **não pode avançar para código** sem violar a metodologia.

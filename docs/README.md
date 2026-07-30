@@ -18,6 +18,7 @@
 | [`proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`](proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md)                       | Identidade oficial                                          |
 | [`proposals/PRD_001_AUTHENTICATION_SPEC.md`](proposals/PRD_001_AUTHENTICATION_SPEC.md)                                   | **PRD-001 v1.0** — referência oficial (Aprovação Funcional) |
 | [`backlog/PRD_001_ENGINEERING_GATE.md`](backlog/PRD_001_ENGINEERING_GATE.md)                                             | Gate técnico pré-implementação (aberto até P1+P2)           |
+| [`backlog/PRD_001_IMPLEMENTATION_READINESS.md`](backlog/PRD_001_IMPLEMENTATION_READINESS.md)                             | Pack de arranque (diferido — só após Fase 2)                |
 | [`backlog/PHASE_GATE_BEFORE_PRD001.md`](backlog/PHASE_GATE_BEFORE_PRD001.md)                                             | Gate de fase pré-spec (histórico + ponteiros)               |
 | [`architecture/ADR-001-foundation-architecture-decisions.md`](architecture/ADR-001-foundation-architecture-decisions.md) | Fundação                                                    |
 | [`architecture/README.md`](architecture/README.md)                                                                       | Índice de ADRs                                              |
