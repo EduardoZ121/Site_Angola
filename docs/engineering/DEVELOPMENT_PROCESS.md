@@ -2,7 +2,7 @@
 
 **Estado:** Activo  
 **Aprovado:** Encerramento FASE 1 (2026-07-29)  
-**Actualização:** 2026-07-30 — Arquitecto Principal + Autoavaliação obrigatória por bloco
+**Actualização:** 2026-07-30 — Escala de maturidade N1–N5 + factores se confiança < 95%
 
 ## Ciclo padrão (todos os módulos)
 
@@ -59,20 +59,39 @@ A partir de 2026-07-30, o agente de desenvolvimento actua como **Arquitecto Prin
 3. Conflitos / ambiguidades encontrados
 4. Como foram resolvidos (e fundamento)
 5. Nível de confiança de alinhamento com a visão Kuteka
+6. Nível de maturidade (escala abaixo)
+
+### Escala de maturidade (uniforme — PRDs, ADRs, docs importantes)
+
+| Nível  | Nome                      | Significado                                                      |
+| ------ | ------------------------- | ---------------------------------------------------------------- |
+| **N1** | Rascunho                  | Ideia inicial; incompleto; não pronto para revisão formal        |
+| **N2** | Em revisão                | Em elaboração / iteração activa com a equipa                     |
+| **N3** | Candidato                 | Auto-revisado; apresentado para aprovação do PO                  |
+| **N4** | Pronto para implementação | Spec aprovada; gate de implementação cumprido (quando aplicável) |
+| **N5** | Implementado e validado   | Código entregue + 4 níveis de encerramento cumpridos             |
+
+Usar esta classificação em conjunto com a percentagem de confiança em todas as Autoavaliações.
 
 ### Autoavaliação do Arquitecto (obrigatória ao fechar um bloco importante)
 
 Sempre que um bloco relevante de especificação / PRD / ADR de produto for concluído ou apresentado como candidata final, incluir secção **«Autoavaliação do Arquitecto»** com:
 
-| Campo                           | Conteúdo                                                 |
-| ------------------------------- | -------------------------------------------------------- |
-| Nível de confiança              | Percentagem (0–100%)                                     |
-| Principais riscos remanescentes | Lista curta e concreta                                   |
-| Dívidas técnicas ou documentais | Lacunas conhecidas (ex.: docs não versionados)           |
-| Decisões adiadas                | O que fica para fases futuras (e porquê)                 |
-| Recomendação                    | **Aprovar** · **Aprovar com reservas** · **Não aprovar** |
+| Campo                           | Conteúdo                                                                                          |
+| ------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Nível de maturidade             | N1–N5 (escala acima)                                                                              |
+| Nível de confiança              | Percentagem (0–100%)                                                                              |
+| Factores < 95%                  | **Obrigatório se confiança < 95%:** listar explicitamente o que impede ≥95% (sem inflacionar a %) |
+| Principais riscos remanescentes | Lista curta e concreta                                                                            |
+| Dívidas técnicas ou documentais | Lacunas conhecidas (ex.: docs não versionados)                                                    |
+| Decisões adiadas                | O que fica para fases futuras (e porquê)                                                          |
+| Recomendação                    | **Aprovar** · **Aprovar com reservas** · **Não aprovar**                                          |
 
-Esta autoavaliação faz parte do processo normal de revisão da Kuteka — não é opcional.
+Regras:
+
+1. A autoavaliação faz parte do processo normal — não é opcional.
+2. **Não** aumentar artificialmente a percentagem de confiança.
+3. Se confiança < 95%, os factores devem ser específicos e verificáveis.
 
 ### Quando pedir intervenção do Product Owner
 
@@ -110,7 +129,7 @@ Caso contrário: analisar, propor a melhor solução, fundamentar com documentos
    - backlog técnico organizado.
 4. Propor melhorias significativas **antes** de implementar; evitar retrabalho cosmético.
 5. Pendências infra P0 (CI, migration `0002`) e domínio são ops — não bloqueiam especificação; **bloqueiam implementação** do PRD-001 até gate.
-6. A metodologia global está madura; alterações ao processo só por decisão explícita do PO (como esta de 2026-07-30).
+6. A metodologia global está madura; alterações ao processo só por decisão explícita do PO (como as de 2026-07-30).
 
 ## Referências
 

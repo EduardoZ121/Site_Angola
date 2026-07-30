@@ -21,32 +21,32 @@ A equipa concorda que:
 
 **Sim.** FASE 1, Landing e P0 técnico integrados em `main`.
 
-| Entrega | Estado |
-| ------- | ------ |
-| FASE 1 — Infraestrutura KEOS | ✅ Merged |
-| Landing Page (PASSO 1 + 1A) | ✅ Merged |
-| P0-1 / P0-2 (RBAC + audit) | ✅ Merged · aprovados tecnicamente |
-| Publish path Landing → `gh-pages` | ✅ Em `main` |
+| Entrega                           | Estado                             |
+| --------------------------------- | ---------------------------------- |
+| FASE 1 — Infraestrutura KEOS      | ✅ Merged                          |
+| Landing Page (PASSO 1 + 1A)       | ✅ Merged                          |
+| P0-1 / P0-2 (RBAC + audit)        | ✅ Merged · aprovados tecnicamente |
+| Publish path Landing → `gh-pages` | ✅ Em `main`                       |
 
 ---
 
 ## 2. Deploy / publicação da Landing
 
-| Alvo | Estado |
-| ---- | ------ |
-| Landing KEOS implementada | ✅ |
-| Publicada em `gh-pages` (GitHub Pages) | ✅ |
+| Alvo                                   | Estado                     |
+| -------------------------------------- | -------------------------- |
+| Landing KEOS implementada              | ✅                         |
+| Publicada em `gh-pages` (GitHub Pages) | ✅                         |
 | `kutekalink.com` a servir Landing KEOS | ⏳ Pendente (DNS / Render) |
 
 ---
 
 ## 3. P0 — entendimento oficial
 
-| Dimensão | Estado |
-| -------- | ------ |
-| P0 técnico (código, testes, aprovação P0-1/P0-2) | ✅ **Concluído** |
-| Activação definitiva do CI no GitHub | ⏳ Operacional |
-| Aplicação da migration `0002` no Supabase remoto | ⏳ Operacional |
+| Dimensão                                          | Estado                       |
+| ------------------------------------------------- | ---------------------------- |
+| P0 técnico (código, testes, aprovação P0-1/P0-2)  | ✅ **Concluído**             |
+| Activação definitiva do CI no GitHub              | ⏳ Operacional               |
+| Aplicação da migration `0002` no Supabase remoto  | ⏳ Operacional               |
 | Encerramento documental “P0 oficialmente fechado” | ⏳ Após as duas linhas acima |
 
 ---
@@ -63,11 +63,11 @@ Estas pendências **devem ser resolvidas antes da implementação do PRD-001**, 
 
 ## 5. Autorização PRD-001
 
-| Actividade | Autorizado? |
-| ---------- | ----------- |
-| Elaboração / aprofundamento da especificação funcional e técnica | ✅ **Sim** |
-| Revisão de negócio da spec | ✅ **Sim** (próximo passo após entrega) |
-| Qualquer implementação / código de auth de produto | ❌ **Não** — até aprovação oficial da spec + infra acima |
+| Actividade                                                       | Autorizado?                                              |
+| ---------------------------------------------------------------- | -------------------------------------------------------- |
+| Elaboração / aprofundamento da especificação funcional e técnica | ✅ **Sim**                                               |
+| Revisão de negócio da spec                                       | ✅ **Sim** (próximo passo após entrega)                  |
+| Qualquer implementação / código de auth de produto               | ❌ **Não** — até aprovação oficial da spec + infra acima |
 
 Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`
 
@@ -82,9 +82,13 @@ Especificação → Aprovação → Implementação → Auto-Revisão Técnica
 → Testes → Validação → Aprovação Final → Próxima Fase
 ```
 
-
 ---
 
 ## Metodologia (2026-07-30)
 
-O agente actua como **Arquitecto Principal e Guardião da Consistência** — ver `docs/engineering/DEVELOPMENT_PROCESS.md`. Auto-revisão obrigatória antes de cada versão candidata; PO só em decisões de negócio / conflitos / estratégia.
+O agente actua como **Arquitecto Principal e Guardião da Consistência** — ver `docs/engineering/DEVELOPMENT_PROCESS.md`.
+
+- Auto-revisão obrigatória antes de cada versão candidata.
+- Autoavaliação com **maturidade N1–N5** + confiança %; se confiança < 95%, listar factores.
+- PO só em decisões de negócio / conflitos / estratégia.
+- Implementação do PRD-001 **bloqueada** até aprovação integral da spec + pendências infra acima.

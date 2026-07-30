@@ -1,8 +1,9 @@
 # PRD-001 — Authentication & User Management
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
-**Versão:** 1.0-rc3  
-**Estado:** 📄 Em revisão · Blocos 1–2 ✅ · Bloco 3 candidata final · **Implementação não autorizada**  
+**Versão:** 1.0-rc4  
+**Estado:** 📄 Em revisão · Blocos 1–3 ✅ · Bloco 4 candidata · **Implementação não autorizada**  
+**Maturidade do documento:** **N3 — Candidato** (N4 só após aprovação integral + gate infra)  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
 **Gate:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
@@ -20,8 +21,9 @@
 | Elaboração / ajuste desta spec           | **Autorizada**                                            |
 | Implementação                            | **Não autorizada** até aprovação oficial integral da spec |
 | Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                        |
-| Bloco 2 — Fluxos principais              | F1–F6 ✅ · revisão global ✅ — ver §6 e §6.8              |
-| Bloco 3 — Casos limite                   | ▶️ Candidata final (§15) — aguarda decisão PO             |
+| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8                  |
+| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                        |
+| Bloco 4 — Critérios finais + wireframes  | ▶️ Candidata (§16–§18)                                    |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
@@ -1143,11 +1145,11 @@ Reutilizar: `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/t
 
 ---
 
-## 15. Bloco 3 — Casos limite (versão candidata final)
+## 15. Bloco 3 — Casos limite
 
-**Estado:** ▶️ Candidata final à aprovação · Implementação bloqueada  
+**Estado:** ✅ **Encerrado** (aprovação PO 2026-07-30) · Implementação bloqueada até aprovação integral  
 **Metodologia:** Arquitecto Principal / Guardião da Consistência (`DEVELOPMENT_PROCESS.md`)  
-**Âmbito desta revisão:** consistência, desambiguação e implementabilidade — **sem** novas funcionalidades nem alteração de D1–D12 / F1–F6.
+**Âmbito da revisão que fechou o bloco:** consistência, desambiguação e implementabilidade — **sem** novas funcionalidades nem alteração de D1–D12 / F1–F6.
 
 ### 15.0 Meta da versão candidata
 
@@ -1318,15 +1320,17 @@ Reutilizar: `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/t
 
 ### 15.4 Critérios de aceitação do Bloco 3
 
-- [ ] Matriz L\* / LT\* cobre F1–F6 + transversal
-- [ ] §15.5 usado como fonte única das regras transversais na implementação
-- [ ] Cada caso respeita erro guiado e uma-conta
-- [ ] Logout ≠ expiração explícito
-- [ ] Open-redirect e privilege paths cobertos (R3)
-- [ ] Excepção anti-enumeração F1 documentada e não alargada a F3/F5
-- [ ] Fora-MVP listado sem ambiguidade
-- [ ] Nenhuma contradição com D1–D12 / F1–F6 aprovados
-- [ ] Lacunas de implementabilidade desta revisão fechadas (L1.7, L2.6, L5.7, L6.8–L6.9, LT.6–LT.7)
+- [x] Matriz L\* / LT\* cobre F1–F6 + transversal
+- [x] §15.5 usado como fonte única das regras transversais na implementação
+- [x] Cada caso respeita erro guiado e uma-conta
+- [x] Logout ≠ expiração explícito
+- [x] Open-redirect e privilege paths cobertos (R3)
+- [x] Excepção anti-enumeração F1 documentada e não alargada a F3/F5
+- [x] Fora-MVP listado sem ambiguidade
+- [x] Nenhuma contradição com D1–D12 / F1–F6 aprovados
+- [x] Lacunas de implementabilidade desta revisão fechadas (L1.7, L2.6, L5.7, L6.8–L6.9, LT.6–LT.7)
+
+_(Aceites com o encerramento do Bloco 3 pelo PO.)_
 
 ---
 
@@ -1368,75 +1372,177 @@ Reutilizar: `@kuteka/database`, `@kuteka/auth`, `@kuteka/validation`, `@kuteka/t
 
 ### 15.7 Autoavaliação do Arquitecto — Bloco 3
 
-| Campo                               | Conteúdo                                                                                                                                                                                                                                         |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Nível de confiança**              | **92%**                                                                                                                                                                                                                                          |
-| **Principais riscos remanescentes** | (1) Gate R1 mal implementado no middleware (perda de `next`). (2) Excepção R6 no F1 alargada por engano a F3/F5. (3) RPC de papéis sem idempotência (L6.9). (4) Multi-tab logout (L4.3) dependente de refresh/cookies.                           |
-| **Dívidas técnicas ou documentais** | Manual Operacional, Software Architecture Blueprint e Design System Nº 003 **não versionados** no repo. Contrato exacto da RPC de activação de papéis fica para Bloco 4 / ADR-004. Duração exacta de tokens email/reset = config Supabase (ops). |
-| **Decisões adiadas**                | Soft-delete UX; terminar todas as sessões pós-reset; símbolo obrigatório; coluna `terms_accepted_at`; UI gestão de papéis; OAuth/MFA; KYC.                                                                                                       |
-| **Recomendação**                    | **Aprovar** — especificação do Bloco 3 suficientemente consistente e desambiguada para avançar ao Bloco 4; implementação continua bloqueada até aprovação integral do PRD-001 + infra.                                                           |
+| Campo                               | Conteúdo                                                                                                                                                                                       |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Nível de maturidade**             | **N3 — Candidato** (à data da autoavaliação); bloco **aprovado/encerrado** pelo PO em seguida                                                                                                  |
+| **Nível de confiança**              | **92%**                                                                                                                                                                                        |
+| **Factores < 95%**                  | (1) Manual / Blueprint / DS Nº 003 não versionados no repo. (2) Contrato RPC de papéis ainda não detalhado nesta secção (passou ao Bloco 4). (3) TTL exacto de tokens = config Supabase (ops). |
+| **Principais riscos remanescentes** | Gate R1 / perda de `next`; R6 alargada por engano; RPC sem idempotência; multi-tab logout                                                                                                      |
+| **Dívidas técnicas ou documentais** | Docs oficiais externos não no repo; RPC → Bloco 4                                                                                                                                              |
+| **Decisões adiadas**                | Soft-delete UX; sessões pós-reset; símbolo obrigatório; `terms_accepted_at`; UI papéis; OAuth/MFA; KYC                                                                                         |
+| **Recomendação**                    | **Aprovar** — **cumprida** (PO 2026-07-30)                                                                                                                                                     |
 
 ---
 
-## 16. Critérios de aceitação
+## 16. Bloco 4 — Critérios finais de aceitação (versão candidata)
 
-### 16.1 Gate pré-código
+**Estado:** ▶️ Candidata à aprovação · Implementação bloqueada  
+**Âmbito:** consolidar critérios de aceitação, contrato técnico mínimo (RPC), rastreabilidade e wireframes alinhados — **sem** novas funcionalidades nem alteração de D1–D12 / F1–F6 / §15.
 
-- [ ] Spec integralmente aprovada (Blocos 1–N da revisão)
+### 16.0 Meta da versão candidata
+
+#### Documentos consultados
+
+| Documento                                       | Uso                                                     |
+| ----------------------------------------------- | ------------------------------------------------------- |
+| PRD-001 §§0–15 (D1–D12, F1–F6, L\*, R1–R12)     | Fonte de verdade funcional                              |
+| `PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`          | Tom / marca nos wireframes                              |
+| `AI_CONTEXT.md` / `DEVELOPMENT_PROCESS.md`      | Metodologia N1–N5 + Autoavaliação                       |
+| `ADR-001` / `ADR-003` / `PERMISSIONS_MATRIX.md` | RBAC, audit, permissions                                |
+| `0001_foundation.sql` / `0002_*.sql`            | Modelo `user_roles`, `write_audit_log`                  |
+| Manual / Blueprint / DS Nº 003                  | Não versionados completos — visual final diferido ao DS |
+
+#### Verificações realizadas
+
+1. Critérios §16 cobrem D1–D12, F1–F6, R1–R12 e amostra L\*/LT\*.
+2. Wireframes §18 alinhados a R4 (sem símbolo obrigatório), F6 aprovado, L5.7, F4.
+3. Contrato RPC só especifica o já decidido (self-serve Cliente/Parceiro; rejeitar agent/admin; idempotência L6.9).
+4. Allowlist `next` (R3) tornada explícita sem novos destinos de produto.
+5. Nenhuma alteração a decisões de negócio aprovadas.
+
+#### Conflitos / ambiguidades e resolução
+
+| Achado                                     | Resolução                                                             | Fundamento           |
+| ------------------------------------------ | --------------------------------------------------------------------- | -------------------- |
+| Wireframe F1 listava símbolo               | Removido do checklist visual (R4)                                     | Consistência Bloco 3 |
+| Wireframe F6 desactualizado vs F6 aprovado | Actualizado (boas-vindas, significados, conta única, reversibilidade) | F6 aprovado          |
+| CTA “Guardar e entrar” em reset            | → “Guardar” + gate R1 / L5.7                                          | Bloco 3              |
+| Falta wireframe F4                         | Acrescentado §18.6                                                    | Completude Bloco 4   |
+| Nome exacto da RPC                         | `activate_self_serve_roles` (spec); SQL na implementação / ADR-004    | Não inventar produto |
+
+---
+
+### 16.1 Gate pré-código (obrigatório antes de qualquer commit de auth)
+
+- [ ] Spec integralmente aprovada (Blocos 1–4 + aprovação oficial)
 - [ ] CI definitivamente activo e verde
 - [ ] Migration `0002` aplicada no remoto
-- [ ] Autorização explícita de implementação
+- [ ] Autorização explícita de implementação pelo PO
+- [ ] Templates de email (verify / reset) configuráveis no Supabase (ops)
+- [ ] Redirect URLs allowlisted no Supabase Auth
 
-### 16.2 Funcional
+### 16.2 Funcional (MVP)
 
-- [ ] Registo + Termos + verify + onboarding (1 ou 2 papéis) + `/app`
-- [ ] Login / logout com `next` contextual
-- [ ] Recuperação de password completa
-- [ ] Landing: anónimo → auth; autenticado + CTA → app sem re-auth
-- [ ] Self-serve só Cliente/Parceiro; Agente/Admin bloqueados
-- [ ] Princípio “uma conta” respeitado nos fluxos e copy
+- [ ] F1: registo email+password + Termos (D10) + R4/R5/R9/R10
+- [ ] F2: verify + reenvio cooldown R8 + L2.\*
+- [ ] F3: login + R6/R7/R11 + preservação `next`
+- [ ] F4: logout voluntário + distinção expiração (L4.5)
+- [ ] F5: pedido + confirmação + L5.7 pós-reset
+- [ ] F6: nome se vazio + Cliente e/ou Parceiro + mensagem conta única + reversibilidade
+- [ ] Gate R1 em middleware / server checks
+- [ ] Landing D11: anónimo → auth; autenticado + CTA → destino sem re-auth
+- [ ] Self-serve só `client` / `patrimonial_partner`; agent/admin bloqueados (D4)
+- [ ] Uma conta (D3 / R12) na copy e nos fluxos
+- [ ] Stub `/app` e `/app/admin` (este só com `admin.panel`)
 
 ### 16.3 Segurança / arquitectura
 
-- [ ] Sem matriz TS de permissions
-- [ ] Audits canónicos presentes
+- [ ] Sem matriz TypeScript de permissions (ADR-003 / P0)
+- [ ] Autorização só via `fetchAuthorizationContext` / RPCs oficiais
+- [ ] Audits canónicos §13 via `writeAuditLog` / `write_audit_log`
 - [ ] Sem service role no client
-- [ ] Open-redirect protegido
-- [ ] Modelo multi-papel N:N desde o dia 1; sessão provider-agnostic (pronto para OAuth)
-- [ ] Testes unit + e2e smoke
+- [ ] Open-redirect protegido (R3 + §16.6)
+- [ ] Multi-papel N:N desde o dia 1; sessão provider-agnostic (D1/D8/D12)
+- [ ] RPC `activate_self_serve_roles` conforme §16.5
+- [ ] Testes: unit (validators, `next`, R4/R5) + integration RPC + e2e smoke F1→F2→F6→`/app`
 
-### 16.4 Produto / confiança
+### 16.4 Produto / confiança / a11y
 
-- [ ] Copy pt-AO alinhada PASSO 0
-- [ ] **Sem** UI nem copy que crie expectativa de Passaporte / KAI / SCK
-- [ ] Contratos §10–§11 apenas na documentação / ADR
+- [ ] Copy pt-AO, Identidade Oficial; content centralizado i18n-ready (D9)
+- [ ] Sem UI/copy Passaporte / KAI / SCK (§10–§11)
+- [ ] Erro guiado R2 em todos os fluxos auth
+- [ ] A11y: teclado, labels, leitores de ecrã, foco no erro
+- [ ] Wireframes §18 respeitados como estrutura de ecrã (visual final = DS)
 
-### 16.5 Quatro níveis (após implementação futura)
+### 16.5 Contrato técnico — activação de papéis (especificação, não código)
 
-Implementação → Auto-revisão → Testes → Validação funcional/visual + aprovação final
+> Detalhe SQL/ADR-004 na implementação. Este contrato fixa o comportamento já aprovado (D3, D4, F6, L6.\*).
+
+| Item                | Especificação                                                                |
+| ------------------- | ---------------------------------------------------------------------------- |
+| Nome canónico (app) | `activate_self_serve_roles`                                                  |
+| Quem chama          | Utilizador autenticado, email **verificado**                                 |
+| Input               | Lista de códigos de papel (`client`, `patrimonial_partner`); ≥1              |
+| Rejeitar            | `certified_agent`, `administrator`, códigos desconhecidos                    |
+| Idempotência        | Re-submeter o mesmo conjunto não duplica linhas nem audits espúrios (L6.9)   |
+| Efeito              | Inserir em `user_roles` os papéis em falta; união de permissions             |
+| Auditoria           | `auth.role_activated` via `write_audit_log` (metadata mínima; sem PII extra) |
+| Falha               | Erro guiado; utilizador permanece em F6; sem acesso `(app)`                  |
+| Fora de âmbito      | Remoção de papéis / UI definições (pós-MVP)                                  |
+
+### 16.6 Allowlist `next` (R3 — explícita para MVP)
+
+**Permitidos (paths relativos internos):**
+
+- `/app`
+- `/app/` + segmentos internos da app **excepto** bypass de permissões
+- `/app/admin` **somente** se o utilizador tiver `admin.panel`; senão destino efectivo = `/app`
+
+**Rejeitar (ignorar → `/app`):**
+
+- URLs absolutas (`http:`, `https:`)
+- Protocol-relative (`//…`)
+- Paths fora de `/app` (ex. `/auth/...` como `next` de continuidade de app — não usar)
+- Qualquer path com `..` ou encoded bypass
+
+A allowlist **cresce** quando existirem rotas `(app)` reais — sem redesenhar o módulo auth.
+
+### 16.7 Rastreabilidade rápida (aceitação ↔ decisões)
+
+| Critério                          | Fundamento   |
+| --------------------------------- | ------------ |
+| Email+password MVP                | D1           |
+| Sem telefone auth                 | D2           |
+| Multi-papel / uma conta           | D3, D8, R12  |
+| Agent/Admin Kuteka-only           | D4           |
+| Stub `/app` + `next`              | D5, R1, R3   |
+| Rotas `/auth/...`                 | D6           |
+| Sem MFA UI                        | D7           |
+| pt-AO + i18n-ready                | D9           |
+| Termos no registo                 | D10, R9      |
+| Landing pública + CTA autenticado | D11, R11     |
+| OAuth fora MVP                    | D12          |
+| Casos limite                      | §15 L\*/LT\* |
+| Regras transversais               | §15.5 R1–R12 |
+
+### 16.8 Quatro níveis (após implementação futura)
+
+Implementação → Auto-revisão técnica → Testes → Validação funcional/visual + aprovação final → maturidade **N5** do módulo.
 
 ---
 
 ## 17. Riscos
 
-| Risco                                        | Impacto                         | Mitigação                        |
-| -------------------------------------------- | ------------------------------- | -------------------------------- |
-| Implementar sem CI / sem `0002`              | Regressões, RPCs em falta       | Gate 16.1                        |
-| Scope creep (dashboards, KAI, Passaporte UI) | Atraso, qualidade               | Não-objectivos §2                |
-| Fricção no verify email                      | Abandono                        | Copy + reenvio + métrica         |
-| Onboarding confuso multi-papel               | Contas sem papel / papel errado | UI simples D3 + defaults         |
-| Enumeração de contas                         | Privacidade                     | Mensagens genéricas              |
-| Policies storage avatar                      | Upload inseguro                 | Avatar opcional / adiar upload   |
-| Confusão com legado                          | Dévida técnica                  | Proibir `legacy/` auth           |
-| Email deliverability                         | Contas bloqueadas em verify     | Templates + domínio sender (ops) |
+| Risco                                        | Impacto                             | Mitigação                        |
+| -------------------------------------------- | ----------------------------------- | -------------------------------- |
+| Implementar sem CI / sem `0002`              | Regressões, RPCs em falta           | Gate 16.1                        |
+| Scope creep (dashboards, KAI, Passaporte UI) | Atraso, qualidade                   | Não-objectivos §2                |
+| Fricção no verify email                      | Abandono                            | Copy + reenvio + métrica         |
+| Onboarding confuso multi-papel               | Contas sem papel / papel errado     | UI F6 + D3                       |
+| Enumeração de contas                         | Privacidade                         | R6                               |
+| Policies storage avatar                      | Upload inseguro                     | Avatar opcional / adiar upload   |
+| Confusão com legado                          | Dévida técnica                      | Proibir `legacy/` auth           |
+| Email deliverability                         | Contas bloqueadas em verify         | Templates + domínio sender (ops) |
+| Gate R1 incorrecto                           | Utilizador perdido / `next` perdido | Testes e2e + §16.6               |
+| RPC não idempotente                          | Dados/audit inconsistentes          | §16.5 / L6.9                     |
 
 ---
 
-## 18. Wireframes dos fluxos principais
+## 18. Bloco 4 — Wireframes dos fluxos principais (versão candidata)
 
-> Wireframes de baixa fidelidade para revisão de negócio. Visual final = Design System (Orange / Slate, tipografia oficial). Sem cards decorativos no hero de auth; um ecrã = uma missão.
+> Baixa fidelidade para revisão de negócio. Visual final = Design System (Orange / Slate, tipografia oficial). Sem cards decorativos no hero de auth; um ecrã = uma missão. Alinhados a F1–F6 aprovados e a R1–R12.
 
-### 18.1 Registo — `/auth/registar` (F1 aprovado)
+### 18.1 Registo — `/auth/registar` (F1)
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -1461,7 +1567,6 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 │  ✓ Pelo menos 8 caracteres                   │
 │  ○ Uma letra maiúscula                       │
 │  ○ Um número                                 │
-│  ○ Um símbolo (se adotado)                   │
 │                                              │
 │  Confirmar password · Termos [ ]             │
 │                                              │
@@ -1470,9 +1575,9 @@ Implementação → Auto-revisão → Testes → Validação funcional/visual + 
 └──────────────────────────────────────────────┘
 ```
 
-_(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)_
+_(Email duplicado L1.1: no mesmo ecrã → Entrar | Recuperar acesso.)_
 
-### 18.2 Verificar email — `/auth/verificar` (F2 aprovado)
+### 18.2 Verificar email — `/auth/verificar` (F2)
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -1485,19 +1590,19 @@ _(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)_
 │                                              │
 │  Enviado para: ma*****@gmail.com             │
 │                                              │
-│  [ Reenviar email ]                          │
+│  [ Reenviar email ]  (cooldown R8 se activo) │
 │  (após reenvio: confirmação + dica Spam)     │
 │                                              │
 │  Ao abrir o link:                            │
 │  "Estamos a confirmar a sua conta…"          │
 │                                              │
-│  Se já confirmado:                           │
+│  Se já confirmado (L2.2):                    │
 │  "A sua conta já se encontra confirmada."    │
-│  [ Entrar na Kuteka ]                        │
+│  [ Entrar na Kuteka ]  → gate R1             │
 └──────────────────────────────────────────────┘
 ```
 
-### 18.3 Login — `/auth/entrar` (F3 aprovado)
+### 18.3 Login — `/auth/entrar` (F3)
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -1515,43 +1620,44 @@ _(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)_
 │  │  (colar e password managers OK)        │  │
 │  └────────────────────────────────────────┘  │
 │                                              │
-│  [ Entrar ]  → destino directo se tudo OK    │
+│  [ Entrar ]  → destino via gate R1           │
 │                                              │
 │  Esqueceu a password? · Criar conta          │
 └──────────────────────────────────────────────┘
 ```
 
-### 18.4 Recuperar — `/auth/recuperar` (F5 aprovado)
+### 18.4 Recuperar — `/auth/recuperar` (F5)
 
 ```
 ┌──────────────────────────────────────────────┐
 │  Kuteka                                      │
 │                                              │
 │  Recuperar acesso                            │
-│  Indique o email da conta. Se existir,       │
-│  enviamos instruções.                        │
+│  Não se preocupe. Vamos ajudá-lo a           │
+│  recuperar o acesso de forma segura.         │
 │                                              │
 │  Email                                       │
 │  ┌────────────────────────────────────────┐  │
 │  │                                        │  │
 │  └────────────────────────────────────────┘  │
 │                                              │
-│  [ Enviar instruções    ]                    │
+│  [ Enviar instruções ]                       │
 │                                              │
 │  Voltar a Entrar                             │
 │  Sem acesso ao email? Contacto               │
 └──────────────────────────────────────────────┘
 ```
 
-### 18.5 Nova password — `/auth/recuperar/confirmar`
+### 18.5 Nova password — `/auth/recuperar/confirmar` (F5)
 
 ```
 ┌──────────────────────────────────────────────┐
 │  Kuteka                                      │
 │                                              │
 │  Nova password                               │
+│  Checklist R4 (8 / maiúscula / número)       │
 │                                              │
-│  Password                                    │
+│  Password                      [ Mostrar ]   │
 │  ┌────────────────────────────────────────┐  │
 │  │                                        │  │
 │  └────────────────────────────────────────┘  │
@@ -1560,40 +1666,65 @@ _(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)_
 │  │                                        │  │
 │  └────────────────────────────────────────┘  │
 │                                              │
-│  [ Guardar e entrar     ]                    │
+│  [ Guardar ]  → L5.7 / gate R1               │
 └──────────────────────────────────────────────┘
 ```
 
-### 18.6 Onboarding — `/auth/onboarding/papeis` (F6 aprovado)
+### 18.6 Logout — confirmação na Landing (F4)
+
+```
+┌──────────────────────────────────────────────┐
+│  Kuteka          Landing (pública)           │
+│                                              │
+│  (conteúdo Landing)                          │
+│                                              │
+│  Aviso discreto:                             │
+│  "Terminou a sua sessão com sucesso.         │
+│   Pode voltar a entrar sempre que desejar."  │
+│                                              │
+│  (Sessão expirada ≠ este copy — L4.5)        │
+└──────────────────────────────────────────────┘
+```
+
+### 18.7 Onboarding — `/auth/onboarding/papeis` (F6)
 
 ```
 ┌──────────────────────────────────────────────┐
 │  Kuteka                                      │
 │                                              │
-│  Como quer usar a Kuteka hoje?               │
-│  Pode escolher mais do que um.               │
+│  Bem-vindo à Kuteka                          │
+│  A sua conta está quase pronta. Vamos        │
+│  concluir uma configuração rápida.           │
 │                                              │
+│  Como prefere ser chamado? (se nome vazio)   │
 │  ┌────────────────────────────────────────┐  │
-│  │ ( ) Cliente                            │  │
-│  │     Habitação com confiança            │  │
-│  └────────────────────────────────────────┘  │
-│  ┌────────────────────────────────────────┐  │
-│  │ ( ) Parceiro Patrimonial               │  │
-│  │     Activar e acompanhar património    │  │
+│  │                                        │  │
 │  └────────────────────────────────────────┘  │
 │                                              │
-│  Agente Certificado e Administrador são      │
-│  atribuídos pela Kuteka.                     │
+│  Como quer usar a Kuteka?                    │
+│  Pode escolher um ou ambos.                  │
 │                                              │
-│  [ Continuar            ]  (disabled se 0)   │
+│  [ ] Cliente — procurar, reservar ou gerir   │
+│  [ ] Parceiro Patrimonial — disponibilizar   │
+│      e gerir patrimónios                     │
+│                                              │
+│  Pode usar a mesma conta para vários papéis. │
+│  Não será necessário criar outra conta.      │
+│  Pode alterar papéis depois nas definições.  │
+│                                              │
+│  Agente e Administrador: atribuídos Kuteka.  │
+│                                              │
+│  [ Continuar ]  (Desativado se 0 papéis)     │
 └──────────────────────────────────────────────┘
 ```
 
-### 18.7 Stub autenticado — `/app`
+_(Pós-sucesso: “A sua conta está pronta. Bem-vindo à Kuteka.” → `/app` ou `next`.)_
+
+### 18.8 Stub autenticado — `/app`
 
 ```
 ┌──────────────────────────────────────────────┐
-│  Kuteka          [Terminar sessão]           │
+│  Kuteka          [ Terminar sessão ]         │
 │                                              │
 │  Bem-vindo, {display_name}                   │
 │                                              │
@@ -1607,7 +1738,7 @@ _(Email duplicado: no mesmo ecrã → Entrar | Recuperar acesso.)_
 
 _(Sem menções a Passaporte, KAI, SCK ou scores.)_
 
-### 18.8 Fluxo condensado (sequência de ecrãs)
+### 18.9 Fluxo condensado (sequência de ecrãs)
 
 ```mermaid
 sequenceDiagram
@@ -1627,10 +1758,22 @@ sequenceDiagram
   A->>S: exchange token
   A->>U: Onboarding papéis
   U->>A: Cliente e/ou Parceiro
-  A->>DB: activate_initial_roles
+  A->>DB: activate_self_serve_roles
   A->>DB: write_audit_log
   A->>U: /app stub
 ```
+
+### 18.10 Autoavaliação do Arquitecto — Bloco 4
+
+| Campo                               | Conteúdo                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Nível de maturidade**             | **N3 — Candidato**                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **Nível de confiança**              | **91%**                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| **Factores < 95%**                  | (1) Manual Operacional, Software Architecture Blueprint e Design System Nº 003 **não versionados** no repo — tokens visuais finais não verificáveis aqui. (2) Assinatura SQL exacta / grants da RPC ficam para ADR-004 na implementação (contrato comportamental §16.5 está fixo). (3) Gate infra (CI + migration `0002`) ainda aberto — impede maturidade N4 do PRD. (4) Templates de email e TTL de tokens = configuração Supabase (ops), fora do controlo desta spec. |
+| **Principais riscos remanescentes** | Implementação do middleware R1; interpretação incorrecta da allowlist §16.6; deliverability de email; desvio visual se DS oficial divergir do que está implícito em `@kuteka/ui`.                                                                                                                                                                                                                                                                                        |
+| **Dívidas técnicas ou documentais** | Versionar Manual/Blueprint/DS no repo; ADR-004 + migration da RPC na fase de implementação; activação CI / `0002`.                                                                                                                                                                                                                                                                                                                                                       |
+| **Decisões adiadas**                | As de §15.3; dashboards reais; UI gestão de papéis; OAuth/MFA.                                                                                                                                                                                                                                                                                                                                                                                                           |
+| **Recomendação**                    | **Aprovar** o Bloco 4 — critérios e wireframes suficientes para MVP. Após aprovação do Bloco 4, pedir **aprovação integral** do PRD-001 (ainda **sem** implementar até N4 = spec aprovada **e** gate 16.1).                                                                                                                                                                                                                                                              |
 
 ---
 
@@ -1673,20 +1816,22 @@ sequenceDiagram
 | 1.0-rc1 | 2026-07-30 | F6 aprovado; §6.8 revisão global aberta                                                    |
 | 1.0-rc2 | 2026-07-30 | Bloco 2 **encerrado**; Bloco 3 casos limite (candidata); metodologia Arquitecto Principal  |
 | 1.0-rc3 | 2026-07-30 | Bloco 3 auto-revisão crítica: §15.5 R1–R12; lacunas L\*; Autoavaliação; sem alterar D1–D12 |
+| 1.0-rc4 | 2026-07-30 | Bloco 3 **encerrado**; Bloco 4 critérios+wireframes (candidata); maturidade N1–N5          |
 
 ---
 
 ## 22. Estado da revisão de negócio
 
-| Bloco       | Conteúdo                                       | Estado                                                  |
-| ----------- | ---------------------------------------------- | ------------------------------------------------------- |
-| 1           | D1–D12 + princípios                            | ✅ Encerrado                                            |
-| 2           | Fluxos F1–F6 + revisão global                  | ✅ **Encerrado**                                        |
-| 3           | Casos limite (§15)                             | ▶️ **Candidata final** (auto-revisão crítica concluída) |
-| 4           | Critérios finais + wireframes                  | Pendente                                                |
-| —           | Aprovação oficial integral → implementação     | Bloqueada                                               |
-| Metodologia | Arquitecto Principal + Autoavaliação por bloco | ✅ Activa                                               |
+| Bloco       | Conteúdo                                   | Estado                           |
+| ----------- | ------------------------------------------ | -------------------------------- |
+| 1           | D1–D12 + princípios                        | ✅ Encerrado                     |
+| 2           | Fluxos F1–F6 + revisão global              | ✅ Encerrado                     |
+| 3           | Casos limite (§15)                         | ✅ **Encerrado** (PO 2026-07-30) |
+| 4           | Critérios finais + wireframes (§16–§18)    | ▶️ **Candidata**                 |
+| —           | Aprovação oficial integral → implementação | Bloqueada                        |
+| Documento   | Maturidade                                 | **N3 — Candidato**               |
+| Metodologia | Arquitecto + Autoavaliação N1–N5           | ✅ Activa                        |
 
-**Pedido:** decisão PO sobre encerramento do Bloco 3 (§15). Em seguida Bloco 4.
+**Pedido:** aprovar Bloco 4 (§16–§18) ou indicar conflitos. Em seguida: aprovação integral do PRD-001 (ainda sem código até gate 16.1).
 
 Até aprovação integral: **nenhuma implementação**.
