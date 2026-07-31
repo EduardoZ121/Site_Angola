@@ -68,7 +68,9 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 - `docs/AI_CONTEXT.md`
 - `docs/engineering/DEVELOPMENT_PROCESS.md`
 - `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` — **v1.0** (N5 concluído)
+- `docs/PROJECT_BASELINE_PRD001.md` — baseline congelada pós-PRD-001
 - `docs/backlog/PRD_001_CLOSURE.md` — encerramento oficial do módulo auth
+- `docs/backlog/PHASE_3_PLATFORM_SHELL_PREP.md` — preparação Shell
 - `docs/architecture/ADR-001-foundation-architecture-decisions.md`
 - `docs/proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`
 
@@ -77,8 +79,8 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 1. **FASE 1 — Infraestrutura** — ✅ encerrada
 2. **Landing Page** (PASSO 1 + 1A) — ✅ encerrada
 3. **P0 pré-Auth** — ✅ (CI + migrations remotas)
-4. **PRD-001 Auth** — ✅ **N5 concluído** (2026-07-31)
-5. **Shell da plataforma** — próximo
+4. **PRD-001 Auth** — ✅ **N5** · baseline congelada (`PROJECT_BASELINE_PRD001.md`)
+5. **Shell da plataforma** — ▶️ em preparação
 6. **PRD-002+** Parceiro Patrimonial, Cliente, …
 
 Processo oficial: `docs/engineering/DEVELOPMENT_PROCESS.md`  

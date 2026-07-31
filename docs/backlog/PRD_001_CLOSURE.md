@@ -4,7 +4,8 @@
 **Decisão PO:** Encerrar PRD-001 no estado actual — sem novas rondas de QA cosmético no stub `/app`.  
 **Spec:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` v1.0  
 **ADR:** `docs/architecture/ADR-004-authentication-module-deferred.md`  
-**Produção:** https://kutekalink.com (`/auth/*` · `/app` · `/app/admin`)
+**Produção:** https://kutekalink.com (`/auth/*` · `/app` · `/app/admin`)  
+**Baseline congelada:** `docs/PROJECT_BASELINE_PRD001.md`
 
 ---
 
