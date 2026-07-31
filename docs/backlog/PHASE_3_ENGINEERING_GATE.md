@@ -1,6 +1,6 @@
 # Fase 3 — Engineering Gate (Shell da Plataforma)
 
-**Estado:** ⏳ **Em espera da Aprovação Funcional** da spec  
+**Estado:** ✅ **Verde** — Aprovação Funcional + implementação N5  
 **Spec:** `docs/proposals/PHASE_3_PLATFORM_SHELL_SPEC.md` v0.9  
 **Baseline:** `docs/PROJECT_BASELINE_PRD001.md`
 

@@ -2,11 +2,11 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 N5 · baseline congelada · Fase 3 Shell em preparação)  
+**Estado:** Activo (PRD-001 N5 · baseline congelada · Fase 3 Shell **N5** · próximo PRD-002)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  
-**Baseline:** `docs/PROJECT_BASELINE_PRD001.md` · Auth: `PRD_001_CLOSURE.md` · Fase 3: `PHASE_3_PLATFORM_SHELL_PREP.md`
+**Baseline:** `docs/PROJECT_BASELINE_PRD001.md` · Shell: `PHASE_3_PLATFORM_SHELL_SPEC.md` · ADR-005
 
 ---
 
@@ -131,8 +131,8 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
 1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
 2 Autenticação (PRD-001) — **N5 concluído** · baseline congelada `PROJECT_BASELINE_PRD001.md`  
-3 Shell da plataforma — **spec N3 candidata** (`PHASE_3_PLATFORM_SHELL_SPEC.md`) · aguarda Aprovação Funcional  
-4 Parceiro Patrimonial (PRD-002)  
+3 Shell da plataforma — **N5 concluído** (`PHASE_3_CLOSURE.md` · ADR-005)  
+4 Parceiro Patrimonial (PRD-002) — **próximo**  
 5 Cliente (PRD-003)  
 6 Agente (PRD-004)  
 7 Administração (PRD-005)  

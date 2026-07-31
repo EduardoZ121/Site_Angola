@@ -2,84 +2,37 @@
 
 **Actualizado:** 2026-07-31  
 **Repo:** https://github.com/EduardoZ121/Site_Angola  
-**Regra do PO:** após cada edição concluída → **Deploy** (Actions Deploy Kuteka) e **CI verde** — sem deixar erros conhecidos.
+**Regra do PO:** após cada edição concluída → **Deploy** (Actions Deploy Kuteka) e **CI verde**.
 
 ---
 
-## Onde estamos agora (ponto de paragem)
+## Onde estamos agora
 
-| Camada                     | Estado                                                              |
-| -------------------------- | ------------------------------------------------------------------- |
-| **Landing KEOS**           | ✅ Feita e na `main`                                                |
-| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde                        |
-| **PRD-001 Auth**           | ✅ **N5** · baseline `PROJECT_BASELINE_PRD001.md`                   |
-| **Supabase remoto**        | ✅ `vhqwitbrpqaiutjbundo` (0001–0003 + seed)                        |
-| **Domínio kutekalink.com** | ✅ KEOS no ar (Render + gh-pages)                                   |
-| **Deploy Kuteka**          | ✅ Verde                                                            |
-| **Fase 3 Shell**           | ⏳ Spec N3 — `PHASE_3_PLATFORM_SHELL_SPEC.md` (Aprovação Funcional) |
-
-**Estado 2026-07-31:** Baseline PRD-001 congelada. Spec Shell **N3** apresentada ao PO.
+| Camada                      | Estado                                     |
+| --------------------------- | ------------------------------------------ |
+| Landing KEOS                | ✅                                         |
+| PRD-001 Auth                | ✅ N5 · baseline congelada                 |
+| Fase 3 Shell                | ✅ **N5** — `PHASE_3_CLOSURE.md` · ADR-005 |
+| Supabase / domínio / Deploy | ✅                                         |
+| **Próximo**                 | **PRD-002 — Parceiro Patrimonial**         |
 
 ---
 
-## Manuais / documentos a usar (por ordem)
+## Manuais
 
-| Ordem | Documento                                       | Para quê                            |
-| ----- | ----------------------------------------------- | ----------------------------------- |
-| 1     | `docs/AI_CONTEXT.md`                            | Memória permanente do produto       |
-| 2     | `docs/PROJECT_BASELINE_PRD001.md`               | Baseline congelada pós-PRD-001      |
-| 3     | `docs/engineering/DEVELOPMENT_PROCESS.md`       | Como trabalhamos (Fase 1/2, N1–N5)  |
-| 4     | `docs/backlog/PHASE_3_PLATFORM_SHELL_PREP.md`   | Preparação Shell (Fase 3)           |
-| 5     | `docs/backlog/PRD_001_CLOSURE.md`               | Encerramento oficial do módulo auth |
-| 6     | `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` | Spec auth (referência)              |
-| 7     | `docs/architecture/ADR-004-*.md`                | Decisões técnicas do módulo auth    |
-| 8     | `docs/backlog/GO_LIVE_CHECKLIST.md`             | Checklist ops / go-live             |
-| 9     | `PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`          | Marca / tom                         |
-
-Índice geral: `docs/README.md`
+| Ordem | Documento                                       | Para quê                |
+| ----- | ----------------------------------------------- | ----------------------- |
+| 1     | `docs/AI_CONTEXT.md`                            | Memória permanente      |
+| 2     | `docs/PROJECT_BASELINE_PRD001.md`               | Baseline auth congelada |
+| 3     | `docs/proposals/PHASE_3_PLATFORM_SHELL_SPEC.md` | Spec Shell              |
+| 4     | `docs/backlog/PHASE_3_CLOSURE.md`               | Encerramento Shell N5   |
+| 5     | `docs/engineering/DEVELOPMENT_PROCESS.md`       | Metodologia             |
 
 ---
 
-## Próximos passos (sequência recomendada)
+## Próximos passos
 
-### 1. Shell da plataforma (fase 3 — Aprovação Funcional)
+1. **PRD-002 — Parceiro Patrimonial** (sobre o Shell)
+2. Ops opcional: P4 templates email · E1 deploy pnpm
 
-Spec: `PHASE_3_PLATFORM_SHELL_SPEC.md` v0.9 (N3).  
-**Acção PO:** aprovar D1–D12 + autorização condicional §12.  
-Depois: implementação autónoma até N5. **Sem** reabrir polish do stub auth.
-
-### 2. PRD-002 — Parceiro Patrimonial
-
-Primeiro módulo de negócio sobre o shell: activar e gerir património.
-
-### 3. Ops opcional
-
-- P4 templates email com marca Kuteka
-- E1 — `deploy.yml` activo em pnpm (opcional)
-
----
-
-## Rotas auth (PRD-001 — estáveis)
-
-| Rota                        | Fluxo              |
-| --------------------------- | ------------------ |
-| `/auth/registar`            | F1 Registo         |
-| `/auth/entrar`              | F3 Login           |
-| `/auth/verificar`           | F2 Email           |
-| `/auth/recuperar`           | F5 Pedido          |
-| `/auth/recuperar/confirmar` | F5 Nova password   |
-| `/auth/onboarding/papeis`   | F6 Papéis          |
-| `/auth/onboarding/perfil`   | F6 Perfil          |
-| `/auth/sair`                | F4 Logout          |
-| `/app` · `/app/admin`       | Stubs autenticados |
-
-Landing CTAs: Começar → `/auth/registar` · Entrar → `/auth/entrar`
-
----
-
-## Política de qualidade (a cumprir sempre)
-
-1. Antes de merge: `pnpm lint` · `format:check` · `typecheck` · `test` · CI verde
-2. Depois de merge na `main`: confirmar **Deploy Kuteka** success
-3. Não inventar decisões de negócio — confrontar PRD / AI_CONTEXT
-4. Não reabrir PRD-001 excepto erro crítico de funcionamento
+PRD-001 e polish do stub auth: **congelados** (só bug crítico).

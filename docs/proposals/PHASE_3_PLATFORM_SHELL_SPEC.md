@@ -1,9 +1,9 @@
 # Fase 3 — Spec funcional: Shell da Plataforma
 
 **Documento:** Especificação funcional para Aprovação Funcional  
-**Versão:** 0.9 (candidata)  
-**Estado:** ⏳ **Candidata a Aprovação Funcional (N3)** — 2026-07-31  
-**Maturidade:** **N3**  
+**Versão:** 1.0  
+**Estado:** ✅ Aprovação Funcional · ✅ Autorização §12 · ✅ Implementação N5  
+**Maturidade:** **N5** · Encerramento: `docs/backlog/PHASE_3_CLOSURE.md`  
 **Depende de:** PRD-001 N5 · baseline `docs/PROJECT_BASELINE_PRD001.md` (congelada)  
 **Preparação:** `docs/backlog/PHASE_3_PLATFORM_SHELL_PREP.md`  
 **Autoridade:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > esta spec  
@@ -13,13 +13,13 @@
 
 ## 0. Registo de autorização
 
-| Item                                     | Estado                                    |
-| ---------------------------------------- | ----------------------------------------- |
-| Baseline PRD-001                         | ✅ Congelada / aprovada pelo PO           |
-| Elaboração desta spec                    | ✅ Autorizada (foco Fase 3)               |
-| Aprovação Funcional (Fase 1 do processo) | ⏳ **Pendente PO**                        |
-| Autorização de Implementação (Fase 2)    | ⏳ Proposta **condicional** (§12)         |
-| Implementação                            | ❌ Até Aprovação Funcional + condição §12 |
+| Item                                     | Estado                          |
+| ---------------------------------------- | ------------------------------- |
+| Baseline PRD-001                         | ✅ Congelada / aprovada pelo PO |
+| Elaboração desta spec                    | ✅ Autorizada (foco Fase 3)     |
+| Aprovação Funcional (Fase 1 do processo) | ✅ PO 2026-07-31 — D1–D12       |
+| Autorização de Implementação (Fase 2)    | ✅ Condicional §12 activada     |
+| Implementação                            | ✅ N5 — `PHASE_3_CLOSURE.md`    |
 
 ---
 
