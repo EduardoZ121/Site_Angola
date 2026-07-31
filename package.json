@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.1.0",
   "description": "KEOS \u2014 Kuteka Engineering Operating System",
-  "packageManager": "pnpm@10.33.3",
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=10 <11"
   },
   "scripts": {
     "dev": "turbo run dev --filter=@kuteka/web",
