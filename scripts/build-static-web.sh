@@ -13,6 +13,9 @@ cleanup() {
     rm -rf app/api
     mv "$WEB/.staticbak/api" app/api
   fi
+  while IFS= read -r -d '' bak; do
+    mv -f "$bak" "${bak%.staticbak}"
+  done < <(find app -type f -name 'route.ts.staticbak' -print0 2>/dev/null || true)
   rmdir "$WEB/.staticbak" 2>/dev/null || true
 }
 trap cleanup EXIT
@@ -28,6 +31,11 @@ fi
 if [[ -d app/api ]]; then
   mv app/api "$WEB/.staticbak/api"
 fi
+# Stash any remaining Route Handlers under app/
+while IFS= read -r -d '' route; do
+  bak="${route}.staticbak"
+  mv "$route" "$bak"
+done < <(find app -type f -name 'route.ts' -print0 2>/dev/null || true)
 
 export STATIC_EXPORT=1
 export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://kutekalink.com}"

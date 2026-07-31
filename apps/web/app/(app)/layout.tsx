@@ -63,11 +63,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         >
           KUTEKA
         </Link>
-        <form action="/auth/sair" method="post">
-          <button type="submit" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
-            {copy.logout.action}
-          </button>
-        </form>
+        <Link href="/auth/sair" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+          {copy.logout.action}
+        </Link>
       </header>
       <main className="mx-auto max-w-2xl px-6 py-12">{children}</main>
     </div>

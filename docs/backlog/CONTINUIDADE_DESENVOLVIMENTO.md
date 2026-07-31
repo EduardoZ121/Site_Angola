@@ -18,7 +18,7 @@
 | **Domínio kutekalink.com** | ⚠️ Ainda pode apontar para Render/legado — ver `DEPLOY_STATUS`         |
 | **Vercel `kuteka-api`**    | ⚠️ Check no PR falhou (projecto API separado; não bloqueia Pages)      |
 
-**Parámos aqui:** auth pronto em  
+**Estado 2026-07-31 (tarde):** PR #5 **merged** na `main`. Auth UI no export estático / gh-pages. **Parámos aqui (histórico):** auth pronto em  
 https://github.com/EduardoZ121/Site_Angola/pull/5  
 À espera de: merge → Deploy → configurar Supabase → validar fluxos reais.
 
@@ -136,3 +136,5 @@ O Deploy Kuteka já está **verde**. O CI falha na `main` porque o ficheiro acti
 3. Commit na `main`
 
 Isso remove o `version: 10` e o CI volta a verde (o YAML correcto já está no repo em `docs/`).
+
+Ver também: `docs/backlog/EXTERNAL_BLOCKERS.md`.

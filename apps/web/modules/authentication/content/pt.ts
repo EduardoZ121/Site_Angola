@@ -75,6 +75,8 @@ export const authCopyPt = {
       'Não foi possível entrar. Verifique os dados e tente novamente. Se esqueceu a password, use Recuperar acesso.',
   },
   logout: {
+    title: 'A terminar sessão',
+    pending: 'A terminar a sua sessão com segurança…',
     done: 'Terminou a sua sessão com sucesso. Pode voltar a entrar sempre que desejar.',
     expired: 'A sua sessão expirou. Entre novamente para continuar.',
     action: 'Terminar sessão',

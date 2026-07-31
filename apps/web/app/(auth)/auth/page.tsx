@@ -1,17 +1,31 @@
-import { redirect } from 'next/navigation';
+'use client';
 
-interface AuthIndexProps {
-  searchParams: Promise<{ mode?: string; next?: string }>;
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { getAuthCopy } from '@/modules/authentication/content';
+
+function AuthIndexRedirect() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const copy = getAuthCopy();
+
+  useEffect(() => {
+    const next = searchParams.get('next');
+    const mode = searchParams.get('mode');
+    const q = new URLSearchParams();
+    if (next) q.set('next', next);
+    const qs = q.toString() ? `?${q.toString()}` : '';
+    router.replace(mode === 'entrar' ? `/auth/entrar${qs}` : `/auth/registar${qs}`);
+  }, [router, searchParams]);
+
+  return <p className="text-slate-500">{copy.common.loading}</p>;
 }
 
-export default async function AuthIndexPage({ searchParams }: AuthIndexProps) {
-  const params = await searchParams;
-  const q = new URLSearchParams();
-  if (params.next) q.set('next', params.next);
-  const qs = q.toString() ? `?${q.toString()}` : '';
-
-  if (params.mode === 'entrar') {
-    redirect(`/auth/entrar${qs}`);
-  }
-  redirect(`/auth/registar${qs}`);
+export default function AuthIndexPage() {
+  return (
+    <Suspense fallback={<p className="px-6 py-16 text-slate-500">A carregar…</p>}>
+      <AuthIndexRedirect />
+    </Suspense>
+  );
 }
