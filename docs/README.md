@@ -7,17 +7,19 @@
 
 1. Ler `AI_CONTEXT.md` antes de especificar ou implementar.
 2. Seguir `engineering/DEVELOPMENT_PROCESS.md` (duas fases PRD + papel do Líder Técnico).
-3. Auth (PRD-001) está **encerrado (N5)** — ver `backlog/PRD_001_CLOSURE.md`. Próximo: Shell da plataforma.
+3. Auth (PRD-001) **N5** — baseline congelada em `PROJECT_BASELINE_PRD001.md`. Próximo: Fase 3 Shell.
 
 ## Oficiais / activos
 
 | Documento                                                                                                                | Função                                               |
 | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | [`AI_CONTEXT.md`](AI_CONTEXT.md)                                                                                         | Memória permanente da equipa                         |
+| [`PROJECT_BASELINE_PRD001.md`](PROJECT_BASELINE_PRD001.md)                                                               | **Baseline congelada** pós-PRD-001                   |
 | [`engineering/DEVELOPMENT_PROCESS.md`](engineering/DEVELOPMENT_PROCESS.md)                                               | Processo, autonomia, N1–N5, duas fases PRD           |
 | [`proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`](proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md)                       | Identidade oficial                                   |
 | [`proposals/PRD_001_AUTHENTICATION_SPEC.md`](proposals/PRD_001_AUTHENTICATION_SPEC.md)                                   | **PRD-001 v1.0** — referência oficial do módulo auth |
 | [`backlog/PRD_001_CLOSURE.md`](backlog/PRD_001_CLOSURE.md)                                                               | **Encerramento N5** do PRD-001 (2026-07-31)          |
+| [`backlog/PHASE_3_PLATFORM_SHELL_PREP.md`](backlog/PHASE_3_PLATFORM_SHELL_PREP.md)                                       | Preparação Fase 3 — Shell da Plataforma              |
 | [`backlog/CONTINUIDADE_DESENVOLVIMENTO.md`](backlog/CONTINUIDADE_DESENVOLVIMENTO.md)                                     | Mapa: onde paramos, manuais, próximos passos, deploy |
 | [`backlog/EXTERNAL_BLOCKERS.md`](backlog/EXTERNAL_BLOCKERS.md)                                                           | Bloqueios só de credenciais/infra                    |
 | [`backlog/GO_LIVE_CHECKLIST.md`](backlog/GO_LIVE_CHECKLIST.md)                                                           | Checklist go-live — execução, não metodologia        |
@@ -45,10 +47,11 @@ Landing, FASE 1, P0, Engineering Gate PRD-001 e propostas UX antigas — úteis 
 
 ## Estado actual
 
-| Item                        | Estado                                    |
-| --------------------------- | ----------------------------------------- |
-| Aprovação Funcional PRD-001 | ✅                                        |
-| Engineering Gate / P1+P2    | ✅ Cumpridos (histórico no Gate)          |
-| Implementação PRD-001       | ✅ **N5 concluído** (2026-07-31)          |
-| Produção auth               | ✅ https://kutekalink.com/auth/* · `/app` |
-| Próximo módulo              | Shell da plataforma → depois PRD-002      |
+| Item                        | Estado                                      |
+| --------------------------- | ------------------------------------------- |
+| Aprovação Funcional PRD-001 | ✅                                          |
+| Engineering Gate / P1+P2    | ✅ Cumpridos (histórico no Gate)            |
+| Implementação PRD-001       | ✅ **N5 concluído** (2026-07-31)            |
+| Baseline PRD-001            | ✅ Congelada — `PROJECT_BASELINE_PRD001.md` |
+| Produção auth               | ✅ https://kutekalink.com/auth/* · `/app`   |
+| Próximo módulo              | Fase 3 Shell (prep) → depois PRD-002        |

@@ -68,7 +68,9 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 - `docs/AI_CONTEXT.md`
 - `docs/engineering/DEVELOPMENT_PROCESS.md`
 - `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` — **v1.0** (N5 concluído)
+- `docs/PROJECT_BASELINE_PRD001.md` — baseline congelada pós-PRD-001
 - `docs/backlog/PRD_001_CLOSURE.md` — encerramento oficial do módulo auth
+- `docs/backlog/PHASE_3_PLATFORM_SHELL_PREP.md` — preparação Shell
 - `docs/architecture/ADR-001-foundation-architecture-decisions.md`
 - `docs/proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`
 
