@@ -1,81 +1,56 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { Heading, Text, buttonVariants } from '@kuteka/ui';
+import {
+  Heading,
+  Text,
+  Badge,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  buttonVariants,
+} from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
-import { createBrowserClient } from '@/lib/supabase/client';
 import { getAuthCopy } from '../content';
+import { useAppSession, roleLabelPt } from './app-session';
 
-type LoadState = 'loading' | 'ready' | 'error';
+const UPCOMING_MODULES = [
+  {
+    key: 'patrimonios',
+    title: 'Patrimónios',
+    description: 'Activar e acompanhar património na plataforma.',
+  },
+  {
+    key: 'confianca',
+    title: 'Confiança',
+    description: 'Documentos e verificação para relações seguras.',
+  },
+  {
+    key: 'habitacao',
+    title: 'Habitação',
+    description: 'Jornada do Cliente — procurar e gerir habitação.',
+  },
+] as const;
 
 /**
- * /app home — loads profile + roles on the client after onboarding (QA-001).
+ * /app home stub — visual hierarchy for authenticated entry (QA Review 002).
  */
 export function AppHomeClient() {
   const copy = getAuthCopy();
-  const [state, setState] = useState<LoadState>('loading');
-  const [displayName, setDisplayName] = useState<string | null>(null);
-  const [roles, setRoles] = useState<string[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const { session, status, error } = useAppSession();
 
-  useEffect(() => {
-    let cancelled = false;
+  const roleLabels: Record<string, string> = {
+    client: copy.onboarding.roles.client,
+    patrimonial_partner: copy.onboarding.roles.partner,
+  };
 
-    async function load() {
-      try {
-        const client = createBrowserClient();
-        const {
-          data: { user },
-          error: userError,
-        } = await client.auth.getUser();
-        if (userError || !user) {
-          if (!cancelled) {
-            setError(copy.common.sessionExpired);
-            setState('error');
-          }
-          return;
-        }
-
-        const [{ data: profile, error: profileError }, rolesResult] = await Promise.all([
-          client.from('profiles').select('display_name').eq('id', user.id).maybeSingle(),
-          client.rpc('get_user_role_codes', { p_user_id: user.id }),
-        ]);
-
-        if (cancelled) return;
-
-        if (profileError || rolesResult.error) {
-          setError(copy.app.loadError);
-          setState('error');
-          return;
-        }
-
-        const roleCodes = Array.isArray(rolesResult.data)
-          ? rolesResult.data.filter((r): r is string => typeof r === 'string')
-          : [];
-
-        setDisplayName(profile?.display_name ?? user.email ?? null);
-        setRoles(roleCodes);
-        setState('ready');
-      } catch {
-        if (!cancelled) {
-          setError(copy.app.loadError);
-          setState('error');
-        }
-      }
-    }
-
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, [copy.app.loadError, copy.common.sessionExpired]);
-
-  if (state === 'loading') {
+  if (status === 'loading') {
     return <Text className="text-slate-600">{copy.common.loading}</Text>;
   }
 
-  if (state === 'error') {
+  if (status === 'error' || !session) {
     return (
       <div className="flex flex-col gap-4">
         <Heading level={1}>{copy.app.title}</Heading>
@@ -93,55 +68,100 @@ export function AppHomeClient() {
             href="/auth/onboarding/papeis"
             className={cn(buttonVariants({ variant: 'secondary' }))}
           >
-            Voltar aos papéis
+            {copy.app.ctaRoles}
           </Link>
         </div>
       </div>
     );
   }
 
-  const roleLabels: Record<string, string> = {
-    client: copy.onboarding.roles.client,
-    patrimonial_partner: copy.onboarding.roles.partner,
-  };
+  const greetingName = session.displayName;
+  const email = session.email;
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-3">
+      <header className="flex flex-col gap-2">
         <Heading level={1}>{copy.app.title}</Heading>
-        {displayName ? (
-          <Text className="text-lg text-slate-700">
-            {copy.app.welcome}, {displayName}
-          </Text>
-        ) : (
-          <Text className="text-lg text-slate-700">{copy.app.welcome}</Text>
-        )}
-        <Text className="text-slate-600">{copy.app.active}</Text>
-        {roles.length > 0 ? (
-          <p className="text-sm text-slate-600">
-            {copy.app.rolesLabel}:{' '}
-            <span className="font-medium text-slate-800">
-              {roles.map((r) => roleLabels[r] ?? r).join(' · ')}
-            </span>
+        <p className="text-xl font-medium tracking-tight text-slate-800 sm:text-2xl">
+          {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
+        </p>
+        {email ? (
+          <p className="text-sm text-slate-500">
+            <span className="text-slate-400">{copy.app.emailLabel}: </span>
+            {email}
           </p>
         ) : null}
+      </header>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle className="text-base">{copy.app.accountStatusTitle}</CardTitle>
+            <CardDescription>{copy.app.accountStatusHint}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Badge variant="success">{copy.app.active}</Badge>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-none">
+          <CardHeader>
+            <CardTitle className="text-base">{copy.app.rolesLabel}</CardTitle>
+            <CardDescription>{copy.app.rolesHint}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {session.roles.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5">
+                {session.roles.map((code) => (
+                  <Badge key={code} variant="brand">
+                    {roleLabelPt(code, roleLabels)}
+                  </Badge>
+                ))}
+              </div>
+            ) : (
+              <Text className="text-sm text-slate-600">{copy.app.noRoles}</Text>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <Text className="text-sm font-medium uppercase tracking-wide text-slate-500">
-          Em preparação
-        </Text>
-        <ul className="flex flex-col gap-2 text-slate-700">
-          <li className="border-b border-slate-100 py-3">Patrimónios — activar e acompanhar</li>
-          <li className="border-b border-slate-100 py-3">Confiança — documentos e verificação</li>
-          <li className="border-b border-slate-100 py-3">Habitação — jornada do Cliente</li>
+      <section className="flex flex-col gap-4" aria-labelledby="upcoming-modules-heading">
+        <div className="flex flex-col gap-1">
+          <h2
+            id="upcoming-modules-heading"
+            className="text-sm font-semibold tracking-wide text-slate-800"
+          >
+            {copy.app.upcomingTitle}
+          </h2>
+          <Text className="text-sm text-slate-500">{copy.app.stub}</Text>
+        </div>
+
+        <ul className="grid gap-3 sm:grid-cols-1">
+          {UPCOMING_MODULES.map((mod) => (
+            <li key={mod.key}>
+              <div
+                aria-disabled="true"
+                className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-slate-50/80 px-4 py-4 opacity-80"
+              >
+                <div className="min-w-0">
+                  <p className="font-medium text-slate-800">{mod.title}</p>
+                  <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+                </div>
+                <span className="shrink-0 rounded-kuteka border border-slate-200 bg-white px-2 py-0.5 text-xs font-medium text-slate-500">
+                  {copy.app.moduleUnavailable}
+                </span>
+              </div>
+            </li>
+          ))}
         </ul>
-        <Text className="text-sm text-slate-500">{copy.app.stub}</Text>
-      </div>
+      </section>
 
       <div className="flex flex-wrap gap-3">
         <Link href="/" className={cn(buttonVariants({ variant: 'secondary' }))}>
-          Voltar à Landing
+          {copy.app.ctaLanding}
+        </Link>
+        <Link href="/auth/onboarding/perfil" className={cn(buttonVariants({ variant: 'ghost' }))}>
+          {copy.app.ctaProfile}
         </Link>
       </div>
     </div>
