@@ -52,5 +52,6 @@
       "version": "10.33.3",
       "onFail": "ignore"
     }
-  }
+  },
+  "packageManager": "pnpm@10.33.3"
 }
