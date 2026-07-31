@@ -1,40 +1,21 @@
-# Bloqueios externos — actualizado 2026-07-31 (tarde)
+# Bloqueios externos — actualizado 2026-07-31 (noite)
 
-Prioridade: **entrega**. Estado real verificado por HTTP.
+| ID  | Bloqueio        | Estado                                                             |
+| --- | --------------- | ------------------------------------------------------------------ |
+| E3  | Domínio público | ✅ `kutekalink.com` serve KEOS                                     |
+| E4  | Deploy Actions  | ✅ Verde                                                           |
+| E2  | Supabase remoto | ✅ Projecto `vhqwitbrpqaiutjbundo` · migrations `0001–0003` · seed |
+| E1  | PAT `workflow`  | 🟡 Opcional                                                        |
 
-| ID  | Bloqueio                        | Estado                                                                  | Owner |
-| --- | ------------------------------- | ----------------------------------------------------------------------- | ----- |
-| E3  | Domínio público desalinhado     | ✅ **Resolvido** — `kutekalink.com` serve KEOS via Render (deploy hook) | —     |
-| E4  | Deploy Actions sem lockfile npm | ✅ **Resolvido** — `package-lock.json` + Deploy Kuteka verde            | —     |
-| E1  | PAT sem scope `workflow`        | 🟡 Opcional — agent não edita `.github/workflows/*`                     | PO    |
-| E2  | Supabase remoto + env           | ❌ **Único bloqueio de produto** — login real                           | PO    |
+## Supabase (activo)
 
-## E2 — o que falta (1 passo teu)
+- URL: `https://vhqwitbrpqaiutjbundo.supabase.co`
+- Auth Site URL: `https://kutekalink.com`
+- Runtime: `/kuteka-config.js` (anon key pública)
+- Secrets GitHub: `NEXT_PUBLIC_SUPABASE_*` + `SUPABASE_SERVICE_ROLE_KEY`
 
-1. Criar token: https://supabase.com/dashboard/account/tokens
-2. No ambiente Cloud / terminal:
+## Validação
 
-```bash
-export SUPABASE_ACCESS_TOKEN=sbp_...
-export SUPABASE_ORG_ID=<org-id>   # aparece com: npx supabase orgs list
-bash scripts/bootstrap-supabase.sh
-```
-
-Isso cria/liga o projecto, aplica `0001`→`0003`, gera `kuteka-config.js` com URL+anon.
-
-3. Colar também em GitHub Secrets (para rebuilds futuros):
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` (só se houver server)
-
-4. Auth URLs no dashboard Supabase:
-   - Site URL: `https://kutekalink.com`
-   - Redirect allowlist: `https://kutekalink.com/auth/**`
-
-**Alternativa mínima:** criar projecto no UI, correr SQL das 3 migrations, e editar `kuteka-config.js` no host com URL+anon (runtime — sem rebuild).
-
-## E1 — opcional (1 min no browser)
-
-Substituir `.github/workflows/deploy.yml` pelo conteúdo de  
-`docs/engineering/github-workflows/deploy.yml`  
-via GitHub → Edit file (o agent não tem scope `workflow`).
+1. Abrir https://kutekalink.com/auth/registar — banner “config em falta” deve desaparecer
+2. Criar conta com email real (confirmação Supabase)
+3. Completar onboarding → `/app`

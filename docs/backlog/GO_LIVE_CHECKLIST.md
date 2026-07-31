@@ -3,22 +3,21 @@
 ## Já feito
 
 - [x] Landing KEOS
-- [x] CI quality activo e verde
-- [x] PRD-001 auth código merged (`main`)
-- [x] Export estático `/auth/*` + `/app` no ar
-- [x] **E3** — `https://kutekalink.com` serve site novo (Render)
-- [x] **E4** — Deploy Kuteka verde (`package-lock.json`)
-- [x] Runtime `kuteka-config.js` para activar Supabase sem rebuild completo
-- [x] Script `scripts/bootstrap-supabase.sh` para P2 + keys
+- [x] CI quality
+- [x] PRD-001 auth código
+- [x] `/auth/*` · `/app` no ar
+- [x] E3 domínio público KEOS
+- [x] E4 Deploy Kuteka
+- [x] E2 / P2 Supabase remoto (`vhqwitbrpqaiutjbundo`, migrations + seed + auth URLs)
+- [x] `kuteka-config.js` + GitHub Secrets
 
-## Ops restante
+## Validação produto (agora)
 
-- [ ] **E2 / P2** — `SUPABASE_ACCESS_TOKEN` (+ org) → `bash scripts/bootstrap-supabase.sh`
-- [ ] P4 — templates email Auth + redirect allowlist
-- [ ] E1 (opcional) — actualizar `deploy.yml` activo para pnpm
-
-## Validação produto (após E2)
-
-- [ ] `/auth/registar` e `/auth/entrar` sem banner “config em falta”
-- [ ] Fluxo F1→F2→F6→`/app` com conta real
+- [ ] Registo com email real + verificar caixa de entrada
+- [ ] Login → onboarding papéis/perfil → `/app`
 - [ ] Logout `/auth/sair`
+- [ ] (Opcional P4) templates email com marca Kuteka
+
+## Opcional
+
+- [ ] E1 — actualizar `deploy.yml` activo para pnpm

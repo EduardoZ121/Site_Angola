@@ -14,7 +14,7 @@
 | **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde               |
 | **PRD-001 Spec**           | ✅ v1.0 Aprovação Funcional                                |
 | **Auth código**            | ✅ Merged `main` + estático `/auth/*` · `/app`             |
-| **P2 Supabase `0002`**     | ❌ **Único bloqueio** — precisa `SUPABASE_ACCESS_TOKEN`    |
+| **P2 Supabase `0002`**     | ✅ Aplicado em `vhqwitbrpqaiutjbundo` (0001–0003 + seed)   |
 | **Domínio kutekalink.com** | ✅ KEOS no ar via Render (`/auth/*` · `/app` OK)           |
 | **Deploy Kuteka (E4)**     | ✅ Verde com `package-lock.json`                           |
 

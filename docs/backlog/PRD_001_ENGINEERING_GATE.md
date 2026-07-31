@@ -5,8 +5,8 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** Diagnóstico ✅ · Gate **ABERTO** (P1 ✅ · P2 ❌ diferido) · **Implementação auth AUTORIZADA** (PO 2026-07-31 · P2 diferido — ver §15) · P2 continua ops obrigatório antes de go-live / e2e real com backend  
-**Maturidade deste documento:** Diagnóstico aprovado · Gate operacional **não verde** até P2 · código auth autorizado sob §15
+**Estado:** Diagnóstico ✅ · Gate **VERDE** (P1 ✅ · P2 ✅ 2026-07-31) · Auth UI + Supabase remoto operacionais  
+**Maturidade deste documento:** Gate operacional verde — P2 aplicado no projecto `vhqwitbrpqaiutjbundo`
 
 ---
 
@@ -65,7 +65,7 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 | ID  | Item                                                                                              | Severidade                                                                  | Notas                                                                     |
 | --- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
 | P1  | Activar `.github/workflows/ci.yml` no remote e obter pipeline **verde**                           | ✅ **Fechado** (2026-07-31)                                                 | Evidência §8.1 — run verde em `main`                                      |
-| P2  | Aplicar migration `0002` no **Supabase remoto** (ambientes relevantes)                            | **Bloqueante**                                                              | Ficheiro existe; aplicação remota não confirmada                          |
+| P2  | Aplicar migration `0002` no **Supabase remoto** (ambientes relevantes)                            | ✅ **Fechado** (2026-07-31)                                                 | Evidência §8.2 — projecto `vhqwitbrpqaiutjbundo`                          |
 | P3  | Autorização de Implementação (Fase 2)                                                             | **Condicional ✅** (PO 2026-07-30)                                          | Activa-se automaticamente com P1+P2 evidentes (§12); sem nova confirmação |
 | P4  | Templates de email Auth (verify / reset) com marca Kuteka + redirect URLs allowlisted no Supabase | **Bloqueante para go-live auth**; desejável antes de começar UI se possível | Ops Supabase (§16.1 / §5.3)                                               |
 | P5  | `kutekalink.com` a servir Landing KEOS (DNS / Render)                                             | **Não bloqueante** para começar código auth em preview                      | Bloqueia experiência pública coerente; ver DEPLOY_STATUS                  |
@@ -152,7 +152,18 @@ Notas: ficheiro criado via UI GitHub; falhas iniciais de pnpm/turbo/prettier cor
 | Aplicado por | _pendente_ |
 | Checklist    | _pendente_ |
 
-Última re-verificação objectiva P2 (Líder Técnico): **2026-07-31** — sem credenciais Supabase no ambiente; token fine-grained novo sem write/secrets. P2 permanece ❌.
+Última re-verificação objectiva P2 (Líder Técnico): **2026-07-31 21:50 UTC** — ✅
+
+| Campo              | Valor                                                                                    |
+| ------------------ | ---------------------------------------------------------------------------------------- |
+| Project ref        | `vhqwitbrpqaiutjbundo`                                                                   |
+| Região             | `eu-west-1`                                                                              |
+| Migrations         | `0001` · `0002` · `0003` aplicadas via `supabase db push`                                |
+| Seed roles         | `0001_roles.sql` (client, patrimonial_partner, certified_agent, administrator)           |
+| Site URL Auth      | `https://kutekalink.com`                                                                 |
+| Redirect allowlist | `https://kutekalink.com/**`, `www`, `localhost:3000`                                     |
+| GitHub Secrets     | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` |
+| Runtime            | `kuteka-config.js` com URL+anon (chave pública)                                          |
 
 ### 8.3 Paralelo (não fecha o Gate sozinho)
 
