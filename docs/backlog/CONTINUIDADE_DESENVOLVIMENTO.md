@@ -8,17 +8,17 @@
 
 ## Onde estamos agora (ponto de paragem)
 
-| Camada                     | Estado                                            |
-| -------------------------- | ------------------------------------------------- |
-| **Landing KEOS**           | ✅ Feita e na `main`                              |
-| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde      |
-| **PRD-001 Auth**           | ✅ **N5** · baseline `PROJECT_BASELINE_PRD001.md` |
-| **Supabase remoto**        | ✅ `vhqwitbrpqaiutjbundo` (0001–0003 + seed)      |
-| **Domínio kutekalink.com** | ✅ KEOS no ar (Render + gh-pages)                 |
-| **Deploy Kuteka**          | ✅ Verde                                          |
-| **Fase 3 Shell**           | ▶️ Preparação — `PHASE_3_PLATFORM_SHELL_PREP.md`  |
+| Camada                     | Estado                                                              |
+| -------------------------- | ------------------------------------------------------------------- |
+| **Landing KEOS**           | ✅ Feita e na `main`                                                |
+| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde                        |
+| **PRD-001 Auth**           | ✅ **N5** · baseline `PROJECT_BASELINE_PRD001.md`                   |
+| **Supabase remoto**        | ✅ `vhqwitbrpqaiutjbundo` (0001–0003 + seed)                        |
+| **Domínio kutekalink.com** | ✅ KEOS no ar (Render + gh-pages)                                   |
+| **Deploy Kuteka**          | ✅ Verde                                                            |
+| **Fase 3 Shell**           | ⏳ Spec N3 — `PHASE_3_PLATFORM_SHELL_SPEC.md` (Aprovação Funcional) |
 
-**Estado 2026-07-31:** Baseline PRD-001 congelada. Em preparação: **Fase 3 — Shell da Plataforma**.
+**Estado 2026-07-31:** Baseline PRD-001 congelada. Spec Shell **N3** apresentada ao PO.
 
 ---
 
@@ -42,9 +42,11 @@
 
 ## Próximos passos (sequência recomendada)
 
-### 1. Shell da plataforma (fase 3 — em preparação)
+### 1. Shell da plataforma (fase 3 — Aprovação Funcional)
 
-Ver `PHASE_3_PLATFORM_SHELL_PREP.md`. Próximo entregável: **spec funcional** até N3 para Aprovação Funcional do PO. **Sem** reabrir polish do stub auth.
+Spec: `PHASE_3_PLATFORM_SHELL_SPEC.md` v0.9 (N3).  
+**Acção PO:** aprovar D1–D12 + autorização condicional §12.  
+Depois: implementação autónoma até N5. **Sem** reabrir polish do stub auth.
 
 ### 2. PRD-002 — Parceiro Patrimonial
 

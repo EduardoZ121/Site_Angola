@@ -131,7 +131,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
 1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
 2 Autenticação (PRD-001) — **N5 concluído** · baseline congelada `PROJECT_BASELINE_PRD001.md`  
-3 Shell da plataforma — **em preparação** (`PHASE_3_PLATFORM_SHELL_PREP.md`)  
+3 Shell da plataforma — **spec N3 candidata** (`PHASE_3_PLATFORM_SHELL_SPEC.md`) · aguarda Aprovação Funcional  
 4 Parceiro Patrimonial (PRD-002)  
 5 Cliente (PRD-003)  
 6 Agente (PRD-004)  

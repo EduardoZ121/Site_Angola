@@ -80,7 +80,7 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 2. **Landing Page** (PASSO 1 + 1A) — ✅ encerrada
 3. **P0 pré-Auth** — ✅ (CI + migrations remotas)
 4. **PRD-001 Auth** — ✅ **N5** · baseline congelada (`PROJECT_BASELINE_PRD001.md`)
-5. **Shell da plataforma** — ▶️ em preparação
+5. **Shell da plataforma** — ⏳ spec N3 (`PHASE_3_PLATFORM_SHELL_SPEC.md`)
 6. **PRD-002+** Parceiro Patrimonial, Cliente, …
 
 Processo oficial: `docs/engineering/DEVELOPMENT_PROCESS.md`  
