@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { Alert, Checkbox, Text } from '@kuteka/ui';
 import { resolveSafeNextPath } from '@kuteka/auth';
 import { onboardingRolesSchema, type SelfServeRoleCode } from '@kuteka/validation';
 import { getAuthCopy } from '../content';
@@ -56,52 +55,57 @@ export function OnboardingRolesForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6" noValidate>
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+      {error ? (
+        <div className="auth-alert" role="alert">
+          {error}
+        </div>
+      ) : null}
 
       <div>
-        <Text className="font-medium text-slate-900">{copy.onboarding.roles.title}</Text>
-        <Text className="mt-1 text-sm text-slate-500">{copy.onboarding.roles.hint}</Text>
+        <p className="font-medium text-white">{copy.onboarding.roles.title}</p>
+        <p className="mt-1 text-sm text-slate-400">{copy.onboarding.roles.hint}</p>
       </div>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-kuteka border border-slate-200 bg-white/60 p-4 transition-colors hover:border-brand-300">
-        <Checkbox
+      <label className="flex cursor-pointer items-start gap-3 rounded-kuteka border border-white/15 bg-white/[0.06] p-4 transition-colors hover:border-brand-400/50">
+        <input
+          type="checkbox"
           checked={roles.includes('client')}
           onChange={() => toggle('client')}
-          className="mt-1"
+          className="mt-1 size-4 rounded border-white/30 bg-white/10 text-brand-600 focus:ring-brand-500"
         />
         <span>
-          <span className="block font-medium text-slate-900">{copy.onboarding.roles.client}</span>
-          <span className="mt-0.5 block text-sm text-slate-600">
+          <span className="block font-medium text-white">{copy.onboarding.roles.client}</span>
+          <span className="mt-0.5 block text-sm text-slate-300">
             {copy.onboarding.roles.clientDesc}
           </span>
         </span>
       </label>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-kuteka border border-slate-200 bg-white/60 p-4 transition-colors hover:border-brand-300">
-        <Checkbox
+      <label className="flex cursor-pointer items-start gap-3 rounded-kuteka border border-white/15 bg-white/[0.06] p-4 transition-colors hover:border-brand-400/50">
+        <input
+          type="checkbox"
           checked={roles.includes('patrimonial_partner')}
           onChange={() => toggle('patrimonial_partner')}
-          className="mt-1"
+          className="mt-1 size-4 rounded border-white/30 bg-white/10 text-brand-600 focus:ring-brand-500"
         />
         <span>
-          <span className="block font-medium text-slate-900">{copy.onboarding.roles.partner}</span>
-          <span className="mt-0.5 block text-sm text-slate-600">
+          <span className="block font-medium text-white">{copy.onboarding.roles.partner}</span>
+          <span className="mt-0.5 block text-sm text-slate-300">
             {copy.onboarding.roles.partnerDesc}
           </span>
         </span>
       </label>
 
-      <Text className="text-sm leading-relaxed text-slate-600">
-        {copy.onboarding.roles.multiRole}
-      </Text>
-      <Text className="text-sm text-slate-500">{copy.onboarding.roles.agentNote}</Text>
+      <p className="text-sm leading-relaxed text-slate-300">{copy.onboarding.roles.multiRole}</p>
+      <p className="text-sm text-slate-400">{copy.onboarding.roles.agentNote}</p>
 
       <SubmitButton
         state={effectiveState}
         idleLabel={copy.onboarding.roles.submit}
         loadingLabel={copy.onboarding.roles.submitLoading}
         successLabel={copy.onboarding.roles.success}
-        className="w-full"
+        className="min-h-12 w-full text-base"
+        size="lg"
       />
     </form>
   );

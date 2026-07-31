@@ -5,7 +5,11 @@ import { getAuthCopy } from '../content';
 
 export type AuthClientResult<T = void> =
   | { ok: true; data: T }
-  | { ok: false; message: string; code?: 'duplicate_email' | 'generic' | 'config' | 'network' };
+  | {
+      ok: false;
+      message: string;
+      code?: 'duplicate_email' | 'generic' | 'config' | 'network' | 'rate_limited';
+    };
 
 const copy = getAuthCopy();
 
@@ -13,12 +17,54 @@ function configError(): AuthClientResult<never> {
   return {
     ok: false,
     code: 'config',
-    message: `${copy.common.configMissing} ${copy.common.nextStepRetry}`,
+    message: copy.common.configMissing,
+  };
+}
+
+function isRateLimitMessage(msg: string, status?: number): boolean {
+  const m = msg.toLowerCase();
+  return (
+    status === 429 ||
+    m.includes('rate limit') ||
+    m.includes('over_email') ||
+    m.includes('email rate') ||
+    m.includes('too many requests') ||
+    m.includes('security purposes')
+  );
+}
+
+function mapAuthError(
+  error: { message?: string; status?: number; code?: string },
+  fallback: string,
+): AuthClientResult<never> {
+  const msg = error.message ?? '';
+  const code = error.code ?? '';
+  if (isRateLimitMessage(`${msg} ${code}`, error.status)) {
+    return { ok: false, code: 'rate_limited', message: copy.common.rateLimited };
+  }
+  if (
+    /already|registered|exists|user_already/i.test(msg) ||
+    code === 'user_already_exists' ||
+    error.status === 422
+  ) {
+    return {
+      ok: false,
+      code: 'duplicate_email',
+      message: `${copy.register.duplicate.title} ${copy.register.duplicate.body}`,
+    };
+  }
+  return {
+    ok: false,
+    code: 'generic',
+    message: fallback,
   };
 }
 
 function mapUnknownError(err: unknown, fallback: string): AuthClientResult<never> {
   const msg = err instanceof Error ? err.message : String(err);
+  if (isRateLimitMessage(msg)) {
+    return { ok: false, code: 'rate_limited', message: copy.common.rateLimited };
+  }
   if (/fetch|network|Failed to fetch|Load failed/i.test(msg)) {
     return { ok: false, code: 'network', message: copy.common.networkError };
   }
@@ -38,7 +84,7 @@ export async function signUp(input: {
   email: string;
   password: string;
   emailRedirectTo?: string;
-}): Promise<AuthClientResult<{ needsEmailVerification: boolean }>> {
+}): Promise<AuthClientResult<{ needsEmailVerification: boolean; hasSession: boolean }>> {
   const client = getClient();
   if (!client) return configError();
 
@@ -52,24 +98,7 @@ export async function signUp(input: {
     });
 
     if (error) {
-      const m = error.message.toLowerCase();
-      if (
-        m.includes('already') ||
-        m.includes('registered') ||
-        m.includes('exists') ||
-        error.status === 422
-      ) {
-        return {
-          ok: false,
-          code: 'duplicate_email',
-          message: `${copy.register.duplicate.title} ${copy.register.duplicate.body}`,
-        };
-      }
-      return {
-        ok: false,
-        code: 'generic',
-        message: `${error.message || copy.common.networkError} ${copy.common.nextStepRetry}`,
-      };
+      return mapAuthError(error, copy.common.networkError);
     }
 
     // Supabase may return empty identities for existing email (anti-enumeration on some projects)
@@ -81,9 +110,15 @@ export async function signUp(input: {
       };
     }
 
+    const confirmed = Boolean(data.user?.email_confirmed_at);
+    const hasSession = Boolean(data.session);
+    // With mailer_autoconfirm, email may be confirmed even if session is omitted.
     return {
       ok: true,
-      data: { needsEmailVerification: !data.session },
+      data: {
+        needsEmailVerification: !hasSession && !confirmed,
+        hasSession,
+      },
     };
   } catch (err) {
     return mapUnknownError(err, `${copy.common.networkError} ${copy.common.nextStepRetry}`);
@@ -183,11 +218,7 @@ export async function resendVerification(input: { email: string }): Promise<Auth
       email: input.email,
     });
     if (error) {
-      return {
-        ok: false,
-        code: 'generic',
-        message: `Não foi possível reenviar o email. ${copy.common.nextStepRetry}`,
-      };
+      return mapAuthError(error, `Não foi possível reenviar o email. ${copy.common.nextStepRetry}`);
     }
     return { ok: true, data: undefined };
   } catch (err) {

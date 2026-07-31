@@ -2,8 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { Alert, Input, Label, Text, buttonVariants } from '@kuteka/ui';
-import { cn } from '@kuteka/shared';
 import Link from 'next/link';
 import { getAuthCopy } from '../content';
 import { updateDisplayName } from '../services/auth-client';
@@ -48,14 +46,22 @@ export function OnboardingProfileForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+      {error ? (
+        <div className="auth-alert" role="alert">
+          {error}
+        </div>
+      ) : null}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="display-name">{copy.onboarding.profile.displayName.label}</Label>
-        <Input
+        <label htmlFor="display-name" className="auth-label">
+          {copy.onboarding.profile.displayName.label}
+        </label>
+        <input
           id="display-name"
+          className="auth-field"
           type="text"
           autoComplete="nickname"
+          placeholder="Como prefere ser chamado"
           value={displayName}
           onChange={(ev) => setDisplayName(ev.target.value)}
           maxLength={120}
@@ -66,14 +72,15 @@ export function OnboardingProfileForm() {
         state={submitState === 'loading' || submitState === 'success' ? submitState : 'idle'}
         idleLabel={copy.onboarding.profile.submit}
         loadingLabel={copy.onboarding.profile.submitLoading}
-        className="w-full"
+        className="min-h-12 w-full text-base"
+        size="lg"
       />
 
-      <Text className="text-center text-sm">
-        <Link href={rolesHref()} className={cn(buttonVariants({ variant: 'ghost' }), 'text-sm')}>
+      <p className="text-center text-sm">
+        <Link href={rolesHref()} className="auth-link">
           {copy.onboarding.profile.skip}
         </Link>
-      </Text>
+      </p>
     </form>
   );
 }

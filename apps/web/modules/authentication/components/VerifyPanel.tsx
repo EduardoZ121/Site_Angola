@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Alert, Button, buttonVariants, Text } from '@kuteka/ui';
+import { Button, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { getAuthCopy } from '../content';
 import { resendVerification } from '../services/auth-client';
@@ -60,8 +60,16 @@ export function VerifyPanel() {
     });
     return (
       <div className="flex flex-col gap-6">
-        <Alert variant="success">{copy.verify.already.title}</Alert>
-        <Link href={ctaHref} className={cn(buttonVariants({ variant: 'primary' }), 'w-full')}>
+        <div
+          className="rounded-kuteka border border-emerald-400/35 bg-emerald-500/15 px-3.5 py-3 text-sm text-emerald-50"
+          role="status"
+        >
+          {copy.verify.already.title}
+        </div>
+        <Link
+          href={ctaHref}
+          className={cn(buttonVariants({ variant: 'primary', size: 'lg' }), 'min-h-12 w-full')}
+        >
           {copy.verify.already.cta}
         </Link>
       </div>
@@ -71,19 +79,30 @@ export function VerifyPanel() {
   return (
     <div className="flex flex-col gap-6">
       {email ? (
-        <Text className="text-sm text-slate-600">
-          {copy.verify.sentTo}:{' '}
-          <span className="font-medium text-slate-800">{maskEmail(email)}</span>
-        </Text>
+        <p className="text-sm text-slate-300">
+          {copy.verify.sentTo}: <span className="font-medium text-white">{maskEmail(email)}</span>
+        </p>
       ) : null}
 
-      {message ? <Alert variant="success">{message}</Alert> : null}
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+      {message ? (
+        <div
+          className="rounded-kuteka border border-emerald-400/35 bg-emerald-500/15 px-3.5 py-3 text-sm text-emerald-50"
+          role="status"
+        >
+          {message}
+        </div>
+      ) : null}
+      {error ? (
+        <div className="auth-alert" role="alert">
+          {error}
+        </div>
+      ) : null}
 
       <Button
         type="button"
         variant="secondary"
-        className="w-full"
+        className="min-h-12 w-full"
+        size="lg"
         loading={loading}
         disabled={loading || cooldown > 0 || !email}
         onClick={onResend}
@@ -93,11 +112,11 @@ export function VerifyPanel() {
           : copy.verify.resend}
       </Button>
 
-      <Text className="text-center text-sm text-slate-500">
-        <Link href="/auth/entrar" className="text-brand-600 hover:underline">
+      <p className="text-center text-sm text-slate-300">
+        <Link href="/auth/entrar" className="auth-link">
           {copy.login.title}
         </Link>
-      </Text>
+      </p>
     </div>
   );
 }
