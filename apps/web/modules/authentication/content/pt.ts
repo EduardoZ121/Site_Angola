@@ -110,13 +110,14 @@ export const authCopyPt = {
     welcomeSubtitle: 'A sua conta está quase pronta. Vamos concluir uma configuração rápida.',
     roles: {
       title: 'Como quer usar a Kuteka?',
-      hint: 'Pode escolher um ou ambos.',
+      hint: 'Indique como pretende usar a Kuteka. Pode alterar ou acrescentar papéis mais tarde.',
       client: 'Cliente',
       clientDesc: 'Procurar, reservar ou gerir o seu percurso habitacional.',
       partner: 'Parceiro Patrimonial',
       partnerDesc: 'Disponibilizar e gerir patrimónios.',
       multiRole:
-        'Pode usar a mesma conta para vários papéis. Não será necessário criar outra conta. Pode alterar papéis depois nas definições.',
+        'Pode seleccionar um ou ambos. A mesma conta pode assumir vários papéis conforme as suas necessidades.',
+      selectAtLeastOne: 'Escolha pelo menos um papel para continuar.',
       agentNote: 'Agente e Administrador são atribuídos pela Kuteka.',
       submit: 'Continuar',
       submitLoading: 'A activar…',
@@ -135,10 +136,14 @@ export const authCopyPt = {
     title: 'O seu espaço Kuteka',
     welcome: 'Bem-vindo',
     active: 'A sua conta está activa.',
+    rolesLabel: 'Papéis activos',
+    loadError: 'Não foi possível carregar o seu espaço. Tente novamente dentro de momentos.',
     stub: 'Os módulos da plataforma serão disponibilizados nas próximas fases — com a mesma conta e os seus papéis.',
     adminTitle: 'Administração',
     adminStub:
       'Área administrativa (permissão admin.panel). Os painéis de negócio serão disponibilizados nas próximas fases.',
+    adminForbidden:
+      'Não tem permissão para aceder a esta área (admin.panel). Se acredita que isto é um erro, contacte a Kuteka.',
     configMissing:
       'A área autenticada requer a configuração do Supabase. Defina as variáveis de ambiente e volte a tentar.',
   },
