@@ -39,6 +39,8 @@ jobs:
         env:
           NEXT_PUBLIC_APP_URL: https://kutekalink.com
           NEXT_PUBLIC_ENABLE_DEV_TOOLS: 'false'
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
       - name: Deploy to GitHub Pages (gh-pages)
         uses: peaceiris/actions-gh-pages@v4

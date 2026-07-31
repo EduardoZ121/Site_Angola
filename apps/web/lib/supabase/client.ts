@@ -1,8 +1,10 @@
 import { createBrowserSupabaseClient, createServerSupabaseClient } from '@kuteka/database';
 import { requireSupabasePublicEnv } from '@/lib/env';
+import { requirePublicSupabaseEnv } from '@/modules/authentication/lib/public-config';
 
 export function createBrowserClient() {
-  return createBrowserSupabaseClient(requireSupabasePublicEnv());
+  // Prefer runtime kuteka-config.js on static hosts; fall back to build-time env.
+  return createBrowserSupabaseClient(requirePublicSupabaseEnv());
 }
 
 export async function createServerClient() {

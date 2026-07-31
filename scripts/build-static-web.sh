@@ -51,6 +51,9 @@ if [[ ! -f out/404.html && -f out/index.html ]]; then
 fi
 
 echo 'kutekalink.com' > out/CNAME
+# Runtime public config (may be empty until Supabase keys are set)
+node "$ROOT/scripts/write-kuteka-config.mjs"
+cp -f "$WEB/public/kuteka-config.js" out/kuteka-config.js
 
 echo "Static export ready at apps/web/out"
 ls -la out | head

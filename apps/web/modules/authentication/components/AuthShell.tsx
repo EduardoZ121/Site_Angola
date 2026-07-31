@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { Heading, Text } from '@kuteka/ui';
 import { getAuthCopy } from '../content';
-import { isSupabaseConfigured } from '../lib/supabase-config';
+import { ConfigMissingBanner } from './ConfigMissingBanner';
 
 interface AuthShellProps {
   title: string;
@@ -16,7 +16,6 @@ interface AuthShellProps {
  */
 export function AuthShell({ title, subtitle, children }: AuthShellProps) {
   const copy = getAuthCopy();
-  const configured = isSupabaseConfigured();
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-orange-50">
@@ -37,14 +36,7 @@ export function AuthShell({ title, subtitle, children }: AuthShellProps) {
         {subtitle ? (
           <Text className="mt-3 text-base leading-relaxed text-slate-600">{subtitle}</Text>
         ) : null}
-        {!configured ? (
-          <p
-            role="status"
-            className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950"
-          >
-            {copy.common.configMissing}
-          </p>
-        ) : null}
+        <ConfigMissingBanner />
         <div className="mt-8 flex flex-col gap-6">{children}</div>
       </div>
     </div>
