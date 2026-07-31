@@ -5,8 +5,8 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** Diagnóstico ✅ · Gate **VERDE** (P1 ✅ · P2 ✅ 2026-07-31) · Auth UI + Supabase remoto operacionais  
-**Maturidade deste documento:** Gate operacional verde — P2 aplicado no projecto `vhqwitbrpqaiutjbundo`
+**Estado:** ✅ Gate **VERDE** (histórico) · Módulo PRD-001 **N5 concluído** — `PRD_001_CLOSURE.md`  
+**Maturidade deste documento:** Histórico de prontidão — P1/P2 cumpridos; implementação encerrada 2026-07-31
 
 ---
 

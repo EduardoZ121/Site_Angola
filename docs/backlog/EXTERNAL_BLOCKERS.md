@@ -16,6 +16,8 @@
 
 ## Validação
 
-1. Abrir https://kutekalink.com/auth/registar — banner “config em falta” deve desaparecer
-2. Criar conta com email real (confirmação Supabase)
-3. Completar onboarding → `/app`
+1. Abrir https://kutekalink.com/auth/registar — banner “config em falta” deve desaparecer ✅
+2. Criar conta com email real (confirmação Supabase) ✅ (QA PO)
+3. Completar onboarding → `/app` ✅ (QA Review 001–002)
+
+PRD-001 encerrado: `docs/backlog/PRD_001_CLOSURE.md`.

@@ -2,30 +2,29 @@
 
 **Documento:** Especificação funcional e técnica para revisão de negócio  
 **Versão:** 1.0  
-**Estado:** ✅ Aprovação Funcional · ⏳ Autorização de Implementação **condicional** (activa com P1+P2) · Gate aberto · **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
-**Maturidade do documento:** Aprovado funcionalmente · **pré-N4** (N4 = Engineering Gate + Autorização de Implementação)  
+**Estado:** ✅ **Módulo concluído (N5)** — 2026-07-31 · Encerramento: `docs/backlog/PRD_001_CLOSURE.md`  
+**Maturidade do documento / módulo:** Aprovação Funcional ✅ · Implementação ✅ · Validação PO ✅ · **N5**  
 **Módulo KEOS:** `apps/web/modules/authentication` (+ `lib/auth`, rotas `(auth)` / `(app)`)  
 **Autoridade de produto:** Manual > Blueprint > Design System Nº 003 > PASSO 0 > `AI_CONTEXT` > este PRD  
-**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` (fase prévia: `PHASE_GATE_BEFORE_PRD001.md`)  
-**Pré-implementação obrigatória:** Engineering Gate aprovado · CI activo · migration `0002` no remoto · Autorização de Implementação explícita do PO
+**Gate (histórico):** `docs/backlog/PRD_001_ENGINEERING_GATE.md` · ADR-004 aceite
 
 ---
 
 ## 0. Registo de autorização e revisão
 
-| Item                                     | Decisão                                                                 |
-| ---------------------------------------- | ----------------------------------------------------------------------- |
-| Fase anterior (dev)                      | Concluída                                                               |
-| P0 técnico                               | Concluído                                                               |
-| Pendências CI / migration 0002 / domínio | Infra/ops — resolver antes de implementar                               |
-| Elaboração / ajuste desta spec           | **Autorizada**                                                          |
-| Aprovação Funcional (Fase 1)             | ✅ **Oficial** (2026-07-30) — referência do módulo                      |
-| Autorização de Implementação (Fase 2)    | ⏳ **Condicional** (PO 2026-07-30) — activa com P1+P2 evidentes no Gate |
-| Implementação                            | ❌ Até P1+P2 ✅; depois iniciar de imediato (autorização pré-emitida)   |
-| Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                                      |
-| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8                                |
-| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                                      |
-| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18                                  |
+| Item                                     | Decisão                                              |
+| ---------------------------------------- | ---------------------------------------------------- |
+| Fase anterior (dev)                      | Concluída                                            |
+| P0 técnico                               | Concluído                                            |
+| Pendências CI / migration 0002 / domínio | ✅ Resolvidas (P1 CI · P2 remoto · domínio KEOS)     |
+| Elaboração / ajuste desta spec           | **Autorizada**                                       |
+| Aprovação Funcional (Fase 1)             | ✅ **Oficial** (2026-07-30) — referência do módulo   |
+| Autorização de Implementação (Fase 2)    | ✅ Emitida / consumida (PO 2026-07-30/31)            |
+| Implementação + encerramento N5          | ✅ **Concluído** (2026-07-31) — `PRD_001_CLOSURE.md` |
+| Bloco 1 — D1–D12                         | **Fechado** (2026-07-30) — ver §14                   |
+| Bloco 2 — Fluxos principais              | **Fechado** (2026-07-30) — ver §6 e §6.8             |
+| Bloco 3 — Casos limite                   | **Fechado** (2026-07-30) — ver §15                   |
+| Bloco 4 — Critérios finais + wireframes  | **Fechado** (2026-07-30) — ver §16–§18               |
 
 ### 0.1 Princípios arquitecturais oficiais (plataforma)
 
