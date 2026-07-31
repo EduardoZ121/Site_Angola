@@ -1,12 +1,17 @@
-import type { Metadata } from 'next';
-import AuthPlaceholderClient from './AuthPlaceholderClient';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-  title: 'Autenticação',
-  description: 'Acesso à plataforma Kuteka — em preparação.',
-  robots: { index: false, follow: false },
-};
+interface AuthIndexProps {
+  searchParams: Promise<{ mode?: string; next?: string }>;
+}
 
-export default function AuthPlaceholderPage() {
-  return <AuthPlaceholderClient />;
+export default async function AuthIndexPage({ searchParams }: AuthIndexProps) {
+  const params = await searchParams;
+  const q = new URLSearchParams();
+  if (params.next) q.set('next', params.next);
+  const qs = q.toString() ? `?${q.toString()}` : '';
+
+  if (params.mode === 'entrar') {
+    redirect(`/auth/entrar${qs}`);
+  }
+  redirect(`/auth/registar${qs}`);
 }

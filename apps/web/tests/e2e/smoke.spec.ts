@@ -34,9 +34,9 @@ test('health endpoint returns ok', async ({ request }) => {
   expect(body.status).toBe('ok');
 });
 
-test('comecar leads to auth placeholder', async ({ page }) => {
+test('comecar leads to register', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('banner').getByRole('link', { name: 'Começar' }).click();
-  await expect(page).toHaveURL(/\/auth/);
-  await expect(page.getByText('PRD-001')).toBeVisible();
+  await expect(page).toHaveURL(/\/auth\/registar/);
+  await expect(page.getByRole('heading', { name: 'Criar conta' })).toBeVisible();
 });

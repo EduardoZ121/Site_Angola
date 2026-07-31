@@ -1,19 +1,22 @@
 # Module: authentication
 
-Domínio KEOS — **stub** até Engineering Gate verde + activação do Implementation Readiness Pack.
+Domínio KEOS — **PRD-001** em implementação (N2 · ADR-004).
 
-**Spec oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0 · Aprovação Funcional ✅)  
-**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
-**Readiness:** `docs/backlog/PRD_001_IMPLEMENTATION_READINESS.md`  
-**Copy inventory:** `docs/backlog/PRD_001_CONTENT_INVENTORY.md`
+**Spec oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0)  
+**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` (§15 — P2 diferido)  
+**Readiness:** `docs/backlog/PRD_001_IMPLEMENTATION_READINESS.md` (**Activo**)  
+**Copy:** `content/pt.ts` ← `docs/backlog/PRD_001_CONTENT_INVENTORY.md`
 
-## Estrutura (reservada)
+## Estrutura
 
-- `components/` · `services/` · `repository/` · `hooks/` · `types/` · `validators/` · `tests/` · (futuro) `content/`
+- `content/` — copy i18n-ready (`getAuthCopy`)
+- `components/` — AuthShell, forms F1–F6, PasswordRules, SubmitButton
+- `lib/` — destination gate (R1), supabase config check
+- `services/auth-client.ts` — wrappers Supabase + erros guiados PT (R2/R6)
 
 ## Regras
 
-1. **Sem** regras de negócio nem UI de produto neste stub.
-2. Autorização de Implementação é **condicional** (PO 2026-07-30) e activa-se com P1+P2 evidentes — sem nova confirmação.
-3. Fonte de verdade na implementação: §15.5 R1–R12 + §16.5–§16.6.
-4. Não usar `legacy/` para auth.
+1. Fonte de verdade: §15.5 R1–R12 + §16.5–§16.6
+2. Sem OAuth / MFA / Passaporte / KAI
+3. Sem `legacy/`
+4. Env Supabase ausente → UI renderiza; submits com erro guiado
