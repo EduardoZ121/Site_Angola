@@ -21,6 +21,7 @@
 | [`backlog/PO_ACTION_P1_P2.md`](backlog/PO_ACTION_P1_P2.md)                                                               | Checklist mínimo humano para fechar P1+P2 (após tentativa autónom) |
 | [`backlog/CONTINUIDADE_DESENVOLVIMENTO.md`](backlog/CONTINUIDADE_DESENVOLVIMENTO.md)                                     | Mapa: onde paramos, manuais, próximos passos, deploy               |
 | [`backlog/EXTERNAL_BLOCKERS.md`](backlog/EXTERNAL_BLOCKERS.md)                                                           | Bloqueios só de credenciais/infra — trabalho paralelo continua     |
+| [`backlog/GO_LIVE_CHECKLIST.md`](backlog/GO_LIVE_CHECKLIST.md)                                                           | Checklist go-live — execução, não metodologia                      |
 | [`backlog/PRD_001_IMPLEMENTATION_READINESS.md`](backlog/PRD_001_IMPLEMENTATION_READINESS.md)                             | Pack de arranque (activa-se com P1+P2)                             |
 | [`backlog/PRD_001_CONTENT_INVENTORY.md`](backlog/PRD_001_CONTENT_INVENTORY.md)                                           | Inventário de copy i18n-ready (prep; sem UI)                       |
 | [`backlog/PHASE_GATE_BEFORE_PRD001.md`](backlog/PHASE_GATE_BEFORE_PRD001.md)                                             | Gate de fase pré-spec (histórico + ponteiros)                      |
