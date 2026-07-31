@@ -12,3 +12,6 @@ test-results
 prebuilt/
 # Edited via GitHub UI / tokens without workflow-write; avoid format:check blocking CI
 .github/workflows/
+
+apps/web/public/kuteka-config.js
+prebuilt/web-out/kuteka-config.js

@@ -133,7 +133,7 @@ export async function signIn(input: {
   if (!client) return configError();
 
   try {
-    const { error } = await client.auth.signInWithPassword({
+    const { data, error } = await client.auth.signInWithPassword({
       email: input.email,
       password: input.password,
     });
@@ -141,6 +141,14 @@ export async function signIn(input: {
     if (error) {
       // R6 — generic login message
       return { ok: false, code: 'generic', message: copy.login.errorGeneric };
+    }
+
+    // Ensure session is persisted before the next navigation (static hosts).
+    if (!data.session) {
+      const { data: again } = await client.auth.getSession();
+      if (!again.session) {
+        return { ok: false, code: 'generic', message: copy.common.sessionExpired };
+      }
     }
     return { ok: true, data: undefined };
   } catch (err) {
@@ -233,10 +241,22 @@ export async function activateSelfServeRoles(
   if (!client) return configError();
 
   try {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await client.auth.getSession();
+    if (sessionError || !session) {
+      return { ok: false, code: 'generic', message: copy.common.sessionExpired };
+    }
+
     const { error } = await client.rpc('activate_self_serve_roles', {
       p_role_codes: roleCodes,
     });
     if (error) {
+      const m = (error.message || '').toLowerCase();
+      if (m.includes('authentication required') || m.includes('jwt') || error.code === 'PGRST301') {
+        return { ok: false, code: 'generic', message: copy.common.sessionExpired };
+      }
       return {
         ok: false,
         code: 'generic',
