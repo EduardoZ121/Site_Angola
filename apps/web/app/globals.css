@@ -55,3 +55,54 @@ body {
     transform: none;
   }
 }
+
+/* Auth pages — presence without noise */
+@keyframes auth-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-fade-up {
+  opacity: 0;
+  animation: auth-fade-up 280ms ease-out forwards;
+}
+
+.auth-delay-1 {
+  animation-delay: 80ms;
+}
+
+.auth-delay-2 {
+  animation-delay: 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-fade-up {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Auth form controls on dark atmosphere */
+.auth-field {
+  @apply flex h-12 w-full rounded-kuteka border border-white/20 bg-white/[0.07] px-3.5 text-base text-white placeholder:text-slate-400 backdrop-blur-sm transition;
+  @apply focus-visible:border-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60;
+}
+
+.auth-label {
+  @apply text-sm font-medium text-slate-200;
+}
+
+.auth-link {
+  @apply font-medium text-brand-400 transition-colors hover:text-brand-300 hover:underline;
+}
+
+.auth-alert {
+  @apply rounded-kuteka border border-red-400/35 bg-red-500/15 px-3.5 py-3 text-sm leading-relaxed text-red-50;
+}

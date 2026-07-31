@@ -2,7 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { Alert, Input, Label } from '@kuteka/ui';
 import { canAccessAdminPanel } from '@kuteka/auth';
 import { fetchAuthorizationContext } from '@kuteka/database';
 import { newPasswordSchema, passwordRules } from '@kuteka/validation';
@@ -102,21 +101,28 @@ export function RecoverConfirmForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+      {error ? (
+        <div className="auth-alert" role="alert">
+          {error}
+        </div>
+      ) : null}
 
       <div className="flex flex-col gap-1.5">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="new-password">{copy.recover.confirm.password.label}</Label>
+        <div className="flex items-center justify-between gap-3">
+          <label htmlFor="new-password" className="auth-label">
+            {copy.recover.confirm.password.label}
+          </label>
           <button
             type="button"
-            className="text-xs font-medium text-brand-600 hover:underline"
+            className="text-xs font-medium text-brand-400 hover:text-brand-300"
             onClick={() => setShowPassword((v) => !v)}
           >
             {showPassword ? copy.common.hidePassword : copy.common.showPassword}
           </button>
         </div>
-        <Input
+        <input
           id="new-password"
+          className="auth-field"
           type={showPassword ? 'text' : 'password'}
           autoComplete="new-password"
           value={password}
@@ -127,9 +133,12 @@ export function RecoverConfirmForm() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="new-password-confirm">{copy.recover.confirm.confirm.label}</Label>
-        <Input
+        <label htmlFor="new-password-confirm" className="auth-label">
+          {copy.recover.confirm.confirm.label}
+        </label>
+        <input
           id="new-password-confirm"
+          className="auth-field"
           type={showPassword ? 'text' : 'password'}
           autoComplete="new-password"
           value={confirmPassword}
@@ -143,7 +152,8 @@ export function RecoverConfirmForm() {
         idleLabel={copy.recover.confirm.submit}
         loadingLabel={copy.recover.confirm.submitLoading}
         successLabel={copy.recover.confirm.submitSuccess}
-        className="w-full"
+        className="min-h-12 w-full text-base"
+        size="lg"
       />
     </form>
   );

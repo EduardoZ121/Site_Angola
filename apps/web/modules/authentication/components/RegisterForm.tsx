@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { Alert, Checkbox, Input, Label, Text } from '@kuteka/ui';
 import { passwordRules, registerSchema } from '@kuteka/validation';
 import { getAuthCopy } from '../content';
 import { signUp } from '../services/auth-client';
@@ -80,49 +79,73 @@ export function RegisterForm() {
     }
 
     setSubmitState('success');
+    if (result.data.needsEmailVerification) {
+      const q = new URLSearchParams();
+      q.set('email', parsed.data.email);
+      if (next) q.set('next', next);
+      router.push(`/auth/verificar?${q.toString()}`);
+      return;
+    }
+
+    // Autoconfirm: prefer onboarding when session exists; otherwise enter with same email.
+    if (result.data.hasSession) {
+      const dest = next
+        ? `/auth/onboarding/papeis?next=${encodeURIComponent(next)}`
+        : '/auth/onboarding/papeis';
+      router.push(dest);
+      return;
+    }
+
     const q = new URLSearchParams();
-    q.set('email', parsed.data.email);
     if (next) q.set('next', next);
-    router.push(`/auth/verificar?${q.toString()}`);
+    router.push(`/auth/entrar${q.toString() ? `?${q}` : ''}`);
   }
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
       {error ? (
-        <Alert variant="danger">
+        <div className="auth-alert" role="alert">
           <p>{error}</p>
           {duplicate ? (
-            <p className="mt-2 flex flex-wrap gap-3">
-              <Link href="/auth/entrar" className="font-medium underline">
+            <p className="mt-2 flex flex-wrap gap-4">
+              <Link href="/auth/entrar" className="auth-link">
                 {copy.register.duplicate.login}
               </Link>
-              <Link href="/auth/recuperar" className="font-medium underline">
+              <Link href="/auth/recuperar" className="auth-link">
                 {copy.register.duplicate.recover}
               </Link>
             </p>
           ) : null}
-        </Alert>
+        </div>
       ) : null}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="register-email">{copy.register.email.label}</Label>
-        <Input
+        <label htmlFor="register-email" className="auth-label">
+          {copy.register.email.label}
+        </label>
+        <input
           id="register-email"
+          className="auth-field"
           type="email"
           autoComplete="email"
+          placeholder={copy.register.email.placeholder}
           value={email}
           onChange={(ev) => setEmail(ev.target.value)}
           required
         />
-        <Text className="text-sm text-slate-500">{copy.register.email.hint}</Text>
+        <p className="text-sm text-slate-400">{copy.register.email.hint}</p>
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="register-password">{copy.register.password.label}</Label>
-        <Input
+        <label htmlFor="register-password" className="auth-label">
+          {copy.register.password.label}
+        </label>
+        <input
           id="register-password"
+          className="auth-field"
           type="password"
           autoComplete="new-password"
+          placeholder={copy.register.password.placeholder}
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}
           required
@@ -131,27 +154,32 @@ export function RegisterForm() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="register-confirm">{copy.register.confirm.label}</Label>
-        <Input
+        <label htmlFor="register-confirm" className="auth-label">
+          {copy.register.confirm.label}
+        </label>
+        <input
           id="register-confirm"
+          className="auth-field"
           type="password"
           autoComplete="new-password"
+          placeholder={copy.register.confirm.placeholder}
           value={confirmPassword}
           onChange={(ev) => setConfirmPassword(ev.target.value)}
           required
         />
       </div>
 
-      <label className="flex items-start gap-2 text-sm text-slate-700">
-        <Checkbox
+      <label className="flex items-start gap-3 text-sm text-slate-300">
+        <input
+          type="checkbox"
           checked={termsAccepted}
           onChange={(ev) => setTermsAccepted(ev.target.checked)}
-          className="mt-0.5"
+          className="mt-1 size-4 rounded border-white/30 bg-white/10 text-brand-600 focus:ring-brand-500"
           required
         />
         <span>
           {copy.register.terms.label}{' '}
-          <Link href="/termos" className="text-brand-600 underline">
+          <Link href="/termos" className="auth-link">
             {copy.register.terms.linkLabel}
           </Link>
         </span>
@@ -162,14 +190,15 @@ export function RegisterForm() {
         idleLabel={copy.register.submit}
         loadingLabel={copy.register.submitLoading}
         successLabel={copy.register.submitSuccess}
-        className="w-full"
+        className="mt-1 min-h-12 w-full text-base"
+        size="lg"
       />
 
-      <Text className="text-center text-sm text-slate-600">
-        <Link href="/auth/entrar" className="font-medium text-brand-600 hover:underline">
+      <p className="text-center text-sm text-slate-300">
+        <Link href="/auth/entrar" className="auth-link">
           {copy.register.ctaLogin}
         </Link>
-      </Text>
+      </p>
     </form>
   );
 }

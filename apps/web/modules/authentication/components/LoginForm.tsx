@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
-import { Alert, Input, Label } from '@kuteka/ui';
 import { loginSchema } from '@kuteka/validation';
 import { canAccessAdminPanel } from '@kuteka/auth';
 import { getAuthCopy } from '../content';
@@ -99,14 +98,22 @@ export function LoginForm() {
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
-      {error ? <Alert variant="danger">{error}</Alert> : null}
+      {error ? (
+        <div className="auth-alert" role="alert">
+          {error}
+        </div>
+      ) : null}
 
       <div className="flex flex-col gap-1.5">
-        <Label htmlFor="login-email">{copy.login.email.label}</Label>
-        <Input
+        <label htmlFor="login-email" className="auth-label">
+          {copy.login.email.label}
+        </label>
+        <input
           id="login-email"
+          className="auth-field"
           type="email"
           autoComplete="email"
+          placeholder={copy.login.email.placeholder}
           value={email}
           onChange={(ev) => setEmail(ev.target.value)}
           required
@@ -114,20 +121,24 @@ export function LoginForm() {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="login-password">{copy.login.password.label}</Label>
+        <div className="flex items-center justify-between gap-3">
+          <label htmlFor="login-password" className="auth-label">
+            {copy.login.password.label}
+          </label>
           <button
             type="button"
-            className="text-xs font-medium text-brand-600 hover:underline"
+            className="text-xs font-medium text-brand-400 hover:text-brand-300"
             onClick={() => setShowPassword((v) => !v)}
           >
             {showPassword ? copy.common.hidePassword : copy.login.password.show}
           </button>
         </div>
-        <Input
+        <input
           id="login-password"
+          className="auth-field"
           type={showPassword ? 'text' : 'password'}
           autoComplete="current-password"
+          placeholder={copy.login.password.placeholder}
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}
           required
@@ -139,14 +150,15 @@ export function LoginForm() {
         idleLabel={copy.login.submit}
         loadingLabel={copy.login.submitLoading}
         successLabel={copy.login.submitSuccess}
-        className="w-full"
+        className="mt-1 min-h-12 w-full text-base"
+        size="lg"
       />
 
-      <div className="flex flex-wrap justify-between gap-3 text-sm">
-        <Link href="/auth/recuperar" className="text-brand-600 hover:underline">
+      <div className="flex flex-wrap justify-between gap-3 text-sm text-slate-300">
+        <Link href="/auth/recuperar" className="auth-link">
           {copy.login.ctaRecover}
         </Link>
-        <Link href="/auth/registar" className="font-medium text-brand-600 hover:underline">
+        <Link href="/auth/registar" className="auth-link">
           {copy.login.ctaRegister}
         </Link>
       </div>

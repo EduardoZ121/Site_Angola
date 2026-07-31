@@ -22,7 +22,7 @@ export function PasswordRules({ password }: PasswordRulesProps) {
       {rules.map((rule) => (
         <li
           key={rule.id}
-          className={`flex items-center gap-2 text-sm ${rule.ok ? 'text-green-700' : 'text-slate-500'}`}
+          className={`flex items-center gap-2 text-sm ${rule.ok ? 'text-emerald-400' : 'text-slate-400'}`}
         >
           <span aria-hidden className="font-mono text-xs">
             {rule.ok ? '✓' : '○'}

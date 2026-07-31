@@ -1,32 +1,24 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
+import { useEffect, useState } from 'react';
 import { getAuthCopy } from '../content';
 import { isPublicSupabaseConfigured } from '../lib/public-config';
 
-function subscribe() {
-  return () => undefined;
-}
-
-function getSnapshot() {
-  return isPublicSupabaseConfigured();
-}
-
-function getServerSnapshot() {
-  return false;
-}
-
-/** Client banner — respects runtime `kuteka-config.js` after hydration. */
+/** Only shows after mount — avoids false “config em falta” flash when kuteka-config.js is present. */
 export function ConfigMissingBanner() {
-  const configured = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const copy = getAuthCopy();
+  const [show, setShow] = useState(false);
 
-  if (configured) return null;
+  useEffect(() => {
+    setShow(!isPublicSupabaseConfigured());
+  }, []);
+
+  if (!show) return null;
 
   return (
     <p
       role="status"
-      className="mt-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950"
+      className="mt-4 rounded-kuteka border border-amber-400/40 bg-amber-500/15 px-3 py-2 text-sm text-amber-50"
     >
       {copy.common.configMissing}
     </p>

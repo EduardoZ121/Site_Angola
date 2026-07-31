@@ -8,29 +8,31 @@ export const authCopyPt = {
   },
   common: {
     loading: 'A carregar…',
-    networkError:
-      'Não foi possível concluir o pedido. Verifique a ligação e tente novamente. Se o problema continuar, tente mais tarde.',
+    networkError: 'Não foi possível concluir o pedido. Verifique a ligação e tente novamente.',
     configMissing:
-      'A autenticação ainda não está disponível neste ambiente. A configuração do serviço está em falta. Pode explorar a Landing ou voltar mais tarde.',
-    nextStepRetry: 'Tente novamente.',
+      'A autenticação ainda não está disponível neste ambiente. Pode explorar a Landing ou voltar mais tarde.',
+    nextStepRetry: 'Tente novamente dentro de alguns minutos.',
+    rateLimited:
+      'Demasiados pedidos neste momento. Aguarde cerca de uma hora e tente novamente — ou entre se já criou a conta.',
     showPassword: 'Mostrar',
     hidePassword: 'Ocultar',
   },
   register: {
     title: 'Criar conta',
-    subtitle:
-      'Crie a sua conta Kuteka e comece a gerir, encontrar e valorizar patrimónios com segurança e transparência.',
+    subtitle: 'Comece em minutos. Uma conta, os seus papéis, o seu espaço Kuteka.',
     email: {
       label: 'Email',
-      hint: 'O seu email protege a conta e permite recuperar o acesso.',
+      hint: 'Usamos o email para proteger e recuperar a conta.',
+      placeholder: 'nome@email.com',
     },
     password: {
       label: 'Password',
+      placeholder: 'Crie uma password segura',
       ruleMin: 'Pelo menos 8 caracteres',
       ruleUpper: 'Uma letra maiúscula',
       ruleNumber: 'Um número',
     },
-    confirm: { label: 'Confirmar password' },
+    confirm: { label: 'Confirmar password', placeholder: 'Repita a password' },
     terms: {
       label: 'Aceito os Termos de utilização',
       linkLabel: 'Termos de utilização',
@@ -49,7 +51,7 @@ export const authCopyPt = {
   verify: {
     title: 'Verifique o seu email',
     subtitle:
-      'Estamos quase lá. Só precisamos confirmar que este email pertence realmente a si para proteger a sua conta.',
+      'Se pedimos confirmação, abra o email da Kuteka. Caso já tenha sessão activa, pode continuar.',
     sentTo: 'Enviado para',
     resend: 'Reenviar email',
     resendLoading: 'A reenviar…',
@@ -63,16 +65,16 @@ export const authCopyPt = {
   },
   login: {
     title: 'Entrar',
-    subtitle: 'Regresse ao seu espaço na Kuteka.',
-    email: { label: 'Email' },
-    password: { label: 'Password', show: 'Mostrar' },
+    subtitle: 'Bem-vindo de volta ao seu espaço Kuteka.',
+    email: { label: 'Email', placeholder: 'nome@email.com' },
+    password: { label: 'Password', show: 'Mostrar', placeholder: 'A sua password' },
     submit: 'Entrar',
     submitLoading: 'A entrar…',
     submitSuccess: 'Sessão iniciada',
     ctaRegister: 'Criar conta',
     ctaRecover: 'Esqueceu a password?',
     errorGeneric:
-      'Não foi possível entrar. Verifique os dados e tente novamente. Se esqueceu a password, use Recuperar acesso.',
+      'Não foi possível entrar. Verifique o email e a password. Se precisar, use Recuperar acesso.',
   },
   logout: {
     title: 'A terminar sessão',
