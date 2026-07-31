@@ -55,3 +55,5 @@ export function emptyAuthorizationContext(
 ): AuthorizationContext {
   return { userId, email, roles: [], permissions: [] };
 }
+
+export { resolveSafeNextPath } from './next-path';
