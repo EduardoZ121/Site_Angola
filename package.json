@@ -45,5 +45,12 @@
       "sharp",
       "unrs-resolver"
     ]
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "10.33.3",
+      "onFail": "ignore"
+    }
   }
 }
