@@ -14,11 +14,11 @@ A Topbar → B Hero → C Diferença → D Como funciona → E Fecho → F Foote
 
 ## CTAs
 
-| Label    | Destino actual                                      |
-| -------- | --------------------------------------------------- |
-| Começar  | `/auth` (placeholder até PRD-001; bloqueado por P0) |
-| Entrar   | `/auth?mode=entrar`                                 |
-| Explorar | `#diferenca` (scroll; `/explorar` quando existir)   |
+| Label    | Destino                                           |
+| -------- | ------------------------------------------------- |
+| Começar  | `/auth/registar` (PRD-001 F1)                     |
+| Entrar   | `/auth/entrar` (PRD-001 F3)                       |
+| Explorar | `#diferenca` (scroll; `/explorar` quando existir) |
 
 ## Regras
 

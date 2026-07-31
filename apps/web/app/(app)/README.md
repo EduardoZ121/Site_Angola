@@ -1,9 +1,10 @@
 # (app) route group
 
-Área autenticada da plataforma (após PRD-001).
+Área autenticada (após PRD-001).
 
-No MVP auth: stub `/app` — conta activa, sem dashboards de negócio.  
-Shell (navegação, contextos de actuação) e módulos seguintes: fases posteriores.
+| Rota         | Função                     |
+| ------------ | -------------------------- |
+| `/app`       | Stub «O seu espaço Kuteka» |
+| `/app/admin` | Stub admin (`admin.panel`) |
 
-Gate: implementação auth só após Engineering Gate + Autorização de Implementação.  
-Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`
+Layout exige sessão quando Supabase está configurado; caso contrário mostra mensagem de stub.

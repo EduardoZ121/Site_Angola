@@ -1,14 +1,14 @@
 # PRD-001 — Implementation Readiness Pack
 
-**Estado:** 📦 Preparado · **Activação automática** quando Gate P1+P2 ✅  
-**Autorização:** Condicional pré-emitida pelo PO (2026-07-30) — activa com evidência no Gate  
+**Estado:** ✅ **Activo** (PO 2026-07-31 — P2 diferido; ver Gate §15)  
+**Autorização:** Condicional pré-emitida (2026-07-30) + **arranque autorizado** com P2 diferido (2026-07-31)  
 **Spec oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` v1.0  
 **Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
-**ADR futuro:** `docs/architecture/ADR-004-authentication-module-deferred.md`  
+**ADR:** `docs/architecture/ADR-004-authentication-module-deferred.md` (N2 — em implementação)  
 **Inventário de copy:** `docs/backlog/PRD_001_CONTENT_INVENTORY.md`  
 **Protocolo pós-evidência:** `scripts/on-prd001-gate-green.sh`
 
-Este pack **activa-se automaticamente** quando o Engineering Gate registar P1+P2 com evidência. Não pedir nova confirmação ao PO.
+Pack **activo**. P2 permanece ops obrigatório antes de go-live / e2e real com backend.
 
 ---
 

@@ -19,3 +19,21 @@ export const healthResponseSchema = z.object({
 });
 
 export type ProfileUpdateInput = z.infer<typeof profileUpdateSchema>;
+
+export {
+  normalizeEmail,
+  passwordRules,
+  passwordSchema,
+  registerSchema,
+  loginSchema,
+  recoverSchema,
+  newPasswordSchema,
+  onboardingRolesSchema,
+  SELF_SERVE_ROLE_CODES,
+  type SelfServeRoleCode,
+  type RegisterInput,
+  type LoginInput,
+  type RecoverInput,
+  type NewPasswordInput,
+  type OnboardingRolesInput,
+} from './auth';

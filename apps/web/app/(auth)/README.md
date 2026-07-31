@@ -1,13 +1,18 @@
 # (auth) route group
 
-Reservado para o módulo **PRD-001** (Login, Registo, Recuperação, Onboarding).
+Rotas PRD-001 (§12.1):
 
-Implementação de produto **bloqueada** até:
+| Rota                        | Função                                         |
+| --------------------------- | ---------------------------------------------- |
+| `/auth`                     | Redirect → registar ou `?mode=entrar` → entrar |
+| `/auth/registar`            | F1                                             |
+| `/auth/entrar`              | F3                                             |
+| `/auth/verificar`           | F2                                             |
+| `/auth/recuperar`           | F5 pedido                                      |
+| `/auth/recuperar/confirmar` | F5 nova password                               |
+| `/auth/onboarding/papeis`   | F6 papéis                                      |
+| `/auth/onboarding/perfil`   | F6 perfil                                      |
+| `/auth/sair`                | F4 logout (POST/GET)                           |
 
-1. Engineering Gate verde (`docs/backlog/PRD_001_ENGINEERING_GATE.md` §8.1–§8.2)
-2. Activação do Implementation Readiness Pack (autorização **condicional** já emitida — activa com P1+P2)
-
-Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0 · Aprovação Funcional ✅).  
-Rotas alvo: §12.1 · Wireframes: §18 · Content: `docs/backlog/PRD_001_CONTENT_INVENTORY.md`.
-
-O placeholder actual em `/auth` **não** é o produto final.
+UI: `modules/authentication`. Spec §18 wireframes.  
+`AuthPlaceholderClient` deixou de ser a UI de produto.

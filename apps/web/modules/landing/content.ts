@@ -80,8 +80,8 @@ export const landingContent = {
     copyright: `© ${new Date().getFullYear()} Kuteka · Angola`,
   },
   routes: {
-    start: '/auth',
-    enter: '/auth?mode=entrar',
+    start: '/auth/registar',
+    enter: '/auth/entrar',
     exploreHash: '#diferenca',
   },
 } as const;

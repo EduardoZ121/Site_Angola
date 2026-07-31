@@ -5,8 +5,8 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** Diagnóstico ✅ · Gate **ABERTO** (P1 ✅ · P2 ❌) · **Autorização de Implementação CONDICIONAL** — activa-se automaticamente quando P2 tiver evidência objectiva  
-**Maturidade deste documento:** Diagnóstico aprovado · Gate operacional **não verde** até P2
+**Estado:** Diagnóstico ✅ · Gate **ABERTO** (P1 ✅ · P2 ❌ diferido) · **Implementação auth AUTORIZADA** (PO 2026-07-31 · P2 diferido — ver §15) · P2 continua ops obrigatório antes de go-live / e2e real com backend  
+**Maturidade deste documento:** Diagnóstico aprovado · Gate operacional **não verde** até P2 · código auth autorizado sob §15
 
 ---
 
@@ -290,5 +290,32 @@ O Product Owner confirma que a tentativa autónom (§13) foi correcta: limitaç�
 | Contornar P1/P2            | ❌ Proibido (ordem PO)                      |
 | Owner P1/P2                | PO / Ops (credenciais)                      |
 | Trabalho autónomo paralelo | ✅ Docs, scripts, qualidade, consistência   |
-| Código auth até Gate verde | ❌                                          |
+| Código auth até Gate verde | ❌ (superseded by §15 — P2 diferido)        |
 | Pós-evidência P1+P2        | Gate verde → readiness → implementar até N5 |
+
+---
+
+## 15. PO 2026-07-31: P2 diferido para arranque de implementação
+
+O Product Owner **diferiu** P2 (aplicação remota da migration `0002`) para **autorizar o arranque de implementação** do PRD-001 agora.
+
+| Item                          | Decisão                                                                                      |
+| ----------------------------- | -------------------------------------------------------------------------------------------- |
+| P1 CI                         | ✅ Verde — condição satisfeita                                                               |
+| P2 migration `0002` no remoto | ❌ **Não** marcado ✅ — permanece pendente de ops                                            |
+| Autorização de código auth    | ✅ **Emitida** sob este deferimento (2026-07-31)                                             |
+| P2 antes de go-live           | **Obrigatório** — e2e real com backend / produção auth exige P2 aplicado e evidência em §8.2 |
+| UI sem Supabase               | Deve renderizar; submits devolvem erros guiados (R2), sem crash                              |
+
+**Implica:**
+
+1. Implementation Readiness Pack → **Activo**
+2. Branch `cursor/prd-001-authentication-f96b` pode implementar o módulo conforme PRD-001 v1.0
+3. Migration `0003` (`activate_self_serve_roles`) versionada no repo; aplicação remota alinhada a P2/ops
+4. **Não** tratar o Gate como verde completo até P2 ter evidência objectiva
+
+| Item                      | Estado                  |
+| ------------------------- | ----------------------- |
+| P2 diferido para arranque | ✅ Registado 2026-07-31 |
+| P2 no Gate                | Continua ❌ (ops)       |
+| Código auth               | Autorizado agora        |
