@@ -1,18 +1,40 @@
-# Bloqueios externos (objectivos) — actualizado 2026-07-31
+# Bloqueios externos — actualizado 2026-07-31 (tarde)
 
-Prioridade do projecto: **entrega**. Estes itens bloqueiam só o que depende deles; o resto avança.
+Prioridade: **entrega**. Estado real verificado por HTTP.
 
-| ID  | Bloqueio                                                             | Impacto                                                | Owner                       | Como desbloquear                                                                | Estado         |
-| --- | -------------------------------------------------------------------- | ------------------------------------------------------ | --------------------------- | ------------------------------------------------------------------------------- | -------------- |
-| E1  | PAT sem scope `workflow` / fine-grained sem Contents+Workflows write | Agent não edita `.github/workflows/*`                  | PO                          | Classic PAT `repo`+`workflow` **ou** fine-grained Contents+Workflows read/write | ❌             |
-| E2  | Supabase remoto + env (`URL`, anon, service role)                    | Login/registo reais; Gate P2; migrations `0002`/`0003` | PO/Ops                      | Criar projecto; aplicar SQL; colocar env no hosting                             | ❌             |
-| E3  | DNS `kutekalink.com` ainda no Render legado                          | Domínio público desalinhado; `/auth/*` 404 no domínio  | PO/Ops                      | A/CNAME → GitHub Pages (ver DEPLOY_STATUS); GoDaddy API actual = 401            | ❌ **urgente** |
-| E4  | `Deploy Kuteka` exige `package-lock.json` (`cache: npm`) vs CI/pnpm  | Deploy Actions falhava sem lockfile npm                | Agent (mitigado) / PO (fix) | Stub `package-lock.json` na raiz + `pnpm -r` no CI; ideal: `deploy.yml` pnpm    | 🟡 mitigado    |
+| ID  | Bloqueio                        | Estado                                                                  | Owner |
+| --- | ------------------------------- | ----------------------------------------------------------------------- | ----- |
+| E3  | Domínio público desalinhado     | ✅ **Resolvido** — `kutekalink.com` serve KEOS via Render (deploy hook) | —     |
+| E4  | Deploy Actions sem lockfile npm | ✅ **Resolvido** — `package-lock.json` + Deploy Kuteka verde            | —     |
+| E1  | PAT sem scope `workflow`        | 🟡 Opcional — agent não edita `.github/workflows/*`                     | PO    |
+| E2  | Supabase remoto + env           | ❌ **Único bloqueio de produto** — login real                           | PO    |
 
-**Não bloqueiam entrega de UI estática:** E2 (páginas auth publicam sem backend; submit mostra config em falta).
+## E2 — o que falta (1 passo teu)
 
-**Estado de publicação:**
+1. Criar token: https://supabase.com/dashboard/account/tokens
+2. No ambiente Cloud / terminal:
 
-- `prebuilt/web-out` → Deploy Kuteka → `gh-pages` (quando E4 ok)
-- Fallback: agent publica `prebuilt/web-out` → `gh-pages` directamente
-- **Domínio custom:** até E3, `kutekalink.com` continua no Render legado; Pages em `*.github.io` / preview tem o conteúdo novo
+```bash
+export SUPABASE_ACCESS_TOKEN=sbp_...
+export SUPABASE_ORG_ID=<org-id>   # aparece com: npx supabase orgs list
+bash scripts/bootstrap-supabase.sh
+```
+
+Isso cria/liga o projecto, aplica `0001`→`0003`, gera `kuteka-config.js` com URL+anon.
+
+3. Colar também em GitHub Secrets (para rebuilds futuros):
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY` (só se houver server)
+
+4. Auth URLs no dashboard Supabase:
+   - Site URL: `https://kutekalink.com`
+   - Redirect allowlist: `https://kutekalink.com/auth/**`
+
+**Alternativa mínima:** criar projecto no UI, correr SQL das 3 migrations, e editar `kuteka-config.js` no host com URL+anon (runtime — sem rebuild).
+
+## E1 — opcional (1 min no browser)
+
+Substituir `.github/workflows/deploy.yml` pelo conteúdo de  
+`docs/engineering/github-workflows/deploy.yml`  
+via GitHub → Edit file (o agent não tem scope `workflow`).

@@ -14,12 +14,12 @@
 | **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde               |
 | **PRD-001 Spec**           | ✅ v1.0 Aprovação Funcional                                |
 | **Auth código**            | ✅ Merged `main` + estático `/auth/*` · `/app`             |
-| **P2 Supabase `0002`**     | ❌ Diferido pelo PO; **obrigatório antes de login real**   |
-| **Domínio kutekalink.com** | ❌ **E3 urgente** — ainda Render legado (GoDaddy API 401)  |
-| **Deploy Kuteka (E4)**     | 🟡 Mitigado com `package-lock.json` stub/root npm          |
+| **P2 Supabase `0002`**     | ❌ **Único bloqueio** — precisa `SUPABASE_ACCESS_TOKEN`    |
+| **Domínio kutekalink.com** | ✅ KEOS no ar via Render (`/auth/*` · `/app` OK)           |
+| **Deploy Kuteka (E4)**     | ✅ Verde com `package-lock.json`                           |
 
-**Estado 2026-07-31 (tarde+):** PR #5 **merged**. Auth + stub `/app` no export estático. Deploy Actions mitigado com `package-lock.json` (E4).  
-**Urgente restante (só PO/Ops):** **E3 DNS** (`kutekalink.com` ainda Render legado) → depois **E2 Supabase**. Sem isso o domínio público não mostra `/auth/*`.
+**Estado 2026-07-31:** E3+E4 fechados. Site público = KEOS.  
+**Só falta (PO):** token Supabase → `bash scripts/bootstrap-supabase.sh` (ver `EXTERNAL_BLOCKERS.md`).
 
 ---
 
