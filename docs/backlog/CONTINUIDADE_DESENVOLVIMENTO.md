@@ -8,19 +8,18 @@
 
 ## Onde estamos agora (ponto de paragem)
 
-| Camada                     | Estado                                                                 |
-| -------------------------- | ---------------------------------------------------------------------- |
-| **Landing KEOS**           | ✅ Feita e na `main` (publish via `prebuilt` → `gh-pages`)             |
-| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde                           |
-| **PRD-001 Spec**           | ✅ v1.0 Aprovação Funcional                                            |
-| **Auth código**            | ✅ Implementado na branch / **PR #5** (ainda **não** merged na `main`) |
-| **P2 Supabase `0002`**     | ❌ Diferido pelo PO para arranque; **obrigatório antes de go-live**    |
-| **Domínio kutekalink.com** | ⚠️ Ainda pode apontar para Render/legado — ver `DEPLOY_STATUS`         |
-| **Vercel `kuteka-api`**    | ⚠️ Check no PR falhou (projecto API separado; não bloqueia Pages)      |
+| Camada                     | Estado                                                     |
+| -------------------------- | ---------------------------------------------------------- |
+| **Landing KEOS**           | ✅ Feita e na `main` (publish via `prebuilt` → `gh-pages`) |
+| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde               |
+| **PRD-001 Spec**           | ✅ v1.0 Aprovação Funcional                                |
+| **Auth código**            | ✅ Merged `main` + estático `/auth/*` · `/app`             |
+| **P2 Supabase `0002`**     | ❌ Diferido pelo PO; **obrigatório antes de login real**   |
+| **Domínio kutekalink.com** | ❌ **E3 urgente** — ainda Render legado (GoDaddy API 401)  |
+| **Deploy Kuteka (E4)**     | 🟡 Mitigado com `package-lock.json` stub/root npm          |
 
-**Estado 2026-07-31 (tarde):** PR #5 **merged** na `main`. Auth UI no export estático / gh-pages. **Parámos aqui (histórico):** auth pronto em  
-https://github.com/EduardoZ121/Site_Angola/pull/5  
-À espera de: merge → Deploy → configurar Supabase → validar fluxos reais.
+**Estado 2026-07-31 (tarde+):** PR #5 **merged**. Auth + stub `/app` no export estático. Deploy Actions mitigado com `package-lock.json` (E4).  
+**Urgente restante (só PO/Ops):** **E3 DNS** (`kutekalink.com` ainda Render legado) → depois **E2 Supabase**. Sem isso o domínio público não mostra `/auth/*`.
 
 ---
 
@@ -47,31 +46,31 @@ https://github.com/EduardoZ121/Site_Angola/pull/5
 
 ## Próximos passos (sequência recomendada)
 
-### Passo A — Fechar o PR de auth (agora)
+### Passo A — Fechar o PR de auth (feito)
 
 1. CI do PR #5 verde ✅
-2. **Merge** PR #5 → `main`
-3. Confirmar **CI** + **Deploy Kuteka** verdes na `main`
-4. Verificar Landing em GitHub Pages
+2. **Merge** PR #5 → `main` ✅
+3. Auth estático + stub `/app` republicados
+4. E4 mitigado com `package-lock.json` (Deploy Kuteka)
 
-### Passo B — Supabase (P2 + auth real)
+### Passo B — Domínio público (**mais urgente**)
+
+- DNS `kutekalink.com` → GitHub Pages (ver `DEPLOY_STATUS`) — GoDaddy API actual **401**
+- Sem isto o site público continua no Render legado
+
+### Passo C — Supabase (P2 + auth real)
 
 1. Criar/abrir projecto Supabase
 2. Aplicar migrations na ordem:
    - `0001_foundation.sql`
    - `0002_p0_rbac_and_audit_hardening.sql` ← **P2**
    - `0003_activate_self_serve_roles.sql`
-3. Configurar env no ambiente / Vercel / local:
+3. Configurar env no ambiente / Pages build / local:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY` (só server)
 4. Auth URLs allowlist + templates email (P4)
 5. Testar F1→F6 manualmente
-
-### Passo C — Domínio público (P5)
-
-- DNS `kutekalink.com` → GitHub Pages (ver `DEPLOY_STATUS`)
-- Ou reparar Render
 
 ### Passo D — Próximos módulos de produto (depois de auth estável)
 
@@ -123,18 +122,10 @@ Sem Supabase a UI auth **abre**, mas login/registo real não completa.
 
 ---
 
-## Acção imediata 30s (para CI + Deploy ambos verdes)
+## Acção imediata (PO) — o que desbloqueia utilizadores
 
-O Deploy Kuteka já está **verde**. O CI falha na `main` porque o ficheiro activo
-`.github/workflows/ci.yml` ainda tem `version: 10` e o `package.json` tem `packageManager`.
+1. **E3 DNS** — apontar `kutekalink.com` / `www` a GitHub Pages (credenciais GoDaddy actuais dão 401).
+2. **E2 Supabase** — projecto + migrations + env para login real.
+3. (Opcional) **E1** — PAT com `workflow` para o agent actualizar `deploy.yml` para pnpm.
 
-**Faz exactamente isto:**
-
-1. Abre: https://github.com/EduardoZ121/Site_Angola/edit/main/.github/workflows/ci.yml
-2. Selecciona **todo** o conteúdo e substitui pelo de:
-   https://raw.githubusercontent.com/EduardoZ121/Site_Angola/main/docs/engineering/github-workflows/ci.yml
-3. Commit na `main`
-
-Isso remove o `version: 10` e o CI volta a verde (o YAML correcto já está no repo em `docs/`).
-
-Ver também: `docs/backlog/EXTERNAL_BLOCKERS.md`.
+Ver: `docs/backlog/EXTERNAL_BLOCKERS.md` · `docs/backlog/GO_LIVE_CHECKLIST.md`.
