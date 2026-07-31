@@ -89,7 +89,7 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 | Dependência                                            | Owner típico     | Estado                                 |
 | ------------------------------------------------------ | ---------------- | -------------------------------------- |
-| GitHub token com scope `workflow`                      | Ops / admin repo | ⏳ Necessário para P1                  |
+| GitHub token com scope `workflow` / Workflows write    | Ops / admin repo | ✅ P1 fechado (UI + CI verde)          |
 | Projecto Supabase (remoto) + permissão para migrations | Ops / backend    | ⏳ Necessário para P2 / P4             |
 | DNS GoDaddy ou reparação Render                        | Ops              | ⏳ P5 (não bloqueia código em preview) |
 | Autorização PO Fase 2 (condicional)                    | Product Owner    | ✅ Pré-emitida (§12); activa com P1+P2 |
@@ -112,12 +112,12 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 ## 7. Recomendação técnica final
 
-| Pergunta                                    | Resposta                                                                                                                                 |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| O PRD-001 está aprovado funcionalmente?     | **Sim** — referência oficial                                                                                                             |
-| O Engineering Gate está pronto para fechar? | **Não** — P1 e P2 em aberto (P3 já condicional)                                                                                          |
-| Pode iniciar-se a implementação agora?      | **Não** — falta evidência P1+P2 (autorização condicional já emitida)                                                                     |
-| Recomendação                                | Fechar **P1 + P2** com evidência objectiva (§8). A Autorização de Implementação **já está pré-emitida** (§12) e activa-se nesse momento. |
+| Pergunta                                    | Resposta                                                                   |
+| ------------------------------------------- | -------------------------------------------------------------------------- |
+| O PRD-001 está aprovado funcionalmente?     | **Sim** — referência oficial                                               |
+| O Engineering Gate está pronto para fechar? | **Não** — falta P2 (P1 ✅)                                                 |
+| Pode iniciar-se a implementação agora?      | **Não** — falta evidência P2 (autorização condicional já emitida)          |
+| Recomendação                                | Fechar **P2** (§8.2). Autorização já pré-emitida (§12) — activa-se com P2. |
 
 ---
 
@@ -173,15 +173,15 @@ Decisão PO (2026-07-30): **assim que P1 e P2 tiverem evidência objectiva neste
 
 ## 9. Autoavaliação do Arquitecto — Engineering Gate PRD-001
 
-| Campo                               | Conteúdo                                                                                                                                                                                                     |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Nível de maturidade**             | Diagnóstico **aprovado** · Gate operacional **aberto** (não N4)                                                                                                                                              |
-| **Nível de confiança**              | **90%** (diagnóstico); prontidão para implementar **~40%** até P1+P2                                                                                                                                         |
-| **Factores < 95% (diagnóstico)**    | (1) `0002` remoto não verificável daqui. (2) CI inactivo — confirmado: sem `ci.yml` em `.github/workflows/` e token sem scope `workflow`. (3) Templates Auth desconhecidos. (4) Domínio público desalinhado. |
-| **Principais riscos remanescentes** | Contornar P1/P2; implementar sem rede CI; RPC em falta no remoto                                                                                                                                             |
-| **Dívidas técnicas ou documentais** | Evidências P1/P2; Manual/Blueprint/DS fora do repo                                                                                                                                                           |
-| **Decisões adiadas**                | Autorização de Implementação; ADR-004 na fase de código                                                                                                                                                      |
-| **Recomendação**                    | Diagnóstico **aprovado**. Manter Gate **aberto**. Executar §8.1–§8.2 via `PO_ACTION_P1_P2.md`. Autorização já condicional (§12) — **não** implementar até P1+P2.                                             |
+| Campo                               | Conteúdo                                                                                                    |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **Nível de maturidade**             | Diagnóstico **aprovado** · Gate operacional **aberto** (não N4)                                             |
+| **Nível de confiança**              | **92%** (diagnóstico); prontidão para implementar **~55%** (P1 ✅; falta P2)                                |
+| **Factores < 95% (diagnóstico)**    | (1) `0002` remoto não verificável daqui. (2) Templates Auth desconhecidos. (3) Domínio público desalinhado. |
+| **Principais riscos remanescentes** | Implementar sem `0002` remoto; RPC em falta                                                                 |
+| **Dívidas técnicas ou documentais** | Evidência P2; Manual/Blueprint/DS fora do repo                                                              |
+| **Decisões adiadas**                | ADR-004 na fase de código                                                                                   |
+| **Recomendação**                    | Manter Gate **aberto** até P2. Não implementar auth até P2 ✅.                                              |
 
 ---
 
@@ -226,9 +226,9 @@ O Líder Técnico esgotou o trabalho **seguro e útil** que pode fazer **sem** c
 
 **Paralelo permitido (§14):** docs, scripts de verificação, qualidade, consistência — sem alterar D1–D12 / arquitectura aprovada.
 
-**Próximo passo do projecto:** PO obtém credenciais → P1+P2 com evidência → Gate verde → readiness activo → implementar até N5 (sem nova confirmação).
+**Próximo passo do projecto:** PO aplica **P2** no Supabase → evidência §8.2 → Gate verde → readiness → implementar até N5.
 
-Até P1+P2 com evidência: **nenhum código** de auth. Com P1+P2 ✅: iniciar implementação de imediato (autorização já dada).
+Até P2 com evidência: **nenhum código** de auth. Com P1+P2 ✅: iniciar implementação de imediato (autorização já dada).
 
 ---
 
