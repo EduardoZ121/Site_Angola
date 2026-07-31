@@ -5,8 +5,8 @@
 **PRD oficial:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (**v1.0** — Aprovação Funcional 2026-07-30)  
 **Gate de fase prévio:** `docs/backlog/PHASE_GATE_BEFORE_PRD001.md`  
 **Metodologia:** `docs/engineering/DEVELOPMENT_PROCESS.md` (Fase 1 ≠ Fase 2)  
-**Estado:** Diagnóstico ✅ · Gate **ABERTO** (aguarda P1+P2) · **Autorização de Implementação CONDICIONAL** emitida pelo PO (2026-07-30) — activa-se automaticamente quando P1+P2 tiverem evidência objectiva  
-**Maturidade deste documento:** Diagnóstico aprovado · Gate operacional **não verde** até P1+P2
+**Estado:** Diagnóstico ✅ · Gate **ABERTO** (P1 ✅ · P2 ❌) · **Autorização de Implementação CONDICIONAL** — activa-se automaticamente quando P2 tiver evidência objectiva  
+**Maturidade deste documento:** Diagnóstico aprovado · Gate operacional **não verde** até P2
 
 ---
 
@@ -62,13 +62,13 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 ## 3. Itens pendentes (bloqueiam Autorização de Implementação)
 
-| ID  | Item                                                                                              | Severidade                                                                  | Notas                                                                                             |
-| --- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| P1  | Activar `.github/workflows/ci.yml` no remote e obter pipeline **verde**                           | **Bloqueante**                                                              | Requer token GitHub com scope `workflow`; agent Cloud sem esse scope não consegue activar sozinho |
-| P2  | Aplicar migration `0002` no **Supabase remoto** (ambientes relevantes)                            | **Bloqueante**                                                              | Ficheiro existe; aplicação remota não confirmada neste ambiente                                   |
-| P3  | Autorização de Implementação (Fase 2)                                                             | **Condicional ✅** (PO 2026-07-30)                                          | Activa-se automaticamente com P1+P2 evidentes (§12); sem nova confirmação                         |
-| P4  | Templates de email Auth (verify / reset) com marca Kuteka + redirect URLs allowlisted no Supabase | **Bloqueante para go-live auth**; desejável antes de começar UI se possível | Ops Supabase (§16.1 / §5.3)                                                                       |
-| P5  | `kutekalink.com` a servir Landing KEOS (DNS / Render)                                             | **Não bloqueante** para começar código auth em preview                      | Bloqueia experiência pública coerente; ver DEPLOY_STATUS                                          |
+| ID  | Item                                                                                              | Severidade                                                                  | Notas                                                                     |
+| --- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| P1  | Activar `.github/workflows/ci.yml` no remote e obter pipeline **verde**                           | ✅ **Fechado** (2026-07-31)                                                 | Evidência §8.1 — run verde em `main`                                      |
+| P2  | Aplicar migration `0002` no **Supabase remoto** (ambientes relevantes)                            | **Bloqueante**                                                              | Ficheiro existe; aplicação remota não confirmada                          |
+| P3  | Autorização de Implementação (Fase 2)                                                             | **Condicional ✅** (PO 2026-07-30)                                          | Activa-se automaticamente com P1+P2 evidentes (§12); sem nova confirmação |
+| P4  | Templates de email Auth (verify / reset) com marca Kuteka + redirect URLs allowlisted no Supabase | **Bloqueante para go-live auth**; desejável antes de começar UI se possível | Ops Supabase (§16.1 / §5.3)                                               |
+| P5  | `kutekalink.com` a servir Landing KEOS (DNS / Render)                                             | **Não bloqueante** para começar código auth em preview                      | Bloqueia experiência pública coerente; ver DEPLOY_STATUS                  |
 
 ---
 
@@ -125,30 +125,18 @@ Este documento **não** altera requisitos de negócio. Consolida o **Gate 16.1**
 
 > **Regra:** não contornar P1/P2; não alterar o estado do Gate para “verde” sem verificação objectiva.
 
-### 8.1 P1 — Activar CI (bloqueante)
+### 8.1 P1 — Activar CI (bloqueante) — ✅ FECHADO
 
-**Evidência actual (2026-07-30):** `.github/workflows/` no repo contém apenas `deploy.yml`. O token GitHub disponível ao agente tem scope `repo` **sem** `workflow` — push de workflows falharia ou seria rejeitado. Activação = acção **humana** com token adequado.
+**Evidência objectiva (2026-07-31):**
 
-Passos:
+| Campo      | Valor                                                               |
+| ---------- | ------------------------------------------------------------------- |
+| Run URL    | https://github.com/EduardoZ121/Site_Angola/actions/runs/30608090273 |
+| Commit SHA | `2e067a004e9f99cc53a9598c1129585532d01144`                          |
+| Data       | 2026-07-31                                                          |
+| Workflow   | `.github/workflows/ci.yml` (registado; job quality verde em ~1m31s) |
 
-1. Com token que inclua scope **`workflow`** (PAT clássico ou fine-grained com Workflows):
-   ```bash
-   ./scripts/enable-github-ci.sh
-   git add .github/workflows/ci.yml
-   git commit -m "ci: enable KEOS quality workflow"
-   git push origin HEAD
-   ```
-   Alternativa: copiar manualmente `docs/engineering/github-workflows/ci.yml` → `.github/workflows/ci.yml` via UI GitHub.
-2. Confirmar Actions → workflow **CI** verde em `main` (e idealmente neste branch).
-3. Registar neste documento → marcar P1 ✅:
-
-| Campo      | Valor      |
-| ---------- | ---------- |
-| Run URL    | _pendente_ |
-| Commit SHA | _pendente_ |
-| Data       | _pendente_ |
-
-Última re-verificação objectiva P1 (Líder Técnico): **2026-07-30 (tarde)** — tentativa autónom falhada (§13). Commit local `ci: enable KEOS quality workflow` preparado; **push rejeitado** (`refusing to allow a Personal Access Token to create or update workflow … without workflow scope`). Token activo: scopes `repo` apenas. Actions API: só Deploy Kuteka + pages-build-deployment. P1 permanece ❌.
+Notas: ficheiro criado via UI GitHub; falhas iniciais de pnpm/turbo/prettier corrigidas em commits subsequentes na `main` (`add88d9`…`2e067a0`). `scripts/check-gate-p1.sh` → exit 0.
 
 ### 8.2 P2 — Migration `0002` no Supabase remoto (bloqueante)
 
@@ -164,7 +152,7 @@ Passos:
 | Aplicado por | _pendente_ |
 | Checklist    | _pendente_ |
 
-Última re-verificação objectiva P2 (Líder Técnico): **2026-07-30 (tarde)** — `apps/web/.env.local` só placeholders; sem `SUPABASE_*` reais no ambiente Cloud; Docker ausente (não há stack local substituto do remoto); Render API / GoDaddy API → **401**. P2 permanece ❌.
+Última re-verificação objectiva P2 (Líder Técnico): **2026-07-31** — sem credenciais Supabase no ambiente; token fine-grained novo sem write/secrets. P2 permanece ❌.
 
 ### 8.3 Paralelo (não fecha o Gate sozinho)
 
@@ -203,14 +191,12 @@ Decisão PO (2026-07-30): **assim que P1 e P2 tiverem evidência objectiva neste
 | -------------------------------- | --------------------------------------------------------------- |
 | Aprovação Funcional PRD-001      | ✅ Oficial                                                      |
 | Diagnóstico Engineering Gate     | ✅ **Aprovado pelo PO** (2026-07-30)                            |
-| Engineering Gate (fecho / verde) | ▶️ **Aberto** — aguarda P1 + P2                                 |
-| Autorização de Implementação     | ⏳ Condicional (§12) — aguarda P1+P2                            |
+| Engineering Gate (fecho / verde) | ▶️ **Aberto** — P1 ✅ · aguarda P2                              |
+| Autorização de Implementação     | ⏳ Condicional (§12) — aguarda P2                               |
 | Maturidade do módulo auth        | Pré-N4                                                          |
 | Papel técnico                    | Arquitecto Principal + Líder Técnico (`DEVELOPMENT_PROCESS.md`) |
 
-**Próximo passo lógico (condução técnica):** fecho operacional de **P1** e **P2** por quem tenha credenciais (`workflow` + Supabase). Checklist mínimo: `docs/backlog/PO_ACTION_P1_P2.md`. O Líder Técnico reavaliará o Gate assim que existirem evidências — sem marcar verde por antecipação.
-
-Até P1+P2 verificados: **nenhuma implementação**. Com P1+P2 ✅: implementação inicia de imediato (§12).
+**Próximo passo lógico:** fecho operacional de **P2** (Supabase remoto). Checklist: `docs/backlog/PO_ACTION_P1_P2.md` §P2. Com P2 ✅: Gate verde → readiness → implementar auth até N5 (§12).
 
 ---
 
@@ -232,7 +218,7 @@ O Líder Técnico esgotou o trabalho **seguro e útil** que pode fazer **sem** c
 
 | Bloqueado fora desta autonomia         | Owner                                               |
 | -------------------------------------- | --------------------------------------------------- |
-| P1 — activar CI (`workflow` scope)     | PO / Ops (credenciais) — **não contornar** (§14)    |
+| P1 — activar CI (`workflow` scope)     | ✅ Fechado 2026-07-31 (§8.1)                        |
 | P2 — aplicar `0002` no Supabase remoto | PO / Ops (credenciais) — **não contornar** (§14)    |
 | P3 — Autorização de Implementação      | ✅ Condicional (§12); activa com P1+P2              |
 | P4/P5 — templates Auth / DNS           | Ops (P4 desejável; P5 não bloqueia código pós-Gate) |

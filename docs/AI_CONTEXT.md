@@ -2,7 +2,7 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 v1.0 Funcional ✅ · Impl. **condicional** c/ P1+P2 · Gate aberto · P1/P2 = só credenciais/ops · código ❌ até evidência)  
+**Estado:** Activo (PRD-001 v1.0 Funcional ✅ · Gate: P1 ✅ · P2 ❌ · Impl. condicional aguarda P2 · código ❌ até P2)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  
