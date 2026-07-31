@@ -8,8 +8,28 @@ export interface SupabasePublicEnv {
   anonKey: string;
 }
 
+/**
+ * Browser client for SPA / static export.
+ * Uses localStorage (not cookie chunking from @supabase/ssr) so sessions survive
+ * client-side navigations on Render / GitHub Pages without a Next middleware.
+ */
 export function createBrowserSupabaseClient(env: SupabasePublicEnv): KutekaSupabaseClient {
-  return createBrowserClient(env.url, env.anonKey);
+  if (typeof window === 'undefined') {
+    return createClient(env.url, env.anonKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  }
+
+  return createClient(env.url, env.anonKey, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      storage: window.localStorage,
+      storageKey: 'kuteka-auth',
+      flowType: 'pkce',
+    },
+  });
 }
 
 /**

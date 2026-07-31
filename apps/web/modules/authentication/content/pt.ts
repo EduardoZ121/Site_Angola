@@ -14,6 +14,7 @@ export const authCopyPt = {
     nextStepRetry: 'Tente novamente dentro de alguns minutos.',
     rateLimited:
       'Demasiados pedidos neste momento. Aguarde cerca de uma hora e tente novamente — ou entre se já criou a conta.',
+    sessionExpired: 'A sua sessão expirou ou não foi iniciada. Entre novamente para continuar.',
     showPassword: 'Mostrar',
     hidePassword: 'Ocultar',
   },
