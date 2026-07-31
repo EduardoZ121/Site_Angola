@@ -36,7 +36,7 @@ export function OnboardingRolesForm() {
 
     const parsed = onboardingRolesSchema.safeParse({ roles });
     if (!parsed.success) {
-      setError(parsed.error.issues[0]?.message ?? copy.common.networkError);
+      setError(parsed.error.issues[0]?.message ?? copy.onboarding.roles.selectAtLeastOne);
       setSubmitState('error');
       return;
     }
@@ -66,6 +66,13 @@ export function OnboardingRolesForm() {
         <p className="mt-1 text-sm text-slate-400">{copy.onboarding.roles.hint}</p>
       </div>
 
+      <div
+        className="rounded-kuteka border border-brand-400/35 bg-brand-500/10 px-4 py-3 text-sm leading-relaxed text-slate-100"
+        role="note"
+      >
+        {copy.onboarding.roles.multiRole}
+      </div>
+
       <label className="flex cursor-pointer items-start gap-3 rounded-kuteka border border-white/15 bg-white/[0.06] p-4 transition-colors hover:border-brand-400/50">
         <input
           type="checkbox"
@@ -74,7 +81,12 @@ export function OnboardingRolesForm() {
           className="mt-1 size-4 rounded border-white/30 bg-white/10 text-brand-600 focus:ring-brand-500"
         />
         <span>
-          <span className="block font-medium text-white">{copy.onboarding.roles.client}</span>
+          <span className="block font-medium text-white">
+            <span aria-hidden="true" className="mr-1.5">
+              🏠
+            </span>
+            {copy.onboarding.roles.client}
+          </span>
           <span className="mt-0.5 block text-sm text-slate-300">
             {copy.onboarding.roles.clientDesc}
           </span>
@@ -89,15 +101,23 @@ export function OnboardingRolesForm() {
           className="mt-1 size-4 rounded border-white/30 bg-white/10 text-brand-600 focus:ring-brand-500"
         />
         <span>
-          <span className="block font-medium text-white">{copy.onboarding.roles.partner}</span>
+          <span className="block font-medium text-white">
+            <span aria-hidden="true" className="mr-1.5">
+              🏢
+            </span>
+            {copy.onboarding.roles.partner}
+          </span>
           <span className="mt-0.5 block text-sm text-slate-300">
             {copy.onboarding.roles.partnerDesc}
           </span>
         </span>
       </label>
 
-      <p className="text-sm leading-relaxed text-slate-300">{copy.onboarding.roles.multiRole}</p>
       <p className="text-sm text-slate-400">{copy.onboarding.roles.agentNote}</p>
+
+      {!formValid && submitState !== 'loading' && submitState !== 'success' ? (
+        <p className="text-sm text-slate-400">{copy.onboarding.roles.selectAtLeastOne}</p>
+      ) : null}
 
       <SubmitButton
         state={effectiveState}

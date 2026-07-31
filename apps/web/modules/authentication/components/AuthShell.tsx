@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { getAuthCopy } from '../content';
+import { BrandMark } from './BrandMark';
 import { ConfigMissingBanner } from './ConfigMissingBanner';
 
 interface AuthShellProps {
@@ -15,8 +14,6 @@ interface AuthShellProps {
  * Form is the only interactive surface — no decorative cards in the media plane.
  */
 export function AuthShell({ title, subtitle, children }: AuthShellProps) {
-  const copy = getAuthCopy();
-
   return (
     <div className="relative min-h-[100svh] overflow-hidden bg-slate-950 text-white">
       <Image
@@ -39,12 +36,7 @@ export function AuthShell({ title, subtitle, children }: AuthShellProps) {
       <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-6xl flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <div className="auth-fade-up max-w-xl">
-            <Link
-              href="/"
-              className="inline-block font-mono text-sm font-semibold tracking-[0.22em] text-brand-400 transition-colors hover:text-brand-300"
-            >
-              {copy.brand.name.toUpperCase()}
-            </Link>
+            <BrandMark />
             <p className="auth-fade-up auth-delay-1 mt-8 max-w-[28ch] text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.08] tracking-tight text-white">
               Património. Confiança. Habitação.
             </p>
