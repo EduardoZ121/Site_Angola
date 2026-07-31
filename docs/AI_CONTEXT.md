@@ -2,11 +2,11 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001 v1.0 Funcional ✅ · Gate: P1 ✅ · P2 ❌ diferido · **Impl. auth em progresso** — PO 2026-07-31 autorizou código com P2 diferido; branch `cursor/prd-001-authentication-f96b`)  
+**Estado:** Activo (PRD-001 **N5 concluído** 2026-07-31 · próximo: Shell da plataforma → PRD-002)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  
-**Gate:** `docs/backlog/PRD_001_ENGINEERING_GATE.md` · Spec: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` (v1.0) · Readiness: `PRD_001_IMPLEMENTATION_READINESS.md` · Fase prévia: `PHASE_GATE_BEFORE_PRD001.md`
+**Auth:** Spec `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` · Encerramento `docs/backlog/PRD_001_CLOSURE.md` · ADR-004
 
 ---
 
@@ -130,8 +130,8 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 0 Fundação (docs + identidade) — **concluída**  
 1 Infraestrutura (monorepo, DS base) — **encerrada**  
 1b Landing Page (PASSO 1 + 1A) — **encerrada** (4 níveis de validação)  
-2 Autenticação (PRD-001) — v1.0 Funcional ✅ · **Implementação em progresso** (PO 2026-07-31 · P2 diferido · Gate §15) · ADR-004 N2 · Gate `docs/backlog/PRD_001_ENGINEERING_GATE.md`  
-3 Shell da plataforma  
+2 Autenticação (PRD-001) — **N5 concluído** (2026-07-31) · `PRD_001_CLOSURE.md` · ADR-004 aceite  
+3 Shell da plataforma — **próximo**  
 4 Parceiro Patrimonial (PRD-002)  
 5 Cliente (PRD-003)  
 6 Agente (PRD-004)  

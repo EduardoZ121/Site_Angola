@@ -8,37 +8,32 @@
 
 ## Onde estamos agora (ponto de paragem)
 
-| Camada                     | Estado                                                     |
-| -------------------------- | ---------------------------------------------------------- |
-| **Landing KEOS**           | ✅ Feita e na `main` (publish via `prebuilt` → `gh-pages`) |
-| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde               |
-| **PRD-001 Spec**           | ✅ v1.0 Aprovação Funcional                                |
-| **Auth código**            | ✅ Merged `main` + estático `/auth/*` · `/app`             |
-| **P2 Supabase `0002`**     | ✅ Aplicado em `vhqwitbrpqaiutjbundo` (0001–0003 + seed)   |
-| **Domínio kutekalink.com** | ✅ KEOS no ar via Render (`/auth/*` · `/app` OK)           |
-| **Deploy Kuteka (E4)**     | ✅ Verde com `package-lock.json`                           |
+| Camada                     | Estado                                         |
+| -------------------------- | ---------------------------------------------- |
+| **Landing KEOS**           | ✅ Feita e na `main`                           |
+| **CI quality**             | ✅ `.github/workflows/ci.yml` activo e verde   |
+| **PRD-001 Auth**           | ✅ **N5 concluído** — ver `PRD_001_CLOSURE.md` |
+| **Supabase remoto**        | ✅ `vhqwitbrpqaiutjbundo` (0001–0003 + seed)   |
+| **Domínio kutekalink.com** | ✅ KEOS no ar (Render + gh-pages)              |
+| **Deploy Kuteka**          | ✅ Verde                                       |
 
-**Estado 2026-07-31:** E3+E4 fechados. Site público = KEOS.  
-**Só falta (PO):** token Supabase → `bash scripts/bootstrap-supabase.sh` (ver `EXTERNAL_BLOCKERS.md`).
+**Estado 2026-07-31:** PRD-001 encerrado. Próximo foco de produto: **Shell da plataforma**, depois PRD-002.
 
 ---
 
 ## Manuais / documentos a usar (por ordem)
 
-| Ordem | Documento                                          | Para quê                           |
-| ----- | -------------------------------------------------- | ---------------------------------- |
-| 1     | `docs/AI_CONTEXT.md`                               | Memória permanente do produto      |
-| 2     | `docs/engineering/DEVELOPMENT_PROCESS.md`          | Como trabalhamos (Fase 1/2, N1–N5) |
-| 3     | `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md`    | Spec auth (D1–D12, F1–F6, R1–R12)  |
-| 4     | `docs/backlog/PRD_001_ENGINEERING_GATE.md`         | Gate P1/P2 + §15 (P2 diferido)     |
-| 5     | `docs/backlog/PRD_001_IMPLEMENTATION_READINESS.md` | Pack de implementação (activo)     |
-| 6     | `docs/backlog/PRD_001_CONTENT_INVENTORY.md`        | Copy i18n das páginas auth         |
-| 7     | `docs/architecture/ADR-004-*.md`                   | Decisões técnicas do módulo auth   |
-| 8     | `docs/backlog/PO_ACTION_P1_P2.md`                  | Checklist ops (P2 Supabase)        |
-| 9     | `docs/engineering/DEPLOY_STATUS_2026-07-30.md`     | Domínio / Pages / Render           |
-| 10    | `docs/security/AUDIT_LOGS_CHECKLIST.md`            | Validar RBAC/audit após migrations |
-| 11    | `PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`             | Marca / tom                        |
-| 12    | `CONTRIBUTING.md`                                  | Como contribuir no monorepo        |
+| Ordem | Documento                                       | Para quê                              |
+| ----- | ----------------------------------------------- | ------------------------------------- |
+| 1     | `docs/AI_CONTEXT.md`                            | Memória permanente do produto         |
+| 2     | `docs/engineering/DEVELOPMENT_PROCESS.md`       | Como trabalhamos (Fase 1/2, N1–N5)    |
+| 3     | `docs/backlog/PRD_001_CLOSURE.md`               | Encerramento oficial do módulo auth   |
+| 4     | `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` | Spec auth (referência histórica/viva) |
+| 5     | `docs/architecture/ADR-004-*.md`                | Decisões técnicas do módulo auth      |
+| 6     | `docs/backlog/GO_LIVE_CHECKLIST.md`             | Checklist ops / go-live               |
+| 7     | `docs/backlog/EXTERNAL_BLOCKERS.md`             | Bloqueios externos                    |
+| 8     | `PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`          | Marca / tom                           |
+| 9     | `CONTRIBUTING.md`                               | Como contribuir no monorepo           |
 
 Índice geral: `docs/README.md`
 
@@ -46,44 +41,22 @@
 
 ## Próximos passos (sequência recomendada)
 
-### Passo A — Fechar o PR de auth (feito)
+### 1. Shell da plataforma (fase 3 — próximo)
 
-1. CI do PR #5 verde ✅
-2. **Merge** PR #5 → `main` ✅
-3. Auth estático + stub `/app` republicados
-4. E4 mitigado com `package-lock.json` (Deploy Kuteka)
+Chrome autenticado estável (navegação, header/sidebar base) sobre a sessão e papéis já entregues no PRD-001 — **sem** reabrir polish cosmético do stub auth.
 
-### Passo B — Domínio público (**mais urgente**)
+### 2. PRD-002 — Parceiro Patrimonial
 
-- DNS `kutekalink.com` → GitHub Pages (ver `DEPLOY_STATUS`) — GoDaddy API actual **401**
-- Sem isto o site público continua no Render legado
+Primeiro módulo de negócio sobre o shell: activar e gerir património.
 
-### Passo C — Supabase (P2 + auth real)
+### 3. Ops opcional
 
-1. Criar/abrir projecto Supabase
-2. Aplicar migrations na ordem:
-   - `0001_foundation.sql`
-   - `0002_p0_rbac_and_audit_hardening.sql` ← **P2**
-   - `0003_activate_self_serve_roles.sql`
-3. Configurar env no ambiente / Pages build / local:
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY` (só server)
-4. Auth URLs allowlist + templates email (P4)
-5. Testar F1→F6 manualmente
-
-### Passo D — Próximos módulos de produto (depois de auth estável)
-
-Seguir roadmap em `AI_CONTEXT` / specs:
-
-1. Shell autenticado /app (hoje é stub)
-2. Patrimónios / activar património
-3. Passaporte / SCK / KAI (fora do MVP auth)
-4. Marketplace / listagens conforme PRDs futuros
+- P4 templates email com marca Kuteka
+- E1 — `deploy.yml` activo em pnpm (opcional)
 
 ---
 
-## Rotas auth já no código (PR #5)
+## Rotas auth (PRD-001 — estáveis)
 
 | Rota                        | Fluxo              |
 | --------------------------- | ------------------ |
@@ -105,27 +78,5 @@ Landing CTAs: Começar → `/auth/registar` · Entrar → `/auth/entrar`
 
 1. Antes de merge: `pnpm lint` · `format:check` · `typecheck` · `test` · CI verde
 2. Depois de merge na `main`: confirmar **Deploy Kuteka** success
-3. Não marcar P2 ✅ sem evidência no Gate
-4. Não inventar decisões de negócio — confrontar PRD-001
-
----
-
-## Credenciais (o que ainda falta)
-
-| Credencial                         | Para quê                                | Estado         |
-| ---------------------------------- | --------------------------------------- | -------------- |
-| Supabase URL + anon + service role | Auth real + migrations                  | ❌ Em falta    |
-| PAT GitHub com `workflow`          | Editar `.github/workflows/*` pelo agent | ❌ (só `repo`) |
-| GoDaddy / Render API               | DNS / reparar hosting                   | ❌ 401         |
-
-Sem Supabase a UI auth **abre**, mas login/registo real não completa.
-
----
-
-## Acção imediata (PO) — o que desbloqueia utilizadores
-
-1. **E3 DNS** — apontar `kutekalink.com` / `www` a GitHub Pages (credenciais GoDaddy actuais dão 401).
-2. **E2 Supabase** — projecto + migrations + env para login real.
-3. (Opcional) **E1** — PAT com `workflow` para o agent actualizar `deploy.yml` para pnpm.
-
-Ver: `docs/backlog/EXTERNAL_BLOCKERS.md` · `docs/backlog/GO_LIVE_CHECKLIST.md`.
+3. Não inventar decisões de negócio — confrontar PRD / AI_CONTEXT
+4. Não reabrir PRD-001 excepto erro crítico de funcionamento

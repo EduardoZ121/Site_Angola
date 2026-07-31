@@ -1,25 +1,26 @@
 # ADR-004 — Authentication module (PRD-001)
 
-**Estado:** ✅ **Accepted / in progress** (N2)  
+**Estado:** ✅ **Accepted / N5** (módulo concluído)  
 **Data:** 2026-07-31  
+**Encerramento:** `docs/backlog/PRD_001_CLOSURE.md`  
 **PRD:** `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` v1.0  
-**Autorização:** PO 2026-07-31 — implementação autorizada com P2 diferido (Gate §15)  
+**Autorização:** PO 2026-07-31 — implementação com P2 diferido no arranque; P2 aplicado antes do go-live  
 **Contrato:** §15.5 R1–R12 · §16.5 (`activate_self_serve_roles`) · §16.6 (`next`) · content inventory
 
 ## Contexto
 
-O módulo de autenticação é o primeiro contacto autenticado com a plataforma Kuteka. A especificação funcional está aprovada; P1 (CI) está verde; P2 (migration `0002` no remoto) foi diferido pelo PO para permitir arranque de código, mantendo-se obrigatório antes de go-live.
+O módulo de autenticação é o primeiro contacto autenticado com a plataforma Kuteka. A especificação funcional foi aprovada; CI (P1) e migrations remotas (P2 + `0003`) foram aplicados; o fluxo F1–F6 → `/app` foi validado em produção (QA Review 001–002). O PO encerrou o PRD-001 sem novas rondas de polish cosmético no stub.
 
 ## Decisão
 
 Implementar o módulo auth em `apps/web/modules/authentication` + rotas `(auth)` / `(app)`, com:
 
-### 1. Sessão (SSR-safe)
+### 1. Sessão (static-export safe)
 
-- Browser + server clients via `@kuteka/database` / `@supabase/ssr`
-- Middleware: refresh de cookies quando `NEXT_PUBLIC_SUPABASE_*` estiver presente
-- Sem sessão em `/app/*` → redirect `/auth/entrar?next=…`
+- Browser client via `@kuteka/database` com `localStorage` (`kuteka-auth`)
+- Server cookie helpers mantidos para caminhos SSR futuros; `/app` usa gate cliente (`AppShell`)
 - Env ausente: UI renderiza; submits devolvem erros guiados (R2), sem crash
+- Runtime público: `kuteka-config.js` / `window.__KUTEKA_CONFIG__`
 
 ### 2. Allowlist `next` (R3 / §16.6)
 
@@ -49,18 +50,17 @@ Implementar o módulo auth em `apps/web/modules/authentication` + rotas `(auth)`
 
 - `@kuteka/validation`: `normalizeEmail`, `passwordRules`, schemas Zod auth
 - `@kuteka/auth`: helpers RBAC existentes + `resolveSafeNextPath`
-- UI: `@kuteka/ui` (Button, Input, Label, Checkbox, Heading, Text, Alert, Spinner)
+- UI: `@kuteka/ui` (Button, Input, Label, Checkbox, Heading, Text, Card, Badge, …)
 
 ## Consequências
 
 - Landing CTAs apontam para `/auth/registar` e `/auth/entrar`
-- Stub `/app` e `/app/admin` até módulos de negócio
-- P2 + aplicação remota de `0002`/`0003` necessários para e2e real
+- Stub `/app` e `/app/admin` até Shell / módulos de negócio
+- PRD-001 fechado em N5; próximos: Shell da plataforma → PRD-002
 - Sem OAuth / MFA / Passaporte / KAI nesta entrega
 
 ## Fora de âmbito
 
 - UI Passaporte / KAI / SCK
-- Dashboards de negócio
-- Alterar D1–D12 / F1–F6
-- Marcar P2 como ✅ sem evidência
+- Dashboards de negócio / Shell completo
+- Alterar D1–D12 / F1–F6 sem revisão controlada do PRD

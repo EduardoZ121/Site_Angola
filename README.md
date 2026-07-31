@@ -67,8 +67,8 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 - `CONTRIBUTING.md` — como contribuir
 - `docs/AI_CONTEXT.md`
 - `docs/engineering/DEVELOPMENT_PROCESS.md`
-- `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` — **v1.0** (Aprovação Funcional)
-- `docs/backlog/PRD_001_ENGINEERING_GATE.md` — Gate pré-implementação
+- `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` — **v1.0** (N5 concluído)
+- `docs/backlog/PRD_001_CLOSURE.md` — encerramento oficial do módulo auth
 - `docs/architecture/ADR-001-foundation-architecture-decisions.md`
 - `docs/proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`
 
@@ -76,11 +76,10 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 
 1. **FASE 1 — Infraestrutura** — ✅ encerrada
 2. **Landing Page** (PASSO 1 + 1A) — ✅ encerrada
-3. **P0 pré-Auth** — P0-1/P0-2 ✅ técnicos; P0-3 (CI + `0002` remoto) ⏳ ops
-4. **PRD-001 Auth** — Aprovação Funcional ✅ · Engineering Gate ▶️ (P1+P2) · implementação ❌ até Fase 2 do processo
-5. Shell, domínios de produto, KAI, …
-
-> **Nota de nomenclatura:** “FASE 2” no roadmap de produto (auth) ≠ **Fase 2 do processo** (= Autorização de Implementação). Ver `DEVELOPMENT_PROCESS.md`.
+3. **P0 pré-Auth** — ✅ (CI + migrations remotas)
+4. **PRD-001 Auth** — ✅ **N5 concluído** (2026-07-31)
+5. **Shell da plataforma** — próximo
+6. **PRD-002+** Parceiro Patrimonial, Cliente, …
 
 Processo oficial: `docs/engineering/DEVELOPMENT_PROCESS.md`  
 pnpm é a fonte de verdade do monorepo (`pnpm-lock.yaml`).
