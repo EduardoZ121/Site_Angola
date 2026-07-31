@@ -120,3 +120,19 @@ Landing CTAs: Começar → `/auth/registar` · Entrar → `/auth/entrar`
 | GoDaddy / Render API               | DNS / reparar hosting                   | ❌ 401         |
 
 Sem Supabase a UI auth **abre**, mas login/registo real não completa.
+
+---
+
+## Acção imediata 30s (para CI + Deploy ambos verdes)
+
+O Deploy Kuteka já está **verde**. O CI falha na `main` porque o ficheiro activo
+`.github/workflows/ci.yml` ainda tem `version: 10` e o `package.json` tem `packageManager`.
+
+**Faz exactamente isto:**
+
+1. Abre: https://github.com/EduardoZ121/Site_Angola/edit/main/.github/workflows/ci.yml
+2. Selecciona **todo** o conteúdo e substitui pelo de:
+   https://raw.githubusercontent.com/EduardoZ121/Site_Angola/main/docs/engineering/github-workflows/ci.yml
+3. Commit na `main`
+
+Isso remove o `version: 10` e o CI volta a verde (o YAML correcto já está no repo em `docs/`).
