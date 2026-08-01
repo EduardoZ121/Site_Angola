@@ -1,10 +1,10 @@
 # (app) route group
 
-Área autenticada após PRD-001 (stub até Shell da plataforma).
+Área autenticada — **Platform Shell** (Fase 3).
 
 | Rota         | Função                     |
 | ------------ | -------------------------- |
-| `/app`       | Stub «O seu espaço Kuteka» |
+| `/app`       | Home «O seu espaço Kuteka» |
 | `/app/admin` | Stub admin (`admin.panel`) |
 
-Layout: `AppShell` (gate cliente + chrome — static-export safe). Sessão em `localStorage` (`kuteka-auth`).
+Layout: `AppShell` (gate) + `PlatformShell` (Sidebar + Topbar + Main). Sessão: `kuteka-auth`.

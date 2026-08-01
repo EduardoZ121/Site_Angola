@@ -20,5 +20,5 @@
 
 ## Próximo produto
 
-- [ ] Shell da plataforma (fase 3)
+- [x] Shell da plataforma (fase 3) — N5
 - [ ] PRD-002 — Parceiro Patrimonial

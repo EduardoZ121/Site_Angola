@@ -6,6 +6,7 @@ export type AppSessionData = {
   email: string | null;
   displayName: string | null;
   roles: string[];
+  permissions: string[];
 };
 
 type AppSessionContextValue = {
