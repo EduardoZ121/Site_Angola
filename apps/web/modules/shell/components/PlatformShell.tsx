@@ -4,13 +4,14 @@ import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useId, useState } from 'react';
-import { Badge, buttonVariants } from '@kuteka/ui';
+import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { BrandMark } from '@/modules/authentication/components/BrandMark';
-import { roleLabelPt, type AppSessionData } from '@/modules/authentication/components/app-session';
+import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
 import { getShellCopy } from '../content/pt';
 import { isNavItemActive, isNavItemVisible, SHELL_NAV_ITEMS } from '../nav';
+import { UserMenu } from './UserMenu';
 
 type PlatformShellProps = {
   children: ReactNode;
@@ -89,9 +90,6 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
     certified_agent: 'Agente Certificado',
     administrator: 'Administrador',
   };
-  const headerName = session?.displayName || session?.email || auth.app.userFallback;
-  const roleBadges = session?.roles ?? [];
-
   useEffect(() => {
     setDrawerOpen(false);
   }, [pathname]);
@@ -155,34 +153,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
               </p>
             </div>
 
-            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-              <div className="hidden min-w-0 flex-col items-end sm:flex">
-                <p className="max-w-[12rem] truncate text-sm font-medium text-slate-800 lg:max-w-xs">
-                  {headerName}
-                </p>
-                {roleBadges.length > 0 ? (
-                  <div
-                    className="mt-1 flex flex-wrap justify-end gap-1"
-                    aria-label={auth.app.rolesLabel}
-                  >
-                    {roleBadges.map((code) => (
-                      <Badge key={code} variant="brand" className="text-[0.65rem]">
-                        {roleLabelPt(code, roleLabels)}
-                      </Badge>
-                    ))}
-                  </div>
-                ) : sessionStatus === 'ready' ? (
-                  <span className="text-xs text-slate-500">{auth.app.noRoles}</span>
-                ) : null}
-              </div>
-              <p className="truncate text-sm font-medium text-slate-800 sm:hidden">{headerName}</p>
-              <Link
-                href="/auth/sair"
-                className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'shrink-0')}
-              >
-                {auth.logout.action}
-              </Link>
-            </div>
+            <UserMenu session={session} sessionStatus={sessionStatus} roleLabels={roleLabels} />
           </div>
         </header>
 

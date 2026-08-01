@@ -37,4 +37,13 @@ describe('shell nav', () => {
     expect(isNavItemActive(item, '/app/habitacao/explorar')).toBe(true);
     expect(isNavItemActive(item, '/app')).toBe(false);
   });
+
+  it('keeps only confianca as soon among product modules', () => {
+    const product = SHELL_NAV_ITEMS.filter((i) =>
+      ['patrimonios', 'habitacao', 'confianca'].includes(i.id),
+    );
+    expect(product.find((i) => i.id === 'patrimonios')?.status).toBe('active');
+    expect(product.find((i) => i.id === 'habitacao')?.status).toBe('active');
+    expect(product.find((i) => i.id === 'confianca')?.status).toBe('soon');
+  });
 });
