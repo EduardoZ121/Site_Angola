@@ -1,15 +1,21 @@
-/** Shell chrome copy — pt-AO (Fase 3). */
+/** Shell chrome copy — pt-AO (Fase 3 + UX refresh). */
 export const shellCopyPt = {
-  areaTitle: 'O seu espaço',
+  areaTitle: 'Plataforma Kuteka',
   navAria: 'Navegação da plataforma',
   openMenu: 'Abrir menu',
   closeMenu: 'Fechar menu',
   soon: 'Em breve',
+  userMenuAria: 'Menu da conta',
+  userMenu: {
+    profile: 'Perfil',
+    roles: 'Papéis',
+    settings: 'Definições',
+  },
   items: {
     home: 'Início',
     patrimonios: 'Patrimónios',
-    confianca: 'Confiança',
     habitacao: 'Habitação',
+    confianca: 'Confiança',
     admin: 'Administração',
   },
 } as const;
