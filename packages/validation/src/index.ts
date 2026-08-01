@@ -37,3 +37,11 @@ export {
   type NewPasswordInput,
   type OnboardingRolesInput,
 } from './auth';
+
+export {
+  PROPERTY_TYPES,
+  PROPERTY_PURPOSES,
+  PROPERTY_STATUSES,
+  activatePropertySchema,
+  type ActivatePropertyInput,
+} from './property';

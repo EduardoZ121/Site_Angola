@@ -16,7 +16,7 @@ export type ShellNavItem = {
 
 export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
   { id: 'home', labelKey: 'home', href: '/app', status: 'active' },
-  { id: 'patrimonios', labelKey: 'patrimonios', status: 'soon' },
+  { id: 'patrimonios', labelKey: 'patrimonios', href: '/app/patrimonios', status: 'active' },
   { id: 'confianca', labelKey: 'confianca', status: 'soon' },
   { id: 'habitacao', labelKey: 'habitacao', status: 'soon' },
   {

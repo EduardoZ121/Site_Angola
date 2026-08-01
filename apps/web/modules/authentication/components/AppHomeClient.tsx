@@ -16,21 +16,24 @@ import { cn } from '@kuteka/shared';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
 
-const UPCOMING_MODULES = [
+const MODULE_LINKS = [
   {
     key: 'patrimonios',
     title: 'Patrimónios',
     description: 'Activar e acompanhar património na plataforma.',
+    href: '/app/patrimonios' as string | null,
   },
   {
     key: 'confianca',
     title: 'Confiança',
     description: 'Documentos e verificação para relações seguras.',
+    href: null,
   },
   {
     key: 'habitacao',
     title: 'Habitação',
     description: 'Jornada do Cliente — procurar e gerir habitação.',
+    href: null,
   },
 ] as const;
 
@@ -137,20 +140,35 @@ export function AppHomeClient() {
         </div>
 
         <ul className="grid gap-3 sm:grid-cols-1">
-          {UPCOMING_MODULES.map((mod) => (
+          {MODULE_LINKS.map((mod) => (
             <li key={mod.key}>
-              <div
-                aria-disabled="true"
-                className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-slate-50/80 px-4 py-4 opacity-80"
-              >
-                <div className="min-w-0">
-                  <p className="font-medium text-slate-800">{mod.title}</p>
-                  <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+              {mod.href ? (
+                <Link
+                  href={mod.href}
+                  className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition-colors hover:border-brand-300"
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-800">{mod.title}</p>
+                    <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+                  </div>
+                  <span className="shrink-0 rounded-kuteka border border-brand-200 bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-800">
+                    Disponível
+                  </span>
+                </Link>
+              ) : (
+                <div
+                  aria-disabled="true"
+                  className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-slate-50/80 px-4 py-4 opacity-80"
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium text-slate-800">{mod.title}</p>
+                    <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+                  </div>
+                  <span className="shrink-0 rounded-kuteka border border-slate-200 bg-white px-2 py-0.5 text-xs font-medium text-slate-500">
+                    {copy.app.moduleUnavailable}
+                  </span>
                 </div>
-                <span className="shrink-0 rounded-kuteka border border-slate-200 bg-white px-2 py-0.5 text-xs font-medium text-slate-500">
-                  {copy.app.moduleUnavailable}
-                </span>
-              </div>
+              )}
             </li>
           ))}
         </ul>

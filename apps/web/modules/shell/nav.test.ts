@@ -21,8 +21,11 @@ describe('shell nav', () => {
     expect(isNavItemActive(home, '/app/admin')).toBe(false);
   });
 
-  it('keeps soon items non-active', () => {
-    const soon = SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!;
-    expect(isNavItemActive(soon, '/app')).toBe(false);
+  it('marks patrimonios active under /app/patrimonios', () => {
+    const item = SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!;
+    expect(item.status).toBe('active');
+    expect(isNavItemActive(item, '/app/patrimonios')).toBe(true);
+    expect(isNavItemActive(item, '/app/patrimonios/novo')).toBe(true);
+    expect(isNavItemActive(item, '/app')).toBe(false);
   });
 });

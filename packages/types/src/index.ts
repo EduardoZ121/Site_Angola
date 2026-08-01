@@ -3,7 +3,28 @@ export type RoleCode =
   'client' | 'patrimonial_partner' | 'certified_agent' | 'administrator' | (string & {});
 
 /** Permission codes — capabilities, not roles */
-export type PermissionCode = 'platform.access' | 'admin.panel' | (string & {});
+export type PermissionCode =
+  'platform.access' | 'admin.panel' | 'properties.manage' | (string & {});
+
+export type PropertyType = 'apartment' | 'house' | 'land' | 'commercial';
+export type PropertyPurpose = 'rent' | 'sale' | 'both';
+export type PropertyStatus = 'draft' | 'active' | 'archived';
+
+export interface Property {
+  id: string;
+  ownerId: string;
+  code: string;
+  title: string;
+  propertyType: PropertyType;
+  purpose: PropertyPurpose;
+  province: string | null;
+  city: string | null;
+  addressLine: string | null;
+  status: PropertyStatus;
+  notes: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface Role {
   id: string;

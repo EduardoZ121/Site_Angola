@@ -9,6 +9,6 @@
 | [ADR-003](ADR-003-p0-pre-auth-hardening.md)             | P0 RBAC + audit       | Aceite                      |
 | [ADR-004](ADR-004-authentication-module-deferred.md)    | Auth module (PRD-001) | ✅ Aceite / N5 (2026-07-31) |
 | [ADR-005](ADR-005-platform-shell.md)                    | Platform Shell        | ✅ Aceite / N5 (2026-07-31) |
+| [ADR-006](ADR-006-properties-module.md)                 | Properties / PRD-002  | ✅ Aceite / N5 (2026-08-01) |
 
-Processo: `docs/engineering/DEVELOPMENT_PROCESS.md`  
-Spec auth: `docs/proposals/PRD_001_AUTHENTICATION_SPEC.md` · Shell: `PHASE_3_PLATFORM_SHELL_SPEC.md`
+Processo: `docs/engineering/DEVELOPMENT_PROCESS.md`
