@@ -6,15 +6,18 @@ import { cn } from '@kuteka/shared';
 import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
 import { RoleHomeDashboard } from '@/modules/shell/components/RoleHomeDashboard';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
+import { EXPERIENCE_LABELS } from '@/modules/shell/role-experience';
 import { getAuthCopy } from '../content';
 import { useAppSession } from './app-session';
 
 /**
- * /app home — role cockpit + continuous Feed (ADR-013 + premium polish).
+ * /app home — experience cockpit + continuous Feed.
  */
 export function AppHomeClient() {
   const copy = getAuthCopy();
   const { session, status, error } = useAppSession();
+  const { mode, effectivePermissions } = useRoleExperience();
 
   if (status === 'error' || (status === 'ready' && !session)) {
     return (
@@ -61,20 +64,23 @@ export function AppHomeClient() {
   if (!session) return null;
 
   const greetingName = session.displayName;
-  const canManage = session.permissions.includes('properties.manage');
-  const canHousing = session.permissions.includes('housing.explore');
-  const canContracts = session.permissions.includes('contracts.manage');
+  const canManage = effectivePermissions.includes('properties.manage');
+  const canHousing = effectivePermissions.includes('housing.explore');
+  const canContracts = effectivePermissions.includes('contracts.manage');
+  const canAgent = effectivePermissions.includes('agent.operate');
+  const canAdmin = effectivePermissions.includes('admin.panel');
+  const showFeed = canHousing || mode === 'client_partner' || mode === 'certified_agent';
 
   return (
     <div className="flex flex-col gap-4">
       <header className="kuteka-detail-panel flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <p className="kuteka-detail-eyebrow">Feed</p>
+          <p className="kuteka-detail-eyebrow">{EXPERIENCE_LABELS[mode]}</p>
           <h1 className="truncate text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
           </h1>
           <p className="kuteka-detail-body mt-0.5">
-            O seu cockpit + scroll contínuo da plataforma.
+            Cockpit e fluxos desta experiência — mude de papel no menu da conta.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -89,18 +95,30 @@ export function AppHomeClient() {
           {canHousing ? (
             <Link
               href="/app/habitacao/explorar"
-              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+              className={cn(
+                buttonVariants({ variant: canManage ? 'secondary' : 'primary', size: 'sm' }),
+                'w-fit',
+              )}
             >
               {copy.app.quickExploreHousing}
             </Link>
-          ) : (
+          ) : null}
+          {canAgent ? (
             <Link
-              href="/auth/onboarding/papeis"
+              href="/app/agente"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
             >
-              {copy.app.quickRoles}
+              Pipeline Agente
             </Link>
-          )}
+          ) : null}
+          {canAdmin ? (
+            <Link
+              href="/app/admin"
+              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+            >
+              Administração
+            </Link>
+          ) : null}
           {canContracts ? (
             <Link
               href="/app/contratos"
@@ -109,12 +127,20 @@ export function AppHomeClient() {
               Contratos
             </Link>
           ) : null}
+          {!canManage && !canHousing && !canAgent && !canAdmin ? (
+            <Link
+              href="/auth/onboarding/papeis"
+              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+            >
+              {copy.app.quickRoles}
+            </Link>
+          ) : null}
         </div>
       </header>
 
       <RoleHomeDashboard session={session} />
 
-      <PlatformFeed canExplore={canHousing} />
+      {showFeed ? <PlatformFeed canExplore={canHousing} /> : null}
     </div>
   );
 }

@@ -1,12 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { roleLabelPt, type AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
 import { getShellCopy } from '../content/pt';
+import { EXPERIENCE_LABELS, type ExperienceMode } from '../role-experience';
+import { useRoleExperience } from './RoleExperienceProvider';
 
 type UserMenuProps = {
   session: AppSessionData | null;
@@ -137,17 +140,20 @@ function MenuIcon({ name }: { name: string }) {
 export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) {
   const auth = getAuthCopy();
   const shell = getShellCopy();
+  const router = useRouter();
+  const { mode, available, setMode, effectivePermissions } = useRoleExperience();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
   const headerName = session?.displayName || session?.email || auth.app.userFallback;
   const roleBadges = session?.roles ?? [];
-  const primaryRole =
+  const accountRoles =
     roleBadges.length > 0
       ? roleBadges.map((code) => roleLabelPt(code, roleLabels)).join(' · ')
       : sessionStatus === 'ready'
         ? auth.app.noRoles
         : '…';
+  const primaryRole = EXPERIENCE_LABELS[mode];
   const initials = (session?.displayName || session?.email || 'K')
     .split(/[\s@]+/)
     .filter(Boolean)
@@ -155,7 +161,9 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
     .map((part) => part[0]?.toUpperCase() ?? '')
     .join('');
 
-  const canPartner = session?.permissions.includes('properties.manage') ?? false;
+  const canPartner = effectivePermissions.includes('properties.manage');
+  const canContracts = effectivePermissions.includes('contracts.manage');
+  const canTrust = effectivePermissions.includes('trust.manage');
 
   const primaryItems: MenuItem[] = [
     {
@@ -180,18 +188,26 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
           } satisfies MenuItem,
         ]
       : []),
-    {
-      href: '/app/contratos',
-      label: shell.userMenu.contracts,
-      hint: shell.userMenu.contractsHint,
-      icon: 'contracts',
-    },
-    {
-      href: '/app/confianca',
-      label: shell.userMenu.documents,
-      hint: shell.userMenu.documentsHint,
-      icon: 'docs',
-    },
+    ...(canContracts
+      ? [
+          {
+            href: '/app/contratos',
+            label: shell.userMenu.contracts,
+            hint: shell.userMenu.contractsHint,
+            icon: 'contracts',
+          } satisfies MenuItem,
+        ]
+      : []),
+    ...(canTrust
+      ? [
+          {
+            href: '/app/confianca',
+            label: shell.userMenu.documents,
+            hint: shell.userMenu.documentsHint,
+            icon: 'docs',
+          } satisfies MenuItem,
+        ]
+      : []),
   ];
 
   const secondaryItems: MenuItem[] = [
@@ -275,9 +291,45 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
             </span>
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold text-slate-900">{headerName}</p>
-              <p className="mt-0.5 truncate text-xs text-slate-600">{primaryRole}</p>
+              <p className="mt-0.5 truncate text-xs font-semibold text-[#08263f]">{primaryRole}</p>
+              <p className="mt-0.5 truncate text-[0.7rem] text-slate-500">Conta: {accountRoles}</p>
             </div>
           </div>
+
+          {available.length > 0 ? (
+            <div className="border-b border-slate-200 px-4 py-3">
+              <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                {shell.switchRole}
+              </p>
+              <p className="mt-0.5 text-xs text-slate-600">{shell.switchRoleHint}</p>
+              <ul className="mt-2 flex flex-col gap-1" role="group" aria-label={shell.switchRole}>
+                {available.map((m) => (
+                  <li key={m}>
+                    <button
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={m === mode}
+                      className={cn(
+                        'flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition-colors',
+                        m === mode
+                          ? 'bg-[#08263f] font-semibold text-white'
+                          : 'font-medium text-slate-800 hover:bg-slate-100',
+                      )}
+                      onClick={() => {
+                        setMode(m as ExperienceMode);
+                        setOpen(false);
+                        // Reload cockpit immediately for the new experience.
+                        router.push('/app');
+                      }}
+                    >
+                      <span>{EXPERIENCE_LABELS[m]}</span>
+                      {m === mode ? <span aria-hidden>✓</span> : null}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           <ul className="py-1.5">
             {primaryItems.map((item) => (

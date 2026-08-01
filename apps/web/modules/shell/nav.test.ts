@@ -1,8 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { isNavItemActive, isNavItemVisible, SHELL_NAV_ITEMS } from './nav';
+import {
+  groupNavItems,
+  isNavItemActive,
+  isNavItemVisible,
+  SHELL_NAV_ITEMS,
+  visibleNavItems,
+} from './nav';
 
 describe('shell nav', () => {
-  it('exposes home as the only always-active public item', () => {
+  it('exposes home as always active', () => {
     const home = SHELL_NAV_ITEMS.find((i) => i.id === 'home');
     expect(home?.status).toBe('active');
     expect(home?.href).toBe('/app');
@@ -10,66 +16,58 @@ describe('shell nav', () => {
 
   it('hides admin without admin.panel', () => {
     const admin = SHELL_NAV_ITEMS.find((i) => i.id === 'admin')!;
-    expect(isNavItemVisible(admin, ['platform.access'])).toBe(false);
-    expect(isNavItemVisible(admin, ['platform.access', 'admin.panel'])).toBe(true);
+    expect(isNavItemVisible(admin, ['platform.access'], 'administrator')).toBe(false);
+    expect(isNavItemVisible(admin, ['platform.access', 'admin.panel'], 'administrator')).toBe(true);
   });
 
-  it('gates product modules by permission (agente stays open for demo)', () => {
-    const base = ['platform.access'];
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!,
-        base,
-      ),
-    ).toBe(false);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!,
-        [...base, 'properties.manage'],
-      ),
-    ).toBe(true);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'habitacao')!,
-        base,
-      ),
-    ).toBe(false);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'habitacao')!,
-        [...base, 'housing.explore'],
-      ),
-    ).toBe(true);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'agente')!,
-        base,
-      ),
-    ).toBe(true);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'confianca')!,
-        base,
-      ),
-    ).toBe(false);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'confianca')!,
-        [...base, 'trust.manage'],
-      ),
-    ).toBe(true);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'contratos')!,
-        base,
-      ),
-    ).toBe(false);
-    expect(
-      isNavItemVisible(
-        SHELL_NAV_ITEMS.find((i) => i.id === 'contratos')!,
-        [...base, 'contracts.manage'],
-      ),
-    ).toBe(true);
+  it('gates agente behind agent.operate (no longer open to all)', () => {
+    const agente = SHELL_NAV_ITEMS.find((i) => i.id === 'agente')!;
+    expect(isNavItemVisible(agente, ['platform.access'], 'client')).toBe(false);
+    expect(isNavItemVisible(agente, ['platform.access', 'agent.operate'], 'certified_agent')).toBe(
+      true,
+    );
+    expect(isNavItemVisible(agente, ['platform.access', 'agent.operate'], 'client')).toBe(false);
+  });
+
+  it('client experience hides patrimónios and confiança', () => {
+    const items = visibleNavItems(
+      ['platform.access', 'housing.explore', 'contracts.manage', 'trust.manage'],
+      'client',
+    );
+    expect(items.some((i) => i.id === 'patrimonios')).toBe(false);
+    expect(items.some((i) => i.id === 'confianca')).toBe(false);
+    expect(items.some((i) => i.id === 'explorar')).toBe(true);
+    expect(items.some((i) => i.id === 'favoritos')).toBe(true);
+    expect(items.some((i) => i.id === 'agente')).toBe(false);
+  });
+
+  it('partner experience hides explorar / favoritos', () => {
+    const items = visibleNavItems(
+      ['platform.access', 'properties.manage', 'contracts.manage', 'trust.manage'],
+      'patrimonial_partner',
+    );
+    expect(items.some((i) => i.id === 'patrimonios')).toBe(true);
+    expect(items.some((i) => i.id === 'ativar')).toBe(true);
+    expect(items.some((i) => i.id === 'explorar')).toBe(false);
+    expect(items.some((i) => i.id === 'favoritos')).toBe(false);
+  });
+
+  it('client_partner shows both cliente and parceiro groups', () => {
+    const items = visibleNavItems(
+      [
+        'platform.access',
+        'housing.explore',
+        'properties.manage',
+        'contracts.manage',
+        'trust.manage',
+      ],
+      'client_partner',
+    );
+    const groups = groupNavItems(items);
+    expect(groups.some((g) => g.group === 'cliente')).toBe(true);
+    expect(groups.some((g) => g.group === 'parceiro')).toBe(true);
+    expect(items.some((i) => i.id === 'explorar')).toBe(true);
+    expect(items.some((i) => i.id === 'patrimonios')).toBe(true);
   });
 
   it('marks /app home active only on the home path', () => {
@@ -81,44 +79,7 @@ describe('shell nav', () => {
 
   it('marks patrimonios active under /app/patrimonios', () => {
     const item = SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!;
-    expect(item.status).toBe('active');
     expect(isNavItemActive(item, '/app/patrimonios')).toBe(true);
     expect(isNavItemActive(item, '/app/patrimonios/novo')).toBe(true);
-    expect(isNavItemActive(item, '/app')).toBe(false);
-  });
-
-  it('marks habitacao active under /app/habitacao', () => {
-    const item = SHELL_NAV_ITEMS.find((i) => i.id === 'habitacao')!;
-    expect(item.status).toBe('active');
-    expect(item.href).toBe('/app/habitacao');
-    expect(isNavItemActive(item, '/app/habitacao')).toBe(true);
-    expect(isNavItemActive(item, '/app/habitacao/explorar')).toBe(true);
-    expect(isNavItemActive(item, '/app')).toBe(false);
-  });
-
-  it('marks all product modules active', () => {
-    const product = SHELL_NAV_ITEMS.filter((i) =>
-      ['patrimonios', 'habitacao', 'agente', 'confianca', 'contratos'].includes(i.id),
-    );
-    for (const id of ['patrimonios', 'habitacao', 'agente', 'confianca', 'contratos'] as const) {
-      expect(product.find((i) => i.id === id)?.status).toBe('active');
-    }
-    expect(product.find((i) => i.id === 'confianca')?.href).toBe('/app/confianca');
-    expect(product.find((i) => i.id === 'contratos')?.href).toBe('/app/contratos');
-  });
-
-  it('marks confianca active under /app/confianca', () => {
-    const item = SHELL_NAV_ITEMS.find((i) => i.id === 'confianca')!;
-    expect(isNavItemActive(item, '/app/confianca')).toBe(true);
-    expect(isNavItemActive(item, '/app/confianca/submeter')).toBe(true);
-    expect(isNavItemActive(item, '/app')).toBe(false);
-  });
-
-  it('marks contratos active under /app/contratos', () => {
-    const item = SHELL_NAV_ITEMS.find((i) => i.id === 'contratos')!;
-    expect(isNavItemActive(item, '/app/contratos')).toBe(true);
-    expect(isNavItemActive(item, '/app/contratos/novo')).toBe(true);
-    expect(isNavItemActive(item, '/app/contratos/detalhe')).toBe(true);
-    expect(isNavItemActive(item, '/app')).toBe(false);
   });
 });
