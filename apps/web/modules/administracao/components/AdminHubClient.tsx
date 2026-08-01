@@ -6,9 +6,15 @@ import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { HeroMedia } from '@/modules/shell/components/HeroMedia';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAdministracaoCopy } from '../content/pt';
-import { fetchPlatformStats, type PlatformStats } from '../services/admin-client';
+import {
+  fetchPlatformStats,
+  listPendingInterests,
+  type AdminInterestRow,
+  type PlatformStats,
+} from '../services/admin-client';
 
 export function AdminHubClient() {
   const copy = getAdministracaoCopy();
@@ -16,6 +22,7 @@ export function AdminHubClient() {
   const allowed = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
 
   const [stats, setStats] = useState<PlatformStats | null>(null);
+  const [pending, setPending] = useState<AdminInterestRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,15 +34,19 @@ export function AdminHubClient() {
         return;
       }
       setLoading(true);
-      const result = await fetchPlatformStats();
+      const [statsResult, pendingResult] = await Promise.all([
+        fetchPlatformStats(),
+        listPendingInterests(),
+      ]);
       if (cancelled) return;
-      if (!result.ok) {
-        setError(result.message);
+      if (!statsResult.ok) {
+        setError(statsResult.message);
         setStats(null);
       } else {
         setError(null);
-        setStats(result.data);
+        setStats(statsResult.data);
       }
+      if (pendingResult.ok) setPending(pendingResult.data);
       setLoading(false);
     }
     if (sessionStatus === 'ready') void load();
@@ -59,11 +70,9 @@ export function AdminHubClient() {
 
   return (
     <div className="flex flex-col gap-8">
+      <HeroMedia preset="admin" />
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Operação
-          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
           <Badge variant="brand" className="w-fit">
@@ -76,6 +85,12 @@ export function AdminHubClient() {
             className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
           >
             {copy.trustReview}
+          </Link>
+          <Link
+            href="/app/habitacao/explorar"
+            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+          >
+            {copy.housingExplore}
           </Link>
           <Link
             href="/app/admin/utilizadores"
@@ -102,13 +117,16 @@ export function AdminHubClient() {
           </div>
         ) : null}
         {!loading && !error && stats ? (
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {(
               [
                 ['profiles', stats.profiles],
                 ['properties', stats.properties_active],
-                ['assignments', stats.agent_assignments_active],
                 ['agents', stats.roles_certified_agent],
+                ['assignments', stats.agent_assignments_active],
+                ['trust', stats.trust_pending ?? 0],
+                ['interests', stats.interests_pending ?? 0],
+                ['demo', stats.properties_demo ?? 0],
               ] as const
             ).map(([key, value]) => (
               <li key={key} className="rounded-kuteka border border-slate-200 bg-white px-4 py-4">
@@ -122,6 +140,43 @@ export function AdminHubClient() {
         ) : null}
         {!loading && !error && !stats ? (
           <EmptyState title={copy.statsTitle} description={copy.loadError} />
+        ) : null}
+      </section>
+
+      <section className="flex flex-col gap-3" aria-labelledby="pending-heading">
+        <div className="flex flex-col gap-1">
+          <h2 id="pending-heading" className="text-sm font-semibold text-slate-800">
+            {copy.pendingTitle}
+          </h2>
+          <Text className="text-sm text-slate-500">{copy.pendingHint}</Text>
+        </div>
+        {!loading && pending.length === 0 ? (
+          <EmptyState title={copy.pendingTitle} description={copy.emptyPending} />
+        ) : null}
+        {pending.length > 0 ? (
+          <ul className="flex flex-col gap-2">
+            {pending.map((row) => (
+              <li
+                key={row.id}
+                className="flex flex-col gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <p className="font-medium text-slate-900">
+                    {row.property_title ?? row.property_id}
+                  </p>
+                  <p className="text-sm text-slate-500">
+                    {new Date(row.created_at).toLocaleString('pt-PT')} · {row.status}
+                  </p>
+                </div>
+                <Link
+                  href={`/app/habitacao/detalhe?id=${encodeURIComponent(row.property_id)}`}
+                  className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+                >
+                  {copy.openProperty}
+                </Link>
+              </li>
+            ))}
+          </ul>
         ) : null}
       </section>
     </div>

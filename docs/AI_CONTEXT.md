@@ -137,6 +137,7 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 6 Agente (PRD-004) — **N5 concluído / congelado** (ADR-008)  
 7 Administração (PRD-005) — **N5 concluído / congelado** (ADR-009)  
 7b Confiança (PRD-006) — **N5 concluído** (ADR-010)  
+7c Experiência de anúncio / fluxo (PRD-007) — **N5** (media, seed, HeroMedia)  
 8 Contratos → 9 Wallet → 10 Marketplace → 11 KAI → 12 BI
 
 ## 13. Segurança (mínimos)

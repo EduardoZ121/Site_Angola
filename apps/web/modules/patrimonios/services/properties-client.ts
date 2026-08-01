@@ -4,6 +4,7 @@ import { activatePropertySchema, type ActivatePropertyInput } from '@kuteka/vali
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { getPatrimoniosCopy } from '../content/pt';
+import { uploadPropertyMedia, type LocalMediaDraft } from './property-media-client';
 
 export type PropertyRow = {
   id: string;
@@ -17,9 +18,16 @@ export type PropertyRow = {
   address_line: string | null;
   status: string;
   notes: string | null;
+  price_aoa: number | null;
+  bedrooms: number | null;
+  cover_image_url: string | null;
+  is_demo: boolean;
   created_at: string;
   updated_at: string;
 };
+
+const PROPERTY_SELECT =
+  'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, updated_at';
 
 function newPropertyCode(): string {
   const n = Math.floor(Math.random() * 1_000_000)
@@ -36,9 +44,7 @@ export async function listMyProperties(): Promise<
     const client = createBrowserClient();
     const { data, error } = await client
       .from('properties')
-      .select(
-        'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, created_at, updated_at',
-      )
+      .select(PROPERTY_SELECT)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
@@ -57,9 +63,7 @@ export async function getProperty(
     const client = createBrowserClient();
     const { data, error } = await client
       .from('properties')
-      .select(
-        'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, created_at, updated_at',
-      )
+      .select(PROPERTY_SELECT)
       .eq('id', id)
       .is('deleted_at', null)
       .maybeSingle();
@@ -73,6 +77,7 @@ export async function getProperty(
 
 export async function activateProperty(
   input: ActivatePropertyInput,
+  mediaDrafts: LocalMediaDraft[] = [],
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
   const copy = getPatrimoniosCopy();
   const parsed = activatePropertySchema.safeParse(input);
@@ -89,6 +94,7 @@ export async function activateProperty(
     if (userError || !user) return { ok: false, message: copy.forbidden };
 
     const v = parsed.data;
+    const primary = mediaDrafts.find((m) => m.isPrimary) ?? mediaDrafts[0];
     const row = {
       owner_id: user.id,
       code: newPropertyCode(),
@@ -99,6 +105,9 @@ export async function activateProperty(
       city: v.city || null,
       address_line: v.addressLine || null,
       notes: v.notes || null,
+      price_aoa: v.priceAoa ?? null,
+      bedrooms: v.bedrooms ?? null,
+      cover_image_url: primary?.publicUrl ?? null,
       status: v.status ?? 'active',
       created_by: user.id,
       updated_by: user.id,
@@ -112,15 +121,20 @@ export async function activateProperty(
       return { ok: false, message: copy.saveError };
     }
 
+    if (mediaDrafts.length) {
+      const mediaResult = await uploadPropertyMedia(data.id as string, mediaDrafts);
+      if (!mediaResult.ok) return mediaResult;
+    }
+
     try {
       await writeAuditLog(client, {
         action: 'property.activated',
         entityType: 'property',
         entityId: data.id,
-        metadata: { code: row.code, title: row.title },
+        metadata: { code: row.code, title: row.title, media_count: mediaDrafts.length },
       });
     } catch {
-      // Activation succeeded; audit is best-effort for MVP.
+      // best-effort
     }
 
     return { ok: true, id: data.id as string };

@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { HeroMedia } from '@/modules/shell/components/HeroMedia';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
@@ -41,22 +43,28 @@ export function PropertyListClient() {
 
   return (
     <div className="flex flex-col gap-8">
+      <HeroMedia preset="patrimonios" />
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Parceiro Patrimonial
-          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
         </div>
-        {canManage ? (
+        <div className="flex flex-wrap gap-2">
           <Link
-            href="/app/patrimonios/novo"
-            className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
+            href="/app/habitacao/explorar"
+            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
           >
-            {copy.activate}
+            {copy.seeInHousing}
           </Link>
-        ) : null}
+          {canManage ? (
+            <Link
+              href="/app/patrimonios/novo"
+              className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
+            >
+              {copy.activate}
+            </Link>
+          ) : null}
+        </div>
       </header>
 
       {!canManage && sessionStatus === 'ready' ? (
@@ -105,26 +113,40 @@ export function PropertyListClient() {
             </h2>
             <Text className="text-sm text-slate-500">{copy.listHint}</Text>
           </div>
-          <ul className="flex flex-col gap-3">
+          <ul className="grid gap-4 sm:grid-cols-2">
             {rows.map((row) => (
               <li key={row.id}>
                 <Link
                   href={`/app/patrimonios/detalhe?id=${row.id}`}
-                  className="flex flex-col gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition-colors hover:border-brand-300 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex h-full flex-col overflow-hidden rounded-kuteka border border-slate-200 bg-white transition-colors hover:border-brand-300"
                 >
-                  <div className="min-w-0">
-                    <p className="font-medium text-slate-900">{row.title}</p>
-                    <p className="mt-0.5 text-sm text-slate-500">
+                  <div className="aspect-[16/10] bg-slate-100">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={row.cover_image_url || '/images/hero.jpg'}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2 p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="font-medium text-slate-900">{row.title}</p>
+                      <Badge variant={row.status === 'active' ? 'success' : 'default'}>
+                        {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
+                      </Badge>
+                    </div>
+                    <p className="text-sm font-semibold text-brand-800">
+                      {formatAoa(row.price_aoa, row.purpose)}
+                    </p>
+                    <p className="text-sm text-slate-600">
                       {copy.types[row.property_type as keyof typeof copy.types] ??
                         row.property_type}
                       {row.city ? ` · ${row.city}` : ''}
                       {row.province ? `, ${row.province}` : ''}
                     </p>
-                    <p className="mt-1 font-mono text-xs text-slate-400">{row.code}</p>
+                    <p className="font-mono text-xs text-slate-400">{row.code}</p>
                   </div>
-                  <Badge variant={row.status === 'active' ? 'success' : 'default'}>
-                    {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
-                  </Badge>
                 </Link>
               </li>
             ))}

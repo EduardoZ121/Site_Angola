@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { HeroMedia } from '@/modules/shell/components/HeroMedia';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
@@ -11,28 +12,28 @@ const MODULE_LINKS = [
   {
     key: 'patrimonios',
     title: 'Patrimónios',
-    description: 'Activar e acompanhar património na plataforma.',
+    description: 'Publique anúncios com fotografias, preço e galeria.',
     href: '/app/patrimonios' as string | null,
     status: 'active' as const,
   },
   {
     key: 'habitacao',
     title: 'Habitação',
-    description: 'Preferências e exploração de habitação para o Cliente.',
-    href: '/app/habitacao' as string | null,
+    description: 'Explore inventário activo e demonstre interesse.',
+    href: '/app/habitacao/explorar' as string | null,
     status: 'active' as const,
   },
   {
     key: 'agente',
     title: 'Agente',
-    description: 'Cobertura de terreno e Activar Acompanhamento.',
+    description: 'Pipeline, visitas e acompanhamentos no terreno.',
     href: '/app/agente' as string | null,
     status: 'active' as const,
   },
   {
     key: 'confianca',
     title: 'Confiança',
-    description: 'Checklist e verificação da conta para relações seguras.',
+    description: 'Verifique a conta — Em análise, Aprovado ou Rejeitado.',
     href: '/app/confianca' as string | null,
     status: 'active' as const,
   },
@@ -137,6 +138,7 @@ export function AppHomeClient() {
 
   return (
     <div className="flex flex-col gap-8">
+      <HeroMedia preset="dashboard" size="lg" />
       <header className="flex flex-col gap-2">
         <Heading level={1}>{copy.app.title}</Heading>
         <p className="text-xl font-medium tracking-tight text-slate-800 sm:text-2xl">

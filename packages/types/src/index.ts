@@ -65,6 +65,10 @@ export interface Property {
   addressLine: string | null;
   status: PropertyStatus;
   notes: string | null;
+  priceAoa: number | null;
+  bedrooms: number | null;
+  coverImageUrl: string | null;
+  isDemo: boolean;
   createdAt: string;
   updatedAt: string;
 }

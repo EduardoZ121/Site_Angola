@@ -53,12 +53,13 @@ export const confiancaCopyPt = {
     agent_credential: 'Credencial de agente',
   },
   statuses: {
-    submitted: 'Submetido',
-    under_review: 'Em revisão',
-    accepted: 'Aceite',
+    submitted: 'Em análise',
+    under_review: 'Em análise',
+    accepted: 'Aprovado',
     rejected: 'Rejeitado',
     pending: 'Por submeter',
   },
+  historyLabel: 'Histórico de verificações',
 } as const;
 
 export function getConfiancaCopy() {

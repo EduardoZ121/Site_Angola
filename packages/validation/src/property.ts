@@ -20,7 +20,26 @@ export const activatePropertySchema = z.object({
   city: z.string().trim().max(80).optional().or(z.literal('')),
   addressLine: z.string().trim().max(160).optional().or(z.literal('')),
   notes: z.string().trim().max(1000).optional().or(z.literal('')),
+  priceAoa: z
+    .number({ invalid_type_error: 'Indique um preço válido.' })
+    .positive('O preço deve ser positivo.')
+    .max(1_000_000_000_000, 'Preço demasiado elevado.')
+    .optional()
+    .nullable(),
+  bedrooms: z
+    .number({ invalid_type_error: 'Indique o número de quartos.' })
+    .int()
+    .min(0)
+    .max(50)
+    .optional()
+    .nullable(),
   status: z.enum(PROPERTY_STATUSES).default('active'),
 });
 
+export const expressInterestSchema = z.object({
+  propertyId: z.string().uuid('Património inválido.'),
+  notes: z.string().trim().max(1000).optional().nullable(),
+});
+
 export type ActivatePropertyInput = z.infer<typeof activatePropertySchema>;
+export type ExpressInterestInput = z.infer<typeof expressInterestSchema>;
