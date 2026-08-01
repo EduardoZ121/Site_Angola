@@ -106,3 +106,88 @@ body {
 .auth-alert {
   @apply rounded-kuteka border border-red-400/35 bg-red-500/15 px-3.5 py-3 text-sm leading-relaxed text-red-50;
 }
+
+/* ─── Authenticated workspace atmosphere (full-bleed) ───────────────────── */
+.kuteka-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0f172a;
+}
+
+.kuteka-atmosphere-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.kuteka-atmosphere-kenburns {
+  animation: kuteka-kenburns 42s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes kuteka-kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
+  }
+}
+
+.kuteka-atmosphere-veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(248, 250, 252, 0.78) 0%,
+      rgba(248, 250, 252, 0.55) 42%,
+      rgba(15, 23, 42, 0.28) 100%
+    ),
+    linear-gradient(180deg, rgba(248, 250, 252, 0.35) 0%, rgba(248, 250, 252, 0.72) 100%);
+}
+
+.kuteka-glass,
+.kuteka-glass-chrome {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 10px 30px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.kuteka-glass {
+  border-radius: 0.5rem;
+}
+
+.kuteka-glass-chrome {
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.kuteka-module-intro {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Elevate common solid surfaces inside the app main over the atmosphere */
+.kuteka-app-main .rounded-kuteka.border.border-slate-200.bg-white,
+.kuteka-app-main .rounded-kuteka.border.border-slate-200.bg-slate-50\/80 {
+  background: rgba(255, 255, 255, 0.82) !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kuteka-atmosphere-kenburns {
+    animation: none;
+  }
+}

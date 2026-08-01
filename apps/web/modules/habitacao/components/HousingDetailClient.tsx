@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
+import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import {
   listPropertyMedia,
@@ -117,7 +118,7 @@ export function HousingDetailClient({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{row.title}</Heading>
           <p className="font-mono text-sm text-slate-500">{row.code}</p>
@@ -220,7 +221,7 @@ export function HousingDetailClient({ id }: { id: string }) {
         </div>
       ) : null}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="kuteka-glass flex flex-wrap gap-3 p-4">
         {canExplore ? (
           <Button
             type="button"
@@ -237,15 +238,16 @@ export function HousingDetailClient({ id }: { id: string }) {
         <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
           {copy.goAgent}
         </Link>
-        <Link
-          href="/app/habitacao/explorar"
-          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
-        >
-          {copy.backToExplore}
-        </Link>
       </div>
 
-      <Text className="text-sm text-slate-500">{copy.mvpNote}</Text>
+      <FlowNextSteps
+        title="Continuar o percurso"
+        steps={[
+          { href: '/app/agente', label: 'Agente acompanha', primary: true },
+          { href: '/app/confianca', label: 'Confiança verifica' },
+          { href: '/app/habitacao/explorar', label: 'Mais patrimónios' },
+        ]}
+      />
     </div>
   );
 }

@@ -95,10 +95,10 @@ export function AdminUsersClient() {
           <Text className="text-slate-600">{copy.usersHint}</Text>
         </div>
         <Link
-          href="/app/admin"
+          href="/app/confianca/revisao"
           className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
         >
-          {copy.backToHub}
+          Rever Confiança
         </Link>
       </header>
 

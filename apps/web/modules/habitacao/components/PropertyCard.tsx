@@ -10,7 +10,7 @@ export function PropertyCard({ row }: { row: HousingPropertyRow }) {
   const href = `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`;
 
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-kuteka border border-slate-200 bg-white transition-shadow hover:shadow-md">
+    <article className="kuteka-glass flex h-full flex-col overflow-hidden transition-shadow hover:shadow-md">
       <Link href={href} className="block aspect-[16/10] bg-slate-100">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

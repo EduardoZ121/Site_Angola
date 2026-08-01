@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
-import { HeroMedia } from '@/modules/shell/components/HeroMedia';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
@@ -138,8 +138,7 @@ export function AppHomeClient() {
 
   return (
     <div className="flex flex-col gap-8">
-      <HeroMedia preset="dashboard" size="lg" />
-      <header className="flex flex-col gap-2">
+      <header className="kuteka-glass flex flex-col gap-2 p-5">
         <Heading level={1}>{copy.app.title}</Heading>
         <p className="text-xl font-medium tracking-tight text-slate-800 sm:text-2xl">
           {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
@@ -235,6 +234,15 @@ export function AppHomeClient() {
           ))}
         </ul>
       </section>
+
+      <FlowNextSteps
+        title="Comece o percurso Kuteka"
+        steps={[
+          { href: '/app/habitacao/explorar', label: 'Explorar habitação', primary: true },
+          { href: '/app/patrimonios/novo', label: 'Publicar património' },
+          { href: '/app/confianca', label: 'Verificar conta' },
+        ]}
+      />
     </div>
   );
 }
