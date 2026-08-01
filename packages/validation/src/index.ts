@@ -54,3 +54,5 @@ export {
   type AgentPreferencesInput,
   type ActivateAssignmentInput,
 } from './agent';
+
+export { assignCertifiedAgentSchema, type AssignCertifiedAgentInput } from './admin';

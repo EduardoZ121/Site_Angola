@@ -12,5 +12,6 @@
 | [ADR-006](ADR-006-properties-module.md)                 | Properties / PRD-002  | ✅ Aceite / N5 (2026-08-01) |
 | [ADR-007](ADR-007-housing-module.md)                    | Habitação / PRD-003   | ✅ Aceite / N5 (2026-08-01) |
 | [ADR-008](ADR-008-agent-module.md)                      | Agente / PRD-004      | ✅ Aceite / N5 (2026-08-01) |
+| [ADR-009](ADR-009-admin-module.md)                      | Admin / PRD-005       | ✅ Aceite / N5 (2026-08-01) |
 
 Processo: `docs/engineering/DEVELOPMENT_PROCESS.md`
