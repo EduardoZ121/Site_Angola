@@ -1,6 +1,6 @@
 export const habitacaoCopyPt = {
   title: 'Habitação',
-  subtitle: 'Defina preferências e explore patrimónios activos na Kuteka.',
+  subtitle: 'Configure a sua busca e explore patrimónios activos com transparência.',
   explore: 'Explorar habitação',
   preferencesTitle: 'As suas preferências',
   preferencesHint: 'Usamos estes filtros como ponto de partida na exploração.',
@@ -14,13 +14,15 @@ export const habitacaoCopyPt = {
   forbidden: 'Não tem permissão para explorar habitação.',
   exploreTitle: 'Explorar habitação',
   exploreSubtitle: 'Patrimónios activos disponibilizados por Parceiros Patrimoniais.',
-  empty: 'Ainda não há patrimónios activos para mostrar com estes filtros.',
+  emptyTitle: 'Sem resultados nesta exploração',
+  empty:
+    'Ainda não há patrimónios activos que correspondam aos filtros. Ajuste as preferências ou volte mais tarde.',
+  emptyCta: 'Configurar preferências',
   backToHub: 'Voltar à Habitação',
   backToExplore: 'Voltar à exploração',
   detailTitle: 'Detalhe da habitação',
   openDetail: 'Ver detalhe',
-  mvpNote:
-    'Nesta fase explora patrimónios activos e guarda preferências. Visitas, propostas, Passaporte e Confiança virão depois.',
+  mvpNote: 'Guarde preferências e explore inventário activo. Visitas e propostas virão depois.',
   fields: {
     purpose: 'Finalidade',
     province: 'Província',

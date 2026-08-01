@@ -11,6 +11,8 @@ import type { AppSessionData } from '@/modules/authentication/components/app-ses
 import { getAuthCopy } from '@/modules/authentication/content';
 import { getShellCopy } from '../content/pt';
 import { isNavItemActive, isNavItemVisible, SHELL_NAV_ITEMS } from '../nav';
+import { NavIcon } from '../nav-icons';
+import { TopbarActions } from './TopbarActions';
 import { UserMenu } from './UserMenu';
 
 type PlatformShellProps = {
@@ -43,7 +45,10 @@ function NavList({
                 className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-400"
                 aria-disabled="true"
               >
-                <span>{label}</span>
+                <span className="inline-flex items-center gap-2.5">
+                  <NavIcon labelKey={item.labelKey} className="size-4 shrink-0 opacity-70" />
+                  {label}
+                </span>
                 <span className="text-xs font-medium text-slate-400">{shell.soon}</span>
               </div>
             </li>
@@ -57,18 +62,34 @@ function NavList({
               onClick={onNavigate}
               aria-current={active ? 'page' : undefined}
               className={cn(
-                'flex items-center rounded-kuteka px-3 py-2.5 text-sm font-medium transition-colors duration-200',
+                'flex items-center gap-2.5 rounded-kuteka px-3 py-2.5 text-sm font-medium transition-colors duration-200',
                 active
                   ? 'bg-brand-50 text-brand-800'
                   : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900',
               )}
             >
+              <NavIcon labelKey={item.labelKey} />
               {label}
             </Link>
           </li>
         );
       })}
     </ul>
+  );
+}
+
+function ShellBrand() {
+  return (
+    <div className="relative border-b border-slate-100 px-4 py-4">
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600"
+      />
+      <BrandMark href="/app" tone="dark" className="tracking-[0.2em]" />
+      <p className="mt-1.5 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-slate-400">
+        Plataforma
+      </p>
+    </div>
   );
 }
 
@@ -110,14 +131,11 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
 
   return (
     <div className="flex min-h-screen bg-slate-50">
-      {/* Desktop sidebar */}
       <aside
         className="hidden w-56 shrink-0 flex-col border-r border-slate-200 bg-white md:flex lg:w-60"
         aria-label={shell.navAria}
       >
-        <div className="border-b border-slate-100 px-4 py-4">
-          <BrandMark href="/app" tone="dark" />
-        </div>
+        <ShellBrand />
         <nav className="flex-1 overflow-y-auto" aria-label={shell.navAria}>
           <NavList pathname={pathname} permissions={permissions} />
         </nav>
@@ -153,7 +171,10 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
               </p>
             </div>
 
-            <UserMenu session={session} sessionStatus={sessionStatus} roleLabels={roleLabels} />
+            <div className="flex items-center gap-1 sm:gap-2">
+              <TopbarActions />
+              <UserMenu session={session} sessionStatus={sessionStatus} roleLabels={roleLabels} />
+            </div>
           </div>
         </header>
 
@@ -162,7 +183,6 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
         </main>
       </div>
 
-      {/* Mobile drawer */}
       {drawerOpen ? (
         <div
           className="fixed inset-0 z-40 md:hidden"

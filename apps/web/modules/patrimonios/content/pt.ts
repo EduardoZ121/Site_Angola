@@ -1,7 +1,10 @@
 export const patrimoniosCopyPt = {
   title: 'Patrimónios',
-  subtitle: 'Active e acompanhe o seu património na Kuteka — na mesma conta.',
-  empty: 'Ainda não activou nenhum património.',
+  subtitle: 'Registe e acompanhe o património que gere na Kuteka.',
+  emptyTitle: 'Nenhum património activado',
+  empty:
+    'Quando activar o primeiro património, a lista aparece aqui — pronta para documentos e Passaporte nas fases seguintes.',
+  emptyCta: 'Ativar o primeiro património',
   activate: 'Ativar Património',
   activating: 'A activar…',
   activated: 'Património activado.',
@@ -41,8 +44,8 @@ export const patrimoniosCopyPt = {
     archived: 'Arquivado',
   },
   listHeading: 'Os seus patrimónios',
-  mvpNote:
-    'Nesta fase activa o registo do património. Documentos, Passaporte e publicação virão em módulos seguintes.',
+  listHint: 'Inventário pessoal — novos registos e estados aparecerão nesta lista.',
+  mvpNote: 'Comece pelo registo estruturado. Documentos e Passaporte chegam nas fases seguintes.',
 } as const;
 
 export function getPatrimoniosCopy() {

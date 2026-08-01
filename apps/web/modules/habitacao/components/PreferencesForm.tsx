@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getHabitacaoCopy } from '../content/pt';
 import { getClientPreferences, saveClientPreferences } from '../services/housing-client';
 
@@ -71,6 +72,9 @@ export function PreferencesForm() {
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
+            Cliente
+          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
         </div>
@@ -105,7 +109,7 @@ export function PreferencesForm() {
             <Text className="mt-1 text-slate-600">{copy.preferencesHint}</Text>
           </div>
 
-          {loading ? <Text className="text-slate-500">A carregar…</Text> : null}
+          {loading ? <ModuleSkeleton rows={2} /> : null}
 
           {!loading ? (
             <form onSubmit={onSubmit} className="flex flex-col gap-4">

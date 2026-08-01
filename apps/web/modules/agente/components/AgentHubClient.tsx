@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAgenteCopy } from '../content/pt';
 import {
   getAgentPreferences,
@@ -77,6 +79,9 @@ export function AgentHubClient() {
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
+            Representação Kuteka
+          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
         </div>
@@ -105,7 +110,7 @@ export function AgentHubClient() {
               <Heading level={2}>{copy.preferencesTitle}</Heading>
               <Text className="mt-1 text-slate-600">{copy.preferencesHint}</Text>
             </div>
-            {loading ? <Text className="text-slate-500">A carregar…</Text> : null}
+            {loading ? <ModuleSkeleton rows={2} /> : null}
             {!loading ? (
               <form onSubmit={onSubmit} className="flex flex-col gap-4">
                 <label className="flex flex-col gap-1.5 text-sm">
@@ -161,9 +166,18 @@ export function AgentHubClient() {
           <section className="flex flex-col gap-3">
             <Heading level={2}>{copy.assignmentsTitle}</Heading>
             {!loading && assignments.length === 0 ? (
-              <div className="rounded-kuteka border border-dashed border-slate-200 px-4 py-8 text-center">
-                <Text className="text-slate-600">{copy.emptyAssignments}</Text>
-              </div>
+              <EmptyState
+                title={copy.emptyAssignmentsTitle}
+                description={copy.emptyAssignments}
+                action={
+                  <Link
+                    href="/app/agente/explorar"
+                    className={cn(buttonVariants({ variant: 'primary' }))}
+                  >
+                    {copy.emptyAssignmentsCta}
+                  </Link>
+                }
+              />
             ) : null}
             <ul className="flex flex-col gap-3">
               {assignments.map((row) => (

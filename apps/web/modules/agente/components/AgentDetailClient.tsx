@@ -2,9 +2,10 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
+import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAgenteCopy } from '../content/pt';
 import {
   activateAssignment,
@@ -68,7 +69,7 @@ export function AgentDetailClient({ id }: { id: string }) {
     if (mine.ok) setAssignment(mine.data);
   }
 
-  if (loading) return <Text className="text-slate-500">A carregar…</Text>;
+  if (loading) return <ModuleSkeleton rows={4} />;
 
   if (error && !row) {
     return (

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
 
@@ -52,7 +53,13 @@ export function AppHomeClient() {
   };
 
   if (status === 'loading') {
-    return <Text className="text-slate-600">{copy.common.loading}</Text>;
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="h-8 w-48 animate-pulse rounded-kuteka bg-slate-100" />
+        <ModuleSkeleton rows={2} />
+        <ModuleSkeleton rows={3} />
+      </div>
+    );
   }
 
   if (status === 'error' || !session) {
@@ -82,6 +89,42 @@ export function AppHomeClient() {
 
   const greetingName = session.displayName;
   const email = session.email;
+  const canManage = session.permissions.includes('properties.manage');
+  const canHousing = session.permissions.includes('housing.explore');
+  const canAgent = session.permissions.includes('agent.operate');
+
+  const quickActions = [
+    canManage
+      ? {
+          key: 'activate',
+          href: '/app/patrimonios/novo',
+          label: copy.app.quickActivateProperty,
+          primary: true,
+        }
+      : null,
+    canHousing
+      ? {
+          key: 'housing',
+          href: '/app/habitacao/explorar',
+          label: copy.app.quickExploreHousing,
+          primary: !canManage,
+        }
+      : null,
+    canAgent
+      ? {
+          key: 'agent',
+          href: '/app/agente',
+          label: copy.app.quickAgent,
+          primary: !canManage && !canHousing,
+        }
+      : null,
+    {
+      key: 'roles',
+      href: '/auth/onboarding/papeis',
+      label: copy.app.quickRoles,
+      primary: false,
+    },
+  ].filter(Boolean) as Array<{ key: string; href: string; label: string; primary: boolean }>;
 
   return (
     <div className="flex flex-col gap-8">
@@ -113,6 +156,30 @@ export function AppHomeClient() {
         ) : (
           <Text className="text-sm text-slate-600">{copy.app.noRoles}</Text>
         )}
+      </section>
+
+      <section className="flex flex-col gap-3" aria-labelledby="today-heading">
+        <div className="flex flex-col gap-1">
+          <h2 id="today-heading" className="text-sm font-semibold tracking-wide text-slate-800">
+            {copy.app.todayTitle}
+          </h2>
+          <Text className="text-sm text-slate-500">{copy.app.todayHint}</Text>
+        </div>
+        <ul className="grid gap-2 sm:grid-cols-2">
+          {quickActions.map((action) => (
+            <li key={action.key}>
+              <Link
+                href={action.href}
+                className={cn(
+                  buttonVariants({ variant: action.primary ? 'primary' : 'secondary' }),
+                  'w-full justify-center',
+                )}
+              >
+                {action.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="flex flex-col gap-4" aria-labelledby="modules-heading">

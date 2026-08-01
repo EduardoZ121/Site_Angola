@@ -25,6 +25,12 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
   const menuId = useId();
   const headerName = session?.displayName || session?.email || auth.app.userFallback;
   const roleBadges = session?.roles ?? [];
+  const initials = (session?.displayName || session?.email || 'K')
+    .split(/[\s@]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
+    .join('');
 
   useEffect(() => {
     if (!open) return;
@@ -55,19 +61,23 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
         aria-controls={menuId}
         onClick={() => setOpen((value) => !value)}
       >
-        <span className="min-w-0 text-left">
+        <span
+          aria-hidden
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-800 ring-1 ring-brand-100"
+        >
+          {initials || 'K'}
+        </span>
+        <span className="hidden min-w-0 text-left sm:block">
           <span className="block truncate text-sm font-medium text-slate-800">{headerName}</span>
           {roleBadges.length > 0 ? (
-            <span className="mt-0.5 hidden truncate text-xs text-slate-500 sm:block">
+            <span className="mt-0.5 block truncate text-xs text-slate-500">
               {roleBadges.map((code) => roleLabelPt(code, roleLabels)).join(' · ')}
             </span>
           ) : sessionStatus === 'ready' ? (
-            <span className="mt-0.5 hidden text-xs text-slate-500 sm:block">
-              {auth.app.noRoles}
-            </span>
+            <span className="mt-0.5 block text-xs text-slate-500">{auth.app.noRoles}</span>
           ) : null}
         </span>
-        <span aria-hidden className="text-xs text-slate-500">
+        <span aria-hidden className="hidden text-xs text-slate-500 sm:inline">
           ▾
         </span>
       </button>
