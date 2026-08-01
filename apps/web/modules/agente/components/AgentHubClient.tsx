@@ -6,8 +6,10 @@ import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { HeroMedia } from '@/modules/shell/components/HeroMedia';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAgenteCopy } from '../content/pt';
+import { AGENT_DEMO_PIPELINE } from '../demo/pipeline';
 import {
   getAgentPreferences,
   listMyAssignments,
@@ -77,28 +79,120 @@ export function AgentHubClient() {
 
   return (
     <div className="flex flex-col gap-8">
+      <HeroMedia preset="agente" />
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Representação Kuteka
-          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
         </div>
-        {canOperate ? (
+        <div className="flex flex-wrap gap-2">
           <Link
-            href="/app/agente/explorar"
-            className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
+            href="/app/habitacao/explorar"
+            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
           >
-            {copy.explore}
+            Ver inventário
           </Link>
-        ) : null}
+          {canOperate ? (
+            <Link
+              href="/app/agente/explorar"
+              className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
+            >
+              {copy.explore}
+            </Link>
+          ) : null}
+        </div>
       </header>
 
       {!canOperate && sessionStatus === 'ready' ? (
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {copy.needAgent}
-        </div>
+        <>
+          <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            <p>{copy.needAgent}</p>
+            <Link
+              href="/app/admin"
+              className={cn(
+                buttonVariants({ variant: 'secondary', size: 'sm' }),
+                'mt-3 inline-flex',
+              )}
+            >
+              {copy.requestAgent}
+            </Link>
+          </div>
+
+          <section className="flex flex-col gap-4" aria-labelledby="agent-demo-heading">
+            <div>
+              <h2 id="agent-demo-heading" className="text-sm font-semibold text-slate-800">
+                {copy.demoTitle}
+              </h2>
+              <Text className="mt-1 text-sm text-slate-500">{copy.demoHint}</Text>
+            </div>
+
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {AGENT_DEMO_PIPELINE.pipeline.map((stage) => (
+                <li
+                  key={stage.id}
+                  className="rounded-kuteka border border-slate-200 bg-white px-4 py-3"
+                >
+                  <p className="text-xs uppercase tracking-wide text-slate-500">{stage.stage}</p>
+                  <p className="mt-1 text-2xl font-semibold text-slate-900">{stage.count}</p>
+                </li>
+              ))}
+            </ul>
+
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="flex flex-col gap-2">
+                <h3 className="text-sm font-semibold text-slate-800">{copy.assignmentsTitle}</h3>
+                <ul className="flex flex-col gap-2">
+                  {AGENT_DEMO_PIPELINE.assignments.map((item) => (
+                    <li key={item.id}>
+                      <Link
+                        href={item.href}
+                        className="flex items-center justify-between gap-3 rounded-kuteka border border-slate-200 bg-white px-4 py-3 hover:border-brand-300"
+                      >
+                        <div>
+                          <p className="font-medium text-slate-900">{item.title}</p>
+                          <p className="font-mono text-xs text-slate-500">{item.code}</p>
+                        </div>
+                        <Badge variant="brand">{item.status}</Badge>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-col gap-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-800">{copy.demoVisits}</h3>
+                  <ul className="mt-2 flex flex-col gap-2">
+                    {AGENT_DEMO_PIPELINE.visits.map((v) => (
+                      <li
+                        key={v.id}
+                        className="rounded-kuteka border border-slate-200 bg-white px-4 py-3 text-sm"
+                      >
+                        <p className="font-medium text-slate-900">{v.title}</p>
+                        <p className="text-slate-500">
+                          {v.when} · {v.where}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-800">{copy.demoAgenda}</h3>
+                  <ul className="mt-2 flex flex-col gap-2">
+                    {AGENT_DEMO_PIPELINE.agenda.map((a) => (
+                      <li
+                        key={a.id}
+                        className="rounded-kuteka border border-slate-200 bg-white px-4 py-3 text-sm"
+                      >
+                        <p className="font-medium text-slate-900">{a.title}</p>
+                        <p className="text-slate-500">{a.when}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+        </>
       ) : null}
 
       <p className="text-sm text-slate-500">{copy.mvpNote}</p>

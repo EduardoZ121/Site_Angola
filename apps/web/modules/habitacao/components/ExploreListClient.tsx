@@ -1,11 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
+import { useEffect, useMemo, useState } from 'react';
+import { PROPERTY_PURPOSES, PROPERTY_TYPES } from '@kuteka/validation';
+import { Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { HeroMedia } from '@/modules/shell/components/HeroMedia';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getHabitacaoCopy } from '../content/pt';
 import {
@@ -13,57 +15,88 @@ import {
   getClientPreferences,
   type HousingPropertyRow,
 } from '../services/housing-client';
+import { PropertyCard } from './PropertyCard';
+
+const PAGE_SIZE = 6;
 
 export function ExploreListClient() {
   const copy = getHabitacaoCopy();
   const { session, status: sessionStatus } = useAppSession();
   const canExplore = session?.permissions.includes('housing.explore') ?? false;
+
   const [rows, setRows] = useState<HousingPropertyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+
+  const [purpose, setPurpose] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
+  const [propertyType, setPropertyType] = useState('');
+  const [query, setQuery] = useState('');
+
+  async function load(filters?: {
+    purpose?: string;
+    province?: string;
+    city?: string;
+    propertyType?: string;
+    query?: string;
+  }) {
+    setLoading(true);
+    const result = await exploreActiveProperties({
+      purpose: filters?.purpose || null,
+      province: filters?.province || null,
+      city: filters?.city || null,
+      propertyType: filters?.propertyType || null,
+      query: filters?.query || null,
+    });
+    if (!result.ok) {
+      setError(result.message);
+      setRows([]);
+    } else {
+      setError(null);
+      setRows(result.data);
+      setPage(1);
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
     let cancelled = false;
-    async function load() {
+    async function init() {
       if (!canExplore) {
         setLoading(false);
         return;
       }
-      setLoading(true);
       const prefs = await getClientPreferences();
       if (cancelled) return;
-      const filters =
-        prefs.ok && prefs.data
-          ? {
-              purpose: prefs.data.purpose,
-              province: prefs.data.province,
-              city: prefs.data.city,
-            }
-          : {};
-      const result = await exploreActiveProperties(filters);
-      if (cancelled) return;
-      if (!result.ok) {
-        setError(result.message);
-        setRows([]);
-      } else {
-        setError(null);
-        setRows(result.data);
-      }
-      setLoading(false);
+      const nextPurpose = prefs.ok && prefs.data?.purpose ? prefs.data.purpose : '';
+      const nextProvince = prefs.ok && prefs.data?.province ? prefs.data.province : '';
+      const nextCity = prefs.ok && prefs.data?.city ? prefs.data.city : '';
+      // Prefill filters from preferences, but load full active catalog first
+      // so the Client always sees demo + live inventory immediately.
+      setPurpose(nextPurpose);
+      setProvince(nextProvince);
+      setCity(nextCity);
+      await load({});
     }
-    if (sessionStatus === 'ready') void load();
+    if (sessionStatus === 'ready') void init();
     return () => {
       cancelled = true;
     };
   }, [canExplore, sessionStatus]);
 
+  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const pageRows = useMemo(() => {
+    const start = (page - 1) * PAGE_SIZE;
+    return rows.slice(start, start + PAGE_SIZE);
+  }, [rows, page]);
+
   return (
     <div className="flex flex-col gap-8">
+      <HeroMedia preset="habitacao" />
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Cliente
-          </p>
           <Heading level={1}>{copy.exploreTitle}</Heading>
           <Text className="text-slate-600">{copy.exploreSubtitle}</Text>
         </div>
@@ -87,6 +120,88 @@ export function ExploreListClient() {
         </div>
       ) : null}
 
+      {canExplore ? (
+        <form
+          className="grid gap-3 rounded-kuteka border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            void load({ purpose, province, city, propertyType, query });
+          }}
+        >
+          <div className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-3">
+            <Label htmlFor="q">{copy.search}</Label>
+            <Input
+              id="q"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={copy.searchPlaceholder}
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="purpose">{copy.fields.purpose}</Label>
+            <select
+              id="purpose"
+              value={purpose}
+              onChange={(e) => setPurpose(e.target.value)}
+              className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+            >
+              <option value="">{copy.fields.any}</option>
+              {PROPERTY_PURPOSES.map((p) => (
+                <option key={p} value={p}>
+                  {copy.purposes[p]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="type">{copy.fields.type}</Label>
+            <select
+              id="type"
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+            >
+              <option value="">{copy.fields.any}</option>
+              {PROPERTY_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {copy.types[t]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="province">{copy.fields.province}</Label>
+            <Input id="province" value={province} onChange={(e) => setProvince(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label htmlFor="city">{copy.fields.city}</Label>
+            <Input id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+          </div>
+          <div className="flex flex-wrap items-end gap-2 sm:col-span-2 lg:col-span-3">
+            <Button type="submit" variant="primary">
+              {copy.applyFilters}
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setPurpose('');
+                setProvince('');
+                setCity('');
+                setPropertyType('');
+                setQuery('');
+                void load({});
+              }}
+            >
+              {copy.clearFilters}
+            </Button>
+            <Text className="text-sm text-slate-500">
+              {rows.length} {copy.results}
+            </Text>
+          </div>
+        </form>
+      ) : null}
+
       {loading ? <ModuleSkeleton rows={3} /> : null}
       {error ? (
         <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
@@ -99,41 +214,57 @@ export function ExploreListClient() {
           title={copy.emptyTitle}
           description={copy.empty}
           action={
-            <Link href="/app/habitacao" className={cn(buttonVariants({ variant: 'primary' }))}>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={() => {
+                setPurpose('');
+                setProvince('');
+                setCity('');
+                setPropertyType('');
+                setQuery('');
+                void load({});
+              }}
+            >
               {copy.emptyCta}
-            </Link>
+            </Button>
           }
         />
       ) : null}
 
-      {rows.length > 0 ? (
-        <ul className="flex flex-col gap-3">
-          {rows.map((row) => (
-            <li key={row.id}>
-              <Link
-                href={`/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`}
-                className="flex flex-col gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition-colors hover:border-brand-300 sm:flex-row sm:items-center sm:justify-between"
+      {pageRows.length > 0 ? (
+        <>
+          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {pageRows.map((row) => (
+              <li key={row.id}>
+                <PropertyCard row={row} />
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Text className="text-sm text-slate-500">
+              {copy.pageOf} {page} / {pageCount}
+            </Text>
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
               >
-                <div className="min-w-0">
-                  <p className="font-medium text-slate-900">{row.title}</p>
-                  <p className="mt-0.5 font-mono text-xs text-slate-500">{row.code}</p>
-                  <p className="mt-1 text-sm text-slate-600">
-                    {[row.city, row.province].filter(Boolean).join(', ') || '—'}
-                  </p>
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant="default">
-                    {copy.types[row.property_type as keyof typeof copy.types] ?? row.property_type}
-                  </Badge>
-                  <Badge variant="brand">
-                    {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
-                  </Badge>
-                  <span className="text-sm font-medium text-brand-800">{copy.openDetail}</span>
-                </div>
-              </Link>
-            </li>
-          ))}
-        </ul>
+                {copy.pagePrev}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={page >= pageCount}
+                onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
+              >
+                {copy.pageNext}
+              </Button>
+            </div>
+          </div>
+        </>
       ) : null}
     </div>
   );

@@ -9,7 +9,14 @@ export const agenteCopyPt = {
   saving: 'A guardar…',
   saved: 'Preferências guardadas.',
   needAgent:
-    'A área Agente está reservada a Agentes Certificados. Se já colabora com a Kuteka, contacte a equipa para activar o seu acesso.',
+    'Operações reais requerem o papel Agente Certificado (atribuído pela Administração). Abaixo encontra uma demonstração do pipeline.',
+  demoTitle: 'Demonstração do pipeline',
+  demoHint:
+    'Dados ilustrativos com o inventário demo — para experimentar a jornada sem permissão de agente.',
+  demoVisits: 'Visitas',
+  demoAgenda: 'Agenda',
+  demoPipeline: 'Pipeline',
+  requestAgent: 'Pedir activação ao Admin',
   loadError: 'Não foi possível carregar a área Agente. Tente novamente.',
   saveError: 'Não foi possível guardar. Tente novamente.',
   forbidden: 'Não tem permissão de Agente Certificado.',

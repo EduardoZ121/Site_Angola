@@ -43,7 +43,9 @@ export {
   PROPERTY_PURPOSES,
   PROPERTY_STATUSES,
   activatePropertySchema,
+  expressInterestSchema,
   type ActivatePropertyInput,
+  type ExpressInterestInput,
 } from './property';
 
 export { clientPreferencesSchema, type ClientPreferencesInput } from './housing';

@@ -7,6 +7,7 @@ import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { HeroMedia } from '@/modules/shell/components/HeroMedia';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getConfiancaCopy } from '../content/pt';
 import { listMyTrustDocuments, type TrustDocumentRow } from '../services/trust-client';
@@ -71,11 +72,9 @@ export function TrustHubClient() {
 
   return (
     <div className="flex flex-col gap-8">
+      <HeroMedia preset="confianca" />
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Verificação
-          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
           <Badge variant="brand" className="w-fit">
@@ -148,7 +147,7 @@ export function TrustHubClient() {
       <section className="flex flex-col gap-3" aria-labelledby="history-heading">
         <div className="flex flex-col gap-1">
           <h2 id="history-heading" className="text-sm font-semibold text-slate-800">
-            {copy.historyTitle}
+            {copy.historyLabel}
           </h2>
           <Text className="text-sm text-slate-500">{copy.historyHint}</Text>
         </div>
@@ -172,7 +171,16 @@ export function TrustHubClient() {
                   </p>
                   {row.notes ? <p className="mt-1 text-sm text-slate-600">{row.notes}</p> : null}
                 </div>
-                <Badge variant="brand" className="w-fit shrink-0">
+                <Badge
+                  variant={
+                    row.status === 'accepted'
+                      ? 'success'
+                      : row.status === 'rejected'
+                        ? 'danger'
+                        : 'warning'
+                  }
+                  className="w-fit shrink-0"
+                >
                   {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
                 </Badge>
               </li>

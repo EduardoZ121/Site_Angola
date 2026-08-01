@@ -2,30 +2,40 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Heading, Badge, buttonVariants } from '@kuteka/ui';
+import { Heading, Badge, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { formatAoa } from '@/lib/format/aoa';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
 import { getProperty, type PropertyRow } from '../services/properties-client';
+import { listPropertyMedia, type PropertyMediaRow } from '../services/property-media-client';
 
 export function PropertyDetailClient({ id }: { id: string }) {
   const copy = getPatrimoniosCopy();
   const [row, setRow] = useState<PropertyRow | null>(null);
+  const [media, setMedia] = useState<PropertyMediaRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeUrl, setActiveUrl] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       setLoading(true);
-      const result = await getProperty(id);
+      const [prop, photos] = await Promise.all([getProperty(id), listPropertyMedia(id)]);
       if (cancelled) return;
-      if (!result.ok) {
-        setError(result.message);
+      if (!prop.ok) {
+        setError(prop.message);
         setRow(null);
       } else {
         setError(null);
-        setRow(result.data);
+        setRow(prop.data);
+        setActiveUrl(prop.data.cover_image_url);
+      }
+      if (photos.ok) {
+        setMedia(photos.data);
+        const primary = photos.data.find((m) => m.is_primary) ?? photos.data[0];
+        if (primary) setActiveUrl(primary.public_url);
       }
       setLoading(false);
     }
@@ -54,17 +64,62 @@ export function PropertyDetailClient({ id }: { id: string }) {
     );
   }
 
+  const gallery = media.length
+    ? media
+    : row.cover_image_url
+      ? [
+          {
+            id: 'cover',
+            property_id: row.id,
+            storage_path: null,
+            public_url: row.cover_image_url,
+            sort_order: 0,
+            is_primary: true,
+          },
+        ]
+      : [];
+
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{row.title}</Heading>
           <p className="font-mono text-sm text-slate-500">{row.code}</p>
+          <p className="text-lg font-semibold text-brand-800">
+            {formatAoa(row.price_aoa, row.purpose)}
+          </p>
         </div>
         <Badge variant={row.status === 'active' ? 'success' : 'default'}>
           {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
         </Badge>
       </header>
+
+      {activeUrl ? (
+        <div className="overflow-hidden rounded-kuteka border border-slate-200">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={activeUrl} alt="" className="aspect-[16/9] w-full object-cover" />
+        </div>
+      ) : null}
+
+      {gallery.length > 1 ? (
+        <ul className="flex gap-2 overflow-x-auto pb-1">
+          {gallery.map((m) => (
+            <li key={m.id}>
+              <button
+                type="button"
+                onClick={() => setActiveUrl(m.public_url)}
+                className={cn(
+                  'block overflow-hidden rounded-kuteka border',
+                  activeUrl === m.public_url ? 'border-brand-500' : 'border-slate-200',
+                )}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={m.public_url} alt="" className="h-16 w-24 object-cover" loading="lazy" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
 
       <dl className="grid gap-4 sm:grid-cols-2">
         <div>
@@ -95,6 +150,14 @@ export function PropertyDetailClient({ id }: { id: string }) {
           </dt>
           <dd className="mt-1 text-slate-900">{row.city || '—'}</dd>
         </div>
+        {row.bedrooms != null ? (
+          <div>
+            <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              {copy.fields.bedrooms}
+            </dt>
+            <dd className="mt-1 text-slate-900">{row.bedrooms}</dd>
+          </div>
+        ) : null}
         <div className="sm:col-span-2">
           <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
             {copy.fields.address}
@@ -111,12 +174,24 @@ export function PropertyDetailClient({ id }: { id: string }) {
         ) : null}
       </dl>
 
-      <Link
-        href="/app/patrimonios"
-        className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
-      >
-        {copy.backToList}
-      </Link>
+      <Text className="text-sm text-slate-500">
+        Quando activo, este anúncio fica disponível em Habitação para o Cliente.
+      </Text>
+
+      <div className="flex flex-wrap gap-3">
+        <Link
+          href={`/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`}
+          className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
+        >
+          {copy.seeInHousing}
+        </Link>
+        <Link
+          href="/app/patrimonios"
+          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+        >
+          {copy.backToList}
+        </Link>
+      </div>
     </div>
   );
 }

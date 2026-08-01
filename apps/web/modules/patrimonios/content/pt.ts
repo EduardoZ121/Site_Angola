@@ -1,9 +1,9 @@
 export const patrimoniosCopyPt = {
   title: 'Patrimónios',
-  subtitle: 'Registe e acompanhe o património que gere na Kuteka.',
+  subtitle: 'Publique anúncios com fotografia, preço e galeria — prontos para o Cliente explorar.',
   emptyTitle: 'Nenhum património activado',
   empty:
-    'Quando activar o primeiro património, a lista aparece aqui — pronta para documentos e Passaporte nas fases seguintes.',
+    'Active o primeiro património com fotografias e preço. O inventário de demonstração já está disponível em Habitação.',
   emptyCta: 'Ativar o primeiro património',
   activate: 'Ativar Património',
   activating: 'A activar…',
@@ -13,11 +13,13 @@ export const patrimoniosCopyPt = {
   activateRole: 'Activar papel Parceiro',
   loadError: 'Não foi possível carregar os patrimónios. Tente novamente.',
   saveError: 'Não foi possível activar o património. Verifique os dados e tente novamente.',
+  mediaUploadError: 'Não foi possível carregar as fotografias. Tente novamente.',
   forbidden: 'Não tem permissão para gerir patrimónios.',
   detailTitle: 'Detalhe do património',
+  seeInHousing: 'Ver como Cliente',
   fields: {
     title: 'Título',
-    titlePlaceholder: 'Ex.: Residência na Maianga',
+    titlePlaceholder: 'Ex.: Moradia T4 Talatona',
     type: 'Tipo',
     purpose: 'Finalidade',
     province: 'Província',
@@ -26,6 +28,19 @@ export const patrimoniosCopyPt = {
     notes: 'Notas (opcional)',
     status: 'Estado',
     code: 'Código',
+    price: 'Preço (AOA)',
+    pricePlaceholder: 'Ex.: 185000000',
+    bedrooms: 'Quartos',
+  },
+  media: {
+    title: 'Fotografias do anúncio',
+    hint: 'Arraste várias imagens, defina a principal, reordene e pré-visualize antes de guardar. Compressão automática activa.',
+    drop: 'Largue as fotografias aqui',
+    pick: 'Escolher imagens',
+    primary: 'Principal',
+    setPrimary: 'Definir principal',
+    remove: 'Remover',
+    preview: 'Pré-visualização do anúncio',
   },
   types: {
     apartment: 'Apartamento',
@@ -44,8 +59,8 @@ export const patrimoniosCopyPt = {
     archived: 'Arquivado',
   },
   listHeading: 'Os seus patrimónios',
-  listHint: 'Inventário pessoal — novos registos e estados aparecerão nesta lista.',
-  mvpNote: 'Comece pelo registo estruturado. Documentos e Passaporte chegam nas fases seguintes.',
+  listHint: 'Anúncios publicados — o Cliente encontra-os em Explorar Habitação.',
+  mvpNote: 'Inclua preço e fotografias para o anúncio aparecer completo no fluxo do Cliente.',
 } as const;
 
 export function getPatrimoniosCopy() {
