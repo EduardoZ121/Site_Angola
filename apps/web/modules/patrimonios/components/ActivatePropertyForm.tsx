@@ -208,11 +208,12 @@ export function ActivatePropertyForm() {
       </form>
 
       <FlowNextSteps
-        title="Depois de publicar"
+        title="Fluxo após publicação"
         steps={[
           { href: '/app/habitacao/explorar', label: 'Ver no inventário', primary: true },
+          { href: '/app/confianca', label: 'Documentos & Confiança' },
+          { href: '/app/contratos', label: 'Preparar contrato' },
           { href: '/app/agente', label: 'Área do Agente' },
-          { href: '/app/confianca', label: 'Verificar conta' },
         ]}
       />
     </div>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
-import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { FeedPlaceholder, PlatformFeed } from '@/modules/shell/components/PlatformFeed';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
 
@@ -47,7 +47,7 @@ const MODULE_DEFS = [
 ] as const;
 
 /**
- * /app dashboard — operational entry into available platform modules.
+ * /app home — shortcuts + continuous marketplace feed.
  */
 export function AppHomeClient() {
   const copy = getAuthCopy();
@@ -60,12 +60,15 @@ export function AppHomeClient() {
     administrator: 'Administrador',
   };
 
+  // Stable chrome while session resolves — avoid blank/flashing titles
   if (status === 'loading') {
     return (
-      <div className="flex flex-col gap-6">
-        <div className="h-8 w-48 animate-pulse rounded-kuteka bg-slate-100" />
-        <ModuleSkeleton rows={2} />
-        <ModuleSkeleton rows={3} />
+      <div className="flex flex-col gap-8">
+        <header className="kuteka-glass flex min-h-[7.5rem] flex-col justify-center gap-2 p-5">
+          <div className="h-7 w-48 animate-pulse rounded bg-slate-200/90" />
+          <div className="h-4 w-72 max-w-full animate-pulse rounded bg-slate-100" />
+        </header>
+        <FeedPlaceholder />
       </div>
     );
   }
@@ -73,24 +76,29 @@ export function AppHomeClient() {
   if (status === 'error' || !session) {
     return (
       <div className="flex flex-col gap-4">
-        <Heading level={1}>{copy.app.title}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {error ?? copy.app.loadError}
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/auth/entrar?next=%2Fapp"
-            className={cn(buttonVariants({ variant: 'primary' }))}
+        <header className="kuteka-glass flex flex-col gap-2 p-5">
+          <Heading level={1}>{copy.app.title}</Heading>
+          <div
+            role="alert"
+            className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
           >
-            {copy.login.submit}
-          </Link>
-          <Link
-            href="/auth/onboarding/papeis"
-            className={cn(buttonVariants({ variant: 'secondary' }))}
-          >
-            {copy.app.ctaRoles}
-          </Link>
-        </div>
+            {error ?? copy.app.loadError}
+          </div>
+          <div className="mt-2 flex flex-wrap gap-3">
+            <Link
+              href="/auth/entrar?next=%2Fapp"
+              className={cn(buttonVariants({ variant: 'primary' }))}
+            >
+              {copy.login.submit}
+            </Link>
+            <Link
+              href="/auth/onboarding/papeis"
+              className={cn(buttonVariants({ variant: 'secondary' }))}
+            >
+              {copy.app.ctaRoles}
+            </Link>
+          </div>
+        </header>
       </div>
     );
   }
@@ -120,12 +128,20 @@ export function AppHomeClient() {
           primary: !canManage,
         }
       : null,
+    canContracts
+      ? {
+          key: 'contracts',
+          href: '/app/contratos',
+          label: 'Gerir contratos',
+          primary: !canManage && !canHousing,
+        }
+      : null,
     canAgent
       ? {
           key: 'agent',
           href: '/app/agente',
           label: copy.app.quickAgent,
-          primary: !canManage && !canHousing,
+          primary: !canManage && !canHousing && !canContracts,
         }
       : null,
     canTrust
@@ -133,15 +149,7 @@ export function AppHomeClient() {
           key: 'trust',
           href: '/app/confianca',
           label: copy.app.quickTrust,
-          primary: !canManage && !canHousing && !canAgent,
-        }
-      : null,
-    canContracts
-      ? {
-          key: 'contracts',
-          href: '/app/contratos',
-          label: 'Gerir contratos',
-          primary: !canManage && !canHousing && !canAgent && !canTrust,
+          primary: !canManage && !canHousing && !canContracts && !canAgent,
         }
       : null,
     {
@@ -159,7 +167,9 @@ export function AppHomeClient() {
         <p className="text-xl font-medium tracking-tight text-slate-800 sm:text-2xl">
           {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
         </p>
-        <p className="text-sm text-slate-600">{copy.app.dashboardHint}</p>
+        <p className="text-sm text-slate-600">
+          Atalhos para actuar — e um feed vivo da plataforma por baixo.
+        </p>
         {email ? (
           <p className="text-sm text-slate-500">
             <span className="text-slate-400">{copy.app.emailLabel}: </span>
@@ -169,7 +179,7 @@ export function AppHomeClient() {
       </header>
 
       <section
-        className="flex flex-wrap items-center gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-3"
+        className="kuteka-glass flex flex-wrap items-center gap-2 px-4 py-3"
         aria-label={copy.app.accountSummaryAria}
       >
         <Badge variant="success">{copy.app.active}</Badge>
@@ -185,13 +195,13 @@ export function AppHomeClient() {
       </section>
 
       <section className="flex flex-col gap-3" aria-labelledby="today-heading">
-        <div className="flex flex-col gap-1">
+        <div className="kuteka-glass flex flex-col gap-1 p-4">
           <h2 id="today-heading" className="text-sm font-semibold tracking-wide text-slate-800">
             {copy.app.todayTitle}
           </h2>
           <Text className="text-sm text-slate-500">{copy.app.todayHint}</Text>
         </div>
-        <ul className="grid gap-2 sm:grid-cols-2">
+        <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {quickActions.map((action) => (
             <li key={action.key}>
               <Link
@@ -208,15 +218,14 @@ export function AppHomeClient() {
         </ul>
       </section>
 
-      <section className="flex flex-col gap-4" aria-labelledby="modules-heading">
-        <div className="flex flex-col gap-1">
+      <section className="flex flex-col gap-3" aria-labelledby="modules-heading">
+        <div className="kuteka-glass flex flex-col gap-1 p-4">
           <h2 id="modules-heading" className="text-sm font-semibold tracking-wide text-slate-800">
             {copy.app.modulesTitle}
           </h2>
           <Text className="text-sm text-slate-500">{copy.app.modulesHint}</Text>
         </div>
-
-        <ul className="grid gap-3">
+        <ul className="grid gap-3 sm:grid-cols-2">
           {MODULE_DEFS.map((mod) => {
             const available =
               mod.permission == null || session.permissions.includes(mod.permission);
@@ -225,7 +234,7 @@ export function AppHomeClient() {
                 {available ? (
                   <Link
                     href={mod.href}
-                    className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition-colors hover:border-brand-300"
+                    className="kuteka-glass flex h-full items-start justify-between gap-4 px-4 py-4 transition-shadow hover:shadow-md"
                   >
                     <div className="min-w-0">
                       <p className="font-medium text-slate-800">{mod.title}</p>
@@ -238,7 +247,7 @@ export function AppHomeClient() {
                 ) : (
                   <div
                     aria-disabled="true"
-                    className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-slate-50/80 px-4 py-4"
+                    className="kuteka-glass flex h-full items-start justify-between gap-4 px-4 py-4 opacity-70"
                   >
                     <div className="min-w-0">
                       <p className="font-medium text-slate-700">{mod.title}</p>
@@ -255,15 +264,27 @@ export function AppHomeClient() {
         </ul>
       </section>
 
+      <section className="flex flex-col gap-4" aria-labelledby="feed-heading">
+        <div className="kuteka-glass flex flex-col gap-1 p-4">
+          <h2 id="feed-heading" className="text-sm font-semibold tracking-wide text-slate-800">
+            Feed da plataforma
+          </h2>
+          <Text className="text-sm text-slate-500">
+            Scroll contínuo com patrimónios, destaques, recomendações e novidades.
+          </Text>
+        </div>
+        <PlatformFeed canExplore={canHousing} />
+      </section>
+
       <FlowNextSteps
-        title="Comece o percurso Kuteka"
+        title="Continue o percurso Kuteka"
         steps={[
           ...(canHousing
             ? [{ href: '/app/habitacao/explorar', label: 'Explorar habitação', primary: true }]
             : [{ href: '/app', label: 'Explorar o painel', primary: true }]),
           ...(canManage ? [{ href: '/app/patrimonios/novo', label: 'Publicar património' }] : []),
-          ...(canTrust ? [{ href: '/app/confianca', label: 'Verificar conta' }] : []),
           ...(canContracts ? [{ href: '/app/contratos', label: 'Preparar contrato' }] : []),
+          ...(canTrust ? [{ href: '/app/confianca', label: 'Verificar conta' }] : []),
           { href: '/auth/onboarding/papeis', label: 'Activar papéis' },
         ]}
       />

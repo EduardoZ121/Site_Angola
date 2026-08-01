@@ -8,9 +8,8 @@ type AtmosphereBackgroundProps = {
 };
 
 /**
- * Full-bleed workspace atmosphere — second plane of the authenticated app.
- * Image always loads; video loops lazily when motion is allowed.
- * Narrow viewports prefer imageMobile / skip video for bandwidth.
+ * Full-bleed cinematic atmosphere — same language as the Landing hero.
+ * Dark veil + slow motion; content sits on glass above.
  */
 export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   const source = HERO_MEDIA[preset];
@@ -18,6 +17,7 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   const [videoFailed, setVideoFailed] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [narrow, setNarrow] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -39,36 +39,44 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   const allowVideo = Boolean(source.video) && !reduceMotion && !narrow;
 
   useEffect(() => {
+    setImageLoaded(false);
     setVideoReady(false);
     setVideoFailed(false);
     if (!allowVideo) return;
-    const timer = window.setTimeout(() => setVideoReady(true), 400);
+    const timer = window.setTimeout(() => setVideoReady(true), 600);
     return () => window.clearTimeout(timer);
-  }, [preset, allowVideo]);
+  }, [preset, allowVideo, imageSrc]);
 
   return (
     <div className="kuteka-atmosphere" aria-hidden>
+      {/* Base plate — never flash white while media loads */}
+      <div className="kuteka-atmosphere-base" />
+
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         key={imageSrc}
         src={imageSrc}
         alt=""
-        className="kuteka-atmosphere-media kuteka-atmosphere-kenburns"
+        className={`kuteka-atmosphere-media kuteka-atmosphere-kenburns${
+          imageLoaded ? ' is-ready' : ''
+        }`}
+        onLoad={() => setImageLoaded(true)}
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src = '/images/hero.jpg';
+          setImageLoaded(true);
         }}
       />
 
       {allowVideo && videoReady && !videoFailed ? (
         <video
           key={source.video}
-          className="kuteka-atmosphere-media"
+          className="kuteka-atmosphere-media kuteka-atmosphere-video"
           autoPlay
           muted
           loop
           playsInline
           preload="metadata"
-          poster={source.image}
+          poster={imageSrc}
           onError={() => setVideoFailed(true)}
         >
           <source src={source.video} type="video/mp4" />
@@ -76,6 +84,7 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
       ) : null}
 
       <div className="kuteka-atmosphere-veil" />
+      <div className="kuteka-atmosphere-grain" />
     </div>
   );
 }

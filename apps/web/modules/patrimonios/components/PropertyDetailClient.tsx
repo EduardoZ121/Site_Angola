@@ -196,7 +196,8 @@ export function PropertyDetailClient({ id }: { id: string }) {
             label: copy.seeInHousing,
             primary: true,
           },
-          { href: '/app/agente', label: 'Área do Agente' },
+          { href: '/app/confianca', label: 'Confiança' },
+          { href: '/app/contratos', label: 'Contrato' },
           { href: '/app/patrimonios/novo', label: 'Publicar outro' },
         ]}
       />

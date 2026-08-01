@@ -1,14 +1,15 @@
 # Directriz permanente — Experiência Premium Kuteka
 
-**Estado:** Activa · parte do **Platform Core v1.0** · 2026-08-01
+**Estado:** Activa · Core v1.0 + expansão · 2026-08-01
 
-1. **Atmosfera full-bleed** — `AtmosphereBackground` no `PlatformShell`; nunca banners-cartão.
-2. **Glass panels** — conteúdo sobre `.kuteka-glass` / `.kuteka-glass-chrome` com legibilidade.
-3. **Marca forte** — `BrandMark` size `lg` na shell.
-4. **Fluxo contínuo** — `FlowNextSteps` / `ForbiddenPanel` em vez de becos «Voltar».
-5. **Demo data** — inventário e pipelines demonstráveis.
-6. **N5 integral** — concluir módulo antes de passar ao seguinte.
-7. **Revisão crítica pré-merge** — parecer produto comercial?
+1. **Continuidade Landing ↔ Plataforma** — mesma atmosfera cinematográfica escura, tipografia e marca.
+2. **Atmosfera full-bleed** — vídeo/imagem lento, veil escuro uniforme, blur; nunca banner-cartão.
+3. **Glass** — painéis legíveis (`.kuteka-glass` / `.kuteka-glass-chrome` escuro na chrome).
+4. **Feed vivo no Início** — atalhos + scroll contínuo (destaques, próximos, populares, patrocinados).
+5. **Demo densa** — dezenas de anúncios com galeria, preço, localização e descrição.
+6. **Fluxo contínuo** — `FlowNextSteps` / `ForbiddenPanel`; sem becos «Voltar».
+7. **Render estável** — sem títulos a desaparecer; skeletons só em zonas de lista; base plate na atmosfera.
+8. **N5 integral** — concluir módulo antes do seguinte; revisão crítica pré-merge.
 
-Implementação: `AtmosphereBackground`, `ModuleIntro`, `FlowNextSteps`, `ForbiddenPanel`, `SessionStatusGate`, `globals.css`.  
+Implementação: `AtmosphereBackground`, `ModuleIntro`, `PlatformFeed`, `FlowNextSteps`, `globals.css`.  
 Baseline: `docs/product/KUTEKA_PLATFORM_CORE_V1.md`.

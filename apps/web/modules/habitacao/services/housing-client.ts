@@ -143,7 +143,7 @@ export async function exploreActiveProperties(
       .eq('status', 'active')
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
-      .limit(100);
+      .limit(200);
 
     if (filters.purpose && filters.purpose !== 'both') {
       query = query.in('purpose', [filters.purpose, 'both']);

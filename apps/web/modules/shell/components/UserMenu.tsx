@@ -54,7 +54,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
         type="button"
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'sm' }),
-          'flex max-w-[14rem] items-center gap-2 px-2 sm:max-w-xs',
+          'flex max-w-[14rem] items-center gap-2 px-2 text-slate-100 hover:bg-white/10 sm:max-w-xs',
         )}
         aria-expanded={open}
         aria-haspopup="menu"
@@ -63,21 +63,21 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       >
         <span
           aria-hidden
-          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-800 ring-1 ring-brand-100"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-500/25 text-xs font-semibold text-brand-100 ring-1 ring-brand-400/40"
         >
           {initials || 'K'}
         </span>
         <span className="hidden min-w-0 text-left sm:block">
-          <span className="block truncate text-sm font-medium text-slate-800">{headerName}</span>
+          <span className="block truncate text-sm font-medium text-slate-50">{headerName}</span>
           {roleBadges.length > 0 ? (
-            <span className="mt-0.5 block truncate text-xs text-slate-500">
+            <span className="mt-0.5 block truncate text-xs text-slate-300">
               {roleBadges.map((code) => roleLabelPt(code, roleLabels)).join(' · ')}
             </span>
           ) : sessionStatus === 'ready' ? (
-            <span className="mt-0.5 block text-xs text-slate-500">{auth.app.noRoles}</span>
+            <span className="mt-0.5 block text-xs text-slate-400">{auth.app.noRoles}</span>
           ) : null}
         </span>
-        <span aria-hidden className="hidden text-xs text-slate-500 sm:inline">
+        <span aria-hidden className="hidden text-xs text-slate-300 sm:inline">
           ▾
         </span>
       </button>

@@ -12,6 +12,7 @@
 | Auditoria + maturidade           | ✅ `CORE_V1_MATURITY_REPORT.md`                              |
 | Hardening RLS (0010)             | ✅ Interests + RBAC scope                                    |
 | **Contratos**                    | ✅ PRD-008 N5 · primeira expansão pós-Core                   |
+| Premium unity + feed + demo×35   | ✅ Landing↔App · feed · migration `0012`                     |
 | **Próximo**                      | Pagamentos → Wallet → Passaporte → Academia → CRM → KAI      |
 
 **Closures:** `PRD_001`…`PRD_008` · `PHASE_3` · `MVP_CORE_TRANSVERSAL_REVIEW` · `ADR-011` · `ADR-012` · `CORE_V1_MATURITY_REPORT`

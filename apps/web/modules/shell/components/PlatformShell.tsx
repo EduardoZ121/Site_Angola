@@ -45,14 +45,14 @@ function NavList({
           return (
             <li key={item.id}>
               <div
-                className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-500"
+                className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-400"
                 aria-disabled="true"
               >
                 <span className="inline-flex items-center gap-2.5">
                   <NavIcon labelKey={item.labelKey} className="size-4 shrink-0 opacity-70" />
                   {label}
                 </span>
-                <span className="text-xs font-medium text-slate-400">{shell.soon}</span>
+                <span className="text-xs font-medium text-slate-500">{shell.soon}</span>
               </div>
             </li>
           );
@@ -67,8 +67,8 @@ function NavList({
               className={cn(
                 'flex items-center gap-2.5 rounded-kuteka px-3 py-2.5 text-sm font-medium transition-colors duration-200',
                 active
-                  ? 'bg-brand-500/15 text-brand-900 ring-1 ring-brand-500/25'
-                  : 'text-slate-800 hover:bg-white/55 hover:text-slate-950',
+                  ? 'bg-brand-500/25 text-white ring-1 ring-brand-400/40'
+                  : 'text-slate-200 hover:bg-white/10 hover:text-white',
               )}
             >
               <NavIcon labelKey={item.labelKey} />
@@ -83,13 +83,13 @@ function NavList({
 
 function ShellBrand() {
   return (
-    <div className="relative border-b border-white/40 px-4 py-5">
+    <div className="relative border-b border-white/10 px-4 py-5">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600"
       />
-      <BrandMark href="/app" tone="dark" size="lg" />
-      <p className="mt-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-600">
+      <BrandMark href="/app" tone="light" size="lg" />
+      <p className="mt-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
         Plataforma imobiliária
       </p>
     </div>
@@ -97,13 +97,14 @@ function ShellBrand() {
 }
 
 /**
- * Authenticated platform chrome — full-bleed atmosphere + glass panels.
+ * Authenticated platform chrome — Landing-continuous cinematic atmosphere + glass.
  */
 export function PlatformShell({ children, session, sessionStatus }: PlatformShellProps) {
   const auth = getAuthCopy();
   const shell = getShellCopy();
   const pathname = usePathname() || '/app';
   const preset = presetFromPathname(pathname);
+  const isHome = pathname === '/app' || pathname === '/app/';
   const [drawerOpen, setDrawerOpen] = useState(false);
   const titleId = useId();
   const drawerId = useId();
@@ -141,7 +142,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
       <AtmosphereBackground preset={preset} />
 
       <aside
-        className="kuteka-glass-chrome relative z-20 hidden w-64 shrink-0 flex-col border-r border-white/35 md:flex lg:w-72"
+        className="kuteka-glass-chrome relative z-20 hidden w-64 shrink-0 flex-col border-r border-white/10 md:flex lg:w-72"
         aria-label={shell.navAria}
       >
         <ShellBrand />
@@ -151,14 +152,14 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
       </aside>
 
       <div className="relative z-10 flex min-w-0 flex-1 flex-col">
-        <header className="kuteka-glass-chrome sticky top-0 z-30 border-b border-white/35">
+        <header className="kuteka-glass-chrome sticky top-0 z-30 border-b border-white/10">
           <div className="flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <button
                 type="button"
                 className={cn(
                   buttonVariants({ variant: 'ghost', size: 'sm' }),
-                  'md:hidden shrink-0 px-2',
+                  'md:hidden shrink-0 px-2 text-slate-100 hover:bg-white/10',
                 )}
                 aria-expanded={drawerOpen}
                 aria-controls={drawerId}
@@ -170,25 +171,30 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 </span>
               </button>
               <div className="min-w-0 md:hidden">
-                <BrandMark href="/app" tone="dark" size="md" />
+                <BrandMark href="/app" tone="light" size="md" />
               </div>
               <p
                 id={titleId}
-                className="hidden truncate text-sm font-semibold tracking-wide text-slate-800 md:block"
+                className="hidden truncate text-sm font-semibold tracking-wide text-slate-100 md:block"
               >
                 {shell.areaTitle}
               </p>
             </div>
 
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-1 text-slate-100 sm:gap-2">
               <TopbarActions />
               <UserMenu session={session} sessionStatus={sessionStatus} roleLabels={roleLabels} />
             </div>
           </div>
         </header>
 
-        <main className="kuteka-app-main mx-auto w-full max-w-5xl flex-1 px-4 py-7 sm:px-6 sm:py-9">
-          <ModuleIntro preset={preset} />
+        <main
+          className={cn(
+            'kuteka-app-main mx-auto w-full flex-1 px-4 py-7 sm:px-6 sm:py-9',
+            isHome ? 'max-w-6xl' : 'max-w-5xl',
+          )}
+        >
+          <ModuleIntro preset={preset} compact={isHome} />
           <div className="flex flex-col gap-6">{children}</div>
         </main>
       </div>
@@ -202,7 +208,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
         >
           <button
             type="button"
-            className="absolute inset-0 bg-slate-950/50 backdrop-blur-[2px] transition-opacity duration-200"
+            className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] transition-opacity duration-200"
             aria-label={shell.closeMenu}
             onClick={() => setDrawerOpen(false)}
           />
@@ -210,17 +216,20 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
             id={drawerId}
             className="kuteka-glass-chrome absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col shadow-xl motion-reduce:transition-none"
           >
-            <div className="flex items-center justify-between border-b border-white/40 px-4 py-5">
+            <div className="flex items-center justify-between border-b border-white/10 px-4 py-5">
               <div>
                 <p id={drawerTitleId} className="sr-only">
                   {shell.navAria}
                 </p>
-                <BrandMark href="/app" tone="dark" size="lg" />
+                <BrandMark href="/app" tone="light" size="lg" />
               </div>
               <button
                 id={`${drawerId}-close`}
                 type="button"
-                className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'px-2')}
+                className={cn(
+                  buttonVariants({ variant: 'ghost', size: 'sm' }),
+                  'px-2 text-slate-100 hover:bg-white/10',
+                )}
                 onClick={() => setDrawerOpen(false)}
               >
                 {shell.closeMenu}

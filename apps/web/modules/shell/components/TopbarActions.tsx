@@ -17,7 +17,7 @@ export function TopbarActions() {
         aria-label={shell.notificationsSoon}
         className={cn(
           buttonVariants({ variant: 'ghost', size: 'sm' }),
-          'relative px-2 text-slate-400 opacity-70',
+          'relative px-2 text-slate-300 opacity-80 hover:bg-white/10',
         )}
       >
         <svg viewBox="0 0 20 20" fill="none" className="size-5" aria-hidden>

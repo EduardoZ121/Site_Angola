@@ -107,14 +107,20 @@ body {
   @apply rounded-kuteka border border-red-400/35 bg-red-500/15 px-3.5 py-3 text-sm leading-relaxed text-red-50;
 }
 
-/* ─── Authenticated workspace atmosphere (full-bleed) ───────────────────── */
+/* ─── Authenticated workspace atmosphere (Landing continuity) ───────────── */
 .kuteka-atmosphere {
   position: fixed;
   inset: 0;
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  background: #0f172a;
+  background: #020617;
+}
+
+.kuteka-atmosphere-base {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 80% at 70% 40%, #1e293b 0%, #020617 55%);
 }
 
 .kuteka-atmosphere-media {
@@ -124,70 +130,188 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  opacity: 0;
+  transition: opacity 480ms ease;
+}
+
+.kuteka-atmosphere-media.is-ready,
+.kuteka-atmosphere-video {
+  opacity: 1;
+}
+
+.kuteka-atmosphere-video {
+  transition: opacity 700ms ease;
 }
 
 .kuteka-atmosphere-kenburns {
-  animation: kuteka-kenburns 42s ease-in-out infinite alternate;
+  animation: kuteka-kenburns 48s ease-in-out infinite alternate;
   will-change: transform;
+  filter: saturate(1.05) contrast(1.02);
 }
 
 @keyframes kuteka-kenburns {
   from {
-    transform: scale(1);
+    transform: scale(1) translate3d(0, 0, 0);
   }
   to {
-    transform: scale(1.07);
+    transform: scale(1.08) translate3d(-1.5%, -0.8%, 0);
   }
 }
 
+/* Dark cinematic veil — mirrors LandingHero gradients */
 .kuteka-atmosphere-veil {
   position: absolute;
   inset: 0;
   background:
     linear-gradient(
-      120deg,
-      rgba(248, 250, 252, 0.78) 0%,
-      rgba(248, 250, 252, 0.55) 42%,
-      rgba(15, 23, 42, 0.28) 100%
+      105deg,
+      rgba(2, 6, 23, 0.88) 0%,
+      rgba(15, 23, 42, 0.62) 42%,
+      rgba(2, 6, 23, 0.4) 100%
     ),
-    linear-gradient(180deg, rgba(248, 250, 252, 0.35) 0%, rgba(248, 250, 252, 0.72) 100%);
+    linear-gradient(
+      180deg,
+      rgba(2, 6, 23, 0.45) 0%,
+      rgba(2, 6, 23, 0.28) 40%,
+      rgba(2, 6, 23, 0.78) 100%
+    );
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.kuteka-atmosphere-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  mix-blend-mode: overlay;
 }
 
 .kuteka-glass,
 .kuteka-glass-chrome {
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.45);
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.55) inset,
-    0 10px 30px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+    0 1px 0 rgba(255, 255, 255, 0.65) inset,
+    0 12px 36px rgba(2, 6, 23, 0.22);
+  backdrop-filter: blur(18px) saturate(1.15);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
 }
 
 .kuteka-glass {
-  border-radius: 0.5rem;
+  border-radius: 0.625rem;
 }
 
 .kuteka-glass-chrome {
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 10px 28px rgba(2, 6, 23, 0.35);
+  color: #f8fafc;
+}
+
+.kuteka-glass-chrome a,
+.kuteka-glass-chrome button {
+  color: inherit;
 }
 
 .kuteka-module-intro {
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+  margin-bottom: 1.5rem;
+}
+
+.kuteka-module-intro--compact {
+  margin-bottom: 1rem;
+}
+
+.kuteka-module-intro__eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fb923c;
+}
+
+.kuteka-module-intro__title {
+  margin-top: 0.5rem;
+  max-width: 36rem;
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: #f8fafc;
+  text-shadow: 0 2px 18px rgba(2, 6, 23, 0.45);
+}
+
+.kuteka-module-intro__subtitle {
+  margin-top: 0.45rem;
+  max-width: 36rem;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #cbd5e1;
+  text-shadow: 0 1px 10px rgba(2, 6, 23, 0.4);
+}
+
+@media (min-width: 640px) {
+  .kuteka-module-intro {
+    margin-bottom: 2rem;
+  }
+  .kuteka-module-intro__subtitle {
+    font-size: 1.05rem;
+  }
+}
+
+/* Feed motion — presence, not noise */
+@keyframes kuteka-feed-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kuteka-feed-section {
+  animation: kuteka-feed-in 320ms ease-out both;
+}
+
+.kuteka-feed-section:nth-child(2) {
+  animation-delay: 40ms;
+}
+.kuteka-feed-section:nth-child(3) {
+  animation-delay: 80ms;
+}
+.kuteka-feed-section:nth-child(4) {
+  animation-delay: 120ms;
+}
+.kuteka-feed-section:nth-child(5) {
+  animation-delay: 160ms;
 }
 
 /* Elevate common solid surfaces inside the app main over the atmosphere */
 .kuteka-app-main .rounded-kuteka.border.border-slate-200.bg-white,
 .kuteka-app-main .rounded-kuteka.border.border-slate-200.bg-slate-50\/80 {
-  background: rgba(255, 255, 255, 0.82) !important;
-  border-color: rgba(255, 255, 255, 0.55) !important;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 10px 28px rgba(2, 6, 23, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .kuteka-atmosphere-kenburns {
+    animation: none;
+  }
+  .kuteka-atmosphere-media,
+  .kuteka-atmosphere-video {
+    transition: none;
+    opacity: 1;
+  }
+  .kuteka-feed-section {
     animation: none;
   }
 }

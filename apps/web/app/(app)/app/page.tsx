@@ -6,9 +6,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-/**
- * Authenticated home stub — client-loaded after onboarding (static-safe).
- */
+/** Authenticated home — shortcuts + continuous platform feed. */
 export default function AppHomePage() {
   return <AppHomeClient />;
 }
