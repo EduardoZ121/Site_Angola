@@ -13,27 +13,26 @@ export type HeroMediaSource = {
 };
 
 /**
- * Curated atmospheres for the authenticated workspace background.
- * Used as full-bleed second plane — never as an inset banner card.
+ * Cinematic atmospheres — same visual language as the Landing hero.
+ * Full-bleed second plane; never inset banner cards.
  */
 export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   dashboard: {
-    image:
-      'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?auto=format&fit=crop&w=2000&q=80',
+    image: '/images/hero.jpg',
     imageMobile: '/images/hero-mobile.jpg',
     video:
-      'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11-large.mp4',
-    alt: 'Vista aérea urbana ao entardecer',
-    eyebrow: 'Kuteka',
-    title: 'Plataforma imobiliária de Angola',
-    subtitle: 'Património, habitação e confiança num fluxo contínuo.',
+      'https://assets.mixkit.co/videos/preview/mixkit-white-luxury-home-exterior-and-pool-5061-large.mp4',
+    alt: 'Moradia contemporânea ao entardecer',
+    eyebrow: 'Kuteka · Angola',
+    title: 'Plataforma imobiliária viva',
+    subtitle: 'Património, habitação e confiança — a continuação natural da Landing.',
   },
   patrimonios: {
     image:
       'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=2000&q=80',
     imageMobile: '/images/hero-mobile.jpg',
     video:
-      'https://assets.mixkit.co/videos/preview/mixkit-white-luxury-home-exterior-and-pool-5061-large.mp4',
+      'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-modern-house-with-a-pool-5062-large.mp4',
     alt: 'Moradia contemporânea com arquitectura premium',
     eyebrow: 'Parceiro Patrimonial',
     title: 'Publique património com presença',
@@ -54,7 +53,8 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     image:
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=2000&q=80',
     imageMobile: '/images/hero-mobile.jpg',
-    video: 'https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-308-large.mp4',
+    video:
+      'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11-large.mp4',
     alt: 'Mediação e trabalho de campo',
     eyebrow: 'Agente Certificado',
     title: 'Acompanhe no terreno',

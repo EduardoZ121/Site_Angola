@@ -122,38 +122,71 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (gate === 'loading') {
     return (
-      <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center gap-4 px-6 py-16">
-        <BrandMark tone="dark" href="/app" />
-        <Text className="text-slate-600">{copy.common.loading}</Text>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-16">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-50"
+          style={{ backgroundImage: "url('/images/hero.jpg')" }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/70"
+        />
+        <div className="relative z-10 flex max-w-lg flex-col gap-4">
+          <BrandMark tone="light" href="/app" size="lg" />
+          <Text className="text-slate-300">{copy.common.loading}</Text>
+        </div>
       </div>
     );
   }
 
   if (gate === 'config') {
     return (
-      <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center gap-4 px-6 py-16">
-        <BrandMark tone="dark" href="/" />
-        <Heading level={1}>{copy.app.title}</Heading>
-        <Text>{copy.app.configMissing}</Text>
-        <Link href="/" className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}>
-          {copy.app.ctaLanding}
-        </Link>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-16">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-45"
+          style={{ backgroundImage: "url('/images/hero.jpg')" }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/70"
+        />
+        <div className="relative z-10 flex max-w-lg flex-col gap-4 rounded-kuteka border border-white/15 bg-white/95 p-6 shadow-xl">
+          <BrandMark tone="dark" href="/" size="md" />
+          <Heading level={1}>{copy.app.title}</Heading>
+          <Text>{copy.app.configMissing}</Text>
+          <Link href="/" className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}>
+            {copy.app.ctaLanding}
+          </Link>
+        </div>
       </div>
     );
   }
 
   if (gate === 'anon') {
     return (
-      <div className="mx-auto flex min-h-screen max-w-lg flex-col justify-center gap-4 px-6 py-16">
-        <BrandMark tone="dark" href="/" />
-        <Heading level={1}>{copy.login.title}</Heading>
-        <Text>É necessário entrar para aceder a esta área.</Text>
-        <Link
-          href="/auth/entrar?next=%2Fapp"
-          className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
-        >
-          {copy.login.submit}
-        </Link>
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-16">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-50"
+          style={{ backgroundImage: "url('/images/hero.jpg')" }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/70"
+        />
+        <div className="relative z-10 flex max-w-lg flex-col gap-4 rounded-kuteka border border-white/15 bg-white/95 p-6 shadow-xl">
+          <BrandMark tone="dark" href="/" size="md" />
+          <Heading level={1}>{copy.login.title}</Heading>
+          <Text>É necessário entrar para aceder a esta área.</Text>
+          <Link
+            href="/auth/entrar?next=%2Fapp"
+            className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
+          >
+            {copy.login.submit}
+          </Link>
+        </div>
       </div>
     );
   }
