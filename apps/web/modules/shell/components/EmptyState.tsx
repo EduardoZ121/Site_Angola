@@ -14,12 +14,12 @@ export function EmptyState({ title, description, action, className }: EmptyState
   return (
     <div
       className={cn(
-        'flex flex-col items-center gap-3 rounded-kuteka border border-dashed border-slate-200 bg-white px-6 py-12 text-center',
+        'kuteka-glass flex flex-col items-center gap-3 border-dashed px-6 py-12 text-center',
         className,
       )}
     >
-      <p className="text-base font-medium text-slate-800">{title}</p>
-      <Text className="max-w-md text-sm text-slate-500">{description}</Text>
+      <p className="text-base font-medium text-slate-900">{title}</p>
+      <Text className="max-w-md text-sm text-slate-600">{description}</Text>
       {action ? <div className="mt-2">{action}</div> : null}
     </div>
   );

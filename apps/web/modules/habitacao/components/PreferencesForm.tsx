@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
-import { HeroMedia } from '@/modules/shell/components/HeroMedia';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getHabitacaoCopy } from '../content/pt';
 import { getClientPreferences, saveClientPreferences } from '../services/housing-client';
@@ -71,8 +71,7 @@ export function PreferencesForm() {
 
   return (
     <div className="flex flex-col gap-8">
-      <HeroMedia preset="habitacao" />
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
@@ -166,6 +165,15 @@ export function PreferencesForm() {
           ) : null}
         </section>
       ) : null}
+
+      <FlowNextSteps
+        title="Continuar para o inventário"
+        steps={[
+          { href: '/app/habitacao/explorar', label: copy.explore, primary: true },
+          { href: '/app/confianca', label: 'Verificar conta' },
+          { href: '/app/agente', label: 'Área do Agente' },
+        ]}
+      />
     </div>
   );
 }

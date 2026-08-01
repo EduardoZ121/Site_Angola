@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Heading, Badge, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
 import { getProperty, type PropertyRow } from '../services/properties-client';
@@ -81,7 +82,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{row.title}</Heading>
           <p className="font-mono text-sm text-slate-500">{row.code}</p>
@@ -178,20 +179,18 @@ export function PropertyDetailClient({ id }: { id: string }) {
         Quando activo, este anúncio fica disponível em Habitação para o Cliente.
       </Text>
 
-      <div className="flex flex-wrap gap-3">
-        <Link
-          href={`/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`}
-          className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
-        >
-          {copy.seeInHousing}
-        </Link>
-        <Link
-          href="/app/patrimonios"
-          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
-        >
-          {copy.backToList}
-        </Link>
-      </div>
+      <FlowNextSteps
+        title="Anúncio publicado — continue o fluxo"
+        steps={[
+          {
+            href: `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`,
+            label: copy.seeInHousing,
+            primary: true,
+          },
+          { href: '/app/agente', label: 'Área do Agente' },
+          { href: '/app/patrimonios/novo', label: 'Publicar outro' },
+        ]}
+      />
     </div>
   );
 }

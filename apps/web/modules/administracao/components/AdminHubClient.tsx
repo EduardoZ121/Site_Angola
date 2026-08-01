@@ -6,7 +6,7 @@ import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
-import { HeroMedia } from '@/modules/shell/components/HeroMedia';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAdministracaoCopy } from '../content/pt';
 import {
@@ -70,8 +70,7 @@ export function AdminHubClient() {
 
   return (
     <div className="flex flex-col gap-8">
-      <HeroMedia preset="admin" />
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
@@ -179,6 +178,15 @@ export function AdminHubClient() {
           </ul>
         ) : null}
       </section>
+
+      <FlowNextSteps
+        title="Próximos passos da operação"
+        steps={[
+          { href: '/app/admin/utilizadores', label: 'Gerir utilizadores', primary: true },
+          { href: '/app/confianca/revisao', label: 'Rever Confiança' },
+          { href: '/app/habitacao/explorar', label: 'Ver inventário' },
+        ]}
+      />
     </div>
   );
 }

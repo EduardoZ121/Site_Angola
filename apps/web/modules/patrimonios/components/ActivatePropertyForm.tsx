@@ -7,7 +7,7 @@ import { Heading, Text, Input, Label, Textarea, buttonVariants } from '@kuteka/u
 import { cn } from '@kuteka/shared';
 import { PROPERTY_PURPOSES, PROPERTY_TYPES } from '@kuteka/validation';
 import { useAppSession } from '@/modules/authentication/components/app-session';
-import { HeroMedia } from '@/modules/shell/components/HeroMedia';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { getPatrimoniosCopy } from '../content/pt';
 import { activateProperty } from '../services/properties-client';
 import type { LocalMediaDraft } from '../services/property-media-client';
@@ -80,8 +80,7 @@ export function ActivatePropertyForm() {
 
   return (
     <div className="flex flex-col gap-6">
-      <HeroMedia preset="patrimonios" size="md" />
-      <header className="flex flex-col gap-2">
+      <header className="kuteka-glass flex flex-col gap-2 p-5">
         <Heading level={1}>{copy.activate}</Heading>
         <Text className="text-slate-600">{copy.mvpNote}</Text>
       </header>
@@ -95,7 +94,7 @@ export function ActivatePropertyForm() {
         </div>
       ) : null}
 
-      <form onSubmit={onSubmit} className="flex flex-col gap-6" noValidate>
+      <form onSubmit={onSubmit} className="kuteka-glass flex flex-col gap-6 p-5" noValidate>
         <div className="flex flex-col gap-2">
           <Label htmlFor="title">{copy.fields.title}</Label>
           <Input
@@ -199,11 +198,23 @@ export function ActivatePropertyForm() {
           >
             {submitting ? copy.activating : copy.activate}
           </button>
-          <Link href="/app/patrimonios" className={cn(buttonVariants({ variant: 'secondary' }))}>
-            {copy.backToList}
+          <Link
+            href="/app/habitacao/explorar"
+            className={cn(buttonVariants({ variant: 'secondary' }))}
+          >
+            Ver inventário Cliente
           </Link>
         </div>
       </form>
+
+      <FlowNextSteps
+        title="Depois de publicar"
+        steps={[
+          { href: '/app/habitacao/explorar', label: 'Ver no inventário', primary: true },
+          { href: '/app/agente', label: 'Área do Agente' },
+          { href: '/app/confianca', label: 'Verificar conta' },
+        ]}
+      />
     </div>
   );
 }

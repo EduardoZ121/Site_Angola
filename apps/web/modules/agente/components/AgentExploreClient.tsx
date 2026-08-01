@@ -68,10 +68,10 @@ export function AgentExploreClient() {
           <Text className="text-slate-600">{copy.exploreSubtitle}</Text>
         </div>
         <Link
-          href="/app/agente"
+          href="/app/habitacao/explorar"
           className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
         >
-          {copy.backToHub}
+          Inventário Cliente
         </Link>
       </header>
 
@@ -93,8 +93,11 @@ export function AgentExploreClient() {
           title={copy.emptyExploreTitle}
           description={copy.emptyExplore}
           action={
-            <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
-              {copy.backToHub}
+            <Link
+              href="/app/habitacao/explorar"
+              className={cn(buttonVariants({ variant: 'secondary' }))}
+            >
+              Ver inventário
             </Link>
           }
         />

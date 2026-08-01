@@ -104,10 +104,10 @@ export function TrustReviewClient() {
           <Text className="text-slate-600">{copy.reviewHint}</Text>
         </div>
         <Link
-          href="/app/confianca"
+          href="/app/admin"
           className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
         >
-          {copy.backToHub}
+          Dashboard Admin
         </Link>
       </header>
 

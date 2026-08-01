@@ -7,7 +7,7 @@ import { Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui'
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
-import { HeroMedia } from '@/modules/shell/components/HeroMedia';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getHabitacaoCopy } from '../content/pt';
 import {
@@ -94,8 +94,7 @@ export function ExploreListClient() {
 
   return (
     <div className="flex flex-col gap-8">
-      <HeroMedia preset="habitacao" />
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{copy.exploreTitle}</Heading>
           <Text className="text-slate-600">{copy.exploreSubtitle}</Text>
@@ -104,7 +103,7 @@ export function ExploreListClient() {
           href="/app/habitacao"
           className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
         >
-          {copy.backToHub}
+          Preferências
         </Link>
       </header>
 
@@ -122,7 +121,7 @@ export function ExploreListClient() {
 
       {canExplore ? (
         <form
-          className="grid gap-3 rounded-kuteka border border-slate-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="kuteka-glass grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3"
           onSubmit={(e) => {
             e.preventDefault();
             void load({ purpose, province, city, propertyType, query });
@@ -266,6 +265,15 @@ export function ExploreListClient() {
           </div>
         </>
       ) : null}
+
+      <FlowNextSteps
+        title="Depois de explorar"
+        steps={[
+          { href: '/app/confianca', label: 'Verificar conta', primary: true },
+          { href: '/app/agente', label: 'Ver acompanhamento' },
+          { href: '/app/patrimonios', label: 'Publicar património' },
+        ]}
+      />
     </div>
   );
 }

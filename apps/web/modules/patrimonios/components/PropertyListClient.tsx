@@ -7,7 +7,7 @@ import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
-import { HeroMedia } from '@/modules/shell/components/HeroMedia';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
@@ -43,8 +43,7 @@ export function PropertyListClient() {
 
   return (
     <div className="flex flex-col gap-8">
-      <HeroMedia preset="patrimonios" />
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
@@ -153,6 +152,15 @@ export function PropertyListClient() {
           </ul>
         </section>
       ) : null}
+
+      <FlowNextSteps
+        title="Continuar o fluxo"
+        steps={[
+          { href: '/app/habitacao/explorar', label: 'Ver como Cliente', primary: true },
+          { href: '/app/patrimonios/novo', label: copy.activate },
+          { href: '/app/confianca', label: 'Verificar conta' },
+        ]}
+      />
     </div>
   );
 }

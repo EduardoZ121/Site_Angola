@@ -65,10 +65,10 @@ export function TrustSubmitClient() {
           <Text className="text-slate-600">{copy.submitHint}</Text>
         </div>
         <Link
-          href="/app/confianca"
+          href="/app/habitacao/explorar"
           className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
         >
-          {copy.backToHub}
+          Explorar habitação
         </Link>
       </header>
 

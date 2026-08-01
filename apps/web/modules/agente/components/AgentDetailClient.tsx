@@ -182,15 +182,21 @@ export function AgentDetailClient({ id }: { id: string }) {
         </div>
       )}
 
-      <div className="flex flex-wrap gap-3">
+      <div className="kuteka-glass flex flex-wrap gap-3 p-4">
         <Link
           href="/app/agente/explorar"
+          className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
+        >
+          Continuar exploração
+        </Link>
+        <Link
+          href="/app/confianca"
           className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
         >
-          {copy.backToExplore}
+          Confiança
         </Link>
-        <Link href="/app/agente" className={cn(buttonVariants({ variant: 'ghost' }), 'w-fit')}>
-          {copy.backToHub}
+        <Link href="/app/admin" className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}>
+          Administração
         </Link>
       </div>
     </div>

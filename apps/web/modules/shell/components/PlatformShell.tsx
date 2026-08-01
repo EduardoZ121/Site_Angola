@@ -10,8 +10,11 @@ import { BrandMark } from '@/modules/authentication/components/BrandMark';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
 import { getShellCopy } from '../content/pt';
+import { presetFromPathname } from '../media/hero-media';
 import { isNavItemActive, isNavItemVisible, SHELL_NAV_ITEMS } from '../nav';
 import { NavIcon } from '../nav-icons';
+import { AtmosphereBackground } from './AtmosphereBackground';
+import { ModuleIntro } from './ModuleIntro';
 import { TopbarActions } from './TopbarActions';
 import { UserMenu } from './UserMenu';
 
@@ -42,7 +45,7 @@ function NavList({
           return (
             <li key={item.id}>
               <div
-                className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-400"
+                className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-500"
                 aria-disabled="true"
               >
                 <span className="inline-flex items-center gap-2.5">
@@ -64,8 +67,8 @@ function NavList({
               className={cn(
                 'flex items-center gap-2.5 rounded-kuteka px-3 py-2.5 text-sm font-medium transition-colors duration-200',
                 active
-                  ? 'bg-brand-50 text-brand-800'
-                  : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900',
+                  ? 'bg-brand-500/15 text-brand-900 ring-1 ring-brand-500/25'
+                  : 'text-slate-800 hover:bg-white/55 hover:text-slate-950',
               )}
             >
               <NavIcon labelKey={item.labelKey} />
@@ -80,26 +83,27 @@ function NavList({
 
 function ShellBrand() {
   return (
-    <div className="relative border-b border-slate-100 px-4 py-4">
+    <div className="relative border-b border-white/40 px-4 py-5">
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600"
+        className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600"
       />
-      <BrandMark href="/app" tone="dark" className="tracking-[0.2em]" />
-      <p className="mt-1.5 text-[0.65rem] font-medium uppercase tracking-[0.16em] text-slate-400">
-        Plataforma
+      <BrandMark href="/app" tone="dark" size="lg" />
+      <p className="mt-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-600">
+        Plataforma imobiliária
       </p>
     </div>
   );
 }
 
 /**
- * Authenticated platform chrome — Sidebar + Topbar + Main (Fase 3 D1/D6/D7).
+ * Authenticated platform chrome — full-bleed atmosphere + glass panels.
  */
 export function PlatformShell({ children, session, sessionStatus }: PlatformShellProps) {
   const auth = getAuthCopy();
   const shell = getShellCopy();
   const pathname = usePathname() || '/app';
+  const preset = presetFromPathname(pathname);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const titleId = useId();
   const drawerId = useId();
@@ -130,9 +134,11 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   }, [drawerOpen]);
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="relative flex min-h-screen">
+      <AtmosphereBackground preset={preset} />
+
       <aside
-        className="hidden w-56 shrink-0 flex-col border-r border-slate-200 bg-white md:flex lg:w-60"
+        className="kuteka-glass-chrome relative z-20 hidden w-64 shrink-0 flex-col border-r border-white/35 md:flex lg:w-72"
         aria-label={shell.navAria}
       >
         <ShellBrand />
@@ -141,9 +147,9 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
         </nav>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 backdrop-blur-sm">
-          <div className="flex items-center justify-between gap-3 px-4 py-3 sm:px-6">
+      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
+        <header className="kuteka-glass-chrome sticky top-0 z-30 border-b border-white/35">
+          <div className="flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <button
                 type="button"
@@ -161,11 +167,11 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 </span>
               </button>
               <div className="min-w-0 md:hidden">
-                <BrandMark href="/app" tone="dark" />
+                <BrandMark href="/app" tone="dark" size="md" />
               </div>
               <p
                 id={titleId}
-                className="hidden truncate text-sm font-medium text-slate-600 md:block"
+                className="hidden truncate text-sm font-semibold tracking-wide text-slate-800 md:block"
               >
                 {shell.areaTitle}
               </p>
@@ -178,8 +184,9 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6 sm:py-10">
-          {children}
+        <main className="kuteka-app-main mx-auto w-full max-w-5xl flex-1 px-4 py-7 sm:px-6 sm:py-9">
+          <ModuleIntro preset={preset} />
+          <div className="flex flex-col gap-6">{children}</div>
         </main>
       </div>
 
@@ -192,16 +199,16 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
         >
           <button
             type="button"
-            className="absolute inset-0 bg-slate-900/40 transition-opacity duration-200"
+            className="absolute inset-0 bg-slate-950/50 backdrop-blur-[2px] transition-opacity duration-200"
             aria-label={shell.closeMenu}
             onClick={() => setDrawerOpen(false)}
           />
           <aside
             id={drawerId}
-            className="absolute inset-y-0 left-0 flex w-[min(18rem,85vw)] flex-col bg-white shadow-lg motion-reduce:transition-none"
+            className="kuteka-glass-chrome absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col shadow-xl motion-reduce:transition-none"
           >
-            <div className="flex items-center justify-between border-b border-slate-100 px-4 py-4">
-              <BrandMark href="/app" tone="dark" />
+            <div className="flex items-center justify-between border-b border-white/40 px-4 py-5">
+              <BrandMark href="/app" tone="dark" size="lg" />
               <button
                 type="button"
                 className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'px-2')}
