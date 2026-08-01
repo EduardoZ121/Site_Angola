@@ -10,6 +10,7 @@ export type PermissionCode =
   | 'housing.explore'
   | 'agent.operate'
   | 'trust.manage'
+  | 'contracts.manage'
   | (string & {});
 
 export type TrustDocType = 'identity' | 'proof_of_address' | 'property_title' | 'agent_credential';
@@ -34,6 +35,8 @@ export type PropertyType = 'apartment' | 'house' | 'land' | 'commercial';
 export type PropertyPurpose = 'rent' | 'sale' | 'both';
 export type PropertyStatus = 'draft' | 'active' | 'archived';
 export type AgentAssignmentStatus = 'active' | 'released';
+export type ContractPurpose = 'rent' | 'sale';
+export type ContractStatus = 'draft' | 'pending_acceptance' | 'active' | 'completed' | 'cancelled';
 
 export type ClientPreferences = {
   userId: string;
@@ -71,6 +74,26 @@ export interface Property {
   isDemo: boolean;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PropertyContract {
+  id: string;
+  code: string;
+  propertyId: string;
+  clientId: string;
+  partnerId: string;
+  agentId: string | null;
+  interestId: string | null;
+  purpose: ContractPurpose;
+  status: ContractStatus;
+  amountAoa: number;
+  currency: 'AOA';
+  title: string;
+  termsNotes: string | null;
+  isDemo: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
 }
 
 export interface Role {

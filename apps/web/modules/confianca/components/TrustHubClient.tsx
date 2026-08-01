@@ -27,6 +27,8 @@ export function TrustHubClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('trust.manage');
   const isAdmin = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
+  const canContracts =
+    sessionStatus === 'ready' && !!session?.permissions.includes('contracts.manage');
 
   const [rows, setRows] = useState<TrustDocumentRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -199,6 +201,7 @@ export function TrustHubClient() {
         title="Depois da verificação"
         steps={[
           { href: '/app/habitacao/explorar', label: 'Explorar habitação', primary: true },
+          ...(canContracts ? [{ href: '/app/contratos', label: 'Preparar contrato' }] : []),
           { href: '/app/agente', label: 'Área do Agente' },
           { href: '/app/admin', label: 'Administração' },
         ]}

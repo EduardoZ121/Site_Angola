@@ -8,6 +8,7 @@ describe('presetFromPathname', () => {
     expect(presetFromPathname('/app/habitacao/explorar')).toBe('habitacao');
     expect(presetFromPathname('/app/agente')).toBe('agente');
     expect(presetFromPathname('/app/confianca/revisao')).toBe('confianca');
+    expect(presetFromPathname('/app/contratos/detalhe')).toBe('contratos');
     expect(presetFromPathname('/app/admin/utilizadores')).toBe('admin');
   });
 });

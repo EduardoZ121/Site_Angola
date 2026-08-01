@@ -1,5 +1,5 @@
 export type HeroMediaPreset =
-  'dashboard' | 'patrimonios' | 'habitacao' | 'agente' | 'confianca' | 'admin';
+  'dashboard' | 'patrimonios' | 'habitacao' | 'agente' | 'confianca' | 'contratos' | 'admin';
 
 export type HeroMediaSource = {
   image: string;
@@ -69,6 +69,15 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     title: 'Relações seguras com evidência',
     subtitle: 'Checklist clara — Em análise, Aprovado ou Rejeitado.',
   },
+  contratos: {
+    image:
+      'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=2000&q=80',
+    imageMobile: '/images/hero-mobile.jpg',
+    alt: 'Mesa executiva com contrato e assinatura',
+    eyebrow: 'Contrato',
+    title: 'Formalize com clareza',
+    subtitle: 'Partes, valor, termos e aceitação antes de Pagamentos.',
+  },
   admin: {
     image:
       'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2000&q=80',
@@ -88,6 +97,7 @@ export function presetFromPathname(pathname: string): HeroMediaPreset {
   if (pathname.startsWith('/app/habitacao')) return 'habitacao';
   if (pathname.startsWith('/app/agente')) return 'agente';
   if (pathname.startsWith('/app/confianca')) return 'confianca';
+  if (pathname.startsWith('/app/contratos')) return 'contratos';
   if (pathname.startsWith('/app/admin')) return 'admin';
   return 'dashboard';
 }

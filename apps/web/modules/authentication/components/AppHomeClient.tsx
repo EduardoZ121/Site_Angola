@@ -37,6 +37,13 @@ const MODULE_DEFS = [
     href: '/app/confianca',
     permission: 'trust.manage' as const,
   },
+  {
+    key: 'contratos',
+    title: 'Contratos',
+    description: 'Minutas, aceitação e preparação de pagamento.',
+    href: '/app/contratos',
+    permission: 'contracts.manage' as const,
+  },
 ] as const;
 
 /**
@@ -94,6 +101,7 @@ export function AppHomeClient() {
   const canHousing = session.permissions.includes('housing.explore');
   const canAgent = session.permissions.includes('agent.operate');
   const canTrust = session.permissions.includes('trust.manage');
+  const canContracts = session.permissions.includes('contracts.manage');
 
   const quickActions = [
     canManage
@@ -126,6 +134,14 @@ export function AppHomeClient() {
           href: '/app/confianca',
           label: copy.app.quickTrust,
           primary: !canManage && !canHousing && !canAgent,
+        }
+      : null,
+    canContracts
+      ? {
+          key: 'contracts',
+          href: '/app/contratos',
+          label: 'Gerir contratos',
+          primary: !canManage && !canHousing && !canAgent && !canTrust,
         }
       : null,
     {
@@ -247,6 +263,7 @@ export function AppHomeClient() {
             : [{ href: '/app', label: 'Explorar o painel', primary: true }]),
           ...(canManage ? [{ href: '/app/patrimonios/novo', label: 'Publicar património' }] : []),
           ...(canTrust ? [{ href: '/app/confianca', label: 'Verificar conta' }] : []),
+          ...(canContracts ? [{ href: '/app/contratos', label: 'Preparar contrato' }] : []),
           { href: '/auth/onboarding/papeis', label: 'Activar papéis' },
         ]}
       />

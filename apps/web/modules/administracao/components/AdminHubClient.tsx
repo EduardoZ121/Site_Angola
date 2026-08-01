@@ -108,6 +108,12 @@ export function AdminHubClient() {
             {copy.housingExplore}
           </Link>
           <Link
+            href="/app/contratos"
+            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+          >
+            {copy.contracts}
+          </Link>
+          <Link
             href="/app/admin/utilizadores"
             className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
           >
@@ -142,6 +148,8 @@ export function AdminHubClient() {
                 ['trust', stats.trust_pending ?? 0],
                 ['interests', stats.interests_pending ?? 0],
                 ['demo', stats.properties_demo ?? 0],
+                ['contractsActive', stats.contracts_active ?? 0],
+                ['contractsPending', stats.contracts_pending ?? 0],
               ] as const
             ).map(([key, value]) => (
               <li key={key} className="rounded-kuteka border border-slate-200 bg-white px-4 py-4">
@@ -199,6 +207,7 @@ export function AdminHubClient() {
         title="Próximos passos da operação"
         steps={[
           { href: '/app/admin/utilizadores', label: 'Gerir utilizadores', primary: true },
+          { href: '/app/contratos', label: 'Preparar contrato' },
           { href: '/app/confianca/revisao', label: 'Rever Confiança' },
           { href: '/app/habitacao/explorar', label: 'Ver inventário' },
         ]}

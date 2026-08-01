@@ -26,6 +26,7 @@ export function HousingDetailClient({ id }: { id: string }) {
   const copy = getHabitacaoCopy();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canExplore = session?.permissions.includes('housing.explore') ?? false;
+  const canContracts = session?.permissions.includes('contracts.manage') ?? false;
 
   const [row, setRow] = useState<HousingPropertyRow | null>(null);
   const [media, setMedia] = useState<PropertyMediaRow[]>([]);
@@ -260,6 +261,11 @@ export function HousingDetailClient({ id }: { id: string }) {
         <Link href="/app/confianca" className={cn(buttonVariants({ variant: 'secondary' }))}>
           {copy.goTrust}
         </Link>
+        {canContracts ? (
+          <Link href="/app/contratos" className={cn(buttonVariants({ variant: 'secondary' }))}>
+            Preparar contrato
+          </Link>
+        ) : null}
         <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
           {copy.goAgent}
         </Link>
@@ -269,6 +275,7 @@ export function HousingDetailClient({ id }: { id: string }) {
         title="Continuar o percurso"
         steps={[
           { href: '/app/agente', label: 'Agente acompanha', primary: true },
+          ...(canContracts ? [{ href: '/app/contratos', label: 'Preparar contrato' }] : []),
           { href: '/app/confianca', label: 'Confiança verifica' },
           { href: '/app/habitacao/explorar', label: 'Mais patrimónios' },
         ]}
