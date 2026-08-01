@@ -48,7 +48,7 @@ export function PropertyTimeline({ propertyId }: { propertyId: string }) {
 
         const rows = (data as TimelineRow[]) ?? [];
         const actorIds = [...new Set(rows.map((r) => r.actor_id).filter(Boolean))] as string[];
-        let names: Record<string, string> = {};
+        const names: Record<string, string> = {};
         if (actorIds.length) {
           const { data: profiles } = await client
             .from('profiles')
