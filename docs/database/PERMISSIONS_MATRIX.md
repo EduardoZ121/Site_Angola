@@ -9,5 +9,6 @@
 | `platform.access`   | ✓      | ✓                   | ✓               | ✓             |
 | `admin.panel`       |        |                     |                 | ✓             |
 | `properties.manage` |        | ✓                   |                 | ✓             |
+| `housing.explore`   | ✓      |                     |                 | ✓             |
 
 Novos papéis / permissões = novos rows + seed/migration — sem alterar o modelo RBAC.

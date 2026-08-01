@@ -28,4 +28,13 @@ describe('shell nav', () => {
     expect(isNavItemActive(item, '/app/patrimonios/novo')).toBe(true);
     expect(isNavItemActive(item, '/app')).toBe(false);
   });
+
+  it('marks habitacao active under /app/habitacao', () => {
+    const item = SHELL_NAV_ITEMS.find((i) => i.id === 'habitacao')!;
+    expect(item.status).toBe('active');
+    expect(item.href).toBe('/app/habitacao');
+    expect(isNavItemActive(item, '/app/habitacao')).toBe(true);
+    expect(isNavItemActive(item, '/app/habitacao/explorar')).toBe(true);
+    expect(isNavItemActive(item, '/app')).toBe(false);
+  });
 });

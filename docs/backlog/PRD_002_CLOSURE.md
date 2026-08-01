@@ -12,4 +12,4 @@
 | Validação     | ✅ Critérios MVP da spec                      |
 
 **Maturidade:** **N5**  
-**Próximo:** PRD-003 Cliente (ou extensão documentos/Passaporte — conforme roadmap).
+**Próximo (histórico):** PRD-003 Cliente — concluído (ver `PRD_003_CLOSURE.md`).

@@ -10,5 +10,6 @@
 | [ADR-004](ADR-004-authentication-module-deferred.md)    | Auth module (PRD-001) | ✅ Aceite / N5 (2026-07-31) |
 | [ADR-005](ADR-005-platform-shell.md)                    | Platform Shell        | ✅ Aceite / N5 (2026-07-31) |
 | [ADR-006](ADR-006-properties-module.md)                 | Properties / PRD-002  | ✅ Aceite / N5 (2026-08-01) |
+| [ADR-007](ADR-007-housing-module.md)                    | Habitação / PRD-003   | ✅ Aceite / N5 (2026-08-01) |
 
 Processo: `docs/engineering/DEVELOPMENT_PROCESS.md`

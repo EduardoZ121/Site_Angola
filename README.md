@@ -81,8 +81,9 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 3. **P0 pré-Auth** — ✅ (CI + migrations remotas)
 4. **PRD-001 Auth** — ✅ **N5** · baseline congelada (`PROJECT_BASELINE_PRD001.md`)
 5. **Shell da plataforma** — ✅ N5 (congelado)
-6. **PRD-002** Parceiro Patrimonial — ✅ N5 (Ativar Património)
-7. **PRD-003** Cliente — próximo
+6. **PRD-002** Parceiro Patrimonial — ✅ N5 · congelado
+7. **PRD-003** Cliente / Habitação — ✅ N5 (ADR-007)
+8. **PRD-004** Agente — próximo
 
 Processo oficial: `docs/engineering/DEVELOPMENT_PROCESS.md`  
 pnpm é a fonte de verdade do monorepo (`pnpm-lock.yaml`).
