@@ -1,27 +1,14 @@
-import { cn } from '@kuteka/shared';
+import { SoftListSlot } from './SoftListSlot';
 
 type ModuleSkeletonProps = {
   rows?: number;
   className?: string;
 };
 
-/** Transient loading placeholder — avoids permanent "A carregar…" copy. */
-export function ModuleSkeleton({ rows = 3, className }: ModuleSkeletonProps) {
-  return (
-    <div
-      className={cn('flex flex-col gap-3', className)}
-      role="status"
-      aria-busy="true"
-      aria-live="polite"
-    >
-      <span className="sr-only">A carregar…</span>
-      {Array.from({ length: rows }, (_, index) => (
-        <div
-          key={index}
-          aria-hidden
-          className="h-16 animate-pulse rounded-kuteka border border-slate-100 bg-slate-100/80"
-        />
-      ))}
-    </div>
-  );
+/**
+ * @deprecated Prefer SoftListSlot — pulse skeletons caused visible flicker.
+ * Kept as a thin alias so call sites fail soft until migrated.
+ */
+export function ModuleSkeleton({ className }: ModuleSkeletonProps) {
+  return <SoftListSlot pending className={className} />;
 }

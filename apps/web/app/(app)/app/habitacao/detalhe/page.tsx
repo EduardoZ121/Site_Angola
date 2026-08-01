@@ -8,7 +8,7 @@ import { cn } from '@kuteka/shared';
 import { HousingDetailClient } from '@/modules/habitacao/components/HousingDetailClient';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
-import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 
 function DetailInner() {
   const params = useSearchParams();
@@ -42,7 +42,7 @@ function DetailInner() {
 
 export default function HabitacaoDetalhePage() {
   return (
-    <Suspense fallback={<ModuleSkeleton rows={4} />}>
+    <Suspense fallback={<SoftListSlot pending minHeightClassName="min-h-[16rem]" />}>
       <DetailInner />
     </Suspense>
   );

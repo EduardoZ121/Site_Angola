@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
-import { FeedPlaceholder, PlatformFeed } from '@/modules/shell/components/PlatformFeed';
+import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
 
@@ -60,20 +61,7 @@ export function AppHomeClient() {
     administrator: 'Administrador',
   };
 
-  // Stable chrome while session resolves — avoid blank/flashing titles
-  if (status === 'loading') {
-    return (
-      <div className="flex flex-col gap-8">
-        <header className="kuteka-glass flex min-h-[7.5rem] flex-col justify-center gap-2 p-5">
-          <div className="h-7 w-48 animate-pulse rounded bg-slate-200/90" />
-          <div className="h-4 w-72 max-w-full animate-pulse rounded bg-slate-100" />
-        </header>
-        <FeedPlaceholder />
-      </div>
-    );
-  }
-
-  if (status === 'error' || !session) {
+  if (status === 'error' || (status === 'ready' && !session)) {
     return (
       <div className="flex flex-col gap-4">
         <header className="kuteka-glass flex flex-col gap-2 p-5">
@@ -102,6 +90,22 @@ export function AppHomeClient() {
       </div>
     );
   }
+
+  if (status === 'loading') {
+    return (
+      <div className="flex flex-col gap-8">
+        <header className="kuteka-glass flex flex-col gap-2 p-5">
+          <Heading level={1}>{copy.app.title}</Heading>
+          <p className="text-sm text-slate-600">
+            Atalhos para actuar — e um feed vivo da plataforma por baixo.
+          </p>
+        </header>
+        <SoftListSlot pending minHeightClassName="min-h-[28rem]" />
+      </div>
+    );
+  }
+
+  if (!session) return null;
 
   const greetingName = session.displayName;
   const email = session.email;

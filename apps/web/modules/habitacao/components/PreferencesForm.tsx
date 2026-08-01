@@ -7,8 +7,8 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
-import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getHabitacaoCopy } from '../content/pt';
 import { getClientPreferences, saveClientPreferences } from '../services/housing-client';
 
@@ -17,7 +17,10 @@ const PURPOSES = ['rent', 'sale', 'both'] as const;
 export function PreferencesForm() {
   const copy = getHabitacaoCopy();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
-  const canExplore = session?.permissions.includes('housing.explore') ?? false;
+  const canExplore =
+    sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');
+  const accessPending = sessionStatus === 'loading';
+  const denied = sessionStatus === 'ready' && !canExplore;
 
   const [purpose, setPurpose] = useState<string>('');
   const [province, setProvince] = useState('');
@@ -76,7 +79,7 @@ export function PreferencesForm() {
   }
 
   return (
-    <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
+    <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-8">
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
@@ -93,7 +96,8 @@ export function PreferencesForm() {
           ) : null}
         </header>
 
-        {!canExplore ? (
+        {accessPending ? <SoftListSlot pending /> : null}
+        {denied ? (
           <ForbiddenPanel
             message={copy.needClient}
             primaryHref="/auth/onboarding/papeis"
@@ -101,83 +105,83 @@ export function PreferencesForm() {
           />
         ) : null}
 
-        <p className="text-sm text-slate-500">{copy.mvpNote}</p>
-
         {canExplore ? (
-          <section className="flex max-w-xl flex-col gap-4">
-            <div>
-              <Heading level={2}>{copy.preferencesTitle}</Heading>
-              <Text className="mt-1 text-slate-600">{copy.preferencesHint}</Text>
-            </div>
+          <>
+            <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
-            {loading ? <ModuleSkeleton rows={2} /> : null}
+            <section className="flex max-w-xl flex-col gap-4">
+              <div>
+                <Heading level={2}>{copy.preferencesTitle}</Heading>
+                <Text className="mt-1 text-slate-600">{copy.preferencesHint}</Text>
+              </div>
 
-            {!loading ? (
-              <form onSubmit={onSubmit} className="flex flex-col gap-4">
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-slate-700">{copy.fields.purpose}</span>
-                  <select
-                    value={purpose}
-                    onChange={(e) => setPurpose(e.target.value)}
-                    className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-slate-900"
-                  >
-                    <option value="">{copy.fields.any}</option>
-                    {PURPOSES.map((p) => (
-                      <option key={p} value={p}>
-                        {copy.purposes[p]}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+              <SoftListSlot pending={loading}>
+                {!loading ? (
+                  <form onSubmit={onSubmit} className="flex flex-col gap-4">
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium text-slate-700">{copy.fields.purpose}</span>
+                      <select
+                        value={purpose}
+                        onChange={(e) => setPurpose(e.target.value)}
+                        className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-slate-900"
+                      >
+                        <option value="">{copy.fields.any}</option>
+                        {PURPOSES.map((p) => (
+                          <option key={p} value={p}>
+                            {copy.purposes[p]}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
 
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-slate-700">{copy.fields.province}</span>
-                  <input
-                    value={province}
-                    onChange={(e) => setProvince(e.target.value)}
-                    className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-slate-900"
-                    maxLength={80}
-                  />
-                </label>
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium text-slate-700">{copy.fields.province}</span>
+                      <input
+                        value={province}
+                        onChange={(e) => setProvince(e.target.value)}
+                        className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-slate-900"
+                        maxLength={80}
+                      />
+                    </label>
 
-                <label className="flex flex-col gap-1.5 text-sm">
-                  <span className="font-medium text-slate-700">{copy.fields.city}</span>
-                  <input
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-slate-900"
-                    maxLength={80}
-                  />
-                </label>
+                    <label className="flex flex-col gap-1.5 text-sm">
+                      <span className="font-medium text-slate-700">{copy.fields.city}</span>
+                      <input
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-slate-900"
+                        maxLength={80}
+                      />
+                    </label>
 
-                {error ? (
-                  <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-                    {error}
-                  </div>
+                    {error ? (
+                      <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+                        {error}
+                      </div>
+                    ) : null}
+                    {message ? (
+                      <div className="rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
+                        {message}
+                      </div>
+                    ) : null}
+
+                    <Button type="submit" disabled={saving} className="w-fit">
+                      {saving ? copy.saving : copy.savePreferences}
+                    </Button>
+                  </form>
                 ) : null}
-                {message ? (
-                  <div className="rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
-                    {message}
-                  </div>
-                ) : null}
+              </SoftListSlot>
+            </section>
 
-                <Button type="submit" disabled={saving} className="w-fit">
-                  {saving ? copy.saving : copy.savePreferences}
-                </Button>
-              </form>
-            ) : null}
-          </section>
-        ) : null}
-
-        {canExplore ? (
-          <FlowNextSteps
-            title="Continuar para o inventário"
-            steps={[
-              { href: '/app/habitacao/explorar', label: copy.explore, primary: true },
-              { href: '/app/confianca', label: 'Verificar conta' },
-              { href: '/app/agente', label: 'Área do Agente' },
-            ]}
-          />
+            <FlowNextSteps
+              title="Continuar para o inventário"
+              steps={[
+                { href: '/app/habitacao/explorar', label: copy.explore, primary: true },
+                { href: '/app/confianca', label: 'Verificar conta' },
+                { href: '/app/agente', label: 'Área do Agente' },
+              ]}
+            />
+          </>
         ) : null}
       </div>
     </SessionStatusGate>

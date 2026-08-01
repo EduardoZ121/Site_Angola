@@ -130,17 +130,11 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  opacity: 0;
-  transition: opacity 480ms ease;
-}
-
-.kuteka-atmosphere-media.is-ready,
-.kuteka-atmosphere-video {
   opacity: 1;
 }
 
 .kuteka-atmosphere-video {
-  transition: opacity 700ms ease;
+  opacity: 1;
 }
 
 .kuteka-atmosphere-kenburns {
@@ -263,35 +257,6 @@ body {
   }
 }
 
-/* Feed motion — presence, not noise */
-@keyframes kuteka-feed-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.kuteka-feed-section {
-  animation: kuteka-feed-in 320ms ease-out both;
-}
-
-.kuteka-feed-section:nth-child(2) {
-  animation-delay: 40ms;
-}
-.kuteka-feed-section:nth-child(3) {
-  animation-delay: 80ms;
-}
-.kuteka-feed-section:nth-child(4) {
-  animation-delay: 120ms;
-}
-.kuteka-feed-section:nth-child(5) {
-  animation-delay: 160ms;
-}
-
 /* Elevate common solid surfaces inside the app main over the atmosphere */
 .kuteka-app-main .rounded-kuteka.border.border-slate-200.bg-white,
 .kuteka-app-main .rounded-kuteka.border.border-slate-200.bg-slate-50\/80 {
@@ -304,14 +269,6 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .kuteka-atmosphere-kenburns {
-    animation: none;
-  }
-  .kuteka-atmosphere-media,
-  .kuteka-atmosphere-video {
-    transition: none;
-    opacity: 1;
-  }
-  .kuteka-feed-section {
     animation: none;
   }
 }
