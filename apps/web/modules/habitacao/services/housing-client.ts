@@ -131,10 +131,49 @@ export type ExploreFilters = {
   query?: string | null;
 };
 
-export async function exploreActiveProperties(
-  filters: ExploreFilters = {},
-): Promise<{ ok: true; data: HousingPropertyRow[] } | { ok: false; message: string }> {
+export type ExplorePageParams = ExploreFilters & {
+  /** Zero-based row offset (Supabase range). */
+  offset?: number;
+  /** Page size — keep small for feed fluidity (default 12). */
+  limit?: number;
+};
+
+export type ExplorePageResult = {
+  rows: HousingPropertyRow[];
+  offset: number;
+  limit: number;
+  hasMore: boolean;
+  nextOffset: number;
+};
+
+const DEFAULT_EXPLORE_LIMIT = 12;
+/** Legacy callers that still want a bounded one-shot list. */
+const LEGACY_EXPLORE_CAP = 48;
+
+function filterByQuery(rows: HousingPropertyRow[], query?: string | null): HousingPropertyRow[] {
+  const q = query?.trim().toLowerCase();
+  if (!q) return rows;
+  return rows.filter(
+    (r) =>
+      r.title.toLowerCase().includes(q) ||
+      r.code.toLowerCase().includes(q) ||
+      (r.city ?? '').toLowerCase().includes(q) ||
+      (r.province ?? '').toLowerCase().includes(q) ||
+      (r.address_line ?? '').toLowerCase().includes(q),
+  );
+}
+
+/**
+ * Paginated explore — foundation for infinite feed at scale.
+ * Uses Supabase `.range(from, to)` instead of loading hundreds of rows.
+ */
+export async function exploreActivePropertiesPage(
+  params: ExplorePageParams = {},
+): Promise<{ ok: true; data: ExplorePageResult } | { ok: false; message: string }> {
   const copy = getHabitacaoCopy();
+  const offset = Math.max(0, params.offset ?? 0);
+  const limit = Math.min(48, Math.max(1, params.limit ?? DEFAULT_EXPLORE_LIMIT));
+
   try {
     const client = createBrowserClient();
     let query = client
@@ -142,41 +181,57 @@ export async function exploreActiveProperties(
       .select(PROPERTY_SELECT)
       .eq('status', 'active')
       .is('deleted_at', null)
-      .order('created_at', { ascending: false })
-      .limit(200);
+      .order('created_at', { ascending: false });
 
-    if (filters.purpose && filters.purpose !== 'both') {
-      query = query.in('purpose', [filters.purpose, 'both']);
+    if (params.purpose && params.purpose !== 'both') {
+      query = query.in('purpose', [params.purpose, 'both']);
     }
-    if (filters.province?.trim()) {
-      query = query.ilike('province', `%${filters.province.trim()}%`);
+    if (params.province?.trim()) {
+      query = query.ilike('province', `%${params.province.trim()}%`);
     }
-    if (filters.city?.trim()) {
-      query = query.ilike('city', `%${filters.city.trim()}%`);
+    if (params.city?.trim()) {
+      query = query.ilike('city', `%${params.city.trim()}%`);
     }
-    if (filters.propertyType?.trim()) {
-      query = query.eq('property_type', filters.propertyType.trim());
+    if (params.propertyType?.trim()) {
+      query = query.eq('property_type', params.propertyType.trim());
     }
 
-    const { data, error } = await query;
+    // Fetch one extra row to detect hasMore without a separate count query.
+    const from = offset;
+    const to = offset + limit; // inclusive end → limit+1 rows when available
+    const { data, error } = await query.range(from, to);
     if (error) return { ok: false, message: copy.loadError };
 
-    let rows = (data as HousingPropertyRow[]) ?? [];
-    const q = filters.query?.trim().toLowerCase();
-    if (q) {
-      rows = rows.filter(
-        (r) =>
-          r.title.toLowerCase().includes(q) ||
-          r.code.toLowerCase().includes(q) ||
-          (r.city ?? '').toLowerCase().includes(q) ||
-          (r.province ?? '').toLowerCase().includes(q) ||
-          (r.address_line ?? '').toLowerCase().includes(q),
-      );
-    }
-    return { ok: true, data: rows };
+    let rows = filterByQuery((data as HousingPropertyRow[]) ?? [], params.query);
+    const hasMore = rows.length > limit;
+    if (hasMore) rows = rows.slice(0, limit);
+
+    return {
+      ok: true,
+      data: {
+        rows,
+        offset,
+        limit,
+        hasMore,
+        nextOffset: offset + rows.length,
+      },
+    };
   } catch {
     return { ok: false, message: copy.loadError };
   }
+}
+
+/** @deprecated Prefer exploreActivePropertiesPage for scalable UIs. */
+export async function exploreActiveProperties(
+  filters: ExploreFilters = {},
+): Promise<{ ok: true; data: HousingPropertyRow[] } | { ok: false; message: string }> {
+  const page = await exploreActivePropertiesPage({
+    ...filters,
+    offset: 0,
+    limit: LEGACY_EXPLORE_CAP,
+  });
+  if (!page.ok) return page;
+  return { ok: true, data: page.data.rows };
 }
 
 export async function getActiveProperty(

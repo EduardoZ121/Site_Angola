@@ -107,6 +107,37 @@ body {
   @apply rounded-kuteka border border-red-400/35 bg-red-500/15 px-3.5 py-3 text-sm leading-relaxed text-red-50;
 }
 
+/* ─── App frame (ADR-013) — only the center pane scrolls ─────────────────── */
+.kuteka-app-frame {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.kuteka-app-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+.kuteka-feed-item {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 22rem;
+}
+
+/* Lighter compositing inside the app — fewer GPU-heavy blurs while scrolling */
+.kuteka-app-frame .kuteka-glass {
+  backdrop-filter: blur(10px) saturate(1.08);
+  -webkit-backdrop-filter: blur(10px) saturate(1.08);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 8px 22px rgba(2, 6, 23, 0.16);
+}
+
+.kuteka-app-frame .kuteka-atmosphere-veil {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 /* ─── Authenticated workspace atmosphere (Landing continuity) ───────────── */
 .kuteka-atmosphere {
   position: fixed;

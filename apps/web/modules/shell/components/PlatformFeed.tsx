@@ -1,174 +1,168 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Badge, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PropertyCard } from '@/modules/habitacao/components/PropertyCard';
-import {
-  exploreActiveProperties,
-  type HousingPropertyRow,
-} from '@/modules/habitacao/services/housing-client';
+import { exploreActivePropertiesPage } from '@/modules/habitacao/services/housing-client';
+import { appendFeedPage, type FeedStreamItem } from '../feed/feed-stream';
 import { SoftListSlot } from './SoftListSlot';
 
-type FeedSection = {
-  id: string;
+const PAGE_SIZE = 12;
+
+const FeedMarker = memo(function FeedMarker({
+  title,
+  hint,
+  badge,
+}: {
   title: string;
   hint: string;
   badge?: string;
-  rows: HousingPropertyRow[];
-};
-
-function shuffleStable(rows: HousingPropertyRow[], salt: number): HousingPropertyRow[] {
-  return [...rows].sort((a, b) => {
-    const ha = (a.id.charCodeAt(8) + salt) % 97;
-    const hb = (b.id.charCodeAt(8) + salt) % 97;
-    return ha - hb;
-  });
-}
-
-function byNewest(rows: HousingPropertyRow[]): HousingPropertyRow[] {
-  return [...rows].sort(
-    (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
-  );
-}
-
-function byPriceDesc(rows: HousingPropertyRow[]): HousingPropertyRow[] {
-  return [...rows].sort((a, b) => (b.price_aoa ?? 0) - (a.price_aoa ?? 0));
-}
-
-function FeedRail({ section }: { section: FeedSection }) {
-  if (!section.rows.length) return null;
+}) {
   return (
-    <section className="flex flex-col gap-3" aria-labelledby={`feed-${section.id}`}>
-      <div className="kuteka-glass flex flex-wrap items-end justify-between gap-2 p-4">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 id={`feed-${section.id}`} className="text-base font-semibold text-slate-900">
-              {section.title}
-            </h2>
-            {section.badge ? <Badge variant="brand">{section.badge}</Badge> : null}
-          </div>
-          <Text className="mt-1 text-sm text-slate-600">{section.hint}</Text>
+    <div className="kuteka-feed-item kuteka-glass flex flex-wrap items-end justify-between gap-2 px-4 py-3">
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <h2 className="text-sm font-semibold tracking-wide text-slate-900">{title}</h2>
+          {badge ? <Badge variant="brand">{badge}</Badge> : null}
         </div>
-        <Link
-          href="/app/habitacao/explorar"
-          className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
-        >
-          Ver tudo
-        </Link>
+        <Text className="mt-0.5 text-sm text-slate-600">{hint}</Text>
       </div>
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {section.rows.slice(0, 6).map((row) => (
-          <li key={`${section.id}-${row.id}`}>
-            <PropertyCard row={row} />
-          </li>
-        ))}
-      </ul>
-    </section>
+    </div>
   );
-}
+});
+
+const FeedLinkCard = memo(function FeedLinkCard({
+  title,
+  hint,
+  href,
+  cta,
+}: {
+  title: string;
+  hint: string;
+  href: string;
+  cta: string;
+}) {
+  return (
+    <div className="kuteka-feed-item kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0">
+        <p className="font-medium text-slate-900">{title}</p>
+        <Text className="mt-1 text-sm text-slate-600">{hint}</Text>
+      </div>
+      <Link
+        href={href}
+        className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit shrink-0')}
+      >
+        {cta}
+      </Link>
+    </div>
+  );
+});
+
+const FeedListing = memo(function FeedListing({
+  item,
+}: {
+  item: Extract<FeedStreamItem, { kind: 'listing' }>;
+}) {
+  return (
+    <div className="kuteka-feed-item">
+      <PropertyCard row={item.row} />
+    </div>
+  );
+});
 
 /**
- * Continuous activity feed for /app — no enter animations, no pulse skeletons.
+ * Continuous platform feed — infinite scroll, paginated Supabase reads.
+ * Markers are inline in the stream (LinkedIn-style), not finite page sections.
  */
 export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
-  const [rows, setRows] = useState<HousingPropertyRow[]>([]);
+  const [items, setItems] = useState<FeedStreamItem[]>([]);
+  const [offset, setOffset] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
   const [hydrated, setHydrated] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const inflight = useRef(false);
 
-  useEffect(() => {
-    let cancelled = false;
-    async function load() {
-      if (!canExplore) {
-        setRows([]);
-        setHydrated(true);
-        return;
-      }
-      const result = await exploreActiveProperties({});
-      if (cancelled) return;
+  const loadPage = useCallback(
+    async (nextOffset: number, nextPageIndex: number) => {
+      if (!canExplore || inflight.current) return;
+      inflight.current = true;
+      if (nextOffset > 0) setLoadingMore(true);
+
+      const result = await exploreActivePropertiesPage({
+        offset: nextOffset,
+        limit: PAGE_SIZE,
+      });
+
       if (!result.ok) {
         setError(result.message);
-        setRows([]);
-      } else {
-        setError(null);
-        setRows(result.data);
+        setHasMore(false);
+        setHydrated(true);
+        setLoadingMore(false);
+        inflight.current = false;
+        return;
       }
+
+      setError(null);
+      setItems((prev) => appendFeedPage(prev, result.data.rows, nextPageIndex));
+      setOffset(result.data.nextOffset);
+      setPageIndex(nextPageIndex + 1);
+      setHasMore(result.data.hasMore);
       setHydrated(true);
+      setLoadingMore(false);
+      inflight.current = false;
+    },
+    [canExplore],
+  );
+
+  useEffect(() => {
+    if (!canExplore) {
+      setItems([]);
+      setHydrated(true);
+      setHasMore(false);
+      return;
     }
-    void load();
-    return () => {
-      cancelled = true;
-    };
-  }, [canExplore]);
+    setItems([]);
+    setOffset(0);
+    setPageIndex(0);
+    setHasMore(true);
+    setHydrated(false);
+    void loadPage(0, 0);
+  }, [canExplore, loadPage]);
 
-  const sections = useMemo((): FeedSection[] => {
-    if (!rows.length) return [];
-    const newest = byNewest(rows);
-    const premium = byPriceDesc(rows).filter((r) => (r.price_aoa ?? 0) >= 50_000_000);
-    const luanda = rows.filter((r) => (r.province || '').toLowerCase().includes('luanda'));
-    const rent = rows.filter((r) => r.purpose === 'rent' || r.purpose === 'both');
-    const popular = shuffleStable(rows, 11);
-    const sponsored = shuffleStable(
-      rows.filter((r) => r.is_demo),
-      3,
+  useEffect(() => {
+    if (!canExplore || !hydrated || !hasMore) return;
+    const node = sentinelRef.current;
+    if (!node) return;
+
+    const scrollRoot =
+      typeof document !== 'undefined'
+        ? document.querySelector<HTMLElement>('.kuteka-app-scroll')
+        : null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          void loadPage(offset, pageIndex);
+        }
+      },
+      { root: scrollRoot, rootMargin: '640px 0px', threshold: 0 },
     );
-
-    return [
-      {
-        id: 'recent',
-        title: 'Publicados recentemente',
-        hint: 'Novos anúncios a entrar na plataforma.',
-        rows: newest,
-      },
-      {
-        id: 'featured',
-        title: 'Em destaque',
-        hint: 'Patrimónios premium seleccionados para si.',
-        badge: 'Destaque',
-        rows: premium.length ? premium : newest,
-      },
-      {
-        id: 'nearby',
-        title: 'Próximos de si',
-        hint: 'Inventário em Luanda e arredores.',
-        rows: luanda.length ? luanda : newest,
-      },
-      {
-        id: 'rent',
-        title: 'Recomendações para arrendar',
-        hint: 'Opções activas de arrendamento.',
-        rows: rent.length ? rent : newest,
-      },
-      {
-        id: 'popular',
-        title: 'Populares esta semana',
-        hint: 'Anúncios com maior interesse na comunidade.',
-        rows: popular,
-      },
-      {
-        id: 'sponsored',
-        title: 'Novidades & patrocinados',
-        hint: 'Campanhas e inventário demo para explorar a Kuteka.',
-        badge: 'Patrocinado',
-        rows: sponsored.length ? sponsored : newest,
-      },
-      {
-        id: 'smart',
-        title: 'Recomendações inteligentes',
-        hint: 'Sugestões com base no inventário activo da plataforma.',
-        badge: 'KAI prep',
-        rows: shuffleStable(rows, 29),
-      },
-    ];
-  }, [rows]);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [canExplore, hydrated, hasMore, offset, pageIndex, loadPage]);
 
   if (!canExplore) {
     return (
       <div className="kuteka-glass p-5">
         <p className="font-medium text-slate-900">Active o papel Cliente para ver o feed</p>
         <Text className="mt-1 text-sm text-slate-600">
-          O feed mostra patrimónios, destaques e recomendações assim que tiver acesso a Habitação.
+          O feed contínuo mostra patrimónios, destaques e recomendações assim que tiver acesso a
+          Habitação.
         </Text>
         <Link
           href="/auth/onboarding/papeis"
@@ -181,7 +175,7 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
   }
 
   return (
-    <SoftListSlot pending={!hydrated} minHeightClassName="min-h-[28rem]">
+    <SoftListSlot pending={!hydrated} minHeightClassName="min-h-[70vh]">
       {error ? (
         <div
           role="alert"
@@ -191,20 +185,67 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
         </div>
       ) : null}
 
-      {!error && hydrated && !sections.length ? (
+      {hydrated && !error && items.length === 0 ? (
         <div className="kuteka-glass p-5">
           <p className="font-medium text-slate-900">Feed a aquecer</p>
           <Text className="mt-1 text-sm text-slate-600">
-            Ainda não há anúncios activos. Explore Habitação ou publique o primeiro património.
+            Ainda não há anúncios activos. Publique o primeiro património ou explore Habitação.
           </Text>
         </div>
       ) : null}
 
-      {sections.length ? (
-        <div className="flex flex-col gap-8">
-          {sections.map((section) => (
-            <FeedRail key={section.id} section={section} />
-          ))}
+      {items.length ? (
+        <div className="flex flex-col gap-4" role="feed" aria-busy={loadingMore || undefined}>
+          {items.map((item) => {
+            if (item.kind === 'marker') {
+              return (
+                <FeedMarker
+                  key={item.key}
+                  title={item.theme.title}
+                  hint={item.theme.hint}
+                  badge={item.theme.badge}
+                />
+              );
+            }
+            if (item.kind === 'link-card') {
+              return (
+                <FeedLinkCard
+                  key={item.key}
+                  title={item.title}
+                  hint={item.hint}
+                  href={item.href}
+                  cta={item.cta}
+                />
+              );
+            }
+            return <FeedListing key={item.key} item={item} />;
+          })}
+
+          <div ref={sentinelRef} className="h-8 w-full" aria-hidden />
+
+          {loadingMore ? (
+            <p className="py-2 text-center text-xs text-slate-500">A carregar mais…</p>
+          ) : null}
+
+          {!hasMore && items.length > 0 ? (
+            <div className="kuteka-glass px-4 py-4 text-center">
+              <p className="text-sm font-medium text-slate-800">
+                Chegou ao fim do inventário actual
+              </p>
+              <Text className="mt-1 text-sm text-slate-600">
+                Novos patrimónios aparecem aqui assim que forem publicados.
+              </Text>
+              <Link
+                href="/app/habitacao/explorar"
+                className={cn(
+                  buttonVariants({ variant: 'secondary', size: 'sm' }),
+                  'mt-3 inline-flex',
+                )}
+              >
+                Explorar com filtros
+              </Link>
+            </div>
+          ) : null}
         </div>
       ) : null}
     </SoftListSlot>

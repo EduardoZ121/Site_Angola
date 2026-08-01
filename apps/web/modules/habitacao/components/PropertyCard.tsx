@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import Link from 'next/link';
 import { Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
@@ -5,7 +6,7 @@ import { formatAoa } from '@/lib/format/aoa';
 import { getHabitacaoCopy } from '../content/pt';
 import type { HousingPropertyRow } from '../services/housing-client';
 
-export function PropertyCard({ row }: { row: HousingPropertyRow }) {
+function PropertyCardComponent({ row }: { row: HousingPropertyRow }) {
   const copy = getHabitacaoCopy();
   const href = `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`;
 
@@ -21,6 +22,7 @@ export function PropertyCard({ row }: { row: HousingPropertyRow }) {
           src={row.cover_image_url || '/images/hero.jpg'}
           alt=""
           loading="lazy"
+          decoding="async"
           className="h-full w-full object-cover"
         />
       </Link>
@@ -58,3 +60,5 @@ export function PropertyCard({ row }: { row: HousingPropertyRow }) {
     </article>
   );
 }
+
+export const PropertyCard = memo(PropertyCardComponent);
