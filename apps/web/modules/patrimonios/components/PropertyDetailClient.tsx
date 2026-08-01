@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Heading, Badge, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
@@ -50,17 +51,23 @@ export function PropertyDetailClient({ id }: { id: string }) {
 
   if (error || !row) {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <Heading level={1}>{copy.detailTitle}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {error ?? copy.loadError}
-        </div>
-        <Link
-          href="/app/patrimonios"
-          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
-        >
-          {copy.backToList}
-        </Link>
+        <EmptyState
+          title={copy.loadError}
+          description={error ?? 'Este património pode ter sido removido ou não está acessível.'}
+          action={
+            <Link href="/app/patrimonios" className={cn(buttonVariants({ variant: 'primary' }))}>
+              Ver patrimónios
+            </Link>
+          }
+        />
+        <FlowNextSteps
+          steps={[
+            { href: '/app/patrimonios/novo', label: copy.activate, primary: true },
+            { href: '/app/confianca', label: 'Verificar conta' },
+          ]}
+        />
       </div>
     );
   }
@@ -109,6 +116,8 @@ export function PropertyDetailClient({ id }: { id: string }) {
               <button
                 type="button"
                 onClick={() => setActiveUrl(m.public_url)}
+                aria-label={`Fotografia ${m.sort_order + 1} de ${row.title}`}
+                aria-pressed={activeUrl === m.public_url}
                 className={cn(
                   'block overflow-hidden rounded-kuteka border',
                   activeUrl === m.public_url ? 'border-brand-500' : 'border-slate-200',

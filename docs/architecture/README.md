@@ -14,5 +14,8 @@
 | [ADR-008](ADR-008-agent-module.md)                      | Agente / PRD-004      | ✅ Aceite / N5 (2026-08-01) |
 | [ADR-009](ADR-009-admin-module.md)                      | Admin / PRD-005       | ✅ Aceite / N5 (2026-08-01) |
 | [ADR-010](ADR-010-trust-module.md)                      | Confiança / PRD-006   | ✅ Aceite / N5 (2026-08-01) |
+| [ADR-011](ADR-011-core-v1-freeze.md)                    | Core v1.0 freeze      | ✅ Aceite (2026-08-01)      |
 
+Baseline de produto: `docs/product/KUTEKA_PLATFORM_CORE_V1.md`  
+Maturidade: `docs/backlog/CORE_V1_MATURITY_REPORT.md`  
 Processo: `docs/engineering/DEVELOPMENT_PROCESS.md`

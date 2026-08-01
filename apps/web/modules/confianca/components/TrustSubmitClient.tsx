@@ -7,14 +7,15 @@ import { TRUST_DOC_TYPES } from '@kuteka/validation';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
-import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
+import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { getConfiancaCopy } from '../content/pt';
 import { submitTrustDocument } from '../services/trust-client';
 
 export function TrustSubmitClient() {
   const copy = getConfiancaCopy();
   const router = useRouter();
-  const { session, status: sessionStatus } = useAppSession();
+  const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('trust.manage');
 
   const [docType, setDocType] = useState<(typeof TRUST_DOC_TYPES)[number]>('identity');
@@ -41,26 +42,27 @@ export function TrustSubmitClient() {
     router.push('/app/confianca');
   }
 
-  if (sessionStatus === 'loading') return <ModuleSkeleton rows={3} />;
+  if (sessionStatus !== 'ready') {
+    return (
+      <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
+        {null}
+      </SessionStatusGate>
+    );
+  }
 
   if (!canManage) {
     return (
       <div className="flex flex-col gap-4">
         <Heading level={1}>{copy.submitTitle}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {copy.forbidden}
-        </div>
+        <ForbiddenPanel message={copy.forbidden} />
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Verificação
-          </p>
           <Heading level={1}>{copy.submitTitle}</Heading>
           <Text className="text-slate-600">{copy.submitHint}</Text>
         </div>

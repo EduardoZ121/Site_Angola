@@ -14,6 +14,52 @@ describe('shell nav', () => {
     expect(isNavItemVisible(admin, ['platform.access', 'admin.panel'])).toBe(true);
   });
 
+  it('gates product modules by permission (agente stays open for demo)', () => {
+    const base = ['platform.access'];
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!,
+        base,
+      ),
+    ).toBe(false);
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'patrimonios')!,
+        [...base, 'properties.manage'],
+      ),
+    ).toBe(true);
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'habitacao')!,
+        base,
+      ),
+    ).toBe(false);
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'habitacao')!,
+        [...base, 'housing.explore'],
+      ),
+    ).toBe(true);
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'agente')!,
+        base,
+      ),
+    ).toBe(true);
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'confianca')!,
+        base,
+      ),
+    ).toBe(false);
+    expect(
+      isNavItemVisible(
+        SHELL_NAV_ITEMS.find((i) => i.id === 'confianca')!,
+        [...base, 'trust.manage'],
+      ),
+    ).toBe(true);
+  });
+
   it('marks /app home active only on the home path', () => {
     const home = SHELL_NAV_ITEMS.find((i) => i.id === 'home')!;
     expect(isNavItemActive(home, '/app')).toBe(true);

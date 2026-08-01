@@ -31,6 +31,7 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   patrimonios: {
     image:
       'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=2000&q=80',
+    imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-white-luxury-home-exterior-and-pool-5061-large.mp4',
     alt: 'Moradia contemporânea com arquitectura premium',
@@ -41,6 +42,7 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   habitacao: {
     image:
       'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=80',
+    imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-luxury-house-4703-large.mp4',
     alt: 'Interior residencial elegante',
@@ -51,6 +53,7 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   agente: {
     image:
       'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=2000&q=80',
+    imageMobile: '/images/hero-mobile.jpg',
     video: 'https://assets.mixkit.co/videos/preview/mixkit-man-working-on-his-laptop-308-large.mp4',
     alt: 'Mediação e trabalho de campo',
     eyebrow: 'Agente Certificado',
@@ -60,6 +63,7 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   confianca: {
     image:
       'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=2000&q=80',
+    imageMobile: '/images/hero-mobile.jpg',
     alt: 'Documentação e verificação segura',
     eyebrow: 'Verificação',
     title: 'Relações seguras com evidência',
@@ -68,6 +72,7 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   admin: {
     image:
       'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=2000&q=80',
+    imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-modern-office-space-with-furniture-and-large-windows-4492-large.mp4',
     alt: 'Ambiente executivo de operação',

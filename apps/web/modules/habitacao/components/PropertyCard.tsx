@@ -11,7 +11,11 @@ export function PropertyCard({ row }: { row: HousingPropertyRow }) {
 
   return (
     <article className="kuteka-glass flex h-full flex-col overflow-hidden transition-shadow hover:shadow-md">
-      <Link href={href} className="block aspect-[16/10] bg-slate-100">
+      <Link
+        href={href}
+        className="block aspect-[16/10] bg-slate-100"
+        aria-label={`Fotografia: ${row.title}`}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={row.cover_image_url || '/images/hero.jpg'}

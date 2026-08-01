@@ -6,8 +6,10 @@ import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import {
   listPropertyMedia,
   type PropertyMediaRow,
@@ -22,7 +24,7 @@ import {
 
 export function HousingDetailClient({ id }: { id: string }) {
   const copy = getHabitacaoCopy();
-  const { session, status: sessionStatus } = useAppSession();
+  const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canExplore = session?.permissions.includes('housing.explore') ?? false;
 
   const [row, setRow] = useState<HousingPropertyRow | null>(null);
@@ -62,6 +64,10 @@ export function HousingDetailClient({ id }: { id: string }) {
       }
       setLoading(false);
     }
+    if (sessionStatus === 'error') {
+      setLoading(false);
+      return;
+    }
     if (sessionStatus === 'ready') void load();
     return () => {
       cancelled = true;
@@ -82,21 +88,38 @@ export function HousingDetailClient({ id }: { id: string }) {
     setMessage(copy.interestDone);
   }
 
-  if (loading || sessionStatus === 'loading') return <ModuleSkeleton rows={4} />;
+  if (sessionStatus !== 'ready') {
+    return (
+      <SessionStatusGate status={sessionStatus} error={sessionError} rows={4}>
+        {null}
+      </SessionStatusGate>
+    );
+  }
+
+  if (loading) return <ModuleSkeleton rows={4} />;
 
   if (error || !row) {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <Heading level={1}>{copy.detailTitle}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {error ?? copy.loadError}
-        </div>
-        <Link
-          href="/app/habitacao/explorar"
-          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
-        >
-          {copy.backToExplore}
-        </Link>
+        <EmptyState
+          title={copy.loadError}
+          description={error ?? 'Este anúncio pode já não estar activo.'}
+          action={
+            <Link
+              href="/app/habitacao/explorar"
+              className={cn(buttonVariants({ variant: 'primary' }))}
+            >
+              Explorar habitação
+            </Link>
+          }
+        />
+        <FlowNextSteps
+          steps={[
+            { href: '/app/habitacao/explorar', label: 'Explorar inventário', primary: true },
+            { href: '/app/confianca', label: 'Verificar conta' },
+          ]}
+        />
       </div>
     );
   }
@@ -146,6 +169,8 @@ export function HousingDetailClient({ id }: { id: string }) {
               <button
                 type="button"
                 onClick={() => setActiveUrl(m.public_url)}
+                aria-label={`Fotografia ${m.sort_order + 1} de ${row.title}`}
+                aria-pressed={activeUrl === m.public_url}
                 className={cn(
                   'block overflow-hidden rounded-kuteka border',
                   activeUrl === m.public_url ? 'border-brand-500' : 'border-slate-200',

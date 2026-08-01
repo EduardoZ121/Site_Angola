@@ -8,34 +8,34 @@ import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAuthCopy } from '../content';
 import { useAppSession, roleLabelPt } from './app-session';
 
-const MODULE_LINKS = [
+const MODULE_DEFS = [
   {
     key: 'patrimonios',
     title: 'Patrimónios',
     description: 'Publique anúncios com fotografias, preço e galeria.',
-    href: '/app/patrimonios' as string | null,
-    status: 'active' as const,
+    href: '/app/patrimonios',
+    permission: 'properties.manage' as const,
   },
   {
     key: 'habitacao',
     title: 'Habitação',
     description: 'Explore inventário activo e demonstre interesse.',
-    href: '/app/habitacao/explorar' as string | null,
-    status: 'active' as const,
+    href: '/app/habitacao/explorar',
+    permission: 'housing.explore' as const,
   },
   {
     key: 'agente',
     title: 'Agente',
     description: 'Pipeline, visitas e acompanhamentos no terreno.',
-    href: '/app/agente' as string | null,
-    status: 'active' as const,
+    href: '/app/agente',
+    permission: null,
   },
   {
     key: 'confianca',
     title: 'Confiança',
     description: 'Verifique a conta — Em análise, Aprovado ou Rejeitado.',
-    href: '/app/confianca' as string | null,
-    status: 'active' as const,
+    href: '/app/confianca',
+    permission: 'trust.manage' as const,
   },
 ] as const;
 
@@ -201,46 +201,53 @@ export function AppHomeClient() {
         </div>
 
         <ul className="grid gap-3">
-          {MODULE_LINKS.map((mod) => (
-            <li key={mod.key}>
-              {mod.href && mod.status === 'active' ? (
-                <Link
-                  href={mod.href}
-                  className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition-colors hover:border-brand-300"
-                >
-                  <div className="min-w-0">
-                    <p className="font-medium text-slate-800">{mod.title}</p>
-                    <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+          {MODULE_DEFS.map((mod) => {
+            const available =
+              mod.permission == null || session.permissions.includes(mod.permission);
+            return (
+              <li key={mod.key}>
+                {available ? (
+                  <Link
+                    href={mod.href}
+                    className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition-colors hover:border-brand-300"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-medium text-slate-800">{mod.title}</p>
+                      <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+                    </div>
+                    <span className="shrink-0 rounded-kuteka border border-brand-200 bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-800">
+                      {copy.app.moduleAvailable}
+                    </span>
+                  </Link>
+                ) : (
+                  <div
+                    aria-disabled="true"
+                    className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-slate-50/80 px-4 py-4"
+                  >
+                    <div className="min-w-0">
+                      <p className="font-medium text-slate-700">{mod.title}</p>
+                      <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
+                    </div>
+                    <span className="shrink-0 rounded-kuteka border border-slate-200 bg-white px-2 py-0.5 text-xs font-medium text-slate-500">
+                      {copy.app.moduleUnavailable}
+                    </span>
                   </div>
-                  <span className="shrink-0 rounded-kuteka border border-brand-200 bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-800">
-                    {copy.app.moduleAvailable}
-                  </span>
-                </Link>
-              ) : (
-                <div
-                  aria-disabled="true"
-                  className="flex items-start justify-between gap-4 rounded-kuteka border border-slate-200 bg-slate-50/80 px-4 py-4"
-                >
-                  <div className="min-w-0">
-                    <p className="font-medium text-slate-700">{mod.title}</p>
-                    <p className="mt-0.5 text-sm text-slate-500">{mod.description}</p>
-                  </div>
-                  <span className="shrink-0 rounded-kuteka border border-slate-200 bg-white px-2 py-0.5 text-xs font-medium text-slate-500">
-                    {copy.app.moduleUnavailable}
-                  </span>
-                </div>
-              )}
-            </li>
-          ))}
+                )}
+              </li>
+            );
+          })}
         </ul>
       </section>
 
       <FlowNextSteps
         title="Comece o percurso Kuteka"
         steps={[
-          { href: '/app/habitacao/explorar', label: 'Explorar habitação', primary: true },
-          { href: '/app/patrimonios/novo', label: 'Publicar património' },
-          { href: '/app/confianca', label: 'Verificar conta' },
+          ...(canHousing
+            ? [{ href: '/app/habitacao/explorar', label: 'Explorar habitação', primary: true }]
+            : [{ href: '/app', label: 'Explorar o painel', primary: true }]),
+          ...(canManage ? [{ href: '/app/patrimonios/novo', label: 'Publicar património' }] : []),
+          ...(canTrust ? [{ href: '/app/confianca', label: 'Verificar conta' }] : []),
+          { href: '/auth/onboarding/papeis', label: 'Activar papéis' },
         ]}
       />
     </div>

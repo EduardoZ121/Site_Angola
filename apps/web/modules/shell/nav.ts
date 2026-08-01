@@ -1,7 +1,9 @@
 /**
- * Platform Shell navigation (Fase 3 · D3–D5).
- * Single nav for all roles; availability is active | soon | permission-gated.
+ * Platform Shell navigation (Fase 3 · Core v1.0).
+ * Product modules are permission-gated; Agente stays visible for demo pipeline.
  */
+
+import type { PermissionCode } from '@kuteka/types';
 
 export type ShellNavStatus = 'active' | 'soon';
 
@@ -11,15 +13,33 @@ export type ShellNavItem = {
   href?: string;
   status: ShellNavStatus;
   /** When set, item is hidden unless the user has this permission. */
-  requiresPermission?: 'admin.panel';
+  requiresPermission?: PermissionCode;
 };
 
 export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
   { id: 'home', labelKey: 'home', href: '/app', status: 'active' },
-  { id: 'patrimonios', labelKey: 'patrimonios', href: '/app/patrimonios', status: 'active' },
-  { id: 'habitacao', labelKey: 'habitacao', href: '/app/habitacao', status: 'active' },
+  {
+    id: 'patrimonios',
+    labelKey: 'patrimonios',
+    href: '/app/patrimonios',
+    status: 'active',
+    requiresPermission: 'properties.manage',
+  },
+  {
+    id: 'habitacao',
+    labelKey: 'habitacao',
+    href: '/app/habitacao',
+    status: 'active',
+    requiresPermission: 'housing.explore',
+  },
   { id: 'agente', labelKey: 'agente', href: '/app/agente', status: 'active' },
-  { id: 'confianca', labelKey: 'confianca', href: '/app/confianca', status: 'active' },
+  {
+    id: 'confianca',
+    labelKey: 'confianca',
+    href: '/app/confianca',
+    status: 'active',
+    requiresPermission: 'trust.manage',
+  },
   {
     id: 'admin',
     labelKey: 'admin',

@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
+import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
+import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { getAdministracaoCopy } from '../content/pt';
 import {
   fetchPlatformStats,
@@ -18,7 +20,7 @@ import {
 
 export function AdminHubClient() {
   const copy = getAdministracaoCopy();
-  const { session, status: sessionStatus } = useAppSession();
+  const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const allowed = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
 
   const [stats, setStats] = useState<PlatformStats | null>(null);
@@ -49,21 +51,38 @@ export function AdminHubClient() {
       if (pendingResult.ok) setPending(pendingResult.data);
       setLoading(false);
     }
+    if (sessionStatus === 'error') {
+      setLoading(false);
+      return;
+    }
     if (sessionStatus === 'ready') void load();
     return () => {
       cancelled = true;
     };
   }, [allowed, sessionStatus]);
 
-  if (sessionStatus === 'loading') return <ModuleSkeleton rows={3} />;
+  if (sessionStatus !== 'ready') {
+    return (
+      <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
+        {null}
+      </SessionStatusGate>
+    );
+  }
 
   if (!allowed) {
     return (
       <div className="flex flex-col gap-4">
         <Heading level={1}>{copy.title}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {copy.forbidden}
-        </div>
+        <ForbiddenPanel
+          message={copy.forbidden}
+          primaryHref="/app"
+          primaryLabel="Ir ao painel"
+          steps={[
+            { href: '/app', label: 'Painel', primary: true },
+            { href: '/app/confianca', label: 'Confiança' },
+            { href: '/contacto', label: 'Contactar Kuteka' },
+          ]}
+        />
       </div>
     );
   }
@@ -74,9 +93,6 @@ export function AdminHubClient() {
         <div className="flex flex-col gap-2">
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
-          <Badge variant="brand" className="w-fit">
-            {copy.permissionBadge}
-          </Badge>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link

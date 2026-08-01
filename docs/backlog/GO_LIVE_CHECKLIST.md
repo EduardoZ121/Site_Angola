@@ -1,24 +1,28 @@
 # Checklist go-live Kuteka (mínimo)
 
-## Já feito
+## Já feito (Core v1.0)
 
-- [x] Landing KEOS
+- [x] Landing
 - [x] CI quality
-- [x] PRD-001 auth código (**N5 concluído**)
-- [x] `/auth/*` · `/app` no ar
-- [x] E3 domínio público KEOS
-- [x] E4 Deploy Kuteka
-- [x] E2 / P2 Supabase remoto (`vhqwitbrpqaiutjbundo`, migrations + seed + auth URLs)
-- [x] `kuteka-config.js` + GitHub Secrets
-- [x] Fluxo Registo → Verificação → Login → Onboarding → `/app` (validação PO)
-- [x] Logout `/auth/sair`
+- [x] Auth N5 · Shell N5 · PRD-002…007 N5
+- [x] Domínio público + Deploy Kuteka
+- [x] Supabase remoto (migrations + seed + auth URLs)
+- [x] Fluxo Registo → Login → Onboarding → `/app`
+- [x] Premium Experience + inventário demo
+- [x] Congelamento Core v1.0 + relatório de maturidade
 
-## Opcional
+## Antes de beta pública
 
+- [ ] Aplicar migration `0010_core_v1_hardening.sql` em todos os ambientes
+- [ ] Executar `disable_demo_partner_account()` (ban `demo.parceiro@kuteka.local`)
+- [ ] Confirmar ausência de credenciais demo em documentação pública
+- [ ] Decidir privacidade do bucket `property-media` (drafts)
+- [ ] Upload real de documentos Confiança
+- [ ] Smoke E2E multi-papel (mobile / tablet / desktop)
 - [ ] (P4) templates email com marca Kuteka
-- [ ] E1 — actualizar `deploy.yml` activo para pnpm
 
-## Próximo produto
+## Expansão pós-Core
 
-- [x] Shell da plataforma (fase 3) — N5
-- [ ] PRD-002 — Parceiro Patrimonial
+- [ ] Contratos (N1→N5)
+- [ ] Pagamentos
+- [ ] Wallet · Passaporte · Academia · CRM · KAI

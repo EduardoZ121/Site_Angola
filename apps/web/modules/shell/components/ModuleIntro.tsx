@@ -1,20 +1,17 @@
 import { HERO_MEDIA, type HeroMediaPreset } from '../media/hero-media';
 
 /**
- * Atmospheric identity copy over the full-bleed background.
- * Uses a paragraph (not h1) so each module keeps a single page heading.
+ * Atmospheric identity strip over the full-bleed background.
+ * Eyebrow + supporting line only — module H1 owns the page title (Core v1.0).
  */
 export function ModuleIntro({ preset }: { preset: HeroMediaPreset }) {
   const source = HERO_MEDIA[preset];
   return (
-    <div className="kuteka-module-intro mb-6 sm:mb-8">
+    <div className="kuteka-module-intro mb-5 sm:mb-6">
       <p className="font-mono text-[11px] font-semibold tracking-[0.18em] text-brand-800 uppercase sm:text-xs">
         {source.eyebrow}
       </p>
-      <p className="mt-2 max-w-2xl text-2xl font-semibold tracking-tight text-slate-950 sm:text-3xl">
-        {source.title}
-      </p>
-      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-800 sm:text-base">
+      <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-slate-700 sm:text-[0.95rem]">
         {source.subtitle}
       </p>
     </div>
