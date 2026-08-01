@@ -5,12 +5,14 @@ export const shellCopyPt = {
   openMenu: 'Abrir menu',
   closeMenu: 'Fechar menu',
   soon: 'Em breve',
+  notificationsSoon: 'Notificações — em breve',
   userMenuAria: 'Menu da conta',
   userMenu: {
     profile: 'Perfil',
     roles: 'Papéis',
     settings: 'Definições',
   },
+
   items: {
     home: 'Início',
     patrimonios: 'Patrimónios',

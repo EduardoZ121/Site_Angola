@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
+import { Badge, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getHabitacaoCopy } from '../content/pt';
 import { getActiveProperty, type HousingPropertyRow } from '../services/housing-client';
 
@@ -34,7 +35,7 @@ export function HousingDetailClient({ id }: { id: string }) {
     };
   }, [id]);
 
-  if (loading) return <Text className="text-slate-500">A carregar…</Text>;
+  if (loading) return <ModuleSkeleton rows={4} />;
 
   if (error || !row) {
     return (

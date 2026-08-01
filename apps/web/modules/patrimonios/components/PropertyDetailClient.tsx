@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
+import { Heading, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
 import { getProperty, type PropertyRow } from '../services/properties-client';
 
@@ -34,7 +35,7 @@ export function PropertyDetailClient({ id }: { id: string }) {
     };
   }, [id]);
 
-  if (loading) return <Text className="text-slate-500">A carregar…</Text>;
+  if (loading) return <ModuleSkeleton rows={4} />;
 
   if (error || !row) {
     return (

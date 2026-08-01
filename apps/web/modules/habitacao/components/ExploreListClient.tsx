@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getHabitacaoCopy } from '../content/pt';
 import {
   exploreActiveProperties,
@@ -59,6 +61,9 @@ export function ExploreListClient() {
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
+            Cliente
+          </p>
           <Heading level={1}>{copy.exploreTitle}</Heading>
           <Text className="text-slate-600">{copy.exploreSubtitle}</Text>
         </div>
@@ -82,7 +87,7 @@ export function ExploreListClient() {
         </div>
       ) : null}
 
-      {loading ? <Text className="text-slate-500">A carregar…</Text> : null}
+      {loading ? <ModuleSkeleton rows={3} /> : null}
       {error ? (
         <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
           {error}
@@ -90,9 +95,15 @@ export function ExploreListClient() {
       ) : null}
 
       {!loading && !error && canExplore && rows.length === 0 ? (
-        <div className="rounded-kuteka border border-dashed border-slate-200 px-4 py-10 text-center">
-          <Text className="text-slate-600">{copy.empty}</Text>
-        </div>
+        <EmptyState
+          title={copy.emptyTitle}
+          description={copy.empty}
+          action={
+            <Link href="/app/habitacao" className={cn(buttonVariants({ variant: 'primary' }))}>
+              {copy.emptyCta}
+            </Link>
+          }
+        />
       ) : null}
 
       {rows.length > 0 ? (

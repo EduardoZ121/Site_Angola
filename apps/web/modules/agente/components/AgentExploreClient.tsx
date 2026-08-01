@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getAgenteCopy } from '../content/pt';
 import {
   exploreActiveProperties,
@@ -59,6 +61,9 @@ export function AgentExploreClient() {
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
+            Representação Kuteka
+          </p>
           <Heading level={1}>{copy.exploreTitle}</Heading>
           <Text className="text-slate-600">{copy.exploreSubtitle}</Text>
         </div>
@@ -76,7 +81,7 @@ export function AgentExploreClient() {
         </div>
       ) : null}
 
-      {loading ? <Text className="text-slate-500">A carregar…</Text> : null}
+      {loading ? <ModuleSkeleton rows={3} /> : null}
       {error ? (
         <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
           {error}
@@ -84,9 +89,15 @@ export function AgentExploreClient() {
       ) : null}
 
       {!loading && !error && canOperate && rows.length === 0 ? (
-        <div className="rounded-kuteka border border-dashed border-slate-200 px-4 py-10 text-center">
-          <Text className="text-slate-600">{copy.emptyExplore}</Text>
-        </div>
+        <EmptyState
+          title={copy.emptyExploreTitle}
+          description={copy.emptyExplore}
+          action={
+            <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
+              {copy.backToHub}
+            </Link>
+          }
+        />
       ) : null}
 
       <ul className="flex flex-col gap-3">

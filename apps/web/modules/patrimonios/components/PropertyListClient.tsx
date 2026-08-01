@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { getPatrimoniosCopy } from '../content/pt';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
 
@@ -41,6 +43,9 @@ export function PropertyListClient() {
     <div className="flex flex-col gap-8">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
+            Parceiro Patrimonial
+          </p>
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
         </div>
@@ -68,7 +73,7 @@ export function PropertyListClient() {
 
       <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
-      {loading ? <Text className="text-slate-500">A carregar…</Text> : null}
+      {loading ? <ModuleSkeleton rows={3} /> : null}
       {error ? (
         <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
           {error}
@@ -76,24 +81,30 @@ export function PropertyListClient() {
       ) : null}
 
       {!loading && !error && rows.length === 0 ? (
-        <div className="rounded-kuteka border border-dashed border-slate-200 px-4 py-10 text-center">
-          <Text className="text-slate-600">{copy.empty}</Text>
-          {canManage ? (
-            <Link
-              href="/app/patrimonios/novo"
-              className={cn(buttonVariants({ variant: 'primary' }), 'mt-4 inline-flex')}
-            >
-              {copy.activate}
-            </Link>
-          ) : null}
-        </div>
+        <EmptyState
+          title={copy.emptyTitle}
+          description={copy.empty}
+          action={
+            canManage ? (
+              <Link
+                href="/app/patrimonios/novo"
+                className={cn(buttonVariants({ variant: 'primary' }))}
+              >
+                {copy.emptyCta}
+              </Link>
+            ) : null
+          }
+        />
       ) : null}
 
       {rows.length > 0 ? (
         <section aria-labelledby="property-list-heading" className="flex flex-col gap-3">
-          <h2 id="property-list-heading" className="text-sm font-semibold text-slate-800">
-            {copy.listHeading}
-          </h2>
+          <div className="flex flex-col gap-1">
+            <h2 id="property-list-heading" className="text-sm font-semibold text-slate-800">
+              {copy.listHeading}
+            </h2>
+            <Text className="text-sm text-slate-500">{copy.listHint}</Text>
+          </div>
           <ul className="flex flex-col gap-3">
             {rows.map((row) => (
               <li key={row.id}>
