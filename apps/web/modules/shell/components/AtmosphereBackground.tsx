@@ -8,16 +8,14 @@ type AtmosphereBackgroundProps = {
 };
 
 /**
- * Full-bleed cinematic atmosphere — same language as the Landing hero.
- * Dark veil + slow motion; content sits on glass above.
+ * Full-bleed cinematic atmosphere.
+ * Image always visible at opacity 1. Video mounts with poster — no delayed swap flash.
  */
 export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   const source = HERO_MEDIA[preset];
-  const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [narrow, setNarrow] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -35,21 +33,15 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
-  const imageSrc = narrow && source.imageMobile ? source.imageMobile : source.image;
-  const allowVideo = Boolean(source.video) && !reduceMotion && !narrow;
-
   useEffect(() => {
-    setImageLoaded(false);
-    setVideoReady(false);
     setVideoFailed(false);
-    if (!allowVideo) return;
-    const timer = window.setTimeout(() => setVideoReady(true), 600);
-    return () => window.clearTimeout(timer);
-  }, [preset, allowVideo, imageSrc]);
+  }, [preset]);
+
+  const imageSrc = narrow && source.imageMobile ? source.imageMobile : source.image;
+  const allowVideo = Boolean(source.video) && !reduceMotion && !narrow && !videoFailed;
 
   return (
     <div className="kuteka-atmosphere" aria-hidden>
-      {/* Base plate — never flash white while media loads */}
       <div className="kuteka-atmosphere-base" />
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -57,17 +49,13 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
         key={imageSrc}
         src={imageSrc}
         alt=""
-        className={`kuteka-atmosphere-media kuteka-atmosphere-kenburns${
-          imageLoaded ? ' is-ready' : ''
-        }`}
-        onLoad={() => setImageLoaded(true)}
+        className="kuteka-atmosphere-media kuteka-atmosphere-kenburns"
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src = '/images/hero.jpg';
-          setImageLoaded(true);
         }}
       />
 
-      {allowVideo && videoReady && !videoFailed ? (
+      {allowVideo ? (
         <video
           key={source.video}
           className="kuteka-atmosphere-media kuteka-atmosphere-video"

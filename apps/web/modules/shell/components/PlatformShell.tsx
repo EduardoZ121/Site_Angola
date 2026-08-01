@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { BrandMark } from '@/modules/authentication/components/BrandMark';
@@ -110,7 +110,12 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   const drawerId = useId();
   const drawerTitleId = useId();
 
-  const permissions = session?.permissions ?? [];
+  // Keep last known permissions so nav items do not appear/disappear while session resolves.
+  const permissionsRef = useRef<string[]>(session?.permissions ?? []);
+  if (session?.permissions?.length) {
+    permissionsRef.current = [...session.permissions];
+  }
+  const permissions = session?.permissions?.length ? session.permissions : permissionsRef.current;
   const roleLabels: Record<string, string> = {
     client: auth.onboarding.roles.client,
     patrimonial_partner: auth.onboarding.roles.partner,

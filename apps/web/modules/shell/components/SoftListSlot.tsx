@@ -10,7 +10,7 @@ type SoftListSlotProps = {
 };
 
 /**
- * Stable list region — fixed min-height glass while first fetch runs.
+ * Stable list region — fixed min-height while first fetch runs.
  * No pulse animation, no unmount of surrounding page chrome.
  */
 export function SoftListSlot({
@@ -20,9 +20,13 @@ export function SoftListSlot({
   children,
 }: SoftListSlotProps) {
   return (
-    <div className={cn(minHeightClassName, className)}>
+    <div
+      className={cn(minHeightClassName, className)}
+      aria-busy={pending || undefined}
+      aria-live="polite"
+    >
       {pending ? (
-        <div className="kuteka-glass h-full" aria-busy="true" aria-live="polite">
+        <div className={cn('kuteka-glass', minHeightClassName)}>
           <span className="sr-only">A carregar conteúdo…</span>
         </div>
       ) : (

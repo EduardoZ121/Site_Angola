@@ -2,7 +2,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
@@ -12,23 +12,93 @@ import { isPublicSupabaseConfigured } from '../lib/public-config';
 import { AppSessionContext, type AppSessionData } from './app-session';
 import { BrandMark } from './BrandMark';
 
-type GateState = 'loading' | 'ready' | 'anon' | 'config';
+type GateState = 'booting' | 'ready' | 'anon' | 'config';
+
+const SESSION_CACHE_KEY = 'kuteka-session-cache';
 
 function asStringArray(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   return value.filter((item): item is string => typeof item === 'string');
 }
 
+/** Sync peek — avoids full-screen boot flash when local session exists. */
+function peekStoredAuthSession(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = window.localStorage.getItem('kuteka-auth');
+    if (!raw) return false;
+    const parsed = JSON.parse(raw) as {
+      access_token?: string;
+      user?: unknown;
+      currentSession?: { access_token?: string; user?: unknown };
+    };
+    return Boolean(
+      parsed?.access_token ||
+      parsed?.user ||
+      parsed?.currentSession?.access_token ||
+      parsed?.currentSession?.user,
+    );
+  } catch {
+    return false;
+  }
+}
+
+function readSessionCache(): AppSessionData | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(SESSION_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as AppSessionData;
+    if (!parsed || typeof parsed !== 'object') return null;
+    return {
+      email: typeof parsed.email === 'string' ? parsed.email : null,
+      displayName: typeof parsed.displayName === 'string' ? parsed.displayName : null,
+      roles: asStringArray(parsed.roles),
+      permissions: asStringArray(parsed.permissions),
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeSessionCache(data: AppSessionData | null) {
+  if (typeof window === 'undefined') return;
+  try {
+    if (!data) {
+      window.sessionStorage.removeItem(SESSION_CACHE_KEY);
+      return;
+    }
+    window.sessionStorage.setItem(SESSION_CACHE_KEY, JSON.stringify(data));
+  } catch {
+    /* ignore quota */
+  }
+}
+
 /**
- * Auth gate for /app + Platform Shell chrome (Fase 3).
- * Session: localStorage (`kuteka-auth`) — static-export safe.
+ * Auth gate for /app + Platform Shell.
+ * Stability rule: never flip sessionStatus back to loading after first ready
+ * (TOKEN_REFRESHED must not remount module trees / skeletons).
+ * Session cache: restore profile/permissions on first paint to avoid nav/Forbidden flash.
  */
 export function AppShell({ children }: { children: ReactNode }) {
   const copy = getAuthCopy();
-  const [gate, setGate] = useState<GateState>('loading');
-  const [session, setSession] = useState<AppSessionData | null>(null);
-  const [sessionStatus, setSessionStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const cachedRef = useRef<AppSessionData | null | undefined>(undefined);
+  if (cachedRef.current === undefined) {
+    cachedRef.current =
+      typeof window !== 'undefined' && peekStoredAuthSession() ? readSessionCache() : null;
+  }
+  const cached = cachedRef.current;
+
+  const [gate, setGate] = useState<GateState>(() =>
+    typeof window !== 'undefined' && peekStoredAuthSession() ? 'ready' : 'booting',
+  );
+  const [session, setSession] = useState<AppSessionData | null>(() => cached);
+  const [sessionStatus, setSessionStatus] = useState<'loading' | 'ready' | 'error'>(() =>
+    cached ? 'ready' : 'loading',
+  );
   const [sessionError, setSessionError] = useState<string | null>(null);
+  const sessionReadyOnce = useRef(Boolean(cached));
+  const loadGeneration = useRef(0);
 
   useEffect(() => {
     if (!isPublicSupabaseConfigured()) {
@@ -39,18 +109,27 @@ export function AppShell({ children }: { children: ReactNode }) {
     let cancelled = false;
     const client = createBrowserClient();
 
-    async function loadSession() {
-      setSessionStatus('loading');
-      setSessionError(null);
+    async function loadSession(opts?: { silent?: boolean }) {
+      const gen = ++loadGeneration.current;
+      const silent = Boolean(opts?.silent) || sessionReadyOnce.current;
+
+      if (!silent) {
+        setSessionStatus('loading');
+        setSessionError(null);
+      }
+
       try {
         const {
           data: { user },
           error: userError,
         } = await client.auth.getUser();
-        if (cancelled) return;
+        if (cancelled || gen !== loadGeneration.current) return;
+
         if (userError || !user) {
           setSession(null);
+          writeSessionCache(null);
           setSessionStatus('ready');
+          sessionReadyOnce.current = true;
           return;
         }
 
@@ -61,31 +140,39 @@ export function AppShell({ children }: { children: ReactNode }) {
             client.rpc('get_user_permission_codes', { p_user_id: user.id }),
           ]);
 
-        if (cancelled) return;
+        if (cancelled || gen !== loadGeneration.current) return;
 
         if (profileError || rolesResult.error || permissionsResult.error) {
           setSessionError(copy.app.loadError);
           setSessionStatus('error');
-          setSession({
+          const partial: AppSessionData = {
             email: user.email ?? null,
             displayName: null,
             roles: [],
             permissions: [],
-          });
+          };
+          setSession(partial);
+          writeSessionCache(null);
+          sessionReadyOnce.current = true;
           return;
         }
 
-        setSession({
+        const next: AppSessionData = {
           email: user.email ?? null,
           displayName: profile?.display_name?.trim() || null,
           roles: asStringArray(rolesResult.data),
           permissions: asStringArray(permissionsResult.data),
-        });
+        };
+        setSession(next);
+        writeSessionCache(next);
+        setSessionError(null);
         setSessionStatus('ready');
+        sessionReadyOnce.current = true;
       } catch {
-        if (!cancelled) {
+        if (!cancelled && gen === loadGeneration.current) {
           setSessionError(copy.app.loadError);
           setSessionStatus('error');
+          sessionReadyOnce.current = true;
         }
       }
     }
@@ -94,24 +181,40 @@ export function AppShell({ children }: { children: ReactNode }) {
       if (cancelled) return;
       if (!authSession) {
         setGate('anon');
+        setSession(null);
+        writeSessionCache(null);
+        setSessionStatus('ready');
+        sessionReadyOnce.current = true;
         return;
       }
       setGate('ready');
-      void loadSession();
+      void loadSession({ silent: sessionReadyOnce.current });
     });
 
     const {
       data: { subscription },
-    } = client.auth.onAuthStateChange((_event, authSession) => {
+    } = client.auth.onAuthStateChange((event, authSession) => {
       if (cancelled) return;
+
       if (!authSession) {
         setGate('anon');
         setSession(null);
+        writeSessionCache(null);
         setSessionStatus('ready');
+        sessionReadyOnce.current = true;
         return;
       }
+
       setGate('ready');
-      void loadSession();
+
+      // INITIAL_SESSION duplicates getSession — ignore after first resolve.
+      // TOKEN_REFRESHED / USER_UPDATED must refresh silently (no skeleton).
+      if (event === 'INITIAL_SESSION' && sessionReadyOnce.current) {
+        return;
+      }
+      void loadSession({
+        silent: sessionReadyOnce.current || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED',
+      });
     });
 
     return () => {
@@ -119,26 +222,6 @@ export function AppShell({ children }: { children: ReactNode }) {
       subscription.unsubscribe();
     };
   }, [copy.app.loadError]);
-
-  if (gate === 'loading') {
-    return (
-      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 py-16">
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-cover bg-center opacity-50"
-          style={{ backgroundImage: "url('/images/hero.jpg')" }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/70"
-        />
-        <div className="relative z-10 flex max-w-lg flex-col gap-4">
-          <BrandMark tone="light" href="/app" size="lg" />
-          <Text className="text-slate-300">{copy.common.loading}</Text>
-        </div>
-      </div>
-    );
-  }
 
   if (gate === 'config') {
     return (
@@ -191,6 +274,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     );
   }
 
+  // booting OR ready — keep PlatformShell mounted (no boot flash swap).
   return (
     <AppSessionContext.Provider value={{ session, status: sessionStatus, error: sessionError }}>
       <PlatformShell session={session} sessionStatus={sessionStatus}>

@@ -4,26 +4,23 @@ import Link from 'next/link';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { EmptyState } from './EmptyState';
-import { ModuleSkeleton } from './ModuleSkeleton';
 
 type SessionStatus = 'loading' | 'ready' | 'error';
 
 type SessionStatusGateProps = {
   status: SessionStatus;
   error?: string | null;
+  /** @deprecated Ignored — page-level skeletons caused flicker. */
   rows?: number;
   children: React.ReactNode;
 };
 
 /**
- * Resolves session loading/error before module data loads —
- * avoids infinite ModuleSkeleton when sessionStatus === 'error'.
+ * Session error wall only.
+ * Never swaps the tree for skeletons (root cause of flash on TOKEN_REFRESHED).
+ * While status === 'loading', children stay mounted and decide soft placeholders.
  */
-export function SessionStatusGate({ status, error, rows = 3, children }: SessionStatusGateProps) {
-  if (status === 'loading') {
-    return <ModuleSkeleton rows={rows} />;
-  }
-
+export function SessionStatusGate({ status, error, children }: SessionStatusGateProps) {
   if (status === 'error') {
     return (
       <EmptyState

@@ -9,6 +9,7 @@ import {
   exploreActiveProperties,
   type HousingPropertyRow,
 } from '@/modules/habitacao/services/housing-client';
+import { SoftListSlot } from './SoftListSlot';
 
 type FeedSection = {
   id: string;
@@ -39,10 +40,7 @@ function byPriceDesc(rows: HousingPropertyRow[]): HousingPropertyRow[] {
 function FeedRail({ section }: { section: FeedSection }) {
   if (!section.rows.length) return null;
   return (
-    <section
-      className="kuteka-feed-section flex flex-col gap-3"
-      aria-labelledby={`feed-${section.id}`}
-    >
+    <section className="flex flex-col gap-3" aria-labelledby={`feed-${section.id}`}>
       <div className="kuteka-glass flex flex-wrap items-end justify-between gap-2 p-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -71,33 +69,12 @@ function FeedRail({ section }: { section: FeedSection }) {
   );
 }
 
-export function FeedPlaceholder() {
-  return (
-    <div className="flex flex-col gap-6" aria-busy="true" aria-live="polite">
-      <span className="sr-only">A carregar o feed…</span>
-      {[0, 1, 2].map((block) => (
-        <div key={block} className="kuteka-glass p-4">
-          <div className="mb-3 h-5 w-40 rounded bg-slate-200/80" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[0, 1, 2].map((card) => (
-              <div
-                key={card}
-                className="h-56 animate-pulse rounded-kuteka bg-slate-100/90"
-                aria-hidden
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 /**
- * Continuous activity feed for /app — Airbnb/LinkedIn-style discovery rail.
+ * Continuous activity feed for /app — no enter animations, no pulse skeletons.
  */
 export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
-  const [rows, setRows] = useState<HousingPropertyRow[] | null>(null);
+  const [rows, setRows] = useState<HousingPropertyRow[]>([]);
+  const [hydrated, setHydrated] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -105,6 +82,7 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
     async function load() {
       if (!canExplore) {
         setRows([]);
+        setHydrated(true);
         return;
       }
       const result = await exploreActiveProperties({});
@@ -112,10 +90,11 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
       if (!result.ok) {
         setError(result.message);
         setRows([]);
-        return;
+      } else {
+        setError(null);
+        setRows(result.data);
       }
-      setError(null);
-      setRows(result.data);
+      setHydrated(true);
     }
     void load();
     return () => {
@@ -124,7 +103,7 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
   }, [canExplore]);
 
   const sections = useMemo((): FeedSection[] => {
-    if (!rows?.length) return [];
+    if (!rows.length) return [];
     const newest = byNewest(rows);
     const premium = byPriceDesc(rows).filter((r) => (r.price_aoa ?? 0) >= 50_000_000);
     const luanda = rows.filter((r) => (r.province || '').toLowerCase().includes('luanda'));
@@ -201,49 +180,33 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
     );
   }
 
-  if (rows === null) return <FeedPlaceholder />;
-
-  if (error) {
-    return (
-      <div
-        role="alert"
-        className="kuteka-glass border border-amber-200 bg-amber-50/95 p-4 text-sm text-amber-950"
-      >
-        {error}
-      </div>
-    );
-  }
-
-  if (!sections.length) {
-    return (
-      <div className="kuteka-glass p-5">
-        <p className="font-medium text-slate-900">Feed a aquecer</p>
-        <Text className="mt-1 text-sm text-slate-600">
-          Ainda não há anúncios activos. Explore Habitação ou publique o primeiro património.
-        </Text>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            href="/app/habitacao/explorar"
-            className={cn(buttonVariants({ variant: 'primary', size: 'sm' }))}
-          >
-            Explorar
-          </Link>
-          <Link
-            href="/app/patrimonios/novo"
-            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
-          >
-            Publicar
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col gap-8">
-      {sections.map((section) => (
-        <FeedRail key={section.id} section={section} />
-      ))}
-    </div>
+    <SoftListSlot pending={!hydrated} minHeightClassName="min-h-[28rem]">
+      {error ? (
+        <div
+          role="alert"
+          className="kuteka-glass border border-amber-200 bg-amber-50/95 p-4 text-sm text-amber-950"
+        >
+          {error}
+        </div>
+      ) : null}
+
+      {!error && hydrated && !sections.length ? (
+        <div className="kuteka-glass p-5">
+          <p className="font-medium text-slate-900">Feed a aquecer</p>
+          <Text className="mt-1 text-sm text-slate-600">
+            Ainda não há anúncios activos. Explore Habitação ou publique o primeiro património.
+          </Text>
+        </div>
+      ) : null}
+
+      {sections.length ? (
+        <div className="flex flex-col gap-8">
+          {sections.map((section) => (
+            <FeedRail key={section.id} section={section} />
+          ))}
+        </div>
+      ) : null}
+    </SoftListSlot>
   );
 }
