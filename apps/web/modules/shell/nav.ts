@@ -19,7 +19,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
   { id: 'patrimonios', labelKey: 'patrimonios', href: '/app/patrimonios', status: 'active' },
   { id: 'habitacao', labelKey: 'habitacao', href: '/app/habitacao', status: 'active' },
   { id: 'agente', labelKey: 'agente', href: '/app/agente', status: 'active' },
-  { id: 'confianca', labelKey: 'confianca', status: 'soon' },
+  { id: 'confianca', labelKey: 'confianca', href: '/app/confianca', status: 'active' },
   {
     id: 'admin',
     labelKey: 'admin',

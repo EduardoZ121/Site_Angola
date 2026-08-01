@@ -56,3 +56,13 @@ export {
 } from './agent';
 
 export { assignCertifiedAgentSchema, type AssignCertifiedAgentInput } from './admin';
+
+export {
+  TRUST_DOC_TYPES,
+  TRUST_DOC_STATUSES,
+  TRUST_REVIEW_STATUSES,
+  submitTrustDocumentSchema,
+  reviewTrustDocumentSchema,
+  type SubmitTrustDocumentInput,
+  type ReviewTrustDocumentInput,
+} from './trust';

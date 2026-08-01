@@ -148,15 +148,16 @@ export const authCopyPt = {
     quickActivateProperty: 'Ativar Património',
     quickExploreHousing: 'Explorar Habitação',
     quickAgent: 'Área do Agente',
+    quickTrust: 'Verificar conta',
     quickRoles: 'Gerir papéis',
     rolesLabel: 'Papéis activos',
     rolesHint: 'A mesma conta pode assumir vários papéis.',
     noRoles: 'Ainda sem papéis activos',
     modulesTitle: 'Módulos da plataforma',
-    modulesHint: 'Acesso directo aos módulos activos e às áreas em desenvolvimento.',
+    modulesHint: 'Acesso directo aos módulos do núcleo da plataforma.',
     upcomingTitle: 'Módulos',
     moduleAvailable: 'Activo',
-    moduleUnavailable: 'Em desenvolvimento',
+    moduleUnavailable: 'Em breve',
     loadError: 'Não foi possível carregar o seu espaço. Tente novamente dentro de momentos.',
     stub: 'Utilize os módulos activos com a mesma conta e os seus papéis.',
     ctaLanding: 'Voltar à Landing',
@@ -164,7 +165,7 @@ export const authCopyPt = {
     ctaRoles: 'Gerir papéis',
     adminTitle: 'Administração',
     adminStub:
-      'Área administrativa (permissão admin.panel). Os painéis de negócio serão disponibilizados nas próximas fases.',
+      'Área administrativa (permissão admin.panel): resumo operacional, utilizadores e revisão de Confiança.',
     adminForbidden:
       'Não tem permissão para aceder a esta área (admin.panel). Se acredita que isto é um erro, contacte a Kuteka.',
     configMissing:

@@ -6,7 +6,7 @@
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  
-**Baseline:** `PROJECT_BASELINE_PRD001.md` · ADR-005…009
+**Baseline:** `PROJECT_BASELINE_PRD001.md` · ADR-005…010
 
 ---
 
@@ -135,7 +135,8 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 4 Parceiro Patrimonial (PRD-002) — **N5 concluído / congelado** (ADR-006)  
 5 Cliente / Habitação (PRD-003) — **N5 concluído / congelado** (ADR-007)  
 6 Agente (PRD-004) — **N5 concluído / congelado** (ADR-008)  
-7 Administração (PRD-005) — **N5 concluído** (ADR-009)  
+7 Administração (PRD-005) — **N5 concluído / congelado** (ADR-009)  
+7b Confiança (PRD-006) — **N5 concluído** (ADR-010)  
 8 Contratos → 9 Wallet → 10 Marketplace → 11 KAI → 12 BI
 
 ## 13. Segurança (mínimos)

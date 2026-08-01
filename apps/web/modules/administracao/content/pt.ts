@@ -5,6 +5,7 @@ export const administracaoCopyPt = {
   users: 'Utilizadores',
   usersTitle: 'Utilizadores e papéis',
   usersHint: 'Leitura das contas e atribuição do papel Agente Certificado.',
+  trustReview: 'Revisão Confiança',
   backToHub: 'Voltar à Administração',
   assignAgent: 'Atribuir Agente Certificado',
   assigning: 'A atribuir…',

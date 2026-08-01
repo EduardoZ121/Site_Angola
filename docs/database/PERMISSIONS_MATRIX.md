@@ -11,5 +11,6 @@
 | `properties.manage` |        | ✓                   |                 | ✓             |
 | `housing.explore`   | ✓      |                     |                 | ✓             |
 | `agent.operate`     |        |                     | ✓               | ✓             |
+| `trust.manage`      | ✓      | ✓                   | ✓               | ✓             |
 
 Novos papéis / permissões = novos rows + seed/migration — sem alterar o modelo RBAC.

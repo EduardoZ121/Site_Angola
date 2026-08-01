@@ -38,14 +38,20 @@ describe('shell nav', () => {
     expect(isNavItemActive(item, '/app')).toBe(false);
   });
 
-  it('keeps only confianca as soon among product modules', () => {
+  it('marks all product modules active', () => {
     const product = SHELL_NAV_ITEMS.filter((i) =>
       ['patrimonios', 'habitacao', 'agente', 'confianca'].includes(i.id),
     );
-    expect(product.find((i) => i.id === 'patrimonios')?.status).toBe('active');
-    expect(product.find((i) => i.id === 'habitacao')?.status).toBe('active');
-    expect(product.find((i) => i.id === 'agente')?.status).toBe('active');
-    expect(product.find((i) => i.id === 'agente')?.href).toBe('/app/agente');
-    expect(product.find((i) => i.id === 'confianca')?.status).toBe('soon');
+    for (const id of ['patrimonios', 'habitacao', 'agente', 'confianca'] as const) {
+      expect(product.find((i) => i.id === id)?.status).toBe('active');
+    }
+    expect(product.find((i) => i.id === 'confianca')?.href).toBe('/app/confianca');
+  });
+
+  it('marks confianca active under /app/confianca', () => {
+    const item = SHELL_NAV_ITEMS.find((i) => i.id === 'confianca')!;
+    expect(isNavItemActive(item, '/app/confianca')).toBe(true);
+    expect(isNavItemActive(item, '/app/confianca/submeter')).toBe(true);
+    expect(isNavItemActive(item, '/app')).toBe(false);
   });
 });
