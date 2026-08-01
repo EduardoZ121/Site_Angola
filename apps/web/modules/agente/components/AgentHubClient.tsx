@@ -7,8 +7,8 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
-import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getAgenteCopy } from '../content/pt';
 import { AGENT_DEMO_PIPELINE } from '../demo/pipeline';
 import {
@@ -23,8 +23,9 @@ const PURPOSES = ['rent', 'sale', 'both'] as const;
 export function AgentHubClient() {
   const copy = getAgenteCopy();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
-  const canOperate = session?.permissions.includes('agent.operate') ?? false;
-  const isAdmin = session?.permissions.includes('admin.panel') ?? false;
+  const canOperate = sessionStatus === 'ready' && !!session?.permissions.includes('agent.operate');
+  const isAdmin = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
+  const accessPending = sessionStatus === 'loading';
 
   const [purpose, setPurpose] = useState('');
   const [province, setProvince] = useState('');
@@ -84,7 +85,7 @@ export function AgentHubClient() {
   }
 
   return (
-    <SessionStatusGate status={sessionStatus} error={sessionError} rows={4}>
+    <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-8">
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
@@ -109,7 +110,9 @@ export function AgentHubClient() {
           </div>
         </header>
 
-        {!canOperate ? (
+        {accessPending ? <SoftListSlot pending /> : null}
+
+        {!canOperate && sessionStatus === 'ready' ? (
           <>
             <div
               role="alert"
@@ -221,13 +224,12 @@ export function AgentHubClient() {
         <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
         {canOperate ? (
-          <>
+          <SoftListSlot pending={loading && assignments.length === 0}>
             <section className="flex max-w-xl flex-col gap-4">
               <div>
                 <Heading level={2}>{copy.preferencesTitle}</Heading>
                 <Text className="mt-1 text-slate-600">{copy.preferencesHint}</Text>
               </div>
-              {loading ? <ModuleSkeleton rows={2} /> : null}
               {!loading ? (
                 <form onSubmit={onSubmit} className="flex flex-col gap-4">
                   <label className="flex flex-col gap-1.5 text-sm">
@@ -325,7 +327,7 @@ export function AgentHubClient() {
                 ))}
               </ul>
             </section>
-          </>
+          </SoftListSlot>
         ) : null}
 
         <FlowNextSteps

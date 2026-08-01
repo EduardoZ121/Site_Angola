@@ -9,16 +9,20 @@ import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
-import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getPatrimoniosCopy } from '../content/pt';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
 
 export function PropertyListClient() {
   const copy = getPatrimoniosCopy();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
-  const canManage = session?.permissions.includes('properties.manage') ?? false;
-  const canHousing = session?.permissions.includes('housing.explore') ?? false;
+  const canManage =
+    sessionStatus === 'ready' && !!session?.permissions.includes('properties.manage');
+  const canHousing =
+    sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');
+  const accessPending = sessionStatus === 'loading';
+  const denied = sessionStatus === 'ready' && !canManage;
   const [rows, setRows] = useState<PropertyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -62,7 +66,7 @@ export function PropertyListClient() {
   ];
 
   return (
-    <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
+    <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-8">
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
@@ -89,7 +93,8 @@ export function PropertyListClient() {
           </div>
         </header>
 
-        {!canManage ? (
+        {accessPending ? <SoftListSlot pending /> : null}
+        {denied ? (
           <ForbiddenPanel
             message={copy.needPartner}
             primaryHref="/auth/onboarding/papeis"
@@ -102,84 +107,88 @@ export function PropertyListClient() {
           />
         ) : null}
 
-        {canManage ? <p className="text-sm text-slate-500">{copy.mvpNote}</p> : null}
+        {canManage ? (
+          <SoftListSlot pending={loading && rows.length === 0}>
+            <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
-        {canManage && loading ? <ModuleSkeleton rows={3} /> : null}
-        {canManage && error ? (
-          <div
-            role="alert"
-            className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
-          >
-            {error}
-          </div>
-        ) : null}
-
-        {canManage && !loading && !error && rows.length === 0 ? (
-          <EmptyState
-            title={copy.emptyTitle}
-            description={copy.empty}
-            action={
-              <Link
-                href="/app/patrimonios/novo"
-                className={cn(buttonVariants({ variant: 'primary' }))}
+            {error ? (
+              <div
+                role="alert"
+                className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
               >
-                {copy.emptyCta}
-              </Link>
-            }
-          />
-        ) : null}
+                {error}
+              </div>
+            ) : null}
 
-        {canManage && rows.length > 0 ? (
-          <section aria-labelledby="property-list-heading" className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
-              <h2 id="property-list-heading" className="text-sm font-semibold text-slate-800">
-                {copy.listHeading}
-              </h2>
-              <Text className="text-sm text-slate-500">{copy.listHint}</Text>
-            </div>
-            <ul className="grid gap-4 sm:grid-cols-2">
-              {rows.map((row) => (
-                <li key={row.id}>
+            {!loading && !error && rows.length === 0 ? (
+              <EmptyState
+                title={copy.emptyTitle}
+                description={copy.empty}
+                action={
                   <Link
-                    href={`/app/patrimonios/detalhe?id=${row.id}`}
-                    className="flex h-full flex-col overflow-hidden rounded-kuteka border border-slate-200 bg-white transition-colors hover:border-brand-300"
-                    aria-label={row.title}
+                    href="/app/patrimonios/novo"
+                    className={cn(buttonVariants({ variant: 'primary' }))}
                   >
-                    <div className="aspect-[16/10] bg-slate-100">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={row.cover_image_url || '/images/hero.jpg'}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="flex flex-1 flex-col gap-2 p-4">
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="font-medium text-slate-900">{row.title}</p>
-                        <Badge variant={row.status === 'active' ? 'success' : 'default'}>
-                          {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
-                        </Badge>
-                      </div>
-                      <p className="text-sm font-semibold text-brand-800">
-                        {formatAoa(row.price_aoa, row.purpose)}
-                      </p>
-                      <p className="text-sm text-slate-600">
-                        {copy.types[row.property_type as keyof typeof copy.types] ??
-                          row.property_type}
-                        {row.city ? ` · ${row.city}` : ''}
-                        {row.province ? `, ${row.province}` : ''}
-                      </p>
-                      <p className="font-mono text-xs text-slate-400">{row.code}</p>
-                    </div>
+                    {copy.emptyCta}
                   </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
+                }
+              />
+            ) : null}
 
-        {canManage ? <FlowNextSteps title="Continuar o fluxo" steps={nextSteps} /> : null}
+            {rows.length > 0 ? (
+              <section aria-labelledby="property-list-heading" className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <h2 id="property-list-heading" className="text-sm font-semibold text-slate-800">
+                    {copy.listHeading}
+                  </h2>
+                  <Text className="text-sm text-slate-500">{copy.listHint}</Text>
+                </div>
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {rows.map((row) => (
+                    <li key={row.id}>
+                      <Link
+                        href={`/app/patrimonios/detalhe?id=${row.id}`}
+                        className="flex h-full flex-col overflow-hidden rounded-kuteka border border-slate-200 bg-white transition-colors hover:border-brand-300"
+                        aria-label={row.title}
+                      >
+                        <div className="aspect-[16/10] bg-slate-100">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={row.cover_image_url || '/images/hero.jpg'}
+                            alt=""
+                            loading="lazy"
+                            className="h-full w-full object-cover"
+                          />
+                        </div>
+                        <div className="flex flex-1 flex-col gap-2 p-4">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium text-slate-900">{row.title}</p>
+                            <Badge variant={row.status === 'active' ? 'success' : 'default'}>
+                              {copy.statuses[row.status as keyof typeof copy.statuses] ??
+                                row.status}
+                            </Badge>
+                          </div>
+                          <p className="text-sm font-semibold text-brand-800">
+                            {formatAoa(row.price_aoa, row.purpose)}
+                          </p>
+                          <p className="text-sm text-slate-600">
+                            {copy.types[row.property_type as keyof typeof copy.types] ??
+                              row.property_type}
+                            {row.city ? ` · ${row.city}` : ''}
+                            {row.province ? `, ${row.province}` : ''}
+                          </p>
+                          <p className="font-mono text-xs text-slate-400">{row.code}</p>
+                        </div>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null}
+
+            <FlowNextSteps title="Continuar o fluxo" steps={nextSteps} />
+          </SoftListSlot>
+        ) : null}
       </div>
     </SessionStatusGate>
   );

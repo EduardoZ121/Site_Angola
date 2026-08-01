@@ -9,6 +9,7 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getConfiancaCopy } from '../content/pt';
 import { submitTrustDocument } from '../services/trust-client';
 
@@ -17,6 +18,8 @@ export function TrustSubmitClient() {
   const router = useRouter();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('trust.manage');
+  const accessPending = sessionStatus === 'loading';
+  const denied = sessionStatus === 'ready' && !canManage;
 
   const [docType, setDocType] = useState<(typeof TRUST_DOC_TYPES)[number]>('identity');
   const [notes, setNotes] = useState('');
@@ -42,82 +45,76 @@ export function TrustSubmitClient() {
     router.push('/app/confianca');
   }
 
-  if (sessionStatus !== 'ready') {
-    return (
-      <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
-        {null}
-      </SessionStatusGate>
-    );
-  }
-
-  if (!canManage) {
-    return (
-      <div className="flex flex-col gap-4">
-        <Heading level={1}>{copy.submitTitle}</Heading>
-        <ForbiddenPanel message={copy.forbidden} />
-      </div>
-    );
-  }
-
   return (
-    <div className="flex flex-col gap-8">
-      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
-        <div className="flex flex-col gap-2">
-          <Heading level={1}>{copy.submitTitle}</Heading>
-          <Text className="text-slate-600">{copy.submitHint}</Text>
-        </div>
-        <Link
-          href="/app/habitacao/explorar"
-          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
-        >
-          Explorar habitação
-        </Link>
-      </header>
+    <SessionStatusGate status={sessionStatus} error={sessionError}>
+      <div className="flex flex-col gap-8">
+        <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="flex flex-col gap-2">
+            <Heading level={1}>{copy.submitTitle}</Heading>
+            <Text className="text-slate-600">{copy.submitHint}</Text>
+          </div>
+          {canManage ? (
+            <Link
+              href="/app/habitacao/explorar"
+              className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+            >
+              Explorar habitação
+            </Link>
+          ) : null}
+        </header>
 
-      {message ? (
-        <div className="rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
-          {message}
-        </div>
-      ) : null}
-      {error ? (
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {error}
-        </div>
-      ) : null}
+        {accessPending ? <SoftListSlot pending /> : null}
+        {denied ? <ForbiddenPanel message={copy.forbidden} /> : null}
 
-      <form onSubmit={onSubmit} className="flex max-w-lg flex-col gap-4">
-        <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-slate-800">{copy.fields.docType}</span>
-          <select
-            value={docType}
-            onChange={(e) => setDocType(e.target.value as (typeof TRUST_DOC_TYPES)[number])}
-            className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-slate-900"
-            required
-          >
-            {TRUST_DOC_TYPES.map((type) => (
-              <option key={type} value={type}>
-                {copy.docTypes[type]}
-              </option>
-            ))}
-          </select>
-        </label>
+        {canManage ? (
+          <>
+            {message ? (
+              <div className="rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
+                {message}
+              </div>
+            ) : null}
+            {error ? (
+              <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+                {error}
+              </div>
+            ) : null}
 
-        <label className="flex flex-col gap-1.5 text-sm">
-          <span className="font-medium text-slate-800">{copy.fields.notes}</span>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            rows={4}
-            maxLength={2000}
-            className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-slate-900"
-            placeholder="Ex.: BI nº …, emitido em …"
-          />
-        </label>
+            <form onSubmit={onSubmit} className="flex max-w-lg flex-col gap-4">
+              <label className="flex flex-col gap-1.5 text-sm">
+                <span className="font-medium text-slate-800">{copy.fields.docType}</span>
+                <select
+                  value={docType}
+                  onChange={(e) => setDocType(e.target.value as (typeof TRUST_DOC_TYPES)[number])}
+                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-slate-900"
+                  required
+                >
+                  {TRUST_DOC_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {copy.docTypes[type]}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-        <Button type="submit" variant="primary" disabled={saving} className="w-fit">
-          {saving ? copy.submitting : copy.submit}
-        </Button>
-      </form>
-    </div>
+              <label className="flex flex-col gap-1.5 text-sm">
+                <span className="font-medium text-slate-800">{copy.fields.notes}</span>
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={4}
+                  maxLength={2000}
+                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-slate-900"
+                  placeholder="Ex.: BI nº …, emitido em …"
+                />
+              </label>
+
+              <Button type="submit" variant="primary" disabled={saving} className="w-fit">
+                {saving ? copy.submitting : copy.submit}
+              </Button>
+            </form>
+          </>
+        ) : null}
+      </div>
+    </SessionStatusGate>
   );
 }
