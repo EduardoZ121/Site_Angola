@@ -9,7 +9,7 @@ export type ShellNavStatus = 'active' | 'soon';
 
 export type ShellNavItem = {
   id: string;
-  labelKey: 'home' | 'patrimonios' | 'habitacao' | 'agente' | 'confianca' | 'admin';
+  labelKey: 'home' | 'patrimonios' | 'habitacao' | 'agente' | 'confianca' | 'contratos' | 'admin';
   href?: string;
   status: ShellNavStatus;
   /** When set, item is hidden unless the user has this permission. */
@@ -39,6 +39,13 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/confianca',
     status: 'active',
     requiresPermission: 'trust.manage',
+  },
+  {
+    id: 'contratos',
+    labelKey: 'contratos',
+    href: '/app/contratos',
+    status: 'active',
+    requiresPermission: 'contracts.manage',
   },
   {
     id: 'admin',

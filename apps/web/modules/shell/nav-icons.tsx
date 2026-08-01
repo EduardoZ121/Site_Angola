@@ -91,12 +91,33 @@ function IconAdmin({ className }: IconProps) {
   );
 }
 
+function IconContract({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M5.5 3.5h7L15.5 6.5v10a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-12a1 1 0 0 1 1-1Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.5 3.8V7h3M7 9.5h6M7 12.2h6M7 14.9h3.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 const ICONS: Record<ShellNavItem['labelKey'], (props: IconProps) => ReactElement> = {
   home: IconHome,
   patrimonios: IconBuilding,
   habitacao: IconKey,
   agente: IconAgent,
   confianca: IconShield,
+  contratos: IconContract,
   admin: IconAdmin,
 };
 

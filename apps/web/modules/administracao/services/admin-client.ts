@@ -20,6 +20,8 @@ export type PlatformStats = {
   trust_pending?: number;
   interests_pending?: number;
   properties_demo?: number;
+  contracts_active?: number;
+  contracts_pending?: number;
 };
 
 export type AdminInterestRow = {

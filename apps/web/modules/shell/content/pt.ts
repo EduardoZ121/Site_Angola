@@ -19,6 +19,7 @@ export const shellCopyPt = {
     habitacao: 'Habitação',
     agente: 'Agente',
     confianca: 'Confiança',
+    contratos: 'Contratos',
     admin: 'Administração',
   },
 } as const;
