@@ -6,7 +6,9 @@ import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { getConfiancaCopy } from '../content/pt';
 import {
   listPendingTrustDocuments,
@@ -16,7 +18,7 @@ import {
 
 export function TrustReviewClient() {
   const copy = getConfiancaCopy();
-  const { session, status: sessionStatus } = useAppSession();
+  const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const allowed = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
 
   const [rows, setRows] = useState<TrustDocumentRow[]>([]);
@@ -56,6 +58,10 @@ export function TrustReviewClient() {
       }
       setLoading(false);
     }
+    if (sessionStatus === 'error') {
+      setLoading(false);
+      return;
+    }
     if (sessionStatus === 'ready') void load();
     return () => {
       cancelled = true;
@@ -80,26 +86,31 @@ export function TrustReviewClient() {
     await reload();
   }
 
-  if (sessionStatus === 'loading') return <ModuleSkeleton rows={3} />;
+  if (sessionStatus !== 'ready') {
+    return (
+      <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
+        {null}
+      </SessionStatusGate>
+    );
+  }
 
   if (!allowed) {
     return (
       <div className="flex flex-col gap-4">
         <Heading level={1}>{copy.reviewTitle}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {copy.reviewForbidden}
-        </div>
+        <ForbiddenPanel
+          message={copy.reviewForbidden}
+          primaryHref="/app"
+          primaryLabel="Ir ao painel"
+        />
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
         <div className="flex flex-col gap-2">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-700">
-            Operação
-          </p>
           <Heading level={1}>{copy.reviewTitle}</Heading>
           <Text className="text-slate-600">{copy.reviewHint}</Text>
         </div>

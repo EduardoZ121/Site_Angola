@@ -10,12 +10,14 @@ type AtmosphereBackgroundProps = {
 /**
  * Full-bleed workspace atmosphere — second plane of the authenticated app.
  * Image always loads; video loops lazily when motion is allowed.
+ * Narrow viewports prefer imageMobile / skip video for bandwidth.
  */
 export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   const source = HERO_MEDIA[preset];
   const [videoReady, setVideoReady] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [narrow, setNarrow] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -26,19 +28,30 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   }, []);
 
   useEffect(() => {
+    const mq = window.matchMedia('(max-width: 767px)');
+    setNarrow(mq.matches);
+    const onChange = () => setNarrow(mq.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  const imageSrc = narrow && source.imageMobile ? source.imageMobile : source.image;
+  const allowVideo = Boolean(source.video) && !reduceMotion && !narrow;
+
+  useEffect(() => {
     setVideoReady(false);
     setVideoFailed(false);
-    if (reduceMotion || !source.video) return;
+    if (!allowVideo) return;
     const timer = window.setTimeout(() => setVideoReady(true), 400);
     return () => window.clearTimeout(timer);
-  }, [preset, reduceMotion, source.video]);
+  }, [preset, allowVideo]);
 
   return (
     <div className="kuteka-atmosphere" aria-hidden>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        key={source.image}
-        src={source.image}
+        key={imageSrc}
+        src={imageSrc}
         alt=""
         className="kuteka-atmosphere-media kuteka-atmosphere-kenburns"
         onError={(e) => {
@@ -46,7 +59,7 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
         }}
       />
 
-      {source.video && videoReady && !reduceMotion && !videoFailed ? (
+      {allowVideo && videoReady && !videoFailed ? (
         <video
           key={source.video}
           className="kuteka-atmosphere-media"

@@ -8,10 +8,17 @@ type ModuleSkeletonProps = {
 /** Transient loading placeholder — avoids permanent "A carregar…" copy. */
 export function ModuleSkeleton({ rows = 3, className }: ModuleSkeletonProps) {
   return (
-    <div className={cn('flex flex-col gap-3', className)} aria-hidden>
+    <div
+      className={cn('flex flex-col gap-3', className)}
+      role="status"
+      aria-busy="true"
+      aria-live="polite"
+    >
+      <span className="sr-only">A carregar…</span>
       {Array.from({ length: rows }, (_, index) => (
         <div
           key={index}
+          aria-hidden
           className="h-16 animate-pulse rounded-kuteka border border-slate-100 bg-slate-100/80"
         />
       ))}

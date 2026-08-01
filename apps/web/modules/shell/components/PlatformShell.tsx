@@ -107,6 +107,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   const [drawerOpen, setDrawerOpen] = useState(false);
   const titleId = useId();
   const drawerId = useId();
+  const drawerTitleId = useId();
 
   const permissions = session?.permissions ?? [];
   const roleLabels: Record<string, string> = {
@@ -127,11 +128,13 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
     document.addEventListener('keydown', onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const closeBtn = document.getElementById(`${drawerId}-close`);
+    closeBtn?.focus();
     return () => {
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prev;
     };
-  }, [drawerOpen]);
+  }, [drawerOpen, drawerId]);
 
   return (
     <div className="relative flex min-h-screen">
@@ -195,7 +198,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
           className="fixed inset-0 z-40 md:hidden"
           role="dialog"
           aria-modal="true"
-          aria-labelledby={drawerId}
+          aria-labelledby={drawerTitleId}
         >
           <button
             type="button"
@@ -208,8 +211,14 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
             className="kuteka-glass-chrome absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col shadow-xl motion-reduce:transition-none"
           >
             <div className="flex items-center justify-between border-b border-white/40 px-4 py-5">
-              <BrandMark href="/app" tone="dark" size="lg" />
+              <div>
+                <p id={drawerTitleId} className="sr-only">
+                  {shell.navAria}
+                </p>
+                <BrandMark href="/app" tone="dark" size="lg" />
+              </div>
               <button
+                id={`${drawerId}-close`}
                 type="button"
                 className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'px-2')}
                 onClick={() => setDrawerOpen(false)}

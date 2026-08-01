@@ -73,17 +73,28 @@ export function AgentDetailClient({ id }: { id: string }) {
 
   if (error && !row) {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <Heading level={1}>{copy.detailTitle}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+        <div
+          role="alert"
+          className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+        >
           {error}
         </div>
-        <Link
-          href="/app/agente/explorar"
-          className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
-        >
-          {copy.backToExplore}
-        </Link>
+        <div className="kuteka-glass flex flex-wrap gap-3 p-4">
+          <Link
+            href="/app/agente/explorar"
+            className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
+          >
+            Continuar exploração
+          </Link>
+          <Link
+            href="/app/agente"
+            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+          >
+            Área Agente
+          </Link>
+        </div>
       </div>
     );
   }
@@ -195,8 +206,8 @@ export function AgentDetailClient({ id }: { id: string }) {
         >
           Confiança
         </Link>
-        <Link href="/app/admin" className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}>
-          Administração
+        <Link href="/contacto" className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}>
+          Contactar Kuteka
         </Link>
       </div>
     </div>

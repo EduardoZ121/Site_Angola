@@ -2,14 +2,17 @@
 
 **Actualizado:** 2026-08-01
 
-| Camada                | Estado                               |
-| --------------------- | ------------------------------------ |
-| PRD-001…004 + Shell   | ✅ N5 · **congelados**               |
-| UX polish módulos     | ✅ Empty states + shell vivo         |
-| PRD-005 Administração | ✅ N5 · **congelado**                |
-| PRD-006 Confiança     | ✅ N5                                |
-| Revisão transversal   | ✅ núcleo MVP                        |
-| PRD-007 Experiência   | ✅ N5 · anúncios + fluxo + HeroMedia |
-| Próximo               | Módulos avançados (PO)               |
+| Camada                           | Estado                                                              |
+| -------------------------------- | ------------------------------------------------------------------- |
+| **Platform Core v1.0**           | ✅ **Congelado** · `docs/product/KUTEKA_PLATFORM_CORE_V1.md`        |
+| Landing · Auth · Shell           | ✅ N5 · Core                                                        |
+| Patrimónios · Habitação · Agente | ✅ N5 · Core                                                        |
+| Administração · Confiança        | ✅ N5 · Core                                                        |
+| Listing + Premium Experience     | ✅ N5 · Core                                                        |
+| Auditoria + maturidade           | ✅ `CORE_V1_MATURITY_REPORT.md`                                     |
+| Hardening RLS (0010)             | ✅ Interests + RBAC scope                                           |
+| **Próximo**                      | Contratos → Pagamentos → Wallet → Passaporte → Academia → CRM → KAI |
 
-**Closures:** `PRD_001` · `PHASE_3` · `PRD_002` · `PRD_003` · `PRD_004` · `PRD_005` · `PRD_006` · `MVP_CORE_TRANSVERSAL_REVIEW` · `PRD_007`
+**Closures:** `PRD_001`…`PRD_007` · `PHASE_3` · `MVP_CORE_TRANSVERSAL_REVIEW` · `ADR-011` · `CORE_V1_MATURITY_REPORT`
+
+**Regra:** sem alteração estrutural ao Core sem nova versão; módulos novos N1→N5 integral.

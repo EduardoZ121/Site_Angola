@@ -8,7 +8,9 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
+import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { ModuleSkeleton } from '@/modules/shell/components/ModuleSkeleton';
+import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { getConfiancaCopy } from '../content/pt';
 import { listMyTrustDocuments, type TrustDocumentRow } from '../services/trust-client';
 
@@ -22,7 +24,7 @@ function latestByType(rows: TrustDocumentRow[]) {
 
 export function TrustHubClient() {
   const copy = getConfiancaCopy();
-  const { session, status: sessionStatus } = useAppSession();
+  const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('trust.manage');
   const isAdmin = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
 
@@ -49,6 +51,10 @@ export function TrustHubClient() {
       }
       setLoading(false);
     }
+    if (sessionStatus === 'error') {
+      setLoading(false);
+      return;
+    }
     if (sessionStatus === 'ready') void load();
     return () => {
       cancelled = true;
@@ -57,15 +63,19 @@ export function TrustHubClient() {
 
   const byType = useMemo(() => latestByType(rows), [rows]);
 
-  if (sessionStatus === 'loading') return <ModuleSkeleton rows={3} />;
+  if (sessionStatus !== 'ready') {
+    return (
+      <SessionStatusGate status={sessionStatus} error={sessionError} rows={3}>
+        {null}
+      </SessionStatusGate>
+    );
+  }
 
   if (!canManage) {
     return (
       <div className="flex flex-col gap-4">
         <Heading level={1}>{copy.title}</Heading>
-        <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-          {copy.forbidden}
-        </div>
+        <ForbiddenPanel message={copy.forbidden} />
       </div>
     );
   }
@@ -76,9 +86,6 @@ export function TrustHubClient() {
         <div className="flex flex-col gap-2">
           <Heading level={1}>{copy.title}</Heading>
           <Text className="text-slate-600">{copy.subtitle}</Text>
-          <Badge variant="brand" className="w-fit">
-            {copy.permissionBadge}
-          </Badge>
         </div>
         <div className="flex flex-wrap gap-2">
           {isAdmin ? (
