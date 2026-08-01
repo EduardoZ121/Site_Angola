@@ -5,13 +5,18 @@ import { HERO_MEDIA, type HeroMediaPreset } from '../media/hero-media';
 
 type AtmosphereBackgroundProps = {
   preset: HeroMediaPreset;
+  /**
+   * `app` — static image only (no video / ken burns). Keeps the workspace
+   * continuous across modules and protects CPU/GPU.
+   * `cinematic` — landing-style media (default for marketing surfaces).
+   */
+  mode?: 'app' | 'cinematic';
 };
 
 /**
- * Full-bleed cinematic atmosphere.
- * Image always visible at opacity 1. Video mounts with poster — no delayed swap flash.
+ * Full-bleed atmosphere. App mode is intentionally quiet and stable.
  */
-export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
+export function AtmosphereBackground({ preset, mode = 'cinematic' }: AtmosphereBackgroundProps) {
   const source = HERO_MEDIA[preset];
   const [videoFailed, setVideoFailed] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
@@ -38,7 +43,9 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
   }, [preset]);
 
   const imageSrc = narrow && source.imageMobile ? source.imageMobile : source.image;
-  const allowVideo = Boolean(source.video) && !reduceMotion && !narrow && !videoFailed;
+  const allowVideo =
+    mode === 'cinematic' && Boolean(source.video) && !reduceMotion && !narrow && !videoFailed;
+  const kenBurns = mode === 'cinematic' && !reduceMotion;
 
   return (
     <div className="kuteka-atmosphere" aria-hidden>
@@ -49,7 +56,13 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
         key={imageSrc}
         src={imageSrc}
         alt=""
-        className="kuteka-atmosphere-media kuteka-atmosphere-kenburns"
+        className={
+          kenBurns
+            ? 'kuteka-atmosphere-media kuteka-atmosphere-kenburns'
+            : 'kuteka-atmosphere-media'
+        }
+        decoding="async"
+        fetchPriority={mode === 'app' ? 'low' : 'auto'}
         onError={(e) => {
           (e.currentTarget as HTMLImageElement).src = '/images/hero.jpg';
         }}
@@ -63,7 +76,7 @@ export function AtmosphereBackground({ preset }: AtmosphereBackgroundProps) {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           poster={imageSrc}
           onError={() => setVideoFailed(true)}
         >

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PROPERTY_PURPOSES, PROPERTY_TYPES } from '@kuteka/validation';
 import { Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
@@ -13,13 +13,21 @@ import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate'
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getHabitacaoCopy } from '../content/pt';
 import {
-  exploreActiveProperties,
+  exploreActivePropertiesPage,
   getClientPreferences,
   type HousingPropertyRow,
 } from '../services/housing-client';
 import { PropertyCard } from './PropertyCard';
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
+
+type Filters = {
+  purpose?: string;
+  province?: string;
+  city?: string;
+  propertyType?: string;
+  query?: string;
+};
 
 export function ExploreListClient() {
   const copy = getHabitacaoCopy();
@@ -31,8 +39,11 @@ export function ExploreListClient() {
 
   const [rows, setRows] = useState<HousingPropertyRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(1);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [filters, setFilters] = useState<Filters>({});
 
   const [purpose, setPurpose] = useState('');
   const [province, setProvince] = useState('');
@@ -40,30 +51,49 @@ export function ExploreListClient() {
   const [propertyType, setPropertyType] = useState('');
   const [query, setQuery] = useState('');
 
-  async function load(filters?: {
-    purpose?: string;
-    province?: string;
-    city?: string;
-    propertyType?: string;
-    query?: string;
-  }) {
-    setLoading(true);
-    const result = await exploreActiveProperties({
-      purpose: filters?.purpose || null,
-      province: filters?.province || null,
-      city: filters?.city || null,
-      propertyType: filters?.propertyType || null,
-      query: filters?.query || null,
-    });
-    if (!result.ok) {
-      setError(result.message);
-      setRows([]);
-    } else {
-      setError(null);
-      setRows(result.data);
-      setPage(1);
-    }
-    setLoading(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const inflight = useRef(false);
+
+  const fetchPage = useCallback(
+    async (nextOffset: number, nextFilters: Filters, replace: boolean) => {
+      if (inflight.current) return;
+      inflight.current = true;
+      if (replace) setLoading(true);
+      else setLoadingMore(true);
+
+      const result = await exploreActivePropertiesPage({
+        purpose: nextFilters.purpose || null,
+        province: nextFilters.province || null,
+        city: nextFilters.city || null,
+        propertyType: nextFilters.propertyType || null,
+        query: nextFilters.query || null,
+        offset: nextOffset,
+        limit: PAGE_SIZE,
+      });
+
+      if (!result.ok) {
+        setError(result.message);
+        if (replace) setRows([]);
+        setHasMore(false);
+      } else {
+        setError(null);
+        setRows((prev) => (replace ? result.data.rows : [...prev, ...result.data.rows]));
+        setOffset(result.data.nextOffset);
+        setHasMore(result.data.hasMore);
+      }
+
+      setLoading(false);
+      setLoadingMore(false);
+      inflight.current = false;
+    },
+    [],
+  );
+
+  function applyFilters(next: Filters) {
+    setFilters(next);
+    setOffset(0);
+    setHasMore(true);
+    void fetchPage(0, next, true);
   }
 
   useEffect(() => {
@@ -75,17 +105,16 @@ export function ExploreListClient() {
       }
       const prefs = await getClientPreferences();
       if (cancelled) return;
-      const nextPurpose = prefs.ok && prefs.data?.purpose ? prefs.data.purpose : '';
-      const nextProvince = prefs.ok && prefs.data?.province ? prefs.data.province : '';
-      const nextCity = prefs.ok && prefs.data?.city ? prefs.data.city : '';
-      setPurpose(nextPurpose);
-      setProvince(nextProvince);
-      setCity(nextCity);
-      await load({
-        purpose: nextPurpose,
-        province: nextProvince,
-        city: nextCity,
-      });
+      const next: Filters = {
+        purpose: prefs.ok && prefs.data?.purpose ? prefs.data.purpose : '',
+        province: prefs.ok && prefs.data?.province ? prefs.data.province : '',
+        city: prefs.ok && prefs.data?.city ? prefs.data.city : '',
+      };
+      setPurpose(next.purpose || '');
+      setProvince(next.province || '');
+      setCity(next.city || '');
+      setFilters(next);
+      await fetchPage(0, next, true);
     }
     if (sessionStatus === 'error') {
       setLoading(false);
@@ -95,17 +124,28 @@ export function ExploreListClient() {
     return () => {
       cancelled = true;
     };
-  }, [canExplore, sessionStatus]);
+  }, [canExplore, sessionStatus, fetchPage]);
 
-  const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
-  const pageRows = useMemo(() => {
-    const start = (page - 1) * PAGE_SIZE;
-    return rows.slice(start, start + PAGE_SIZE);
-  }, [rows, page]);
+  useEffect(() => {
+    if (!canExplore || loading || !hasMore) return;
+    const node = sentinelRef.current;
+    if (!node) return;
+    const scrollRoot = document.querySelector<HTMLElement>('.kuteka-app-scroll');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          void fetchPage(offset, filters, false);
+        }
+      },
+      { root: scrollRoot, rootMargin: '480px 0px', threshold: 0 },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [canExplore, loading, hasMore, offset, filters, fetchPage]);
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-5">
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
             <Heading level={1}>{copy.exploreTitle}</Heading>
@@ -134,7 +174,7 @@ export function ExploreListClient() {
               className="kuteka-glass grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3"
               onSubmit={(e) => {
                 e.preventDefault();
-                void load({ purpose, province, city, propertyType, query });
+                applyFilters({ purpose, province, city, propertyType, query });
               }}
             >
               <div className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-3">
@@ -203,13 +243,14 @@ export function ExploreListClient() {
                     setCity('');
                     setPropertyType('');
                     setQuery('');
-                    void load({});
+                    applyFilters({});
                   }}
                 >
                   {copy.clearFilters}
                 </Button>
                 <Text className="text-sm text-slate-500">
-                  {rows.length} {copy.results}
+                  {rows.length}
+                  {hasMore ? '+' : ''} {copy.results}
                 </Text>
               </div>
             </form>
@@ -238,7 +279,7 @@ export function ExploreListClient() {
                         setCity('');
                         setPropertyType('');
                         setQuery('');
-                        void load({});
+                        applyFilters({});
                       }}
                     >
                       {copy.emptyCta}
@@ -247,38 +288,22 @@ export function ExploreListClient() {
                 />
               ) : null}
 
-              {pageRows.length > 0 ? (
+              {rows.length > 0 ? (
                 <>
-                  <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-                    {pageRows.map((row) => (
-                      <li key={row.id}>
+                  <ul className="grid gap-4 sm:grid-cols-2">
+                    {rows.map((row) => (
+                      <li key={row.id} className="kuteka-feed-item">
                         <PropertyCard row={row} />
                       </li>
                     ))}
                   </ul>
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <Text className="text-sm text-slate-500">
-                      {copy.pageOf} {page} / {pageCount}
-                    </Text>
-                    <div className="flex gap-2">
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        disabled={page <= 1}
-                        onClick={() => setPage((p) => Math.max(1, p - 1))}
-                      >
-                        {copy.pagePrev}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        disabled={page >= pageCount}
-                        onClick={() => setPage((p) => Math.min(pageCount, p + 1))}
-                      >
-                        {copy.pageNext}
-                      </Button>
-                    </div>
-                  </div>
+                  <div ref={sentinelRef} className="h-8 w-full" aria-hidden />
+                  {loadingMore ? (
+                    <p className="py-2 text-center text-xs text-slate-500">A carregar mais…</p>
+                  ) : null}
+                  {!hasMore ? (
+                    <Text className="text-center text-sm text-slate-500">Fim dos resultados</Text>
+                  ) : null}
                 </>
               ) : null}
             </SoftListSlot>
@@ -290,7 +315,7 @@ export function ExploreListClient() {
                 { href: '/app/agente', label: 'Ver acompanhamento' },
                 ...(session?.permissions.includes('properties.manage')
                   ? [{ href: '/app/patrimonios', label: 'Publicar património' }]
-                  : [{ href: '/app', label: 'Ir ao painel' }]),
+                  : [{ href: '/app', label: 'Ir ao feed' }]),
               ]}
             />
           </>

@@ -10,11 +10,9 @@ import { BrandMark } from '@/modules/authentication/components/BrandMark';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
 import { getShellCopy } from '../content/pt';
-import { presetFromPathname } from '../media/hero-media';
 import { isNavItemActive, isNavItemVisible, SHELL_NAV_ITEMS } from '../nav';
 import { NavIcon } from '../nav-icons';
 import { AtmosphereBackground } from './AtmosphereBackground';
-import { ModuleIntro } from './ModuleIntro';
 import { TopbarActions } from './TopbarActions';
 import { UserMenu } from './UserMenu';
 
@@ -97,20 +95,21 @@ function ShellBrand() {
 }
 
 /**
- * Authenticated platform chrome — Landing-continuous cinematic atmosphere + glass.
+ * LinkedIn-style app frame (ADR-013):
+ * - Left nav + top header never scroll
+ * - Only the center pane scrolls
+ * - Stable atmosphere — same environment across modules
  */
 export function PlatformShell({ children, session, sessionStatus }: PlatformShellProps) {
   const auth = getAuthCopy();
   const shell = getShellCopy();
   const pathname = usePathname() || '/app';
-  const preset = presetFromPathname(pathname);
-  const isHome = pathname === '/app' || pathname === '/app/';
   const [drawerOpen, setDrawerOpen] = useState(false);
   const titleId = useId();
   const drawerId = useId();
   const drawerTitleId = useId();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Keep last known permissions so nav items do not appear/disappear while session resolves.
   const permissionsRef = useRef<string[]>(session?.permissions ?? []);
   if (session?.permissions?.length) {
     permissionsRef.current = [...session.permissions];
@@ -122,8 +121,10 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
     certified_agent: 'Agente Certificado',
     administrator: 'Administrador',
   };
+
   useEffect(() => {
     setDrawerOpen(false);
+    scrollRef.current?.scrollTo({ top: 0 });
   }, [pathname]);
 
   useEffect(() => {
@@ -143,21 +144,24 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   }, [drawerOpen, drawerId]);
 
   return (
-    <div className="relative flex min-h-screen">
-      <AtmosphereBackground preset={preset} />
+    <div className="kuteka-app-frame relative flex h-dvh overflow-hidden">
+      <AtmosphereBackground mode="app" preset="dashboard" />
 
       <aside
-        className="kuteka-glass-chrome relative z-20 hidden w-64 shrink-0 flex-col border-r border-white/10 md:flex lg:w-72"
+        className="kuteka-glass-chrome relative z-20 hidden h-dvh w-64 shrink-0 flex-col border-r border-white/10 md:flex lg:w-72"
         aria-label={shell.navAria}
       >
         <ShellBrand />
-        <nav className="flex-1 overflow-y-auto" aria-label={shell.navAria}>
+        <nav
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+          aria-label={shell.navAria}
+        >
           <NavList pathname={pathname} permissions={permissions} />
         </nav>
       </aside>
 
-      <div className="relative z-10 flex min-w-0 flex-1 flex-col">
-        <header className="kuteka-glass-chrome sticky top-0 z-30 border-b border-white/10">
+      <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col">
+        <header className="kuteka-glass-chrome z-30 shrink-0 border-b border-white/10">
           <div className="flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
             <div className="flex min-w-0 items-center gap-3">
               <button
@@ -193,15 +197,14 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
           </div>
         </header>
 
-        <main
-          className={cn(
-            'kuteka-app-main mx-auto w-full flex-1 px-4 py-7 sm:px-6 sm:py-9',
-            isHome ? 'max-w-6xl' : 'max-w-5xl',
-          )}
+        <div
+          ref={scrollRef}
+          className="kuteka-app-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain"
         >
-          <ModuleIntro preset={preset} compact={isHome} />
-          <div className="flex flex-col gap-6">{children}</div>
-        </main>
+          <main className="kuteka-app-main mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 sm:py-6">
+            <div className="flex flex-col gap-5">{children}</div>
+          </main>
+        </div>
       </div>
 
       {drawerOpen ? (
@@ -213,13 +216,13 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
         >
           <button
             type="button"
-            className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px] transition-opacity duration-200"
+            className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px]"
             aria-label={shell.closeMenu}
             onClick={() => setDrawerOpen(false)}
           />
           <aside
             id={drawerId}
-            className="kuteka-glass-chrome absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col shadow-xl motion-reduce:transition-none"
+            className="kuteka-glass-chrome absolute inset-y-0 left-0 flex w-[min(20rem,88vw)] flex-col shadow-xl"
           >
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-5">
               <div>
@@ -240,7 +243,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 {shell.closeMenu}
               </button>
             </div>
-            <nav className="flex-1 overflow-y-auto" aria-label={shell.navAria}>
+            <nav className="min-h-0 flex-1 overflow-y-auto" aria-label={shell.navAria}>
               <NavList
                 pathname={pathname}
                 permissions={permissions}
