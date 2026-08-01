@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import type { ShellNavItem } from './nav';
+import type { ShellNavLabelKey } from './nav';
 
 type IconProps = { className?: string };
 
@@ -50,12 +50,6 @@ function IconAgent({ className }: IconProps) {
       <circle cx="10" cy="6.5" r="2.8" stroke="currentColor" strokeWidth="1.4" />
       <path
         d="M4.5 16.5c.7-3 2.7-4.5 5.5-4.5s4.8 1.5 5.5 4.5"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-      <path
-        d="M15.5 8.5h2M16.5 7.5v2"
         stroke="currentColor"
         strokeWidth="1.4"
         strokeLinecap="round"
@@ -111,13 +105,118 @@ function IconContract({ className }: IconProps) {
   );
 }
 
-const ICONS: Record<ShellNavItem['labelKey'], (props: IconProps) => ReactElement> = {
+function IconSearch({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <circle cx="9" cy="9" r="5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M13 13.5 16.5 17" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconHeart({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M10 16.5s-6-3.6-6-7.2A3.3 3.3 0 0 1 10 6.8a3.3 3.3 0 0 1 6 2.5c0 3.6-6 7.2-6 7.2Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconCalendar({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <rect
+        x="3.5"
+        y="4.5"
+        width="13"
+        height="12"
+        rx="1.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+      />
+      <path
+        d="M3.5 8h13M7 3v3M13 3v3"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function IconPlus({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M10 4.5v11M4.5 10h11"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function IconChart({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M4 15.5V9M8.5 15.5V5M13 15.5v-4M17 15.5V7"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function IconUser({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <circle cx="10" cy="7" r="3" stroke="currentColor" strokeWidth="1.4" />
+      <path
+        d="M4.5 16c1-3 2.8-4.5 5.5-4.5s4.5 1.5 5.5 4.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function IconOffer({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M3.5 10.5 10 4l6.5 6.5V16a1 1 0 0 1-1 1H4.5a1 1 0 0 1-1-1v-5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+      <circle cx="13" cy="8" r="1.2" fill="currentColor" />
+    </svg>
+  );
+}
+
+const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   home: IconHome,
+  explorar: IconSearch,
+  favoritos: IconHeart,
+  visitas: IconCalendar,
+  propostas: IconOffer,
   patrimonios: IconBuilding,
+  ativar: IconPlus,
   habitacao: IconKey,
   agente: IconAgent,
   confianca: IconShield,
   contratos: IconContract,
+  relatorios: IconChart,
+  conta: IconUser,
   admin: IconAdmin,
 };
 
@@ -125,9 +224,9 @@ export function NavIcon({
   labelKey,
   className = 'size-4 shrink-0',
 }: {
-  labelKey: ShellNavItem['labelKey'];
+  labelKey: ShellNavLabelKey;
   className?: string;
 }) {
-  const Icon = ICONS[labelKey];
+  const Icon = ICONS[labelKey] ?? IconHome;
   return <Icon className={className} />;
 }

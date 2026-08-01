@@ -6,6 +6,8 @@ import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { EXPERIENCE_LABELS, type ExperienceMode } from '../role-experience';
+import { useRoleExperience } from './RoleExperienceProvider';
 
 type RoleHomeDashboardProps = {
   session: AppSessionData;
@@ -63,8 +65,10 @@ function DashboardShell({
 type LiveStats = {
   properties: number;
   activeProperties: number;
-  contracts: number;
-  activeContracts: number;
+  clientContracts: number;
+  clientActiveContracts: number;
+  partnerContracts: number;
+  partnerActiveContracts: number;
   interests: number;
   reviews: number;
   reviewAvg: number | null;
@@ -73,19 +77,22 @@ type LiveStats = {
   proposals30: number;
   users: number;
   trustPending: number;
+  assignments: number;
 };
 
-async function loadLiveStats(session: AppSessionData): Promise<LiveStats> {
+function isActiveContractStatus(status: string): boolean {
+  return ['active', 'signed', 'in_progress', 'in_force', 'em_vigor'].includes(status);
+}
+
+async function loadLiveStats(uid: string): Promise<LiveStats> {
   const client = createBrowserClient();
-  const {
-    data: { user },
-  } = await client.auth.getUser();
-  const uid = user?.id;
   const empty: LiveStats = {
     properties: 0,
     activeProperties: 0,
-    contracts: 0,
-    activeContracts: 0,
+    clientContracts: 0,
+    clientActiveContracts: 0,
+    partnerContracts: 0,
+    partnerActiveContracts: 0,
     interests: 0,
     reviews: 0,
     reviewAvg: null,
@@ -94,301 +101,257 @@ async function loadLiveStats(session: AppSessionData): Promise<LiveStats> {
     proposals30: 0,
     users: 0,
     trustPending: 0,
+    assignments: 0,
   };
 
   try {
-    if (!uid) return empty;
-    const isPartner = session.roles.includes('patrimonial_partner');
-    const isClient = session.roles.includes('client');
-    const isAdmin =
-      session.roles.includes('administrator') || session.roles.includes('super_administrator');
-    const isAgent = session.roles.includes('certified_agent');
-
-    if (isPartner) {
-      const props = await client
-        .from('properties')
-        .select('id, status', { count: 'exact' })
-        .eq('owner_id', uid)
-        .is('deleted_at', null);
-      const propRows = (props.data as { id: string; status: string }[]) ?? [];
-      const propIds = propRows.map((p) => p.id);
-      const active = propRows.filter((p) => p.status === 'active').length;
-
-      let contracts = 0;
-      let activeContracts = 0;
-      let reviews = 0;
-      let reviewAvg: number | null = null;
-      let views30 = 0;
-      let visits30 = 0;
-      let proposals30 = 0;
-
-      if (propIds.length) {
-        const [cAll, cActive, rev, metrics] = await Promise.all([
-          client
-            .from('property_contracts')
-            .select('id', { count: 'exact', head: true })
-            .in('property_id', propIds)
-            .is('deleted_at', null),
-          client
-            .from('property_contracts')
-            .select('id', { count: 'exact', head: true })
-            .in('property_id', propIds)
-            .in('status', ['active', 'signed', 'in_progress'])
-            .is('deleted_at', null),
-          client.from('contract_reviews').select('rating').in('property_id', propIds),
-          client
-            .from('property_metrics')
-            .select('views_30d, visits_30d, proposals_30d')
-            .in('property_id', propIds),
-        ]);
-        contracts = cAll.count ?? 0;
-        activeContracts = cActive.count ?? 0;
-        const ratings = ((rev.data as { rating: number }[]) ?? []).map((r) => Number(r.rating));
-        reviews = ratings.length;
-        reviewAvg = ratings.length ? ratings.reduce((a, b) => a + b, 0) / ratings.length : null;
-        for (const m of (metrics.data as {
-          views_30d: number;
-          visits_30d: number;
-          proposals_30d: number;
-        }[]) ?? []) {
-          views30 += Number(m.views_30d) || 0;
-          visits30 += Number(m.visits_30d) || 0;
-          proposals30 += Number(m.proposals_30d) || 0;
-        }
-      }
-
-      return {
-        ...empty,
-        properties: props.count ?? propRows.length,
-        activeProperties: active,
-        contracts,
-        activeContracts,
-        reviews,
-        reviewAvg,
-        views30,
-        visits30,
-        proposals30,
-      };
-    }
-
-    if (isClient) {
-      const [prefs, interests, contracts] = await Promise.all([
+    const [props, clientContracts, partnerContracts, interests, assignments, users, trust] =
+      await Promise.all([
+        client.from('properties').select('id, status').eq('owner_id', uid).is('deleted_at', null),
         client
-          .from('client_preferences')
-          .select('user_id', { count: 'exact', head: true })
-          .eq('user_id', uid),
+          .from('property_contracts')
+          .select('id, status', { count: 'exact' })
+          .eq('client_id', uid)
+          .is('deleted_at', null),
+        client
+          .from('property_contracts')
+          .select('id, status', { count: 'exact' })
+          .eq('partner_id', uid)
+          .is('deleted_at', null),
         client
           .from('property_interests')
           .select('id', { count: 'exact', head: true })
           .eq('client_id', uid),
         client
-          .from('property_contracts')
-          .select('id', { count: 'exact', head: true })
-          .eq('client_id', uid)
-          .is('deleted_at', null),
-      ]);
-      return {
-        ...empty,
-        interests: interests.count ?? 0,
-        contracts: contracts.count ?? 0,
-        properties: prefs.count ?? 0,
-      };
-    }
-
-    if (isAgent) {
-      const [assignments, contracts] = await Promise.all([
-        client
           .from('agent_assignments')
           .select('id', { count: 'exact', head: true })
           .eq('agent_id', uid)
           .is('deleted_at', null),
-        client
-          .from('property_contracts')
-          .select('id', { count: 'exact', head: true })
-          .eq('agent_id', uid)
-          .is('deleted_at', null),
-      ]);
-      return {
-        ...empty,
-        properties: assignments.count ?? 0,
-        contracts: contracts.count ?? 0,
-      };
-    }
-
-    if (isAdmin) {
-      const [users, props, contracts, trust] = await Promise.all([
         client.from('profiles').select('id', { count: 'exact', head: true }),
-        client
-          .from('properties')
-          .select('id', { count: 'exact', head: true })
-          .is('deleted_at', null)
-          .eq('status', 'active'),
-        client
-          .from('property_contracts')
-          .select('id', { count: 'exact', head: true })
-          .is('deleted_at', null),
         client
           .from('trust_documents')
           .select('id', { count: 'exact', head: true })
           .in('status', ['submitted', 'under_review']),
       ]);
-      return {
-        ...empty,
-        users: users.count ?? 0,
-        activeProperties: props.count ?? 0,
-        contracts: contracts.count ?? 0,
-        trustPending: trust.count ?? 0,
-      };
+
+    const propRows = (props.data as { id: string; status: string }[]) ?? [];
+    const propIds = propRows.map((p) => p.id);
+    let reviews = 0;
+    let reviewAvg: number | null = null;
+    let views30 = 0;
+    let visits30 = 0;
+    let proposals30 = 0;
+
+    if (propIds.length) {
+      const [rev, metrics] = await Promise.all([
+        client.from('contract_reviews').select('rating').in('property_id', propIds),
+        client
+          .from('property_metrics')
+          .select('views_30d, visits_30d, proposals_30d')
+          .in('property_id', propIds),
+      ]);
+      const ratings = ((rev.data as { rating: number }[]) ?? []).map((r) => Number(r.rating));
+      reviews = ratings.length;
+      reviewAvg = ratings.length ? ratings.reduce((a, b) => a + b, 0) / ratings.length : null;
+      for (const m of (metrics.data as {
+        views_30d: number;
+        visits_30d: number;
+        proposals_30d: number;
+      }[]) ?? []) {
+        views30 += Number(m.views_30d) || 0;
+        visits30 += Number(m.visits_30d) || 0;
+        proposals30 += Number(m.proposals_30d) || 0;
+      }
     }
+
+    const partnerRows = (partnerContracts.data as { status: string }[]) ?? [];
+    const clientRows = (clientContracts.data as { status: string }[]) ?? [];
+
+    return {
+      ...empty,
+      properties: propRows.length,
+      activeProperties: propRows.filter((p) => p.status === 'active').length,
+      clientContracts: clientContracts.count ?? clientRows.length,
+      clientActiveContracts: clientRows.filter((c) => isActiveContractStatus(c.status)).length,
+      partnerContracts: partnerContracts.count ?? partnerRows.length,
+      partnerActiveContracts: partnerRows.filter((c) => isActiveContractStatus(c.status)).length,
+      interests: interests.count ?? 0,
+      reviews,
+      reviewAvg,
+      views30,
+      visits30,
+      proposals30,
+      users: users.count ?? 0,
+      trustPending: trust.count ?? 0,
+      assignments: assignments.count ?? 0,
+    };
   } catch {
-    // fall through
+    return empty;
   }
-  return empty;
+}
+
+function ClientPanel({ s, loading }: { s: LiveStats | null; loading: boolean }) {
+  return (
+    <DashboardShell
+      loading={loading}
+      eyebrow="Cliente"
+      title="Jornada habitacional"
+      subtitle="Pesquisas, interesses, visitas e contratos como comprador ou arrendatário."
+      stats={[
+        { label: 'Interesses / favoritos', value: String(s?.interests ?? 0) },
+        { label: 'Contratos (cliente)', value: String(s?.clientContracts ?? 0) },
+        { label: 'Contratos activos', value: String(s?.clientActiveContracts ?? 0) },
+        { label: 'Propostas / visitas (30d)', value: String(s?.proposals30 ?? 0) },
+      ]}
+      links={[
+        { href: '/app/habitacao/explorar', label: 'Explorar Habitação', primary: true },
+        { href: '/app/habitacao?vista=interesses', label: 'Favoritos' },
+        { href: '/app/habitacao?vista=visitas', label: 'Visitas' },
+        { href: '/app/contratos', label: 'Contratos' },
+        { href: '/auth/onboarding/perfil', label: 'Conta' },
+      ]}
+    />
+  );
+}
+
+function PartnerPanel({ s, loading }: { s: LiveStats | null; loading: boolean }) {
+  return (
+    <DashboardShell
+      loading={loading}
+      eyebrow="Parceiro Patrimonial"
+      title="Gestão do património"
+      subtitle="Patrimónios, receitas, contratos activos, Índice Kuteka e reputação."
+      stats={[
+        { label: 'Patrimónios', value: String(s?.properties ?? 0) },
+        { label: 'Publicados', value: String(s?.activeProperties ?? 0) },
+        { label: 'Visualizações (30d)', value: String(s?.views30 ?? 0) },
+        { label: 'Visitas (30d)', value: String(s?.visits30 ?? 0) },
+        { label: 'Contratos (parceiro)', value: String(s?.partnerContracts ?? 0) },
+        { label: 'Contratos activos', value: String(s?.partnerActiveContracts ?? 0) },
+        {
+          label: 'Avaliação média',
+          value: s?.reviewAvg != null ? `${s.reviewAvg.toFixed(1)}★` : '—',
+        },
+        { label: 'Avaliações', value: String(s?.reviews ?? 0) },
+      ]}
+      links={[
+        { href: '/app/patrimonios', label: 'Patrimónios', primary: true },
+        { href: '/app/patrimonios/novo', label: 'Ativar Património' },
+        { href: '/app/contratos', label: 'Contratos' },
+        { href: '/app/confianca', label: 'Confiança' },
+      ]}
+    />
+  );
+}
+
+function panelForMode(
+  mode: ExperienceMode,
+  s: LiveStats | null,
+  loading: boolean,
+): React.ReactNode {
+  switch (mode) {
+    case 'client':
+      return <ClientPanel s={s} loading={loading} />;
+    case 'patrimonial_partner':
+      return <PartnerPanel s={s} loading={loading} />;
+    case 'client_partner':
+      return (
+        <div className="flex flex-col gap-4">
+          <p className="kuteka-detail-meta px-1">
+            Experiência integrada — {EXPERIENCE_LABELS.client_partner}. Dois cockpits, um só login.
+          </p>
+          <ClientPanel s={s} loading={loading} />
+          <PartnerPanel s={s} loading={loading} />
+        </div>
+      );
+    case 'certified_agent':
+      return (
+        <DashboardShell
+          loading={loading}
+          eyebrow="Agente Certificado"
+          title="Pipeline no terreno"
+          subtitle="Imóveis atribuídos, visitas, propostas e avaliações técnicas."
+          stats={[
+            { label: 'Imóveis atribuídos', value: String(s?.assignments ?? 0) },
+            {
+              label: 'Contratos',
+              value: String((s?.clientContracts ?? 0) + (s?.partnerContracts ?? 0)),
+            },
+            { label: 'Visitas (30d)', value: String(s?.visits30 ?? 0) },
+            { label: 'Propostas', value: String(s?.proposals30 ?? 0) },
+          ]}
+          links={[
+            { href: '/app/agente', label: 'Pipeline', primary: true },
+            { href: '/app/agente/explorar', label: 'Inventário' },
+            { href: '/app/contratos', label: 'Contratos' },
+            { href: '/app/habitacao/explorar', label: 'Habitação' },
+          ]}
+        />
+      );
+    case 'administrator':
+    case 'super_administrator':
+      return (
+        <DashboardShell
+          loading={loading}
+          eyebrow={EXPERIENCE_LABELS[mode]}
+          title="Comando operacional"
+          subtitle="Utilizadores, patrimónios, contratos, auditoria e aprovações."
+          stats={[
+            { label: 'Utilizadores', value: String(s?.users ?? 0) },
+            { label: 'Patrimónios publicados', value: String(s?.activeProperties ?? 0) },
+            {
+              label: 'Contratos',
+              value: String((s?.clientContracts ?? 0) + (s?.partnerContracts ?? 0)),
+            },
+            { label: 'Pendentes confiança', value: String(s?.trustPending ?? 0) },
+          ]}
+          links={[
+            { href: '/app/admin', label: 'Administração', primary: true },
+            { href: '/app/admin/utilizadores', label: 'Utilizadores' },
+            { href: '/app/confianca/revisao', label: 'Aprovações' },
+            { href: '/app/contratos', label: 'Contratos' },
+          ]}
+        />
+      );
+    default:
+      return <ClientPanel s={s} loading={loading} />;
+  }
 }
 
 /**
- * Role-aware home strip — live counts from Supabase when available.
+ * Role-aware home — widgets change with active experience (Mudar de Papel).
  */
 export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
-  const roles = session.roles;
-  const isSuper = roles.includes('super_administrator');
-  const isAdmin = roles.includes('administrator') || isSuper;
-  const isAgent = roles.includes('certified_agent');
-  const isPartner = roles.includes('patrimonial_partner');
-  const isClient = roles.includes('client');
-
+  const { mode } = useRoleExperience();
   const [stats, setStats] = useState<LiveStats | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    void loadLiveStats(session).then((data) => {
+    async function run() {
+      setLoading(true);
+      const client = createBrowserClient();
+      const {
+        data: { user },
+      } = await client.auth.getUser();
+      if (!user) {
+        if (!cancelled) {
+          setStats(null);
+          setLoading(false);
+        }
+        return;
+      }
+      const data = await loadLiveStats(user.id);
       if (!cancelled) {
         setStats(data);
         setLoading(false);
       }
-    });
+    }
+    void run();
     return () => {
       cancelled = true;
     };
-  }, [session]);
+  }, [session.roles, mode]);
 
-  const s = stats;
-
-  if (isSuper || isAdmin) {
-    return (
-      <DashboardShell
-        loading={loading}
-        eyebrow={isSuper ? 'Superadministrador' : 'Administrador'}
-        title={isSuper ? 'Painel executivo Kuteka' : 'Comando da plataforma'}
-        subtitle="Utilizadores, patrimónios activos, contratos e aprovações — dados da plataforma."
-        stats={[
-          { label: 'Utilizadores', value: String(s?.users ?? 0) },
-          { label: 'Patrimónios activos', value: String(s?.activeProperties ?? 0) },
-          { label: 'Contratos', value: String(s?.contracts ?? 0) },
-          { label: 'Pendentes confiança', value: String(s?.trustPending ?? 0) },
-        ]}
-        links={[
-          { href: '/app/admin', label: 'Operações', primary: true },
-          { href: '/app/admin/utilizadores', label: 'Utilizadores' },
-          { href: '/app/contratos', label: 'Contratos' },
-          { href: '/app/confianca/revisao', label: 'Aprovações' },
-        ]}
-      />
-    );
-  }
-
-  if (isAgent) {
-    return (
-      <DashboardShell
-        loading={loading}
-        eyebrow="Agente Certificado"
-        title="O seu pipeline no terreno"
-        subtitle="Imóveis atribuídos e contratos sob a sua responsabilidade."
-        stats={[
-          { label: 'Imóveis atribuídos', value: String(s?.properties ?? 0) },
-          { label: 'Contratos', value: String(s?.contracts ?? 0) },
-          { label: 'Visitas (métricas)', value: String(s?.visits30 ?? 0) },
-          { label: 'Propostas', value: String(s?.proposals30 ?? 0) },
-        ]}
-        links={[
-          { href: '/app/agente', label: 'Pipeline', primary: true },
-          { href: '/app/agente/explorar', label: 'Explorar inventário' },
-          { href: '/app/contratos', label: 'Contratos' },
-          { href: '/app/habitacao/explorar', label: 'Habitação' },
-        ]}
-      />
-    );
-  }
-
-  if (isPartner) {
-    return (
-      <DashboardShell
-        loading={loading}
-        eyebrow="Parceiro Patrimonial"
-        title="Os seus patrimónios"
-        subtitle="Publicações, visitas, contratos, rendimento e reputação — dados reais da conta."
-        stats={[
-          { label: 'Imóveis', value: String(s?.properties ?? 0) },
-          { label: 'Publicados', value: String(s?.activeProperties ?? 0) },
-          { label: 'Visualizações (30d)', value: String(s?.views30 ?? 0) },
-          { label: 'Visitas (30d)', value: String(s?.visits30 ?? 0) },
-          { label: 'Propostas (30d)', value: String(s?.proposals30 ?? 0) },
-          { label: 'Contratos activos', value: String(s?.activeContracts ?? 0) },
-          {
-            label: 'Avaliação média',
-            value: s?.reviewAvg != null ? `${s.reviewAvg.toFixed(1)}★` : '—',
-          },
-          { label: 'Avaliações', value: String(s?.reviews ?? 0) },
-        ]}
-        links={[
-          { href: '/app/patrimonios', label: 'Os meus anúncios', primary: true },
-          { href: '/app/patrimonios/novo', label: 'Publicar' },
-          { href: '/app/contratos', label: 'Contratos' },
-          { href: '/app/confianca', label: 'Confiança' },
-        ]}
-      />
-    );
-  }
-
-  if (isClient) {
-    return (
-      <DashboardShell
-        loading={loading}
-        eyebrow="Cliente"
-        title="A sua jornada habitacional"
-        subtitle="Preferências, interesses e contratos na Kuteka."
-        stats={[
-          { label: 'Preferências', value: String(s?.properties ?? 0) },
-          { label: 'Interesses', value: String(s?.interests ?? 0) },
-          { label: 'Contratos', value: String(s?.contracts ?? 0) },
-          { label: 'Explorar', value: 'Habitação' },
-        ]}
-        links={[
-          { href: '/app/habitacao/explorar', label: 'Explorar', primary: true },
-          { href: '/app/contratos', label: 'Contratos' },
-          { href: '/app/confianca', label: 'Verificar conta' },
-          { href: '/app/agente', label: 'Agente' },
-        ]}
-      />
-    );
-  }
-
-  return (
-    <DashboardShell
-      eyebrow="Kuteka"
-      title="Active o seu papel"
-      subtitle="Escolha Cliente ou Parceiro Patrimonial para personalizar o painel e o feed."
-      stats={[
-        { label: 'Módulos prontos', value: '6+' },
-        { label: 'Feed contínuo', value: 'On' },
-        { label: 'Confiança', value: 'KYC' },
-        { label: 'Contratos', value: 'N5' },
-      ]}
-      links={[
-        { href: '/auth/onboarding/papeis', label: 'Activar papéis', primary: true },
-        { href: '/app/confianca', label: 'Confiança' },
-      ]}
-    />
-  );
+  return <>{panelForMode(mode, stats, loading)}</>;
 }

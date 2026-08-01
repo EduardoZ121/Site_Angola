@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { PreferencesForm } from '@/modules/habitacao/components/PreferencesForm';
+import { Suspense } from 'react';
+import { ClientHubClient } from '@/modules/habitacao/components/ClientHubClient';
 
 export const metadata: Metadata = {
   title: 'Habitação',
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function HabitacaoPage() {
-  return <PreferencesForm />;
+  return (
+    <Suspense fallback={<p className="kuteka-detail-meta">A carregar Habitação…</p>}>
+      <ClientHubClient />
+    </Suspense>
+  );
 }

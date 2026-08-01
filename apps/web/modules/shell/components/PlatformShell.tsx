@@ -10,11 +10,14 @@ import { BrandMark } from '@/modules/authentication/components/BrandMark';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
 import { getShellCopy } from '../content/pt';
-import { isNavItemActive, isNavItemVisible, SHELL_NAV_ITEMS } from '../nav';
+import { groupNavItems, isNavItemActive, visibleNavItems } from '../nav';
+import { EXPERIENCE_LABELS } from '../role-experience';
 import { NavIcon } from '../nav-icons';
 import { AtmosphereBackground } from './AtmosphereBackground';
+import { RoleRouteGuard } from './RoleRouteGuard';
 import { TopbarActions } from './TopbarActions';
 import { UserMenu } from './UserMenu';
+import { useRoleExperience } from './RoleExperienceProvider';
 
 type PlatformShellProps = {
   children: ReactNode;
@@ -22,60 +25,74 @@ type PlatformShellProps = {
   sessionStatus: 'loading' | 'ready' | 'error';
 };
 
-function NavList({
-  pathname,
-  permissions,
-  onNavigate,
-}: {
-  pathname: string;
-  permissions: readonly string[];
-  onNavigate?: () => void;
-}) {
+function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
   const shell = getShellCopy();
+  const { mode, effectivePermissions } = useRoleExperience();
+  const items = visibleNavItems(effectivePermissions, mode);
+  const groups = groupNavItems(items);
+  const showGroupHeaders = mode === 'client_partner' || groups.length > 2;
 
   return (
-    <ul className="flex flex-col gap-1 p-3">
-      {SHELL_NAV_ITEMS.filter((item) => isNavItemVisible(item, permissions)).map((item) => {
-        const label = shell.items[item.labelKey];
-        const active = isNavItemActive(item, pathname);
+    <div className="flex flex-col gap-3 p-3">
+      <div className="rounded-kuteka border border-white/10 bg-white/5 px-3 py-2">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-slate-400">
+          {shell.activeExperience}
+        </p>
+        <p className="mt-0.5 text-sm font-semibold text-white">{EXPERIENCE_LABELS[mode]}</p>
+      </div>
 
-        if (item.status === 'soon') {
-          return (
-            <li key={item.id}>
-              <div
-                className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-400"
-                aria-disabled="true"
-              >
-                <span className="inline-flex items-center gap-2.5">
-                  <NavIcon labelKey={item.labelKey} className="size-4 shrink-0 opacity-70" />
-                  {label}
-                </span>
-                <span className="text-xs font-medium text-slate-500">{shell.soon}</span>
-              </div>
-            </li>
-          );
-        }
+      {groups.map(({ group, items: groupItems }) => (
+        <div key={group}>
+          {showGroupHeaders && group !== 'geral' ? (
+            <p className="mb-1 px-3 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-slate-400">
+              {shell.groups[group]}
+            </p>
+          ) : null}
+          <ul className="flex flex-col gap-1">
+            {groupItems.map((item) => {
+              const label = shell.items[item.labelKey];
+              const active = isNavItemActive(item, pathname);
 
-        return (
-          <li key={item.id}>
-            <Link
-              href={item.href!}
-              onClick={onNavigate}
-              aria-current={active ? 'page' : undefined}
-              className={cn(
-                'flex items-center gap-2.5 rounded-kuteka px-3 py-2.5 text-sm font-medium transition-colors duration-200',
-                active
-                  ? 'bg-brand-500/25 text-white ring-1 ring-brand-400/40'
-                  : 'text-slate-200 hover:bg-white/10 hover:text-white',
-              )}
-            >
-              <NavIcon labelKey={item.labelKey} />
-              {label}
-            </Link>
-          </li>
-        );
-      })}
-    </ul>
+              if (item.status === 'soon') {
+                return (
+                  <li key={item.id}>
+                    <div
+                      className="flex items-center justify-between gap-2 rounded-kuteka px-3 py-2.5 text-sm text-slate-400"
+                      aria-disabled="true"
+                    >
+                      <span className="inline-flex items-center gap-2.5">
+                        <NavIcon labelKey={item.labelKey} className="size-4 shrink-0 opacity-70" />
+                        {label}
+                      </span>
+                      <span className="text-xs font-medium text-slate-500">{shell.soon}</span>
+                    </div>
+                  </li>
+                );
+              }
+
+              return (
+                <li key={item.id}>
+                  <Link
+                    href={item.href!}
+                    onClick={onNavigate}
+                    aria-current={active ? 'page' : undefined}
+                    className={cn(
+                      'flex items-center gap-2.5 rounded-kuteka px-3 py-2.5 text-sm font-medium transition-colors duration-200',
+                      active
+                        ? 'bg-[#f0a91f] text-[#08263f] shadow-sm'
+                        : 'text-slate-200 hover:bg-white/10 hover:text-white',
+                    )}
+                  >
+                    <NavIcon labelKey={item.labelKey} />
+                    {label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -92,10 +109,7 @@ function ShellBrand() {
 }
 
 /**
- * LinkedIn-style app frame (ADR-013):
- * - Left nav + top header never scroll
- * - Only the center pane scrolls
- * - Stable atmosphere — same environment across modules
+ * LinkedIn-style app frame (ADR-013) + role experience lens.
  */
 export function PlatformShell({ children, session, sessionStatus }: PlatformShellProps) {
   const auth = getAuthCopy();
@@ -106,12 +120,8 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   const drawerId = useId();
   const drawerTitleId = useId();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { mode } = useRoleExperience();
 
-  const permissionsRef = useRef<string[]>(session?.permissions ?? []);
-  if (session?.permissions?.length) {
-    permissionsRef.current = [...session.permissions];
-  }
-  const permissions = session?.permissions?.length ? session.permissions : permissionsRef.current;
   const roleLabels: Record<string, string> = {
     client: auth.onboarding.roles.client,
     patrimonial_partner: auth.onboarding.roles.partner,
@@ -123,7 +133,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   useEffect(() => {
     setDrawerOpen(false);
     scrollRef.current?.scrollTo({ top: 0 });
-  }, [pathname]);
+  }, [pathname, mode]);
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -154,7 +164,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
           className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
           aria-label={shell.navAria}
         >
-          <NavList pathname={pathname} permissions={permissions} />
+          <NavList pathname={pathname} />
         </nav>
       </aside>
 
@@ -180,12 +190,15 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
               <div className="min-w-0 md:hidden">
                 <BrandMark href="/app" variant="inline" tone="light" size="md" />
               </div>
-              <p
-                id={titleId}
-                className="hidden truncate text-sm font-semibold tracking-wide text-slate-100 md:block"
-              >
-                {shell.areaTitle}
-              </p>
+              <div className="hidden min-w-0 md:block">
+                <p
+                  id={titleId}
+                  className="truncate text-sm font-semibold tracking-wide text-slate-100"
+                >
+                  {shell.areaTitle}
+                </p>
+                <p className="truncate text-xs text-slate-300">{EXPERIENCE_LABELS[mode]}</p>
+              </div>
             </div>
 
             <div className="flex items-center gap-1 text-slate-100 sm:gap-2">
@@ -200,7 +213,9 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
           className="kuteka-app-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain"
         >
           <main className="kuteka-app-main mx-auto w-full max-w-4xl px-4 py-5 sm:px-6 sm:py-6">
-            <div className="flex flex-col gap-5">{children}</div>
+            <div className="flex flex-col gap-5">
+              <RoleRouteGuard>{children}</RoleRouteGuard>
+            </div>
           </main>
         </div>
       </div>
@@ -242,11 +257,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
               </button>
             </div>
             <nav className="min-h-0 flex-1 overflow-y-auto" aria-label={shell.navAria}>
-              <NavList
-                pathname={pathname}
-                permissions={permissions}
-                onNavigate={() => setDrawerOpen(false)}
-              />
+              <NavList pathname={pathname} onNavigate={() => setDrawerOpen(false)} />
             </nav>
           </aside>
         </div>

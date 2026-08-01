@@ -29,13 +29,14 @@ Demo seed em contrato `completed`.
 
 ## Contas demo (password `DemoKuteka2026!`)
 
-| Email                      | Papel                |
-| -------------------------- | -------------------- |
-| demo.cliente@kuteka.local  | Cliente              |
-| demo.parceiro@kuteka.local | Parceiro Patrimonial |
-| demo.agente@kuteka.local   | Agente Certificado   |
-| demo.admin@kuteka.local    | Administrador        |
-| demo.super@kuteka.local    | Superadministrador   |
+| Email                      | Papel                               |
+| -------------------------- | ----------------------------------- |
+| demo.cliente@kuteka.local  | Cliente                             |
+| demo.parceiro@kuteka.local | Parceiro Patrimonial                |
+| demo.dual@kuteka.local     | Cliente + Parceiro (Mudar de papel) |
+| demo.agente@kuteka.local   | Agente Certificado                  |
+| demo.admin@kuteka.local    | Administrador                       |
+| demo.super@kuteka.local    | Superadministrador                  |
 
 ## Aplicar migração
 

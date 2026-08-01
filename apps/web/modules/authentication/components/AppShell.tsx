@@ -7,6 +7,7 @@ import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { PlatformShell } from '@/modules/shell/components/PlatformShell';
+import { RoleExperienceProvider } from '@/modules/shell/components/RoleExperienceProvider';
 import { getAuthCopy } from '../content';
 import { isPublicSupabaseConfigured } from '../lib/public-config';
 import { AppSessionContext, type AppSessionData } from './app-session';
@@ -277,9 +278,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   // booting OR ready — keep PlatformShell mounted (no boot flash swap).
   return (
     <AppSessionContext.Provider value={{ session, status: sessionStatus, error: sessionError }}>
-      <PlatformShell session={session} sessionStatus={sessionStatus}>
-        {children}
-      </PlatformShell>
+      <RoleExperienceProvider roles={session?.roles ?? []} permissions={session?.permissions ?? []}>
+        <PlatformShell session={session} sessionStatus={sessionStatus}>
+          {children}
+        </PlatformShell>
+      </RoleExperienceProvider>
     </AppSessionContext.Provider>
   );
 }
