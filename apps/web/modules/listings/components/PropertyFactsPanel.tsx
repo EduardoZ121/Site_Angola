@@ -1,5 +1,15 @@
 import { formatAoa } from '@/lib/format/aoa';
+import {
+  CONSERVATION_LABELS,
+  CONSTRUCTION_LABELS,
+  MANAGEMENT_LABELS,
+} from '../lib/manual-ops-labels';
 import { AMENITY_LABELS, type EnrichedListing } from '../types';
+
+function yesNo(value: boolean | null | undefined): string | null {
+  if (value == null) return null;
+  return value ? 'Sim' : 'Não';
+}
 
 function asAmenityList(value: EnrichedListing['amenities']): string[] {
   if (!Array.isArray(value)) return [];
@@ -50,11 +60,26 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
 
       <dl className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <Fact label="Tipologia" value={typeLabel} />
-        <Fact label="Finalidade" value={purposeLabel} />
+        <Fact label="Finalidade comercial" value={purposeLabel} />
+        {row.management_level ? (
+          <Fact
+            label="Nível de gestão"
+            value={MANAGEMENT_LABELS[row.management_level] ?? row.management_level}
+          />
+        ) : null}
         <Fact label="Província" value={row.province || '—'} />
+        <Fact label="Município" value={row.municipality || '—'} />
+        <Fact label="Comuna" value={row.commune || '—'} />
         <Fact label="Cidade" value={row.city || '—'} />
         <Fact label="Bairro" value={row.neighborhood || '—'} />
-        <Fact label="Morada" value={row.address_line || '—'} />
+        <Fact label="Rua" value={row.address_line || '—'} />
+        <Fact label="Número" value={row.street_number || '—'} />
+        {row.latitude != null && row.longitude != null ? (
+          <Fact
+            label="Coordenadas GPS"
+            value={`${Number(row.latitude).toFixed(5)}, ${Number(row.longitude).toFixed(5)}`}
+          />
+        ) : null}
         {row.bedrooms != null ? <Fact label="Quartos" value={`T${row.bedrooms}`} /> : null}
         {row.bathrooms != null ? (
           <Fact label="Casas de banho" value={String(row.bathrooms)} />
@@ -78,6 +103,18 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
         {row.year_built != null ? (
           <Fact label="Ano de construção" value={String(row.year_built)} />
         ) : null}
+        {row.conservation_state ? (
+          <Fact
+            label="Estado de conservação"
+            value={CONSERVATION_LABELS[row.conservation_state] ?? row.conservation_state}
+          />
+        ) : null}
+        {row.construction_status ? (
+          <Fact
+            label="Estado da construção"
+            value={CONSTRUCTION_LABELS[row.construction_status] ?? row.construction_status}
+          />
+        ) : null}
         {row.renovated_year != null ? (
           <Fact label="Remodelação" value={String(row.renovated_year)} />
         ) : null}
@@ -86,6 +123,36 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
             label="Custos mensais (condomínio)"
             value={`${Number(row.monthly_condo_aoa).toLocaleString('pt-AO')} AOA`}
           />
+        ) : null}
+        {yesNo(row.has_piped_water) ? (
+          <Fact label="Água canalizada" value={yesNo(row.has_piped_water)!} />
+        ) : null}
+        {yesNo(row.has_electricity) ? (
+          <Fact label="Energia eléctrica" value={yesNo(row.has_electricity)!} />
+        ) : null}
+        {yesNo(row.has_generator) ? (
+          <Fact label="Gerador" value={yesNo(row.has_generator)!} />
+        ) : null}
+        {yesNo(row.has_internet) ? (
+          <Fact label="Internet" value={yesNo(row.has_internet)!} />
+        ) : null}
+        {yesNo(row.has_security) ? (
+          <Fact label="Segurança" value={yesNo(row.has_security)!} />
+        ) : null}
+        {yesNo(row.has_paved_street) ? (
+          <Fact label="Pavimentação" value={yesNo(row.has_paved_street)!} />
+        ) : null}
+        {yesNo(row.near_schools) ? (
+          <Fact label="Escolas próximas" value={yesNo(row.near_schools)!} />
+        ) : null}
+        {yesNo(row.near_hospitals) ? (
+          <Fact label="Hospitais próximos" value={yesNo(row.near_hospitals)!} />
+        ) : null}
+        {yesNo(row.near_markets) ? (
+          <Fact label="Mercados próximos" value={yesNo(row.near_markets)!} />
+        ) : null}
+        {yesNo(row.near_transport) ? (
+          <Fact label="Transportes próximos" value={yesNo(row.near_transport)!} />
         ) : null}
       </dl>
 

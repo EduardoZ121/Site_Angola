@@ -42,10 +42,19 @@ export {
   PROPERTY_TYPES,
   PROPERTY_PURPOSES,
   PROPERTY_STATUSES,
+  KUTEKA_SERVICES,
+  MANAGEMENT_LEVELS,
+  RENOVATION_REQUESTS,
+  UNFINISHED_INTENTS,
+  CONSTRUCTION_STATUSES,
+  CONSERVATION_STATES,
+  propertyRequiresEvaluation,
   activatePropertySchema,
   expressInterestSchema,
   type ActivatePropertyInput,
   type ExpressInterestInput,
+  type KutekaService,
+  type ManagementLevel,
 } from './property';
 
 export { clientPreferencesSchema, type ClientPreferencesInput } from './housing';

@@ -10,7 +10,7 @@ import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { getHabitacaoCopy } from '../content/pt';
 
-import { HOUSING_ENRICHED_SELECT } from '@/modules/listings/types';
+import { HOUSING_ENRICHED_SELECT, HOUSING_ENRICHED_SELECT_V13 } from '@/modules/listings/types';
 
 export type HousingPropertyRow = {
   id: string;
@@ -274,7 +274,19 @@ export async function getActiveProperty(
       .maybeSingle();
 
     if (!enriched.error && enriched.data) {
-      return { ok: true, data: enriched.data as HousingPropertyRow };
+      return { ok: true, data: enriched.data as unknown as HousingPropertyRow };
+    }
+
+    const v13 = await client
+      .from('properties')
+      .select(HOUSING_ENRICHED_SELECT_V13)
+      .eq('id', id)
+      .eq('status', 'active')
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (!v13.error && v13.data) {
+      return { ok: true, data: v13.data as unknown as HousingPropertyRow };
     }
 
     const core = await client
@@ -286,7 +298,7 @@ export async function getActiveProperty(
       .maybeSingle();
 
     if (core.error || !core.data) return { ok: false, message: copy.loadError };
-    return { ok: true, data: core.data as HousingPropertyRow };
+    return { ok: true, data: core.data as unknown as HousingPropertyRow };
   } catch {
     return { ok: false, message: copy.loadError };
   }

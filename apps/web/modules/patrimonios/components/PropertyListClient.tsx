@@ -13,6 +13,7 @@ import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate'
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getPatrimoniosCopy } from '../content/pt';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
+import { PartnerLifecyclePanel } from './PartnerLifecyclePanel';
 
 export function PropertyListClient() {
   const copy = getPatrimoniosCopy();
@@ -109,6 +110,7 @@ export function PropertyListClient() {
 
         {canManage ? (
           <SoftListSlot pending={loading && rows.length === 0}>
+            <PartnerLifecyclePanel />
             <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
             {error ? (
