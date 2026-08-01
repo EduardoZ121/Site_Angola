@@ -47,3 +47,10 @@ export {
 } from './property';
 
 export { clientPreferencesSchema, type ClientPreferencesInput } from './housing';
+
+export {
+  agentPreferencesSchema,
+  activateAssignmentSchema,
+  type AgentPreferencesInput,
+  type ActivateAssignmentInput,
+} from './agent';

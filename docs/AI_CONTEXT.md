@@ -2,11 +2,11 @@
 
 **Documento:** Contexto institucional para desenvolvimento assistido por IA e equipa humana  
 **Versão:** 1.0  
-**Estado:** Activo (PRD-001+Shell+PRD-002 N5 congelados · PRD-003 Habitação **N5** · próximo PRD-004)  
+**Estado:** Activo (PRD-001…003 + Shell N5 congelados · PRD-004 Agente **N5** · próximo PRD-005)  
 **Actualização:** Rara — apenas por decisão oficial da equipa  
 **Uso:** Consultar antes de qualquer especificação, PRD ou implementação  
 **Índice:** `docs/README.md`  
-**Baseline:** `PROJECT_BASELINE_PRD001.md` · Shell ADR-005 · Patrimónios ADR-006 · Habitação ADR-007
+**Baseline:** `PROJECT_BASELINE_PRD001.md` · ADR-005…008
 
 ---
 
@@ -133,9 +133,9 @@ Documento: `docs/engineering/DEVELOPMENT_PROCESS.md`
 2 Autenticação (PRD-001) — **N5 concluído** · baseline congelada `PROJECT_BASELINE_PRD001.md`  
 3 Shell da plataforma — **N5 concluído / congelado** (ADR-005)  
 4 Parceiro Patrimonial (PRD-002) — **N5 concluído / congelado** (ADR-006)  
-5 Cliente / Habitação (PRD-003) — **N5 concluído** (ADR-007)  
-6 Agente (PRD-004) — **próximo**  
-7 Administração (PRD-005)  
+5 Cliente / Habitação (PRD-003) — **N5 concluído / congelado** (ADR-007)  
+6 Agente (PRD-004) — **N5 concluído** (ADR-008)  
+7 Administração (PRD-005) — **próximo**  
 8 Contratos → 9 Wallet → 10 Marketplace → 11 KAI → 12 BI
 
 ## 13. Segurança (mínimos)
