@@ -45,3 +45,5 @@ export {
   activatePropertySchema,
   type ActivatePropertyInput,
 } from './property';
+
+export { clientPreferencesSchema, type ClientPreferencesInput } from './housing';

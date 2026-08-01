@@ -4,11 +4,19 @@ export type RoleCode =
 
 /** Permission codes — capabilities, not roles */
 export type PermissionCode =
-  'platform.access' | 'admin.panel' | 'properties.manage' | (string & {});
+  'platform.access' | 'admin.panel' | 'properties.manage' | 'housing.explore' | (string & {});
 
 export type PropertyType = 'apartment' | 'house' | 'land' | 'commercial';
 export type PropertyPurpose = 'rent' | 'sale' | 'both';
 export type PropertyStatus = 'draft' | 'active' | 'archived';
+
+export type ClientPreferences = {
+  userId: string;
+  purpose: PropertyPurpose | null;
+  province: string | null;
+  city: string | null;
+  updatedAt: string;
+};
 
 export interface Property {
   id: string;

@@ -32,8 +32,8 @@ const MODULE_LINKS = [
   {
     key: 'habitacao',
     title: 'Habitação',
-    description: 'Jornada do Cliente — procurar e gerir habitação.',
-    href: null,
+    description: 'Jornada do Cliente — preferências e exploração de habitação.',
+    href: '/app/habitacao' as string | null,
   },
 ] as const;
 
