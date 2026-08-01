@@ -57,7 +57,28 @@ export function PropertyShowcase({
         onSelect={onSelectMedia}
       />
       <PropertyFactsPanel row={row} typeLabel={typeLabel} purposeLabel={purposeLabel} />
-      <PropertyDigitalPassport row={row} />
+      <nav
+        aria-label="Secções da ficha"
+        className="kuteka-detail-panel flex flex-wrap gap-2 px-4 py-3"
+      >
+        {[
+          { href: '#pdk', label: 'Passaporte Digital' },
+          { href: '#saude', label: 'Painel de Saúde' },
+          { href: '#avaliacao', label: 'Avaliação Técnica' },
+          { href: '#contrato-kuteka', label: 'Contrato Kuteka' },
+          { href: '#historico', label: 'Histórico' },
+          { href: '#avaliacoes', label: 'Avaliações' },
+        ].map((item) => (
+          <a
+            key={item.href}
+            href={item.href}
+            className="kuteka-detail-chip kuteka-detail-chip--accent"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+      <PropertyDigitalPassport row={row} mediaCount={gallery.length} />
       <PropertyHealthPanel row={row} />
       <PropertyEvaluationPanel propertyId={row.id} />
       <PropertyServiceContractPanel propertyId={row.id} />
@@ -69,6 +90,10 @@ export function PropertyShowcase({
         city={row.city}
         province={row.province}
         nearbyNotes={row.nearby_notes}
+        nearSchools={row.near_schools}
+        nearHospitals={row.near_hospitals}
+        nearMarkets={row.near_markets}
+        nearTransport={row.near_transport}
       />
       <PropertyTimeline propertyId={row.id} />
       <PropertyReviews propertyId={row.id} />

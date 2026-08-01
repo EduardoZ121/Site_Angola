@@ -36,7 +36,7 @@ export function AuthShell({ title, subtitle, children }: AuthShellProps) {
       <div className="relative z-10 mx-auto flex min-h-[100svh] w-full max-w-6xl flex-col justify-center px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
           <div className="auth-fade-up max-w-xl">
-            <BrandMark />
+            <BrandMark href="/" variant="inline" tone="light" size="xl" />
             <p className="auth-fade-up auth-delay-1 mt-8 max-w-[28ch] text-[clamp(2rem,5vw,3.25rem)] font-semibold leading-[1.08] tracking-tight text-white">
               Património. Confiança. Habitação.
             </p>

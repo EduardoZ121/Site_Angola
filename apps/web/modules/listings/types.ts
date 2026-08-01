@@ -96,6 +96,10 @@ export type ContractReviewRow = {
   comment: string | null;
   dimensions: Record<string, number> | null;
   created_at: string;
+  owner_reply?: string | null;
+  owner_replied_at?: string | null;
+  agent_reply?: string | null;
+  agent_replied_at?: string | null;
 };
 
 const MANUAL_OPS_COLUMNS =
