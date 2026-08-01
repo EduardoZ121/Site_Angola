@@ -7,7 +7,7 @@
 
 1. Ler `AI_CONTEXT.md` antes de especificar ou implementar.
 2. Seguir `engineering/DEVELOPMENT_PROCESS.md` (duas fases PRD + papel do Líder Técnico).
-3. Auth + Shell + PRD-002…004 **N5**. Próximo: **PRD-005 Administração**.
+3. Auth + Shell + PRD-002…005 **N5**. Núcleo de papéis MVP operacional.
 
 ## Oficiais / activos
 
@@ -26,6 +26,8 @@
 | [`backlog/PRD_003_CLOSURE.md`](backlog/PRD_003_CLOSURE.md)                                                               | Encerramento N5 PRD-003                              |
 | [`proposals/PRD_004_AGENTE.md`](proposals/PRD_004_AGENTE.md)                                                             | **PRD-004** — Agente Certificado                     |
 | [`backlog/PRD_004_CLOSURE.md`](backlog/PRD_004_CLOSURE.md)                                                               | Encerramento N5 PRD-004                              |
+| [`proposals/PRD_005_ADMINISTRACAO.md`](proposals/PRD_005_ADMINISTRACAO.md)                                               | **PRD-005** — Administração                          |
+| [`backlog/PRD_005_CLOSURE.md`](backlog/PRD_005_CLOSURE.md)                                                               | Encerramento N5 PRD-005                              |
 | [`backlog/PHASE_3_CLOSURE.md`](backlog/PHASE_3_CLOSURE.md)                                                               | Encerramento N5 do Shell                             |
 | [`backlog/PHASE_3_PLATFORM_SHELL_PREP.md`](backlog/PHASE_3_PLATFORM_SHELL_PREP.md)                                       | Preparação Fase 3 — Shell da Plataforma              |
 | [`backlog/PHASE_3_ENGINEERING_GATE.md`](backlog/PHASE_3_ENGINEERING_GATE.md)                                             | Gate técnico Fase 3 (checklist Shell)                |
@@ -66,5 +68,6 @@ Landing, FASE 1, P0, Engineering Gate PRD-001 e propostas UX antigas — úteis 
 | PRD-002 Patrimónios         | ✅ N5 (ADR-006 · Ativar Património)         |
 | PRD-003 Cliente / Habitação | ✅ N5 (ADR-007 · Explorar Habitação)        |
 | PRD-004 Agente              | ✅ N5 (ADR-008 · Activar Acompanhamento)    |
+| PRD-005 Administração       | ✅ N5 (ADR-009)                             |
 | Produção                    | ✅ https://kutekalink.com                   |
-| Próximo módulo              | **PRD-005 — Administração**                 |
+| Próximo                     | Extensões de negócio (PO)                   |
