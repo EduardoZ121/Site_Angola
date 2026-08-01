@@ -1,11 +1,18 @@
 /** Official role codes — extensible via DB, not a closed product enum forever */
 export type RoleCode =
-  'client' | 'patrimonial_partner' | 'certified_agent' | 'administrator' | (string & {});
+  | 'client'
+  | 'patrimonial_partner'
+  | 'certified_agent'
+  | 'administrator'
+  | 'super_administrator'
+  | (string & {});
 
 /** Permission codes — capabilities, not roles */
 export type PermissionCode =
   | 'platform.access'
   | 'admin.panel'
+  | 'executive.panel'
+  | 'reputation.manage'
   | 'properties.manage'
   | 'housing.explore'
   | 'agent.operate'

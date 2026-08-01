@@ -4,13 +4,13 @@ import Link from 'next/link';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
+import { RoleHomeDashboard } from '@/modules/shell/components/RoleHomeDashboard';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getAuthCopy } from '../content';
 import { useAppSession } from './app-session';
 
 /**
- * /app home — the Feed IS the platform (ADR-013).
- * Compact composer strip + continuous infinite stream. No dashboard stack.
+ * /app home — role cockpit + continuous Feed (ADR-013 + premium polish).
  */
 export function AppHomeClient() {
   const copy = getAuthCopy();
@@ -19,7 +19,7 @@ export function AppHomeClient() {
   if (status === 'error' || (status === 'ready' && !session)) {
     return (
       <div className="flex flex-col gap-4">
-        <header className="kuteka-glass flex flex-col gap-2 p-5">
+        <header className="kuteka-detail-panel flex flex-col gap-2 p-5">
           <Heading level={1}>{copy.app.title}</Heading>
           <div
             role="alert"
@@ -49,9 +49,9 @@ export function AppHomeClient() {
   if (status === 'loading') {
     return (
       <div className="flex flex-col gap-4">
-        <header className="kuteka-glass px-4 py-3">
-          <p className="text-sm font-semibold text-slate-800">Feed</p>
-          <Text className="text-sm text-slate-500">A preparar o ambiente contínuo…</Text>
+        <header className="kuteka-detail-panel px-4 py-3">
+          <p className="text-sm font-semibold text-slate-900">Feed</p>
+          <Text className="text-sm text-stone-600">A preparar o ambiente contínuo…</Text>
         </header>
         <SoftListSlot pending minHeightClassName="min-h-[70vh]" />
       </div>
@@ -67,16 +67,14 @@ export function AppHomeClient() {
 
   return (
     <div className="flex flex-col gap-4">
-      <header className="kuteka-glass flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
+      <header className="kuteka-detail-panel flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-slate-500">
-            Feed
-          </p>
+          <p className="kuteka-detail-eyebrow">Feed</p>
           <h1 className="truncate text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
           </h1>
-          <p className="mt-0.5 text-sm text-slate-600">
-            Scroll contínuo — a plataforma em movimento.
+          <p className="kuteka-detail-body mt-0.5">
+            O seu cockpit + scroll contínuo da plataforma.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -113,6 +111,8 @@ export function AppHomeClient() {
           ) : null}
         </div>
       </header>
+
+      <RoleHomeDashboard session={session} />
 
       <PlatformFeed canExplore={canHousing} />
     </div>

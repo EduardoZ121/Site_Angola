@@ -6,6 +6,8 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { getPatrimoniosCopy } from '../content/pt';
 import { uploadPropertyMedia, type LocalMediaDraft } from './property-media-client';
 
+import { ENRICHED_PROPERTY_SELECT } from '@/modules/listings/types';
+
 export type PropertyRow = {
   id: string;
   owner_id: string;
@@ -24,10 +26,29 @@ export type PropertyRow = {
   is_demo: boolean;
   created_at: string;
   updated_at: string;
+  description?: string | null;
+  video_url?: string | null;
+  virtual_tour_url?: string | null;
+  floor_plan_url?: string | null;
+  documents_url?: string | null;
+  year_built?: number | null;
+  renovated_year?: number | null;
+  area_useful_m2?: number | null;
+  area_total_m2?: number | null;
+  floors?: number | null;
+  bathrooms?: number | null;
+  parking_spaces?: number | null;
+  monthly_condo_aoa?: number | null;
+  condo_rules?: string | null;
+  amenities?: unknown;
+  latitude?: number | null;
+  longitude?: number | null;
+  location_exact?: boolean | null;
+  neighborhood?: string | null;
+  nearby_notes?: string | null;
 };
 
-const PROPERTY_SELECT =
-  'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, updated_at';
+const PROPERTY_SELECT = ENRICHED_PROPERTY_SELECT;
 
 function newPropertyCode(): string {
   const n = Math.floor(Math.random() * 1_000_000)
@@ -55,21 +76,36 @@ export async function listMyProperties(): Promise<
   }
 }
 
+const PROPERTY_SELECT_CORE =
+  'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, updated_at';
+
 export async function getProperty(
   id: string,
 ): Promise<{ ok: true; data: PropertyRow } | { ok: false; message: string }> {
   const copy = getPatrimoniosCopy();
   try {
     const client = createBrowserClient();
-    const { data, error } = await client
+    const enriched = await client
       .from('properties')
       .select(PROPERTY_SELECT)
       .eq('id', id)
       .is('deleted_at', null)
       .maybeSingle();
 
-    if (error || !data) return { ok: false, message: copy.loadError };
-    return { ok: true, data: data as PropertyRow };
+    if (!enriched.error && enriched.data) {
+      return { ok: true, data: enriched.data as PropertyRow };
+    }
+
+    // Fallback before migration 0013 is applied.
+    const core = await client
+      .from('properties')
+      .select(PROPERTY_SELECT_CORE)
+      .eq('id', id)
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (core.error || !core.data) return { ok: false, message: copy.loadError };
+    return { ok: true, data: core.data as PropertyRow };
   } catch {
     return { ok: false, message: copy.loadError };
   }

@@ -224,15 +224,17 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
           <div ref={sentinelRef} className="h-8 w-full" aria-hidden />
 
           {loadingMore ? (
-            <p className="py-2 text-center text-xs text-slate-500">A carregar mais…</p>
+            <p className="kuteka-detail-panel py-2 text-center text-xs text-stone-700">
+              A carregar mais…
+            </p>
           ) : null}
 
           {!hasMore && items.length > 0 ? (
-            <div className="kuteka-glass px-4 py-4 text-center">
-              <p className="text-sm font-medium text-slate-800">
+            <div className="kuteka-detail-panel px-4 py-4 text-center">
+              <p className="text-sm font-medium text-slate-900">
                 Chegou ao fim do inventário actual
               </p>
-              <Text className="mt-1 text-sm text-slate-600">
+              <Text className="mt-1 text-sm text-stone-700">
                 Novos patrimónios aparecem aqui assim que forem publicados.
               </Text>
               <Link

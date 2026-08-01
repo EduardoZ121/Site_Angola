@@ -10,6 +10,8 @@ import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { getHabitacaoCopy } from '../content/pt';
 
+import { HOUSING_ENRICHED_SELECT } from '@/modules/listings/types';
+
 export type HousingPropertyRow = {
   id: string;
   code: string;
@@ -26,6 +28,26 @@ export type HousingPropertyRow = {
   cover_image_url: string | null;
   is_demo: boolean;
   created_at: string;
+  description?: string | null;
+  video_url?: string | null;
+  virtual_tour_url?: string | null;
+  floor_plan_url?: string | null;
+  documents_url?: string | null;
+  year_built?: number | null;
+  renovated_year?: number | null;
+  area_useful_m2?: number | null;
+  area_total_m2?: number | null;
+  floors?: number | null;
+  bathrooms?: number | null;
+  parking_spaces?: number | null;
+  monthly_condo_aoa?: number | null;
+  condo_rules?: string | null;
+  amenities?: unknown;
+  latitude?: number | null;
+  longitude?: number | null;
+  location_exact?: boolean | null;
+  neighborhood?: string | null;
+  nearby_notes?: string | null;
 };
 
 export type ClientPreferencesRow = {
@@ -36,8 +58,7 @@ export type ClientPreferencesRow = {
   updated_at: string;
 };
 
-const PROPERTY_SELECT =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at';
+const PROPERTY_SELECT = HOUSING_ENRICHED_SELECT;
 
 export async function getClientPreferences(): Promise<
   { ok: true; data: ClientPreferencesRow | null } | { ok: false; message: string }
@@ -163,9 +184,13 @@ function filterByQuery(rows: HousingPropertyRow[], query?: string | null): Housi
   );
 }
 
+const PROPERTY_SELECT_CORE =
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at';
+
 /**
  * Paginated explore — foundation for infinite feed at scale.
  * Uses Supabase `.range(from, to)` instead of loading hundreds of rows.
+ * List/feed uses core columns (lighter + works before migration 0013).
  */
 export async function exploreActivePropertiesPage(
   params: ExplorePageParams = {},
@@ -178,7 +203,7 @@ export async function exploreActivePropertiesPage(
     const client = createBrowserClient();
     let query = client
       .from('properties')
-      .select(PROPERTY_SELECT)
+      .select(PROPERTY_SELECT_CORE)
       .eq('status', 'active')
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
@@ -240,7 +265,7 @@ export async function getActiveProperty(
   const copy = getHabitacaoCopy();
   try {
     const client = createBrowserClient();
-    const { data, error } = await client
+    const enriched = await client
       .from('properties')
       .select(PROPERTY_SELECT)
       .eq('id', id)
@@ -248,8 +273,20 @@ export async function getActiveProperty(
       .is('deleted_at', null)
       .maybeSingle();
 
-    if (error || !data) return { ok: false, message: copy.loadError };
-    return { ok: true, data: data as HousingPropertyRow };
+    if (!enriched.error && enriched.data) {
+      return { ok: true, data: enriched.data as HousingPropertyRow };
+    }
+
+    const core = await client
+      .from('properties')
+      .select(PROPERTY_SELECT_CORE)
+      .eq('id', id)
+      .eq('status', 'active')
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (core.error || !core.data) return { ok: false, message: copy.loadError };
+    return { ok: true, data: core.data as HousingPropertyRow };
   } catch {
     return { ok: false, message: copy.loadError };
   }

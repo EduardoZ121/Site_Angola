@@ -298,6 +298,179 @@ body {
   -webkit-backdrop-filter: blur(14px);
 }
 
+/* ─── Premium detail panel — AA/AAA contrast over dark atmosphere ─────────── */
+:root {
+  --kuteka-detail-bg: #fffdf8;
+  --kuteka-detail-ink: #0f172a;
+  --kuteka-detail-muted: #334155;
+  --kuteka-detail-label: #92400e;
+  --kuteka-detail-accent: #b45309;
+  --kuteka-detail-accent-soft: #fef3c7;
+  --kuteka-detail-line: #e7e5e4;
+  --kuteka-detail-price: #1d4ed8;
+}
+
+.kuteka-detail-panel {
+  background: var(--kuteka-detail-bg);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0.75rem;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 14px 36px rgba(2, 6, 23, 0.28);
+  color: var(--kuteka-detail-ink);
+}
+
+.kuteka-detail-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--kuteka-detail-accent);
+}
+
+.kuteka-detail-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--kuteka-detail-ink);
+}
+
+.kuteka-detail-subtitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--kuteka-detail-ink);
+}
+
+.kuteka-detail-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--kuteka-detail-muted);
+}
+
+.kuteka-detail-meta {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #57534e;
+}
+
+.kuteka-detail-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--kuteka-detail-label);
+}
+
+.kuteka-detail-value {
+  margin-top: 0.3rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: var(--kuteka-detail-ink);
+}
+
+.kuteka-detail-price {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--kuteka-detail-price);
+}
+
+.kuteka-detail-fact {
+  border-radius: 0.5rem;
+  background: #fff;
+  border: 1px solid var(--kuteka-detail-line);
+  padding: 0.85rem 0.95rem;
+}
+
+.kuteka-detail-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--kuteka-detail-line);
+  background: #fff;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--kuteka-detail-ink);
+}
+
+.kuteka-detail-chip--accent {
+  border-color: #fcd34d;
+  background: var(--kuteka-detail-accent-soft);
+  color: #78350f;
+}
+
+.kuteka-detail-stars {
+  letter-spacing: 0.08em;
+  color: #d97706;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.kuteka-detail-review {
+  border-radius: 0.65rem;
+  border: 1px solid var(--kuteka-detail-line);
+  background: #fff;
+  padding: 0.9rem 1rem;
+}
+
+.kuteka-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.kuteka-timeline__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.25rem 1fr;
+  gap: 0.75rem;
+  padding-bottom: 1.15rem;
+}
+
+.kuteka-timeline__item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 0.45rem;
+  top: 1rem;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #f59e0b, #fde68a);
+}
+
+.kuteka-timeline__dot {
+  margin-top: 0.35rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 999px;
+  background: #f59e0b;
+  box-shadow: 0 0 0 3px #fef3c7;
+}
+
+.kuteka-role-stat {
+  border-radius: 0.65rem;
+  border: 1px solid var(--kuteka-detail-line);
+  background: #fff;
+  padding: 0.9rem 1rem;
+}
+
+.kuteka-role-stat__value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--kuteka-detail-ink);
+}
+
+.kuteka-role-stat__label {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #57534e;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kuteka-atmosphere-kenburns {
     animation: none;

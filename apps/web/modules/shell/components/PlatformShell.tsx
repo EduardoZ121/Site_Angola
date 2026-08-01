@@ -120,6 +120,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
     patrimonial_partner: auth.onboarding.roles.partner,
     certified_agent: 'Agente Certificado',
     administrator: 'Administrador',
+    super_administrator: 'Superadministrador',
   };
 
   useEffect(() => {
