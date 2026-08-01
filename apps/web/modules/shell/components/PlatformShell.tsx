@@ -81,15 +81,12 @@ function NavList({
 
 function ShellBrand() {
   return (
-    <div className="relative border-b border-white/10 px-4 py-5">
+    <div className="relative border-b border-white/10 px-3 py-4">
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-brand-500 via-brand-400 to-brand-600"
       />
-      <BrandMark href="/app" tone="light" size="xl" />
-      <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-slate-400">
-        Gestão patrimonial
-      </p>
+      <BrandMark href="/app" variant="shell" size="xl" />
     </div>
   );
 }
@@ -181,7 +178,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 </span>
               </button>
               <div className="min-w-0 md:hidden">
-                <BrandMark href="/app" tone="light" size="lg" />
+                <BrandMark href="/app" variant="inline" tone="light" size="md" />
               </div>
               <p
                 id={titleId}
@@ -230,7 +227,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 <p id={drawerTitleId} className="sr-only">
                   {shell.navAria}
                 </p>
-                <BrandMark href="/app" tone="light" size="xl" />
+                <BrandMark href="/app" variant="shell" size="lg" />
               </div>
               <button
                 id={`${drawerId}-close`}

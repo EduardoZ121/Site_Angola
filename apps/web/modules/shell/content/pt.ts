@@ -9,8 +9,22 @@ export const shellCopyPt = {
   userMenuAria: 'Menu da conta',
   userMenu: {
     profile: 'Perfil',
-    roles: 'Papéis',
+    profileHint: 'Os meus dados pessoais',
+    roles: 'Os meus papéis',
+    rolesHint: 'Cliente, Parceiro, Agente…',
+    patrimonios: 'Os meus patrimónios',
+    patrimoniosHint: 'Anúncios e gestão patrimonial',
+    contracts: 'Contratos',
+    contractsHint: 'Minutas e formalizações',
+    documents: 'Documentos',
+    documentsHint: 'Confiança e verificação',
     settings: 'Definições',
+    settingsHint: 'Preferências da conta',
+    help: 'Centro de ajuda',
+    helpHint: 'Guias e perguntas frequentes',
+    contact: 'Contactar Kuteka',
+    contactHint: 'Fale com a nossa equipa',
+    logout: 'Terminar sessão',
   },
 
   items: {

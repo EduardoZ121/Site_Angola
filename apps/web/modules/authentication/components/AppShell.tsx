@@ -236,7 +236,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/70"
         />
         <div className="relative z-10 flex max-w-lg flex-col gap-4 rounded-kuteka border border-white/15 bg-white/95 p-6 shadow-xl">
-          <BrandMark tone="dark" href="/" size="md" />
+          <BrandMark tone="dark" href="/" size="md" variant="inline" />
           <Heading level={1}>{copy.app.title}</Heading>
           <Text>{copy.app.configMissing}</Text>
           <Link href="/" className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}>
@@ -260,7 +260,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/70"
         />
         <div className="relative z-10 flex max-w-lg flex-col gap-4 rounded-kuteka border border-white/15 bg-white/95 p-6 shadow-xl">
-          <BrandMark tone="dark" href="/" size="md" />
+          <BrandMark tone="dark" href="/" size="md" variant="inline" />
           <Heading level={1}>{copy.login.title}</Heading>
           <Text>É necessário entrar para aceder a esta área.</Text>
           <Link
