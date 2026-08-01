@@ -7,7 +7,7 @@ export type ShellNavStatus = 'active' | 'soon';
 
 export type ShellNavItem = {
   id: string;
-  labelKey: 'home' | 'patrimonios' | 'habitacao' | 'confianca' | 'admin';
+  labelKey: 'home' | 'patrimonios' | 'habitacao' | 'agente' | 'confianca' | 'admin';
   href?: string;
   status: ShellNavStatus;
   /** When set, item is hidden unless the user has this permission. */
@@ -18,6 +18,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
   { id: 'home', labelKey: 'home', href: '/app', status: 'active' },
   { id: 'patrimonios', labelKey: 'patrimonios', href: '/app/patrimonios', status: 'active' },
   { id: 'habitacao', labelKey: 'habitacao', href: '/app/habitacao', status: 'active' },
+  { id: 'agente', labelKey: 'agente', href: '/app/agente', status: 'active' },
   { id: 'confianca', labelKey: 'confianca', status: 'soon' },
   {
     id: 'admin',

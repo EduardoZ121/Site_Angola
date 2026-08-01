@@ -15,6 +15,7 @@ export const shellCopyPt = {
     home: 'Início',
     patrimonios: 'Patrimónios',
     habitacao: 'Habitação',
+    agente: 'Agente',
     confianca: 'Confiança',
     admin: 'Administração',
   },

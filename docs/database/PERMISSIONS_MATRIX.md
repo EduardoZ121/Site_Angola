@@ -10,5 +10,6 @@
 | `admin.panel`       |        |                     |                 | ✓             |
 | `properties.manage` |        | ✓                   |                 | ✓             |
 | `housing.explore`   | ✓      |                     |                 | ✓             |
+| `agent.operate`     |        |                     | ✓               | ✓             |
 
 Novos papéis / permissões = novos rows + seed/migration — sem alterar o modelo RBAC.

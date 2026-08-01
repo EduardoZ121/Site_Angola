@@ -22,6 +22,13 @@ const MODULE_LINKS = [
     status: 'active' as const,
   },
   {
+    key: 'agente',
+    title: 'Agente',
+    description: 'Cobertura de terreno e Activar Acompanhamento.',
+    href: '/app/agente' as string | null,
+    status: 'active' as const,
+  },
+  {
     key: 'confianca',
     title: 'Confiança',
     description: 'Documentos e verificação para relações seguras.',

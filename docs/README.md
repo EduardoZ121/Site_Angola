@@ -7,7 +7,7 @@
 
 1. Ler `AI_CONTEXT.md` antes de especificar ou implementar.
 2. Seguir `engineering/DEVELOPMENT_PROCESS.md` (duas fases PRD + papel do Líder Técnico).
-3. Auth + Shell + PRD-002 + PRD-003 Habitação **N5**. Próximo: **PRD-004 Agente**.
+3. Auth + Shell + PRD-002…004 **N5**. Próximo: **PRD-005 Administração**.
 
 ## Oficiais / activos
 
@@ -24,6 +24,8 @@
 | [`backlog/PRD_002_CLOSURE.md`](backlog/PRD_002_CLOSURE.md)                                                               | Encerramento N5 PRD-002                              |
 | [`proposals/PRD_003_CLIENTE.md`](proposals/PRD_003_CLIENTE.md)                                                           | **PRD-003** — Cliente / Habitação                    |
 | [`backlog/PRD_003_CLOSURE.md`](backlog/PRD_003_CLOSURE.md)                                                               | Encerramento N5 PRD-003                              |
+| [`proposals/PRD_004_AGENTE.md`](proposals/PRD_004_AGENTE.md)                                                             | **PRD-004** — Agente Certificado                     |
+| [`backlog/PRD_004_CLOSURE.md`](backlog/PRD_004_CLOSURE.md)                                                               | Encerramento N5 PRD-004                              |
 | [`backlog/PHASE_3_CLOSURE.md`](backlog/PHASE_3_CLOSURE.md)                                                               | Encerramento N5 do Shell                             |
 | [`backlog/PHASE_3_PLATFORM_SHELL_PREP.md`](backlog/PHASE_3_PLATFORM_SHELL_PREP.md)                                       | Preparação Fase 3 — Shell da Plataforma              |
 | [`backlog/PHASE_3_ENGINEERING_GATE.md`](backlog/PHASE_3_ENGINEERING_GATE.md)                                             | Gate técnico Fase 3 (checklist Shell)                |
@@ -63,5 +65,6 @@ Landing, FASE 1, P0, Engineering Gate PRD-001 e propostas UX antigas — úteis 
 | Fase 3 Shell                | ✅ N5 · congelado (ADR-005)                 |
 | PRD-002 Patrimónios         | ✅ N5 (ADR-006 · Ativar Património)         |
 | PRD-003 Cliente / Habitação | ✅ N5 (ADR-007 · Explorar Habitação)        |
+| PRD-004 Agente              | ✅ N5 (ADR-008 · Activar Acompanhamento)    |
 | Produção                    | ✅ https://kutekalink.com                   |
-| Próximo módulo              | **PRD-004 — Agente**                        |
+| Próximo módulo              | **PRD-005 — Administração**                 |
