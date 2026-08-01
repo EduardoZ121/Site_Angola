@@ -7,7 +7,7 @@
 
 1. Ler `AI_CONTEXT.md` antes de especificar ou implementar.
 2. Seguir `engineering/DEVELOPMENT_PROCESS.md` (duas fases PRD + papel do Líder Técnico).
-3. Auth (PRD-001) **N5** + Shell (Fase 3) **N5**. Próximo: **PRD-002**.
+3. Auth + Shell + PRD-002 Patrimónios **N5**. Próximo: **PRD-003 Cliente**.
 
 ## Oficiais / activos
 
@@ -19,7 +19,9 @@
 | [`proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md`](proposals/PASSO_0_IDENTIDADE_OFICIAL_KUTEKA.md)                       | Identidade oficial                                   |
 | [`proposals/PRD_001_AUTHENTICATION_SPEC.md`](proposals/PRD_001_AUTHENTICATION_SPEC.md)                                   | **PRD-001 v1.0** — referência oficial do módulo auth |
 | [`backlog/PRD_001_CLOSURE.md`](backlog/PRD_001_CLOSURE.md)                                                               | **Encerramento N5** do PRD-001 (2026-07-31)          |
-| [`proposals/PHASE_3_PLATFORM_SHELL_SPEC.md`](proposals/PHASE_3_PLATFORM_SHELL_SPEC.md)                                   | **Fase 3 Shell** — spec v1.0 / N5                    |
+| [`proposals/PHASE_3_PLATFORM_SHELL_SPEC.md`](proposals/PHASE_3_PLATFORM_SHELL_SPEC.md)                                   | Fase 3 Shell — N5 (congelado)                        |
+| [`proposals/PRD_002_PARCEIRO_PATRIMONIAL.md`](proposals/PRD_002_PARCEIRO_PATRIMONIAL.md)                                 | **PRD-002** — Ativar Património                      |
+| [`backlog/PRD_002_CLOSURE.md`](backlog/PRD_002_CLOSURE.md)                                                               | Encerramento N5 PRD-002                              |
 | [`backlog/PHASE_3_CLOSURE.md`](backlog/PHASE_3_CLOSURE.md)                                                               | Encerramento N5 do Shell                             |
 | [`backlog/PHASE_3_PLATFORM_SHELL_PREP.md`](backlog/PHASE_3_PLATFORM_SHELL_PREP.md)                                       | Preparação Fase 3 — Shell da Plataforma              |
 | [`backlog/PHASE_3_ENGINEERING_GATE.md`](backlog/PHASE_3_ENGINEERING_GATE.md)                                             | Gate técnico Fase 3 (checklist Shell)                |
@@ -56,6 +58,7 @@ Landing, FASE 1, P0, Engineering Gate PRD-001 e propostas UX antigas — úteis 
 | Engineering Gate / P1+P2    | ✅ Cumpridos (histórico no Gate)            |
 | Implementação PRD-001       | ✅ **N5 concluído** (2026-07-31)            |
 | Baseline PRD-001            | ✅ Congelada — `PROJECT_BASELINE_PRD001.md` |
-| Fase 3 Shell                | ✅ **N5** — ADR-005 · `PHASE_3_CLOSURE.md`  |
-| Produção                    | ✅ https://kutekalink.com/auth/* · `/app`   |
-| Próximo módulo              | **PRD-002 — Parceiro Patrimonial**          |
+| Fase 3 Shell                | ✅ N5 · congelado (ADR-005)                 |
+| PRD-002 Patrimónios         | ✅ N5 (ADR-006 · Ativar Património)         |
+| Produção                    | ✅ https://kutekalink.com                   |
+| Próximo módulo              | **PRD-003 — Cliente**                       |

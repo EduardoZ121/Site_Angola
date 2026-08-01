@@ -1,15 +1,15 @@
 # Module: patrimonios
 
-Domínio KEOS — stub FASE 1.
+**PRD-002** — Ativar Património (Parceiro Patrimonial).
 
-Estrutura futura:
+## Rotas
 
-- `components/`
-- `services/`
-- `repository/`
-- `hooks/`
-- `types/`
-- `validators/`
-- `tests/`
+- `/app/patrimonios` — lista
+- `/app/patrimonios/novo` — activar
+- `/app/patrimonios/detalhe?id=` — detalhe (query — static-export safe)
 
-Sem regras de negócio nesta fase.
+## Regras
+
+1. Escrita exige `properties.manage` (papel `patrimonial_partner`)
+2. Sem Passaporte / KAI / marketplace neste MVP
+3. Reutiliza Shell + sessão PRD-001
