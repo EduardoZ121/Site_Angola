@@ -1,12 +1,15 @@
 'use client';
 
-import { activatePropertySchema, type ActivatePropertyInput } from '@kuteka/validation';
+import {
+  activatePropertySchema,
+  propertyRequiresEvaluation,
+  type ActivatePropertyInput,
+} from '@kuteka/validation';
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { ENRICHED_PROPERTY_SELECT, ENRICHED_PROPERTY_SELECT_V13 } from '@/modules/listings/types';
 import { getPatrimoniosCopy } from '../content/pt';
 import { uploadPropertyMedia, type LocalMediaDraft } from './property-media-client';
-
-import { ENRICHED_PROPERTY_SELECT } from '@/modules/listings/types';
 
 export type PropertyRow = {
   id: string;
@@ -46,6 +49,37 @@ export type PropertyRow = {
   location_exact?: boolean | null;
   neighborhood?: string | null;
   nearby_notes?: string | null;
+  municipality?: string | null;
+  commune?: string | null;
+  street_number?: string | null;
+  conservation_state?: string | null;
+  construction_status?: string | null;
+  management_level?: string | null;
+  requested_services?: unknown;
+  renovation_requests?: unknown;
+  unfinished_intent?: string | null;
+  has_piped_water?: boolean | null;
+  has_electricity?: boolean | null;
+  has_generator?: boolean | null;
+  has_internet?: boolean | null;
+  has_security?: boolean | null;
+  has_paved_street?: boolean | null;
+  near_schools?: boolean | null;
+  near_hospitals?: boolean | null;
+  near_markets?: boolean | null;
+  near_transport?: boolean | null;
+  lifecycle_status?: string | null;
+  kuteka_score?: number | null;
+  last_maintenance_at?: string | null;
+  last_inspection_at?: string | null;
+  needs_renovation?: boolean | null;
+  pdk_code?: string | null;
+  owner_history?: unknown;
+  maintenance_history?: unknown;
+  inspection_history?: unknown;
+  valuation_history?: unknown;
+  legal_notes?: string | null;
+  commercial_notes?: string | null;
 };
 
 const PROPERTY_SELECT = ENRICHED_PROPERTY_SELECT;
@@ -57,20 +91,60 @@ function newPropertyCode(): string {
   return `KTK-IMM-${n}`;
 }
 
+function newServiceContractCode(): string {
+  const n = Math.floor(Math.random() * 1_000_000)
+    .toString()
+    .padStart(6, '0');
+  return `KTK-SVC-${n}`;
+}
+
+function mapPrimaryServiceType(management: string, services: string[]): string {
+  if (management === 'full_management' || services.includes('full_management')) {
+    return 'full_management';
+  }
+  if (management === 'rental_management' || services.includes('rental_management')) {
+    return 'intermediation_rent';
+  }
+  if (services.includes('construction_finish')) return 'construction_finish';
+  if (services.includes('renovation') || services.includes('renewal')) return 'renovation';
+  if (services.includes('evaluation')) return 'evaluation';
+  if (services.includes('photography')) return 'photography';
+  if (services.includes('home_staging')) return 'home_staging';
+  if (services.includes('works_supervision')) return 'works_supervision';
+  if (services.includes('condo_admin')) return 'condo_admin';
+  if (management === 'find_buyer' || services.includes('find_buyer')) {
+    return 'intermediation_sale';
+  }
+  if (management === 'find_tenant' || services.includes('find_tenant')) {
+    return 'intermediation_rent';
+  }
+  return 'intermediation_sale';
+}
+
 export async function listMyProperties(): Promise<
   { ok: true; data: PropertyRow[] } | { ok: false; message: string }
 > {
   const copy = getPatrimoniosCopy();
   try {
     const client = createBrowserClient();
-    const { data, error } = await client
+    const full = await client
       .from('properties')
       .select(PROPERTY_SELECT)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
-    if (error) return { ok: false, message: copy.loadError };
-    return { ok: true, data: (data as PropertyRow[]) ?? [] };
+    if (!full.error) {
+      return { ok: true, data: (full.data as unknown as PropertyRow[]) ?? [] };
+    }
+
+    const v13 = await client
+      .from('properties')
+      .select(ENRICHED_PROPERTY_SELECT_V13)
+      .is('deleted_at', null)
+      .order('created_at', { ascending: false });
+
+    if (v13.error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (v13.data as unknown as PropertyRow[]) ?? [] };
   } catch {
     return { ok: false, message: copy.loadError };
   }
@@ -93,10 +167,20 @@ export async function getProperty(
       .maybeSingle();
 
     if (!enriched.error && enriched.data) {
-      return { ok: true, data: enriched.data as PropertyRow };
+      return { ok: true, data: enriched.data as unknown as PropertyRow };
     }
 
-    // Fallback before migration 0013 is applied.
+    const v13 = await client
+      .from('properties')
+      .select(ENRICHED_PROPERTY_SELECT_V13)
+      .eq('id', id)
+      .is('deleted_at', null)
+      .maybeSingle();
+
+    if (!v13.error && v13.data) {
+      return { ok: true, data: v13.data as unknown as PropertyRow };
+    }
+
     const core = await client
       .from('properties')
       .select(PROPERTY_SELECT_CORE)
@@ -105,7 +189,7 @@ export async function getProperty(
       .maybeSingle();
 
     if (core.error || !core.data) return { ok: false, message: copy.loadError };
-    return { ok: true, data: core.data as PropertyRow };
+    return { ok: true, data: core.data as unknown as PropertyRow };
   } catch {
     return { ok: false, message: copy.loadError };
   }
@@ -131,9 +215,20 @@ export async function activateProperty(
 
     const v = parsed.data;
     const primary = mediaDrafts.find((m) => m.isPrimary) ?? mediaDrafts[0];
-    const row = {
+    const needsEval = propertyRequiresEvaluation(v.requestedServices, v.managementLevel);
+    const publishStatus = v.status ?? (needsEval ? 'draft' : 'active');
+    const lifecycleStatus = needsEval ? 'em_avaliacao' : 'publicado';
+    const code = newPropertyCode();
+
+    const amenities: string[] = [];
+    if (v.hasInternet) amenities.push('internet');
+    if (v.hasElectricity) amenities.push('energia');
+    if (v.hasPipedWater) amenities.push('agua');
+    if (v.hasSecurity) amenities.push('seguranca');
+
+    const row: Record<string, unknown> = {
       owner_id: user.id,
-      code: newPropertyCode(),
+      code,
       title: v.title,
       property_type: v.propertyType,
       purpose: v.purpose,
@@ -143,37 +238,159 @@ export async function activateProperty(
       notes: v.notes || null,
       price_aoa: v.priceAoa ?? null,
       bedrooms: v.bedrooms ?? null,
+      bathrooms: v.bathrooms ?? null,
+      area_total_m2: v.areaTotalM2 ?? null,
+      area_useful_m2: v.areaUsefulM2 ?? null,
+      year_built: v.yearBuilt ?? null,
+      latitude: v.latitude ?? null,
+      longitude: v.longitude ?? null,
+      location_exact: v.latitude != null && v.longitude != null,
+      neighborhood: v.neighborhood || null,
+      municipality: v.municipality || null,
+      commune: v.commune || null,
+      street_number: v.streetNumber || null,
+      conservation_state: v.conservationState ?? null,
+      construction_status: v.constructionStatus ?? null,
+      management_level: v.managementLevel,
+      requested_services: v.requestedServices,
+      renovation_requests: v.renovationRequests ?? [],
+      unfinished_intent: v.unfinishedIntent ?? 'none',
+      has_piped_water: v.hasPipedWater ?? null,
+      has_electricity: v.hasElectricity ?? null,
+      has_generator: v.hasGenerator ?? null,
+      has_internet: v.hasInternet ?? null,
+      has_security: v.hasSecurity ?? null,
+      has_paved_street: v.hasPavedStreet ?? null,
+      near_schools: v.nearSchools ?? null,
+      near_hospitals: v.nearHospitals ?? null,
+      near_markets: v.nearMarkets ?? null,
+      near_transport: v.nearTransport ?? null,
+      lifecycle_status: lifecycleStatus,
+      needs_renovation: (v.renovationRequests?.length ?? 0) > 0,
+      pdk_code: `PDK-${code}`,
+      amenities,
       cover_image_url: primary?.publicUrl ?? null,
-      status: v.status ?? 'active',
+      status: publishStatus,
       created_by: user.id,
       updated_by: user.id,
     };
 
-    const { data, error } = await client.from('properties').insert(row).select('id').single();
-    if (error || !data) {
-      if (error?.code === '42501' || error?.message?.toLowerCase().includes('policy')) {
+    let insertResult = await client.from('properties').insert(row).select('id').single();
+
+    // Before migration 0014: retry with core columns only.
+    if (insertResult.error) {
+      const coreRow = {
+        owner_id: user.id,
+        code,
+        title: v.title,
+        property_type: v.propertyType,
+        purpose: v.purpose,
+        province: v.province || null,
+        city: v.city || null,
+        address_line: v.addressLine || null,
+        notes: v.notes || null,
+        price_aoa: v.priceAoa ?? null,
+        bedrooms: v.bedrooms ?? null,
+        cover_image_url: primary?.publicUrl ?? null,
+        status: publishStatus,
+        created_by: user.id,
+        updated_by: user.id,
+      };
+      insertResult = await client.from('properties').insert(coreRow).select('id').single();
+    }
+
+    if (insertResult.error || !insertResult.data) {
+      if (
+        insertResult.error?.code === '42501' ||
+        insertResult.error?.message?.toLowerCase().includes('policy')
+      ) {
         return { ok: false, message: copy.forbidden };
       }
       return { ok: false, message: copy.saveError };
     }
 
+    const propertyId = insertResult.data.id as string;
+
     if (mediaDrafts.length) {
-      const mediaResult = await uploadPropertyMedia(data.id as string, mediaDrafts);
+      const mediaResult = await uploadPropertyMedia(propertyId, mediaDrafts);
       if (!mediaResult.ok) return mediaResult;
+    }
+
+    // Contrato de serviços Kuteka ↔ Parceiro (Manual Cap.7) — best-effort until migration.
+    try {
+      const serviceType = mapPrimaryServiceType(v.managementLevel, v.requestedServices);
+      await client.from('partner_service_contracts').insert({
+        code: newServiceContractCode(),
+        partner_id: user.id,
+        property_id: propertyId,
+        service_type: serviceType,
+        exclusivity: v.managementLevel === 'full_management' ? 'partial' : 'none',
+        status: needsEval ? 'pending_acceptance' : 'draft',
+        terms_notes:
+          'Contrato de prestação de serviços Kuteka ↔ Parceiro Patrimonial gerado no registo do património.',
+        commission_notes: 'Comissão conforme tabela Kuteka e modalidade escolhida.',
+        requested_services: v.requestedServices,
+        created_by: user.id,
+        updated_by: user.id,
+      });
+    } catch {
+      // table may not exist yet
+    }
+
+    // Draft evaluation placeholder when gated (Manual Cap.6).
+    if (needsEval) {
+      try {
+        await client.from('property_evaluations').insert({
+          property_id: propertyId,
+          status: 'draft',
+          checklist: {
+            construcao: 'pendente',
+            acabamentos: 'pendente',
+            eletrica: 'pendente',
+            canalizacao: 'pendente',
+            habitabilidade: 'pendente',
+          },
+          valuation_plan: 'Aguarda visita técnica e relatório oficial Kuteka.',
+          report_notes: 'Avaliação técnica obrigatória antes da publicação plena.',
+          created_at: new Date().toISOString(),
+        });
+      } catch {
+        // table may not exist yet
+      }
+    }
+
+    try {
+      await client
+        .from('profiles')
+        .update({
+          partner_lifecycle: needsEval ? 'com_imovel_em_avaliacao' : 'imovel_publicado',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', user.id);
+    } catch {
+      // best-effort
     }
 
     try {
       await writeAuditLog(client, {
         action: 'property.activated',
         entityType: 'property',
-        entityId: data.id,
-        metadata: { code: row.code, title: row.title, media_count: mediaDrafts.length },
+        entityId: propertyId,
+        metadata: {
+          code,
+          title: v.title,
+          media_count: mediaDrafts.length,
+          management_level: v.managementLevel,
+          requested_services: v.requestedServices,
+          requires_evaluation: needsEval,
+          status: publishStatus,
+        },
       });
     } catch {
       // best-effort
     }
 
-    return { ok: true, id: data.id as string };
+    return { ok: true, id: propertyId };
   } catch {
     return { ok: false, message: copy.saveError };
   }

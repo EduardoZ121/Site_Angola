@@ -1,10 +1,14 @@
 'use client';
 
 import type { EnrichedListing, ListingMedia } from '../types';
+import { PropertyDigitalPassport } from './PropertyDigitalPassport';
+import { PropertyEvaluationPanel } from './PropertyEvaluationPanel';
 import { PropertyFactsPanel } from './PropertyFactsPanel';
 import { PropertyGallery } from './PropertyGallery';
+import { PropertyHealthPanel } from './PropertyHealthPanel';
 import { PropertyMapPanel } from './PropertyMapPanel';
 import { PropertyReviews } from './PropertyReviews';
+import { PropertyServiceContractPanel } from './PropertyServiceContractPanel';
 import { PropertyTimeline } from './PropertyTimeline';
 
 type PropertyShowcaseProps = {
@@ -18,6 +22,7 @@ type PropertyShowcaseProps = {
 
 /**
  * Premium listing body shared by Habitação and Patrimónios detail pages.
+ * Manual ops panels are additive — Showcase chrome unchanged.
  */
 export function PropertyShowcase({
   row,
@@ -52,6 +57,10 @@ export function PropertyShowcase({
         onSelect={onSelectMedia}
       />
       <PropertyFactsPanel row={row} typeLabel={typeLabel} purposeLabel={purposeLabel} />
+      <PropertyDigitalPassport row={row} />
+      <PropertyHealthPanel row={row} />
+      <PropertyEvaluationPanel propertyId={row.id} />
+      <PropertyServiceContractPanel propertyId={row.id} />
       <PropertyMapPanel
         latitude={row.latitude}
         longitude={row.longitude}
