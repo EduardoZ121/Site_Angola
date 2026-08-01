@@ -70,12 +70,20 @@ export function AdminHubClient() {
             {copy.permissionBadge}
           </Badge>
         </div>
-        <Link
-          href="/app/admin/utilizadores"
-          className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
-        >
-          {copy.users}
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href="/app/confianca/revisao"
+            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+          >
+            {copy.trustReview}
+          </Link>
+          <Link
+            href="/app/admin/utilizadores"
+            className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
+          >
+            {copy.users}
+          </Link>
+        </div>
       </header>
 
       <p className="text-sm text-slate-500">{copy.mvpNote}</p>

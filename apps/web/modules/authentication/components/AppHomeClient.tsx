@@ -32,9 +32,9 @@ const MODULE_LINKS = [
   {
     key: 'confianca',
     title: 'Confiança',
-    description: 'Documentos e verificação para relações seguras.',
-    href: null,
-    status: 'soon' as const,
+    description: 'Checklist e verificação da conta para relações seguras.',
+    href: '/app/confianca' as string | null,
+    status: 'active' as const,
   },
 ] as const;
 
@@ -92,6 +92,7 @@ export function AppHomeClient() {
   const canManage = session.permissions.includes('properties.manage');
   const canHousing = session.permissions.includes('housing.explore');
   const canAgent = session.permissions.includes('agent.operate');
+  const canTrust = session.permissions.includes('trust.manage');
 
   const quickActions = [
     canManage
@@ -116,6 +117,14 @@ export function AppHomeClient() {
           href: '/app/agente',
           label: copy.app.quickAgent,
           primary: !canManage && !canHousing,
+        }
+      : null,
+    canTrust
+      ? {
+          key: 'trust',
+          href: '/app/confianca',
+          label: copy.app.quickTrust,
+          primary: !canManage && !canHousing && !canAgent,
         }
       : null,
     {

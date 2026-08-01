@@ -9,7 +9,26 @@ export type PermissionCode =
   | 'properties.manage'
   | 'housing.explore'
   | 'agent.operate'
+  | 'trust.manage'
   | (string & {});
+
+export type TrustDocType = 'identity' | 'proof_of_address' | 'property_title' | 'agent_credential';
+
+export type TrustDocStatus = 'submitted' | 'under_review' | 'accepted' | 'rejected';
+
+export type TrustDocument = {
+  id: string;
+  userId: string;
+  propertyId: string | null;
+  docType: TrustDocType;
+  status: TrustDocStatus;
+  notes: string | null;
+  rejectionReason: string | null;
+  reviewedBy: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export type PropertyType = 'apartment' | 'house' | 'land' | 'commercial';
 export type PropertyPurpose = 'rent' | 'sale' | 'both';

@@ -28,6 +28,9 @@
 | [`backlog/PRD_004_CLOSURE.md`](backlog/PRD_004_CLOSURE.md)                                                               | Encerramento N5 PRD-004                              |
 | [`proposals/PRD_005_ADMINISTRACAO.md`](proposals/PRD_005_ADMINISTRACAO.md)                                               | **PRD-005** — Administração                          |
 | [`backlog/PRD_005_CLOSURE.md`](backlog/PRD_005_CLOSURE.md)                                                               | Encerramento N5 PRD-005                              |
+| [`proposals/PRD_006_CONFIANCA.md`](proposals/PRD_006_CONFIANCA.md)                                                       | **PRD-006** — Confiança                              |
+| [`backlog/PRD_006_CLOSURE.md`](backlog/PRD_006_CLOSURE.md)                                                               | Encerramento N5 PRD-006                              |
+| [`backlog/MVP_CORE_TRANSVERSAL_REVIEW.md`](backlog/MVP_CORE_TRANSVERSAL_REVIEW.md)                                       | Revisão transversal núcleo MVP                       |
 | [`backlog/PHASE_3_CLOSURE.md`](backlog/PHASE_3_CLOSURE.md)                                                               | Encerramento N5 do Shell                             |
 | [`backlog/PHASE_3_PLATFORM_SHELL_PREP.md`](backlog/PHASE_3_PLATFORM_SHELL_PREP.md)                                       | Preparação Fase 3 — Shell da Plataforma              |
 | [`backlog/PHASE_3_ENGINEERING_GATE.md`](backlog/PHASE_3_ENGINEERING_GATE.md)                                             | Gate técnico Fase 3 (checklist Shell)                |
@@ -69,5 +72,6 @@ Landing, FASE 1, P0, Engineering Gate PRD-001 e propostas UX antigas — úteis 
 | PRD-003 Cliente / Habitação | ✅ N5 (ADR-007 · Explorar Habitação)        |
 | PRD-004 Agente              | ✅ N5 (ADR-008 · Activar Acompanhamento)    |
 | PRD-005 Administração       | ✅ N5 (ADR-009)                             |
+| PRD-006 Confiança           | ✅ N5 (ADR-010)                             |
 | Produção                    | ✅ https://kutekalink.com                   |
 | Próximo                     | Extensões de negócio (PO)                   |

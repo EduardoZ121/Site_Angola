@@ -85,6 +85,7 @@ O protótipo Vite/React está em `legacy/`. Não usar como base de novas feature
 7. **PRD-003** Cliente / Habitação — ✅ N5 · congelado
 8. **PRD-004** Agente Certificado — ✅ N5 · congelado
 9. **PRD-005** Administração — ✅ N5 (ADR-009)
+10. **PRD-006** Confiança — ✅ N5 (ADR-010)
 
 Processo oficial: `docs/engineering/DEVELOPMENT_PROCESS.md`  
 pnpm é a fonte de verdade do monorepo (`pnpm-lock.yaml`).

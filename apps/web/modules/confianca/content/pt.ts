@@ -1,0 +1,66 @@
+export const confiancaCopyPt = {
+  title: 'Confiança',
+  subtitle:
+    'Verifique a sua conta com evidências estruturadas. Relações seguras começam por uma checklist clara.',
+  permissionBadge: 'trust.manage',
+  submit: 'Submeter verificação',
+  submitTitle: 'Submeter item de verificação',
+  submitHint: 'Indique o tipo e notas de apoio. O upload de ficheiros chega em fases seguintes.',
+  submitting: 'A submeter…',
+  submitted: 'Item submetido para verificação.',
+  backToHub: 'Voltar à Confiança',
+  checklistTitle: 'Checklist da conta',
+  checklistHint: 'Estado mais recente de cada tipo de verificação.',
+  historyTitle: 'Submissões recentes',
+  historyHint: 'Histórico das suas submissões e revisões.',
+  emptyChecklistTitle: 'Ainda sem submissões',
+  emptyChecklist:
+    'Comece por submeter a verificação de identidade. Cada item entra em fila de revisão.',
+  emptyChecklistCta: 'Submeter verificação',
+  emptyHistoryTitle: 'Sem histórico',
+  emptyHistory: 'As submissões aparecerão aqui após o primeiro envio.',
+  review: 'Revisão admin',
+  reviewTitle: 'Revisão de Confiança',
+  reviewHint: 'Fila de itens submetidos ou em revisão. Aceite, rejeite ou marque em análise.',
+  emptyReviewTitle: 'Fila vazia',
+  emptyReview: 'Não há itens pendentes de revisão neste momento.',
+  accept: 'Aceitar',
+  reject: 'Rejeitar',
+  markReview: 'Em revisão',
+  reviewing: 'A actualizar…',
+  reviewed: 'Revisão registada.',
+  rejectionReasonLabel: 'Motivo da rejeição',
+  rejectionReasonPlaceholder: 'Explique o que falta ou está incorrecto.',
+  loadError: 'Não foi possível carregar a Confiança. Tente novamente.',
+  saveError: 'Não foi possível submeter. Tente novamente.',
+  forbidden: 'Não tem permissão para gerir a Confiança (trust.manage).',
+  reviewForbidden: 'Não tem permissão para rever submissões (admin.panel).',
+  mvpNote:
+    'MVP: checklist e estados. Passaporte Digital, Score e upload de ficheiros virão depois.',
+  fields: {
+    docType: 'Tipo de verificação',
+    notes: 'Notas (opcional)',
+    status: 'Estado',
+    property: 'Património (opcional)',
+    none: '—',
+    createdAt: 'Submetido',
+    reviewedAt: 'Revisado',
+  },
+  docTypes: {
+    identity: 'Identidade',
+    proof_of_address: 'Comprovativo de morada',
+    property_title: 'Título de propriedade',
+    agent_credential: 'Credencial de agente',
+  },
+  statuses: {
+    submitted: 'Submetido',
+    under_review: 'Em revisão',
+    accepted: 'Aceite',
+    rejected: 'Rejeitado',
+    pending: 'Por submeter',
+  },
+} as const;
+
+export function getConfiancaCopy() {
+  return confiancaCopyPt;
+}
