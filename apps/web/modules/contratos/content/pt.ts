@@ -2,7 +2,6 @@ export const contratosCopyPt = {
   title: 'Contratos',
   subtitle:
     'Formalize a intenção aprovada em contrato, com partes, valor, termos e estados claros.',
-  permissionBadge: 'contracts.manage',
   create: 'Preparar contrato',
   createTitle: 'Preparar novo contrato',
   createHint:
@@ -19,7 +18,8 @@ export const contratosCopyPt = {
   loadError: 'Não foi possível carregar Contratos. Tente novamente.',
   saveError: 'Não foi possível preparar o contrato. Verifique os dados e tente novamente.',
   transitionError: 'Não foi possível actualizar o contrato. Tente novamente.',
-  forbidden: 'Não tem permissão para gerir Contratos (contracts.manage).',
+  forbidden:
+    'A área Contratos fica disponível quando a sua conta tem o papel adequado (Cliente, Parceiro, Agente ou Admin).',
   accept: 'Aceitar contrato',
   accepting: 'A aceitar…',
   accepted: 'Contrato activo. O próximo passo é preparar pagamento.',

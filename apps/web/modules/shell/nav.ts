@@ -41,18 +41,18 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     requiresPermission: 'trust.manage',
   },
   {
-    id: 'admin',
-    labelKey: 'admin',
-    href: '/app/admin',
-    status: 'active',
-    requiresPermission: 'admin.panel',
-  },
-  {
     id: 'contratos',
     labelKey: 'contratos',
     href: '/app/contratos',
     status: 'active',
     requiresPermission: 'contracts.manage',
+  },
+  {
+    id: 'admin',
+    labelKey: 'admin',
+    href: '/app/admin',
+    status: 'active',
+    requiresPermission: 'admin.panel',
   },
 ] as const;
 

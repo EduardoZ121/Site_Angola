@@ -88,10 +88,12 @@ export function ContractsHubClient() {
         <Heading level={1}>{copy.title}</Heading>
         <ForbiddenPanel
           message={copy.forbidden}
+          primaryHref="/auth/onboarding/papeis"
+          primaryLabel="Activar papel"
           steps={[
-            { href: '/app/confianca', label: 'Confiança', primary: true },
-            { href: '/app/admin', label: 'Administração' },
-            { href: '/app', label: 'Painel' },
+            { href: '/app', label: 'Painel', primary: true },
+            { href: '/app/confianca', label: 'Confiança' },
+            { href: '/contacto', label: 'Contactar Kuteka' },
           ]}
         />
       </div>
