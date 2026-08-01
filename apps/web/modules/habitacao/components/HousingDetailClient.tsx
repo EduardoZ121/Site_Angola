@@ -6,14 +6,15 @@ import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
-import { EmptyState } from '@/modules/shell/components/EmptyState';
-import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
-import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
-import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
 import {
   listPropertyMedia,
   type PropertyMediaRow,
 } from '@/modules/patrimonios/services/property-media-client';
+import { EmptyState } from '@/modules/shell/components/EmptyState';
+import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
+import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
+import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getHabitacaoCopy } from '../content/pt';
 import {
   expressInterest,
@@ -91,35 +92,16 @@ export function HousingDetailClient({ id }: { id: string }) {
     setMessage(copy.interestDone);
   }
 
-  const gallery = row
-    ? media.length
-      ? media
-      : row.cover_image_url
-        ? [
-            {
-              id: 'cover',
-              property_id: row.id,
-              storage_path: null,
-              public_url: row.cover_image_url,
-              sort_order: 0,
-              is_primary: true,
-            },
-          ]
-        : []
-    : [];
-
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
-      <div className="flex flex-col gap-6">
-        <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-5">
+        <header className="kuteka-detail-panel flex flex-col gap-3 p-5 sm:flex-row sm:items-start sm:justify-between">
           <div className="flex flex-col gap-2">
             <Heading level={1}>{row?.title ?? copy.detailTitle}</Heading>
             {row ? (
               <>
-                <p className="font-mono text-sm text-slate-500">{row.code}</p>
-                <p className="text-lg font-semibold text-brand-800">
-                  {formatAoa(row.price_aoa, row.purpose)}
-                </p>
+                <p className="font-mono text-sm text-stone-600">{row.code}</p>
+                <p className="kuteka-detail-price">{formatAoa(row.price_aoa, row.purpose)}</p>
               </>
             ) : null}
           </div>
@@ -157,92 +139,18 @@ export function HousingDetailClient({ id }: { id: string }) {
 
           {row ? (
             <>
-              {activeUrl ? (
-                <div className="overflow-hidden rounded-kuteka border border-slate-200">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={activeUrl} alt="" className="aspect-[16/9] w-full object-cover" />
-                </div>
-              ) : null}
-
-              {gallery.length > 1 ? (
-                <ul className="flex gap-2 overflow-x-auto pb-1">
-                  {gallery.map((m) => (
-                    <li key={m.id}>
-                      <button
-                        type="button"
-                        onClick={() => setActiveUrl(m.public_url)}
-                        aria-label={`Fotografia ${m.sort_order + 1} de ${row.title}`}
-                        aria-pressed={activeUrl === m.public_url}
-                        className={cn(
-                          'block overflow-hidden rounded-kuteka border',
-                          activeUrl === m.public_url ? 'border-brand-500' : 'border-slate-200',
-                        )}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={m.public_url}
-                          alt=""
-                          className="h-16 w-24 object-cover"
-                          loading="lazy"
-                        />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-
-              <dl className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                    {copy.fields.type}
-                  </dt>
-                  <dd className="mt-1 text-slate-900">
-                    {copy.types[row.property_type as keyof typeof copy.types] ?? row.property_type}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                    {copy.fields.purpose}
-                  </dt>
-                  <dd className="mt-1 text-slate-900">
-                    {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                    {copy.fields.province}
-                  </dt>
-                  <dd className="mt-1 text-slate-900">{row.province || '—'}</dd>
-                </div>
-                <div>
-                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                    {copy.fields.city}
-                  </dt>
-                  <dd className="mt-1 text-slate-900">{row.city || '—'}</dd>
-                </div>
-                {row.bedrooms != null ? (
-                  <div>
-                    <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                      {copy.fields.bedrooms}
-                    </dt>
-                    <dd className="mt-1 text-slate-900">T{row.bedrooms}</dd>
-                  </div>
-                ) : null}
-                <div className="sm:col-span-2">
-                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                    {copy.fields.address}
-                  </dt>
-                  <dd className="mt-1 text-slate-900">{row.address_line || '—'}</dd>
-                </div>
-                {row.notes ? (
-                  <div className="sm:col-span-2">
-                    <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                      Notas
-                    </dt>
-                    <dd className="mt-1 whitespace-pre-wrap text-slate-900">{row.notes}</dd>
-                  </div>
-                ) : null}
-              </dl>
+              <PropertyShowcase
+                row={row}
+                media={media}
+                activeUrl={activeUrl}
+                onSelectMedia={setActiveUrl}
+                typeLabel={
+                  copy.types[row.property_type as keyof typeof copy.types] ?? row.property_type
+                }
+                purposeLabel={
+                  copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose
+                }
+              />
 
               {message ? (
                 <div className="rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
@@ -255,7 +163,7 @@ export function HousingDetailClient({ id }: { id: string }) {
                 </div>
               ) : null}
 
-              <div className="kuteka-glass flex flex-wrap gap-3 p-4">
+              <div className="kuteka-detail-panel flex flex-wrap gap-3 p-4">
                 {canExplore ? (
                   <Button
                     type="button"
