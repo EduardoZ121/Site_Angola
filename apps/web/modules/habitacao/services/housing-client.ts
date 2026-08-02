@@ -48,6 +48,8 @@ export type HousingPropertyRow = {
   location_exact?: boolean | null;
   neighborhood?: string | null;
   nearby_notes?: string | null;
+  expected_available_on?: string | null;
+  availability_note?: string | null;
 };
 
 export type ClientPreferencesRow = {
@@ -150,6 +152,8 @@ export type ExploreFilters = {
   city?: string | null;
   propertyType?: string | null;
   query?: string | null;
+  /** Marketplace futuro — expected_available_on. */
+  futureAvailability?: boolean | null;
 };
 
 export type ExplorePageParams = ExploreFilters & {
@@ -187,6 +191,9 @@ function filterByQuery(rows: HousingPropertyRow[], query?: string | null): Housi
 const PROPERTY_SELECT_CORE =
   'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at';
 
+const PROPERTY_SELECT_FUTURE =
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note';
+
 /**
  * Paginated explore — foundation for infinite feed at scale.
  * Uses Supabase `.range(from, to)` instead of loading hundreds of rows.
@@ -198,15 +205,24 @@ export async function exploreActivePropertiesPage(
   const copy = getHabitacaoCopy();
   const offset = Math.max(0, params.offset ?? 0);
   const limit = Math.min(48, Math.max(1, params.limit ?? DEFAULT_EXPLORE_LIMIT));
+  const futureOnly = Boolean(params.futureAvailability);
 
   try {
     const client = createBrowserClient();
     let query = client
       .from('properties')
-      .select(PROPERTY_SELECT_CORE)
-      .eq('status', 'active')
-      .is('deleted_at', null)
-      .order('created_at', { ascending: false });
+      .select(futureOnly ? PROPERTY_SELECT_FUTURE : PROPERTY_SELECT_CORE)
+      .is('deleted_at', null);
+
+    if (futureOnly) {
+      const today = new Date().toISOString().slice(0, 10);
+      query = query
+        .not('expected_available_on', 'is', null)
+        .gte('expected_available_on', today)
+        .order('expected_available_on', { ascending: true });
+    } else {
+      query = query.eq('status', 'active').order('created_at', { ascending: false });
+    }
 
     if (params.purpose && params.purpose !== 'both') {
       query = query.in('purpose', [params.purpose, 'both']);
@@ -227,7 +243,7 @@ export async function exploreActivePropertiesPage(
     const { data, error } = await query.range(from, to);
     if (error) return { ok: false, message: copy.loadError };
 
-    let rows = filterByQuery((data as HousingPropertyRow[]) ?? [], params.query);
+    let rows = filterByQuery((data as unknown as HousingPropertyRow[]) ?? [], params.query);
     const hasMore = rows.length > limit;
     if (hasMore) rows = rows.slice(0, limit);
 

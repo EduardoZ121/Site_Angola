@@ -206,8 +206,10 @@ function IconOffer({ className }: IconProps) {
 const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   home: IconHome,
   explorar: IconSearch,
+  residencia: IconKey,
   favoritos: IconHeart,
   visitas: IconCalendar,
+  futuro: IconCalendar,
   propostas: IconOffer,
   patrimonios: IconBuilding,
   ativar: IconPlus,

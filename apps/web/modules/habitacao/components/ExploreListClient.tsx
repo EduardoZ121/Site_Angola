@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { PROPERTY_PURPOSES, PROPERTY_TYPES } from '@kuteka/validation';
 import { Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
@@ -27,10 +28,13 @@ type Filters = {
   city?: string;
   propertyType?: string;
   query?: string;
+  futureAvailability?: boolean;
 };
 
 export function ExploreListClient() {
   const copy = getHabitacaoCopy();
+  const searchParams = useSearchParams();
+  const futureMode = searchParams?.get('disponibilidade') === 'futura';
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canExplore =
     sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');
@@ -43,7 +47,7 @@ export function ExploreListClient() {
   const [error, setError] = useState<string | null>(null);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const [filters, setFilters] = useState<Filters>({});
+  const [filters, setFilters] = useState<Filters>({ futureAvailability: futureMode });
 
   const [purpose, setPurpose] = useState('');
   const [province, setProvince] = useState('');
@@ -109,6 +113,7 @@ export function ExploreListClient() {
         purpose: prefs.ok && prefs.data?.purpose ? prefs.data.purpose : '',
         province: prefs.ok && prefs.data?.province ? prefs.data.province : '',
         city: prefs.ok && prefs.data?.city ? prefs.data.city : '',
+        futureAvailability: futureMode,
       };
       setPurpose(next.purpose || '');
       setProvince(next.province || '');
@@ -124,7 +129,7 @@ export function ExploreListClient() {
     return () => {
       cancelled = true;
     };
-  }, [canExplore, sessionStatus, fetchPage]);
+  }, [canExplore, sessionStatus, fetchPage, futureMode]);
 
   useEffect(() => {
     if (!canExplore || loading || !hasMore) return;
@@ -148,15 +153,31 @@ export function ExploreListClient() {
       <div className="flex flex-col gap-5">
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
-            <Heading level={1}>{copy.exploreTitle}</Heading>
-            <Text className="text-slate-600">{copy.exploreSubtitle}</Text>
+            <Heading level={1}>{futureMode ? 'Disponibilidade futura' : copy.exploreTitle}</Heading>
+            <Text className="text-slate-600">
+              {futureMode
+                ? 'Imóveis que a Kuteka prevê libertar — active notificações e prepare a entrada.'
+                : copy.exploreSubtitle}
+            </Text>
           </div>
-          <Link
-            href="/app/habitacao"
-            className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
-          >
-            Preferências
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href={
+                futureMode
+                  ? '/app/habitacao/explorar'
+                  : '/app/habitacao/explorar?disponibilidade=futura'
+              }
+              className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+            >
+              {futureMode ? 'Ver activos' : 'Disponibilidade futura'}
+            </Link>
+            <Link
+              href="/app/habitacao"
+              className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+            >
+              Preferências
+            </Link>
+          </div>
         </header>
 
         {accessPending ? <SoftListSlot pending /> : null}
@@ -174,7 +195,14 @@ export function ExploreListClient() {
               className="kuteka-glass grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-3"
               onSubmit={(e) => {
                 e.preventDefault();
-                applyFilters({ purpose, province, city, propertyType, query });
+                applyFilters({
+                  purpose,
+                  province,
+                  city,
+                  propertyType,
+                  query,
+                  futureAvailability: futureMode,
+                });
               }}
             >
               <div className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-3">

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { ResidentOpsClient } from '@/modules/ops/components/ResidentOpsClient';
 import { PreferencesForm } from './PreferencesForm';
 
 type InterestRow = {
@@ -81,6 +82,7 @@ export function ClientHubClient() {
         aria-label="Secções cliente"
       >
         {[
+          { id: 'residencia', label: 'Residência', href: '/app/habitacao?vista=residencia' },
           { id: 'preferencias', label: 'Preferências', href: '/app/habitacao' },
           {
             id: 'interesses',
@@ -103,7 +105,9 @@ export function ClientHubClient() {
         ))}
       </nav>
 
-      {vista === 'interesses' || vista === 'visitas' ? (
+      {vista === 'residencia' ? (
+        <ResidentOpsClient />
+      ) : vista === 'interesses' || vista === 'visitas' ? (
         <section className="kuteka-detail-panel p-5">
           <h2 className="kuteka-detail-title">
             {vista === 'visitas' ? 'Visitas & acompanhamento' : 'Favoritos / Interesses'}

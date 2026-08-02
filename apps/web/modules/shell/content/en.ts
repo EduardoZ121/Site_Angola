@@ -97,8 +97,10 @@ export const shellCopyEn: ShellCopy = {
   items: {
     home: 'Home',
     explorar: 'Explore Housing',
+    residencia: 'Residence',
     favoritos: 'Favourites / Interests',
     visitas: 'Visits',
+    futuro: 'Future availability',
     propostas: 'Proposals',
     patrimonios: 'Properties',
     ativar: 'Activate Property',
