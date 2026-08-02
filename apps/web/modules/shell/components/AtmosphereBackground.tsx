@@ -42,7 +42,16 @@ export function AtmosphereBackground({ preset, mode = 'cinematic' }: AtmosphereB
     setVideoFailed(false);
   }, [preset]);
 
-  const imageSrc = narrow && source.imageMobile ? source.imageMobile : source.image;
+  // App shell: local light assets only (no remote Unsplash / full desktop hero).
+  // Cinematic surfaces keep the richer preset sources.
+  const imageSrc =
+    mode === 'app'
+      ? narrow
+        ? '/images/hero-mobile.jpg'
+        : '/images/hero-app.jpg'
+      : narrow && source.imageMobile
+        ? source.imageMobile
+        : source.image;
   const allowVideo =
     mode === 'cinematic' && Boolean(source.video) && !reduceMotion && !narrow && !videoFailed;
   const kenBurns = mode === 'cinematic' && !reduceMotion;

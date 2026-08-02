@@ -18,6 +18,7 @@ export type HeroMediaSource = {
  */
 export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   dashboard: {
+    /** Landing / cinematic. App shell uses `/images/hero-app.jpg` (AtmosphereBackground). */
     image: '/images/hero.jpg',
     imageMobile: '/images/hero-mobile.jpg',
     video:
