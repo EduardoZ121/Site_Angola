@@ -7,7 +7,8 @@ import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
 import { RoleHomeDashboard } from '@/modules/shell/components/RoleHomeDashboard';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
-import { EXPERIENCE_LABELS } from '@/modules/shell/role-experience';
+import { modeBadgeLabel } from '@/modules/i18n/experience-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { useAppSession } from './app-session';
 
@@ -15,7 +16,8 @@ import { useAppSession } from './app-session';
  * /app home — experience cockpit + continuous Feed.
  */
 export function AppHomeClient() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const { session, status, error } = useAppSession();
   const { mode, effectivePermissions } = useRoleExperience();
 
@@ -75,7 +77,7 @@ export function AppHomeClient() {
     <div className="flex flex-col gap-4">
       <header className="kuteka-detail-panel flex flex-col gap-3 px-4 py-3.5 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <p className="kuteka-detail-eyebrow">{EXPERIENCE_LABELS[mode]}</p>
+          <p className="kuteka-detail-eyebrow">{modeBadgeLabel(mode, locale)}</p>
           <h1 className="truncate text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
           </h1>

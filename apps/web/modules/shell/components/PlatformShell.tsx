@@ -9,9 +9,10 @@ import { cn } from '@kuteka/shared';
 import { BrandMark } from '@/modules/authentication/components/BrandMark';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
-import { getShellCopy } from '../content/pt';
+import { experienceLabel, modeBadgeLabel } from '@/modules/i18n/experience-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '../content';
 import { groupNavItems, isNavItemActive, visibleNavItems } from '../nav';
-import { EXPERIENCE_LABELS } from '../role-experience';
 import { NavIcon } from '../nav-icons';
 import { AtmosphereBackground } from './AtmosphereBackground';
 import { RoleRouteGuard } from './RoleRouteGuard';
@@ -26,7 +27,8 @@ type PlatformShellProps = {
 };
 
 function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
-  const shell = getShellCopy();
+  const { locale } = useLocale();
+  const shell = getShellCopy(locale);
   const { mode, effectivePermissions } = useRoleExperience();
   const items = visibleNavItems(effectivePermissions, mode);
   const groups = groupNavItems(items);
@@ -34,11 +36,11 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
 
   return (
     <div className="flex flex-col gap-3 p-3">
-      <div className="rounded-kuteka border border-white/10 bg-white/5 px-3 py-2">
-        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-slate-400">
+      <div className="rounded-kuteka border border-[#f0a91f]/40 bg-[#f0a91f]/10 px-3 py-2">
+        <p className="text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-[#fde68a]">
           {shell.activeExperience}
         </p>
-        <p className="mt-0.5 text-sm font-semibold text-white">{EXPERIENCE_LABELS[mode]}</p>
+        <p className="mt-0.5 text-sm font-bold text-white">{modeBadgeLabel(mode, locale)}</p>
       </div>
 
       {groups.map(({ group, items: groupItems }) => (
@@ -112,8 +114,9 @@ function ShellBrand() {
  * LinkedIn-style app frame (ADR-013) + role experience lens.
  */
 export function PlatformShell({ children, session, sessionStatus }: PlatformShellProps) {
-  const auth = getAuthCopy();
-  const shell = getShellCopy();
+  const { locale } = useLocale();
+  const auth = getAuthCopy(locale);
+  const shell = getShellCopy(locale);
   const pathname = usePathname() || '/app';
   const [drawerOpen, setDrawerOpen] = useState(false);
   const titleId = useId();
@@ -125,9 +128,9 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
   const roleLabels: Record<string, string> = {
     client: auth.onboarding.roles.client,
     patrimonial_partner: auth.onboarding.roles.partner,
-    certified_agent: 'Agente Certificado',
-    administrator: 'Administrador',
-    super_administrator: 'Superadministrador',
+    certified_agent: experienceLabel('certified_agent', locale),
+    administrator: experienceLabel('administrator', locale),
+    super_administrator: experienceLabel('super_administrator', locale),
   };
 
   useEffect(() => {
@@ -197,7 +200,9 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 >
                   {shell.areaTitle}
                 </p>
-                <p className="truncate text-xs text-slate-300">{EXPERIENCE_LABELS[mode]}</p>
+                <p className="truncate text-xs font-semibold text-[#fde68a]">
+                  {modeBadgeLabel(mode, locale)}
+                </p>
               </div>
             </div>
 

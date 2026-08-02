@@ -471,8 +471,273 @@ body {
   color: #57534e;
 }
 
+/* ── Account menu + notifications (AA contrast on light panels) ─────────── */
+.kuteka-account-panel {
+  position: absolute;
+  right: 0;
+  z-index: 50;
+  margin-top: 0.5rem;
+  width: min(22rem, calc(100vw - 1.25rem));
+  overflow: hidden;
+  border-radius: 0.9rem;
+  border: 1px solid #cbd5e1;
+  background: #fffef9;
+  color: #0f172a;
+  box-shadow:
+    0 18px 40px rgba(2, 6, 23, 0.22),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  animation: kuteka-account-in 160ms ease-out;
+}
+
+.kuteka-account-panel--menu {
+  display: flex;
+  flex-direction: column;
+  max-height: min(85dvh, 36rem);
+}
+
+.kuteka-notif-panel {
+  width: min(22rem, calc(100vw - 1.25rem));
+  max-height: min(70dvh, 28rem);
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes kuteka-account-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.kuteka-account-panel__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 1rem 1.1rem;
+}
+
+.kuteka-account-panel__title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.kuteka-account-panel__meta {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.kuteka-account-panel__scroll {
+  min-height: 0;
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
+.kuteka-account-avatar {
+  display: flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #f0a91f;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #08263f;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 3px #f0a91f;
+}
+
+.kuteka-mode-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  background: #08263f;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fffbeb;
+}
+
+.kuteka-account-section {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.75rem 0.85rem;
+}
+
+.kuteka-account-section--last {
+  border-bottom: 0;
+}
+
+.kuteka-account-section__title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #1e293b;
+}
+
+.kuteka-account-section__hint {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.kuteka-account-role {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.65rem;
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  transition: background-color 140ms ease;
+}
+
+.kuteka-account-role:hover {
+  background: #f1f5f9;
+}
+
+.kuteka-account-role--active {
+  background: #08263f;
+  color: #fff;
+}
+
+.kuteka-account-role--active:hover {
+  background: #0b3050;
+}
+
+.kuteka-account-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0.55rem;
+  border-radius: 0.65rem;
+  color: #0f172a;
+  transition: background-color 140ms ease;
+}
+
+.kuteka-account-item:hover {
+  background: #f1f5f9;
+}
+
+.kuteka-account-item__icon {
+  margin-top: 0.1rem;
+  color: #08263f;
+}
+
+.kuteka-account-item__label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.kuteka-account-item__hint {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #334155;
+}
+
+.kuteka-account-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0.65rem;
+  padding: 0.7rem 0.55rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #b91c1c;
+  transition: background-color 140ms ease;
+}
+
+.kuteka-account-logout:hover {
+  background: #fef2f2;
+}
+
+.kuteka-notif-badge {
+  position: absolute;
+  top: 0.1rem;
+  right: 0.05rem;
+  min-width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  background: #f0a91f;
+  padding: 0 0.3rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  line-height: 1.15rem;
+  color: #08263f;
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.55);
+}
+
+.kuteka-notif-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.85rem 1rem;
+  transition: background-color 140ms ease;
+}
+
+.kuteka-notif-item:hover {
+  background: #f8fafc;
+}
+
+.kuteka-notif-item__title {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.kuteka-notif-item__body {
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.kuteka-lang-select {
+  max-width: 8.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(15, 23, 42, 0.45);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+.kuteka-lang-select option {
+  color: #0f172a;
+  background: #fff;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kuteka-atmosphere-kenburns {
+    animation: none;
+  }
+
+  .kuteka-account-panel {
     animation: none;
   }
 }

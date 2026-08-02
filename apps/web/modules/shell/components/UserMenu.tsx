@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useId, useRef, useState } from 'react';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { experienceLabel, modeBadgeLabel } from '@/modules/i18n/experience-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { roleLabelPt, type AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
-import { getShellCopy } from '../content/pt';
-import { EXPERIENCE_LABELS, type ExperienceMode } from '../role-experience';
+import { getShellCopy } from '../content';
+import type { ExperienceMode } from '../role-experience';
+import { LanguageSwitcher } from './LanguageSwitcher';
 import { useRoleExperience } from './RoleExperienceProvider';
 
 type UserMenuProps = {
@@ -22,11 +25,10 @@ type MenuItem = {
   label: string;
   hint: string;
   icon: string;
-  danger?: boolean;
 };
 
 function MenuIcon({ name }: { name: string }) {
-  const common = 'size-[1.15rem] shrink-0 stroke-[1.75]';
+  const common = 'size-[1.15rem] shrink-0 stroke-[1.85]';
   switch (name) {
     case 'profile':
       return (
@@ -83,6 +85,23 @@ function MenuIcon({ name }: { name: string }) {
           <path d="M10 13h4M10 16h3" stroke="currentColor" strokeLinecap="round" />
         </svg>
       );
+    case 'bell':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden>
+          <path
+            d="M12 4a5 5 0 0 0-5 5v2.2c0 .9-.4 1.7-1 2.3L5 15h14l-1-1.5c-.6-.6-1-1.4-1-2.3V9a5 5 0 0 0-5-5Z"
+            stroke="currentColor"
+          />
+          <path d="M10 18a2 2 0 0 0 4 0" stroke="currentColor" strokeLinecap="round" />
+        </svg>
+      );
+    case 'messages':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden>
+          <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" strokeLinecap="round" />
+          <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" />
+        </svg>
+      );
     case 'settings':
       return (
         <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden>
@@ -91,6 +110,16 @@ function MenuIcon({ name }: { name: string }) {
             d="M12 3.5v2M12 18.5v2M3.5 12h2M18.5 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"
             stroke="currentColor"
             strokeLinecap="round"
+          />
+        </svg>
+      );
+    case 'privacy':
+      return (
+        <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden>
+          <path
+            d="M12 3.5 19 6v5c0 4.2-2.8 7-7 9-4.2-2-7-4.8-7-9V6l7-2.5Z"
+            stroke="currentColor"
+            strokeLinejoin="round"
           />
         </svg>
       );
@@ -109,8 +138,11 @@ function MenuIcon({ name }: { name: string }) {
     case 'contact':
       return (
         <svg viewBox="0 0 24 24" fill="none" className={common} aria-hidden>
-          <path d="M4 7.5 12 13l8-5.5" stroke="currentColor" strokeLinecap="round" />
-          <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" />
+          <path
+            d="M6.5 5.5h3l1.5 3.5-2 1.2a10 10 0 0 0 4.8 4.8l1.2-2 3.5 1.5v3A1.5 1.5 0 0 1 16.5 19 12.5 12.5 0 0 1 5 7.5a1.5 1.5 0 0 1 1.5-2Z"
+            stroke="currentColor"
+            strokeLinejoin="round"
+          />
         </svg>
       );
     case 'logout':
@@ -134,12 +166,38 @@ function MenuIcon({ name }: { name: string }) {
   }
 }
 
+function ItemList({ items, onNavigate }: { items: MenuItem[]; onNavigate: () => void }) {
+  return (
+    <ul className="py-1">
+      {items.map((item) => (
+        <li key={item.href + item.label}>
+          <Link
+            role="menuitem"
+            href={item.href}
+            className="kuteka-account-item"
+            onClick={onNavigate}
+          >
+            <span className="kuteka-account-item__icon">
+              <MenuIcon name={item.icon} />
+            </span>
+            <span className="min-w-0">
+              <span className="kuteka-account-item__label">{item.label}</span>
+              <span className="kuteka-account-item__hint">{item.hint}</span>
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /**
- * Professional account menu — high contrast, icons, short descriptions.
+ * Premium account menu — AA contrast, internal scroll, role + language.
  */
 export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) {
-  const auth = getAuthCopy();
-  const shell = getShellCopy();
+  const { locale } = useLocale();
+  const auth = getAuthCopy(locale);
+  const shell = getShellCopy(locale);
   const router = useRouter();
   const { mode, available, setMode, effectivePermissions } = useRoleExperience();
   const [open, setOpen] = useState(false);
@@ -153,7 +211,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       : sessionStatus === 'ready'
         ? auth.app.noRoles
         : '…';
-  const primaryRole = EXPERIENCE_LABELS[mode];
+  const modeLabel = modeBadgeLabel(mode, locale);
   const initials = (session?.displayName || session?.email || 'K')
     .split(/[\s@]+/)
     .filter(Boolean)
@@ -208,17 +266,38 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
           } satisfies MenuItem,
         ]
       : []),
+    {
+      href: '/app/definicoes#notificacoes',
+      label: shell.userMenu.notifications,
+      hint: shell.userMenu.notificationsHint,
+      icon: 'bell',
+    },
+    {
+      href: '/contacto#chat',
+      label: shell.userMenu.messages,
+      hint: shell.userMenu.messagesHint,
+      icon: 'messages',
+    },
   ];
 
-  const secondaryItems: MenuItem[] = [
+  const preferenceItems: MenuItem[] = [
     {
-      href: '/auth/onboarding/perfil',
+      href: '/app/definicoes',
       label: shell.userMenu.settings,
       hint: shell.userMenu.settingsHint,
       icon: 'settings',
     },
     {
-      href: '/contacto',
+      href: '/privacidade',
+      label: shell.userMenu.privacy,
+      hint: shell.userMenu.privacyHint,
+      icon: 'privacy',
+    },
+  ];
+
+  const supportItems: MenuItem[] = [
+    {
+      href: '/app/ajuda',
       label: shell.userMenu.help,
       hint: shell.userMenu.helpHint,
       icon: 'help',
@@ -268,7 +347,9 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
         </span>
         <span className="hidden min-w-0 text-left sm:block">
           <span className="block truncate text-sm font-semibold text-white">{headerName}</span>
-          <span className="mt-0.5 block truncate text-xs text-slate-200">{primaryRole}</span>
+          <span className="mt-0.5 block truncate text-xs font-medium text-[#fde68a]">
+            {modeLabel}
+          </span>
         </span>
         <span aria-hidden className="hidden text-xs text-slate-200 sm:inline">
           ▾
@@ -280,110 +361,94 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
           id={menuId}
           role="menu"
           aria-label={shell.userMenuAria}
-          className="absolute right-0 z-50 mt-2 w-[19.5rem] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/15"
+          className="kuteka-account-panel kuteka-account-panel--menu"
         >
-          <div className="flex items-center gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3.5">
-            <span
-              aria-hidden
-              className="flex size-11 shrink-0 items-center justify-center rounded-full bg-[#f0a91f] text-sm font-bold text-[#08263f]"
+          <div className="kuteka-account-panel__head">
+            <Link
+              href="/auth/onboarding/perfil"
+              className="kuteka-account-avatar"
+              onClick={() => setOpen(false)}
+              title={shell.changePhoto}
             >
-              {initials || 'K'}
-            </span>
+              <span aria-hidden>{initials || 'K'}</span>
+            </Link>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-900">{headerName}</p>
-              <p className="mt-0.5 truncate text-xs font-semibold text-[#08263f]">{primaryRole}</p>
-              <p className="mt-0.5 truncate text-[0.7rem] text-slate-500">Conta: {accountRoles}</p>
+              <p className="truncate text-sm font-bold text-slate-900">{headerName}</p>
+              <p className="kuteka-mode-chip mt-1">{modeLabel}</p>
+              <p className="mt-1 truncate text-xs font-medium text-slate-700">
+                {shell.accountLabel}: {accountRoles}
+              </p>
+              <Link
+                href="/auth/onboarding/perfil"
+                className="mt-1 inline-block text-xs font-semibold text-[#92400e] underline-offset-2 hover:underline"
+                onClick={() => setOpen(false)}
+              >
+                {shell.changePhoto}
+              </Link>
             </div>
           </div>
 
-          {available.length > 0 ? (
-            <div className="border-b border-slate-200 px-4 py-3">
-              <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-                {shell.switchRole}
-              </p>
-              <p className="mt-0.5 text-xs text-slate-600">{shell.switchRoleHint}</p>
-              <ul className="mt-2 flex flex-col gap-1" role="group" aria-label={shell.switchRole}>
-                {available.map((m) => (
-                  <li key={m}>
-                    <button
-                      type="button"
-                      role="menuitemradio"
-                      aria-checked={m === mode}
-                      className={cn(
-                        'flex w-full items-center justify-between rounded-lg px-2.5 py-2 text-left text-sm transition-colors',
-                        m === mode
-                          ? 'bg-[#08263f] font-semibold text-white'
-                          : 'font-medium text-slate-800 hover:bg-slate-100',
-                      )}
-                      onClick={() => {
-                        setMode(m as ExperienceMode);
-                        setOpen(false);
-                        // Reload cockpit immediately for the new experience.
-                        router.push('/app');
-                      }}
-                    >
-                      <span>{EXPERIENCE_LABELS[m]}</span>
-                      {m === mode ? <span aria-hidden>✓</span> : null}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+          <div className="kuteka-account-panel__scroll">
+            {available.length > 0 ? (
+              <div className="kuteka-account-section">
+                <p className="kuteka-account-section__title">{shell.switchRole}</p>
+                <p className="kuteka-account-section__hint">{shell.switchRoleHint}</p>
+                <ul className="mt-2 flex flex-col gap-1" role="group" aria-label={shell.switchRole}>
+                  {available.map((m) => (
+                    <li key={m}>
+                      <button
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={m === mode}
+                        className={cn(
+                          'kuteka-account-role',
+                          m === mode && 'kuteka-account-role--active',
+                        )}
+                        onClick={() => {
+                          setMode(m as ExperienceMode);
+                          setOpen(false);
+                          router.push('/app');
+                        }}
+                      >
+                        <span>{experienceLabel(m, locale)}</span>
+                        {m === mode ? <span aria-hidden>✓</span> : null}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <div className="kuteka-account-section">
+              <ItemList items={primaryItems} onNavigate={() => setOpen(false)} />
             </div>
-          ) : null}
 
-          <ul className="py-1.5">
-            {primaryItems.map((item) => (
-              <li key={item.href + item.label}>
-                <Link
-                  role="menuitem"
-                  href={item.href}
-                  className="flex items-start gap-3 px-4 py-2.5 text-slate-900 transition-colors hover:bg-slate-50"
-                  onClick={() => setOpen(false)}
-                >
-                  <span className="mt-0.5 text-[#08263f]">{<MenuIcon name={item.icon} />}</span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold">{item.label}</span>
-                    <span className="mt-0.5 block text-xs text-slate-600">{item.hint}</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+            <div className="kuteka-account-section">
+              <LanguageSwitcher onSelected={() => setOpen(false)} />
+            </div>
 
-          <div className="border-t border-slate-200" />
+            <div className="kuteka-account-section">
+              <ItemList items={preferenceItems} onNavigate={() => setOpen(false)} />
+            </div>
 
-          <ul className="py-1.5">
-            {secondaryItems.map((item) => (
-              <li key={item.href + item.label}>
-                <Link
-                  role="menuitem"
-                  href={item.href}
-                  className="flex items-start gap-3 px-4 py-2.5 text-slate-900 transition-colors hover:bg-slate-50"
-                  onClick={() => setOpen(false)}
-                >
-                  <span className="mt-0.5 text-[#08263f]">{<MenuIcon name={item.icon} />}</span>
-                  <span className="min-w-0">
-                    <span className="block text-sm font-semibold">{item.label}</span>
-                    <span className="mt-0.5 block text-xs text-slate-600">{item.hint}</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+            <div className="kuteka-account-section">
+              <ItemList items={supportItems} onNavigate={() => setOpen(false)} />
+            </div>
 
-          <div className="border-t border-slate-200" />
-
-          <Link
-            role="menuitem"
-            href="/auth/sair"
-            className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-700 transition-colors hover:bg-red-50"
-            onClick={() => setOpen(false)}
-          >
-            <span className="text-red-600">
-              <MenuIcon name="logout" />
-            </span>
-            {shell.userMenu.logout}
-          </Link>
+            <div className="kuteka-account-section kuteka-account-section--last">
+              <Link
+                role="menuitem"
+                href="/auth/sair"
+                className="kuteka-account-logout"
+                onClick={() => setOpen(false)}
+              >
+                <span className="text-red-700">
+                  <MenuIcon name="logout" />
+                </span>
+                {shell.userMenu.logout}
+              </Link>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

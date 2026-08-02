@@ -1,15 +1,22 @@
-/** Shell chrome copy — pt-AO (Fase 3 + role experience). */
+/** Shell chrome copy — pt-AO. */
 export const shellCopyPt = {
   areaTitle: 'Plataforma Kuteka',
   navAria: 'Navegação da plataforma',
   openMenu: 'Abrir menu',
   closeMenu: 'Fechar menu',
   soon: 'Em breve',
-  notificationsSoon: 'Notificações — em breve',
+  notificationsTitle: 'Notificações',
+  notificationsEmpty: 'Sem notificações novas neste momento.',
+  notificationsMarkRead: 'Marcar como lidas',
+  notificationsViewAll: 'Ver todas',
+  language: 'Idioma',
+  languageHint: 'Altera toda a interface',
   userMenuAria: 'Menu da conta',
   switchRole: 'Mudar de papel',
   switchRoleHint: 'Altera menus, dashboard e fluxos imediatamente',
   activeExperience: 'Experiência activa',
+  accountLabel: 'Conta',
+  changePhoto: 'Alterar fotografia',
   groups: {
     geral: 'Geral',
     cliente: 'Cliente',
@@ -28,15 +35,64 @@ export const shellCopyPt = {
     contractsHint: 'Minutas e formalizações',
     documents: 'Documentos',
     documentsHint: 'Confiança e verificação',
+    notifications: 'Notificações',
+    notificationsHint: 'Alertas do seu papel activo',
+    messages: 'Mensagens',
+    messagesHint: 'Conversas com a Kuteka',
+    language: 'Idioma',
+    languageHint: 'Português, English, Français, Español',
     settings: 'Definições',
-    settingsHint: 'Preferências da conta',
-    help: 'Centro de ajuda',
-    helpHint: 'Guias e perguntas frequentes',
-    contact: 'Contactar Kuteka',
-    contactHint: 'Fale com a nossa equipa',
+    settingsHint: 'Idioma, moeda, tema e privacidade',
+    privacy: 'Privacidade',
+    privacyHint: 'Dados e consentimentos',
+    help: 'Centro de Ajuda',
+    helpHint: 'Manual, FAQ e tutoriais',
+    contact: 'Contactar a Kuteka',
+    contactHint: 'WhatsApp, telefone, email e chat',
     logout: 'Terminar sessão',
   },
-
+  settingsPage: {
+    title: 'Definições',
+    subtitle: 'Preferências da conta e da experiência Kuteka.',
+    language: 'Idioma',
+    currency: 'Moeda',
+    theme: 'Tema',
+    themeLight: 'Claro',
+    themeDark: 'Escuro',
+    themeSystem: 'Sistema',
+    notifications: 'Notificações',
+    notificationsHint: 'Receber alertas do papel activo',
+    privacy: 'Privacidade',
+    privacyHint: 'Consulte a política de privacidade',
+    security: 'Segurança',
+    password: 'Palavra-passe',
+    passwordHint: 'Alterar ou recuperar palavra-passe',
+    sessions: 'Sessões activas',
+    sessionsHint: 'Termine a sessão neste dispositivo quando quiser',
+    saveLocale: 'Idioma guardado nas preferências da conta',
+  },
+  helpPage: {
+    title: 'Centro de Ajuda',
+    subtitle: 'Guias para publicar, comprar, arrendar e operar na Kuteka.',
+    manual: 'Manual do utilizador',
+    faq: 'Perguntas frequentes',
+    videos: 'Vídeos',
+    tutorials: 'Tutoriais',
+    howPublish: 'Como publicar',
+    howBuy: 'Como comprar',
+    howRent: 'Como arrendar',
+    contactCta: 'Ainda precisa de ajuda? Contacte-nos',
+  },
+  contactPage: {
+    title: 'Contactar a Kuteka',
+    subtitle: 'Escolha o canal mais conveniente para a sua equipa.',
+    whatsapp: 'WhatsApp',
+    phone: 'Telefone',
+    email: 'Email',
+    chat: 'Chat',
+    helpCenter: 'Centro de Ajuda',
+    hours: 'Atendimento em dias úteis, 09:00–18:00 (WAT)',
+  },
   items: {
     home: 'Início',
     explorar: 'Explorar Habitação',
@@ -53,7 +109,6 @@ export const shellCopyPt = {
     conta: 'Conta',
     admin: 'Administração',
   },
-
   routeBlocked: {
     title: 'Área indisponível neste papel',
     body: 'A experiência activa não inclui este fluxo. Mude de papel no menu da conta ou escolha um atalho autorizado.',
@@ -62,8 +117,8 @@ export const shellCopyPt = {
   },
 } as const;
 
-export type ShellCopy = typeof shellCopyPt;
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
 
-export function getShellCopy(): ShellCopy {
-  return shellCopyPt;
-}
+export type ShellCopy = DeepStringify<typeof shellCopyPt>;

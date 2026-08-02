@@ -1,7 +1,8 @@
+import type { AppLocale } from '@/modules/i18n/types';
 import { authCopyPt, type AuthCopy } from './pt';
 
-/** MVP locale pt-AO; structure ready for en without shipping EN UI yet. */
-export function getAuthCopy(_locale: 'pt' | 'en' = 'pt'): AuthCopy {
+/** Auth dictionaries — shell chrome is fully multilingual; auth body stays pt-AO until EN/FR/ES packs land. */
+export function getAuthCopy(_locale: AppLocale | 'pt' | 'en' = 'pt'): AuthCopy {
   return authCopyPt;
 }
 
