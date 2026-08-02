@@ -96,8 +96,10 @@ export const shellCopyPt = {
   items: {
     home: 'Início',
     explorar: 'Explorar Habitação',
+    residencia: 'Residência',
     favoritos: 'Favoritos / Interesses',
     visitas: 'Visitas',
+    futuro: 'Disponibilidade futura',
     propostas: 'Propostas',
     patrimonios: 'Patrimónios',
     ativar: 'Ativar Património',

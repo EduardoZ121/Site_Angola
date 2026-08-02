@@ -1,15 +1,16 @@
 # Module: kai
 
-Domínio KEOS — stub FASE 1.
+Inteligência Kuteka (KAI) — camada proactiva da plataforma.
 
-Estrutura futura:
+## Estado actual
 
-- `components/`
-- `services/`
-- `repository/`
-- `hooks/`
-- `types/`
-- `validators/`
-- `tests/`
+- Insights rule-based em `modules/ops/kai-insights.ts`
+- Cartões no home (`KaiInsightCards`) por experiência activa
+- Sinais: disponibilidade futura, pagamentos, renovação, ocupação, pipeline
 
-Sem regras de negócio nesta fase.
+## Evolução
+
+- Modelos preditivos de renovação / churn
+- Matching automático cliente ↔ imóvel a libertar
+- Campanhas marketplace sem intervenção manual
+- Integração com agenda, financeiro e rede de prestadores

@@ -10,8 +10,10 @@ export type ShellNavStatus = 'active' | 'soon';
 export type ShellNavLabelKey =
   | 'home'
   | 'explorar'
+  | 'residencia'
   | 'favoritos'
   | 'visitas'
+  | 'futuro'
   | 'propostas'
   | 'patrimonios'
   | 'ativar'
@@ -60,6 +62,15 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     group: 'cliente',
   },
   {
+    id: 'residencia',
+    labelKey: 'residencia',
+    href: '/app/habitacao?vista=residencia',
+    status: 'active',
+    requiresPermission: 'housing.explore',
+    experiences: ['client', 'client_partner'],
+    group: 'cliente',
+  },
+  {
     id: 'favoritos',
     labelKey: 'favoritos',
     href: '/app/habitacao?vista=interesses',
@@ -76,6 +87,21 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     requiresPermission: 'housing.explore',
     experiences: ['client', 'client_partner'],
     group: 'cliente',
+  },
+  {
+    id: 'futuro',
+    labelKey: 'futuro',
+    href: '/app/habitacao/explorar?disponibilidade=futura',
+    status: 'active',
+    requiresPermission: 'housing.explore',
+    experiences: [
+      'client',
+      'client_partner',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
   },
   {
     id: 'propostas',

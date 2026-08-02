@@ -732,6 +732,93 @@ body {
   background: #fff;
 }
 
+/* ── Operational intelligence / KAI ─────────────────────────────────────── */
+.kuteka-kai-card {
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.9rem 1rem;
+  background: #fff;
+}
+
+.kuteka-kai-card--info {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.kuteka-kai-card--warn {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+.kuteka-kai-card--success {
+  border-color: #bbf7d0;
+  background: #ecfdf5;
+}
+
+.kuteka-kai-card--predict {
+  border-color: #fcd34d;
+  background: linear-gradient(135deg, #fff7ed, #fef3c7);
+}
+
+.kuteka-kai-card__title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.kuteka-kai-card__body {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #334155;
+}
+
+.kuteka-ops-block {
+  border-radius: 0.7rem;
+  border: 1px solid #e7e5e4;
+  background: #fff;
+  padding: 0.85rem 1rem;
+}
+
+.kuteka-ops-block__title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.kuteka-ops-block__meta {
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.kuteka-ops-pipeline {
+  border-radius: 0.7rem;
+  border: 1px dashed #f59e0b;
+  background: #fffbeb;
+  padding: 0.9rem 1rem;
+}
+
+.kuteka-ops-pipeline__flow {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #78350f;
+}
+
+.kuteka-ops-input {
+  border-radius: 0.55rem;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .kuteka-atmosphere-kenburns {
     animation: none;

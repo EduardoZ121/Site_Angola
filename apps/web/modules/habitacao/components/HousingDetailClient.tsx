@@ -15,6 +15,7 @@ import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { NotifyAvailabilityButton } from '@/modules/ops/components/NotifyAvailabilityButton';
 import { getHabitacaoCopy } from '../content/pt';
 import {
   expressInterest,
@@ -163,34 +164,37 @@ export function HousingDetailClient({ id }: { id: string }) {
                 </div>
               ) : null}
 
-              <div className="kuteka-detail-panel flex flex-wrap gap-3 p-4">
-                {canExplore ? (
-                  <Button
-                    type="button"
-                    variant="primary"
-                    disabled={busy || hasInterest}
-                    onClick={() => void onInterest()}
-                  >
-                    {busy ? copy.interestBusy : hasInterest ? copy.interestDone : copy.interest}
-                  </Button>
-                ) : null}
-                <Link
-                  href="/app/confianca"
-                  className={cn(buttonVariants({ variant: 'secondary' }))}
-                >
-                  {copy.goTrust}
-                </Link>
-                {canContracts ? (
+              <div className="kuteka-detail-panel flex flex-col gap-3 p-4">
+                <div className="flex flex-wrap gap-3">
+                  {canExplore ? (
+                    <Button
+                      type="button"
+                      variant="primary"
+                      disabled={busy || hasInterest}
+                      onClick={() => void onInterest()}
+                    >
+                      {busy ? copy.interestBusy : hasInterest ? copy.interestDone : copy.interest}
+                    </Button>
+                  ) : null}
                   <Link
-                    href="/app/contratos"
+                    href="/app/confianca"
                     className={cn(buttonVariants({ variant: 'secondary' }))}
                   >
-                    Preparar contrato
+                    {copy.goTrust}
                   </Link>
-                ) : null}
-                <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
-                  {copy.goAgent}
-                </Link>
+                  {canContracts ? (
+                    <Link
+                      href="/app/contratos"
+                      className={cn(buttonVariants({ variant: 'secondary' }))}
+                    >
+                      Preparar contrato
+                    </Link>
+                  ) : null}
+                  <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                    {copy.goAgent}
+                  </Link>
+                </div>
+                {canExplore ? <NotifyAvailabilityButton propertyId={id} /> : null}
               </div>
 
               <FlowNextSteps
