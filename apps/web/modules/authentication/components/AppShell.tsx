@@ -234,7 +234,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div
           aria-hidden
           className="absolute inset-0 bg-cover bg-center opacity-45"
-          style={{ backgroundImage: "url('/images/hero.jpg')" }}
+          style={{ backgroundImage: "url('/images/hero-app.jpg')" }}
         />
         <div
           aria-hidden
@@ -258,7 +258,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div
           aria-hidden
           className="absolute inset-0 bg-cover bg-center opacity-50"
-          style={{ backgroundImage: "url('/images/hero.jpg')" }}
+          style={{ backgroundImage: "url('/images/hero-app.jpg')" }}
         />
         <div
           aria-hidden
