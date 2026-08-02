@@ -6,7 +6,10 @@ import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { EXPERIENCE_LABELS, type ExperienceMode } from '../role-experience';
+import { experienceLabel, modeBadgeLabel } from '@/modules/i18n/experience-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import type { AppLocale } from '@/modules/i18n/types';
+import type { ExperienceMode } from '../role-experience';
 import { useRoleExperience } from './RoleExperienceProvider';
 
 type RoleHomeDashboardProps = {
@@ -248,6 +251,7 @@ function panelForMode(
   mode: ExperienceMode,
   s: LiveStats | null,
   loading: boolean,
+  locale: AppLocale,
 ): React.ReactNode {
   switch (mode) {
     case 'client':
@@ -258,7 +262,7 @@ function panelForMode(
       return (
         <div className="flex flex-col gap-4">
           <p className="kuteka-detail-meta px-1">
-            Experiência integrada — {EXPERIENCE_LABELS.client_partner}. Dois cockpits, um só login.
+            {modeBadgeLabel('client_partner', locale)} — {experienceLabel('client_partner', locale)}
           </p>
           <ClientPanel s={s} loading={loading} />
           <PartnerPanel s={s} loading={loading} />
@@ -293,7 +297,7 @@ function panelForMode(
       return (
         <DashboardShell
           loading={loading}
-          eyebrow={EXPERIENCE_LABELS[mode]}
+          eyebrow={modeBadgeLabel(mode, locale)}
           title="Comando operacional"
           subtitle="Utilizadores, patrimónios, contratos, auditoria e aprovações."
           stats={[
@@ -323,6 +327,7 @@ function panelForMode(
  */
 export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
   const { mode } = useRoleExperience();
+  const { locale } = useLocale();
   const [stats, setStats] = useState<LiveStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -353,5 +358,5 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
     };
   }, [session.roles, mode]);
 
-  return <>{panelForMode(mode, stats, loading)}</>;
+  return <>{panelForMode(mode, stats, loading, locale)}</>;
 }

@@ -7,6 +7,7 @@ export type AppSessionData = {
   displayName: string | null;
   roles: string[];
   permissions: string[];
+  locale?: string | null;
 };
 
 type AppSessionContextValue = {

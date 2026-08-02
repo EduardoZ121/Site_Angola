@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { LocaleProvider } from '@/modules/i18n/LocaleProvider';
 import { PlatformShell } from '@/modules/shell/components/PlatformShell';
 import { RoleExperienceProvider } from '@/modules/shell/components/RoleExperienceProvider';
 import { getAuthCopy } from '../content';
@@ -56,6 +57,7 @@ function readSessionCache(): AppSessionData | null {
       displayName: typeof parsed.displayName === 'string' ? parsed.displayName : null,
       roles: asStringArray(parsed.roles),
       permissions: asStringArray(parsed.permissions),
+      locale: typeof parsed.locale === 'string' ? parsed.locale : null,
     };
   } catch {
     return null;
@@ -136,7 +138,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         const [{ data: profile, error: profileError }, rolesResult, permissionsResult] =
           await Promise.all([
-            client.from('profiles').select('display_name').eq('id', user.id).maybeSingle(),
+            client.from('profiles').select('display_name, locale').eq('id', user.id).maybeSingle(),
             client.rpc('get_user_role_codes', { p_user_id: user.id }),
             client.rpc('get_user_permission_codes', { p_user_id: user.id }),
           ]);
@@ -151,6 +153,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             displayName: null,
             roles: [],
             permissions: [],
+            locale: null,
           };
           setSession(partial);
           writeSessionCache(null);
@@ -163,6 +166,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           displayName: profile?.display_name?.trim() || null,
           roles: asStringArray(rolesResult.data),
           permissions: asStringArray(permissionsResult.data),
+          locale: typeof profile?.locale === 'string' ? profile.locale : null,
         };
         setSession(next);
         writeSessionCache(next);
@@ -278,11 +282,16 @@ export function AppShell({ children }: { children: ReactNode }) {
   // booting OR ready — keep PlatformShell mounted (no boot flash swap).
   return (
     <AppSessionContext.Provider value={{ session, status: sessionStatus, error: sessionError }}>
-      <RoleExperienceProvider roles={session?.roles ?? []} permissions={session?.permissions ?? []}>
-        <PlatformShell session={session} sessionStatus={sessionStatus}>
-          {children}
-        </PlatformShell>
-      </RoleExperienceProvider>
+      <LocaleProvider profileLocale={session?.locale ?? null}>
+        <RoleExperienceProvider
+          roles={session?.roles ?? []}
+          permissions={session?.permissions ?? []}
+        >
+          <PlatformShell session={session} sessionStatus={sessionStatus}>
+            {children}
+          </PlatformShell>
+        </RoleExperienceProvider>
+      </LocaleProvider>
     </AppSessionContext.Provider>
   );
 }

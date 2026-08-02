@@ -8,7 +8,7 @@ export const permissionCodeSchema = z
 
 export const profileUpdateSchema = z.object({
   displayName: z.string().trim().min(1).max(120).optional(),
-  locale: z.enum(['pt', 'en']).optional(),
+  locale: z.enum(['pt', 'en', 'fr', 'es']).optional(),
   avatarUrl: z.string().url().nullable().optional(),
 });
 

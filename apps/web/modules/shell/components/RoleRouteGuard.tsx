@@ -4,8 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
-import { getShellCopy } from '../content/pt';
-import { canAccessPath, EXPERIENCE_LABELS } from '../role-experience';
+import { experienceLabel, modeBadgeLabel } from '@/modules/i18n/experience-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '../content';
+import { canAccessPath } from '../role-experience';
 import { useRoleExperience } from './RoleExperienceProvider';
 
 /**
@@ -13,8 +15,9 @@ import { useRoleExperience } from './RoleExperienceProvider';
  */
 export function RoleRouteGuard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname() || '/app';
+  const { locale } = useLocale();
   const { effectivePermissions, mode, available, setMode, ready } = useRoleExperience();
-  const shell = getShellCopy();
+  const shell = getShellCopy(locale);
 
   if (!ready) return <>{children}</>;
 
@@ -23,12 +26,9 @@ export function RoleRouteGuard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="kuteka-detail-panel flex flex-col gap-4 p-6">
-      <p className="kuteka-detail-eyebrow">{EXPERIENCE_LABELS[mode]}</p>
+      <p className="kuteka-detail-eyebrow">{modeBadgeLabel(mode, locale)}</p>
       <h1 className="kuteka-detail-title">{shell.routeBlocked.title}</h1>
       <p className="kuteka-detail-body">{shell.routeBlocked.body}</p>
-      <p className="kuteka-detail-meta">
-        Permissão necessária nesta experiência: <code>{access.permission}</code>
-      </p>
       <div className="flex flex-wrap gap-2">
         {available.map((m) => (
           <button
@@ -39,7 +39,7 @@ export function RoleRouteGuard({ children }: { children: React.ReactNode }) {
               buttonVariants({ variant: m === mode ? 'primary' : 'secondary', size: 'sm' }),
             )}
           >
-            {EXPERIENCE_LABELS[m]}
+            {experienceLabel(m, locale)}
           </button>
         ))}
         <Link href="/app" className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}>
