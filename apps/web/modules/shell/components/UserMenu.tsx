@@ -225,7 +225,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
 
   const primaryItems: MenuItem[] = [
     {
-      href: '/auth/onboarding/perfil',
+      href: '/app/perfil',
       label: shell.userMenu.profile,
       hint: shell.userMenu.profileHint,
       icon: 'profile',
@@ -365,7 +365,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
         >
           <div className="kuteka-account-panel__head">
             <Link
-              href="/auth/onboarding/perfil"
+              href="/app/perfil"
               className="kuteka-account-avatar"
               onClick={() => setOpen(false)}
               title={shell.changePhoto}
@@ -379,7 +379,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
                 {shell.accountLabel}: {accountRoles}
               </p>
               <Link
-                href="/auth/onboarding/perfil"
+                href="/app/perfil"
                 className="mt-1 inline-block text-xs font-semibold text-[#92400e] underline-offset-2 hover:underline"
                 onClick={() => setOpen(false)}
               >

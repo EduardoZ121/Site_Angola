@@ -141,6 +141,21 @@ export function CreateContractForm() {
           ) : null}
         </header>
 
+        {canCreate ? (
+          <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+            <p>{copy.kycBanner}</p>
+            <Link
+              href="/app/perfil"
+              className={cn(
+                buttonVariants({ variant: 'secondary', size: 'sm' }),
+                'mt-2 inline-flex',
+              )}
+            >
+              {copy.kycBannerCta}
+            </Link>
+          </div>
+        ) : null}
+
         {accessPending ? <SoftListSlot pending /> : null}
         {denied ? <ForbiddenPanel message={copy.forbidden} /> : null}
         {deniedCreate ? (

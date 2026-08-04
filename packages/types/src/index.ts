@@ -38,6 +38,53 @@ export type TrustDocument = {
   updatedAt: string;
 };
 
+export type KycLevel = 0 | 1 | 2 | 3 | 4;
+
+export type VerificationStatus = 'missing' | 'pending' | 'verified' | 'rejected';
+
+export type IdDocKind = 'bi' | 'passport' | 'residence_card' | 'other';
+
+export type IdentityPartySnapshot = {
+  userId: string;
+  legalFullName: string | null;
+  preferredName: string | null;
+  displayName: string | null;
+  sex: string | null;
+  birthDate: string | null;
+  nationality: string | null;
+  placeOfBirth: string | null;
+  maritalStatus: string | null;
+  email: string | null;
+  emailConfirmed: boolean;
+  emailSecondary: string | null;
+  phonePrimary: string | null;
+  phoneSecondary: string | null;
+  phoneVerified: boolean;
+  avatarUrl: string | null;
+  kycLevel: KycLevel;
+  trustIndex: number;
+  document: {
+    kind: IdDocKind;
+    number: string;
+    issuedOn: string | null;
+    expiresOn: string | null;
+    issuedAt: string | null;
+    issuingCountry: string;
+    status: string;
+  } | null;
+  address: {
+    country: string;
+    province: string | null;
+    municipality: string | null;
+    commune: string | null;
+    neighborhood: string | null;
+    street: string | null;
+    number: string | null;
+    postalCode: string | null;
+    line: string | null;
+  } | null;
+};
+
 export type PropertyType = 'apartment' | 'house' | 'land' | 'commercial';
 export type PropertyPurpose = 'rent' | 'sale' | 'both';
 export type PropertyStatus = 'draft' | 'active' | 'archived';
@@ -132,6 +179,14 @@ export interface Profile {
   displayName: string | null;
   avatarUrl: string | null;
   locale: string;
+  legalFullName?: string | null;
+  preferredName?: string | null;
+  kycLevel?: KycLevel;
+  trustIndex?: number;
+  kycIdentityStatus?: VerificationStatus;
+  kycDocumentStatus?: VerificationStatus;
+  kycAddressStatus?: VerificationStatus;
+  kycBankingStatus?: VerificationStatus;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

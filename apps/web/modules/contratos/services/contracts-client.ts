@@ -52,6 +52,9 @@ function contractMessage(errorMessage: string | undefined, fallback: string) {
   if (msg.includes('contracts.manage') || msg.includes('policy') || msg.includes('42501')) {
     return getContratosCopy().forbidden;
   }
+  if (msg.includes('kyc') || msg.includes('identity verification')) {
+    return getContratosCopy().kycRequired;
+  }
   return fallback;
 }
 

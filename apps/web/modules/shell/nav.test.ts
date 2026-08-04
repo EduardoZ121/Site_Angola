@@ -29,16 +29,17 @@ describe('shell nav', () => {
     expect(isNavItemVisible(agente, ['platform.access', 'agent.operate'], 'client')).toBe(false);
   });
 
-  it('client experience hides patrimónios and confiança', () => {
+  it('client experience shows confiança and hides patrimónios', () => {
     const items = visibleNavItems(
       ['platform.access', 'housing.explore', 'contracts.manage', 'trust.manage'],
       'client',
     );
     expect(items.some((i) => i.id === 'patrimonios')).toBe(false);
-    expect(items.some((i) => i.id === 'confianca')).toBe(false);
+    expect(items.some((i) => i.id === 'confianca')).toBe(true);
     expect(items.some((i) => i.id === 'explorar')).toBe(true);
     expect(items.some((i) => i.id === 'favoritos')).toBe(true);
     expect(items.some((i) => i.id === 'agente')).toBe(false);
+    expect(items.some((i) => i.id === 'conta' && i.href === '/app/perfil')).toBe(true);
   });
 
   it('partner experience hides explorar / favoritos', () => {

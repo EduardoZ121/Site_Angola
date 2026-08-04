@@ -27,7 +27,13 @@ export const EXPERIENCE_LABELS: Record<ExperienceMode, string> = {
 
 /** Permissions exposed in the UI for each experience mode. */
 const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
-  client: ['platform.access', 'housing.explore', 'contracts.manage', 'reputation.manage'],
+  client: [
+    'platform.access',
+    'housing.explore',
+    'contracts.manage',
+    'reputation.manage',
+    'trust.manage',
+  ],
   patrimonial_partner: [
     'platform.access',
     'properties.manage',
@@ -49,6 +55,7 @@ const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
     'housing.explore',
     'contracts.manage',
     'reputation.manage',
+    'trust.manage',
   ],
   administrator: [
     'platform.access',

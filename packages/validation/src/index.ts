@@ -79,6 +79,24 @@ export {
 } from './trust';
 
 export {
+  SEX_CODES,
+  MARITAL_STATUS_CODES,
+  ID_DOC_KINDS,
+  KYC_LEVELS,
+  VERIFICATION_STATUSES,
+  identityPersonalSchema,
+  identityContactsSchema,
+  identityAddressSchema,
+  identityIdDocumentSchema,
+  identityBankingSchema,
+  type IdentityPersonalInput,
+  type IdentityContactsInput,
+  type IdentityAddressInput,
+  type IdentityIdDocumentInput,
+  type IdentityBankingInput,
+} from './identity';
+
+export {
   CONTRACT_PURPOSES,
   CONTRACT_STATUSES,
   createPropertyContractSchema,

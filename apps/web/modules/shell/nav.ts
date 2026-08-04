@@ -163,8 +163,15 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/confianca',
     status: 'active',
     requiresPermission: 'trust.manage',
-    experiences: ['patrimonial_partner', 'client_partner', 'administrator', 'super_administrator'],
-    group: 'parceiro',
+    experiences: [
+      'client',
+      'patrimonial_partner',
+      'client_partner',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
   },
   {
     id: 'agente',
@@ -187,7 +194,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
   {
     id: 'conta',
     labelKey: 'conta',
-    href: '/auth/onboarding/perfil',
+    href: '/app/perfil',
     status: 'active',
     group: 'geral',
   },
