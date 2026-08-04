@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
+import type { IdentityPartySnapshot } from '@kuteka/types';
 import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { getPartySnapshot } from '@/modules/identidade/services/identity-client';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
@@ -27,6 +29,96 @@ function statusVariant(status: string): 'default' | 'success' | 'warning' | 'dan
   if (status === 'pending_acceptance' || status === 'draft') return 'warning';
   if (status === 'cancelled') return 'danger';
   return 'default';
+}
+
+function PartyBlock({
+  label,
+  userId,
+  snapshot,
+}: {
+  label: string;
+  userId: string | null;
+  snapshot: IdentityPartySnapshot | null;
+}) {
+  if (!userId) {
+    return (
+      <div>
+        <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</dt>
+        <dd className="mt-1 text-sm text-slate-500">—</dd>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</dt>
+      <dd className="mt-1 text-sm text-slate-900">
+        <p className="font-medium">
+          {snapshot?.legalFullName || snapshot?.preferredName || snapshot?.displayName || '—'}
+        </p>
+        {snapshot?.document?.number ? (
+          <p className="mt-0.5 text-xs text-slate-600">
+            {String(snapshot.document.kind).toUpperCase()} {snapshot.document.number}
+          </p>
+        ) : null}
+        {snapshot?.address?.line ? (
+          <p className="mt-0.5 text-xs text-slate-600">{snapshot.address.line}</p>
+        ) : null}
+        {snapshot?.phonePrimary ? (
+          <p className="mt-0.5 text-xs text-slate-600">{snapshot.phonePrimary}</p>
+        ) : null}
+        {snapshot?.email ? <p className="mt-0.5 text-xs text-slate-600">{snapshot.email}</p> : null}
+        <p className="mt-1 break-all font-mono text-[10px] text-slate-400">{userId}</p>
+        {snapshot ? (
+          <Badge variant={snapshot.kycLevel >= 2 ? 'success' : 'warning'} className="mt-1">
+            KYC {snapshot.kycLevel} · Índice {Number(snapshot.trustIndex).toFixed(0)}
+          </Badge>
+        ) : null}
+      </dd>
+    </div>
+  );
+}
+
+function PartySnapshots({
+  clientId,
+  partnerId,
+  agentId,
+  labels,
+}: {
+  clientId: string;
+  partnerId: string;
+  agentId: string | null;
+  labels: { client: string; partner: string; agent: string };
+}) {
+  const [client, setClient] = useState<IdentityPartySnapshot | null>(null);
+  const [partner, setPartner] = useState<IdentityPartySnapshot | null>(null);
+  const [agent, setAgent] = useState<IdentityPartySnapshot | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function load() {
+      const [c, p, a] = await Promise.all([
+        getPartySnapshot(clientId),
+        getPartySnapshot(partnerId),
+        agentId ? getPartySnapshot(agentId) : Promise.resolve({ ok: false as const, message: '' }),
+      ]);
+      if (cancelled) return;
+      setClient(c.ok ? c.data : null);
+      setPartner(p.ok ? p.data : null);
+      setAgent(a.ok ? a.data : null);
+    }
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [agentId, clientId, partnerId]);
+
+  return (
+    <dl className="mt-4 flex flex-col gap-4">
+      <PartyBlock label={labels.client} userId={clientId} snapshot={client} />
+      <PartyBlock label={labels.partner} userId={partnerId} snapshot={partner} />
+      <PartyBlock label={labels.agent} userId={agentId} snapshot={agent} />
+    </dl>
+  );
 }
 
 export function ContractDetailClient({ id }: { id: string }) {
@@ -216,32 +308,16 @@ export function ContractDetailClient({ id }: { id: string }) {
 
                   <aside className="rounded-kuteka border border-slate-200 bg-white p-5">
                     <h2 className="text-sm font-semibold text-slate-800">{copy.fields.parties}</h2>
-                    <dl className="mt-4 flex flex-col gap-3">
-                      <div>
-                        <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                          {copy.fields.client}
-                        </dt>
-                        <dd className="mt-1 break-all font-mono text-xs text-slate-700">
-                          {row.client_id}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                          {copy.fields.partner}
-                        </dt>
-                        <dd className="mt-1 break-all font-mono text-xs text-slate-700">
-                          {row.partner_id}
-                        </dd>
-                      </div>
-                      <div>
-                        <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                          {copy.fields.agent}
-                        </dt>
-                        <dd className="mt-1 break-all font-mono text-xs text-slate-700">
-                          {row.agent_id ?? '—'}
-                        </dd>
-                      </div>
-                    </dl>
+                    <PartySnapshots
+                      clientId={row.client_id}
+                      partnerId={row.partner_id}
+                      agentId={row.agent_id}
+                      labels={{
+                        client: copy.fields.client,
+                        partner: copy.fields.partner,
+                        agent: copy.fields.agent,
+                      }}
+                    />
                   </aside>
                 </section>
 

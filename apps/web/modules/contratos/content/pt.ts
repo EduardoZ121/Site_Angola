@@ -20,6 +20,11 @@ export const contratosCopyPt = {
   transitionError: 'Não foi possível actualizar o contrato. Tente novamente.',
   forbidden:
     'A área Contratos fica disponível quando a sua conta tem o papel adequado (Cliente, Parceiro, Agente ou Admin).',
+  kycRequired:
+    'Identidade verificada obrigatória (KYC nível 2+): complete o Perfil e Confiança do Cliente e do Parceiro antes de formalizar contratos reais.',
+  kycBanner:
+    'Contratos reais exigem Identidade Real (documento validado). Complete o seu Perfil se ainda não o fez.',
+  kycBannerCta: 'Abrir Perfil KYC',
   accept: 'Aceitar contrato',
   accepting: 'A aceitar…',
   accepted: 'Contrato activo. O próximo passo é preparar pagamento.',
