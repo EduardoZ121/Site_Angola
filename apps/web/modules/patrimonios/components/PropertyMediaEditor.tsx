@@ -78,7 +78,7 @@ export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMedia
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-1">
         <p className="text-sm font-medium text-slate-800">{copy.media.title}</p>
-        <Text className="text-sm text-slate-500">{copy.media.hint}</Text>
+        <Text className="text-sm font-medium text-stone-700">{copy.media.hint}</Text>
       </div>
 
       <div

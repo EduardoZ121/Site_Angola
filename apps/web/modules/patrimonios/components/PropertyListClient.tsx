@@ -72,7 +72,7 @@ export function PropertyListClient() {
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
             <Heading level={1}>{copy.title}</Heading>
-            <Text className="text-slate-600">{copy.subtitle}</Text>
+            <Text className="text-stone-700">{copy.subtitle}</Text>
           </div>
           <div className="flex flex-wrap gap-2">
             {canHousing ? (
