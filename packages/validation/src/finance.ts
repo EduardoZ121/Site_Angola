@@ -204,6 +204,7 @@ export const financeCreateExportSchema = z.object({
 
 export const KUTEKA_PAY_MODULE_CODES = [
   'smart_move',
+  'find_home',
   'rent',
   'marketplace',
   'concierge',

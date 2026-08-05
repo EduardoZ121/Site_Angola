@@ -177,6 +177,12 @@ export function ExploreListClient() {
             >
               Preferências
             </Link>
+            <Link
+              href="/app/encontrar-casa"
+              className={cn(buttonVariants({ variant: 'ghost' }), 'w-fit shrink-0')}
+            >
+              Encontrar Casa
+            </Link>
           </div>
         </header>
 

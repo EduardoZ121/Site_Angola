@@ -240,6 +240,22 @@ function IconMove({ className }: IconProps) {
   );
 }
 
+function IconHomeSearch({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M3.5 9 10 3.5l4 3.5M3.5 9v7a1 1 0 0 0 1 1h4"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="13" cy="12.5" r="2.7" stroke="currentColor" strokeWidth="1.4" />
+      <path d="m15 14.6 2 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function IconTools({ className }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
@@ -292,6 +308,7 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   super: IconSuper,
   financeiro: IconFinance,
   mudanca: IconMove,
+  encontrar: IconHomeSearch,
   servicos: IconTools,
   planos: IconPlan,
 };

@@ -114,6 +114,7 @@ export const shellCopyFr: ShellCopy = {
     super: 'Super Admin',
     financeiro: 'Finance',
     mudanca: 'Déménagement intelligent',
+    encontrar: 'Trouver un logement',
     servicos: 'Prestataires',
     planos: 'Plans Partenaire',
   },

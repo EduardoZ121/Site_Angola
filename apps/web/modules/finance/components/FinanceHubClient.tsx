@@ -232,6 +232,12 @@ export function FinanceHubClient() {
               <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Mudança Inteligente
               </Link>
+              <Link
+                href="/app/encontrar-casa"
+                className={cn(buttonVariants({ variant: 'secondary' }))}
+              >
+                Encontrar Casa
+              </Link>
               <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Prestadores
               </Link>

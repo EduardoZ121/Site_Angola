@@ -27,6 +27,7 @@ export type ShellNavLabelKey =
   | 'super'
   | 'financeiro'
   | 'mudanca'
+  | 'encontrar'
   | 'servicos'
   | 'planos';
 
@@ -224,6 +225,14 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     id: 'mudanca',
     labelKey: 'mudanca',
     href: '/app/mudanca',
+    status: 'active',
+    experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
+    group: 'cliente',
+  },
+  {
+    id: 'encontrar',
+    labelKey: 'encontrar',
+    href: '/app/encontrar-casa',
     status: 'active',
     experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
     group: 'cliente',
