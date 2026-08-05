@@ -65,7 +65,12 @@ export type IdentityPartySnapshot = {
   avatarUrl: string | null;
   kycLevel: KycLevel;
   trustIndex: number;
+  /** Alias of trustIndex — User Trust Score */
+  uts?: number;
+  kisCompleteness?: number;
+  livenessStatus?: string;
   document: {
+    id?: string;
     kind: IdDocKind;
     number: string;
     issuedOn: string | null;
@@ -73,6 +78,8 @@ export type IdentityPartySnapshot = {
     issuedAt: string | null;
     issuingCountry: string;
     status: string;
+    ocrStatus?: string;
+    encryptionScheme?: string;
   } | null;
   address: {
     country: string;
@@ -83,6 +90,8 @@ export type IdentityPartySnapshot = {
     street: string | null;
     number: string | null;
     postalCode: string | null;
+    gpsLat?: number | null;
+    gpsLng?: number | null;
     line: string | null;
   } | null;
 };
