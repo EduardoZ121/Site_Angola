@@ -66,7 +66,8 @@ export function PayEnginePanel({ canManage }: PanelProps) {
     }
     if (ints.ok) {
       setIntents(ints.data);
-      if (!webhookIntent && ints.data.length > 0) setWebhookIntent(ints.data[0].id);
+      const first = ints.data[0];
+      if (!webhookIntent && first) setWebhookIntent(first.id);
     }
     if (prods.ok) setProducts(prods.data);
     setLoading(false);
