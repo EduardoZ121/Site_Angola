@@ -113,8 +113,22 @@ cancelled | failed`; timeline append-only em `concierge_events`.
     taxa em créditos pela stack transversal; `custody_mode = none`.
   - UI `/app/concierge`: criação, badges, cronologia, acções de cliente/operação,
     `SessionStatusGate` e `SoftListSlot`; links no shell e no Finance Hub.
+- **Fase D4 — Garantia Kuteka (entregue)**
+  - Migration: `supabase/migrations/0027_garantia.sql`
+  - ADR: `docs/architecture/ADR-023-garantia-kuteka.md`
+  - Subscrição opcional de 3 500 AOA/mês pelo produto `garantia.monthly`, sem
+    caminho de pagamento isolado.
+  - Activação via `kuteka_pay_create_intent` (`module_code = garantia`,
+    `purpose = subscription`, `reference_type = garantia_subscription`) e
+    registo no Ledger transversal.
+  - Estados: `draft → awaiting_payment → active → cancelled | past_due |
+failed`; timeline append-only em `garantia_events`.
+  - Cancelamento em `awaiting_payment` ou no mesmo dia UTC da activação devolve
+    100% em créditos; depois termina a cobertura sem reembolso nem pró-rata.
+  - UI `/app/garantia`: rascunho, activação, cancelamento, badges e cronologia,
+    com `SessionStatusGate`, `SoftListSlot`, link no shell e no Finance Hub.
 - **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
 - **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2/D3 e só arrancam
+As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2/D3/D4 e só arrancam
 depois destas.

@@ -116,6 +116,7 @@ export const shellCopyFr: ShellCopy = {
     mudanca: 'Déménagement intelligent',
     encontrar: 'Trouver un logement',
     concierge: 'Conciergerie',
+    garantia: 'Garantie Kuteka',
     servicos: 'Prestataires',
     planos: 'Plans Partenaire',
   },

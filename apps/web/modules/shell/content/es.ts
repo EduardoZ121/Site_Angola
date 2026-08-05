@@ -116,6 +116,7 @@ export const shellCopyEs: ShellCopy = {
     mudanca: 'Mudanza Inteligente',
     encontrar: 'Encontrar Casa',
     concierge: 'Conserjería',
+    garantia: 'Garantía Kuteka',
     servicos: 'Prestadores',
     planos: 'Planes Socio',
   },

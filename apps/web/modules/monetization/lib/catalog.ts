@@ -209,6 +209,38 @@ export function conciergeStatusTone(status: string): 'default' | 'warning' | 'su
   }
 }
 
+export type GarantiaStatus =
+  'draft' | 'awaiting_payment' | 'active' | 'cancelled' | 'past_due' | 'failed';
+
+export const GARANTIA_STATUS_LABELS: Record<GarantiaStatus, string> = {
+  draft: 'Rascunho',
+  awaiting_payment: 'A aguardar pagamento',
+  active: 'Cobertura activa',
+  cancelled: 'Cancelada',
+  past_due: 'Pagamento em atraso',
+  failed: 'Falhada',
+};
+
+export function garantiaStatusLabel(status: string): string {
+  return GARANTIA_STATUS_LABELS[status as GarantiaStatus] ?? status;
+}
+
+export function garantiaStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
+  switch (status) {
+    case 'active':
+      return 'success';
+    case 'draft':
+    case 'awaiting_payment':
+    case 'past_due':
+      return 'warning';
+    case 'cancelled':
+    case 'failed':
+      return 'danger';
+    default:
+      return 'default';
+  }
+}
+
 export const PARTNER_PLAN_OPTIONS = [
   {
     code: 'partner.bronze.monthly',

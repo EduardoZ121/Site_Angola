@@ -241,6 +241,9 @@ export function FinanceHubClient() {
               <Link href="/app/concierge" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Concierge
               </Link>
+              <Link href="/app/garantia" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                Garantia Kuteka
+              </Link>
               <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Prestadores
               </Link>

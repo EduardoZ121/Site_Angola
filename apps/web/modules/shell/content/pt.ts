@@ -115,6 +115,7 @@ export const shellCopyPt = {
     mudanca: 'Mudança Inteligente',
     encontrar: 'Encontrar Casa',
     concierge: 'Concierge',
+    garantia: 'Garantia Kuteka',
     servicos: 'Prestadores',
     planos: 'Planos Parceiro',
   },
