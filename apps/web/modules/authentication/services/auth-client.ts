@@ -234,6 +234,126 @@ export async function resendVerification(input: { email: string }): Promise<Auth
   }
 }
 
+/** Dual path: Supabase email OTP (link companion) + Kuteka security_issue_otp sandbox/app code. */
+export async function issueEmailVerificationOtp(input: {
+  email: string;
+}): Promise<
+  AuthClientResult<{ challengeId?: string; sandboxCode?: string; supabaseOtpRequested: boolean }>
+> {
+  const client = getClient();
+  if (!client) return configError();
+
+  let supabaseOtpRequested = false;
+  try {
+    const { error: resendError } = await client.auth.resend({
+      type: 'signup',
+      email: input.email,
+    });
+    supabaseOtpRequested = !resendError;
+  } catch {
+    supabaseOtpRequested = false;
+  }
+
+  try {
+    const {
+      data: { user },
+    } = await client.auth.getUser();
+    const { data, error } = await client.rpc('security_issue_otp', {
+      p_channel: 'email',
+      p_purpose: 'email_verify',
+      p_destination: input.email.trim().toLowerCase(),
+      p_user_id: user?.id ?? null,
+    });
+    if (error) {
+      if (supabaseOtpRequested) {
+        return { ok: true, data: { supabaseOtpRequested: true } };
+      }
+      return mapAuthError(error, `Não foi possível enviar o código. ${copy.common.nextStepRetry}`);
+    }
+    const row = data as { ok?: boolean; challengeId?: string; sandboxCode?: string };
+    return {
+      ok: true,
+      data: {
+        challengeId: row?.challengeId,
+        sandboxCode: row?.sandboxCode,
+        supabaseOtpRequested,
+      },
+    };
+  } catch (err) {
+    if (supabaseOtpRequested) {
+      return { ok: true, data: { supabaseOtpRequested: true } };
+    }
+    return mapUnknownError(err, copy.common.networkError);
+  }
+}
+
+/**
+ * Preferential Method B: 6-digit OTP in-app.
+ * Tries Supabase Auth verifyOtp first, then Kuteka security_verify_otp challenge.
+ */
+export async function verifyEmailOtpCode(input: {
+  email: string;
+  code: string;
+  challengeId?: string | null;
+}): Promise<AuthClientResult<{ via: 'supabase' | 'kuteka' }>> {
+  const client = getClient();
+  if (!client) return configError();
+
+  const token = input.code.replace(/\D/g, '').slice(0, 6);
+  if (token.length !== 6) {
+    return { ok: false, code: 'generic', message: 'Introduza o código de 6 dígitos.' };
+  }
+
+  try {
+    const { error: supabaseError } = await client.auth.verifyOtp({
+      email: input.email.trim().toLowerCase(),
+      token,
+      type: 'signup',
+    });
+    if (!supabaseError) {
+      return { ok: true, data: { via: 'supabase' } };
+    }
+  } catch {
+    // fall through to Kuteka challenge
+  }
+
+  if (input.challengeId) {
+    try {
+      const { data, error } = await client.rpc('security_verify_otp', {
+        p_challenge_id: input.challengeId,
+        p_code: token,
+      });
+      if (error) {
+        return {
+          ok: false,
+          code: 'generic',
+          message: `Código inválido. ${copy.common.nextStepRetry}`,
+        };
+      }
+      const row = data as { ok?: boolean; error?: string };
+      if (row?.ok) {
+        return { ok: true, data: { via: 'kuteka' } };
+      }
+      return {
+        ok: false,
+        code: 'generic',
+        message:
+          row?.error === 'expired'
+            ? 'O código expirou. Peça um novo.'
+            : 'Código incorrecto. Tente novamente.',
+      };
+    } catch (err) {
+      return mapUnknownError(err, copy.common.networkError);
+    }
+  }
+
+  return {
+    ok: false,
+    code: 'generic',
+    message: 'Código incorrecto ou expirado. Reenvie o email e tente novamente.',
+  };
+}
+
 export async function activateSelfServeRoles(
   roleCodes: SelfServeRoleCode[],
 ): Promise<AuthClientResult> {

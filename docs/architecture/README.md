@@ -15,6 +15,9 @@
 | [ADR-009](ADR-009-admin-module.md)                      | Admin / PRD-005       | ✅ Aceite / N5 (2026-08-01) |
 | [ADR-010](ADR-010-trust-module.md)                      | Confiança / PRD-006   | ✅ Aceite / N5 (2026-08-01) |
 | [ADR-011](ADR-011-core-v1-freeze.md)                    | Core v1.0 freeze      | ✅ Aceite (2026-08-01)      |
+| …                                                       | ADR-012 … ADR-024     | Ver ficheiros na pasta      |
+| [ADR-025](ADR-025-kis-identity-system.md)               | KIS Identity System   | ✅ Aceite                   |
+| [ADR-026](ADR-026-identity-security-center.md)          | Identity & Security   | ✅ Aceite (2026-08-05)      |
 
 Baseline de produto: `docs/product/KUTEKA_PLATFORM_CORE_V1.md`  
 Maturidade: `docs/backlog/CORE_V1_MATURITY_REPORT.md`  

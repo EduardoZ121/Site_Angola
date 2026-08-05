@@ -52,11 +52,19 @@ export const authCopyPt = {
   verify: {
     title: 'Verifique o seu email',
     subtitle:
-      'Se pedimos confirmação, abra o email da Kuteka. Caso já tenha sessão activa, pode continuar.',
+      'Confirme com o código de 6 dígitos ou abra o link no email da Kuteka. Ambos os métodos são válidos.',
     sentTo: 'Enviado para',
-    resend: 'Reenviar email',
+    dualHint:
+      'Prefira introduzir o código OTP abaixo se o link não abrir no seu dispositivo ou cliente de correio.',
+    otpLabel: 'Código de 6 dígitos',
+    otpPlaceholder: '000000',
+    otpSubmit: 'Confirmar com código',
+    orLink: 'ou',
+    linkHint: 'Também pode abrir o link de confirmação no email (Método A).',
+    sandboxHint: 'Ambiente de teste: código {code}',
+    resend: 'Reenviar email e código',
     resendLoading: 'A reenviar…',
-    resendSuccess: 'Email reenviado. Verifique também a pasta de Spam.',
+    resendSuccess: 'Email e código reenviados. Verifique também a pasta de Spam.',
     cooldown: 'Pode reenviar dentro de {seconds}s.',
     confirming: 'Estamos a confirmar a sua conta…',
     already: {
@@ -88,7 +96,19 @@ export const authCopyPt = {
     request: {
       title: 'Recuperar acesso',
       subtitle: 'Não se preocupe. Vamos ajudá-lo a recuperar o acesso de forma segura.',
+      channelLabel: 'Como prefere recuperar?',
+      channelEmail: 'Por email',
+      channelPhone: 'Por telefone (SMS)',
+      channelBoth: 'Email e telefone',
       email: { label: 'Email' },
+      phone: { label: 'Telefone', placeholder: '+2449XXXXXXXX' },
+      otpLabel: 'Código de 6 dígitos',
+      otpSubmit: 'Validar código',
+      sendOtp: 'Enviar código SMS',
+      phoneSuccess:
+        'Código SMS validado (sandbox). Defina a nova palavra-passe quando tiver sessão, ou use também o email.',
+      phonePrepared:
+        'A recuperação por SMS está preparada (sandbox). Em produção usará o fornecedor SMS da Kuteka.',
       submit: 'Enviar instruções',
       submitLoading: 'A enviar…',
       back: 'Voltar a Entrar',

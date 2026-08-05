@@ -193,17 +193,18 @@ Prioridade orientada a **versão comercial pronta para lançamento** (não a exp
 
 ### 5.2 Integrações externas
 
-| Integração                                                           | Estado                                                |
-| -------------------------------------------------------------------- | ----------------------------------------------------- |
-| Supabase Auth + Postgres + RLS/RPC                                   | Ligado                                                |
-| Supabase Storage (`property-media`, `identity-documents`, `avatars`) | Ligado                                                |
-| Email (via Supabase Auth SMTP)                                       | Parcial — auth; pouco/nenhum transaccional de negócio |
-| SMS / OTP telefone                                                   | **Não ligado** (`phone_verified_at` no schema)        |
-| Mapas                                                                | OSM embed + links Google — sem SDK Maps pago          |
-| Multicaixa / EMIS / Stripe / Wise                                    | Códigos de adaptador; **só sandbox activo**           |
-| KYC vendor (Onfido etc.)                                             | **Ausente**                                           |
-| Cron SLA                                                             | RPCs existem; agendamento em produção **a confirmar** |
-| Google OAuth / S3 / Resend (docs legadas)                            | **Não** no `.env` KEOS actual                         |
+| Integração                                                           | Estado                                                                       |
+| -------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Supabase Auth + Postgres + RLS/RPC                                   | Ligado                                                                       |
+| Supabase Storage (`property-media`, `identity-documents`, `avatars`) | Ligado                                                                       |
+| Email (via Supabase Auth SMTP)                                       | Parcial — auth; checklist ADR-026 Phase 1 (SMTP + confirm on)                |
+| SMS / OTP telefone                                                   | **Arquitectura pronta** (sandbox + `security_*`); fornecedor Angola pendente |
+| Centro de Segurança (`/app/centro-seguranca`)                        | **UI + schema ADR-026** — 2FA/dispositivos preparados por flag               |
+| Mapas                                                                | OSM embed + links Google — sem SDK Maps pago                                 |
+| Multicaixa / EMIS / Stripe / Wise                                    | Códigos de adaptador; **só sandbox activo**                                  |
+| KYC vendor (Onfido etc.)                                             | **Ausente**                                                                  |
+| Cron SLA                                                             | RPCs existem; agendamento em produção **a confirmar**                        |
+| Google OAuth / S3 / Resend (docs legadas)                            | **Não** no `.env` KEOS actual                                                |
 
 ### 5.3 Conta comercial necessária
 
@@ -240,36 +241,36 @@ Prioridade orientada a **versão comercial pronta para lançamento** (não a exp
 
 ### 5.7 Percentagens por domínio
 
-| Domínio                        | %   | Nota                            |
-| ------------------------------ | --- | ------------------------------- |
-| Auth / RBAC                    | 92  | N5; OAuth/SMS pendentes         |
-| Identity / KYC                 | 78  | Forte self-serve; sem vendor    |
-| Shell / i18n                   | 88  | Settings finos                  |
-| Patrimónios                    | 90  | Core N5 + enrichments           |
-| Habitação                      | 88  | Core N5                         |
-| Agente                         | 82  | Agenda ainda parcial            |
-| Admin operacional              | 85  | Sem BI                          |
-| Confiança                      | 70  | Sem upload ficheiros            |
-| Contratos                      | 85  | Pagamentos handoff sandbox      |
-| Finance core (ledger/catálogo) | 80  | Sandbox money                   |
-| Kuteka Pay                     | 55  | Motor ok; adaptadores inactivos |
-| Marketplace                    | 75  | Ciclo sandbox                   |
-| Smart Move D1                  | 80  | N5 sandbox                      |
-| Encontrar Casa D2              | 75  | Sandbox                         |
-| Concierge D3                   | 75  | Sandbox                         |
-| Garantia D4                    | 65  | Sem recorrência real            |
-| Assistência D5                 | 75  | Sem dispatch                    |
-| Super Admin CC                 | 78  | Config-first                    |
-| Planos parceiro                | 70  | Sandbox                         |
-| PDK / Passaporte               | 45  | Painel ≠ produto                |
-| ICK                            | 50  | Scoring limitado                |
-| Saúde imóvel                   | 55  | Advisory                        |
-| Jurídico                       | 10  | Stub                            |
-| Relatórios / Analytics         | 15  | Stub                            |
-| KAI                            | 35  | Rules only                      |
-| Wallet / Escrow                | 5   | Hook schema + stub módulo       |
-| Academia                       | 0   | Docs only                       |
-| Legal pages / AGT              | 10  | Placeholders                    |
+| Domínio                        | %   | Nota                                           |
+| ------------------------------ | --- | ---------------------------------------------- |
+| Auth / RBAC                    | 94  | Dual OTP + Security Center schema; SMS sandbox |
+| Identity / KYC                 | 78  | Forte self-serve; sem vendor                   |
+| Shell / i18n                   | 88  | Settings finos                                 |
+| Patrimónios                    | 90  | Core N5 + enrichments                          |
+| Habitação                      | 88  | Core N5                                        |
+| Agente                         | 82  | Agenda ainda parcial                           |
+| Admin operacional              | 85  | Sem BI                                         |
+| Confiança                      | 70  | Sem upload ficheiros                           |
+| Contratos                      | 85  | Pagamentos handoff sandbox                     |
+| Finance core (ledger/catálogo) | 80  | Sandbox money                                  |
+| Kuteka Pay                     | 55  | Motor ok; adaptadores inactivos                |
+| Marketplace                    | 75  | Ciclo sandbox                                  |
+| Smart Move D1                  | 80  | N5 sandbox                                     |
+| Encontrar Casa D2              | 75  | Sandbox                                        |
+| Concierge D3                   | 75  | Sandbox                                        |
+| Garantia D4                    | 65  | Sem recorrência real                           |
+| Assistência D5                 | 75  | Sem dispatch                                   |
+| Super Admin CC                 | 78  | Config-first                                   |
+| Planos parceiro                | 70  | Sandbox                                        |
+| PDK / Passaporte               | 45  | Painel ≠ produto                               |
+| ICK                            | 50  | Scoring limitado                               |
+| Saúde imóvel                   | 55  | Advisory                                       |
+| Jurídico                       | 10  | Stub                                           |
+| Relatórios / Analytics         | 15  | Stub                                           |
+| KAI                            | 35  | Rules only                                     |
+| Wallet / Escrow                | 5   | Hook schema + stub módulo                      |
+| Academia                       | 0   | Docs only                                      |
+| Legal pages / AGT              | 10  | Placeholders                                   |
 
 **Plataforma (média ponderada produto/schema):** ≈ **62%**.  
 **Prontidão comercial com Kz reais:** ≈ **48%**.
@@ -316,17 +317,19 @@ flowchart LR
 
 ## 8. Referências canónicas
 
-| Documento                                                                       | Uso                                                 |
-| ------------------------------------------------------------------------------- | --------------------------------------------------- |
-| [ARQUITETURA_FINANCEIRA_KUTEKA.md](../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md) | Filosofia financeira v1.0                           |
-| [docs/finance/README.md](../finance/README.md)                                  | Ordem Fases A–E / D1–D5                             |
-| [KUTEKA_PLATFORM_CORE_V1.md](./KUTEKA_PLATFORM_CORE_V1.md)                      | Congelamento Core                                   |
-| [CORE_V1_MATURITY_REPORT.md](../backlog/CORE_V1_MATURITY_REPORT.md)             | Maturidade Core                                     |
-| [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md)                      | Operação empresarial + versões comerciais v1.0–v3.0 |
-| [GO_LIVE_CHECKLIST.md](../backlog/GO_LIVE_CHECKLIST.md)                         | Checklist beta (alinhar a KOS §8)                   |
-| [MANUAL_VS_PLATFORM.md](../engineering/MANUAL_VS_PLATFORM.md)                   | PDK / ICK / Saúde                                   |
-| ADRs `001`–`024`                                                                | Decisões por módulo                                 |
-| Migrations `0001`–`0028`                                                        | Schema efectivo                                     |
+| Documento                                                                        | Uso                                                 |
+| -------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [ARQUITETURA_FINANCEIRA_KUTEKA.md](../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md)  | Filosofia financeira v1.0                           |
+| [docs/finance/README.md](../finance/README.md)                                   | Ordem Fases A–E / D1–D5                             |
+| [KUTEKA_PLATFORM_CORE_V1.md](./KUTEKA_PLATFORM_CORE_V1.md)                       | Congelamento Core                                   |
+| [CORE_V1_MATURITY_REPORT.md](../backlog/CORE_V1_MATURITY_REPORT.md)              | Maturidade Core                                     |
+| [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md)                       | Operação empresarial + versões comerciais v1.0–v3.0 |
+| [ADR-025 KIS](../architecture/ADR-025-kis-identity-system.md)                    | Identidade jurídica / KYC                           |
+| [ADR-026 Identity Security](../architecture/ADR-026-identity-security-center.md) | OTP dual, SMS, Centro de Segurança, 2FA preparado   |
+| [GO_LIVE_CHECKLIST.md](../backlog/GO_LIVE_CHECKLIST.md)                          | Checklist beta (alinhar a KOS §8)                   |
+| [MANUAL_VS_PLATFORM.md](../engineering/MANUAL_VS_PLATFORM.md)                    | PDK / ICK / Saúde                                   |
+| ADRs `001`–`024`                                                                 | Decisões por módulo                                 |
+| Migrations `0001`–`0028`                                                         | Schema efectivo                                     |
 
 ---
 
