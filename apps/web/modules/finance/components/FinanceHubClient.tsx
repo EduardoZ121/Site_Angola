@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
+import { Badge, Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
@@ -10,51 +10,75 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import {
   createSandboxPayment,
   captureSandboxPayment,
+  fetchMyCreditBalance,
   formatAoaAmount,
+  generateInvoicePdf,
   listFinanceProducts,
   listInvoices,
   listMyConsents,
+  listRefunds,
+  redeemCredits,
   upsertConsent,
   CONSENT_SCOPES,
+  type CreditBalance,
   type FinanceConsentRow,
   type FinanceConsentScope,
   type FinanceInvoiceRow,
   type FinanceProductRow,
+  type FinanceRefundRow,
 } from '@/modules/finance/services/finance-client';
 import {
   listPaymentReminders,
   type PaymentReminderRow,
 } from '@/modules/monetization/services/monetization-client';
+import { getFinanceHubCopy } from '../content/pt';
 
 /**
  * User-facing finance hub — pay-per-use sandbox + invoices.
  * Free exploration remains free; this is for optional paid services.
  */
+function openHtml(html: string) {
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank', 'noopener');
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
+
 export function FinanceHubClient() {
+  const hubCopy = getFinanceHubCopy();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const ready = sessionStatus === 'ready';
   const [products, setProducts] = useState<FinanceProductRow[]>([]);
   const [invoices, setInvoices] = useState<FinanceInvoiceRow[]>([]);
   const [reminders, setReminders] = useState<PaymentReminderRow[]>([]);
   const [consents, setConsents] = useState<FinanceConsentRow[]>([]);
+  const [refunds, setRefunds] = useState<FinanceRefundRow[]>([]);
+  const [balance, setBalance] = useState<CreditBalance | null>(null);
+  const [redeemAmount, setRedeemAmount] = useState('');
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [redeemBusy, setRedeemBusy] = useState(false);
+  const [invoiceBusy, setInvoiceBusy] = useState<string | null>(null);
   const [consentBusy, setConsentBusy] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [p, i, rem, cons] = await Promise.all([
+    const [p, i, rem, cons, refs, bal] = await Promise.all([
       listFinanceProducts(),
       listInvoices(10),
       listPaymentReminders(12),
       listMyConsents(),
+      listRefunds(10),
+      fetchMyCreditBalance(),
     ]);
     if (p.ok) setProducts(p.data.filter((x) => x.active && x.category !== 'commission'));
     if (i.ok) setInvoices(i.data);
     if (rem.ok) setReminders(rem.data);
     if (cons.ok) setConsents(cons.data);
+    if (refs.ok) setRefunds(refs.data);
+    if (bal.ok) setBalance(bal.data);
     setLoading(false);
   }, []);
 
@@ -86,6 +110,35 @@ export function FinanceHubClient() {
     }
     setMessage(`Plus activado (sandbox). Fatura ${String(captured.data.invoiceNumber)}`);
     await load();
+  }
+
+  async function onRedeem() {
+    const amount = Number(redeemAmount);
+    if (!amount || amount <= 0) return;
+    setRedeemBusy(true);
+    setError(null);
+    setMessage(null);
+    const res = await redeemCredits({ amount, reason: 'Uso de créditos no hub' });
+    setRedeemBusy(false);
+    if (!res.ok) {
+      setError(res.message);
+      return;
+    }
+    setMessage(hubCopy.redeemDone);
+    setRedeemAmount('');
+    await load();
+  }
+
+  async function onDownloadInvoice(id: string) {
+    setInvoiceBusy(id);
+    setError(null);
+    const res = await generateInvoicePdf({ invoiceId: id });
+    setInvoiceBusy(null);
+    if (!res.ok) {
+      setError(res.message);
+      return;
+    }
+    openHtml(res.data.html);
   }
 
   async function toggleConsent(scope: FinanceConsentScope, granted: boolean) {
@@ -128,6 +181,38 @@ export function FinanceHubClient() {
         ) : null}
 
         <SoftListSlot pending={loading}>
+          <section className="kuteka-detail-panel p-5">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="kuteka-detail-eyebrow">{hubCopy.creditBalance}</p>
+                <p className="text-2xl font-semibold tabular-nums text-slate-900">
+                  {formatAoaAmount(balance?.balance ?? 0, balance?.currency ?? 'AOA')}
+                </p>
+              </div>
+              <div className="flex items-end gap-2">
+                <div>
+                  <Label htmlFor="redeem-amount">{hubCopy.redeem} (Kz)</Label>
+                  <Input
+                    id="redeem-amount"
+                    className="w-32"
+                    value={redeemAmount}
+                    onChange={(e) => setRedeemAmount(e.target.value)}
+                    inputMode="numeric"
+                  />
+                </div>
+                <Button
+                  type="button"
+                  loading={redeemBusy}
+                  disabled={!redeemAmount || Number(redeemAmount) <= 0}
+                  onClick={() => void onRedeem()}
+                >
+                  {hubCopy.redeem}
+                </Button>
+              </div>
+            </div>
+            <p className="kuteka-detail-meta mt-2">{hubCopy.redeemHint}</p>
+          </section>
+
           <section className="kuteka-detail-panel p-5">
             <h2 className="kuteka-detail-title">Serviços disponíveis</h2>
             <ul className="mt-3 divide-y divide-slate-200">
@@ -215,15 +300,49 @@ export function FinanceHubClient() {
             <h2 className="kuteka-detail-title">As minhas faturas</h2>
             <ul className="mt-3 divide-y divide-slate-200">
               {invoices.map((inv) => (
-                <li key={inv.id} className="flex justify-between py-2 text-sm">
+                <li
+                  key={inv.id}
+                  className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm"
+                >
                   <span className="font-mono">{inv.number}</span>
-                  <span>
+                  <span className="flex items-center gap-2">
                     {formatAoaAmount(Number(inv.total), inv.currency)} · {inv.status}
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      loading={invoiceBusy === inv.id}
+                      onClick={() => void onDownloadInvoice(inv.id)}
+                    >
+                      {hubCopy.downloadInvoice}
+                    </Button>
                   </span>
                 </li>
               ))}
               {invoices.length === 0 ? (
                 <li className="py-3 text-sm text-slate-500">Ainda sem faturas.</li>
+              ) : null}
+            </ul>
+          </section>
+
+          <section className="kuteka-detail-panel p-5">
+            <h2 className="kuteka-detail-title">{hubCopy.myRefunds}</h2>
+            <ul className="mt-3 divide-y divide-slate-200">
+              {refunds.map((r) => (
+                <li key={r.id} className="flex flex-wrap justify-between gap-2 py-2 text-sm">
+                  <span>
+                    {r.reason} <span className="text-slate-500">({r.mode})</span>
+                  </span>
+                  <span className="flex items-center gap-2">
+                    <Badge variant={r.status === 'completed' ? 'success' : 'default'}>
+                      {r.status}
+                    </Badge>
+                    {formatAoaAmount(Number(r.amount), r.currency)}
+                  </span>
+                </li>
+              ))}
+              {refunds.length === 0 ? (
+                <li className="py-3 text-sm text-slate-500">{hubCopy.noRefunds}</li>
               ) : null}
             </ul>
           </section>
