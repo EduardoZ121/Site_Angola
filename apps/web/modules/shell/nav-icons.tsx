@@ -226,6 +226,52 @@ function IconFinance({ className }: IconProps) {
   );
 }
 
+function IconMove({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M4 10h12M12 6.5 15.5 10 12 13.5M8 6.5 4.5 10 8 13.5"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconTools({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M12.5 4.5a3 3 0 0 0-4.2 4.2L4 13l3 3 4.3-4.3a3 3 0 0 0 4.2-4.2L13.5 9.5 12.5 4.5Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconPlan({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M5 4.5h10v11H5V4.5Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.5 8h5M7.5 11h5M7.5 14h3"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   home: IconHome,
   explorar: IconSearch,
@@ -245,6 +291,9 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   admin: IconAdmin,
   super: IconSuper,
   financeiro: IconFinance,
+  mudanca: IconMove,
+  servicos: IconTools,
+  planos: IconPlan,
 };
 
 export function NavIcon({

@@ -32,6 +32,11 @@ import {
   type FinanceProductRow,
   type RevenueSnapshot,
 } from '../services/finance-client';
+import {
+  listFeatureFlags,
+  setFeatureFlag,
+  type FeatureFlagRow,
+} from '@/modules/monetization/services/monetization-client';
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
@@ -60,6 +65,7 @@ export function SuperCommandCenter() {
   const [gateways, setGateways] = useState<FinanceGatewayRow[]>([]);
   const [commissions, setCommissions] = useState<FinanceCommissionRow[]>([]);
   const [invoices, setInvoices] = useState<FinanceInvoiceRow[]>([]);
+  const [flags, setFlags] = useState<FeatureFlagRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -84,7 +90,7 @@ export function SuperCommandCenter() {
       return;
     }
     setLoading(true);
-    const [snap, prods, priceRules, led, gws, comms, invs] = await Promise.all([
+    const [snap, prods, priceRules, led, gws, comms, invs, fl] = await Promise.all([
       fetchRevenueSnapshot(),
       listFinanceProducts(),
       listPriceRules(),
@@ -92,6 +98,7 @@ export function SuperCommandCenter() {
       listGateways(),
       listCommissions(),
       listInvoices(20),
+      listFeatureFlags(),
     ]);
     if (!snap.ok) setError(snap.message);
     else {
@@ -111,6 +118,7 @@ export function SuperCommandCenter() {
     if (gws.ok) setGateways(gws.data);
     if (comms.ok) setCommissions(comms.data);
     if (invs.ok) setInvoices(invs.data);
+    if (fl.ok) setFlags(fl.data);
     const {
       data: { user },
     } = await createBrowserClient().auth.getUser();
@@ -188,6 +196,20 @@ export function SuperCommandCenter() {
     await load();
   }
 
+  async function onToggleFlag(code: string, enabled: boolean) {
+    if (!canManage) return;
+    setBusy(`flag-${code}`);
+    setError(null);
+    const result = await setFeatureFlag(code, enabled);
+    setBusy(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    setMessage(`Flag ${code} → ${enabled ? 'ON' : 'OFF'}`);
+    await load();
+  }
+
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
@@ -199,6 +221,15 @@ export function SuperCommandCenter() {
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/app/admin" className={cn(buttonVariants({ variant: 'secondary' }))}>
               Admin operacional
+            </Link>
+            <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'ghost' }))}>
+              Mudança Inteligente
+            </Link>
+            <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'ghost' }))}>
+              Prestadores
+            </Link>
+            <Link href="/app/parceiro/planos" className={cn(buttonVariants({ variant: 'ghost' }))}>
+              Planos Parceiro
             </Link>
             <Link href="/app/perfil" className={cn(buttonVariants({ variant: 'ghost' }))}>
               Perfil / KYC
@@ -266,6 +297,51 @@ export function SuperCommandCenter() {
                   value={String(snapshot?.sandboxGateways ?? 0)}
                 />
               </div>
+            </section>
+
+            {/* Service Health / feature flags */}
+            <section className="kuteka-detail-panel p-5" aria-labelledby="flags">
+              <h2 id="flags" className="kuteka-detail-title">
+                Service Health
+              </h2>
+              <p className="kuteka-detail-body mt-1">
+                Ligar / desligar módulos comerciais sem deploy.
+              </p>
+              <ul className="mt-3 divide-y divide-slate-200">
+                {flags.map((f) => (
+                  <li
+                    key={f.code}
+                    className="flex flex-wrap items-center justify-between gap-2 py-3"
+                  >
+                    <div>
+                      <p className="font-medium text-slate-900">{f.label}</p>
+                      <p className="text-sm text-slate-600">{f.description}</p>
+                      <p className="font-mono text-xs text-slate-500">{f.code}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={f.enabled ? 'success' : 'warning'}>
+                        {f.enabled ? 'ON' : 'OFF'}
+                      </Badge>
+                      {canManage ? (
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          loading={busy === `flag-${f.code}`}
+                          onClick={() => void onToggleFlag(f.code, !f.enabled)}
+                        >
+                          {f.enabled ? 'Desligar' : 'Ligar'}
+                        </Button>
+                      ) : null}
+                    </div>
+                  </li>
+                ))}
+                {flags.length === 0 ? (
+                  <li className="py-3 text-sm text-slate-500">
+                    Sem flags (aplicar migration 0020).
+                  </li>
+                ) : null}
+              </ul>
             </section>
 
             {/* Sandbox pay */}

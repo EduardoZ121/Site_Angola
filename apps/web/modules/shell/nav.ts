@@ -25,7 +25,10 @@ export type ShellNavLabelKey =
   | 'conta'
   | 'admin'
   | 'super'
-  | 'financeiro';
+  | 'financeiro'
+  | 'mudanca'
+  | 'servicos'
+  | 'planos';
 
 export type ShellNavItem = {
   id: string;
@@ -216,6 +219,37 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'super_administrator',
     ],
     group: 'geral',
+  },
+  {
+    id: 'mudanca',
+    labelKey: 'mudanca',
+    href: '/app/mudanca',
+    status: 'active',
+    experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
+    group: 'cliente',
+  },
+  {
+    id: 'servicos',
+    labelKey: 'servicos',
+    href: '/app/servicos',
+    status: 'active',
+    experiences: [
+      'client',
+      'client_partner',
+      'patrimonial_partner',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
+  },
+  {
+    id: 'planos',
+    labelKey: 'planos',
+    href: '/app/parceiro/planos',
+    status: 'active',
+    requiresPermission: 'properties.manage',
+    experiences: ['patrimonial_partner', 'client_partner', 'administrator', 'super_administrator'],
+    group: 'parceiro',
   },
   {
     id: 'conta',
