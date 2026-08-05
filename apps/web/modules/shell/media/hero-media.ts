@@ -98,6 +98,7 @@ export function presetFromPathname(pathname: string): HeroMediaPreset {
   if (pathname.startsWith('/app/habitacao')) return 'habitacao';
   if (pathname.startsWith('/app/agente')) return 'agente';
   if (pathname.startsWith('/app/confianca')) return 'confianca';
+  if (pathname.startsWith('/app/centro-confianca')) return 'confianca';
   if (pathname.startsWith('/app/contratos')) return 'contratos';
   if (pathname.startsWith('/app/admin')) return 'admin';
   return 'dashboard';

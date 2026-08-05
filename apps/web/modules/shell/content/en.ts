@@ -107,6 +107,7 @@ export const shellCopyEn: ShellCopy = {
     habitacao: 'Housing',
     agente: 'Agent',
     confianca: 'Trust',
+    centroConfianca: 'Trust Center',
     contratos: 'Contracts',
     relatorios: 'Reports',
     conta: 'Account',

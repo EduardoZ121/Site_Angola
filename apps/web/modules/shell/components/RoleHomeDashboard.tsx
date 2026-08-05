@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
+import { buildKisKaiSuggestions } from '@/modules/identidade/lib/trust-center';
+import { loadMyIdentity } from '@/modules/identidade/services/identity-client';
 import { KaiInsightCards } from '@/modules/ops/components/KaiInsightCards';
 import {
   AdminOpsCockpit,
@@ -12,7 +14,7 @@ import {
 } from '@/modules/ops/components/StakeholderCockpits';
 import { buildKaiInsights } from '@/modules/ops/kai-insights';
 import { loadOpsStats } from '@/modules/ops/load-ops-stats';
-import type { OpsStats } from '@/modules/ops/types';
+import type { KaiInsight, OpsStats } from '@/modules/ops/types';
 import { experienceLabel, modeBadgeLabel } from '@/modules/i18n/experience-labels';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { createBrowserClient } from '@/lib/supabase/client';
@@ -70,6 +72,7 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
   const { mode } = useRoleExperience();
   const { locale } = useLocale();
   const [stats, setStats] = useState<OpsStats | null>(null);
+  const [kisInsights, setKisInsights] = useState<KaiInsight[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -83,13 +86,15 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
       if (!user) {
         if (!cancelled) {
           setStats(null);
+          setKisInsights([]);
           setLoading(false);
         }
         return;
       }
-      const data = await loadOpsStats(user.id);
+      const [data, identity] = await Promise.all([loadOpsStats(user.id), loadMyIdentity()]);
       if (!cancelled) {
         setStats(data);
+        setKisInsights(identity.ok ? buildKisKaiSuggestions(identity.data) : []);
         setLoading(false);
       }
     }
@@ -99,7 +104,10 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
     };
   }, [session.roles, mode]);
 
-  const insights = useMemo(() => (stats ? buildKaiInsights(mode, stats) : []), [mode, stats]);
+  const insights = useMemo(() => {
+    const ops = stats ? buildKaiInsights(mode, stats) : [];
+    return [...kisInsights, ...ops].slice(0, 5);
+  }, [kisInsights, mode, stats]);
 
   return (
     <div className="flex flex-col gap-4">

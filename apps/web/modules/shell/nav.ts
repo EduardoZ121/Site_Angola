@@ -20,6 +20,7 @@ export type ShellNavLabelKey =
   | 'habitacao'
   | 'agente'
   | 'confianca'
+  | 'centroConfianca'
   | 'contratos'
   | 'relatorios'
   | 'conta'
@@ -172,6 +173,21 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/confianca',
     status: 'active',
     requiresPermission: 'trust.manage',
+    experiences: [
+      'client',
+      'patrimonial_partner',
+      'client_partner',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
+  },
+  {
+    id: 'centroConfianca',
+    labelKey: 'centroConfianca',
+    href: '/app/centro-confianca',
+    status: 'active',
     experiences: [
       'client',
       'patrimonial_partner',

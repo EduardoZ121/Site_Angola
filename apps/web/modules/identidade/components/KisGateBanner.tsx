@@ -25,7 +25,7 @@ export function KisGateBanner({ level, action = 'contract', minLevel }: KisGateB
       <p className="font-medium">{copy.kycGateTitle}</p>
       <p className="mt-1">{copy.kycGateBody}</p>
       <Link
-        href="/app/perfil"
+        href="/app/centro-confianca"
         className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-2 inline-flex')}
       >
         {copy.kycCta}

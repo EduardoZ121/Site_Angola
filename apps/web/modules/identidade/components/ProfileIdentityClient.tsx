@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { ID_DOC_KINDS, MARITAL_STATUS_CODES, SEX_CODES } from '@kuteka/validation';
 import { Badge, Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
@@ -88,6 +89,7 @@ function nextAfter(step: KisStepId): KisStepId {
 
 export function ProfileIdentityClient() {
   const copy = getIdentidadeCopy();
+  const searchParams = useSearchParams();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const [bundle, setBundle] = useState<IdentityBundle | null>(null);
   const [loading, setLoading] = useState(true);
@@ -210,11 +212,16 @@ export function ProfileIdentityClient() {
   useEffect(() => {
     if (landed || !bundle) return;
     setLanded(true);
+    const passo = searchParams.get('passo');
+    if (passo && KIS_STEPS.some((s) => s.id === passo)) {
+      setStep(passo as KisStepId);
+      return;
+    }
     const completeness = Number(bundle.profile.kis_completeness ?? bundle.profile.trust_index ?? 0);
     if (completeness < 100) {
       setStep('overview');
     }
-  }, [bundle, landed]);
+  }, [bundle, landed, searchParams]);
 
   useEffect(() => {
     if (step !== 'privacy' || privacyLoaded) return;
@@ -575,15 +582,29 @@ export function ProfileIdentityClient() {
                   <Button type="button" onClick={() => setStep(suggestedStep)}>
                     {copy.continue}
                   </Button>
+                  <Link
+                    href="/app/centro-confianca"
+                    className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
+                  >
+                    Centro de Confiança
+                  </Link>
                 </div>
               ) : (
-                <p className="mt-4 text-sm text-emerald-800">{completenessLabel}</p>
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <p className="text-sm text-emerald-800">{completenessLabel}</p>
+                  <Link
+                    href="/app/centro-confianca"
+                    className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
+                  >
+                    Centro de Confiança
+                  </Link>
+                </div>
               )}
               {level < 2 ? (
                 <p className="mt-3 text-sm text-amber-800">
                   {copy.kycGateBody}{' '}
-                  <Link href="/app/confianca" className="underline">
-                    {copy.privacy.confianca}
+                  <Link href="/app/centro-confianca" className="underline">
+                    Centro de Confiança
                   </Link>
                 </p>
               ) : null}

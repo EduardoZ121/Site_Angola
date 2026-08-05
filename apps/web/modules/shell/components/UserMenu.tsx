@@ -231,6 +231,12 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       icon: 'profile',
     },
     {
+      href: '/app/centro-confianca',
+      label: shell.items.centroConfianca,
+      hint: 'Estado da conta, UTS e próximos passos',
+      icon: 'docs',
+    },
+    {
       href: '/auth/onboarding/papeis',
       label: shell.userMenu.roles,
       hint: shell.userMenu.rolesHint,

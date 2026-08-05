@@ -15,12 +15,13 @@ ADR-014 delivered the KYC 0–4 schema and `/app/perfil`. KIS elevates that into
 
 1. **KIS is the single source of personal / ID / address / banking data** for the platform. New modules must call `get_identity_party_snapshot` (or load KIS fields) — never invent parallel forms.
 2. **UX:** digital-bank style multi-step wizard on `/app/perfil` (save & continue, progress %, next-step assistant).
-3. **UTS** = `profiles.trust_index` (0–100); `kis_completeness` drives the assistant %.
-4. **KYC levels 0–4** remain the product levels; visible in UI and snapshots.
-5. **Commercial gates:** `assert_actor_meets_kyc(2)` on Kuteka Pay intents and marketplace order create; contracts already require KYC ≥ 2. UI banners (`KisGateBanner`) + PT error mapping.
-6. **Document protection:** private `identity-documents` bucket + RLS; `encryption_scheme = storage_private_bucket_v1`; access logs on snapshot/document view; field change history; export via `export_my_identity_data`.
-7. **OCR / liveness:** columns and statuses prepared (`ocr_*`, `liveness_*`); pipelines deferred to a later commercial version.
-8. **Visitors** may browse without KYC; contractual/payment/service actions require minimum level 2.
+3. **Centro de Confiança** (`/app/centro-confianca`) — human-readable trust dashboard (account state, pillars, UTS, next step). KAI reads the same model to suggest unlocks on the home feed.
+4. **UTS** = `profiles.trust_index` (0–100); `kis_completeness` drives the assistant %.
+5. **KYC levels 0–4** remain the product levels; visible in UI and snapshots.
+6. **Commercial gates:** `assert_actor_meets_kyc(2)` on Kuteka Pay intents and marketplace order create; contracts already require KYC ≥ 2. UI banners (`KisGateBanner`) + PT error mapping.
+7. **Document protection:** private `identity-documents` bucket + RLS; `encryption_scheme = storage_private_bucket_v1`; access logs on snapshot/document view; field change history; export via `export_my_identity_data`.
+8. **OCR / liveness:** columns and statuses prepared (`ocr_*`, `liveness_*`); pipelines deferred to a later commercial version.
+9. **Visitors** may browse without KYC; contractual/payment/service actions require minimum level 2.
 
 ## Consequences
 
