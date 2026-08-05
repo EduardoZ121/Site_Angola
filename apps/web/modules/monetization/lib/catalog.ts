@@ -54,6 +54,51 @@ export function orderStatusTone(status: string): 'default' | 'warning' | 'succes
   }
 }
 
+export type SmartMoveStatus =
+  'draft' | 'awaiting_payment' | 'active' | 'matched' | 'completed' | 'cancelled' | 'failed';
+
+export const SMART_MOVE_STATUS_LABELS: Record<SmartMoveStatus, string> = {
+  draft: 'Rascunho',
+  awaiting_payment: 'A aguardar pagamento',
+  active: 'Activo',
+  matched: 'Solução encontrada',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+  failed: 'Falhado',
+};
+
+export function smartMoveStatusLabel(status: string): string {
+  return SMART_MOVE_STATUS_LABELS[status as SmartMoveStatus] ?? status;
+}
+
+export function smartMoveStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
+  switch (status) {
+    case 'active':
+    case 'completed':
+      return 'success';
+    case 'matched':
+    case 'awaiting_payment':
+    case 'draft':
+      return 'warning';
+    case 'failed':
+    case 'cancelled':
+      return 'danger';
+    default:
+      return 'default';
+  }
+}
+
+export const URGENCY_LABELS: Record<SmartMoveUrgency, string> = {
+  planned_90: 'Planeada (61–90 dias)',
+  priority_60: 'Prioritária (31–60 dias)',
+  urgent_30: 'Urgente (15–30 dias)',
+  emergency_14: 'Emergência (1–14 dias)',
+};
+
+export function urgencyLabel(band: string): string {
+  return URGENCY_LABELS[band as SmartMoveUrgency] ?? band;
+}
+
 export const PARTNER_PLAN_OPTIONS = [
   {
     code: 'partner.bronze.monthly',
