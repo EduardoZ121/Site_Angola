@@ -1,107 +1,108 @@
 'use client';
 
 import Link from 'next/link';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getOpsCopy } from '../content';
 import { formatAoa, formatDays } from '../format';
 import type { OpsStats } from '../types';
 import { OpsCockpitShell } from './OpsCockpitShell';
 
 export function ClientOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
-  const active = s?.clientContracts.find((c) => c.status === 'active');
+  const { locale } = useLocale();
+  const c = getOpsCopy(locale).client;
+  const active = s?.clientContracts.find((row) => row.status === 'active');
   return (
     <OpsCockpitShell
       loading={loading}
-      eyebrow="Cliente · Residência"
-      title="Centro de gestão da habitação"
-      subtitle="Contrato, pagamentos, calendário, comunicações e intenção de saída."
+      eyebrow={c.eyebrow}
+      title={c.title}
+      subtitle={c.subtitle}
       stats={[
-        { label: 'Dias restantes', value: formatDays(active?.daysRemaining) },
+        { label: c.daysRemaining, value: formatDays(active?.daysRemaining) },
         {
-          label: 'Próxima renda',
+          label: c.nextRent,
           value:
             active?.nextPaymentAmountAoa != null ? formatAoa(active.nextPaymentAmountAoa) : '—',
         },
-        { label: 'Pagamentos feitos', value: String(s?.paymentsPaid ?? 0) },
-        { label: 'Em atraso', value: String(s?.paymentsLate ?? 0) },
-        { label: 'Manutenções abertas', value: String(s?.maintenanceOpen ?? 0) },
-        { label: 'Interesses', value: String(s?.interests ?? 0) },
-        { label: 'Caução', value: formatAoa(active?.depositAoa) },
+        { label: c.paymentsPaid, value: String(s?.paymentsPaid ?? 0) },
+        { label: c.late, value: String(s?.paymentsLate ?? 0) },
+        { label: c.maintenanceOpen, value: String(s?.maintenanceOpen ?? 0) },
+        { label: c.interests, value: String(s?.interests ?? 0) },
+        { label: c.deposit, value: formatAoa(active?.depositAoa) },
         {
-          label: 'Estado contrato',
-          value: active?.status ?? 'sem contrato activo',
+          label: c.contractStatus,
+          value: active?.status ?? c.noActiveContract,
         },
       ]}
       links={[
-        { href: '/app/habitacao?vista=residencia', label: 'Cockpit residência', primary: true },
-        { href: '/app/contratos', label: 'Contratos' },
-        { href: '/app/habitacao/explorar?disponibilidade=futura', label: 'Disponibilidade futura' },
-        { href: '/app/habitacao/explorar', label: 'Explorar' },
+        { href: '/app/habitacao?vista=residencia', label: c.linkResidence, primary: true },
+        { href: '/app/contratos', label: c.linkContracts },
+        { href: '/app/habitacao/explorar?disponibilidade=futura', label: c.linkFuture },
+        { href: '/app/habitacao/explorar', label: c.linkExplore },
       ]}
     >
       {active ? (
         <div className="kuteka-ops-block mt-4">
-          <p className="kuteka-ops-block__title">{active.propertyTitle ?? 'Imóvel actual'}</p>
+          <p className="kuteka-ops-block__title">{active.propertyTitle ?? c.currentProperty}</p>
           <p className="kuteka-ops-block__meta">
             {active.propertyCode} · {active.startsOn ?? '—'} → {active.endsOn ?? '—'}
             {active.exitIntent !== 'none'
-              ? ` · Saída: ${active.exitIntent}${active.exitIntentDate ? ` (${active.exitIntentDate})` : ''}`
+              ? ` · ${c.exitLabel}: ${active.exitIntent}${active.exitIntentDate ? ` (${active.exitIntentDate})` : ''}`
               : ''}
           </p>
           <p className="kuteka-ops-block__meta mt-1">
-            Calendário: próximo pagamento {active.nextPaymentDue ?? '—'} · renovação / inspeções no
-            hub de residência.
+            {c.calendarHint.replace('{due}', active.nextPaymentDue ?? '—')}
           </p>
         </div>
       ) : (
-        <p className="kuteka-detail-meta mt-4">
-          Ainda sem contrato activo — explore habitação ou acompanhe propostas.
-        </p>
+        <p className="kuteka-detail-meta mt-4">{c.empty}</p>
       )}
     </OpsCockpitShell>
   );
 }
 
 export function PartnerOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
+  const { locale } = useLocale();
+  const c = getOpsCopy(locale).partner;
   const soon = s?.futureProperties[0];
   return (
     <OpsCockpitShell
       loading={loading}
-      eyebrow="Parceiro Patrimonial"
-      title="Gestão inteligente do património"
-      subtitle="Receitas, ocupação, contratos, previsão de libertação e pipeline comercial."
+      eyebrow={c.eyebrow}
+      title={c.title}
+      subtitle={c.subtitle}
       stats={[
-        { label: 'Receita mensal', value: formatAoa(s?.monthlyRevenueAoa) },
-        { label: 'Receita anual', value: formatAoa(s?.annualRevenueAoa) },
-        { label: 'Ocupação', value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—' },
-        { label: 'Ocupados', value: String(s?.propertiesOccupied ?? 0) },
-        { label: 'Disponíveis', value: String(s?.propertiesAvailable ?? 0) },
-        { label: 'Prestes a libertar', value: String(s?.propertiesFutureFree ?? 0) },
-        { label: 'Contratos activos', value: String(s?.partnerContractsActive ?? 0) },
-        { label: 'A vencer (60d)', value: String(s?.partnerContractsExpiring ?? 0) },
-        { label: 'Interessados', value: String(s?.pipelineInterests ?? 0) },
-        { label: 'Visitas 30d', value: String(s?.pipelineVisits30 ?? 0) },
-        { label: 'Propostas 30d', value: String(s?.pipelineProposals30 ?? 0) },
+        { label: c.monthlyRevenue, value: formatAoa(s?.monthlyRevenueAoa) },
+        { label: c.annualRevenue, value: formatAoa(s?.annualRevenueAoa) },
+        { label: c.occupancy, value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—' },
+        { label: c.occupied, value: String(s?.propertiesOccupied ?? 0) },
+        { label: c.available, value: String(s?.propertiesAvailable ?? 0) },
+        { label: c.soonFree, value: String(s?.propertiesFutureFree ?? 0) },
+        { label: c.activeContracts, value: String(s?.partnerContractsActive ?? 0) },
+        { label: c.expiring, value: String(s?.partnerContractsExpiring ?? 0) },
+        { label: c.interested, value: String(s?.pipelineInterests ?? 0) },
+        { label: c.visits30, value: String(s?.pipelineVisits30 ?? 0) },
+        { label: c.proposals30, value: String(s?.pipelineProposals30 ?? 0) },
         {
-          label: 'Avaliação',
+          label: c.rating,
           value: s?.reviewAvg != null ? `${s.reviewAvg.toFixed(1)}★` : '—',
         },
       ]}
       links={[
-        { href: '/app/patrimonios', label: 'Patrimónios', primary: true },
-        { href: '/app/contratos', label: 'Contratos' },
-        { href: '/app/habitacao/explorar?disponibilidade=futura', label: 'Libertações futuras' },
-        { href: '/app/confianca', label: 'Confiança' },
+        { href: '/app/patrimonios', label: c.linkProperties, primary: true },
+        { href: '/app/contratos', label: c.linkContracts },
+        { href: '/app/habitacao/explorar?disponibilidade=futura', label: c.linkReleases },
+        { href: '/app/confianca', label: c.linkTrust },
       ]}
     >
       <div className="kuteka-ops-pipeline mt-4">
-        <p className="kuteka-ops-block__title">Pipeline comercial</p>
-        <p className="kuteka-ops-pipeline__flow">
-          Interessados → Visitas → Propostas → Negociação → Contrato → Mudança → Ocupação →
-          Renovação
-        </p>
+        <p className="kuteka-ops-block__title">{c.pipelineTitle}</p>
+        <p className="kuteka-ops-pipeline__flow">{c.pipelineFlow}</p>
         {soon ? (
           <p className="kuteka-ops-block__meta mt-2">
-            Previsão KAI: <strong>{soon.title ?? soon.code}</strong> deverá ficar disponível em{' '}
-            <strong>~{soon.daysUntilFree} dias</strong>
+            {c.kaiForecast
+              .replace('{title}', soon.title ?? soon.code ?? '—')
+              .replace('{days}', String(soon.daysUntilFree))}
             {soon.availabilityNote ? ` — ${soon.availabilityNote}` : ''}.
           </p>
         ) : null}
@@ -111,25 +112,27 @@ export function PartnerOpsCockpit({ s, loading }: { s: OpsStats | null; loading:
 }
 
 export function AgentOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
+  const { locale } = useLocale();
+  const c = getOpsCopy(locale).agent;
   return (
     <OpsCockpitShell
       loading={loading}
-      eyebrow="Agente · CRM"
-      title="Pipeline no terreno"
-      subtitle="Clientes, visitas, imóveis urgentes, avaliações e comissões."
+      eyebrow={c.eyebrow}
+      title={c.title}
+      subtitle={c.subtitle}
       stats={[
-        { label: 'Imóveis atribuídos', value: String(s?.assignments ?? 0) },
-        { label: 'Contratos', value: String(s?.agentContracts ?? 0) },
-        { label: 'Libertações futuras', value: String(s?.propertiesFutureFree ?? 0) },
-        { label: 'Interessados (rede)', value: String(s?.pipelineInterests ?? 0) },
-        { label: 'Visitas 30d', value: String(s?.pipelineVisits30 ?? 0) },
-        { label: 'Propostas 30d', value: String(s?.pipelineProposals30 ?? 0) },
+        { label: c.assigned, value: String(s?.assignments ?? 0) },
+        { label: c.contracts, value: String(s?.agentContracts ?? 0) },
+        { label: c.futureReleases, value: String(s?.propertiesFutureFree ?? 0) },
+        { label: c.networkInterests, value: String(s?.pipelineInterests ?? 0) },
+        { label: c.visits30, value: String(s?.pipelineVisits30 ?? 0) },
+        { label: c.proposals30, value: String(s?.pipelineProposals30 ?? 0) },
       ]}
       links={[
-        { href: '/app/agente', label: 'CRM Agente', primary: true },
-        { href: '/app/agente/explorar', label: 'Inventário' },
-        { href: '/app/contratos', label: 'Assinaturas' },
-        { href: '/app/habitacao/explorar?disponibilidade=futura', label: 'Urgentes / futuros' },
+        { href: '/app/agente', label: c.linkCrm, primary: true },
+        { href: '/app/agente/explorar', label: c.linkInventory },
+        { href: '/app/contratos', label: c.linkSignatures },
+        { href: '/app/habitacao/explorar?disponibilidade=futura', label: c.linkUrgent },
       ]}
     />
   );
@@ -144,70 +147,69 @@ export function AdminOpsCockpit({
   loading: boolean;
   executive?: boolean;
 }) {
+  const { locale } = useLocale();
+  const c = getOpsCopy(locale).admin;
   return (
     <OpsCockpitShell
       loading={loading}
-      eyebrow={executive ? 'SuperAdministrador · Executivo' : 'Administrador · Operações'}
-      title={executive ? 'Cockpit executivo' : 'Cockpit operacional'}
-      subtitle={
-        executive
-          ? 'Património sob gestão, receitas, crescimento, ocupação e satisfação.'
-          : 'Imóveis, contratos, libertações, pagamentos e novos stakeholders.'
-      }
+      eyebrow={executive ? c.eyebrowExec : c.eyebrow}
+      title={executive ? c.titleExec : c.title}
+      subtitle={executive ? c.subtitleExec : c.subtitle}
       stats={[
-        { label: 'Utilizadores', value: String(s?.users ?? 0) },
-        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
-        { label: 'Contratos terminados', value: String(s?.contractsCompletedTotal ?? 0) },
-        { label: 'Prestes a libertar', value: String(s?.propertiesFutureFree ?? 0) },
-        { label: 'Novos clientes', value: String(s?.clientsCount ?? 0) },
-        { label: 'Parceiros', value: String(s?.partnersCount ?? 0) },
-        { label: 'Agentes', value: String(s?.agentsCount ?? 0) },
-        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0) },
+        { label: c.users, value: String(s?.users ?? 0) },
+        { label: c.contractsActive, value: String(s?.contractsActiveTotal ?? 0) },
+        { label: c.contractsCompleted, value: String(s?.contractsCompletedTotal ?? 0) },
+        { label: c.soonFree, value: String(s?.propertiesFutureFree ?? 0) },
+        { label: c.newClients, value: String(s?.clientsCount ?? 0) },
+        { label: c.partners, value: String(s?.partnersCount ?? 0) },
+        { label: c.agents, value: String(s?.agentsCount ?? 0) },
+        { label: c.trustPending, value: String(s?.trustPending ?? 0) },
         ...(executive
           ? [
               {
-                label: 'Ocupação média',
+                label: c.avgOccupancy,
                 value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—',
               },
               {
-                label: 'Tempo médio libertação',
+                label: c.avgRelease,
                 value: s?.avgDaysToFree != null ? `${s.avgDaysToFree}d` : '—',
               },
-              { label: 'Receita mensal (demo)', value: formatAoa(s?.monthlyRevenueAoa) },
-              { label: 'Receita anual (demo)', value: formatAoa(s?.annualRevenueAoa) },
+              { label: c.monthlyRevenue, value: formatAoa(s?.monthlyRevenueAoa) },
+              { label: c.annualRevenue, value: formatAoa(s?.annualRevenueAoa) },
             ]
           : []),
       ]}
       links={[
-        { href: '/app/admin', label: 'Administração', primary: true },
-        { href: '/app/admin/utilizadores', label: 'Utilizadores' },
-        { href: '/app/financeiro', label: 'Financeiro' },
-        { href: '/app/juridico', label: 'Jurídico' },
-        { href: '/app/servicos', label: 'Prestadores' },
-        { href: '/app/confianca/revisao', label: 'Aprovações' },
+        { href: '/app/admin', label: c.linkAdmin, primary: true },
+        { href: '/app/admin/utilizadores', label: c.linkUsers },
+        { href: '/app/financeiro', label: c.linkFinance },
+        { href: '/app/juridico', label: c.linkLegal },
+        { href: '/app/servicos', label: c.linkProviders },
+        { href: '/app/confianca/revisao', label: c.linkApprovals },
       ]}
     />
   );
 }
 
 export function FutureAvailabilityList({ s }: { s: OpsStats | null }) {
+  const { locale } = useLocale();
+  const c = getOpsCopy(locale).future;
   if (!s?.futureProperties.length) return null;
   return (
-    <section className="kuteka-detail-panel p-5" aria-label="Disponibilidade futura">
-      <p className="kuteka-detail-eyebrow">Marketplace · Futuro</p>
-      <h2 className="kuteka-detail-title mt-1">Disponibilidade futura</h2>
-      <p className="kuteka-detail-body mt-1">
-        Imóveis que a Kuteka prevê libertar — active notificações e prepare campanhas.
-      </p>
+    <section className="kuteka-detail-panel p-5" aria-label={c.aria}>
+      <p className="kuteka-detail-eyebrow">{c.eyebrow}</p>
+      <h2 className="kuteka-detail-title mt-1">{c.title}</h2>
+      <p className="kuteka-detail-body mt-1">{c.subtitle}</p>
       <ul className="mt-4 flex flex-col gap-3">
         {s.futureProperties.map((prop) => (
           <li key={prop.id} className="kuteka-ops-block">
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
-                <p className="kuteka-ops-block__title">{prop.title ?? 'Património'}</p>
+                <p className="kuteka-ops-block__title">{prop.title ?? c.propertyFallback}</p>
                 <p className="kuteka-ops-block__meta">
                   {prop.code}
-                  {prop.city ? ` · ${prop.city}` : ''} · livre em ~{prop.daysUntilFree} dias (
+                  {prop.city ? ` · ${prop.city}` : ''} ·{' '}
+                  {c.freeIn.replace('{days}', String(prop.daysUntilFree))} (
                   {prop.expectedAvailableOn})
                 </p>
                 {prop.availabilityNote ? (
@@ -218,7 +220,7 @@ export function FutureAvailabilityList({ s }: { s: OpsStats | null }) {
                 href={`/app/habitacao/detalhe?id=${prop.id}`}
                 className="text-sm font-bold text-[#08263f] underline-offset-2 hover:underline"
               >
-                Ver / notificar
+                {c.viewNotify}
               </Link>
             </div>
           </li>

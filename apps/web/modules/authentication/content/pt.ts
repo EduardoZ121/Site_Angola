@@ -148,8 +148,12 @@ export const authCopyPt = {
     quickActivateProperty: 'Ativar Património',
     quickExploreHousing: 'Explorar Habitação',
     quickAgent: 'Área do Agente',
+    quickAdmin: 'Administração',
+    quickContracts: 'Contratos',
     quickTrust: 'Verificar conta',
     quickRoles: 'Gerir papéis',
+    experienceHint: 'Cockpit e fluxos desta experiência — mude de papel no menu da conta.',
+    feedPreparing: 'A preparar o ambiente contínuo…',
     rolesLabel: 'Papéis activos',
     rolesHint: 'A mesma conta pode assumir vários papéis.',
     noRoles: 'Ainda sem papéis activos',
@@ -174,4 +178,14 @@ export const authCopyPt = {
   },
 } as const;
 
-export type AuthCopy = typeof authCopyPt;
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string
+    ? string
+    : T[K] extends readonly (infer U)[]
+      ? DeepStringify<U>[]
+      : T[K] extends object
+        ? DeepStringify<T[K]>
+        : T[K];
+};
+
+export type AuthCopy = DeepStringify<typeof authCopyPt>;

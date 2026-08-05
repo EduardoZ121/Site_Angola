@@ -57,7 +57,7 @@ export function LandingHero() {
               href={c.routes.exploreHash}
               className={cn(
                 buttonVariants({ variant: 'outline', size: 'lg' }),
-                'min-h-12 w-full justify-center border-white/35 text-white hover:bg-white/10 sm:w-auto',
+                'min-h-12 w-full justify-center border-white/35 bg-transparent text-white hover:bg-white/10 sm:w-auto',
               )}
             >
               {c.hero.secondaryCta}
