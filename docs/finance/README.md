@@ -99,8 +99,22 @@ cancelled | failed`; timeline append-only em `find_home_events`.
     transversal de reembolsos/créditos; `custody_mode = none`.
   - UI `/app/encontrar-casa`: criação, badges/SLA, cronologia, acções de cliente
     e operação de match/falha.
+- **Fase D3 — Concierge Kuteka (entregue)**
+  - Migration: `supabase/migrations/0026_concierge.sql`
+  - ADR: `docs/architecture/ADR-022-concierge.md`
+  - Serviço pay-per-use com taxa única `service_fee` pelo produto
+    `concierge.request`, via `kuteka_pay_create_intent` (`module_code =
+concierge`, `reference_type = concierge_request`).
+  - Estados: `draft → awaiting_payment → active → in_progress → completed |
+cancelled | failed`; timeline append-only em `concierge_events`.
+  - Cliente cria com categoria/notas e imóvel/contrato opcionais. Operadores com
+    `agent.operate` ou `finance.manage` iniciam e concluem o atendimento.
+  - Cancelamento antes de `in_progress` e falha operacional devolvem 100% da
+    taxa em créditos pela stack transversal; `custody_mode = none`.
+  - UI `/app/concierge`: criação, badges, cronologia, acções de cliente/operação,
+    `SessionStatusGate` e `SoftListSlot`; links no shell e no Finance Hub.
 - **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
 - **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2 e só arrancam
+As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2/D3 e só arrancam
 depois destas.

@@ -114,6 +114,7 @@ export const shellCopyPt = {
     financeiro: 'Financeiro',
     mudanca: 'Mudança Inteligente',
     encontrar: 'Encontrar Casa',
+    concierge: 'Concierge',
     servicos: 'Prestadores',
     planos: 'Planos Parceiro',
   },

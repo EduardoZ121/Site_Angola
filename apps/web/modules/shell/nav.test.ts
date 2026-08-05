@@ -41,6 +41,7 @@ describe('shell nav', () => {
     expect(items.some((i) => i.id === 'agente')).toBe(false);
     expect(items.some((i) => i.id === 'conta' && i.href === '/app/perfil')).toBe(true);
     expect(items.some((i) => i.id === 'financeiro')).toBe(true);
+    expect(items.some((i) => i.id === 'concierge' && i.href === '/app/concierge')).toBe(true);
     expect(items.some((i) => i.id === 'super')).toBe(false);
   });
 

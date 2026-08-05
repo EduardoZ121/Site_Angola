@@ -115,6 +115,7 @@ export const shellCopyEs: ShellCopy = {
     financeiro: 'Finanzas',
     mudanca: 'Mudanza Inteligente',
     encontrar: 'Encontrar Casa',
+    concierge: 'Conserjería',
     servicos: 'Prestadores',
     planos: 'Planes Socio',
   },
