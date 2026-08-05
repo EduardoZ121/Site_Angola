@@ -111,6 +111,8 @@ export const shellCopyFr: ShellCopy = {
     relatorios: 'Rapports',
     conta: 'Compte',
     admin: 'Administration',
+    super: 'Super Admin',
+    financeiro: 'Finance',
   },
   routeBlocked: {
     title: 'Zone indisponible pour ce rôle',

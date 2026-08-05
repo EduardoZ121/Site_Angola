@@ -66,6 +66,7 @@ const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
     'properties.manage',
     'agent.operate',
     'reputation.manage',
+    'finance.read',
   ],
   super_administrator: [
     'platform.access',
@@ -77,6 +78,8 @@ const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
     'properties.manage',
     'agent.operate',
     'reputation.manage',
+    'finance.manage',
+    'finance.read',
   ],
 };
 
@@ -146,6 +149,7 @@ const PATH_RULES: PathRule[] = [
   { prefix: '/app/admin', permission: 'admin.panel' },
   { prefix: '/app/confianca', permission: 'trust.manage' },
   { prefix: '/app/contratos', permission: 'contracts.manage' },
+  { prefix: '/app/super', permission: 'finance.manage' },
 ];
 
 export function canAccessPath(
@@ -172,8 +176,9 @@ export function homePathForExperience(mode: ExperienceMode): string {
     case 'certified_agent':
       return '/app/agente';
     case 'administrator':
-    case 'super_administrator':
       return '/app/admin';
+    case 'super_administrator':
+      return '/app/super';
     default:
       return '/app';
   }

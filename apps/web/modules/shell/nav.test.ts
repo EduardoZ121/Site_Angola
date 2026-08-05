@@ -40,6 +40,17 @@ describe('shell nav', () => {
     expect(items.some((i) => i.id === 'favoritos')).toBe(true);
     expect(items.some((i) => i.id === 'agente')).toBe(false);
     expect(items.some((i) => i.id === 'conta' && i.href === '/app/perfil')).toBe(true);
+    expect(items.some((i) => i.id === 'financeiro')).toBe(true);
+    expect(items.some((i) => i.id === 'super')).toBe(false);
+  });
+
+  it('super admin sees command center', () => {
+    const items = visibleNavItems(
+      ['platform.access', 'admin.panel', 'finance.manage', 'finance.read'],
+      'super_administrator',
+    );
+    expect(items.some((i) => i.id === 'super' && i.href === '/app/super')).toBe(true);
+    expect(items.some((i) => i.id === 'admin')).toBe(true);
   });
 
   it('partner experience hides explorar / favoritos', () => {
