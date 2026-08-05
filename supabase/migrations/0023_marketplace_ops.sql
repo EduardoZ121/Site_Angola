@@ -15,7 +15,13 @@
 -- 1. service_orders — colunas operacionais (orçamento, SLA, avaliação)
 -- ═══════════════════════════════════════════════════════════════════════════
 
+-- service_providers/service_orders (0020) não tinham updated_by; adiciona-o para
+-- rastreabilidade das transições operacionais desta fase.
+alter table public.service_providers
+  add column if not exists updated_by uuid references auth.users (id);
+
 alter table public.service_orders
+  add column if not exists updated_by uuid references auth.users (id),
   add column if not exists quoted_amount_aoa numeric(14, 2),
   add column if not exists quoted_at timestamptz,
   add column if not exists quote_notes text,
