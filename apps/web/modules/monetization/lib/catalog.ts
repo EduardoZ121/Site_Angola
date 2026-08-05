@@ -154,6 +154,61 @@ export function findHomeStatusTone(status: string): 'default' | 'warning' | 'suc
   }
 }
 
+export type ConciergeCategoryValue =
+  | 'housing_guidance'
+  | 'contract_support'
+  | 'document_support'
+  | 'move_coordination'
+  | 'property_support'
+  | 'other';
+
+export const CONCIERGE_CATEGORY_OPTIONS: { value: ConciergeCategoryValue; label: string }[] = [
+  { value: 'housing_guidance', label: 'Orientação habitacional' },
+  { value: 'contract_support', label: 'Apoio com contrato' },
+  { value: 'document_support', label: 'Apoio documental' },
+  { value: 'move_coordination', label: 'Coordenação de mudança' },
+  { value: 'property_support', label: 'Apoio com imóvel' },
+  { value: 'other', label: 'Outro pedido' },
+];
+
+export function conciergeCategoryLabel(value: string): string {
+  return CONCIERGE_CATEGORY_OPTIONS.find((option) => option.value === value)?.label ?? value;
+}
+
+export type ConciergeStatus =
+  'draft' | 'awaiting_payment' | 'active' | 'in_progress' | 'completed' | 'cancelled' | 'failed';
+
+export const CONCIERGE_STATUS_LABELS: Record<ConciergeStatus, string> = {
+  draft: 'Rascunho',
+  awaiting_payment: 'A aguardar pagamento',
+  active: 'A aguardar operador',
+  in_progress: 'Em atendimento',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+  failed: 'Falhado',
+};
+
+export function conciergeStatusLabel(status: string): string {
+  return CONCIERGE_STATUS_LABELS[status as ConciergeStatus] ?? status;
+}
+
+export function conciergeStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
+  switch (status) {
+    case 'active':
+    case 'completed':
+      return 'success';
+    case 'draft':
+    case 'awaiting_payment':
+    case 'in_progress':
+      return 'warning';
+    case 'cancelled':
+    case 'failed':
+      return 'danger';
+    default:
+      return 'default';
+  }
+}
+
 export const PARTNER_PLAN_OPTIONS = [
   {
     code: 'partner.bronze.monthly',

@@ -238,6 +238,9 @@ export function FinanceHubClient() {
               >
                 Encontrar Casa
               </Link>
+              <Link href="/app/concierge" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                Concierge
+              </Link>
               <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Prestadores
               </Link>

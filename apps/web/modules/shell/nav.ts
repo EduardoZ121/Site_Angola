@@ -28,6 +28,7 @@ export type ShellNavLabelKey =
   | 'financeiro'
   | 'mudanca'
   | 'encontrar'
+  | 'concierge'
   | 'servicos'
   | 'planos';
 
@@ -236,6 +237,20 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     status: 'active',
     experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
     group: 'cliente',
+  },
+  {
+    id: 'concierge',
+    labelKey: 'concierge',
+    href: '/app/concierge',
+    status: 'active',
+    experiences: [
+      'client',
+      'client_partner',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
   },
   {
     id: 'servicos',
