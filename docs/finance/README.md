@@ -24,14 +24,29 @@ Antes de mais serviços de negócio, consolidamos a **infraestrutura financeira
 transversal** — genérica e reutilizável, sem soluções isoladas e sem custódia
 (`custody_mode = none`).
 
-- **Fase A — Consolidação (esta entrega)**
+- **Fase A — Consolidação (entregue)**
   - Migration: `supabase/migrations/0021_finance_infra_fase_a.sql`
   - ADR: `docs/architecture/ADR-017-finance-infra-fase-a.md`
   - Reembolsos, disputas, reconciliação, fraude, regras KAI, CRM financeiro,
     exportações contabilísticas, faturas com PDF/numeração e redimir créditos.
   - Super Admin reorganizado num Command Center por separadores (config-first).
-- **Fase B — Gateways reais** (Multicaixa/EMIS/Stripe fora de sandbox).
-- **Fase C — Custódia/escrow opcional e automação de payouts.**
+- **Fase B — Kuteka Pay: motor de pagamento unificado (esta entrega)**
+  - Migration: `supabase/migrations/0022_kuteka_pay_engine.sql`
+  - ADR: `docs/architecture/ADR-018-kuteka-pay-engine.md`
+  - Uma só arquitectura de pagamento para **todos** os módulos (renda, reservas,
+    mudança inteligente, concierge, contratos, avaliações, prestadores, futuros).
+  - Payment intent como fonte de verdade; `module_code` / `purpose` /
+    `reference_type` / `reference_id` ligam qualquer objecto de negócio.
+  - RPCs `kuteka_pay_create_intent`, `kuteka_pay_capture`, `kuteka_pay_fail`,
+    `kuteka_pay_cancel`, `kuteka_pay_status`, `kuteka_pay_simulate_webhook`,
+    `kuteka_pay_adapter_health`, `kuteka_pay_set_default_gateway`.
+  - `finance_create_sandbox_payment` / `finance_capture_sandbox_payment` passam a
+    **wrappers** sobre o motor (callers antigos continuam a funcionar).
+  - Adaptadores: `sandbox|multicaixa|emis|stripe|wise|bank_transfer` (só sandbox
+    activo nesta fase; trocar de gateway é configuração, não código de módulo).
+  - Super Admin: novo separador **Kuteka Pay** (saúde de adaptadores, simular
+    webhook, gateway por omissão).
+- **Fase C — Gateways reais + custódia/escrow opcional e automação de payouts.**
 - **Fase D — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases B/C/D assentam sobre a fundação da Fase A e só arrancam depois desta.
+As Fases C/D assentam sobre a fundação das Fases A/B e só arrancam depois destas.

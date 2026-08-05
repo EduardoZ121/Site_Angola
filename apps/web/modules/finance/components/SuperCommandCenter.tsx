@@ -21,6 +21,7 @@ import { KaiRulesPanel } from './super/KaiRulesPanel';
 import { CrmPanel } from './super/CrmPanel';
 import { ExportPanel } from './super/ExportPanel';
 import { InvoicesPanel } from './super/InvoicesPanel';
+import { PayEnginePanel } from './super/PayEnginePanel';
 import { GatewaysPanel } from './super/GatewaysPanel';
 import { FeatureFlagsPanel } from './super/FeatureFlagsPanel';
 import { CampaignsPanel } from './super/CampaignsPanel';
@@ -38,6 +39,7 @@ type TabKey =
   | 'crm'
   | 'exports'
   | 'invoices'
+  | 'payengine'
   | 'gateways'
   | 'flags'
   | 'campaigns';
@@ -68,6 +70,7 @@ export function SuperCommandCenter() {
     { key: 'crm', label: copy.tabs.crm },
     { key: 'exports', label: copy.tabs.exports },
     { key: 'invoices', label: copy.tabs.invoices },
+    { key: 'payengine', label: copy.tabs.payengine },
     { key: 'gateways', label: copy.tabs.gateways },
     { key: 'flags', label: copy.tabs.flags },
     { key: 'campaigns', label: copy.tabs.campaigns },
@@ -86,6 +89,7 @@ export function SuperCommandCenter() {
     crm: <CrmPanel canManage={canManage} />,
     exports: <ExportPanel canManage={canManage} />,
     invoices: <InvoicesPanel canManage={canManage} />,
+    payengine: <PayEnginePanel canManage={canManage} />,
     gateways: <GatewaysPanel canManage={canManage} />,
     flags: <FeatureFlagsPanel canManage={canManage} />,
     campaigns: <CampaignsPanel canManage={canManage} />,
