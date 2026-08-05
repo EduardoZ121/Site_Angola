@@ -311,6 +311,7 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   encontrar: IconHomeSearch,
   concierge: IconAgent,
   garantia: IconShield,
+  assistencia: IconTools,
   servicos: IconTools,
   planos: IconPlan,
 };

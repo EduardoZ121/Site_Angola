@@ -127,8 +127,23 @@ failed`; timeline append-only em `garantia_events`.
     100% em créditos; depois termina a cobertura sem reembolso nem pró-rata.
   - UI `/app/garantia`: rascunho, activação, cancelamento, badges e cronologia,
     com `SessionStatusGate`, `SoftListSlot`, link no shell e no Finance Hub.
+- **Fase D5 — Assistência 24h (entregue)**
+  - Migration: `supabase/migrations/0028_assistencia_24h.sql`
+  - ADR: `docs/architecture/ADR-024-assistencia-24h.md`
+  - Chamada urgente por 5 000 AOA através do produto `assistencia_24h.call`,
+    sem pagamentos ou saldos próprios.
+  - Activação via `kuteka_pay_create_intent` (`module_code = assistencia_24h`,
+    `purpose = call_fee`, `reference_type = assistencia_request`) e registo no
+    Ledger transversal.
+  - Estados: `draft → awaiting_payment → active → in_progress → completed |
+cancelled | failed`; timeline append-only em `assistencia_events`.
+  - O cliente cria com categoria, urgência, notas e imóvel opcional; operadores
+    iniciam e concluem a assistência.
+  - Cancelamento antes de `in_progress` devolve 100% da taxa em créditos.
+  - UI `/app/assistencia`: criação, pagamento, operação, badges e cronologia,
+    com `SessionStatusGate`, `SoftListSlot`, link no shell e no Finance Hub.
 - **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
 - **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2/D3/D4 e só arrancam
-depois destas.
+As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2/D3/D4/D5 e só
+arrancam depois destas.

@@ -117,6 +117,7 @@ export const shellCopyFr: ShellCopy = {
     encontrar: 'Trouver un logement',
     concierge: 'Conciergerie',
     garantia: 'Garantie Kuteka',
+    assistencia: 'Assistance 24h',
     servicos: 'Prestataires',
     planos: 'Plans Partenaire',
   },

@@ -252,6 +252,27 @@ export {
 } from './garantia';
 
 export {
+  ASSISTENCIA_STATUSES,
+  ASSISTENCIA_EVENT_TYPES,
+  ASSISTENCIA_CATEGORIES,
+  ASSISTENCIA_URGENCIES,
+  assistenciaCreateSchema,
+  assistenciaRequestIdSchema,
+  assistenciaOperatorActionSchema,
+  assistenciaCancelSchema,
+  assistenciaFailSchema,
+  type AssistenciaStatus,
+  type AssistenciaEventType,
+  type AssistenciaCategory,
+  type AssistenciaUrgency,
+  type AssistenciaCreateInput,
+  type AssistenciaRequestIdInput,
+  type AssistenciaOperatorActionInput,
+  type AssistenciaCancelInput,
+  type AssistenciaFailInput,
+} from './assistencia';
+
+export {
   CONTRACT_PURPOSES,
   CONTRACT_STATUSES,
   createPropertyContractSchema,

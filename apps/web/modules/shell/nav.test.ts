@@ -43,6 +43,7 @@ describe('shell nav', () => {
     expect(items.some((i) => i.id === 'financeiro')).toBe(true);
     expect(items.some((i) => i.id === 'concierge' && i.href === '/app/concierge')).toBe(true);
     expect(items.some((i) => i.id === 'garantia' && i.href === '/app/garantia')).toBe(true);
+    expect(items.some((i) => i.id === 'assistencia' && i.href === '/app/assistencia')).toBe(true);
     expect(items.some((i) => i.id === 'super')).toBe(false);
   });
 

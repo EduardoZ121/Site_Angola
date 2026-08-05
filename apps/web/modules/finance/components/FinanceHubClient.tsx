@@ -244,6 +244,12 @@ export function FinanceHubClient() {
               <Link href="/app/garantia" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Garantia Kuteka
               </Link>
+              <Link
+                href="/app/assistencia"
+                className={cn(buttonVariants({ variant: 'secondary' }))}
+              >
+                Assistência 24h
+              </Link>
               <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'secondary' }))}>
                 Prestadores
               </Link>
