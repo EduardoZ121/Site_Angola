@@ -26,8 +26,7 @@ export function SessionStatusGate({ status, error, children }: SessionStatusGate
       <EmptyState
         title="Sessão indisponível"
         description={
-          error ??
-          'Não foi possível validar a sessão. Entre novamente para continuar na plataforma.'
+          error ?? 'A sua sessão expirou ou não foi validada. Entre novamente para continuar.'
         }
         action={
           <Link

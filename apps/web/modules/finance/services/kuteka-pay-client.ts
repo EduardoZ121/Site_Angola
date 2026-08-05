@@ -23,14 +23,14 @@ import { createBrowserClient } from '@/lib/supabase/client';
  */
 
 const copy = {
-  loadError: 'Não foi possível carregar dados do Kuteka Pay.',
-  createError: 'Não foi possível criar o pagamento.',
-  captureError: 'Não foi possível capturar o pagamento.',
-  failError: 'Não foi possível marcar a falha.',
-  cancelError: 'Não foi possível cancelar o pagamento.',
-  statusError: 'Não foi possível obter o estado do pagamento.',
-  webhookError: 'Não foi possível simular o webhook.',
-  saveError: 'Não foi possível guardar.',
+  loadError: 'Estamos a ter dificuldade em mostrar o Kuteka Pay. Tente novamente.',
+  createError: 'Não conseguimos iniciar o pagamento. Tente novamente.',
+  captureError: 'Não conseguimos confirmar o pagamento. Tente novamente.',
+  failError: 'Não conseguimos actualizar o estado do pagamento. Tente novamente.',
+  cancelError: 'Não conseguimos cancelar o pagamento. Tente novamente.',
+  statusError: 'Não conseguimos obter o estado do pagamento. Tente novamente.',
+  webhookError: 'Não conseguimos simular o evento de pagamento. Tente novamente.',
+  saveError: 'Não conseguimos guardar agora. Tente novamente.',
 };
 
 export type KutekaPayClientAction =

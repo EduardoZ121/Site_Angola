@@ -158,7 +158,8 @@ export const authCopyPt = {
     upcomingTitle: 'Módulos',
     moduleAvailable: 'Activo',
     moduleUnavailable: 'Em breve',
-    loadError: 'Não foi possível carregar o seu espaço. Tente novamente dentro de momentos.',
+    loadError:
+      'Estamos a ter dificuldade em abrir o seu espaço. Tente novamente dentro de momentos.',
     stub: 'Utilize os módulos activos com a mesma conta e os seus papéis.',
     ctaLanding: 'Voltar à Landing',
     ctaProfile: 'Perfil',

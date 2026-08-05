@@ -175,11 +175,11 @@ export type RevenueSnapshot = {
 };
 
 const copy = {
-  loadError: 'Não foi possível carregar dados financeiros.',
-  saveError: 'Não foi possível guardar.',
+  loadError: 'Estamos a ter dificuldade em mostrar os dados financeiros. Tente novamente.',
+  saveError: 'Não conseguimos guardar agora. Tente novamente.',
   forbidden: 'Sem permissão financeira.',
-  quoteError: 'Não foi possível cotar o produto.',
-  payError: 'Não foi possível criar o pagamento.',
+  quoteError: 'Não conseguimos obter a cotação. Tente novamente.',
+  payError: 'Não conseguimos iniciar o pagamento. Tente novamente.',
 };
 
 export async function fetchRevenueSnapshot(): Promise<

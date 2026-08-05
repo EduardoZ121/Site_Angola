@@ -66,7 +66,7 @@ export function ResidentOpsClient() {
       );
       await refresh();
     } catch {
-      setMessage('Não foi possível guardar a intenção de saída. Tente novamente.');
+      setMessage('Não conseguimos guardar a intenção de saída. Tente novamente.');
     } finally {
       setBusy(false);
     }
@@ -104,7 +104,7 @@ export function ResidentOpsClient() {
       setMessage('Pedido de serviço enviado ao parceiro / rede Kuteka.');
       await refresh();
     } catch {
-      setMessage('Não foi possível criar o pedido. Verifique permissões ou tente mais tarde.');
+      setMessage('Não conseguimos criar o pedido. Verifique a sua conta ou tente mais tarde.');
     } finally {
       setBusy(false);
     }

@@ -78,8 +78,8 @@ export type PaymentReminderRow = {
 };
 
 const copy = {
-  loadError: 'Não foi possível carregar dados.',
-  actionError: 'Não foi possível concluir a acção.',
+  loadError: 'Estamos a ter dificuldade em mostrar estes dados. Tente novamente.',
+  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
 };
 
 export async function listSmartMoveRequests(): Promise<

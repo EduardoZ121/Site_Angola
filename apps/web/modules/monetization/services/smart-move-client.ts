@@ -28,8 +28,8 @@ import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-ga
  */
 
 const copy = {
-  loadError: 'Não foi possível carregar os pedidos de mudança.',
-  actionError: 'Não foi possível concluir a acção.',
+  loadError: 'Estamos a ter dificuldade em mostrar os pedidos de mudança. Tente novamente.',
+  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
 };
 
 export type SmartMoveRequestDetail = {

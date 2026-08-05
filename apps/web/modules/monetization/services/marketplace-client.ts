@@ -27,8 +27,8 @@ import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-ga
  */
 
 const copy = {
-  loadError: 'Não foi possível carregar dados do marketplace.',
-  actionError: 'Não foi possível concluir a acção.',
+  loadError: 'Estamos a ter dificuldade em mostrar o marketplace. Tente novamente.',
+  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
 };
 
 export type MarketplaceProviderContext = {

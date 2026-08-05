@@ -18,7 +18,7 @@ export default function Error({
   return (
     <main className="mx-auto flex min-h-[60vh] max-w-lg flex-col justify-center gap-4 px-6">
       <Heading level={1}>Erro</Heading>
-      <Text>Não foi possível carregar esta página.</Text>
+      <Text>Estamos a ter dificuldade em mostrar esta página. Tente novamente.</Text>
       <Button onClick={reset}>Tentar novamente</Button>
     </main>
   );
