@@ -25,6 +25,11 @@ export function getFinanceCopy() {
       crm: 'CRM',
       exports: 'Exportações',
       campaigns: 'Campanhas',
+      payEngine: 'Kuteka Pay — Adaptadores',
+      payEngineDefault: 'Gateway por omissão',
+      payEngineIntent: 'Criar payment intent',
+      payEngineWebhook: 'Simular webhook (sandbox)',
+      payEngineIntents: 'Payment intents recentes',
     },
     tabs: {
       revenue: 'Receita',
@@ -39,6 +44,7 @@ export function getFinanceCopy() {
       crm: 'CRM',
       exports: 'Exportações',
       invoices: 'Faturação',
+      payengine: 'Kuteka Pay',
       gateways: 'Gateways',
       flags: 'Service Health',
       campaigns: 'Campanhas',
@@ -60,6 +66,17 @@ export function getFinanceCopy() {
     },
     custodyNote: 'Modo de custódia: none (sem escrow). O dinheiro não fica na Kuteka.',
     sandboxHint: 'Ambiente de teste — sem dinheiro real até activar Multicaixa/EMIS/Stripe.',
+    payEngineHint:
+      'Motor de pagamento unificado: todos os módulos usam kuteka_pay_*. Saúde dos adaptadores (sandbox|multicaixa|emis|stripe|wise|bank_transfer).',
+    payEngineDefaultHint:
+      'Define o adaptador base usado quando um módulo não indica gateway. Fase B: sandbox por omissão.',
+    payEngineIntentHint:
+      'Cria um payment intent de teste ligado a um módulo. Em sandbox devolve auto_capture_ready.',
+    payEngineWebhookHint:
+      'Simula eventos de gateway (succeeded/failed/cancelled/expired) sobre um intent sandbox.',
+    createIntent: 'Criar intent',
+    simulateWebhook: 'Simular webhook',
+    setDefaultGateway: 'Definir por omissão',
     quote: 'Cotar',
     pay: 'Criar pagamento sandbox',
     capture: 'Simular captura',

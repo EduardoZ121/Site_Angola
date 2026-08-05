@@ -200,6 +200,69 @@ export const financeCreateExportSchema = z.object({
   format: z.enum(FINANCE_EXPORT_FORMATS).default('csv'),
 });
 
+// ─── Fase B — Kuteka Pay (motor de pagamento unificado) ─────────────────────
+
+export const KUTEKA_PAY_MODULE_CODES = [
+  'smart_move',
+  'rent',
+  'marketplace',
+  'concierge',
+  'contract',
+  'valuation',
+  'booking',
+  'plus',
+  'partner_plan',
+  'other',
+] as const;
+
+export const KUTEKA_PAY_ADAPTER_CODES = [
+  'sandbox',
+  'multicaixa',
+  'emis',
+  'stripe',
+  'wise',
+  'bank_transfer',
+] as const;
+
+export const KUTEKA_PAY_WEBHOOK_EVENTS = ['succeeded', 'failed', 'cancelled', 'expired'] as const;
+
+export const kutekaPayCreateIntentSchema = z.object({
+  productCode: z.string().trim().min(2).max(80),
+  moduleCode: z.enum(KUTEKA_PAY_MODULE_CODES).default('other'),
+  purpose: z.string().trim().max(120).optional().nullable(),
+  referenceType: z.string().trim().max(64).optional().nullable(),
+  referenceId: z.string().uuid().optional().nullable(),
+  urgencyBand: z.enum(FINANCE_URGENCY_BANDS).optional().nullable(),
+  gatewayCode: z.enum(KUTEKA_PAY_ADAPTER_CODES).optional().nullable(),
+  idempotencyKey: z.string().trim().min(6).max(120).optional().nullable(),
+  description: z.string().trim().max(500).optional().nullable(),
+});
+
+export const kutekaPayIntentIdSchema = z.object({
+  paymentIntentId: z.string().uuid(),
+});
+
+export const kutekaPayFailSchema = z.object({
+  paymentIntentId: z.string().uuid(),
+  code: z.string().trim().max(80).optional().nullable(),
+  message: z.string().trim().max(500).optional().nullable(),
+});
+
+export const kutekaPaySimulateWebhookSchema = z.object({
+  paymentIntentId: z.string().uuid(),
+  event: z.enum(KUTEKA_PAY_WEBHOOK_EVENTS),
+});
+
+export const kutekaPaySetDefaultGatewaySchema = z.object({
+  gatewayCode: z.enum(KUTEKA_PAY_ADAPTER_CODES),
+});
+
+export type KutekaPayCreateIntentInput = z.infer<typeof kutekaPayCreateIntentSchema>;
+export type KutekaPayIntentIdInput = z.infer<typeof kutekaPayIntentIdSchema>;
+export type KutekaPayFailInput = z.infer<typeof kutekaPayFailSchema>;
+export type KutekaPaySimulateWebhookInput = z.infer<typeof kutekaPaySimulateWebhookSchema>;
+export type KutekaPaySetDefaultGatewayInput = z.infer<typeof kutekaPaySetDefaultGatewaySchema>;
+
 export type FinanceQuoteInput = z.infer<typeof financeQuoteSchema>;
 export type FinanceSandboxPaymentInput = z.infer<typeof financeSandboxPaymentSchema>;
 export type FinanceCaptureInput = z.infer<typeof financeCaptureSchema>;

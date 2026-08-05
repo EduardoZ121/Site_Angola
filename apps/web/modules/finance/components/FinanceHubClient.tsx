@@ -8,8 +8,6 @@ import { useAppSession } from '@/modules/authentication/components/app-session';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import {
-  createSandboxPayment,
-  captureSandboxPayment,
   fetchMyCreditBalance,
   formatAoaAmount,
   generateInvoicePdf,
@@ -27,6 +25,7 @@ import {
   type FinanceProductRow,
   type FinanceRefundRow,
 } from '@/modules/finance/services/finance-client';
+import { createAndSettle } from '@/modules/finance/services/kuteka-pay-client';
 import {
   listPaymentReminders,
   type PaymentReminderRow,
@@ -90,25 +89,25 @@ export function FinanceHubClient() {
     setBusy(true);
     setError(null);
     setMessage(null);
-    const created = await createSandboxPayment({
+    // Motor unificado Kuteka Pay: cria o intent (módulo plus) e, em sandbox,
+    // captura-o de imediato. Trocar de gateway não exige mudar este código.
+    const settled = await createAndSettle({
       productCode: 'kuteka_plus.monthly',
+      moduleCode: 'plus',
+      purpose: 'plus_subscription',
       gatewayCode: 'sandbox',
       description: 'Kuteka Plus (sandbox)',
     });
-    if (!created.ok) {
-      setBusy(false);
-      setError(created.message);
-      return;
-    }
-    const captured = await captureSandboxPayment({
-      paymentIntentId: String(created.data.paymentIntentId),
-    });
     setBusy(false);
-    if (!captured.ok) {
-      setError(captured.message);
+    if (!settled.ok) {
+      setError(settled.message);
       return;
     }
-    setMessage(`Plus activado (sandbox). Fatura ${String(captured.data.invoiceNumber)}`);
+    setMessage(
+      settled.captured
+        ? `Plus activado (sandbox). Fatura ${settled.invoiceNumber ?? '—'}`
+        : 'Plus a aguardar pagamento no gateway.',
+    );
     await load();
   }
 
