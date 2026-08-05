@@ -13,6 +13,11 @@ import {
   formatAoaAmount,
   listFinanceProducts,
   listInvoices,
+  listMyConsents,
+  upsertConsent,
+  CONSENT_SCOPES,
+  type FinanceConsentRow,
+  type FinanceConsentScope,
   type FinanceInvoiceRow,
   type FinanceProductRow,
 } from '@/modules/finance/services/finance-client';
@@ -31,21 +36,25 @@ export function FinanceHubClient() {
   const [products, setProducts] = useState<FinanceProductRow[]>([]);
   const [invoices, setInvoices] = useState<FinanceInvoiceRow[]>([]);
   const [reminders, setReminders] = useState<PaymentReminderRow[]>([]);
+  const [consents, setConsents] = useState<FinanceConsentRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [consentBusy, setConsentBusy] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [p, i, rem] = await Promise.all([
+    const [p, i, rem, cons] = await Promise.all([
       listFinanceProducts(),
       listInvoices(10),
       listPaymentReminders(12),
+      listMyConsents(),
     ]);
     if (p.ok) setProducts(p.data.filter((x) => x.active && x.category !== 'commission'));
     if (i.ok) setInvoices(i.data);
     if (rem.ok) setReminders(rem.data);
+    if (cons.ok) setConsents(cons.data);
     setLoading(false);
   }, []);
 
@@ -78,6 +87,21 @@ export function FinanceHubClient() {
     setMessage(`Plus activado (sandbox). Fatura ${String(captured.data.invoiceNumber)}`);
     await load();
   }
+
+  async function toggleConsent(scope: FinanceConsentScope, granted: boolean) {
+    setConsentBusy(scope);
+    setError(null);
+    const result = await upsertConsent(scope, granted);
+    setConsentBusy(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    setMessage(granted ? `Consentimento ${scope} concedido.` : `Consentimento ${scope} revogado.`);
+    await load();
+  }
+
+  const consentMap = new Map(consents.map((c) => [c.scope, c.granted]));
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
@@ -137,6 +161,35 @@ export function FinanceHubClient() {
                 Completar identidade
               </Link>
             </div>
+          </section>
+
+          <section className="kuteka-detail-panel p-5">
+            <h2 className="kuteka-detail-title">Consentimentos comerciais</h2>
+            <p className="kuteka-detail-body mt-1">
+              Controla ofertas KAI, parceiros e prestadores (opt-in).
+            </p>
+            <ul className="mt-3 divide-y divide-slate-200">
+              {CONSENT_SCOPES.map((item) => {
+                const granted = consentMap.get(item.scope) === true;
+                return (
+                  <li
+                    key={item.scope}
+                    className="flex flex-wrap items-center justify-between gap-2 py-2"
+                  >
+                    <span className="text-sm text-slate-800">{item.label}</span>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={granted ? 'secondary' : 'primary'}
+                      loading={consentBusy === item.scope}
+                      onClick={() => void toggleConsent(item.scope, !granted)}
+                    >
+                      {granted ? 'Revogar' : 'Autorizar'}
+                    </Button>
+                  </li>
+                );
+              })}
+            </ul>
           </section>
 
           <section className="kuteka-detail-panel p-5">

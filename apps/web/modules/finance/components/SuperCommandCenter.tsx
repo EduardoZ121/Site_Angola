@@ -23,7 +23,10 @@ import {
   listInvoices,
   listLedgerEntries,
   listPriceRules,
+  listCampaigns,
+  setCampaignActive,
   updatePriceRule,
+  type FinanceCampaignRow,
   type FinanceCommissionRow,
   type FinanceGatewayRow,
   type FinanceInvoiceRow,
@@ -66,6 +69,7 @@ export function SuperCommandCenter() {
   const [commissions, setCommissions] = useState<FinanceCommissionRow[]>([]);
   const [invoices, setInvoices] = useState<FinanceInvoiceRow[]>([]);
   const [flags, setFlags] = useState<FeatureFlagRow[]>([]);
+  const [campaigns, setCampaigns] = useState<FinanceCampaignRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -90,7 +94,7 @@ export function SuperCommandCenter() {
       return;
     }
     setLoading(true);
-    const [snap, prods, priceRules, led, gws, comms, invs, fl] = await Promise.all([
+    const [snap, prods, priceRules, led, gws, comms, invs, fl, camps] = await Promise.all([
       fetchRevenueSnapshot(),
       listFinanceProducts(),
       listPriceRules(),
@@ -99,6 +103,7 @@ export function SuperCommandCenter() {
       listCommissions(),
       listInvoices(20),
       listFeatureFlags(),
+      listCampaigns(),
     ]);
     if (!snap.ok) setError(snap.message);
     else {
@@ -119,6 +124,7 @@ export function SuperCommandCenter() {
     if (comms.ok) setCommissions(comms.data);
     if (invs.ok) setInvoices(invs.data);
     if (fl.ok) setFlags(fl.data);
+    if (camps.ok) setCampaigns(camps.data);
     const {
       data: { user },
     } = await createBrowserClient().auth.getUser();
@@ -207,6 +213,20 @@ export function SuperCommandCenter() {
       return;
     }
     setMessage(`Flag ${code} → ${enabled ? 'ON' : 'OFF'}`);
+    await load();
+  }
+
+  async function onToggleCampaign(id: string, active: boolean) {
+    if (!canManage) return;
+    setBusy(`camp-${id}`);
+    setError(null);
+    const result = await setCampaignActive(id, active);
+    setBusy(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    setMessage(`Campanha ${active ? 'activada' : 'desactivada'}.`);
     await load();
   }
 
@@ -340,6 +360,49 @@ export function SuperCommandCenter() {
                   <li className="py-3 text-sm text-slate-500">
                     Sem flags (aplicar migration 0020).
                   </li>
+                ) : null}
+              </ul>
+            </section>
+
+            <section className="kuteka-detail-panel p-5" aria-labelledby="campaigns">
+              <h2 id="campaigns" className="kuteka-detail-title">
+                Campanhas
+              </h2>
+              <p className="kuteka-detail-body mt-1">Créditos e descontos configuráveis (B2B2C).</p>
+              <ul className="mt-3 divide-y divide-slate-200">
+                {campaigns.map((c) => (
+                  <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
+                    <div>
+                      <p className="font-medium text-slate-900">{c.name}</p>
+                      <p className="text-sm text-slate-600">{c.description}</p>
+                      <p className="font-mono text-xs text-slate-500">
+                        {c.code}
+                        {c.credit_grant != null
+                          ? ` · créditos ${formatAoaAmount(Number(c.credit_grant))}`
+                          : ''}
+                        {c.discount_pct != null ? ` · -${c.discount_pct}%` : ''}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={c.active ? 'success' : 'warning'}>
+                        {c.active ? 'Activa' : 'Off'}
+                      </Badge>
+                      {canManage ? (
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="secondary"
+                          loading={busy === `camp-${c.id}`}
+                          onClick={() => void onToggleCampaign(c.id, !c.active)}
+                        >
+                          {c.active ? 'Desactivar' : 'Activar'}
+                        </Button>
+                      ) : null}
+                    </div>
+                  </li>
+                ))}
+                {campaigns.length === 0 ? (
+                  <li className="py-3 text-sm text-slate-500">Sem campanhas.</li>
                 ) : null}
               </ul>
             </section>
