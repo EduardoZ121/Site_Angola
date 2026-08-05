@@ -142,8 +142,14 @@ cancelled | failed`; timeline append-only em `assistencia_events`.
   - Cancelamento antes de `in_progress` devolve 100% da taxa em créditos.
   - UI `/app/assistencia`: criação, pagamento, operação, badges e cronologia,
     com `SessionStatusGate`, `SoftListSlot`, link no shell e no Finance Hub.
-- **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
+- **Fase D1–D5 (primeiro conjunto comercial) — concluída** (2026-08-05).
+- **Fase comercial restante (não confundir com D1–D5):** gateways reais +
+  custódia/escrow opcional e automação de payouts.
 - **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2/D3/D4/D5 e só
-arrancam depois destas.
+As fases comerciais restantes e a Fase E assentam sobre A/B/C/D1–D5.
+
+**Visão global (pós–Fase D):**  
+[KUTEKA ROADMAP MASTER](../product/KUTEKA_ROADMAP_MASTER.md) — plataforma.  
+[KUTEKA OPERATING SYSTEM (KOS)](../product/KUTEKA_OPERATING_SYSTEM.md) — operação
+empresarial e versões comerciais **v1.0 → v3.0**.

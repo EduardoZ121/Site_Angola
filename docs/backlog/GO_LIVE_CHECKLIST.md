@@ -23,6 +23,14 @@
 
 ## Expansão pós-Core
 
-- [ ] Contratos (N1→N5)
-- [ ] Pagamentos
-- [ ] Wallet · Passaporte · Academia · CRM · KAI
+> Actualizado 2026-08-05: Contratos, KYC, Ledger, Kuteka Pay (sandbox),
+> Marketplace e D1–D5 já entregues. Fonte de verdade:
+> [`docs/product/KUTEKA_ROADMAP_MASTER.md`](../product/KUTEKA_ROADMAP_MASTER.md).
+
+- [x] Contratos (N5)
+- [x] Pagamentos (Kuteka Pay sandbox — gateways reais pendentes)
+- [ ] Wallet / Escrow — só com decisão legal/PO
+- [ ] Passaporte (produto; painel PDK já parcial)
+- [ ] Academia
+- [x] CRM financeiro (Fase A — aprofundar)
+- [x] KAI regras (Fase A — preditivo pendente)
