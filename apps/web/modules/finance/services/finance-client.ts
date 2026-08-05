@@ -88,6 +88,45 @@ export type FinanceCommissionRow = {
   active: boolean;
 };
 
+export type FinanceCampaignRow = {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  discount_pct: number | null;
+  discount_amount: number | null;
+  credit_grant: number | null;
+  product_codes: string[];
+  active: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+};
+
+export type FinanceConsentScope =
+  | 'kai_suggestions'
+  | 'partner_offers'
+  | 'provider_offers'
+  | 'insurance'
+  | 'telecom'
+  | 'analytics_share';
+
+export type FinanceConsentRow = {
+  id: string;
+  scope: FinanceConsentScope;
+  granted: boolean;
+  granted_at: string | null;
+  revoked_at: string | null;
+};
+
+export const CONSENT_SCOPES: { scope: FinanceConsentScope; label: string }[] = [
+  { scope: 'kai_suggestions', label: 'Sugestões KAI comerciais' },
+  { scope: 'partner_offers', label: 'Ofertas de parceiros' },
+  { scope: 'provider_offers', label: 'Ofertas de prestadores' },
+  { scope: 'insurance', label: 'Seguros' },
+  { scope: 'telecom', label: 'Telecom / internet' },
+  { scope: 'analytics_share', label: 'Analytics agregados' },
+];
+
 export type RevenueSnapshot = {
   capturedCharges: number;
   pendingCharges: number;
@@ -355,6 +394,84 @@ export async function grantCredits(
     });
     if (error || !data) return { ok: false, message: error?.message ?? copy.forbidden };
     return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listCampaigns(): Promise<
+  { ok: true; data: FinanceCampaignRow[] } | { ok: false; message: string }
+> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_campaigns')
+      .select(
+        'id, code, name, description, discount_pct, discount_amount, credit_grant, product_codes, active, starts_at, ends_at',
+      )
+      .is('deleted_at', null)
+      .order('code');
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceCampaignRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function setCampaignActive(
+  id: string,
+  active: boolean,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.from('finance_campaigns').update({ active }).eq('id', id);
+    if (error) return { ok: false, message: error.message || copy.forbidden };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listMyConsents(): Promise<
+  { ok: true; data: FinanceConsentRow[] } | { ok: false; message: string }
+> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_commercial_consents')
+      .select('id, scope, granted, granted_at, revoked_at')
+      .order('scope');
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceConsentRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function upsertConsent(
+  scope: FinanceConsentScope,
+  granted: boolean,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const {
+      data: { user },
+    } = await client.auth.getUser();
+    if (!user) return { ok: false, message: copy.forbidden };
+    const now = new Date().toISOString();
+    const { error } = await client.from('finance_commercial_consents').upsert(
+      {
+        user_id: user.id,
+        scope,
+        granted,
+        granted_at: granted ? now : null,
+        revoked_at: granted ? null : now,
+        updated_at: now,
+      },
+      { onConflict: 'user_id,scope' },
+    );
+    if (error) return { ok: false, message: error.message || copy.saveError };
+    return { ok: true };
   } catch {
     return { ok: false, message: copy.saveError };
   }
