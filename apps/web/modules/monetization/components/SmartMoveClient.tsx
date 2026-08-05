@@ -6,6 +6,8 @@ import { Badge, Button, Heading, Label, Text, buttonVariants } from '@kuteka/ui'
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { KisGateBanner } from '@/modules/identidade/components/KisGateBanner';
+import { getMyKycLevel } from '@/modules/identidade/services/identity-client';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
@@ -64,13 +66,19 @@ export function SmartMoveClient() {
   const [matchInputs, setMatchInputs] = useState<Record<string, string>>({});
   const [events, setEvents] = useState<Record<string, SmartMoveEvent[]>>({});
   const [openTimeline, setOpenTimeline] = useState<string | null>(null);
+  const [kycLevel, setKycLevel] = useState(0);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [req, ctx] = await Promise.all([listSmartMoveRequests(), fetchSmartMoveContext()]);
+    const [req, ctx, kyc] = await Promise.all([
+      listSmartMoveRequests(),
+      fetchSmartMoveContext(),
+      getMyKycLevel(),
+    ]);
     if (req.ok) setRows(req.data);
     else setError(req.message);
     if (ctx.ok) setCanOperate(ctx.data.canOperate);
+    if (kyc.ok) setKycLevel(kyc.level);
 
     const client = createBrowserClient();
     const {
@@ -200,6 +208,8 @@ export function SmartMoveClient() {
             {message}
           </p>
         ) : null}
+
+        <KisGateBanner level={kycLevel} action="smart_move" minLevel={2} />
 
         <SoftListSlot pending={loading}>
           <section className="kuteka-detail-panel p-5">

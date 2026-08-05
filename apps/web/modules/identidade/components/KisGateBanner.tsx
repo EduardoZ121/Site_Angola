@@ -1,0 +1,35 @@
+'use client';
+
+import Link from 'next/link';
+import { buttonVariants } from '@kuteka/ui';
+import { cn } from '@kuteka/shared';
+import { getIdentidadeCopy } from '../content/pt';
+import { meetsActionKyc } from '../lib/kyc';
+
+type KisGateBannerProps = {
+  level: number;
+  action?: string;
+  minLevel?: number;
+};
+
+export function KisGateBanner({ level, action = 'contract', minLevel }: KisGateBannerProps) {
+  const copy = getIdentidadeCopy();
+  const allowed = minLevel != null ? level >= minLevel : meetsActionKyc(level, action);
+  if (allowed) return null;
+
+  return (
+    <div
+      role="status"
+      className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950"
+    >
+      <p className="font-medium">{copy.kycGateTitle}</p>
+      <p className="mt-1">{copy.kycGateBody}</p>
+      <Link
+        href="/app/perfil"
+        className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-2 inline-flex')}
+      >
+        {copy.kycCta}
+      </Link>
+    </div>
+  );
+}

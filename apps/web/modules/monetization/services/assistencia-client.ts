@@ -13,6 +13,7 @@ import {
   type AssistenciaRequestIdInput,
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
 
 const copy = {
   loadError: 'Não foi possível carregar os pedidos de Assistência 24h.',
@@ -60,7 +61,8 @@ async function callRpc(fn: string, args: Record<string, unknown>): Promise<Actio
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc(fn, args);
-    if (error || !data) return { ok: false, message: error?.message || copy.actionError };
+    if (error || !data)
+      return { ok: false, message: mapIdentityGateMessage(error?.message, copy.actionError) };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
     return { ok: false, message: copy.actionError };

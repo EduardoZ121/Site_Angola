@@ -3,10 +3,14 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useEffect, useMemo, useState } from 'react';
+import type { IdentityPartySnapshot } from '@kuteka/types';
 import { CONTRACT_PURPOSES } from '@kuteka/validation';
 import { Button, Heading, Input, Label, Text, Textarea, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { KisGateBanner } from '@/modules/identidade/components/KisGateBanner';
+import { KisPartyReadonly } from '@/modules/identidade/components/KisPartyReadonly';
+import { getMyKycLevel, getMyPartySnapshot } from '@/modules/identidade/services/identity-client';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
@@ -44,6 +48,8 @@ export function CreateContractForm() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [kycLevel, setKycLevel] = useState(0);
+  const [partySnapshot, setPartySnapshot] = useState<IdentityPartySnapshot | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -53,8 +59,14 @@ export function CreateContractForm() {
         return;
       }
       setLoading(true);
-      const result = await listContractProperties();
+      const [result, kyc, snap] = await Promise.all([
+        listContractProperties(),
+        getMyKycLevel(),
+        getMyPartySnapshot(),
+      ]);
       if (cancelled) return;
+      if (kyc.ok) setKycLevel(kyc.level);
+      if (snap.ok) setPartySnapshot(snap.data);
       if (!result.ok) {
         setError(result.message);
         setProperties([]);
@@ -142,17 +154,9 @@ export function CreateContractForm() {
         </header>
 
         {canCreate ? (
-          <div className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
-            <p>{copy.kycBanner}</p>
-            <Link
-              href="/app/perfil"
-              className={cn(
-                buttonVariants({ variant: 'secondary', size: 'sm' }),
-                'mt-2 inline-flex',
-              )}
-            >
-              {copy.kycBannerCta}
-            </Link>
+          <div className="flex flex-col gap-3">
+            <KisGateBanner level={kycLevel} action="contract" minLevel={2} />
+            <KisPartyReadonly snapshot={partySnapshot} title="A sua identidade (KIS)" />
           </div>
         ) : null}
 

@@ -37,10 +37,32 @@ export type IdentityProfileRow = {
   selfie_url: string | null;
   kyc_level: number;
   trust_index: number;
+  kis_completeness: number;
+  kyc_photo_status: TrustPillarStatus;
+  liveness_status: string;
   kyc_identity_status: TrustPillarStatus;
   kyc_document_status: TrustPillarStatus;
   kyc_address_status: TrustPillarStatus;
   kyc_banking_status: TrustPillarStatus;
+};
+
+export type IdentityFieldChangeRow = {
+  id: string;
+  field_name: string;
+  old_value: string | null;
+  new_value: string | null;
+  entity_type: string;
+  created_at: string;
+};
+
+export type IdentityAccessLogRow = {
+  id: string;
+  actor_id: string | null;
+  action: string;
+  entity_type: string;
+  entity_id: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
 };
 
 export type IdentityAddressRow = {
@@ -107,11 +129,22 @@ const PROFILE_SELECT = [
   'selfie_url',
   'kyc_level',
   'trust_index',
+  'kis_completeness',
+  'kyc_photo_status',
+  'liveness_status',
   'kyc_identity_status',
   'kyc_document_status',
   'kyc_address_status',
   'kyc_banking_status',
 ].join(', ');
+
+function mapIdentityError(errorMessage: string | undefined, fallback: string): string {
+  const msg = errorMessage?.toLowerCase() ?? '';
+  if (msg.includes('identity verification') || msg.includes('kyc')) {
+    return getIdentidadeCopy().kycGateBody;
+  }
+  return fallback;
+}
 
 async function recompute(): Promise<void> {
   const client = createBrowserClient();
@@ -165,17 +198,28 @@ export async function loadMyIdentity(): Promise<
     ]);
 
     if (profileRes.error || !profileRes.data) {
-      return { ok: false, message: copy.loadError };
+      return { ok: false, message: mapIdentityError(profileRes.error?.message, copy.loadError) };
     }
 
     const wallets = Array.isArray(bankRes.data?.digital_wallets)
       ? (bankRes.data!.digital_wallets as string[])
       : [];
 
+    const raw = profileRes.data as unknown as IdentityProfileRow;
+    const profile: IdentityProfileRow = {
+      ...raw,
+      kis_completeness: Number(raw.kis_completeness ?? raw.trust_index ?? 0),
+      kyc_photo_status: (raw.kyc_photo_status ??
+        'missing') as IdentityProfileRow['kyc_photo_status'],
+      liveness_status: raw.liveness_status ?? 'none',
+      trust_index: Number(raw.trust_index ?? 0),
+      kyc_level: Number(raw.kyc_level ?? 0),
+    };
+
     return {
       ok: true,
       data: {
-        profile: profileRes.data as unknown as IdentityProfileRow,
+        profile,
         email: user.email ?? null,
         emailConfirmed: Boolean(user.email_confirmed_at),
         address: (addrRes.data as IdentityAddressRow | null) ?? null,
@@ -222,7 +266,7 @@ export async function savePersonalIdentity(
         updated_by: user.id,
       })
       .eq('id', user.id);
-    if (error) return { ok: false, message: copy.saveError };
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.saveError) };
     await writeAuditLog(client, {
       action: 'identity.personal_updated',
       entityType: 'profile',
@@ -260,7 +304,7 @@ export async function saveContacts(
       patch.phone_verified_at = new Date().toISOString();
     }
     const { error } = await client.from('profiles').update(patch).eq('id', user.id);
-    if (error) return { ok: false, message: copy.saveError };
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.saveError) };
     await recompute();
     return { ok: true };
   } catch {
@@ -303,7 +347,7 @@ export async function saveAddress(
     const { error } = await client
       .from('identity_addresses')
       .upsert(row, { onConflict: 'user_id' });
-    if (error) return { ok: false, message: copy.saveError };
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.saveError) };
     if (v.submitForReview) {
       await client.from('trust_documents').insert({
         user_id: user.id,
@@ -351,7 +395,7 @@ export async function saveBanking(
       },
       { onConflict: 'user_id' },
     );
-    if (error) return { ok: false, message: copy.saveError };
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.saveError) };
     await recompute();
     return { ok: true };
   } catch {
@@ -518,6 +562,22 @@ export async function getPartySnapshot(
   }
 }
 
+export async function getMyPartySnapshot(): Promise<
+  { ok: true; data: IdentityPartySnapshot } | { ok: false; message: string }
+> {
+  const copy = getIdentidadeCopy();
+  try {
+    const client = createBrowserClient();
+    const {
+      data: { user },
+    } = await client.auth.getUser();
+    if (!user) return { ok: false, message: copy.forbidden };
+    return getPartySnapshot(user.id);
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
 export async function getMyKycLevel(): Promise<
   { ok: true; level: number; trustIndex: number } | { ok: false; message: string }
 > {
@@ -528,4 +588,56 @@ export async function getMyKycLevel(): Promise<
     level: result.data.profile.kyc_level ?? 0,
     trustIndex: Number(result.data.profile.trust_index ?? 0),
   };
+}
+
+export async function listMyIdentityChanges(
+  limit = 50,
+): Promise<{ ok: true; data: IdentityFieldChangeRow[] } | { ok: false; message: string }> {
+  const copy = getIdentidadeCopy();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('list_my_identity_changes', {
+      p_limit: limit,
+    });
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.loadError) };
+    const rows = Array.isArray(data) ? (data as IdentityFieldChangeRow[]) : [];
+    return { ok: true, data: rows };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function listMyIdentityAccessLogs(
+  limit = 50,
+): Promise<{ ok: true; data: IdentityAccessLogRow[] } | { ok: false; message: string }> {
+  const copy = getIdentidadeCopy();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('list_my_identity_access_logs', {
+      p_limit: limit,
+    });
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.loadError) };
+    const rows = Array.isArray(data) ? (data as IdentityAccessLogRow[]) : [];
+    return { ok: true, data: rows };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function logDocumentView(
+  documentId: string,
+  side: 'front' | 'back' | 'meta' = 'meta',
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getIdentidadeCopy();
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.rpc('log_identity_document_view', {
+      p_document_id: documentId,
+      p_side: side,
+    });
+    if (error) return { ok: false, message: mapIdentityError(error.message, copy.saveError) };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
 }
