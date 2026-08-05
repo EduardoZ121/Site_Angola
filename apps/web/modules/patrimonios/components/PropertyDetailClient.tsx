@@ -6,6 +6,7 @@ import { Heading, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
+import { ListingPerformanceCockpit } from '@/modules/listings/components/ListingPerformanceCockpit';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
@@ -83,9 +84,11 @@ export function PropertyDetailClient({ id }: { id: string }) {
               }
             />
             <FlowNextSteps
+              title="Começar de novo"
+              kaiHint="Active um património ou complete a verificação da conta."
               steps={[
                 { href: '/app/patrimonios/novo', label: copy.activate, primary: true },
-                { href: '/app/confianca', label: 'Verificar conta' },
+                { href: '/app/centro-confianca', label: 'Centro de Confiança' },
               ]}
             />
           </>
@@ -104,22 +107,29 @@ export function PropertyDetailClient({ id }: { id: string }) {
               purposeLabel={copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
             />
 
+            <ListingPerformanceCockpit
+              propertyId={row.id}
+              kutekaScore={row.kuteka_score != null ? Number(row.kuteka_score) : null}
+              priceAoa={Number(row.price_aoa) || 0}
+              purpose={row.purpose}
+            />
+
             <p className="kuteka-detail-panel px-4 py-3 text-sm text-stone-700">
               Quando activo, este anúncio fica disponível em Habitação para o Cliente — com a mesma
               ficha premium, mapa e reputação.
             </p>
 
             <FlowNextSteps
-              title="Anúncio publicado — continue o fluxo"
+              title="Próximo passo sugerido"
+              kaiHint="Partilhe o anúncio em Habitação para gerar visitas, ou avance para contrato quando tiver interessados."
               steps={[
                 {
                   href: `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`,
                   label: copy.seeInHousing,
                   primary: true,
                 },
-                { href: '/app/confianca', label: 'Confiança' },
-                { href: '/app/contratos', label: 'Contrato' },
-                { href: '/app/patrimonios/novo', label: 'Publicar outro' },
+                { href: '/app/centro-confianca', label: 'Centro de Confiança' },
+                { href: '/app/contratos/novo', label: 'Criar contrato' },
               ]}
             />
           </>

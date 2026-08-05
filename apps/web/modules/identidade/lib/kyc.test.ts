@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   KYC_LEVEL_LABELS,
   actionRequiresKyc,
+  computeGradualKisProgress,
   formatCompleteness,
   meetsActionKyc,
   minLevelForAction,
@@ -60,5 +61,30 @@ describe('kis helpers', () => {
   it('formats completeness', () => {
     expect(formatCompleteness(45.2)).toBe('45%');
     expect(formatCompleteness(120)).toBe('100%');
+  });
+
+  it('computes gradual KIS progress per step', () => {
+    expect(
+      computeGradualKisProgress({
+        emailConfirmed: true,
+        phoneVerified: false,
+        hasPersonal: false,
+        hasDocument: false,
+        hasPhoto: false,
+        hasAddress: false,
+        hasBanking: false,
+      }),
+    ).toBe(12);
+    expect(
+      computeGradualKisProgress({
+        emailConfirmed: true,
+        phoneVerified: true,
+        hasPersonal: true,
+        hasDocument: true,
+        hasPhoto: true,
+        hasAddress: true,
+        hasBanking: true,
+      }),
+    ).toBe(100);
   });
 });

@@ -111,7 +111,7 @@ export function PropertyListClient() {
         {canManage ? (
           <SoftListSlot pending={loading && rows.length === 0}>
             <PartnerLifecyclePanel />
-            <p className="text-sm text-slate-500">{copy.mvpNote}</p>
+            <p className="text-sm text-stone-700">{copy.mvpNote}</p>
 
             {error ? (
               <div
@@ -143,7 +143,7 @@ export function PropertyListClient() {
                   <h2 id="property-list-heading" className="text-sm font-semibold text-slate-800">
                     {copy.listHeading}
                   </h2>
-                  <Text className="text-sm text-slate-500">{copy.listHint}</Text>
+                  <Text className="text-sm text-stone-700">{copy.listHint}</Text>
                 </div>
                 <ul className="grid gap-4 sm:grid-cols-2">
                   {rows.map((row) => (
@@ -179,7 +179,7 @@ export function PropertyListClient() {
                             {row.city ? ` · ${row.city}` : ''}
                             {row.province ? `, ${row.province}` : ''}
                           </p>
-                          <p className="font-mono text-xs text-slate-400">{row.code}</p>
+                          <p className="font-mono text-xs text-stone-600">{row.code}</p>
                         </div>
                       </Link>
                     </li>

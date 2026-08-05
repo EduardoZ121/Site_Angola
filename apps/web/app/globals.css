@@ -91,7 +91,7 @@ body {
 
 /* Auth form controls on dark atmosphere */
 .auth-field {
-  @apply flex h-12 w-full rounded-kuteka border border-white/20 bg-white/[0.07] px-3.5 text-base text-white placeholder:text-slate-400 backdrop-blur-sm transition;
+  @apply flex h-12 w-full rounded-kuteka border border-white/20 bg-white/[0.07] px-3.5 text-base text-white placeholder:text-slate-200/80 backdrop-blur-sm transition;
   @apply focus-visible:border-brand-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60;
 }
 
@@ -350,15 +350,23 @@ body {
 .kuteka-detail-meta {
   font-size: 0.8rem;
   line-height: 1.45;
-  color: #57534e;
+  color: var(--kuteka-detail-muted);
 }
 
 .kuteka-detail-label {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--kuteka-detail-label);
+}
+
+.kuteka-detail-micro {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #44403c; /* stone-700 — AA on cream panels */
 }
 
 .kuteka-detail-value {
@@ -366,6 +374,19 @@ body {
   font-size: 0.98rem;
   font-weight: 600;
   color: var(--kuteka-detail-ink);
+}
+
+/* Form labels inside detail panels — never low-contrast slate-500 */
+.kuteka-detail-panel label,
+.kuteka-detail-panel .kuteka-field-label,
+.kuteka-glass label {
+  color: #1c1917; /* stone-900 */
+  font-weight: 600;
+}
+
+.kuteka-detail-panel .text-slate-500,
+.kuteka-detail-panel .text-slate-400 {
+  color: #44403c !important;
 }
 
 .kuteka-detail-price {

@@ -19,18 +19,18 @@ export function KisPartyReadonly({ snapshot, title }: KisPartyReadonlyProps) {
   return (
     <section className="kuteka-detail-panel p-4" aria-label={title}>
       <p className="kuteka-detail-eyebrow">{title}</p>
-      <p className="mt-1 text-xs text-slate-500">{copy.party.fromKis}</p>
+      <p className="mt-1 text-xs text-stone-700">{copy.party.fromKis}</p>
       {!snapshot || !legalName ? (
         <p className="mt-3 text-sm text-slate-600">{copy.party.empty}</p>
       ) : (
         <dl className="mt-3 flex flex-col gap-2 text-sm">
           <div>
-            <dt className="text-xs uppercase tracking-wide text-slate-500">Nome</dt>
+            <dt className="text-xs uppercase tracking-wide text-stone-700">Nome</dt>
             <dd className="font-medium text-slate-900">{legalName}</dd>
           </div>
           {snapshot.document?.number ? (
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">{copy.party.bi}</dt>
+              <dt className="text-xs uppercase tracking-wide text-stone-700">{copy.party.bi}</dt>
               <dd className="text-slate-800">
                 {String(snapshot.document.kind).toUpperCase()} {snapshot.document.number}
               </dd>
@@ -38,7 +38,7 @@ export function KisPartyReadonly({ snapshot, title }: KisPartyReadonlyProps) {
           ) : null}
           {snapshot.address?.line ? (
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">
+              <dt className="text-xs uppercase tracking-wide text-stone-700">
                 {copy.party.address}
               </dt>
               <dd className="text-slate-800">{snapshot.address.line}</dd>
@@ -46,13 +46,13 @@ export function KisPartyReadonly({ snapshot, title }: KisPartyReadonlyProps) {
           ) : null}
           {snapshot.phonePrimary ? (
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">{copy.party.phone}</dt>
+              <dt className="text-xs uppercase tracking-wide text-stone-700">{copy.party.phone}</dt>
               <dd className="text-slate-800">{snapshot.phonePrimary}</dd>
             </div>
           ) : null}
           {snapshot.email ? (
             <div>
-              <dt className="text-xs uppercase tracking-wide text-slate-500">{copy.party.email}</dt>
+              <dt className="text-xs uppercase tracking-wide text-stone-700">{copy.party.email}</dt>
               <dd className="text-slate-800">{snapshot.email}</dd>
             </div>
           ) : null}

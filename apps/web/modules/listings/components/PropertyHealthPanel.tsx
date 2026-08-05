@@ -12,7 +12,7 @@ function Metric({ label, value, hint }: { label: string; value: string; hint?: s
     <div className="kuteka-detail-fact">
       <dt className="kuteka-detail-label">{label}</dt>
       <dd className="kuteka-detail-value">{value}</dd>
-      {hint ? <p className="mt-1 text-xs text-slate-500">{hint}</p> : null}
+      {hint ? <p className="mt-1 text-xs text-stone-700">{hint}</p> : null}
     </div>
   );
 }

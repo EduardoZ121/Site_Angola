@@ -9,6 +9,8 @@ import { experienceLabel, modeBadgeLabel } from '@/modules/i18n/experience-label
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { roleLabelPt, type AppSessionData } from '@/modules/authentication/components/app-session';
 import { getAuthCopy } from '@/modules/authentication/content';
+import { createBrowserClient } from '@/lib/supabase/client';
+import { KYC_LEVEL_LABELS, type KycLevel } from '@/modules/identidade/lib/kyc';
 import { getShellCopy } from '../content';
 import type { ExperienceMode } from '../role-experience';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -201,6 +203,11 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
   const router = useRouter();
   const { mode, available, setMode, effectivePermissions } = useRoleExperience();
   const [open, setOpen] = useState(false);
+  const [trustStrip, setTrustStrip] = useState<{
+    kycLevel: number;
+    uts: number;
+    ick: number | null;
+  } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
   const headerName = session?.displayName || session?.email || auth.app.userFallback;
@@ -218,6 +225,41 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() ?? '')
     .join('');
+
+  useEffect(() => {
+    if (sessionStatus !== 'ready' || !session) {
+      setTrustStrip(null);
+      return;
+    }
+    let cancelled = false;
+    async function loadTrust() {
+      try {
+        const client = createBrowserClient();
+        const {
+          data: { user },
+        } = await client.auth.getUser();
+        if (!user) return;
+        const { data } = await client
+          .from('profiles')
+          .select('kyc_level, trust_index, ick_score')
+          .eq('id', user.id)
+          .maybeSingle();
+        if (cancelled || !data) return;
+        setTrustStrip({
+          kycLevel: Number(data.kyc_level ?? 0),
+          uts: Number(data.trust_index ?? 0),
+          ick: data.ick_score != null ? Number(data.ick_score) : null,
+        });
+      } catch (err) {
+        console.error('[UserMenu] trust strip', err);
+        if (!cancelled) setTrustStrip(null);
+      }
+    }
+    void loadTrust();
+    return () => {
+      cancelled = true;
+    };
+  }, [session, sessionStatus]);
 
   const canPartner = effectivePermissions.includes('properties.manage');
   const canContracts = effectivePermissions.includes('contracts.manage');
@@ -381,12 +423,42 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-slate-900">{headerName}</p>
               <p className="kuteka-mode-chip mt-1">{modeLabel}</p>
-              <p className="mt-1 truncate text-xs font-medium text-slate-700">
+              <p className="mt-1 truncate text-xs font-medium text-stone-700">
                 {shell.accountLabel}: {accountRoles}
               </p>
+              {trustStrip ? (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-900 ring-1 ring-amber-200">
+                    KYC {trustStrip.kycLevel}
+                  </span>
+                  <span className="rounded-full bg-sky-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-sky-900 ring-1 ring-sky-200">
+                    UTS {Math.round(trustStrip.uts)}
+                  </span>
+                  {trustStrip.ick != null ? (
+                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-900 ring-1 ring-emerald-200">
+                      ICK {Math.round(trustStrip.ick)}
+                    </span>
+                  ) : null}
+                  <span
+                    className="rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-semibold text-stone-700 ring-1 ring-stone-200"
+                    title={
+                      KYC_LEVEL_LABELS[Math.min(4, Math.max(0, trustStrip.kycLevel)) as KycLevel]
+                    }
+                  >
+                    {roleBadges.length} papel{roleBadges.length === 1 ? '' : 'éis'}
+                  </span>
+                </div>
+              ) : null}
+              <Link
+                href="/app/centro-confianca"
+                className="mt-1 inline-block text-xs font-semibold text-[#92400e] underline-offset-2 hover:underline"
+                onClick={() => setOpen(false)}
+              >
+                Centro de Confiança
+              </Link>
               <Link
                 href="/app/perfil"
-                className="mt-1 inline-block text-xs font-semibold text-[#92400e] underline-offset-2 hover:underline"
+                className="mt-1 ml-2 inline-block text-xs font-semibold text-[#92400e] underline-offset-2 hover:underline"
                 onClick={() => setOpen(false)}
               >
                 {shell.changePhoto}
