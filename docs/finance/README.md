@@ -88,8 +88,19 @@ cancelled | failed`.
   - UI `/app/mudanca`: badges de estado, montantes abertura/sucesso, cronologia;
     cliente aceita/recusa/cancela, operador (`agent.operate`/`finance.manage`)
     regista match e falha por SLA.
+- **Fase D2 — Encontrar Casa (entregue)**
+  - Migration: `supabase/migrations/0025_find_home.sql`
+  - ADR: `docs/architecture/ADR-021-find-home.md`
+  - Procura prioritária assistida com uma única taxa (`priority_fee`) pelo motor
+    Kuteka Pay; sem cobrança ao aceitar e sem caminho de pagamento isolado.
+  - Estados: `draft → awaiting_payment → active → matched → completed |
+cancelled | failed`; timeline append-only em `find_home_events`.
+  - Falha e cancelamento elegível geram reembolso integral pela infraestrutura
+    transversal de reembolsos/créditos; `custody_mode = none`.
+  - UI `/app/encontrar-casa`: criação, badges/SLA, cronologia, acções de cliente
+    e operação de match/falha.
 - **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
 - **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases D/E assentam sobre a fundação das Fases A/B/C/D1 e só arrancam depois
-destas.
+As Fases D/E assentam sobre a fundação das Fases A/B/C/D1/D2 e só arrancam
+depois destas.
