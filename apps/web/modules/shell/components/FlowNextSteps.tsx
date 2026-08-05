@@ -10,6 +10,8 @@ export type FlowStep = {
 
 type FlowNextStepsProps = {
   title?: string;
+  /** Orientação KAI — um próximo passo claro, não uma lista fria de botões. */
+  kaiHint?: string;
   steps: FlowStep[];
   className?: string;
 };
@@ -17,28 +19,36 @@ type FlowNextStepsProps = {
 /** Continuous-journey CTAs — prefer forward motion over “Voltar”. */
 export function FlowNextSteps({
   title = 'Continuar o percurso',
+  kaiHint,
   steps,
   className,
 }: FlowNextStepsProps) {
   if (!steps.length) return null;
+  const primary = steps.find((s) => s.primary) ?? steps[0]!;
+  const secondary = steps.filter((s) => s !== primary);
+
   return (
     <nav
       aria-label={title}
-      className={cn(
-        'kuteka-glass flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between',
-        className,
-      )}
+      className={cn('kuteka-detail-panel flex flex-col gap-3 p-4', className)}
     >
-      <p className="text-sm font-medium text-slate-800">{title}</p>
+      <div>
+        <p className="kuteka-detail-micro">KAI · Próximo passo</p>
+        <p className="mt-1 text-sm font-semibold text-stone-900">{title}</p>
+        {kaiHint ? <p className="mt-1 text-sm text-stone-700">{kaiHint}</p> : null}
+      </div>
       <div className="flex flex-wrap gap-2">
-        {steps.map((step) => (
+        <Link
+          href={primary.href}
+          className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+        >
+          {primary.label}
+        </Link>
+        {secondary.map((step) => (
           <Link
             key={`${step.href}-${step.label}`}
             href={step.href}
-            className={cn(
-              buttonVariants({ variant: step.primary ? 'primary' : 'secondary', size: 'sm' }),
-              'w-fit',
-            )}
+            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
           >
             {step.label}
           </Link>

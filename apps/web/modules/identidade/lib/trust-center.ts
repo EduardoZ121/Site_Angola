@@ -6,6 +6,8 @@ import {
   statusGlyph,
   statusLabel,
   suggestNextKisStep,
+  computeGradualKisProgress,
+  kisProgressFlagsFromBundle,
   type KisStepId,
   type KycLevel,
   type TrustPillar,
@@ -64,7 +66,8 @@ export function buildTrustCenterModel(bundle: IdentityBundle): TrustCenterModel 
   const p = bundle.profile;
   const level = Math.min(4, Math.max(0, p.kyc_level ?? 0)) as KycLevel;
   const uts = Number(p.trust_index ?? 0);
-  const completeness = Number(p.kis_completeness ?? uts);
+  const flags = kisProgressFlagsFromBundle(bundle);
+  const completeness = computeGradualKisProgress(flags);
   const band = utsBand(uts);
 
   const pillars: TrustPillar[] = [
@@ -77,17 +80,7 @@ export function buildTrustCenterModel(bundle: IdentityBundle): TrustCenterModel 
     { id: 'banking', label: 'Banco', status: p.kyc_banking_status ?? 'missing' },
   ];
 
-  const nextStepId = suggestNextKisStep({
-    emailConfirmed: bundle.emailConfirmed,
-    phoneVerified: Boolean(p.phone_verified_at),
-    hasPersonal: Boolean(p.legal_full_name?.trim() && p.birth_date && p.nationality),
-    hasDocument: Boolean(bundle.document && bundle.document.status !== 'rejected'),
-    hasPhoto: Boolean(p.avatar_url),
-    hasAddress: Boolean(bundle.address?.province && bundle.address?.municipality),
-    hasBanking: Boolean(
-      bundle.banking?.iban || bundle.banking?.account_number || bundle.banking?.bank_name,
-    ),
-  });
+  const nextStepId = suggestNextKisStep(flags);
 
   const nextCopy = nextStepCopy(nextStepId, level);
   const unlockHints: string[] = [];

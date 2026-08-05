@@ -13,7 +13,9 @@ import { getIdentidadeCopy } from '../content/pt';
 import {
   KIS_STEPS,
   KYC_LEVEL_LABELS,
+  computeGradualKisProgress,
   formatCompleteness,
+  kisProgressFlagsFromBundle,
   statusGlyph,
   statusLabel,
   statusTone,
@@ -217,7 +219,7 @@ export function ProfileIdentityClient() {
       setStep(passo as KisStepId);
       return;
     }
-    const completeness = Number(bundle.profile.kis_completeness ?? bundle.profile.trust_index ?? 0);
+    const completeness = computeGradualKisProgress(kisProgressFlagsFromBundle(bundle));
     if (completeness < 100) {
       setStep('overview');
     }
@@ -446,7 +448,7 @@ export function ProfileIdentityClient() {
 
   const level = (bundle?.profile.kyc_level ?? 0) as KycLevel;
   const trustIndex = Number(bundle?.profile.trust_index ?? 0);
-  const completeness = Number(bundle?.profile.kis_completeness ?? bundle?.profile.trust_index ?? 0);
+  const completeness = bundle ? computeGradualKisProgress(kisProgressFlagsFromBundle(bundle)) : 0;
   const completenessLabel = copy.progress.replace('{n}', String(Math.round(completeness)));
   const docStatus = bundle?.document?.status;
   const docBadge =

@@ -89,7 +89,7 @@ export function TrustCenterClient() {
             <>
               <section className="kuteka-detail-panel grid gap-4 p-5 sm:grid-cols-3">
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500">Estado da conta</p>
+                  <p className="kuteka-detail-micro">Estado da conta</p>
                   <p className="mt-1 flex items-center gap-2 text-lg font-semibold text-slate-900">
                     <span aria-hidden>{accountGlyph(model.accountStatus)}</span>
                     {model.accountLabel}
@@ -99,7 +99,7 @@ export function TrustCenterClient() {
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500">UTS</p>
+                  <p className="kuteka-detail-micro">UTS</p>
                   <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
                     {Math.round(model.uts)}
                     <span className="text-base font-normal text-slate-500">/100</span>
@@ -107,7 +107,7 @@ export function TrustCenterClient() {
                   <p className="mt-1 text-sm font-medium text-slate-700">{model.utsBandLabel}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-wide text-slate-500">Perfil KIS</p>
+                  <p className="kuteka-detail-micro">Perfil KIS</p>
                   <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
                     {formatCompleteness(model.completeness)}
                   </p>
