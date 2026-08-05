@@ -160,6 +160,24 @@ export {
 } from './finance';
 
 export {
+  MARKETPLACE_ORDER_STATUSES,
+  MARKETPLACE_PROVIDER_CATEGORIES,
+  marketplaceCreateOrderSchema,
+  marketplaceSubmitQuoteSchema,
+  marketplaceOrderIdSchema,
+  marketplacePayOrderSchema,
+  marketplaceCancelOrderSchema,
+  marketplaceRateOrderSchema,
+  type MarketplaceOrderStatus,
+  type MarketplaceCreateOrderInput,
+  type MarketplaceSubmitQuoteInput,
+  type MarketplaceOrderIdInput,
+  type MarketplacePayOrderInput,
+  type MarketplaceCancelOrderInput,
+  type MarketplaceRateOrderInput,
+} from './marketplace';
+
+export {
   CONTRACT_PURPOSES,
   CONTRACT_STATUSES,
   createPropertyContractSchema,
