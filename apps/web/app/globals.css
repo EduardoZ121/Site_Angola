@@ -16,7 +16,7 @@ body {
 }
 
 body {
-  @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-50;
+  @apply bg-white text-slate-900 antialiased;
 }
 
 /* Landing hero entrance — ≤250ms, staggered (PASSO 1 / 1A) */
@@ -226,6 +226,8 @@ body {
 
 .kuteka-glass {
   border-radius: 0.625rem;
+  color: #0f172a;
+  color-scheme: light;
 }
 
 .kuteka-glass-chrome {
@@ -303,7 +305,7 @@ body {
   --kuteka-detail-bg: #fffdf8;
   --kuteka-detail-ink: #0f172a;
   --kuteka-detail-muted: #334155;
-  --kuteka-detail-label: #92400e;
+  --kuteka-detail-label: #78350f;
   --kuteka-detail-accent: #b45309;
   --kuteka-detail-accent-soft: #fef3c7;
   --kuteka-detail-line: #e7e5e4;
@@ -318,6 +320,91 @@ body {
     0 1px 0 rgba(255, 255, 255, 0.85) inset,
     0 14px 36px rgba(2, 6, 23, 0.28);
   color: var(--kuteka-detail-ink);
+  color-scheme: light;
+}
+
+/*
+ * Fortress: light app surfaces must stay AA-readable even if `.dark` lands on <html>
+ * (system preference / stale localStorage). Atmosphere stays dark; panels stay ink-on-cream.
+ */
+.kuteka-glass :is(h1, h2, h3, h4, h5, h6),
+.kuteka-detail-panel :is(h1, h2, h3, h4, h5, h6),
+.kuteka-account-panel :is(h1, h2, h3, h4, h5, h6),
+.kuteka-app-surface :is(h1, h2, h3, h4, h5, h6) {
+  color: #0f172a !important;
+}
+
+/* Pale Tailwind ink utilities — never near-white on cream panels */
+.kuteka-glass
+  :is(
+    .text-slate-600,
+    .text-slate-500,
+    .text-slate-400,
+    .text-slate-300,
+    .text-slate-200,
+    .text-slate-100
+  ),
+.kuteka-detail-panel
+  :is(
+    .text-slate-600,
+    .text-slate-500,
+    .text-slate-400,
+    .text-slate-300,
+    .text-slate-200,
+    .text-slate-100
+  ),
+.kuteka-app-surface
+  :is(
+    .text-slate-600,
+    .text-slate-500,
+    .text-slate-400,
+    .text-slate-300,
+    .text-slate-200,
+    .text-slate-100
+  ),
+.kuteka-account-panel
+  :is(
+    .text-slate-600,
+    .text-slate-500,
+    .text-slate-400,
+    .text-slate-300,
+    .text-slate-200,
+    .text-slate-100
+  ) {
+  color: #334155 !important;
+}
+
+.kuteka-glass :is(input, select, textarea),
+.kuteka-detail-panel :is(input, select, textarea),
+.kuteka-account-panel :is(input, select, textarea),
+.kuteka-app-main
+  :is(
+    input:not([type='checkbox']):not([type='radio']):not([type='hidden']):not([type='submit']):not(
+        [type='button']
+      ):not([type='reset']),
+    select,
+    textarea
+  ) {
+  color: #0f172a !important;
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color-scheme: light;
+  -webkit-text-fill-color: #0f172a;
+}
+
+.kuteka-glass :is(input, select, textarea)::placeholder,
+.kuteka-detail-panel :is(input, select, textarea)::placeholder,
+.kuteka-app-main :is(input, textarea)::placeholder {
+  color: #57534e !important;
+  opacity: 1;
+  -webkit-text-fill-color: #57534e;
+}
+
+.kuteka-glass option,
+.kuteka-detail-panel option,
+.kuteka-app-main option {
+  color: #0f172a;
+  background-color: #ffffff;
 }
 
 .kuteka-detail-eyebrow {
@@ -644,12 +731,13 @@ body {
 }
 
 .kuteka-account-role--active {
-  background: #08263f;
-  color: #fff;
+  background: #fef3c7;
+  color: #08263f;
+  box-shadow: inset 0 0 0 2px #f0a91f;
 }
 
 .kuteka-account-role--active:hover {
-  background: #0b3050;
+  background: #fde68a;
 }
 
 .kuteka-account-item {

@@ -42,12 +42,12 @@ export function SettingsClient() {
         <h2 id="settings-theme" className="kuteka-detail-title">
           {s.theme}
         </h2>
+        <p className="kuteka-detail-body mt-1">
+          A Beta usa painéis claros sobre a atmosfera Kuteka — o tema claro está activo para
+          garantir contraste e legibilidade.
+        </p>
         <ul className="mt-3 flex flex-wrap gap-2">
-          {[s.themeLight, s.themeDark, s.themeSystem].map((label) => (
-            <li key={label} className="kuteka-detail-chip">
-              {label}
-            </li>
-          ))}
+          <li className="kuteka-detail-chip kuteka-detail-chip--accent">{s.themeLight}</li>
         </ul>
       </section>
 

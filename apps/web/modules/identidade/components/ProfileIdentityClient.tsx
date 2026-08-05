@@ -460,7 +460,8 @@ export function ProfileIdentityClient() {
           ? copy.document.pending
           : null;
 
-  const selectClass = 'rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm';
+  const selectClass =
+    'rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900';
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>

@@ -584,7 +584,7 @@ export function ActivatePropertyForm() {
                   onChange={(e) =>
                     setPropertyType(e.target.value as (typeof PROPERTY_TYPES)[number])
                   }
-                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
                 >
                   {PROPERTY_TYPES.map((t) => (
                     <option key={t} value={t}>
@@ -599,7 +599,7 @@ export function ActivatePropertyForm() {
                   id="purpose"
                   value={purpose}
                   onChange={(e) => setPurpose(e.target.value as (typeof PROPERTY_PURPOSES)[number])}
-                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
                 >
                   {PROPERTY_PURPOSES.map((p) => (
                     <option key={p} value={p}>
@@ -672,7 +672,7 @@ export function ActivatePropertyForm() {
                   id="management"
                   value={managementLevel}
                   onChange={(e) => setManagementLevel(e.target.value as ManagementLevel)}
-                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                  className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
                 >
                   {MANAGEMENT_LEVELS.map((level) => (
                     <option key={level} value={level}>
@@ -699,7 +699,7 @@ export function ActivatePropertyForm() {
                         e.target.value as (typeof CONSTRUCTION_STATUSES)[number],
                       )
                     }
-                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
                   >
                     {CONSTRUCTION_STATUSES.map((s) => (
                       <option key={s} value={s}>
@@ -716,7 +716,7 @@ export function ActivatePropertyForm() {
                     onChange={(e) =>
                       setUnfinishedIntent(e.target.value as (typeof UNFINISHED_INTENTS)[number])
                     }
-                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
                   >
                     {UNFINISHED_INTENTS.map((s) => (
                       <option key={s} value={s}>
@@ -856,7 +856,7 @@ export function ActivatePropertyForm() {
                     onChange={(e) =>
                       setConservationState(e.target.value as (typeof CONSERVATION_STATES)[number])
                     }
-                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
                   >
                     {CONSERVATION_STATES.map((s) => (
                       <option key={s} value={s}>

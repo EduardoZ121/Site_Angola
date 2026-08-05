@@ -60,11 +60,14 @@ export function PartnerLifecyclePanel() {
         </p>
       </div>
 
-      <div className="flex flex-wrap gap-3 text-sm">
-        <span className="rounded-kuteka border border-slate-200 bg-white px-3 py-1.5">
-          KID: <span className="font-mono">{profile?.kid ?? 'Atribuído após verificação'}</span>
+      <div className="flex flex-wrap gap-3 text-sm text-slate-900">
+        <span className="rounded-kuteka border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-900">
+          KID:{' '}
+          <span className="font-mono text-slate-800">
+            {profile?.kid ?? 'Atribuído após verificação'}
+          </span>
         </span>
-        <span className="rounded-kuteka border border-slate-200 bg-white px-3 py-1.5">
+        <span className="rounded-kuteka border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-900">
           Categoria:{' '}
           {PARTNER_CATEGORY_LABELS[profile?.partner_category ?? ''] ??
             profile?.partner_category ??
