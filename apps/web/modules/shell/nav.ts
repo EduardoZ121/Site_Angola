@@ -29,6 +29,7 @@ export type ShellNavLabelKey =
   | 'mudanca'
   | 'encontrar'
   | 'concierge'
+  | 'garantia'
   | 'servicos'
   | 'planos';
 
@@ -247,6 +248,20 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'client',
       'client_partner',
       'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
+  },
+  {
+    id: 'garantia',
+    labelKey: 'garantia',
+    href: '/app/garantia',
+    status: 'active',
+    experiences: [
+      'client',
+      'patrimonial_partner',
+      'client_partner',
       'administrator',
       'super_administrator',
     ],

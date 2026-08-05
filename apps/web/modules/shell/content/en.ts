@@ -116,6 +116,7 @@ export const shellCopyEn: ShellCopy = {
     mudanca: 'Smart Move',
     encontrar: 'Find a Home',
     concierge: 'Concierge',
+    garantia: 'Kuteka Guarantee',
     servicos: 'Providers',
     planos: 'Partner Plans',
   },

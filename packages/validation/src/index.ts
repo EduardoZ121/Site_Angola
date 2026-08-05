@@ -237,6 +237,21 @@ export {
 } from './concierge';
 
 export {
+  GARANTIA_STATUSES,
+  GARANTIA_EVENT_TYPES,
+  garantiaCreateSchema,
+  garantiaSubscriptionIdSchema,
+  garantiaCancelSchema,
+  garantiaPaymentStatusSchema,
+  type GarantiaStatus,
+  type GarantiaEventType,
+  type GarantiaCreateInput,
+  type GarantiaSubscriptionIdInput,
+  type GarantiaCancelInput,
+  type GarantiaPaymentStatusInput,
+} from './garantia';
+
+export {
   CONTRACT_PURPOSES,
   CONTRACT_STATUSES,
   createPropertyContractSchema,
