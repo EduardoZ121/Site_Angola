@@ -276,33 +276,29 @@ Prioridade orientada a **versão comercial pronta para lançamento** (não a exp
 
 ---
 
-## 6. Caminho mais eficiente até versão comercial lançável
+## 6. Caminho mais eficiente — mapeado a versões comerciais
 
-Não construir novos módulos de negócio agora. Sequência recomendada (**Fase de Consolidação Comercial**):
+Não construir novos módulos fora da versão activa. Sequência = **KOS go-live + versões**:
 
 ```mermaid
 flowchart LR
-  A[Auditoria Master ✓] --> B[Legal + Go-live hardening]
-  B --> C[Gateway real Multicaixa/EMIS]
-  C --> D[Pay em produção nos D1–D5 + Marketplace]
-  D --> E[Notificações + Confiança upload]
-  E --> F[Beta pública controlada]
-  F --> G[AGT/SAF-T + payouts]
-  G --> H[Próxima grande fase produto]
+  A[Roadmap + KOS ✓] --> B[v1.0 Beta]
+  B --> C[v1.5 Pay real]
+  C --> D[v2.0 KAI / i18n]
+  D --> E[v3.0 Ecossistema]
 ```
 
-| Etapa  | Objectivo                       | Critério de saída                                                                     |
-| ------ | ------------------------------- | ------------------------------------------------------------------------------------- |
-| **C0** | Congelar visão (este documento) | PO valida categorias e %                                                              |
-| **C1** | Legal + go-live checklist       | Termos/Privacidade; demos banidos; E2E smoke                                          |
-| **C2** | Kuteka Pay produção             | 1 gateway AO a cobrar e reconciliar                                                   |
-| **C3** | Activar monetização existente   | D1–D5 + `/app/servicos` + planos com dinheiro real                                    |
-| **C4** | Operação mínima                 | Email transaccional; upload Confiança; SLAs com cron                                  |
-| **C5** | Beta pública                    | Utilizadores reais; Super Admin a operar preços                                       |
-| **C6** | Compliance + payouts            | Exports AGT; payouts prestadores                                                      |
-| **C7** | Nova fase produto               | Só então: Passaporte produto, Academia, marketplaces setoriais, ou Escrow se aprovado |
+| Etapa antiga          | Versão   | Objectivo                       | Critério de saída                              |
+| --------------------- | -------- | ------------------------------- | ---------------------------------------------- |
+| **C0**                | —        | Congelar visão (Master + KOS)   | PO valida                                      |
+| **C1 + C5**           | **v1.0** | Beta pública controlada         | KOS §8; demos off; suporte; SLA comercial      |
+| **C2–C4**             | **v1.5** | Receita real + operação estável | Gateway AO; recon; notificações; SLA ≥ 90%     |
+| **C6 + profundidade** | **v2.0** | Escala inteligente              | KAI preditivo; marketplace maduro; i18n; AGT   |
+| **C7**                | **v3.0** | Ecossistema                     | API; white label; expansão; escrow se aprovado |
 
-**Eficiência:** cada serviço D1–D5 e o marketplace **já** falam com Kuteka Pay. Ligar o gateway uma vez desbloqueia a maior parte da receita desenhada — sem reescrever módulos.
+**Eficiência:** D1–D5 e marketplace **já** falam com Kuteka Pay. Ligar o gateway em **v1.5** desbloqueia receita sem reescrever módulos.
+
+**Trilogia:** Arquitectura Financeira (negócio) · este Roadmap (plataforma) · [KOS](./KUTEKA_OPERATING_SYSTEM.md) (empresa).
 
 ---
 
@@ -320,16 +316,17 @@ flowchart LR
 
 ## 8. Referências canónicas
 
-| Documento                                                                       | Uso                                                                            |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| [ARQUITETURA_FINANCEIRA_KUTEKA.md](../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md) | Filosofia financeira v1.0                                                      |
-| [docs/finance/README.md](../finance/README.md)                                  | Ordem Fases A–E / D1–D5                                                        |
-| [KUTEKA_PLATFORM_CORE_V1.md](./KUTEKA_PLATFORM_CORE_V1.md)                      | Congelamento Core                                                              |
-| [CORE_V1_MATURITY_REPORT.md](../backlog/CORE_V1_MATURITY_REPORT.md)             | Maturidade Core                                                                |
-| [GO_LIVE_CHECKLIST.md](../backlog/GO_LIVE_CHECKLIST.md)                         | Checklist beta (parcialmente desactualizado pós-finanças — actualizar após C1) |
-| [MANUAL_VS_PLATFORM.md](../engineering/MANUAL_VS_PLATFORM.md)                   | PDK / ICK / Saúde                                                              |
-| ADRs `001`–`024`                                                                | Decisões por módulo                                                            |
-| Migrations `0001`–`0028`                                                        | Schema efectivo                                                                |
+| Documento                                                                       | Uso                                                 |
+| ------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [ARQUITETURA_FINANCEIRA_KUTEKA.md](../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md) | Filosofia financeira v1.0                           |
+| [docs/finance/README.md](../finance/README.md)                                  | Ordem Fases A–E / D1–D5                             |
+| [KUTEKA_PLATFORM_CORE_V1.md](./KUTEKA_PLATFORM_CORE_V1.md)                      | Congelamento Core                                   |
+| [CORE_V1_MATURITY_REPORT.md](../backlog/CORE_V1_MATURITY_REPORT.md)             | Maturidade Core                                     |
+| [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md)                      | Operação empresarial + versões comerciais v1.0–v3.0 |
+| [GO_LIVE_CHECKLIST.md](../backlog/GO_LIVE_CHECKLIST.md)                         | Checklist beta (alinhar a KOS §8)                   |
+| [MANUAL_VS_PLATFORM.md](../engineering/MANUAL_VS_PLATFORM.md)                   | PDK / ICK / Saúde                                   |
+| ADRs `001`–`024`                                                                | Decisões por módulo                                 |
+| Migrations `0001`–`0028`                                                        | Schema efectivo                                     |
 
 ---
 
@@ -338,5 +335,6 @@ flowchart LR
 | Versão | Data       | Notas                                                                         |
 | ------ | ---------- | ----------------------------------------------------------------------------- |
 | 1.0    | 2026-08-05 | Primeira consolidação pós–Fase D5; auditoria demo vs comercial; caminho C0–C7 |
+| 1.1    | 2026-08-05 | Ligação ao KOS; caminho remapeado para versões comerciais v1.0–v3.0           |
 
-**Próxima revisão:** após decisão PO sobre a próxima grande fase (pós–C0) ou após activação do primeiro gateway real (C2).
+**Próxima revisão:** ao declarar **Kuteka v1.0 Beta** ou após o primeiro gateway real (**v1.5**).
