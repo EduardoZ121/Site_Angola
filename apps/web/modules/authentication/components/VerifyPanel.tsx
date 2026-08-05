@@ -1,12 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Button, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { getAuthCopy } from '../content';
-import { resendVerification } from '../services/auth-client';
+import {
+  issueEmailVerificationOtp,
+  resendVerification,
+  verifyEmailOtpCode,
+} from '../services/auth-client';
 import { applyDestinationGate } from '../lib/destination-gate';
 
 const COOLDOWN_SECONDS = 60;
@@ -20,6 +24,7 @@ function maskEmail(email: string): string {
 
 export function VerifyPanel() {
   const copy = getAuthCopy();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') ?? '';
   const next = searchParams.get('next');
@@ -29,6 +34,10 @@ export function VerifyPanel() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [challengeId, setChallengeId] = useState<string | null>(null);
+  const [sandboxHint, setSandboxHint] = useState<string | null>(null);
+  const [verifying, setVerifying] = useState(false);
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -41,14 +50,48 @@ export function VerifyPanel() {
     setLoading(true);
     setError(null);
     setMessage(null);
-    const result = await resendVerification({ email });
+    setSandboxHint(null);
+
+    const otpIssue = await issueEmailVerificationOtp({ email });
+    if (!otpIssue.ok) {
+      const fallback = await resendVerification({ email });
+      setLoading(false);
+      if (!fallback.ok) {
+        setError(fallback.message);
+        return;
+      }
+      setMessage(copy.verify.resendSuccess);
+      setCooldown(COOLDOWN_SECONDS);
+      return;
+    }
+
     setLoading(false);
+    if (otpIssue.data.challengeId) setChallengeId(otpIssue.data.challengeId);
+    if (otpIssue.data.sandboxCode) {
+      setSandboxHint(copy.verify.sandboxHint.replace('{code}', otpIssue.data.sandboxCode));
+    }
+    setMessage(copy.verify.resendSuccess);
+    setCooldown(COOLDOWN_SECONDS);
+  }
+
+  async function onVerifyOtp(e: FormEvent) {
+    e.preventDefault();
+    if (!email || otp.replace(/\D/g, '').length !== 6) return;
+    setVerifying(true);
+    setError(null);
+    const result = await verifyEmailOtpCode({ email, code: otp, challengeId });
+    setVerifying(false);
     if (!result.ok) {
       setError(result.message);
       return;
     }
-    setMessage(copy.verify.resendSuccess);
-    setCooldown(COOLDOWN_SECONDS);
+    const ctaHref = applyDestinationGate({
+      hasSession: true,
+      emailVerified: true,
+      roleCodes: [],
+      next,
+    });
+    router.push(ctaHref);
   }
 
   if (already) {
@@ -84,6 +127,8 @@ export function VerifyPanel() {
         </p>
       ) : null}
 
+      <p className="text-sm leading-relaxed text-slate-300">{copy.verify.dualHint}</p>
+
       {message ? (
         <div
           className="rounded-kuteka border border-emerald-400/35 bg-emerald-500/15 px-3.5 py-3 text-sm text-emerald-50"
@@ -92,11 +137,52 @@ export function VerifyPanel() {
           {message}
         </div>
       ) : null}
+      {sandboxHint ? (
+        <div
+          className="rounded-kuteka border border-amber-400/35 bg-amber-500/15 px-3.5 py-3 text-sm text-amber-50"
+          role="status"
+        >
+          {sandboxHint}
+        </div>
+      ) : null}
       {error ? (
         <div className="auth-alert" role="alert">
           {error}
         </div>
       ) : null}
+
+      <form onSubmit={onVerifyOtp} className="flex flex-col gap-3">
+        <label htmlFor="verify-otp" className="auth-label">
+          {copy.verify.otpLabel}
+        </label>
+        <input
+          id="verify-otp"
+          className="auth-field tracking-[0.4em]"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          maxLength={6}
+          placeholder={copy.verify.otpPlaceholder}
+          value={otp}
+          onChange={(ev) => setOtp(ev.target.value.replace(/\D/g, '').slice(0, 6))}
+          disabled={!email}
+        />
+        <Button
+          type="submit"
+          variant="primary"
+          className="min-h-12 w-full"
+          size="lg"
+          loading={verifying}
+          disabled={verifying || !email || otp.length !== 6}
+        >
+          {copy.verify.otpSubmit}
+        </Button>
+      </form>
+
+      <div className="relative py-1 text-center text-xs uppercase tracking-wide text-slate-500">
+        <span>{copy.verify.orLink}</span>
+      </div>
+
+      <p className="text-center text-sm text-slate-400">{copy.verify.linkHint}</p>
 
       <Button
         type="button"

@@ -279,6 +279,12 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       icon: 'docs',
     },
     {
+      href: '/app/centro-seguranca',
+      label: shell.items.centroSeguranca,
+      hint: 'Email, telefone, sessões e nível de segurança',
+      icon: 'docs',
+    },
+    {
       href: '/auth/onboarding/papeis',
       label: shell.userMenu.roles,
       hint: shell.userMenu.rolesHint,

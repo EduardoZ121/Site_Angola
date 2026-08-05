@@ -107,6 +107,7 @@ export const shellCopyPt = {
     agente: 'Agente',
     confianca: 'Confiança',
     centroConfianca: 'Centro de Confiança',
+    centroSeguranca: 'Centro de Segurança',
     contratos: 'Contratos',
     relatorios: 'Relatórios',
     conta: 'Conta',
