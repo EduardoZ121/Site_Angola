@@ -149,6 +149,7 @@ cancelled | failed`; timeline append-only em `assistencia_events`.
 
 As fases comerciais restantes e a Fase E assentam sobre A/B/C/D1–D5.
 
-**Visão global da plataforma (pós–Fase D):**  
-[KUTEKA ROADMAP MASTER](../product/KUTEKA_ROADMAP_MASTER.md) — concluído N5,
-parcial, pendente, melhorias futuras e auditoria demo vs comercial.
+**Visão global (pós–Fase D):**  
+[KUTEKA ROADMAP MASTER](../product/KUTEKA_ROADMAP_MASTER.md) — plataforma.  
+[KUTEKA OPERATING SYSTEM (KOS)](../product/KUTEKA_OPERATING_SYSTEM.md) — operação
+empresarial e versões comerciais **v1.0 → v3.0**.

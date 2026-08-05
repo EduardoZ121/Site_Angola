@@ -2,12 +2,13 @@
 
 | Campo        | Valor                                                                                                     |
 | ------------ | --------------------------------------------------------------------------------------------------------- |
-| **Versão**   | 1.0                                                                                                       |
+| **Versão**   | 1.1                                                                                                       |
 | **Data**     | 2026-08-05                                                                                                |
-| **Estado**   | Auditoria de maturidade pós–Fase D (primeiro conjunto comercial)                                          |
+| **Estado**   | Auditoria de maturidade pós–Fase D + alinhamento a versões comerciais                                     |
 | **Produção** | https://kutekalink.com                                                                                    |
 | **Repo**     | EduardoZ121/Site_Angola · branch `main`                                                                   |
 | **Fontes**   | Core v1.0 · ADRs 001–024 · Arquitectura Financeira v1.0 · migrations `0001`–`0028` · código em `apps/web` |
+| **Operação** | [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md) (KOS) — empresa diária + versões v1.0–v3.0     |
 
 ---
 
@@ -25,7 +26,16 @@ A **Fase D do roadmap financeiro** (primeiro conjunto de serviços comerciais so
 
 **Princípio aprovado (PO 2026-08-05):** B2B2C · núcleo gratuito · pay-per-use · Plus opcional · `custody_mode = none` · sem wallet/escrow nesta fase · Super Admin parametriza preços · Ledger-first · um só caminho de pagamento (Kuteka Pay).
 
-**Próxima decisão de produto:** não abrir novos módulos de negócio até consolidar a visão deste documento e escolher a próxima grande fase (recomendação na §6).
+**Metodologia (a partir de 2026-08-05):** deixar de priorizar “fechar todos os módulos”. Passar a **versões comerciais** — ver KOS §10 e §6 abaixo:
+
+| Versão        | Foco                                     |
+| ------------- | ---------------------------------------- |
+| **v1.0** Beta | Go-live + operação mínima                |
+| **v1.5**      | Pagamentos reais + SLA estável           |
+| **v2.0**      | KAI + marketplace maduro + i18n          |
+| **v3.0**      | Ecossistema (API, white label, expansão) |
+
+**Próxima decisão de produto:** validar Roadmap Master + KOS e declarar início oficial de **Kuteka v1.0 Beta** (checklist KOS §8).
 
 ---
 
