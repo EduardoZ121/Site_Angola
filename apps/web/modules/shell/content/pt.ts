@@ -110,6 +110,8 @@ export const shellCopyPt = {
     relatorios: 'Relatórios',
     conta: 'Conta',
     admin: 'Administração',
+    super: 'Super Admin',
+    financeiro: 'Financeiro',
   },
   routeBlocked: {
     title: 'Área indisponível neste papel',

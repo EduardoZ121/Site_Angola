@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { StakeholderStubPage } from '@/modules/ops/components/StakeholderStubPage';
+import { FinanceHubClient } from '@/modules/finance/components/FinanceHubClient';
 
 export const metadata: Metadata = {
   title: 'Financeiro',
@@ -7,18 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function FinanceiroPage() {
-  return (
-    <StakeholderStubPage
-      eyebrow="Financeiro"
-      title="Painel financeiro"
-      subtitle="Pagamentos, rendas previstas, atrasos, comissões e previsões de caixa."
-      bullets={[
-        'Pagamentos recebidos e futuros',
-        'Rendas previstas e em atraso',
-        'Comissões Kuteka e agentes',
-        'Impostos e previsões de caixa',
-        'Ligação ao cockpit do Parceiro e Admin',
-      ]}
-    />
-  );
+  return <FinanceHubClient />;
 }

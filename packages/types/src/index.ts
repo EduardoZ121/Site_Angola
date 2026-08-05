@@ -18,6 +18,8 @@ export type PermissionCode =
   | 'agent.operate'
   | 'trust.manage'
   | 'contracts.manage'
+  | 'finance.manage'
+  | 'finance.read'
   | (string & {});
 
 export type TrustDocType = 'identity' | 'proof_of_address' | 'property_title' | 'agent_credential';

@@ -203,6 +203,29 @@ function IconOffer({ className }: IconProps) {
   );
 }
 
+function IconSuper({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M10 2.5 12.2 7l4.8.7-3.5 3.4.8 4.8L10 13.8 5.7 15.9l.8-4.8L3 7.7 7.8 7 10 2.5Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function IconFinance({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <rect x="3" y="5" width="14" height="10" rx="1.5" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3 8.5h14" stroke="currentColor" strokeWidth="1.4" />
+      <circle cx="13.5" cy="12" r="1.2" fill="currentColor" />
+    </svg>
+  );
+}
+
 const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   home: IconHome,
   explorar: IconSearch,
@@ -220,6 +243,8 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   relatorios: IconChart,
   conta: IconUser,
   admin: IconAdmin,
+  super: IconSuper,
+  financeiro: IconFinance,
 };
 
 export function NavIcon({

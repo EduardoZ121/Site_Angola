@@ -23,7 +23,9 @@ export type ShellNavLabelKey =
   | 'contratos'
   | 'relatorios'
   | 'conta'
-  | 'admin';
+  | 'admin'
+  | 'super'
+  | 'financeiro';
 
 export type ShellNavItem = {
   id: string;
@@ -190,6 +192,30 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     requiresPermission: 'admin.panel',
     experiences: ['administrator', 'super_administrator'],
     group: 'admin',
+  },
+  {
+    id: 'super',
+    labelKey: 'super',
+    href: '/app/super',
+    status: 'active',
+    requiresPermission: 'finance.manage',
+    experiences: ['super_administrator'],
+    group: 'admin',
+  },
+  {
+    id: 'financeiro',
+    labelKey: 'financeiro',
+    href: '/app/financeiro',
+    status: 'active',
+    experiences: [
+      'client',
+      'patrimonial_partner',
+      'client_partner',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
+    group: 'geral',
   },
   {
     id: 'conta',
