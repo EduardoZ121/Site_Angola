@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { ProfileIdentityClient } from '@/modules/identidade/components/ProfileIdentityClient';
 
 export const metadata: Metadata = {
@@ -7,5 +8,13 @@ export const metadata: Metadata = {
 };
 
 export default function PerfilPage() {
-  return <ProfileIdentityClient />;
+  return (
+    <Suspense
+      fallback={
+        <div className="kuteka-detail-panel p-5 text-sm text-slate-600">A carregar KIS…</div>
+      }
+    >
+      <ProfileIdentityClient />
+    </Suspense>
+  );
 }
