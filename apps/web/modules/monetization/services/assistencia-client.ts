@@ -16,8 +16,8 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
 
 const copy = {
-  loadError: 'Não foi possível carregar os pedidos de Assistência 24h.',
-  actionError: 'Não foi possível concluir a acção.',
+  loadError: 'Estamos a ter dificuldade em mostrar a Assistência 24h. Tente novamente.',
+  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
 };
 
 export type AssistenciaRequestDetail = {

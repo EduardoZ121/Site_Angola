@@ -15,9 +15,9 @@ export const contratosCopyPt = {
     'Quando Confiança e Administração validarem as partes, prepare o primeiro contrato para seguir para Pagamentos.',
   emptyDemo:
     'Se a base estiver vazia, execute a migration PRD-008 para carregar contratos demo KTK-CTR.',
-  loadError: 'Não foi possível carregar Contratos. Tente novamente.',
-  saveError: 'Não foi possível preparar o contrato. Verifique os dados e tente novamente.',
-  transitionError: 'Não foi possível actualizar o contrato. Tente novamente.',
+  loadError: 'Estamos a ter dificuldade em mostrar os contratos. Tente novamente.',
+  saveError: 'Não conseguimos preparar o contrato. Verifique os dados e tente novamente.',
+  transitionError: 'Não conseguimos actualizar o contrato. Tente novamente.',
   forbidden:
     'A área Contratos fica disponível quando a sua conta tem o papel adequado (Cliente, Parceiro, Agente ou Admin).',
   kycRequired:

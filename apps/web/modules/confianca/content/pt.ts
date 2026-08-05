@@ -31,8 +31,8 @@ export const confiancaCopyPt = {
   reviewed: 'Revisão registada.',
   rejectionReasonLabel: 'Motivo da rejeição',
   rejectionReasonPlaceholder: 'Explique o que falta ou está incorrecto.',
-  loadError: 'Não foi possível carregar a Confiança. Tente novamente.',
-  saveError: 'Não foi possível submeter. Tente novamente.',
+  loadError: 'Estamos a ter dificuldade em mostrar a Confiança. Tente novamente.',
+  saveError: 'Não conseguimos submeter agora. Tente novamente.',
   forbidden: 'Não tem permissão para gerir a Confiança (trust.manage).',
   reviewForbidden: 'Não tem permissão para rever submissões (admin.panel).',
   mvpNote:

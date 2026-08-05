@@ -385,7 +385,15 @@ body {
 }
 
 .kuteka-detail-panel .text-slate-500,
-.kuteka-detail-panel .text-slate-400 {
+.kuteka-detail-panel .text-slate-400,
+.kuteka-glass .text-slate-500,
+.kuteka-glass .text-slate-400 {
+  color: #44403c !important; /* stone-700 — readable labels on cream/glass */
+}
+
+/* App light surfaces: micro-labels and helpers must stay AA */
+.kuteka-app-surface .text-slate-500,
+.kuteka-app-surface .text-slate-400 {
   color: #44403c !important;
 }
 

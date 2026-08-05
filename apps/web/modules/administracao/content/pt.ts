@@ -32,7 +32,7 @@ export const administracaoCopyPt = {
     contractsActive: 'Contratos activos',
     contractsPending: 'Contratos pendentes',
   },
-  loadError: 'Não foi possível carregar a Administração. Tente novamente.',
+  loadError: 'Estamos a ter dificuldade em mostrar a Administração. Tente novamente.',
   forbidden: 'Não tem permissão para aceder à Administração (admin.panel).',
   mvpNote:
     'Dashboard vivo: navegue para utilizadores, revisão de Confiança e inventário do Cliente.',

@@ -23,8 +23,8 @@ import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-ga
  */
 
 const copy = {
-  loadError: 'Não foi possível carregar os pedidos de procura.',
-  actionError: 'Não foi possível concluir a acção.',
+  loadError: 'Estamos a ter dificuldade em mostrar os pedidos de procura. Tente novamente.',
+  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
 };
 
 export type FindHomeRequestDetail = {

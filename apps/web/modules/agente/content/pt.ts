@@ -19,8 +19,8 @@ export const agenteCopyPt = {
   requestAgent: 'Pedir activação (contacto)',
   requestAgentHint:
     'O papel Agente Certificado é atribuído pela Administração. Contacte a Kuteka ou continue a explorar a demonstração.',
-  loadError: 'Não foi possível carregar a área Agente. Tente novamente.',
-  saveError: 'Não foi possível guardar. Tente novamente.',
+  loadError: 'Estamos a ter dificuldade em mostrar a área Agente. Tente novamente.',
+  saveError: 'Não conseguimos guardar. Tente novamente.',
   forbidden: 'Não tem permissão de Agente Certificado.',
   exploreTitle: 'Inventário activo',
   exploreSubtitle: 'Patrimónios disponíveis para acompanhamento responsável no terreno.',

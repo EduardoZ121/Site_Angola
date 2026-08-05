@@ -144,7 +144,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
         setFormError(
           error.message.includes('duplicate') || error.code === '23505'
             ? 'Já avaliou este assunto neste contrato.'
-            : 'Não foi possível guardar a avaliação.',
+            : 'Não conseguimos guardar a avaliação. Tente novamente.',
         );
       } else {
         setFormOk('Avaliação registada.');
@@ -152,7 +152,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
         await fetchReviews();
       }
     } catch {
-      setFormError('Não foi possível guardar a avaliação.');
+      setFormError('Não conseguimos guardar a avaliação. Tente novamente.');
     }
     setSubmitting(false);
   }

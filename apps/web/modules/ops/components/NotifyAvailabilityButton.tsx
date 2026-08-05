@@ -37,7 +37,9 @@ export function NotifyAvailabilityButton({ propertyId }: { propertyId: string })
         {status === 'ok' ? 'Notificação activada' : 'Notificar quando ficar disponível'}
       </button>
       {status === 'error' ? (
-        <p className="kuteka-detail-meta">Não foi possível activar a notificação.</p>
+        <p className="kuteka-detail-meta">
+          Não conseguimos activar a notificação. Tente novamente.
+        </p>
       ) : null}
     </div>
   );

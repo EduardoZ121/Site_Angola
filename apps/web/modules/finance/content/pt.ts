@@ -5,7 +5,7 @@ export function getFinanceCopy() {
       'Motor financeiro Kuteka: receita, catálogo, preços, créditos, reembolsos, disputas, reconciliação, fraude, KAI, CRM e exportações. Infraestrutura transversal, sem custódia de fundos.',
     eyebrow: 'Revenue Command Center',
     forbidden: 'Apenas Super Administrador (finance.manage) acede a este painel.',
-    loadError: 'Não foi possível carregar o centro financeiro.',
+    loadError: 'Estamos a ter dificuldade em mostrar o centro financeiro. Tente novamente.',
     sections: {
       revenue: 'Receita',
       products: 'Catálogo',
