@@ -46,7 +46,26 @@ transversal** — genérica e reutilizável, sem soluções isoladas e sem cust�
     activo nesta fase; trocar de gateway é configuração, não código de módulo).
   - Super Admin: novo separador **Kuteka Pay** (saúde de adaptadores, simular
     webhook, gateway por omissão).
-- **Fase C — Gateways reais + custódia/escrow opcional e automação de payouts.**
-- **Fase D — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
+- **Fase C — Marketplace Operacional (esta entrega)**
+  - Migration: `supabase/migrations/0023_marketplace_ops.sql`
+  - ADR: `docs/architecture/ADR-019-marketplace-ops.md`
+  - Fecha o ciclo do prestador: pedido → orçamento → aceitação → execução →
+    **pagamento via Kuteka Pay** → avaliação → **comissão no Ledger** → SLA →
+    histórico. Nenhum caminho de pagamento isolado.
+  - `service_orders` ganha orçamento, SLA e avaliação; `service_order_events` é a
+    timeline append-only.
+  - RPCs `marketplace_create_order`, `marketplace_submit_quote`,
+    `marketplace_accept_quote`, `marketplace_start_order`,
+    `marketplace_complete_order`, `marketplace_pay_order`,
+    `marketplace_cancel_order`, `marketplace_rate_order`,
+    `marketplace_check_slas`, `marketplace_my_context`,
+    `marketplace_list_providers`.
+  - `kuteka_pay_create_intent` ganha `p_amount_override` (genérico) para cobrar o
+    valor negociado mantendo o intent como fonte de verdade.
+  - Produto genérico `marketplace.service` (valor real via override do orçamento).
+  - UI `/app/servicos` por separadores: Prestadores | Os meus pedidos | Pedidos
+    recebidos. Prestadores demo operáveis por `demo.parceiro` ou `finance.manage`.
+- **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
+- **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases C/D assentam sobre a fundação das Fases A/B e só arrancam depois destas.
+As Fases D/E assentam sobre a fundação das Fases A/B/C e só arrancam depois destas.

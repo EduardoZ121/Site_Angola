@@ -22,6 +22,38 @@ export const PROVIDER_CATEGORIES = [
   { value: 'other', label: 'Outros' },
 ] as const;
 
+export type OrderStatus =
+  'requested' | 'quoted' | 'accepted' | 'in_progress' | 'completed' | 'cancelled' | 'disputed';
+
+export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+  requested: 'Pedido',
+  quoted: 'Orçamentado',
+  accepted: 'Aceite',
+  in_progress: 'Em execução',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+  disputed: 'Em disputa',
+};
+
+export function orderStatusLabel(status: string): string {
+  return ORDER_STATUS_LABELS[status as OrderStatus] ?? status;
+}
+
+export function orderStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
+  switch (status) {
+    case 'completed':
+      return 'success';
+    case 'cancelled':
+    case 'disputed':
+      return 'danger';
+    case 'requested':
+    case 'quoted':
+      return 'warning';
+    default:
+      return 'default';
+  }
+}
+
 export const PARTNER_PLAN_OPTIONS = [
   {
     code: 'partner.bronze.monthly',

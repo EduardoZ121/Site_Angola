@@ -110,6 +110,7 @@ export async function createIntent(
       p_idempotency_key: parsed.data.idempotencyKey ?? null,
       p_description: parsed.data.description ?? null,
       p_metadata: {},
+      p_amount_override: parsed.data.amountOverride ?? null,
     });
     if (error || !data) return { ok: false, message: error?.message ?? copy.createError };
     const raw = data as Record<string, unknown>;

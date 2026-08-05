@@ -236,6 +236,7 @@ export const kutekaPayCreateIntentSchema = z.object({
   gatewayCode: z.enum(KUTEKA_PAY_ADAPTER_CODES).optional().nullable(),
   idempotencyKey: z.string().trim().min(6).max(120).optional().nullable(),
   description: z.string().trim().max(500).optional().nullable(),
+  amountOverride: z.number().nonnegative().max(100_000_000).optional().nullable(),
 });
 
 export const kutekaPayIntentIdSchema = z.object({
