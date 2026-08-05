@@ -1,23 +1,27 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
-import { Heading, Text } from '@kuteka/ui';
+import { InstitutionalDocument } from '@/modules/institutional/components/InstitutionalDocument';
+import { readPublicDoc } from '@/modules/institutional/lib/read-public-doc';
 
 export const metadata: Metadata = {
-  title: 'Termos de utilização',
-  robots: { index: false, follow: false },
+  title: 'Termos de Utilização · Kuteka',
+  description:
+    'Termos e Condições de Utilização da plataforma Kuteka — direitos, deveres, Kuteka Pay, KIS, contratos e comissões.',
+  robots: { index: true, follow: true },
 };
 
 export default function TermsPage() {
+  const markdown = readPublicDoc('TERMOS_UTILIZACAO_v1.md');
   return (
-    <main className="mx-auto max-w-2xl px-6 py-16">
-      <Heading level={1}>Termos de utilização</Heading>
-      <Text className="mt-4">
-        Documento institucional em preparação. O conteúdo legal oficial será publicado antes do
-        lançamento autenticado.
-      </Text>
-      <Link href="/" className="mt-8 inline-block text-sm text-brand-600 hover:underline">
-        Voltar à Landing
-      </Link>
-    </main>
+    <InstitutionalDocument
+      title="Termos de Utilização"
+      subtitle="Regras de utilização da plataforma Kuteka, papéis, serviços, pagamentos, cancelamentos e responsabilidades."
+      versionNote="Versão 1.0 Beta · Vigência 5 de Agosto de 2026 · kutekalink.com"
+      markdown={markdown}
+      downloads={[
+        { label: 'Descarregar PDF', href: '/docs/TERMOS_UTILIZACAO_v1.pdf' },
+        { label: 'Descarregar Word', href: '/docs/TERMOS_UTILIZACAO_v1.docx' },
+        { label: 'Markdown', href: '/docs/TERMOS_UTILIZACAO_v1.md' },
+      ]}
+    />
   );
 }

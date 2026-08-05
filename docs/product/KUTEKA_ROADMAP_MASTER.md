@@ -111,8 +111,9 @@ Critério: fluxo implementado, migration + ADR (quando aplicável), UI ligada a 
 | **Assistência 24h**                             | Ciclo taxa + ops                                                                                          | Dispatch; integração telefone/WhatsApp                             |
 | **Planos Parceiro**                             | Bronze–Gold activação sandbox                                                                             | Benefícios Platinum profundos; billing real                        |
 | **Lembretes de renda**                          | Tabela + RPC + lista no Hub                                                                               | Notificações push/email/SMS                                        |
-| **Definições / Ajuda**                          | Locale; FAQ fino                                                                                          | Tema/notificações reais; centro de ajuda completo                  |
-| **Termos / Privacidade**                        | Páginas “em preparação”                                                                                   | Textos legais publicados                                           |
+| **Definições / Ajuda**                          | Locale; Manual completo em `/app/ajuda`                                                                   | Tema/notificações reais; vídeos tutoriais                          |
+| **Termos / Privacidade**                        | **v1.0 Beta publicados** (`/termos`, `/privacidade` + PDF/Word)                                           | Revisão jurídica externa recomendada antes de escala               |
+| **Manual / Centro de Ajuda**                    | **Manual v1.0** em `/app/ajuda` + PDF/Word                                                                | Vídeos tutoriais progressivos                                      |
 | **i18n**                                        | Shell pt/en/es/fr                                                                                         | Cobertura total de módulos comerciais                              |
 | **Agente / visitas**                            | Ops reais + fallbacks demo                                                                                | Agenda completa (módulo `agenda` ainda stub)                       |
 
@@ -188,7 +189,7 @@ Prioridade orientada a **versão comercial pronta para lançamento** (não a exp
 | Patrimónios / Habitação / Agente / Admin / Contratos | **Operacional** (com inventário `is_demo` ainda seedado)                      |
 | KYC self-serve + storage documentos                  | **Operacional** (sem vendor eID externo)                                      |
 | Super Admin / Finance Hub / D1–D5 / Marketplace      | **Operacional em sandbox** — ciclos reais de estado; **pagamentos simulados** |
-| Jurídico, Relatórios, Termos/Privacidade             | **Stub / placeholder**                                                        |
+| Jurídico, Relatórios, Termos/Privacidade             | Termos+Privacidade+Manual **publicados**; módulo Jurídico ainda stub          |
 | Contas `demo.*@kuteka.local`                         | **Demo** — remover/banir antes de beta pública                                |
 
 ### 5.2 Integrações externas
@@ -231,13 +232,14 @@ Prioridade orientada a **versão comercial pronta para lançamento** (não a exp
 
 ### 5.6 Decisões jurídicas / regulatórias
 
-| Tema                                        | Estado                                                     |
-| ------------------------------------------- | ---------------------------------------------------------- |
-| Termos de uso + Privacidade                 | Placeholder — **obrigatório** antes de beta pública        |
-| Custódia / escrow                           | Desligado; requer decisão legal explícita                  |
-| KYC / AML                                   | Self-serve; avaliar obrigações se volumes/pagamentos reais |
-| AGT / SAF-T                                 | Fase E documentada; não iniciada                           |
-| Créditos / reembolsos em “moeda plataforma” | Modelo técnico ok; texto legal ao cliente em falta         |
+| Tema                                        | Estado                                                                               |
+| ------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Termos de uso + Privacidade                 | **Publicados v1.0 Beta** (PDF/Word + páginas) — revisão jurídica externa recomendada |
+| Manual do Utilizador / Centro de Ajuda      | **Publicado v1.0 Beta** (`/app/ajuda` + downloads)                                   |
+| Custódia / escrow                           | Desligado; requer decisão legal explícita                                            |
+| KYC / AML                                   | Self-serve; avaliar obrigações se volumes/pagamentos reais                           |
+| AGT / SAF-T                                 | Fase E documentada; não iniciada                                                     |
+| Créditos / reembolsos em “moeda plataforma” | Modelo técnico ok; texto legal ao cliente em falta                                   |
 
 ### 5.7 Percentagens por domínio
 
@@ -270,7 +272,7 @@ Prioridade orientada a **versão comercial pronta para lançamento** (não a exp
 | KAI                            | 35  | Rules only                                     |
 | Wallet / Escrow                | 5   | Hook schema + stub módulo                      |
 | Academia                       | 0   | Docs only                                      |
-| Legal pages / AGT              | 10  | Placeholders                                   |
+| Legal pages / AGT              | 70  | Termos+Privacidade+Manual Beta; AGT pendente   |
 
 **Plataforma (média ponderada produto/schema):** ≈ **62%**.  
 **Prontidão comercial com Kz reais:** ≈ **48%**.
