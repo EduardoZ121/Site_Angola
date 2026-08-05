@@ -2,15 +2,41 @@
 
 import {
   financeCaptureSchema,
+  financeCreateExportSchema,
+  financeCreateRefundSchema,
+  financeFlagFraudSchema,
   financeGrantCreditsSchema,
+  financeInvoicePdfSchema,
+  financeMarkInvoiceEmailedSchema,
+  financeOpenDisputeSchema,
   financeQuoteSchema,
+  financeRedeemCreditsSchema,
+  financeResolveFraudSchema,
+  financeRunReconciliationSchema,
   financeSandboxPaymentSchema,
+  financeSetCommissionSchema,
   financeUpdatePriceRuleSchema,
+  financeUpsertCrmAccountSchema,
+  financeUpsertKaiRuleSchema,
+  financeUpsertProductSchema,
   type FinanceCaptureInput,
+  type FinanceCreateExportInput,
+  type FinanceCreateRefundInput,
+  type FinanceFlagFraudInput,
   type FinanceGrantCreditsInput,
+  type FinanceInvoicePdfInput,
+  type FinanceMarkInvoiceEmailedInput,
+  type FinanceOpenDisputeInput,
   type FinanceQuoteInput,
+  type FinanceRedeemCreditsInput,
+  type FinanceResolveFraudInput,
+  type FinanceRunReconciliationInput,
   type FinanceSandboxPaymentInput,
+  type FinanceSetCommissionInput,
   type FinanceUpdatePriceRuleInput,
+  type FinanceUpsertCrmAccountInput,
+  type FinanceUpsertKaiRuleInput,
+  type FinanceUpsertProductInput,
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { formatAoaAmount } from '../lib/format';
@@ -75,6 +101,9 @@ export type FinanceInvoiceRow = {
   total: number;
   issued_at: string;
   user_id: string;
+  pdf_generated_at?: string | null;
+  email_sent_at?: string | null;
+  email_to?: string | null;
 };
 
 export type FinanceCommissionRow = {
@@ -132,6 +161,11 @@ export type RevenueSnapshot = {
   pendingCharges: number;
   commissions: number;
   creditsGranted: number;
+  refunds: number;
+  openDisputes: number;
+  openFraud: number;
+  crmAccounts: number;
+  kaiRules: number;
   paymentIntents: number;
   invoices: number;
   activeProducts: number;
@@ -168,6 +202,11 @@ export async function fetchRevenueSnapshot(): Promise<
         pendingCharges: Number(raw.pendingCharges ?? 0),
         commissions: Number(raw.commissions ?? 0),
         creditsGranted: Number(raw.creditsGranted ?? 0),
+        refunds: Number(raw.refunds ?? 0),
+        openDisputes: Number(raw.openDisputes ?? 0),
+        openFraud: Number(raw.openFraud ?? 0),
+        crmAccounts: Number(raw.crmAccounts ?? 0),
+        kaiRules: Number(raw.kaiRules ?? 0),
         paymentIntents: Number(raw.paymentIntents ?? 0),
         invoices: Number(raw.invoices ?? 0),
         activeProducts: Number(raw.activeProducts ?? 0),
@@ -472,6 +511,557 @@ export async function upsertConsent(
     );
     if (error) return { ok: false, message: error.message || copy.saveError };
     return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+// ─── Fase A — infraestrutura financeira transversal ─────────────────────────
+
+export type FinanceRefundRow = {
+  id: string;
+  ledger_entry_id: string;
+  user_id: string;
+  amount: number;
+  currency: string;
+  mode: string;
+  status: string;
+  reason: string;
+  created_at: string;
+  resolved_at: string | null;
+};
+
+export type FinanceDisputeRow = {
+  id: string;
+  code: string;
+  ledger_entry_id: string | null;
+  user_id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  reason: string;
+  opened_at: string;
+  closed_at: string | null;
+};
+
+export type FinanceReconRunRow = {
+  id: string;
+  code: string;
+  period_start: string;
+  period_end: string;
+  gateway_code: string | null;
+  status: string;
+  matched_count: number;
+  unmatched_count: number;
+  total_amount: number;
+  created_at: string;
+};
+
+export type FinanceFraudFlagRow = {
+  id: string;
+  code: string;
+  entity_type: string;
+  entity_id: string | null;
+  user_id: string | null;
+  severity: string;
+  status: string;
+  reason: string;
+  opened_at: string;
+  resolved_at: string | null;
+};
+
+export type FinanceKaiRuleRow = {
+  id: string;
+  code: string;
+  label: string;
+  description: string | null;
+  trigger_event: string;
+  target_product_code: string | null;
+  target_segment: string | null;
+  consent_scope: string | null;
+  priority: number;
+  active: boolean;
+};
+
+export type FinanceCrmAccountRow = {
+  id: string;
+  code: string;
+  name: string;
+  account_type: string;
+  service_provider_id: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  status: string;
+  created_at: string;
+};
+
+export type FinanceExportRow = {
+  id: string;
+  code: string;
+  period_start: string;
+  period_end: string;
+  format: string;
+  status: string;
+  row_count: number;
+  total_amount: number;
+  generated_at: string | null;
+  created_at: string;
+};
+
+export type CreditBalance = { balance: number; currency: string };
+
+export async function fetchMyCreditBalance(): Promise<
+  { ok: true; data: CreditBalance } | { ok: false; message: string }
+> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_my_credit_balance');
+    if (error || !data) return { ok: false, message: copy.loadError };
+    const raw = data as Record<string, unknown>;
+    return {
+      ok: true,
+      data: { balance: Number(raw.balance ?? 0), currency: String(raw.currency ?? 'AOA') },
+    };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function redeemCredits(
+  input: FinanceRedeemCreditsInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeRedeemCreditsSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_redeem_credits', {
+      p_amount: parsed.data.amount,
+      p_reason: parsed.data.reason ?? null,
+      p_order_ref: parsed.data.orderRef ?? null,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listRefunds(
+  limit = 30,
+): Promise<{ ok: true; data: FinanceRefundRow[] } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_refunds')
+      .select(
+        'id, ledger_entry_id, user_id, amount, currency, mode, status, reason, created_at, resolved_at',
+      )
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceRefundRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function createRefund(
+  input: FinanceCreateRefundInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeCreateRefundSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_create_refund', {
+      p_ledger_entry_id: parsed.data.ledgerEntryId,
+      p_amount: parsed.data.amount,
+      p_reason: parsed.data.reason,
+      p_mode: parsed.data.mode,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listDisputes(
+  limit = 30,
+): Promise<{ ok: true; data: FinanceDisputeRow[] } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_disputes')
+      .select(
+        'id, code, ledger_entry_id, user_id, amount, currency, status, reason, opened_at, closed_at',
+      )
+      .order('opened_at', { ascending: false })
+      .limit(limit);
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceDisputeRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function openDispute(
+  input: FinanceOpenDisputeInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeOpenDisputeSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_open_dispute', {
+      p_ledger_entry_id: parsed.data.ledgerEntryId,
+      p_reason: parsed.data.reason,
+      p_amount: parsed.data.amount ?? null,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listReconciliationRuns(
+  limit = 20,
+): Promise<{ ok: true; data: FinanceReconRunRow[] } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_reconciliation_runs')
+      .select(
+        'id, code, period_start, period_end, gateway_code, status, matched_count, unmatched_count, total_amount, created_at',
+      )
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceReconRunRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function runReconciliation(
+  input: FinanceRunReconciliationInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeRunReconciliationSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_run_reconciliation', {
+      p_period_start: parsed.data.periodStart,
+      p_period_end: parsed.data.periodEnd,
+      p_gateway_code: parsed.data.gatewayCode ?? null,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function generateInvoicePdf(
+  input: FinanceInvoicePdfInput,
+): Promise<{ ok: true; data: { html: string; number: string } } | { ok: false; message: string }> {
+  const parsed = financeInvoicePdfSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_generate_invoice_pdf', {
+      p_invoice_id: parsed.data.invoiceId,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    const raw = data as Record<string, unknown>;
+    return {
+      ok: true,
+      data: { html: String(raw.html ?? ''), number: String(raw.number ?? '') },
+    };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function markInvoiceEmailed(
+  input: FinanceMarkInvoiceEmailedInput,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  const parsed = financeMarkInvoiceEmailedSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.rpc('finance_mark_invoice_emailed', {
+      p_invoice_id: parsed.data.invoiceId,
+      p_email: parsed.data.email,
+    });
+    if (error) return { ok: false, message: error.message || copy.saveError };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function upsertProduct(
+  input: FinanceUpsertProductInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeUpsertProductSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_upsert_product', {
+      p_code: parsed.data.code,
+      p_name: parsed.data.name,
+      p_category: parsed.data.category,
+      p_pricing_model: parsed.data.pricingModel,
+      p_description: parsed.data.description ?? null,
+      p_currency: parsed.data.currency,
+      p_buyer_roles: parsed.data.buyerRoles,
+      p_kai_suggestible: parsed.data.kaiSuggestible,
+      p_active: parsed.data.active,
+      p_amount: parsed.data.amount ?? null,
+      p_price_code: parsed.data.priceCode ?? null,
+      p_charge_event: parsed.data.chargeEvent,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function setCommission(
+  input: FinanceSetCommissionInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeSetCommissionSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_set_commission', {
+      p_code: parsed.data.code,
+      p_label: parsed.data.label,
+      p_category: parsed.data.category,
+      p_take_rate_pct: parsed.data.takeRatePct ?? null,
+      p_fixed_amount: parsed.data.fixedAmount ?? null,
+      p_payer_side: parsed.data.payerSide,
+      p_currency: parsed.data.currency,
+      p_active: parsed.data.active,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listKaiRules(): Promise<
+  { ok: true; data: FinanceKaiRuleRow[] } | { ok: false; message: string }
+> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_kai_rules')
+      .select(
+        'id, code, label, description, trigger_event, target_product_code, target_segment, consent_scope, priority, active',
+      )
+      .is('deleted_at', null)
+      .order('priority');
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceKaiRuleRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function upsertKaiRule(
+  input: FinanceUpsertKaiRuleInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeUpsertKaiRuleSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_upsert_kai_rule', {
+      p_code: parsed.data.code,
+      p_label: parsed.data.label,
+      p_trigger_event: parsed.data.triggerEvent,
+      p_target_product_code: parsed.data.targetProductCode ?? null,
+      p_description: parsed.data.description ?? null,
+      p_target_segment: parsed.data.targetSegment ?? null,
+      p_consent_scope: parsed.data.consentScope ?? null,
+      p_priority: parsed.data.priority,
+      p_active: parsed.data.active,
+      p_config: {},
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listFraudFlags(
+  limit = 30,
+): Promise<{ ok: true; data: FinanceFraudFlagRow[] } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_fraud_flags')
+      .select(
+        'id, code, entity_type, entity_id, user_id, severity, status, reason, opened_at, resolved_at',
+      )
+      .order('opened_at', { ascending: false })
+      .limit(limit);
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceFraudFlagRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function flagFraud(
+  input: FinanceFlagFraudInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeFlagFraudSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_flag_fraud', {
+      p_entity_type: parsed.data.entityType,
+      p_entity_id: parsed.data.entityId ?? null,
+      p_reason: parsed.data.reason,
+      p_severity: parsed.data.severity,
+      p_user_id: parsed.data.userId ?? null,
+      p_signals: {},
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function resolveFraud(
+  input: FinanceResolveFraudInput,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  const parsed = financeResolveFraudSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.rpc('finance_resolve_fraud', {
+      p_flag_id: parsed.data.flagId,
+      p_status: parsed.data.status,
+      p_notes: parsed.data.notes ?? null,
+    });
+    if (error) return { ok: false, message: error.message || copy.saveError };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listCrmAccounts(
+  limit = 60,
+): Promise<{ ok: true; data: FinanceCrmAccountRow[] } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_crm_accounts')
+      .select(
+        'id, code, name, account_type, service_provider_id, contact_email, contact_phone, status, created_at',
+      )
+      .is('deleted_at', null)
+      .order('account_type')
+      .order('name')
+      .limit(limit);
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceCrmAccountRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function upsertCrmAccount(
+  input: FinanceUpsertCrmAccountInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeUpsertCrmAccountSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_upsert_crm_account', {
+      p_code: parsed.data.code,
+      p_name: parsed.data.name,
+      p_account_type: parsed.data.accountType,
+      p_service_provider_id: parsed.data.serviceProviderId ?? null,
+      p_user_id: parsed.data.userId ?? null,
+      p_contact_email: parsed.data.contactEmail ?? null,
+      p_contact_phone: parsed.data.contactPhone ?? null,
+      p_status: parsed.data.status,
+      p_metadata: {},
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function listAccountingExports(
+  limit = 20,
+): Promise<{ ok: true; data: FinanceExportRow[] } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('finance_accounting_exports')
+      .select(
+        'id, code, period_start, period_end, format, status, row_count, total_amount, generated_at, created_at',
+      )
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) return { ok: false, message: copy.loadError };
+    return { ok: true, data: (data as FinanceExportRow[]) ?? [] };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function createAccountingExport(
+  input: FinanceCreateExportInput,
+): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const parsed = financeCreateExportSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+  }
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('finance_create_accounting_export', {
+      p_period_start: parsed.data.periodStart,
+      p_period_end: parsed.data.periodEnd,
+      p_format: parsed.data.format,
+    });
+    if (error || !data) return { ok: false, message: error?.message ?? copy.saveError };
+    return { ok: true, data: data as Record<string, unknown> };
   } catch {
     return { ok: false, message: copy.saveError };
   }

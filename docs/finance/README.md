@@ -17,3 +17,21 @@ Documentação oficial da monetização e arquitectura financeira.
 - Super Admin: `/app/super`
 - Hub utilizador: `/app/financeiro`
 - Demo Super: `demo.super@kuteka.local` / `DemoKuteka2026!`
+
+## Ordem do roteiro (nova ordem PO 2026-08-05)
+
+Antes de mais serviços de negócio, consolidamos a **infraestrutura financeira
+transversal** — genérica e reutilizável, sem soluções isoladas e sem custódia
+(`custody_mode = none`).
+
+- **Fase A — Consolidação (esta entrega)**
+  - Migration: `supabase/migrations/0021_finance_infra_fase_a.sql`
+  - ADR: `docs/architecture/ADR-017-finance-infra-fase-a.md`
+  - Reembolsos, disputas, reconciliação, fraude, regras KAI, CRM financeiro,
+    exportações contabilísticas, faturas com PDF/numeração e redimir créditos.
+  - Super Admin reorganizado num Command Center por separadores (config-first).
+- **Fase B — Gateways reais** (Multicaixa/EMIS/Stripe fora de sandbox).
+- **Fase C — Custódia/escrow opcional e automação de payouts.**
+- **Fase D — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
+
+As Fases B/C/D assentam sobre a fundação da Fase A e só arrancam depois desta.
