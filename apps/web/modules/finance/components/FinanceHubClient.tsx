@@ -16,6 +16,10 @@ import {
   type FinanceInvoiceRow,
   type FinanceProductRow,
 } from '@/modules/finance/services/finance-client';
+import {
+  listPaymentReminders,
+  type PaymentReminderRow,
+} from '@/modules/monetization/services/monetization-client';
 
 /**
  * User-facing finance hub — pay-per-use sandbox + invoices.
@@ -26,6 +30,7 @@ export function FinanceHubClient() {
   const ready = sessionStatus === 'ready';
   const [products, setProducts] = useState<FinanceProductRow[]>([]);
   const [invoices, setInvoices] = useState<FinanceInvoiceRow[]>([]);
+  const [reminders, setReminders] = useState<PaymentReminderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -33,9 +38,14 @@ export function FinanceHubClient() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [p, i] = await Promise.all([listFinanceProducts(), listInvoices(10)]);
+    const [p, i, rem] = await Promise.all([
+      listFinanceProducts(),
+      listInvoices(10),
+      listPaymentReminders(12),
+    ]);
     if (p.ok) setProducts(p.data.filter((x) => x.active && x.category !== 'commission'));
     if (i.ok) setInvoices(i.data);
+    if (rem.ok) setReminders(rem.data);
     setLoading(false);
   }, []);
 
@@ -111,10 +121,41 @@ export function FinanceHubClient() {
               <Button type="button" loading={busy} onClick={() => void buyPlus()}>
                 Activar Kuteka Plus (sandbox)
               </Button>
-              <Link href="/app/perfil" className={cn(buttonVariants({ variant: 'secondary' }))}>
+              <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                Mudança Inteligente
+              </Link>
+              <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                Prestadores
+              </Link>
+              <Link
+                href="/app/parceiro/planos"
+                className={cn(buttonVariants({ variant: 'ghost' }))}
+              >
+                Planos Parceiro
+              </Link>
+              <Link href="/app/perfil" className={cn(buttonVariants({ variant: 'ghost' }))}>
                 Completar identidade
               </Link>
             </div>
+          </section>
+
+          <section className="kuteka-detail-panel p-5">
+            <h2 className="kuteka-detail-title">Lembretes de renda</h2>
+            <ul className="mt-3 divide-y divide-slate-200">
+              {reminders.map((r) => (
+                <li key={r.id} className="flex flex-wrap justify-between gap-2 py-2 text-sm">
+                  <span>
+                    {r.offset_label.toUpperCase()} · {r.scheduled_for} · {r.channel}
+                  </span>
+                  <Badge variant={r.status === 'scheduled' ? 'warning' : 'success'}>
+                    {r.status}
+                  </Badge>
+                </li>
+              ))}
+              {reminders.length === 0 ? (
+                <li className="py-3 text-sm text-slate-500">Sem lembretes agendados.</li>
+              ) : null}
+            </ul>
           </section>
 
           <section className="kuteka-detail-panel p-5">

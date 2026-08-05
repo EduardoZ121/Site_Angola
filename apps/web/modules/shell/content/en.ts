@@ -113,6 +113,9 @@ export const shellCopyEn: ShellCopy = {
     admin: 'Administration',
     super: 'Super Admin',
     financeiro: 'Finance',
+    mudanca: 'Smart Move',
+    servicos: 'Providers',
+    planos: 'Partner Plans',
   },
   routeBlocked: {
     title: 'Area unavailable in this role',

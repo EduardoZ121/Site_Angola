@@ -113,6 +113,9 @@ export const shellCopyFr: ShellCopy = {
     admin: 'Administration',
     super: 'Super Admin',
     financeiro: 'Finance',
+    mudanca: 'Déménagement intelligent',
+    servicos: 'Prestataires',
+    planos: 'Plans Partenaire',
   },
   routeBlocked: {
     title: 'Zone indisponible pour ce rôle',

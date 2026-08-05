@@ -112,6 +112,9 @@ export const shellCopyPt = {
     admin: 'Administração',
     super: 'Super Admin',
     financeiro: 'Financeiro',
+    mudanca: 'Mudança Inteligente',
+    servicos: 'Prestadores',
+    planos: 'Planos Parceiro',
   },
   routeBlocked: {
     title: 'Área indisponível neste papel',

@@ -251,6 +251,25 @@ export function ResidentOpsClient() {
                 {active.exitReason ? ` · ${active.exitReason}` : ''}
               </p>
             ) : null}
+            <Link
+              href="/app/mudanca"
+              className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'mt-4 w-fit')}
+            >
+              Activar Mudança Inteligente
+            </Link>
+          </section>
+
+          <section className="kuteka-detail-panel p-5">
+            <h2 className="kuteka-detail-title">Rede de prestadores</h2>
+            <p className="kuteka-detail-body mt-1">
+              Pedidos de limpeza, mudanças e obras com comissão Kuteka (marketplace).
+            </p>
+            <Link
+              href="/app/servicos"
+              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-3 w-fit')}
+            >
+              Abrir marketplace
+            </Link>
           </section>
         </>
       ) : null}
