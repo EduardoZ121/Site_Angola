@@ -65,7 +65,31 @@ transversal** — genérica e reutilizável, sem soluções isoladas e sem cust�
   - Produto genérico `marketplace.service` (valor real via override do orçamento).
   - UI `/app/servicos` por separadores: Prestadores | Os meus pedidos | Pedidos
     recebidos. Prestadores demo operáveis por `demo.parceiro` ou `finance.manage`.
+- **Fase D1 — Mudança Inteligente N5 (esta entrega)**
+  - Migration: `supabase/migrations/0024_smart_move_n5.sql`
+  - ADR: `docs/architecture/ADR-020-smart-move-n5.md`
+  - Fecha o ciclo da Mudança Inteligente sobre a **mesma** infraestrutura
+    (Ledger + Kuteka Pay + reembolsos/créditos). Nenhum caminho isolado.
+  - Estados: `draft → awaiting_payment → active → matched → completed |
+cancelled | failed`.
+  - Pagamentos: **abertura** (`opening_fee`) no arranque; **sucesso**
+    (`success_fee`) só quando a Kuteka encontra solução aceite — ambos via
+    `kuteka_pay_create_intent` (`module_code = smart_move`,
+    `reference_type = smart_move_request`).
+  - Reembolsos por urgência em créditos: falha devolve 50–100 % da abertura;
+    cancelamento antes do match devolve 100 % — via tabelas `finance_refunds` +
+    `finance_credit_*` (helper interno `smart_move_credit_refund`).
+  - SLA de matching por urgência (720/480/240/120 h);
+    `smart_move_check_slas` marca breaches.
+  - `smart_move_events` — timeline append-only (padrão `service_order_events`).
+  - RPCs `create_smart_move_request` (refactor Kuteka Pay), `smart_move_match`,
+    `smart_move_accept_match`, `smart_move_reject_match`, `smart_move_fail`,
+    `smart_move_cancel`, `smart_move_check_slas`, `smart_move_my_context`.
+  - UI `/app/mudanca`: badges de estado, montantes abertura/sucesso, cronologia;
+    cliente aceita/recusa/cancela, operador (`agent.operate`/`finance.manage`)
+    regista match e falha por SLA.
 - **Fase D — Gateways reais + custódia/escrow opcional e automação de payouts.**
 - **Fase E — Conformidade AGT/SAF-T** sobre as exportações da Fase A.
 
-As Fases D/E assentam sobre a fundação das Fases A/B/C e só arrancam depois destas.
+As Fases D/E assentam sobre a fundação das Fases A/B/C/D1 e só arrancam depois
+destas.

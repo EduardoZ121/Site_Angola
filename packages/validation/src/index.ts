@@ -178,6 +178,25 @@ export {
 } from './marketplace';
 
 export {
+  SMART_MOVE_STATUSES,
+  SMART_MOVE_EVENT_TYPES,
+  smartMoveCreateSchema,
+  smartMoveRequestIdSchema,
+  smartMoveMatchSchema,
+  smartMoveRejectSchema,
+  smartMoveFailSchema,
+  smartMoveCancelSchema,
+  type SmartMoveStatus,
+  type SmartMoveEventType,
+  type SmartMoveCreateInput,
+  type SmartMoveRequestIdInput,
+  type SmartMoveMatchInput,
+  type SmartMoveRejectInput,
+  type SmartMoveFailInput,
+  type SmartMoveCancelInput,
+} from './smart-move';
+
+export {
   CONTRACT_PURPOSES,
   CONTRACT_STATUSES,
   createPropertyContractSchema,
