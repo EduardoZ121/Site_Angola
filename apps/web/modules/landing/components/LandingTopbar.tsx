@@ -2,9 +2,9 @@
 
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { BrandMark } from '@/modules/authentication/components/BrandMark';
 import { landingContent } from '../content';
 
 const c = landingContent;
@@ -43,24 +43,8 @@ export function LandingTopbar() {
       )}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:h-16 sm:px-6">
-        <Link
-          href="/"
-          className={cn(
-            'flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2',
-            light ? 'focus-visible:ring-offset-white' : 'focus-visible:ring-offset-slate-950',
-          )}
-        >
-          <Image
-            src="/kuteka-logo.svg"
-            alt=""
-            width={28}
-            height={28}
-            className="size-7"
-            unoptimized
-            priority
-          />
-          <span className="text-base font-semibold tracking-tight">{c.topbar.brand}</span>
-        </Link>
+        {/* Official lockup on white plate — navy mark stays visible on dark hero */}
+        <BrandMark href="/" tone={light ? 'dark' : 'light'} size="sm" variant="inline" />
 
         <nav aria-label="Principal" className="flex items-center gap-2 sm:gap-3">
           <Link
