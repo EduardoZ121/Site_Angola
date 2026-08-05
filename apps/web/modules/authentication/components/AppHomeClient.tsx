@@ -56,7 +56,7 @@ export function AppHomeClient() {
       <div className="flex flex-col gap-4">
         <header className="kuteka-detail-panel px-4 py-3">
           <p className="text-sm font-semibold text-slate-900">Feed</p>
-          <Text className="text-sm text-stone-600">A preparar o ambiente contínuo…</Text>
+          <Text className="text-sm text-stone-600">{copy.app.feedPreparing}</Text>
         </header>
         <SoftListSlot pending minHeightClassName="min-h-[70vh]" />
       </div>
@@ -81,9 +81,7 @@ export function AppHomeClient() {
           <h1 className="truncate text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
           </h1>
-          <p className="kuteka-detail-body mt-0.5">
-            Cockpit e fluxos desta experiência — mude de papel no menu da conta.
-          </p>
+          <p className="kuteka-detail-body mt-0.5">{copy.app.experienceHint}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           {canManage ? (
@@ -110,7 +108,7 @@ export function AppHomeClient() {
               href="/app/agente"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
             >
-              Pipeline Agente
+              {copy.app.quickAgent}
             </Link>
           ) : null}
           {canAdmin ? (
@@ -118,7 +116,7 @@ export function AppHomeClient() {
               href="/app/admin"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
             >
-              Administração
+              {copy.app.quickAdmin}
             </Link>
           ) : null}
           {canContracts ? (
@@ -126,7 +124,7 @@ export function AppHomeClient() {
               href="/app/contratos"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
             >
-              Contratos
+              {copy.app.quickContracts}
             </Link>
           ) : null}
           {!canManage && !canHousing && !canAgent && !canAdmin ? (

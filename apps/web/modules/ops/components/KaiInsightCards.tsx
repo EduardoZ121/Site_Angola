@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getOpsCopy } from '../content';
 import type { KaiInsight } from '../types';
 
 const TONE_CLASS: Record<KaiInsight['tone'], string> = {
@@ -11,15 +13,15 @@ const TONE_CLASS: Record<KaiInsight['tone'], string> = {
 };
 
 export function KaiInsightCards({ insights }: { insights: KaiInsight[] }) {
+  const { locale } = useLocale();
+  const c = getOpsCopy(locale).kai;
   if (!insights.length) return null;
 
   return (
-    <section className="kuteka-detail-panel p-5" aria-label="KAI — Inteligência Kuteka">
-      <p className="kuteka-detail-eyebrow">KAI · Inteligência Kuteka</p>
-      <h2 className="kuteka-detail-title mt-1">Antecipação operacional</h2>
-      <p className="kuteka-detail-body mt-1">
-        Insights proactivos para decisões — disponibilidade, pagamentos, renovação e pipeline.
-      </p>
+    <section className="kuteka-detail-panel p-5" aria-label={c.aria}>
+      <p className="kuteka-detail-eyebrow">{c.eyebrow}</p>
+      <h2 className="kuteka-detail-title mt-1">{c.title}</h2>
+      <p className="kuteka-detail-body mt-1">{c.subtitle}</p>
       <ul className="mt-4 flex flex-col gap-3">
         {insights.map((insight) => {
           const inner = (
