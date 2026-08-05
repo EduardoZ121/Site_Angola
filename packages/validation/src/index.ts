@@ -197,6 +197,27 @@ export {
 } from './smart-move';
 
 export {
+  FIND_HOME_STATUSES,
+  FIND_HOME_EVENT_TYPES,
+  FIND_HOME_TYPOLOGIES,
+  findHomeCreateSchema,
+  findHomeRequestIdSchema,
+  findHomeMatchSchema,
+  findHomeRejectSchema,
+  findHomeFailSchema,
+  findHomeCancelSchema,
+  type FindHomeStatus,
+  type FindHomeEventType,
+  type FindHomeTypology,
+  type FindHomeCreateInput,
+  type FindHomeRequestIdInput,
+  type FindHomeMatchInput,
+  type FindHomeRejectInput,
+  type FindHomeFailInput,
+  type FindHomeCancelInput,
+} from './find-home';
+
+export {
   CONTRACT_PURPOSES,
   CONTRACT_STATUSES,
   createPropertyContractSchema,

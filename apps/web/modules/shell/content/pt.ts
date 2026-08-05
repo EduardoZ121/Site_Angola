@@ -113,6 +113,7 @@ export const shellCopyPt = {
     super: 'Super Admin',
     financeiro: 'Financeiro',
     mudanca: 'Mudança Inteligente',
+    encontrar: 'Encontrar Casa',
     servicos: 'Prestadores',
     planos: 'Planos Parceiro',
   },

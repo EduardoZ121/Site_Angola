@@ -99,6 +99,61 @@ export function urgencyLabel(band: string): string {
   return URGENCY_LABELS[band as SmartMoveUrgency] ?? band;
 }
 
+export type FindHomeTypologyValue =
+  't0' | 't1' | 't2' | 't3' | 't4' | 't5_plus' | 'moradia' | 'terreno' | 'comercial' | 'outro';
+
+export const FIND_HOME_TYPOLOGY_OPTIONS: { value: FindHomeTypologyValue; label: string }[] = [
+  { value: 't0', label: 'T0 / Estúdio' },
+  { value: 't1', label: 'T1' },
+  { value: 't2', label: 'T2' },
+  { value: 't3', label: 'T3' },
+  { value: 't4', label: 'T4' },
+  { value: 't5_plus', label: 'T5 ou mais' },
+  { value: 'moradia', label: 'Moradia' },
+  { value: 'terreno', label: 'Terreno' },
+  { value: 'comercial', label: 'Comercial' },
+  { value: 'outro', label: 'Outro' },
+];
+
+export function findHomeTypologyLabel(value: string | null | undefined): string {
+  if (!value) return 'Sem tipologia';
+  return FIND_HOME_TYPOLOGY_OPTIONS.find((o) => o.value === value)?.label ?? value;
+}
+
+export type FindHomeStatus =
+  'draft' | 'awaiting_payment' | 'active' | 'matched' | 'completed' | 'cancelled' | 'failed';
+
+export const FIND_HOME_STATUS_LABELS: Record<FindHomeStatus, string> = {
+  draft: 'Rascunho',
+  awaiting_payment: 'A aguardar pagamento',
+  active: 'Procura activa',
+  matched: 'Casa encontrada',
+  completed: 'Concluído',
+  cancelled: 'Cancelado',
+  failed: 'Sem solução',
+};
+
+export function findHomeStatusLabel(status: string): string {
+  return FIND_HOME_STATUS_LABELS[status as FindHomeStatus] ?? status;
+}
+
+export function findHomeStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
+  switch (status) {
+    case 'active':
+    case 'completed':
+      return 'success';
+    case 'matched':
+    case 'awaiting_payment':
+    case 'draft':
+      return 'warning';
+    case 'failed':
+    case 'cancelled':
+      return 'danger';
+    default:
+      return 'default';
+  }
+}
+
 export const PARTNER_PLAN_OPTIONS = [
   {
     code: 'partner.bronze.monthly',
