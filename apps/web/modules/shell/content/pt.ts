@@ -116,6 +116,7 @@ export const shellCopyPt = {
     encontrar: 'Encontrar Casa',
     concierge: 'Concierge',
     garantia: 'Garantia Kuteka',
+    assistencia: 'Assistência 24h',
     servicos: 'Prestadores',
     planos: 'Planos Parceiro',
   },

@@ -208,6 +208,7 @@ export const KUTEKA_PAY_MODULE_CODES = [
   'rent',
   'marketplace',
   'concierge',
+  'assistencia_24h',
   'contract',
   'valuation',
   'booking',

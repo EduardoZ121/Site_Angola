@@ -241,6 +241,76 @@ export function garantiaStatusTone(status: string): 'default' | 'warning' | 'suc
   }
 }
 
+export type AssistenciaCategoryValue =
+  'plumbing' | 'electricity' | 'locksmith' | 'security' | 'water_damage' | 'gas' | 'other';
+
+export const ASSISTENCIA_CATEGORY_OPTIONS: {
+  value: AssistenciaCategoryValue;
+  label: string;
+}[] = [
+  { value: 'plumbing', label: 'Canalização' },
+  { value: 'electricity', label: 'Electricidade' },
+  { value: 'locksmith', label: 'Fechaduras e chaves' },
+  { value: 'security', label: 'Segurança' },
+  { value: 'water_damage', label: 'Infiltração ou inundação' },
+  { value: 'gas', label: 'Gás' },
+  { value: 'other', label: 'Outra emergência' },
+];
+
+export function assistenciaCategoryLabel(value: string): string {
+  return ASSISTENCIA_CATEGORY_OPTIONS.find((option) => option.value === value)?.label ?? value;
+}
+
+export type AssistenciaUrgencyValue = 'urgent' | 'emergency';
+
+export const ASSISTENCIA_URGENCY_OPTIONS: {
+  value: AssistenciaUrgencyValue;
+  label: string;
+}[] = [
+  { value: 'urgent', label: 'Urgente — nas próximas 24 horas' },
+  { value: 'emergency', label: 'Emergência — risco imediato' },
+];
+
+export function assistenciaUrgencyLabel(value: string): string {
+  return ASSISTENCIA_URGENCY_OPTIONS.find((option) => option.value === value)?.label ?? value;
+}
+
+export type AssistenciaStatus =
+  'draft' | 'awaiting_payment' | 'active' | 'in_progress' | 'completed' | 'cancelled' | 'failed';
+
+export const ASSISTENCIA_STATUS_LABELS: Record<AssistenciaStatus, string> = {
+  draft: 'Rascunho',
+  awaiting_payment: 'A aguardar pagamento',
+  active: 'A aguardar operador',
+  in_progress: 'Assistência em curso',
+  completed: 'Concluída',
+  cancelled: 'Cancelada',
+  failed: 'Falhada',
+};
+
+export function assistenciaStatusLabel(status: string): string {
+  return ASSISTENCIA_STATUS_LABELS[status as AssistenciaStatus] ?? status;
+}
+
+export function assistenciaStatusTone(
+  status: string,
+): 'default' | 'warning' | 'success' | 'danger' {
+  switch (status) {
+    case 'active':
+    case 'completed':
+      return 'success';
+    case 'draft':
+    case 'awaiting_payment':
+    case 'in_progress':
+      return 'warning';
+    case 'cancelled':
+    case 'failed':
+      return 'danger';
+    default:
+      return 'default';
+  }
+}
+
 export const PARTNER_PLAN_OPTIONS = [
   {
     code: 'partner.bronze.monthly',
