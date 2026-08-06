@@ -19,6 +19,7 @@ export type ShellNavLabelKey =
   | 'ativar'
   | 'habitacao'
   | 'agente'
+  | 'mensagens'
   | 'confianca'
   | 'centroConfianca'
   | 'centroSeguranca'
@@ -54,6 +55,21 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'home',
     href: '/app',
     status: 'active',
+    group: 'geral',
+  },
+  {
+    id: 'mensagens',
+    labelKey: 'mensagens',
+    href: '/app/mensagens',
+    status: 'active',
+    experiences: [
+      'client',
+      'client_partner',
+      'patrimonial_partner',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+    ],
     group: 'geral',
   },
   // ── Cliente ──────────────────────────────────────────────────────────────

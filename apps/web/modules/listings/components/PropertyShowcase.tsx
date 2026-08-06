@@ -10,6 +10,7 @@ import { PropertyMapPanel } from './PropertyMapPanel';
 import { PropertyReviews } from './PropertyReviews';
 import { PropertyServiceContractPanel } from './PropertyServiceContractPanel';
 import { PropertyTimeline } from './PropertyTimeline';
+import { PropertyTrustPanel } from './PropertyTrustPanel';
 
 type PropertyShowcaseProps = {
   row: EnrichedListing;
@@ -56,6 +57,7 @@ export function PropertyShowcase({
         gallery={gallery}
         onSelect={onSelectMedia}
       />
+      <PropertyTrustPanel propertyId={row.id} />
       <PropertyFactsPanel row={row} typeLabel={typeLabel} purposeLabel={purposeLabel} />
       <nav
         aria-label="Secções da ficha"

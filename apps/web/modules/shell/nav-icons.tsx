@@ -269,6 +269,19 @@ function IconTools({ className }: IconProps) {
   );
 }
 
+function IconChat({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
+      <path
+        d="M3.5 5.8A2.3 2.3 0 0 1 5.8 3.5h8.4a2.3 2.3 0 0 1 2.3 2.3v5.4a2.3 2.3 0 0 1-2.3 2.3H8.6l-3.4 2.8v-2.8H5.8a2.3 2.3 0 0 1-2.3-2.3V5.8Z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function IconPlan({ className }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
@@ -300,6 +313,7 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   ativar: IconPlus,
   habitacao: IconKey,
   agente: IconAgent,
+  mensagens: IconChat,
   confianca: IconShield,
   centroConfianca: IconShield,
   centroSeguranca: IconShield,

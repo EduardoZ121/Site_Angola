@@ -34,7 +34,7 @@ O papel de Agente é atribuído directamente pela Kuteka após um processo de ce
 ## Identidade e confiança
 
 **8. O que é o KIS?**
-KIS é o sistema de identidade e verificação (KYC — *Know Your Customer*) da Kuteka, que confirma a identidade dos utilizadores para reforçar a confiança na plataforma.
+KIS é o sistema de identidade e verificação (KYC — _Know Your Customer_) da Kuteka, que confirma a identidade dos utilizadores para reforçar a confiança na plataforma.
 
 **9. Preciso de completar o KYC para explorar imóveis?**
 Em geral não é necessário para a exploração básica (pesquisa, favoritos). É exigido para operações mais sensíveis, como propostas, contratos e determinados pagamentos.

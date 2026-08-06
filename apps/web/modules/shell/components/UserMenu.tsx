@@ -327,7 +327,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       icon: 'bell',
     },
     {
-      href: '/contacto#chat',
+      href: '/app/mensagens',
       label: shell.userMenu.messages,
       hint: shell.userMenu.messagesHint,
       icon: 'messages',

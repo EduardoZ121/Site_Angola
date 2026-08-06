@@ -9,6 +9,7 @@ import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
+import { MessagePropertyOwnerButton } from '@/modules/mensagens/components/MessagePropertyOwnerButton';
 import {
   listPropertyMedia,
   type PropertyMediaRow,
@@ -200,6 +201,11 @@ export function HousingDetailClient({ id }: { id: string }) {
                   </Link>
                 </div>
                 {canExplore ? <NotifyAvailabilityButton propertyId={id} /> : null}
+                <MessagePropertyOwnerButton
+                  propertyId={id}
+                  ownerId={row.owner_id}
+                  propertyTitle={row.title}
+                />
               </div>
 
               <FlowNextSteps

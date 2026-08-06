@@ -3,15 +3,28 @@ import Link from 'next/link';
 import { Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
+import { getConfiancaCopy } from '@/modules/confianca/content';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { getHabitacaoCopy } from '../content';
 import type { HousingPropertyRow } from '../services/housing-client';
 
-function PropertyCardComponent({ row }: { row: HousingPropertyRow }) {
+type PropertyCardProps = {
+  row: HousingPropertyRow;
+  /** Optional — pass through when the caller already has aggregate reputation
+   *  data (avoids one fetch per card). Falls back to the row's own
+   *  `kuteka_score` when omitted. */
+  ratingAvg?: number | null;
+  ratingCount?: number | null;
+};
+
+function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProps) {
   const { locale } = useLocale();
   const copy = getHabitacaoCopy(locale);
+  const trustCopy = getConfiancaCopy(locale).trustCard;
   const href = `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`;
+  const kutekaScore = row.kuteka_score != null ? Math.round(Number(row.kuteka_score)) : null;
+  const hasRating = ratingAvg != null && (ratingCount ?? 0) > 0;
 
   return (
     <article className="kuteka-glass flex h-full flex-col overflow-hidden transition-shadow hover:shadow-md">
@@ -54,6 +67,24 @@ function PropertyCardComponent({ row }: { row: HousingPropertyRow }) {
             {[row.city, row.province].filter(Boolean).join(', ') || '—'}
             {row.bedrooms != null ? ` · T${row.bedrooms}` : ''}
           </p>
+          {hasRating || kutekaScore != null ? (
+            <p className="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+              {hasRating ? (
+                <span className="inline-flex items-center gap-1">
+                  <span className="text-[#f0a91f]" aria-hidden>
+                    ★
+                  </span>
+                  <span className="font-mono font-semibold">{Number(ratingAvg).toFixed(1)}</span>
+                  <span>({ratingCount})</span>
+                </span>
+              ) : null}
+              {kutekaScore != null ? (
+                <span className="font-mono" title={trustCopy.ickLabel}>
+                  ICK {kutekaScore}
+                </span>
+              ) : null}
+            </p>
+          ) : null}
         </div>
         <Link
           href={href}

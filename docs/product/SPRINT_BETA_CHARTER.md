@@ -33,13 +33,14 @@ Registada também em [`AGENTS.md`](../../AGENTS.md) e no KOS (princípio 8).
 
 Sequência **aprovada pelo PO** (Missão Cursor 2026-08-06). Cada sprint fecha com critério de saída verificável antes de abrir a seguinte.
 
-| Sprint     | Objectivo de negócio                          | Foco principal                                                                                                                                                             |
-| ---------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Beta 1** | Preparação para o Beta Público                | Legal (Termos, Privacidade, Cookies); Centro de Documentação; **KOCC MVP**; Go Live Readiness; BCP/DRP v0.9; Go-Live Hardening; estratégia Beta (sem “Demo” ao utilizador) |
-| **Beta 2** | Lançamento do Beta Público                    | Convidar ~20 Parceiros, ~20 Clientes, ~5 Agentes, ~5 Prestadores; recolher feedback                                                                                        |
-| **Beta 3** | Corrigir o que utilizadores reais encontrarem | Sem novas funcionalidades — só correcções e estabilização                                                                                                                  |
-| **Beta 4** | Preparar integrações reais                    | SMTP, SMS, WhatsApp, Multicaixa, EMIS (quando houver credenciais)                                                                                                          |
-| **Beta 5** | Primeiras receitas reais                      | Activação comercial controlada dos serviços pagos                                                                                                                          |
+| Sprint       | Objectivo de negócio                          | Foco principal                                                                                                                                                             |
+| ------------ | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Beta 1**   | Preparação para o Beta Público                | Legal (Termos, Privacidade, Cookies); Centro de Documentação; **KOCC MVP**; Go Live Readiness; BCP/DRP v0.9; Go-Live Hardening; estratégia Beta (sem “Demo” ao utilizador) |
+| **Beta 1.5** | Confiança + Comunicação (Chat + Trust Card)   | Mensagens integradas + reputação visível (Trust Card, avaliações, KAI) — ver [SPRINT_BETA_1_5.md](./SPRINT_BETA_1_5.md)                                                    |
+| **Beta 2**   | Lançamento do Beta Público                    | Convidar ~20 Parceiros, ~20 Clientes, ~5 Agentes, ~5 Prestadores; recolher feedback                                                                                        |
+| **Beta 3**   | Corrigir o que utilizadores reais encontrarem | Sem novas funcionalidades — só correcções e estabilização                                                                                                                  |
+| **Beta 4**   | Preparar integrações reais                    | SMTP, SMS, WhatsApp, Multicaixa, EMIS (quando houver credenciais)                                                                                                          |
+| **Beta 5**   | Primeiras receitas reais                      | Activação comercial controlada dos serviços pagos                                                                                                                          |
 
 ## 4. Sprint Beta 1 — escopo e critério de saída
 

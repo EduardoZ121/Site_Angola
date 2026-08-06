@@ -36,6 +36,7 @@ describe('shell nav', () => {
     );
     expect(items.some((i) => i.id === 'patrimonios')).toBe(false);
     expect(items.some((i) => i.id === 'confianca')).toBe(true);
+    expect(items.some((i) => i.id === 'mensagens' && i.href === '/app/mensagens')).toBe(true);
     expect(items.some((i) => i.id === 'explorar')).toBe(true);
     expect(items.some((i) => i.id === 'favoritos')).toBe(true);
     expect(items.some((i) => i.id === 'agente')).toBe(false);

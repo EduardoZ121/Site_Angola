@@ -2,16 +2,16 @@
 2:I[35695,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-18e6dad961ddf743.js"],""]
 3:I[76366,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-18e6dad961ddf743.js"],"Providers"]
 4:I[27719,[],""]
-5:I[89645,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1980","static/chunks/1980-a479484090d43ded.js","8039","static/chunks/app/error-fc206a867a9b591d.js"],"default"]
+5:I[89645,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1980","static/chunks/1980-b02d80260e3c660e.js","8039","static/chunks/app/error-fc206a867a9b591d.js"],"default"]
 6:I[38427,[],""]
-7:I[85415,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-a479484090d43ded.js","4345","static/chunks/app/not-found-1b535a11807f525e.js"],"default"]
-8:I[41614,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-a479484090d43ded.js","9146","static/chunks/9146-90427d3b67e5cb9f.js","4106","static/chunks/app/(marketing)/documentacao/page-7af0f3040f67a61e.js"],""]
-9:I[63162,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-a479484090d43ded.js","9146","static/chunks/9146-90427d3b67e5cb9f.js","4106","static/chunks/app/(marketing)/documentacao/page-7af0f3040f67a61e.js"],"LanguageSwitcher"]
-a:I[89146,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-a479484090d43ded.js","9146","static/chunks/9146-90427d3b67e5cb9f.js","4106","static/chunks/app/(marketing)/documentacao/page-7af0f3040f67a61e.js"],"HelpCenterClient"]
-12:I[40545,["4573","static/chunks/4573-8765300bdcbcaac8.js","1980","static/chunks/1980-a479484090d43ded.js","4219","static/chunks/app/global-error-450719285615af4f.js"],"default"]
+7:I[85415,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-b02d80260e3c660e.js","4345","static/chunks/app/not-found-1b535a11807f525e.js"],"default"]
+8:I[41614,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-b02d80260e3c660e.js","9146","static/chunks/9146-90427d3b67e5cb9f.js","4106","static/chunks/app/(marketing)/documentacao/page-7af0f3040f67a61e.js"],""]
+9:I[63162,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-b02d80260e3c660e.js","9146","static/chunks/9146-90427d3b67e5cb9f.js","4106","static/chunks/app/(marketing)/documentacao/page-7af0f3040f67a61e.js"],"LanguageSwitcher"]
+a:I[89146,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-b02d80260e3c660e.js","9146","static/chunks/9146-90427d3b67e5cb9f.js","4106","static/chunks/app/(marketing)/documentacao/page-7af0f3040f67a61e.js"],"HelpCenterClient"]
+12:I[40545,["4573","static/chunks/4573-8765300bdcbcaac8.js","1980","static/chunks/1980-b02d80260e3c660e.js","4219","static/chunks/app/global-error-450719285615af4f.js"],"default"]
 :HL["/_next/static/media/bb3ef058b751a6ad-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/_next/static/css/8091fefb46c4a498.css","style"]
+:HL["/_next/static/css/06e2eca1a3d37af0.css","style"]
 b:T4788,# Manual do Utilizador Kuteka
 
 **Manual do Utilizador / Centro de Ajuda · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
@@ -494,7 +494,7 @@ O papel de Agente é atribuído directamente pela Kuteka após um processo de ce
 ## Identidade e confiança
 
 **8. O que é o KIS?**
-KIS é o sistema de identidade e verificação (KYC — *Know Your Customer*) da Kuteka, que confirma a identidade dos utilizadores para reforçar a confiança na plataforma.
+KIS é o sistema de identidade e verificação (KYC — _Know Your Customer_) da Kuteka, que confirma a identidade dos utilizadores para reforçar a confiança na plataforma.
 
 **9. Preciso de completar o KYC para explorar imóveis?**
 Em geral não é necessário para a exploração básica (pesquisa, favoritos). É exigido para operações mais sensíveis, como propostas, contratos e determinados pagamentos.
@@ -568,7 +568,7 @@ Termos e siglas utilizados na plataforma Kuteka, por ordem alfabética.
 ---
 
 _Não encontrou um termo? Contacte-nos em `/contacto` e ajudaremos a esclarecer._
-e:T6c9,# Novidades — Kuteka
+e:T80a,# Novidades — Kuteka
 
 **Novidades · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
@@ -590,19 +590,19 @@ Esta secção será actualizada progressivamente à medida que novas funcionalid
 
 A Kuteka evolui por **versões comerciais**, alinhadas com o roteiro interno de produto:
 
-| Versão | Foco |
-| --- | --- |
+| Versão                 | Foco                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------ |
 | **v1.0 Beta** (actual) | Lançamento em produção, operação mínima, núcleo gratuito + serviços pay-per-use em sandbox |
-| **v1.5** | Activação de pagamentos reais e reforço de SLA de suporte |
-| **v2.0** | Motor de recomendações KAI, marketplace mais maduro e expansão de idiomas |
-| **v3.0** | Ecossistema alargado — API pública, white label e expansão geográfica |
+| **v1.5**               | Activação de pagamentos reais e reforço de SLA de suporte                                  |
+| **v2.0**               | Motor de recomendações KAI, marketplace mais maduro e expansão de idiomas                  |
+| **v3.0**               | Ecossistema alargado — API pública, white label e expansão geográfica                      |
 
 As datas de transição entre versões dependem da validação de negócio, de parcerias de pagamento e de requisitos regulatórios, pelo que este roteiro é indicativo e pode ser ajustado. Actualizações relevantes serão sempre comunicadas nesta página.
 
 ---
 
 _Tem sugestões para o roteiro? Contacte-nos em `/contacto`._
-f:T694,# Estado dos Serviços — Kuteka
+f:T853,# Estado dos Serviços — Kuteka
 
 **Estado dos Serviços · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
@@ -612,16 +612,16 @@ Estado operacional indicativo dos principais serviços da plataforma. Nesta fase
 
 ## Estado actual
 
-| Serviço | Estado | Notas |
-| --- | --- | --- |
-| Plataforma web (`kutekalink.com`) | 🟢 Operacional | Acesso normal a landing, autenticação e área da conta |
-| Autenticação e contas | 🟢 Operacional | Registo, login, recuperação e verificação por email/OTP |
-| Exploração de habitação | 🟢 Operacional | Pesquisa, favoritos e ficha de imóveis |
-| Gestão de patrimónios (Parceiro) | 🟢 Operacional | Publicação e gestão de imóveis |
-| Contratos | 🟢 Operacional | Criação e acompanhamento de minutas |
-| Kuteka Pay | 🟡 Sandbox | Pagamentos em ambiente de simulação; gateway real em preparação |
-| Notificações | 🟢 Operacional | Alertas dentro da plataforma |
-| Centro de Segurança / Confiança | 🟢 Operacional | Consulta de UTS, sessões e nível de segurança |
+| Serviço                           | Estado         | Notas                                                           |
+| --------------------------------- | -------------- | --------------------------------------------------------------- |
+| Plataforma web (`kutekalink.com`) | 🟢 Operacional | Acesso normal a landing, autenticação e área da conta           |
+| Autenticação e contas             | 🟢 Operacional | Registo, login, recuperação e verificação por email/OTP         |
+| Exploração de habitação           | 🟢 Operacional | Pesquisa, favoritos e ficha de imóveis                          |
+| Gestão de patrimónios (Parceiro)  | 🟢 Operacional | Publicação e gestão de imóveis                                  |
+| Contratos                         | 🟢 Operacional | Criação e acompanhamento de minutas                             |
+| Kuteka Pay                        | 🟡 Sandbox     | Pagamentos em ambiente de simulação; gateway real em preparação |
+| Notificações                      | 🟢 Operacional | Alertas dentro da plataforma                                    |
+| Centro de Segurança / Confiança   | 🟢 Operacional | Consulta de UTS, sessões e nível de segurança                   |
 
 **Legenda:** 🟢 Operacional · 🟡 Em sandbox / capacidade limitada · 🔴 Indisponível
 
@@ -632,7 +632,7 @@ Se detectar uma anomalia não reflectida nesta página, contacte-nos através de
 ---
 
 _Esta página é indicativa e não substitui uma monitorização automatizada em tempo real, ainda em preparação para uma versão futura da plataforma._
-0:{"P":null,"b":"PqFC-HZM-yWa1S5AGCUb6","p":"","c":["","documentacao",""],"i":false,"f":[[["",{"children":["(marketing)",{"children":["documentacao",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/8091fefb46c4a498.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L7",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(marketing)",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["documentacao",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","main",null,{"className":"mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-10 sm:px-6 md:py-14","children":[["$","div",null,{"className":"flex flex-wrap items-center justify-between gap-3","children":[["$","$L8",null,{"href":"/","className":"text-sm font-medium text-brand-700 hover:underline","children":"← Kuteka"}],["$","$L9",null,{"variant":"compact"}]]}],["$","$La",null,{"docs":{"manual":"$b","faq":"$c","glossario":"$d","novidades":"$e","estado":"$f"},"basePath":"/documentacao","publicMode":true}]]}],null,"$L10"]}],{},null,false]},null,false]},null,false]},null,false],"$L11",false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
+0:{"P":null,"b":"P80ySzp7u4VKZTOnU1ZHP","p":"","c":["","documentacao",""],"i":false,"f":[[["",{"children":["(marketing)",{"children":["documentacao",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/06e2eca1a3d37af0.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L7",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(marketing)",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["documentacao",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","main",null,{"className":"mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-10 sm:px-6 md:py-14","children":[["$","div",null,{"className":"flex flex-wrap items-center justify-between gap-3","children":[["$","$L8",null,{"href":"/","className":"text-sm font-medium text-brand-700 hover:underline","children":"← Kuteka"}],["$","$L9",null,{"variant":"compact"}]]}],["$","$La",null,{"docs":{"manual":"$b","faq":"$c","glossario":"$d","novidades":"$e","estado":"$f"},"basePath":"/documentacao","publicMode":true}]]}],null,"$L10"]}],{},null,false]},null,false]},null,false]},null,false],"$L11",false]],"m":"$undefined","G":["$12",[]],"s":false,"S":true}
 13:I[56974,[],"OutletBoundary"]
 15:I[41795,[],"AsyncMetadataOutlet"]
 17:I[56974,[],"ViewportBoundary"]

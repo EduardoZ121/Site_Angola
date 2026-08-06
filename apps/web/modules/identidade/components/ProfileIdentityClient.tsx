@@ -7,6 +7,12 @@ import { ID_DOC_KINDS, MARITAL_STATUS_CODES, SEX_CODES } from '@kuteka/validatio
 import { Badge, Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { TrustCard } from '@/modules/confianca/components/TrustCard';
+import { buildUserReputationHints } from '@/modules/confianca/lib/reputation-kai';
+import {
+  loadUserTrustSummary,
+  type UserTrustSummary,
+} from '@/modules/confianca/services/reputation-client';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
@@ -103,6 +109,7 @@ export function ProfileIdentityClient() {
   const [busy, setBusy] = useState<string | null>(null);
   const [step, setStep] = useState<KisStepId>('overview');
   const [landed, setLanded] = useState(false);
+  const [trustSummary, setTrustSummary] = useState<UserTrustSummary | null>(null);
 
   // Personal
   const [legalFullName, setLegalFullName] = useState('');
@@ -227,6 +234,17 @@ export function ProfileIdentityClient() {
       setStep('overview');
     }
   }, [bundle, landed, searchParams]);
+
+  useEffect(() => {
+    if (!bundle?.profile.id) return;
+    let cancelled = false;
+    void loadUserTrustSummary(bundle.profile.id).then((result) => {
+      if (!cancelled && result.ok) setTrustSummary(result.data);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [bundle?.profile.id]);
 
   useEffect(() => {
     if (step !== 'privacy' || privacyLoaded) return;
@@ -582,6 +600,20 @@ export function ProfileIdentityClient() {
                   <PillarRow key={pillar.id} pillar={pillar} />
                 ))}
               </ul>
+              {trustSummary ? (
+                <div className="mt-4">
+                  <TrustCard
+                    ick={trustSummary.ickScore}
+                    ratingAvg={trustSummary.ratingAvg}
+                    ratingCount={trustSummary.ratingCount}
+                    contractsCompleted={trustSummary.contractsCompleted}
+                    kisLevel={trustSummary.kycLevel}
+                    memberSince={trustSummary.memberSince}
+                    lastActivityAt={trustSummary.lastActivityAt}
+                    kaiHints={buildUserReputationHints(trustSummary, locale)}
+                  />
+                </div>
+              ) : null}
               {suggestedStep !== 'overview' ? (
                 <div className="mt-4 flex flex-wrap items-center gap-3">
                   <p className="text-sm text-slate-600">{copy.nextStepHint}</p>
