@@ -1,8 +1,8 @@
 /** Centro de Confiança Kuteka — estado da conta + próximos passos KIS. */
 
 import type { IdentityBundle } from '../services/identity-client';
+import type { IdentidadeCopy } from '../content';
 import {
-  KYC_LEVEL_LABELS,
   statusGlyph,
   statusLabel,
   suggestNextKisStep,
@@ -55,41 +55,43 @@ export function utsBand(score: number): TrustCenterModel['utsBand'] {
   return 'low';
 }
 
-export function utsBandLabel(band: TrustCenterModel['utsBand']): string {
-  if (band === 'excellent') return 'Excelente';
-  if (band === 'good') return 'Bom';
-  if (band === 'fair') return 'Em evolução';
-  return 'Inicial';
+export function utsBandLabel(band: TrustCenterModel['utsBand'], copy: IdentidadeCopy): string {
+  return copy.trustCenter.utsBandLabels[band];
 }
 
-export function buildTrustCenterModel(bundle: IdentityBundle): TrustCenterModel {
+export function buildTrustCenterModel(
+  bundle: IdentityBundle,
+  copy: IdentidadeCopy,
+): TrustCenterModel {
   const p = bundle.profile;
   const level = Math.min(4, Math.max(0, p.kyc_level ?? 0)) as KycLevel;
   const uts = Number(p.trust_index ?? 0);
   const flags = kisProgressFlagsFromBundle(bundle);
   const completeness = computeGradualKisProgress(flags);
   const band = utsBand(uts);
+  const pillarsCopy = copy.pillars;
 
   const pillars: TrustPillar[] = [
-    { id: 'identity', label: 'Identidade', status: p.kyc_identity_status ?? 'missing' },
-    { id: 'document', label: 'Documento', status: p.kyc_document_status ?? 'missing' },
-    { id: 'email', label: 'Email', status: emailPillar(bundle) },
-    { id: 'phone', label: 'Telefone', status: phonePillar(bundle) },
-    { id: 'photo', label: 'Fotografia', status: photoPillar(bundle) },
-    { id: 'address', label: 'Endereço', status: p.kyc_address_status ?? 'missing' },
-    { id: 'banking', label: 'Banco', status: p.kyc_banking_status ?? 'missing' },
+    { id: 'identity', label: pillarsCopy.identity, status: p.kyc_identity_status ?? 'missing' },
+    { id: 'document', label: pillarsCopy.document, status: p.kyc_document_status ?? 'missing' },
+    { id: 'email', label: pillarsCopy.email, status: emailPillar(bundle) },
+    { id: 'phone', label: pillarsCopy.phone, status: phonePillar(bundle) },
+    { id: 'photo', label: pillarsCopy.photo, status: photoPillar(bundle) },
+    { id: 'address', label: pillarsCopy.address, status: p.kyc_address_status ?? 'missing' },
+    { id: 'banking', label: pillarsCopy.banking, status: p.kyc_banking_status ?? 'missing' },
   ];
 
   const nextStepId = suggestNextKisStep(flags);
 
-  const nextCopy = nextStepCopy(nextStepId, level);
+  const nextCopy = nextStepCopy(nextStepId, level, copy);
+  const hints = copy.trustCenter.unlockHints;
   const unlockHints: string[] = [];
   if (level < 2) {
-    unlockHints.push('Com nível 2 desbloqueia contratos, reservas, visitas e Kuteka Pay.');
+    unlockHints.push(hints.level2);
   } else if (level < 3) {
-    unlockHints.push('Com nível 3 a identidade Kuteka fica validada para operações avançadas.');
+    unlockHints.push(hints.level3);
   } else if (level < 4) {
-    unlockHints.push('Com nível 4 (Premium) completa morada verificada e dados bancários.');
+    unlockHints.push(hints.level4);
   }
 
   const accountStatus: AccountLifecycleStatus =
@@ -99,15 +101,15 @@ export function buildTrustCenterModel(bundle: IdentityBundle): TrustCenterModel 
     accountStatus,
     accountLabel:
       accountStatus === 'active'
-        ? 'Conta activa'
+        ? copy.trustCenter.accountActive
         : accountStatus === 'pending'
-          ? 'Conta em verificação'
-          : 'Conta limitada',
+          ? copy.trustCenter.accountPending
+          : copy.trustCenter.accountRestricted,
     kycLevel: level,
-    kycLabel: KYC_LEVEL_LABELS[level],
+    kycLabel: copy.trustCenter.kycLevelLabels[level],
     uts,
     utsBand: band,
-    utsBandLabel: utsBandLabel(band),
+    utsBandLabel: utsBandLabel(band, copy),
     completeness,
     pillars,
     nextStepId,
@@ -117,65 +119,53 @@ export function buildTrustCenterModel(bundle: IdentityBundle): TrustCenterModel 
   };
 }
 
-function nextStepCopy(step: KisStepId, level: KycLevel): { title: string; body: string } {
+function nextStepCopy(
+  step: KisStepId,
+  level: KycLevel,
+  copy: IdentidadeCopy,
+): { title: string; body: string } {
+  const steps = copy.trustCenter.nextSteps;
   switch (step) {
     case 'contacts':
       return {
-        title: 'Verifique o telefone para progredir',
-        body:
-          level < 2
-            ? 'Confirme o telefone e avance a identidade para desbloquear o Kuteka Pay.'
-            : 'Verifique o telefone para reforçar o UTS e atingir o próximo nível.',
+        title: steps.contacts.title,
+        body: level < 2 ? steps.contacts.bodyLow : steps.contacts.bodyHigh,
       };
     case 'personal':
-      return {
-        title: 'Complete a identidade pessoal',
-        body: 'Nome conforme BI, data de nascimento e nacionalidade alimentam contratos automaticamente.',
-      };
+      return steps.personal;
     case 'document':
-      return {
-        title: 'Submeta o documento de identificação',
-        body: 'BI ou passaporte (frente e verso) — necessário para KYC nível 2 e pagamentos.',
-      };
+      return steps.document;
     case 'photo':
-      return {
-        title: 'Adicione a fotografia oficial',
-        body: 'A foto de perfil fortalece a confiança na plataforma e no Passaporte Digital.',
-      };
+      return steps.photo;
     case 'address':
-      return {
-        title: 'Valide o endereço',
-        body: 'A morada aparece em faturas, recibos e contratos — submeta para verificação.',
-      };
+      return steps.address;
     case 'banking':
-      return {
-        title: 'Adicione dados bancários',
-        body: 'Opcional agora; necessário para reembolsos e nível Premium (KYC 4).',
-      };
+      return steps.banking;
     default:
-      return {
-        title: 'Perfil KIS em bom estado',
-        body: 'Continue a manter documentos válidos. Explore serviços desbloqueados.',
-      };
+      return steps.overview;
   }
 }
 
 /** KAI suggestions derived from the Trust Center / KIS. */
-export function buildKisKaiSuggestions(bundle: IdentityBundle): {
+export function buildKisKaiSuggestions(
+  bundle: IdentityBundle,
+  copy: IdentidadeCopy,
+): {
   id: string;
   tone: 'info' | 'warn' | 'success' | 'predict';
   title: string;
   body: string;
   href: string;
 }[] {
-  const model = buildTrustCenterModel(bundle);
+  const model = buildTrustCenterModel(bundle, copy);
+  const kai = copy.trustCenter.kai;
   const out: ReturnType<typeof buildKisKaiSuggestions> = [];
 
   if (model.kycLevel < 2) {
     out.push({
       id: 'kis-pay-gate',
       tone: 'warn',
-      title: 'Verifique a identidade para utilizar o Kuteka Pay',
+      title: kai.payGateTitle,
       body: `${statusGlyph('pending')} KYC ${model.kycLevel}/2 · UTS ${Math.round(model.uts)}. ${model.nextStepTitle}`,
       href: '/app/centro-confianca',
     });
@@ -184,22 +174,24 @@ export function buildKisKaiSuggestions(bundle: IdentityBundle): {
       id: 'kis-next',
       tone: 'info',
       title: model.nextStepTitle,
-      body: `Complete o Centro de Confiança (${Math.round(model.completeness)}%) e desbloqueie reservas e serviços.`,
+      body: kai.nextBodyTemplate.replace('{pct}', String(Math.round(model.completeness))),
       href: '/app/centro-confianca',
     });
   } else if (model.utsBand === 'excellent' && model.kycLevel >= 3) {
     out.push({
       id: 'kis-strong',
       tone: 'success',
-      title: `UTS ${Math.round(model.uts)} — ${model.utsBandLabel}`,
-      body: 'Identidade sólida. Pode operar contratos e pagamentos com confiança plena.',
+      title: kai.strongTitleTemplate
+        .replace('{uts}', String(Math.round(model.uts)))
+        .replace('{band}', model.utsBandLabel),
+      body: kai.strongBody,
       href: '/app/centro-confianca',
     });
   } else if (model.nextStepId !== 'overview') {
     out.push({
       id: 'kis-complete',
       tone: 'predict',
-      title: 'Complete o seu perfil e desbloqueie reservas',
+      title: kai.completeTitle,
       body: model.nextStepBody,
       href: '/app/centro-confianca',
     });
@@ -208,6 +200,7 @@ export function buildKisKaiSuggestions(bundle: IdentityBundle): {
   return out.slice(0, 2);
 }
 
-export function pillarLine(pillar: TrustPillar): string {
-  return `${statusGlyph(pillar.status)} ${pillar.label} — ${statusLabel(pillar.status)}`;
+export function pillarLine(pillar: TrustPillar, copy?: IdentidadeCopy): string {
+  const labels = copy?.trustCenter.statusLabels;
+  return `${statusGlyph(pillar.status)} ${pillar.label} — ${statusLabel(pillar.status, labels)}`;
 }

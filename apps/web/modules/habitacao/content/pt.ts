@@ -59,8 +59,35 @@ export const habitacaoCopyPt = {
     sale: 'Venda',
     both: 'Venda e arrendamento',
   },
+  hub: {
+    eyebrow: 'Experiência Cliente',
+    subtitle: 'Preferências, interesses, visitas e atalhos da sua jornada.',
+    navLabel: 'Secções cliente',
+    tabs: {
+      residencia: 'Residência',
+      preferencias: 'Preferências',
+      interesses: 'Favoritos / Interesses',
+      visitas: 'Visitas',
+    },
+    visits: {
+      title: 'Visitas & acompanhamento',
+      description: 'Pedidos de interesse e estados de acompanhamento (visita / proposta).',
+    },
+    favorites: {
+      title: 'Favoritos / Interesses',
+      description: 'Imóveis em que demonstrou interesse na Kuteka.',
+    },
+    loading: 'A carregar…',
+    emptyInterests:
+      'Ainda não há interesses registados. Explore o inventário e demonstre interesse nos imóveis.',
+    exploreNow: 'Explorar agora',
+    propertyFallback: 'Património',
+    viewDetail: 'Ver ficha',
+  },
 } as const;
 
-export function getHabitacaoCopy() {
-  return habitacaoCopyPt;
-}
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type HabitacaoCopy = DeepStringify<typeof habitacaoCopyPt>;

@@ -5,7 +5,9 @@ import Link from 'next/link';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { EXIT_REASONS, MAINTENANCE_CATEGORIES, formatAoa, formatDays } from '../format';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getOpsCopy } from '../content';
+import { formatAoa, formatDays, getExitReasons, getMaintenanceCategories } from '../format';
 import { loadOpsStats } from '../load-ops-stats';
 import type { OpsContract, OpsStats } from '../types';
 
@@ -13,6 +15,10 @@ import type { OpsContract, OpsStats } from '../types';
  * Cliente residente — contrato, pagamentos, manutenção e intenção de saída.
  */
 export function ResidentOpsClient() {
+  const { locale } = useLocale();
+  const copy = getOpsCopy(locale).resident;
+  const exitReasons = getExitReasons(locale);
+  const maintenanceCategories = getMaintenanceCategories(locale);
   const [stats, setStats] = useState<OpsStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<string | null>(null);
@@ -58,15 +64,13 @@ export function ResidentOpsClient() {
         p_exit_intent: 'confirmed',
         p_exit_intent_date: exit_intent_date,
         p_exit_reason: exitReason,
-        p_exit_notes: `Intenção de saída em ${days} dias.`,
+        p_exit_notes: copy.exitNoteTemplate.replace('{days}', String(days)),
       });
       if (error) throw error;
-      setMessage(
-        'Intenção de saída registada. A Kuteka pode iniciar a procura de novos interessados.',
-      );
+      setMessage(copy.exitSuccess);
       await refresh();
     } catch {
-      setMessage('Não conseguimos guardar a intenção de saída. Tente novamente.');
+      setMessage(copy.exitError);
     } finally {
       setBusy(false);
     }
@@ -94,17 +98,17 @@ export function ResidentOpsClient() {
         partner_id: contract?.partner_id ?? null,
         category: maintCategory,
         title: maintTitle.trim(),
-        description: 'Pedido criado no cockpit do cliente.',
+        description: copy.maintenanceNoteDefault,
         status: 'requested',
         created_by: user.id,
         updated_by: user.id,
       });
       if (error) throw error;
       setMaintTitle('');
-      setMessage('Pedido de serviço enviado ao parceiro / rede Kuteka.');
+      setMessage(copy.maintenanceSuccess);
       await refresh();
     } catch {
-      setMessage('Não conseguimos criar o pedido. Verifique a sua conta ou tente mais tarde.');
+      setMessage(copy.maintenanceError);
     } finally {
       setBusy(false);
     }
@@ -113,11 +117,9 @@ export function ResidentOpsClient() {
   return (
     <div className="flex flex-col gap-5">
       <header className="kuteka-detail-panel p-5">
-        <p className="kuteka-detail-eyebrow">Cliente · Residência</p>
-        <Heading level={1}>Gestão da habitação</Heading>
-        <Text className="mt-1 text-slate-700">
-          Contrato actual, pagamentos, calendário, comunicações e intenção de saída.
-        </Text>
+        <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+        <Heading level={1}>{copy.title}</Heading>
+        <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
       </header>
 
       {message ? (
@@ -126,18 +128,16 @@ export function ResidentOpsClient() {
         </div>
       ) : null}
 
-      {loading ? <p className="kuteka-detail-meta">A carregar cockpit…</p> : null}
+      {loading ? <p className="kuteka-detail-meta">{copy.loading}</p> : null}
 
       {!loading && !active ? (
         <section className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-body">
-            Ainda não tem um contrato activo. Explore habitação ou acompanhe propostas.
-          </p>
+          <p className="kuteka-detail-body">{copy.noContractBody}</p>
           <Link
             href="/app/habitacao/explorar"
             className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'mt-3 w-fit')}
           >
-            Explorar Habitação
+            {copy.exploreHousing}
           </Link>
         </section>
       ) : null}
@@ -145,20 +145,26 @@ export function ResidentOpsClient() {
       {active ? (
         <>
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Contrato actual</h2>
+            <h2 className="kuteka-detail-title">{copy.contractTitle}</h2>
             <ul className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { label: 'Estado', value: active.status },
-                { label: 'Início', value: active.startsOn ?? '—' },
-                { label: 'Término', value: active.endsOn ?? '—' },
-                { label: 'Dias restantes', value: formatDays(active.daysRemaining) },
+                { label: copy.statusLabel, value: active.status },
+                { label: copy.startLabel, value: active.startsOn ?? '—' },
+                { label: copy.endLabel, value: active.endsOn ?? '—' },
                 {
-                  label: 'Renda / valor',
+                  label: copy.daysRemainingLabel,
+                  value: formatDays(active.daysRemaining, locale),
+                },
+                {
+                  label: copy.rentLabel,
                   value: formatAoa(active.nextPaymentAmountAoa ?? active.amountAoa / 12),
                 },
-                { label: 'Caução', value: formatAoa(active.depositAoa) },
-                { label: 'Próximo pagamento', value: active.nextPaymentDue ?? '—' },
-                { label: 'Dias até pagar', value: formatDays(active.daysUntilPayment) },
+                { label: copy.depositLabel, value: formatAoa(active.depositAoa) },
+                { label: copy.nextPaymentLabel, value: active.nextPaymentDue ?? '—' },
+                {
+                  label: copy.daysUntilPaymentLabel,
+                  value: formatDays(active.daysUntilPayment, locale),
+                },
               ].map((item) => (
                 <li key={item.label} className="kuteka-role-stat">
                   <p className="kuteka-role-stat__value">{item.value}</p>
@@ -167,24 +173,22 @@ export function ResidentOpsClient() {
               ))}
             </ul>
             <p className="kuteka-detail-meta mt-3">
-              {active.propertyTitle} · {active.propertyCode} · Pagamentos:{' '}
-              {stats?.paymentsPaid ?? 0} pagos · {stats?.paymentsPending ?? 0} pendentes ·{' '}
-              {stats?.paymentsLate ?? 0} em atraso
+              {active.propertyTitle} · {active.propertyCode} · {copy.paymentsLabel}:{' '}
+              {stats?.paymentsPaid ?? 0} {copy.paymentsPaidLabel} · {stats?.paymentsPending ?? 0}{' '}
+              {copy.paymentsPendingLabel} · {stats?.paymentsLate ?? 0} {copy.paymentsLateLabel}
             </p>
           </section>
 
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Solicitar serviço</h2>
-            <p className="kuteka-detail-body mt-1">
-              Manutenção, limpeza, remodelação, pintura, eletricidade ou canalização.
-            </p>
+            <h2 className="kuteka-detail-title">{copy.serviceTitle}</h2>
+            <p className="kuteka-detail-body mt-1">{copy.serviceSubtitle}</p>
             <div className="mt-3 flex flex-col gap-3 sm:flex-row">
               <select
                 className="kuteka-ops-input"
                 value={maintCategory}
                 onChange={(e) => setMaintCategory(e.target.value)}
               >
-                {MAINTENANCE_CATEGORIES.map((c) => (
+                {maintenanceCategories.map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>
@@ -192,7 +196,7 @@ export function ResidentOpsClient() {
               </select>
               <input
                 className="kuteka-ops-input flex-1"
-                placeholder="Descreva o pedido"
+                placeholder={copy.servicePlaceholder}
                 value={maintTitle}
                 onChange={(e) => setMaintTitle(e.target.value)}
               />
@@ -202,34 +206,31 @@ export function ResidentOpsClient() {
                 className={cn(buttonVariants({ variant: 'primary', size: 'sm' }))}
                 onClick={() => void submitMaintenance()}
               >
-                Enviar
+                {copy.send}
               </button>
             </div>
           </section>
 
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Intenção de saída</h2>
-            <p className="kuteka-detail-body mt-1">
-              Informe com antecedência para a Kuteka procurar novos interessados, organizar visitas
-              e facilitar a devolução da caução.
-            </p>
+            <h2 className="kuteka-detail-title">{copy.exitTitle}</h2>
+            <p className="kuteka-detail-body mt-1">{copy.exitSubtitle}</p>
             <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <select
                 className="kuteka-ops-input"
                 value={exitDays}
                 onChange={(e) => setExitDays(e.target.value)}
               >
-                <option value="30">Pretendo sair em 30 dias</option>
-                <option value="60">Pretendo sair em 60 dias</option>
-                <option value="90">Pretendo sair em 90 dias</option>
-                <option value="custom">Data personalizada (~45 dias)</option>
+                <option value="30">{copy.exit30}</option>
+                <option value="60">{copy.exit60}</option>
+                <option value="90">{copy.exit90}</option>
+                <option value="custom">{copy.exitCustom}</option>
               </select>
               <select
                 className="kuteka-ops-input"
                 value={exitReason}
                 onChange={(e) => setExitReason(e.target.value)}
               >
-                {EXIT_REASONS.map((r) => (
+                {exitReasons.map((r) => (
                   <option key={r.value} value={r.value}>
                     {r.label}
                   </option>
@@ -241,12 +242,12 @@ export function ResidentOpsClient() {
                 className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
                 onClick={() => void submitExitIntent()}
               >
-                Registar intenção
+                {copy.registerExit}
               </button>
             </div>
             {active.exitIntent !== 'none' ? (
               <p className="kuteka-detail-meta mt-3">
-                Estado actual: {active.exitIntent}
+                {copy.currentStateLabel}: {active.exitIntent}
                 {active.exitIntentDate ? ` · ${active.exitIntentDate}` : ''}
                 {active.exitReason ? ` · ${active.exitReason}` : ''}
               </p>
@@ -255,20 +256,18 @@ export function ResidentOpsClient() {
               href="/app/mudanca"
               className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'mt-4 w-fit')}
             >
-              Activar Mudança Inteligente
+              {copy.activateSmartMove}
             </Link>
           </section>
 
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Rede de prestadores</h2>
-            <p className="kuteka-detail-body mt-1">
-              Pedidos de limpeza, mudanças e obras com comissão Kuteka (marketplace).
-            </p>
+            <h2 className="kuteka-detail-title">{copy.providersTitle}</h2>
+            <p className="kuteka-detail-body mt-1">{copy.providersSubtitle}</p>
             <Link
               href="/app/servicos"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-3 w-fit')}
             >
-              Abrir marketplace
+              {copy.openMarketplace}
             </Link>
           </section>
         </>

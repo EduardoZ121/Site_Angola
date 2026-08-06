@@ -212,7 +212,7 @@ export async function updatePassword(input: { password: string }): Promise<AuthC
       return {
         ok: false,
         code: 'generic',
-        message: `Não foi possível actualizar a password. ${authCopy().common.nextStepRetry}`,
+        message: `${authCopy().actions.updatePasswordFailed} ${authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };
@@ -233,7 +233,7 @@ export async function resendVerification(input: { email: string }): Promise<Auth
     if (error) {
       return mapAuthError(
         error,
-        `Não foi possível reenviar o email. ${authCopy().common.nextStepRetry}`,
+        `${authCopy().actions.resendEmailFailed} ${authCopy().common.nextStepRetry}`,
       );
     }
     return { ok: true, data: undefined };
@@ -278,7 +278,7 @@ export async function issueEmailVerificationOtp(input: {
       }
       return mapAuthError(
         error,
-        `Não foi possível enviar o código. ${authCopy().common.nextStepRetry}`,
+        `${authCopy().emailOtp.sendFailed} ${authCopy().common.nextStepRetry}`,
       );
     }
     const row = data as { ok?: boolean; challengeId?: string; sandboxCode?: string };
@@ -312,7 +312,7 @@ export async function verifyEmailOtpCode(input: {
 
   const token = input.code.replace(/\D/g, '').slice(0, 6);
   if (token.length !== 6) {
-    return { ok: false, code: 'generic', message: 'Introduza o código de 6 dígitos.' };
+    return { ok: false, code: 'generic', message: authCopy().emailOtp.invalidLength };
   }
 
   try {
@@ -338,7 +338,7 @@ export async function verifyEmailOtpCode(input: {
         return {
           ok: false,
           code: 'generic',
-          message: `Código inválido. ${authCopy().common.nextStepRetry}`,
+          message: `${authCopy().emailOtp.invalidGeneric} ${authCopy().common.nextStepRetry}`,
         };
       }
       const row = data as { ok?: boolean; error?: string };
@@ -349,9 +349,7 @@ export async function verifyEmailOtpCode(input: {
         ok: false,
         code: 'generic',
         message:
-          row?.error === 'expired'
-            ? 'O código expirou. Peça um novo.'
-            : 'Código incorrecto. Tente novamente.',
+          row?.error === 'expired' ? authCopy().emailOtp.expired : authCopy().emailOtp.incorrect,
       };
     } catch (err) {
       return mapUnknownError(err, authCopy().common.networkError);
@@ -361,7 +359,7 @@ export async function verifyEmailOtpCode(input: {
   return {
     ok: false,
     code: 'generic',
-    message: 'Código incorrecto ou expirado. Reenvie o email e tente novamente.',
+    message: authCopy().emailOtp.incorrectOrExpired,
   };
 }
 
@@ -391,7 +389,7 @@ export async function activateSelfServeRoles(
       return {
         ok: false,
         code: 'generic',
-        message: `Não foi possível activar os papéis. ${error.message || authCopy().common.nextStepRetry}`,
+        message: `${authCopy().actions.activateRolesFailed} ${error.message || authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };
@@ -413,7 +411,7 @@ export async function updateDisplayName(displayName: string): Promise<AuthClient
       return {
         ok: false,
         code: 'generic',
-        message: `Sessão inválida. Entre novamente para continuar.`,
+        message: authCopy().common.sessionInvalid,
       };
     }
     const { error } = await client
@@ -424,7 +422,7 @@ export async function updateDisplayName(displayName: string): Promise<AuthClient
       return {
         ok: false,
         code: 'generic',
-        message: `Não foi possível guardar o nome. ${authCopy().common.nextStepRetry}`,
+        message: `${authCopy().actions.saveNameFailed} ${authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };

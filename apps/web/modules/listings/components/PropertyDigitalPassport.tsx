@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import {
-  CONSTRUCTION_LABELS,
-  CONSERVATION_LABELS,
-  MANAGEMENT_LABELS,
-  RENOVATION_LABELS,
-  SERVICE_LABELS,
-  UNFINISHED_LABELS,
   asHistoryList,
+  getConstructionLabels,
+  getConservationLabels,
+  getManagementLabels,
+  getRenovationLabels,
+  getServiceLabels,
+  getUnfinishedLabels,
 } from '../lib/manual-ops-labels';
 import type { EnrichedListing } from '../types';
 import { KutekaScoreGauge } from './KutekaScoreGauge';
@@ -48,6 +49,13 @@ export function PropertyDigitalPassport({
   row: EnrichedListing;
   mediaCount?: number;
 }) {
+  const { locale } = useLocale();
+  const constructionLabels = getConstructionLabels(locale);
+  const conservationLabels = getConservationLabels(locale);
+  const managementLabels = getManagementLabels(locale);
+  const renovationLabels = getRenovationLabels(locale);
+  const serviceLabels = getServiceLabels(locale);
+  const unfinishedLabels = getUnfinishedLabels(locale);
   const pdk = row.pdk_code || `PDK-${row.code}`;
   const owners = asHistoryList(row.owner_history);
   const maintenance = asHistoryList(row.maintenance_history);
@@ -147,22 +155,22 @@ export function PropertyDigitalPassport({
           <Fact
             label="Estado da construção"
             value={
-              CONSTRUCTION_LABELS[row.construction_status ?? ''] ?? row.construction_status ?? '—'
+              constructionLabels[row.construction_status ?? ''] ?? row.construction_status ?? '—'
             }
           />
           <Fact
             label="Conservação"
             value={
-              CONSERVATION_LABELS[row.conservation_state ?? ''] ?? row.conservation_state ?? '—'
+              conservationLabels[row.conservation_state ?? ''] ?? row.conservation_state ?? '—'
             }
           />
           <Fact
             label="Gestão contratada"
-            value={MANAGEMENT_LABELS[row.management_level ?? ''] ?? row.management_level ?? '—'}
+            value={managementLabels[row.management_level ?? ''] ?? row.management_level ?? '—'}
           />
           <Fact
             label="Obra inacabada"
-            value={UNFINISHED_LABELS[row.unfinished_intent ?? ''] ?? row.unfinished_intent ?? '—'}
+            value={unfinishedLabels[row.unfinished_intent ?? ''] ?? row.unfinished_intent ?? '—'}
           />
         </dl>
       </div>
@@ -181,7 +189,7 @@ export function PropertyDigitalPassport({
           <ul className="mt-2 flex flex-wrap gap-2">
             {services.map((svc) => (
               <li key={svc} className="kuteka-detail-chip kuteka-detail-chip--accent">
-                {SERVICE_LABELS[svc] ?? svc}
+                {serviceLabels[svc] ?? svc}
               </li>
             ))}
           </ul>
@@ -194,7 +202,7 @@ export function PropertyDigitalPassport({
           <ul className="mt-2 flex flex-wrap gap-2">
             {renovations.map((item) => (
               <li key={item} className="kuteka-detail-chip">
-                {RENOVATION_LABELS[item] ?? item}
+                {renovationLabels[item] ?? item}
               </li>
             ))}
           </ul>

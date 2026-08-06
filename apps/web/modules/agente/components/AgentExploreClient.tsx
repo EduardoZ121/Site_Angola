@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react';
 import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getAgenteCopy } from '../content/pt';
+import { getAgenteCopy } from '../content';
 import {
   exploreActiveProperties,
   getAgentPreferences,
@@ -16,7 +17,8 @@ import {
 } from '../services/agent-client';
 
 export function AgentExploreClient() {
-  const copy = getAgenteCopy();
+  const { locale } = useLocale();
+  const copy = getAgenteCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canOperate = sessionStatus === 'ready' && !!session?.permissions.includes('agent.operate');
   const accessPending = sessionStatus === 'loading';

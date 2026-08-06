@@ -131,8 +131,27 @@ export const patrimoniosCopyPt = {
   listHint: 'Anúncios e patrimónios sob gestão — o Cliente encontra os publicados em Habitação.',
   mvpNote:
     'Após a finalidade comercial, indique os serviços Kuteka e o nível de gestão. Serviços de gestão/avaliação exigem avaliação técnica antes da publicação plena.',
+  detailNote:
+    'Quando activo, este anúncio fica disponível em Habitação para o Cliente — com a mesma ficha premium, mapa e reputação.',
+  nextSteps: {
+    detailErrorHint: 'Este património pode ter sido removido ou não está acessível.',
+    seeProperties: 'Ver patrimónios',
+    startOverTitle: 'Começar de novo',
+    startOverHint: 'Active um património ou complete a verificação da conta.',
+    trustCenter: 'Centro de Confiança',
+    suggestedTitle: 'Próximo passo sugerido',
+    suggestedHint:
+      'Partilhe o anúncio em Habitação para gerar visitas, ou avance para contrato quando tiver interessados.',
+    createContract: 'Criar contrato',
+    continueFlowTitle: 'Continuar o fluxo',
+    goDashboard: 'Ir ao painel',
+    verifyAccount: 'Verificar conta',
+    seeAgentArea: 'Ver área Agente',
+  },
 } as const;
 
-export function getPatrimoniosCopy() {
-  return patrimoniosCopyPt;
-}
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type PatrimoniosCopy = DeepStringify<typeof patrimoniosCopyPt>;

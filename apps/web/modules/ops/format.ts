@@ -1,3 +1,6 @@
+import type { AppLocale } from '@/modules/i18n/types';
+import { getOpsCopy } from './content';
+
 export function daysBetween(from: Date, to: Date): number {
   const ms = to.getTime() - from.getTime();
   return Math.ceil(ms / (1000 * 60 * 60 * 24));
@@ -22,29 +25,34 @@ export function formatAoa(amount: number | null | undefined): string {
   }
 }
 
-export function formatDays(days: number | null | undefined): string {
+export function formatDays(days: number | null | undefined, locale: AppLocale = 'pt'): string {
   if (days == null) return '—';
-  if (days < 0) return `${Math.abs(days)}d atraso`;
-  if (days === 0) return 'Hoje';
-  return `${days} dias`;
+  const copy = getOpsCopy(locale).dates;
+  if (days < 0) return `${Math.abs(days)}${copy.lateSuffix}`;
+  if (days === 0) return copy.today;
+  return `${days} ${copy.daysSuffix}`;
 }
 
-export const EXIT_REASONS: { value: string; label: string }[] = [
-  { value: 'mudanca_cidade', label: 'Mudança de cidade' },
-  { value: 'compra_casa', label: 'Compra de casa' },
-  { value: 'renda_elevada', label: 'Renda elevada' },
-  { value: 'mudanca_emprego', label: 'Mudança de emprego' },
-  { value: 'outro', label: 'Outro' },
-];
+/** @deprecated Use getExitReasons(locale) for locale-aware labels. */
+export const EXIT_REASONS: { value: string; label: string }[] = toOptionList(
+  getOpsCopy('pt').exitReasons,
+);
 
-export const MAINTENANCE_CATEGORIES: { value: string; label: string }[] = [
-  { value: 'maintenance', label: 'Manutenção' },
-  { value: 'cleaning', label: 'Limpeza' },
-  { value: 'renovation', label: 'Remodelação' },
-  { value: 'painting', label: 'Pintura' },
-  { value: 'electricity', label: 'Eletricidade' },
-  { value: 'plumbing', label: 'Canalização' },
-  { value: 'gardening', label: 'Jardinagem' },
-  { value: 'security', label: 'Segurança' },
-  { value: 'other', label: 'Outro' },
-];
+/** @deprecated Use getMaintenanceCategories(locale) for locale-aware labels. */
+export const MAINTENANCE_CATEGORIES: { value: string; label: string }[] = toOptionList(
+  getOpsCopy('pt').maintenanceCategories,
+);
+
+function toOptionList(labels: Record<string, string>): { value: string; label: string }[] {
+  return Object.entries(labels).map(([value, label]) => ({ value, label }));
+}
+
+export function getExitReasons(locale: AppLocale = 'pt'): { value: string; label: string }[] {
+  return toOptionList(getOpsCopy(locale).exitReasons);
+}
+
+export function getMaintenanceCategories(
+  locale: AppLocale = 'pt',
+): { value: string; label: string }[] {
+  return toOptionList(getOpsCopy(locale).maintenanceCategories);
+}

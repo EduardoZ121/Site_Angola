@@ -27,6 +27,10 @@ export const shellCopyPt = {
   userMenu: {
     profile: 'Perfil',
     profileHint: 'Os meus dados pessoais',
+    centroConfiancaHint: 'Estado da conta, UTS e próximos passos',
+    centroSegurancaHint: 'Email, telefone, sessões e nível de segurança',
+    roleCountSingular: 'papel',
+    roleCountPlural: 'papéis',
     roles: 'Os meus papéis',
     rolesHint: 'Activar ou gerir papéis da conta',
     patrimonios: 'Os meus patrimónios',
@@ -149,6 +153,72 @@ export const shellCopyPt = {
   securityCenterHint: 'Email, telefone, sessões, dispositivos e nível de segurança da conta.',
   feedEndTitle: 'Chegou ao fim do inventário actual',
   feedEndBody: 'Novos patrimónios aparecem aqui assim que forem publicados.',
+  feed: {
+    activateRoleTitle: 'Active o papel Cliente para ver o feed',
+    activateRoleBody:
+      'O feed contínuo mostra patrimónios, destaques e recomendações assim que tiver acesso a Habitação.',
+    activateRoleCta: 'Activar papel',
+    warmingTitle: 'Feed a aquecer',
+    warmingBody:
+      'Ainda não há anúncios activos. Publique o primeiro património ou explore Habitação.',
+    exploreWithFilters: 'Explorar com filtros',
+    markers: {
+      new: { title: 'Patrimónios novos', hint: 'Acabaram de entrar na plataforma.' },
+      featured: {
+        title: 'Em destaque',
+        hint: 'Selecção com presença premium.',
+        badge: 'Destaque',
+      },
+      nearby: { title: 'Próximos de si', hint: 'Inventário relevante para explorar agora.' },
+      recommend: {
+        title: 'Recomendações',
+        hint: 'Sugestões com base no inventário activo.',
+      },
+      trends: { title: 'Tendências', hint: 'O que a comunidade está a ver.' },
+      premium: {
+        title: 'Imóveis premium',
+        hint: 'Património de gama alta.',
+        badge: 'Premium',
+      },
+      contracts: {
+        title: 'Actividade de contratos',
+        hint: 'Formalização a avançar na plataforma.',
+        badge: 'Contratos',
+      },
+      news: { title: 'Novidades', hint: 'Actualizações recentes do marketplace.' },
+      smart: {
+        title: 'Recomendações inteligentes',
+        hint: 'Preparação para o motor KAI.',
+        badge: 'KAI prep',
+      },
+      more: { title: 'Mais patrimónios', hint: 'Continue a explorar — o feed não acaba aqui.' },
+      sponsored: {
+        title: 'Anúncios patrocinados',
+        hint: 'Campanhas e inventário em promoção.',
+        badge: 'Patrocinado',
+      },
+    },
+    linkCard: {
+      title: 'Explorar habitação com filtros',
+      hint: 'Afine localização, finalidade e tipologia sem sair da plataforma.',
+      cta: 'Abrir explorar',
+    },
+  },
+  institutional: {
+    badge: 'Kuteka · v1.0 Beta',
+    backToLanding: 'Voltar à Landing',
+    contactKuteka: 'Contactar a Kuteka',
+  },
+  errors: {
+    routeErrorTitle: 'Erro',
+    routeErrorBody: 'Estamos a ter dificuldade em mostrar esta página. Tente novamente.',
+    retry: 'Tentar novamente',
+    globalErrorTitle: 'Algo correu mal',
+    globalErrorBody: 'Ocorreu um erro inesperado. Pode tentar novamente.',
+    notFoundTitle: 'Página não encontrada',
+    notFoundBody: 'O recurso pedido não existe.',
+    goHome: 'Ir para a fundação',
+  },
 } as const;
 
 type DeepStringify<T> = {

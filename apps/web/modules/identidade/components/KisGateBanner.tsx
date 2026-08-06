@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
-import { getIdentidadeCopy } from '../content/pt';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getIdentidadeCopy } from '../content';
 import { meetsActionKyc } from '../lib/kyc';
 
 type KisGateBannerProps = {
@@ -13,7 +14,8 @@ type KisGateBannerProps = {
 };
 
 export function KisGateBanner({ level, action = 'contract', minLevel }: KisGateBannerProps) {
-  const copy = getIdentidadeCopy();
+  const { locale } = useLocale();
+  const copy = getIdentidadeCopy(locale);
   const allowed = minLevel != null ? level >= minLevel : meetsActionKyc(level, action);
   if (allowed) return null;
 

@@ -15,8 +15,23 @@ export const authCopyFr: AuthCopy = {
       'Trop de demandes pour le moment. Attendez environ une heure puis réessayez — ou connectez-vous si vous avez déjà un compte.',
     sessionExpired:
       'Votre session a expiré ou n’a pas été démarrée. Connectez-vous à nouveau pour continuer.',
+    sessionInvalid: 'Session invalide. Connectez-vous à nouveau pour continuer.',
     showPassword: 'Afficher',
     hidePassword: 'Masquer',
+  },
+  emailOtp: {
+    sendFailed: 'Nous n’avons pas pu envoyer le code.',
+    invalidLength: 'Saisissez le code à 6 chiffres.',
+    invalidGeneric: 'Code invalide.',
+    expired: 'Le code a expiré. Demandez-en un nouveau.',
+    incorrect: 'Code incorrect. Veuillez réessayer.',
+    incorrectOrExpired: 'Code incorrect ou expiré. Renvoyez l’e-mail et réessayez.',
+  },
+  actions: {
+    updatePasswordFailed: 'Nous n’avons pas pu mettre à jour le mot de passe.',
+    resendEmailFailed: 'Nous n’avons pas pu renvoyer l’e-mail.',
+    activateRolesFailed: 'Nous n’avons pas pu activer les rôles.',
+    saveNameFailed: 'Nous n’avons pas pu enregistrer le nom.',
   },
   register: {
     title: 'Créer un compte',

@@ -1,7 +1,11 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '@/modules/shell/content';
 import { parseMarkdownDocument, type MdBlock } from '../lib/parse-markdown';
 
 export type DocumentDownload = {
@@ -132,14 +136,16 @@ export function InstitutionalDocument({
   markdown,
   downloads,
   backHref = '/',
-  backLabel = 'Voltar à Landing',
+  backLabel,
 }: Props) {
+  const { locale } = useLocale();
+  const shell = getShellCopy(locale).institutional;
   const blocks = parseMarkdownDocument(markdown).filter((b) => b.type !== 'h1');
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12 md:py-16">
       <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-        Kuteka · v1.0 Beta
+        {shell.badge}
       </p>
       <Heading level={1} className="mt-2">
         {title}
@@ -168,10 +174,10 @@ export function InstitutionalDocument({
 
       <div className="mt-12 flex flex-wrap gap-4 border-t border-slate-200 pt-6">
         <Link href={backHref} className="text-sm font-medium text-brand-700 hover:underline">
-          {backLabel}
+          {backLabel ?? shell.backToLanding}
         </Link>
         <Link href="/contacto" className="text-sm text-slate-600 hover:underline">
-          Contactar a Kuteka
+          {shell.contactKuteka}
         </Link>
       </div>
     </main>

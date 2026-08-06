@@ -15,8 +15,9 @@ import {
 import type { IdentityPartySnapshot } from '@kuteka/types';
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
 import { compressImageFile } from '@/lib/media/compress-image';
-import { getIdentidadeCopy } from '../content/pt';
+import { getIdentidadeCopy } from '../content';
 import type { TrustPillarStatus } from '../lib/kyc';
 
 export type IdentityProfileRow = {
@@ -141,7 +142,7 @@ const PROFILE_SELECT = [
 function mapIdentityError(errorMessage: string | undefined, fallback: string): string {
   const msg = errorMessage?.toLowerCase() ?? '';
   if (msg.includes('identity verification') || msg.includes('kyc')) {
-    return getIdentidadeCopy().kycGateBody;
+    return getIdentidadeCopy(resolveUiLocale()).kycGateBody;
   }
   return fallback;
 }
@@ -158,7 +159,7 @@ async function recompute(): Promise<void> {
 export async function loadMyIdentity(): Promise<
   { ok: true; data: IdentityBundle } | { ok: false; message: string }
 > {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -240,7 +241,7 @@ export async function loadMyIdentity(): Promise<
 export async function savePersonalIdentity(
   input: IdentityPersonalInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   const parsed = identityPersonalSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -282,7 +283,7 @@ export async function savePersonalIdentity(
 export async function saveContacts(
   input: IdentityContactsInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   const parsed = identityContactsSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -315,7 +316,7 @@ export async function saveContacts(
 export async function saveAddress(
   input: IdentityAddressInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   const parsed = identityAddressSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -368,7 +369,7 @@ export async function saveAddress(
 export async function saveBanking(
   input: IdentityBankingInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   const parsed = identityBankingSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -408,7 +409,7 @@ async function uploadIdentityFile(
   side: 'front' | 'back' | 'avatar' | 'selfie',
   file: File,
 ): Promise<{ ok: true; path: string; publicUrl?: string } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const compressed =
@@ -441,7 +442,7 @@ export async function submitIdDocument(input: {
   front: File;
   back: File;
 }): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   const parsed = identityIdDocumentSchema.safeParse(input.meta);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -510,7 +511,7 @@ export async function uploadAvatarOrSelfie(
   kind: 'avatar' | 'selfie',
   file: File,
 ): Promise<{ ok: true; url: string } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -535,7 +536,7 @@ export async function uploadAvatarOrSelfie(
 export async function exportMyIdentity(): Promise<
   { ok: true; data: unknown } | { ok: false; message: string }
 > {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('export_my_identity_data');
@@ -549,7 +550,7 @@ export async function exportMyIdentity(): Promise<
 export async function getPartySnapshot(
   userId: string,
 ): Promise<{ ok: true; data: IdentityPartySnapshot } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('get_identity_party_snapshot', {
@@ -565,7 +566,7 @@ export async function getPartySnapshot(
 export async function getMyPartySnapshot(): Promise<
   { ok: true; data: IdentityPartySnapshot } | { ok: false; message: string }
 > {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -593,7 +594,7 @@ export async function getMyKycLevel(): Promise<
 export async function listMyIdentityChanges(
   limit = 50,
 ): Promise<{ ok: true; data: IdentityFieldChangeRow[] } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('list_my_identity_changes', {
@@ -610,7 +611,7 @@ export async function listMyIdentityChanges(
 export async function listMyIdentityAccessLogs(
   limit = 50,
 ): Promise<{ ok: true; data: IdentityAccessLogRow[] } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('list_my_identity_access_logs', {
@@ -628,7 +629,7 @@ export async function logDocumentView(
   documentId: string,
   side: 'front' | 'back' | 'meta' = 'meta',
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getIdentidadeCopy();
+  const copy = getIdentidadeCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { error } = await client.rpc('log_identity_document_view', {

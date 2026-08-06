@@ -31,6 +31,7 @@ export const confiancaCopyPt = {
   reviewed: 'Revisão registada.',
   rejectionReasonLabel: 'Motivo da rejeição',
   rejectionReasonPlaceholder: 'Explique o que falta ou está incorrecto.',
+  rejectionReasonRequired: 'Motivo da rejeição é obrigatório.',
   loadError: 'Estamos a ter dificuldade em mostrar a Confiança. Tente novamente.',
   saveError: 'Não conseguimos submeter agora. Tente novamente.',
   forbidden: 'Não tem permissão para gerir a Confiança (trust.manage).',
@@ -62,6 +63,8 @@ export const confiancaCopyPt = {
   historyLabel: 'Histórico de verificações',
 } as const;
 
-export function getConfiancaCopy() {
-  return confiancaCopyPt;
-}
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type ConfiancaCopy = DeepStringify<typeof confiancaCopyPt>;

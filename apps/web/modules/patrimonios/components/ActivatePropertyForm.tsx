@@ -19,16 +19,17 @@ import {
   type ManagementLevel,
 } from '@kuteka/validation';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import {
-  CONSERVATION_LABELS,
-  CONSTRUCTION_LABELS,
-  MANAGEMENT_LABELS,
-  RENOVATION_LABELS,
-  SERVICE_LABELS,
-  UNFINISHED_LABELS,
+  getConservationLabels,
+  getConstructionLabels,
+  getManagementLabels,
+  getRenovationLabels,
+  getServiceLabels,
+  getUnfinishedLabels,
 } from '@/modules/listings/lib/manual-ops-labels';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
-import { getPatrimoniosCopy } from '../content/pt';
+import { getPatrimoniosCopy } from '../content';
 import { activateProperty } from '../services/properties-client';
 import type { LocalMediaDraft } from '../services/property-media-client';
 import { PropertyMediaEditor } from './PropertyMediaEditor';
@@ -182,7 +183,14 @@ function FieldLabel({ htmlFor, children }: { htmlFor: string; children: ReactNod
 }
 
 export function ActivatePropertyForm() {
-  const copy = getPatrimoniosCopy();
+  const { locale } = useLocale();
+  const copy = getPatrimoniosCopy(locale);
+  const serviceLabels = getServiceLabels(locale);
+  const managementLabels = getManagementLabels(locale);
+  const constructionLabels = getConstructionLabels(locale);
+  const unfinishedLabels = getUnfinishedLabels(locale);
+  const renovationLabels = getRenovationLabels(locale);
+  const conservationLabels = getConservationLabels(locale);
   const router = useRouter();
   const { session, status } = useAppSession();
   const canManage = session?.permissions.includes('properties.manage') ?? false;
@@ -654,7 +662,7 @@ export function ActivatePropertyForm() {
                           setRequestedServices((prev) => toggleInList(prev, svc as KutekaService))
                         }
                       />
-                      <span>{SERVICE_LABELS[svc] ?? svc}</span>
+                      <span>{serviceLabels[svc] ?? svc}</span>
                     </label>
                   </li>
                 ))}
@@ -676,7 +684,7 @@ export function ActivatePropertyForm() {
                 >
                   {MANAGEMENT_LEVELS.map((level) => (
                     <option key={level} value={level}>
-                      {MANAGEMENT_LABELS[level] ?? level}
+                      {managementLabels[level] ?? level}
                     </option>
                   ))}
                 </select>
@@ -703,7 +711,7 @@ export function ActivatePropertyForm() {
                   >
                     {CONSTRUCTION_STATUSES.map((s) => (
                       <option key={s} value={s}>
-                        {CONSTRUCTION_LABELS[s] ?? s}
+                        {constructionLabels[s] ?? s}
                       </option>
                     ))}
                   </select>
@@ -720,7 +728,7 @@ export function ActivatePropertyForm() {
                   >
                     {UNFINISHED_INTENTS.map((s) => (
                       <option key={s} value={s}>
-                        {UNFINISHED_LABELS[s] ?? s}
+                        {unfinishedLabels[s] ?? s}
                       </option>
                     ))}
                   </select>
@@ -752,7 +760,7 @@ export function ActivatePropertyForm() {
                           )
                         }
                       />
-                      <span>{RENOVATION_LABELS[item] ?? item}</span>
+                      <span>{renovationLabels[item] ?? item}</span>
                     </label>
                   </li>
                 ))}
@@ -860,7 +868,7 @@ export function ActivatePropertyForm() {
                   >
                     {CONSERVATION_STATES.map((s) => (
                       <option key={s} value={s}>
-                        {CONSERVATION_LABELS[s] ?? s}
+                        {conservationLabels[s] ?? s}
                       </option>
                     ))}
                   </select>

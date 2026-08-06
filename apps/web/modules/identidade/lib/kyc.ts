@@ -70,7 +70,11 @@ export function statusGlyph(status: TrustPillarStatus): string {
   return '⚪';
 }
 
-export function statusLabel(status: TrustPillarStatus): string {
+export function statusLabel(
+  status: TrustPillarStatus,
+  labels?: Record<TrustPillarStatus, string>,
+): string {
+  if (labels) return labels[status];
   if (status === 'verified') return 'Verificado';
   if (status === 'pending') return 'Em análise';
   if (status === 'rejected') return 'Rejeitado';

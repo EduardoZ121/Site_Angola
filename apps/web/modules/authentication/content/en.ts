@@ -14,8 +14,23 @@ export const authCopyEn: AuthCopy = {
     rateLimited:
       'Too many requests right now. Wait about an hour and try again — or sign in if you already created an account.',
     sessionExpired: 'Your session expired or was not started. Sign in again to continue.',
+    sessionInvalid: 'Invalid session. Sign in again to continue.',
     showPassword: 'Show',
     hidePassword: 'Hide',
+  },
+  emailOtp: {
+    sendFailed: 'We could not send the code.',
+    invalidLength: 'Enter the 6-digit code.',
+    invalidGeneric: 'Invalid code.',
+    expired: 'The code expired. Request a new one.',
+    incorrect: 'Incorrect code. Please try again.',
+    incorrectOrExpired: 'Incorrect or expired code. Resend the email and try again.',
+  },
+  actions: {
+    updatePasswordFailed: 'We could not update the password.',
+    resendEmailFailed: 'We could not resend the email.',
+    activateRolesFailed: 'We could not activate the roles.',
+    saveNameFailed: 'We could not save the name.',
   },
   register: {
     title: 'Create account',

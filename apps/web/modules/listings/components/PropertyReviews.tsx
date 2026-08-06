@@ -3,12 +3,18 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
-import { REVIEW_SUBJECT_LABELS, type ContractReviewRow } from '../types';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
+import { getListingsCopy, type ListingsCopy } from '../content';
+import type { ContractReviewRow } from '../types';
 
-function Stars({ rating }: { rating: number }) {
+function Stars({ rating, ariaTemplate }: { rating: number; ariaTemplate: string }) {
   const n = Math.max(0, Math.min(5, Math.round(rating)));
   return (
-    <span className="kuteka-detail-stars inline-flex gap-0.5" aria-label={`${n} de 5 estrelas`}>
+    <span
+      className="kuteka-detail-stars inline-flex gap-0.5"
+      aria-label={ariaTemplate.replace('{n}', String(n))}
+    >
       {[1, 2, 3, 4, 5].map((i) => (
         <span key={i} className={i <= n ? 'text-[#f0a91f]' : 'text-slate-300'} aria-hidden>
           ★
@@ -33,6 +39,10 @@ const SELECT_CORE =
  * Reputação Airbnb-style — estrelas, média, histórico e respostas.
  */
 export function PropertyReviews({ propertyId }: { propertyId: string }) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale);
+  const reviewsCopy = copy.reviews;
+  const subjectLabels = copy.subjects as ListingsCopy['subjects'] & Record<string, string>;
   const { session, status: sessionStatus } = useAppSession();
   const canWrite =
     sessionStatus === 'ready' && !!session?.permissions.includes('reputation.manage');
@@ -117,7 +127,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
     setFormError(null);
     setFormOk(null);
     if (!contractId) {
-      setFormError('Só pode avaliar após um contrato concluído associado a este imóvel.');
+      setFormError(reviewsCopy.needContractError);
       return;
     }
     setSubmitting(true);
@@ -127,7 +137,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
         data: { user },
       } = await client.auth.getUser();
       if (!user) {
-        setFormError('Sessão inválida.');
+        setFormError(reviewsCopy.invalidSessionError);
         setSubmitting(false);
         return;
       }
@@ -143,16 +153,16 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
       if (error) {
         setFormError(
           error.message.includes('duplicate') || error.code === '23505'
-            ? 'Já avaliou este assunto neste contrato.'
-            : 'Não conseguimos guardar a avaliação. Tente novamente.',
+            ? reviewsCopy.duplicateError
+            : reviewsCopy.saveError,
         );
       } else {
-        setFormOk('Avaliação registada.');
+        setFormOk(reviewsCopy.saveSuccess);
         setComment('');
         await fetchReviews();
       }
     } catch {
-      setFormError('Não conseguimos guardar a avaliação. Tente novamente.');
+      setFormError(reviewsCopy.saveError);
     }
     setSubmitting(false);
   }
@@ -175,11 +185,11 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
   const avg =
     rows.length > 0 ? rows.reduce((sum, row) => sum + Number(row.rating), 0) / rows.length : null;
 
-  const bySubject = Object.keys(REVIEW_SUBJECT_LABELS).map((key) => {
+  const bySubject = Object.keys(subjectLabels).map((key) => {
     const subset = rows.filter((r) => r.subject_kind === key);
     const mean =
       subset.length > 0 ? subset.reduce((s, r) => s + Number(r.rating), 0) / subset.length : null;
-    return { key, label: REVIEW_SUBJECT_LABELS[key], mean, count: subset.length };
+    return { key, label: subjectLabels[key], mean, count: subset.length };
   });
 
   return (
@@ -191,17 +201,17 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 id="reviews-heading" className="kuteka-detail-title">
-            Reputação & avaliações
+            {reviewsCopy.title}
           </h2>
-          <p className="kuteka-detail-meta mt-1">
-            Estrelas, comentários, respostas e histórico — após contrato concluído.
-          </p>
+          <p className="kuteka-detail-meta mt-1">{reviewsCopy.subtitle}</p>
         </div>
         {avg != null ? (
           <div className="text-right">
-            <Stars rating={avg} />
+            <Stars rating={avg} ariaTemplate={reviewsCopy.starsAriaTemplate} />
             <p className="kuteka-detail-meta mt-1">
-              Média geral {avg.toFixed(1)} · {rows.length} avaliação(ões)
+              {reviewsCopy.averageTemplate
+                .replace('{avg}', avg.toFixed(1))
+                .replace('{count}', String(rows.length))}
             </p>
           </div>
         ) : null}
@@ -218,7 +228,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
               >
                 <span className="text-sm font-medium text-slate-800">{s.label}</span>
                 <span className="inline-flex items-center gap-1.5">
-                  <Stars rating={s.mean ?? 0} />
+                  <Stars rating={s.mean ?? 0} ariaTemplate={reviewsCopy.starsAriaTemplate} />
                   <span className="font-mono text-xs text-slate-600">{s.mean?.toFixed(1)}</span>
                 </span>
               </li>
@@ -231,16 +241,14 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
           onSubmit={onSubmit}
           className="mt-5 flex flex-col gap-3 border-t border-[var(--kuteka-detail-line)] pt-5"
         >
-          <h3 className="kuteka-detail-subtitle">Escrever avaliação</h3>
+          <h3 className="kuteka-detail-subtitle">{reviewsCopy.writeTitle}</h3>
           {contracts.length === 0 ? (
-            <p className="kuteka-detail-body">
-              Disponível após um contrato concluído neste património.
-            </p>
+            <p className="kuteka-detail-body">{reviewsCopy.unavailable}</p>
           ) : (
             <>
               <div className="grid gap-3 sm:grid-cols-2">
                 <label className="flex flex-col gap-1 text-sm">
-                  <span className="kuteka-detail-label">Contrato</span>
+                  <span className="kuteka-detail-label">{reviewsCopy.contractLabel}</span>
                   <select
                     value={contractId}
                     onChange={(e) => setContractId(e.target.value)}
@@ -254,13 +262,13 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                   </select>
                 </label>
                 <label className="flex flex-col gap-1 text-sm">
-                  <span className="kuteka-detail-label">Assunto</span>
+                  <span className="kuteka-detail-label">{reviewsCopy.subjectLabel}</span>
                   <select
                     value={subjectKind}
                     onChange={(e) => setSubjectKind(e.target.value)}
                     className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
                   >
-                    {Object.entries(REVIEW_SUBJECT_LABELS).map(([key, label]) => (
+                    {Object.entries(subjectLabels).map(([key, label]) => (
                       <option key={key} value={key}>
                         {label}
                       </option>
@@ -269,7 +277,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                 </label>
               </div>
               <label className="flex flex-col gap-1 text-sm">
-                <span className="kuteka-detail-label">Classificação</span>
+                <span className="kuteka-detail-label">{reviewsCopy.ratingLabel}</span>
                 <div className="flex flex-wrap items-center gap-2">
                   {[5, 4, 3, 2, 1].map((n) => (
                     <button
@@ -288,14 +296,14 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                 </div>
               </label>
               <label className="flex flex-col gap-1 text-sm">
-                <span className="kuteka-detail-label">Comentário</span>
+                <span className="kuteka-detail-label">{reviewsCopy.commentLabel}</span>
                 <textarea
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   rows={3}
                   maxLength={1000}
                   className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-                  placeholder="Descreva a experiência…"
+                  placeholder={reviewsCopy.commentPlaceholder}
                 />
               </label>
               {formError ? (
@@ -309,20 +317,17 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                 disabled={submitting}
                 className="kuteka-detail-chip kuteka-detail-chip--accent w-fit px-4 py-2"
               >
-                {submitting ? 'A guardar…' : 'Publicar avaliação'}
+                {submitting ? reviewsCopy.submitting : reviewsCopy.submit}
               </button>
             </>
           )}
         </form>
       ) : null}
 
-      {!loaded ? <p className="kuteka-detail-meta mt-4">A carregar avaliações…</p> : null}
+      {!loaded ? <p className="kuteka-detail-meta mt-4">{reviewsCopy.loading}</p> : null}
 
       {loaded && rows.length === 0 ? (
-        <p className="kuteka-detail-body mt-4">
-          Ainda não há avaliações públicas. Aparecem quando um contrato é concluído e as partes
-          partilham feedback.
-        </p>
+        <p className="kuteka-detail-body mt-4">{reviewsCopy.empty}</p>
       ) : null}
 
       {rows.length > 0 ? (
@@ -331,19 +336,19 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
             <li key={row.id} className="kuteka-detail-review">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-                  {REVIEW_SUBJECT_LABELS[row.subject_kind] ?? row.subject_kind}
+                  {subjectLabels[row.subject_kind] ?? row.subject_kind}
                 </span>
-                <Stars rating={Number(row.rating)} />
+                <Stars rating={Number(row.rating)} ariaTemplate={reviewsCopy.starsAriaTemplate} />
               </div>
               <p className="kuteka-detail-meta mt-1">
-                {new Date(row.created_at).toLocaleDateString('pt-AO')}
+                {new Date(row.created_at).toLocaleDateString(LOCALE_INTL_TAG[locale])}
               </p>
               {row.comment ? <p className="kuteka-detail-body mt-2">{row.comment}</p> : null}
 
               {row.owner_reply ? (
                 <div className="mt-3 rounded-kuteka border-l-4 border-[#08263f] bg-slate-50 px-3 py-2">
                   <p className="text-xs font-bold uppercase tracking-wide text-[#08263f]">
-                    Resposta do proprietário
+                    {reviewsCopy.ownerReply}
                   </p>
                   <p className="kuteka-detail-body mt-1">{row.owner_reply}</p>
                 </div>
@@ -351,7 +356,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
               {row.agent_reply ? (
                 <div className="mt-2 rounded-kuteka border-l-4 border-[#f0a91f] bg-amber-50/60 px-3 py-2">
                   <p className="text-xs font-bold uppercase tracking-wide text-[#08263f]">
-                    Resposta do agente
+                    {reviewsCopy.agentReply}
                   </p>
                   <p className="kuteka-detail-body mt-1">{row.agent_reply}</p>
                 </div>
@@ -366,7 +371,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                     }
                     rows={2}
                     className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
-                    placeholder="Escrever resposta pública…"
+                    placeholder={reviewsCopy.replyPlaceholder}
                   />
                   <div className="flex flex-wrap gap-2">
                     {canReplyOwner && !row.owner_reply ? (
@@ -375,7 +380,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                         className="kuteka-detail-chip kuteka-detail-chip--accent"
                         onClick={() => void submitReply(row.id, 'owner')}
                       >
-                        Responder como proprietário
+                        {reviewsCopy.replyAsOwner}
                       </button>
                     ) : null}
                     {canReplyAgent && !row.agent_reply ? (
@@ -384,7 +389,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                         className="kuteka-detail-chip kuteka-detail-chip--accent"
                         onClick={() => void submitReply(row.id, 'agent')}
                       >
-                        Responder como agente
+                        {reviewsCopy.replyAsAgent}
                       </button>
                     ) : null}
                   </div>

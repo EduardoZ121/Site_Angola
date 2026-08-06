@@ -18,7 +18,7 @@ export function ClientOpsCockpit({ s, loading }: { s: OpsStats | null; loading: 
       title={c.title}
       subtitle={c.subtitle}
       stats={[
-        { label: c.daysRemaining, value: formatDays(active?.daysRemaining) },
+        { label: c.daysRemaining, value: formatDays(active?.daysRemaining, locale) },
         {
           label: c.nextRent,
           value:

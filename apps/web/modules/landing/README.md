@@ -4,7 +4,7 @@ Landing Page pública da Kuteka — contrato: **PASSO 1** + **PASSO 1A**.
 
 ## Estrutura
 
-- `content.ts` — copy e rotas (separado da estrutura)
+- `content/` — pacotes de copy por idioma (pt/en/fr/es) + `getLandingCopy(locale)`; `content.ts` mantém-se como re-export de compatibilidade
 - `LandingPage.tsx` — composição das secções
 - `components/` — Topbar, Hero, Diferença, Como funciona, Fecho, Footer, ícones, Reveal
 
@@ -24,5 +24,5 @@ A Topbar → B Hero → C Diferença → D Como funciona → E Fecho → F Foote
 
 - Design System `@kuteka/ui` + tokens Kuteka Orange / Slate
 - Sem stats fabricados, sem social proof inventado
-- Server Components por defeito; client só para topbar scroll / reveal
+- Secções são client components — usam `useLocale()` + `getLandingCopy(locale)` para seguir o idioma activo
 - Documentação: PASSO 0, 1, 1A

@@ -6,12 +6,13 @@ import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getContratosCopy } from '../content/pt';
+import { getContratosCopy } from '../content';
 import { getContractProperty, listContracts, type ContractRow } from '../services/contracts-client';
 
 function statusVariant(status: string): 'default' | 'success' | 'warning' | 'danger' | 'brand' {
@@ -22,7 +23,8 @@ function statusVariant(status: string): 'default' | 'success' | 'warning' | 'dan
 }
 
 export function ContractsHubClient() {
-  const copy = getContratosCopy();
+  const { locale } = useLocale();
+  const copy = getContratosCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage =
     sessionStatus === 'ready' && !!session?.permissions.includes('contracts.manage');

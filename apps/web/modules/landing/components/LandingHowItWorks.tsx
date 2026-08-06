@@ -1,12 +1,15 @@
+'use client';
+
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import Link from 'next/link';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { Reveal } from './Reveal';
-import { landingContent } from '../content';
-
-const c = landingContent;
+import { getLandingCopy } from '../content';
 
 export function LandingHowItWorks() {
+  const { locale } = useLocale();
+  const c = getLandingCopy(locale);
   return (
     <section
       id={c.howItWorks.id}

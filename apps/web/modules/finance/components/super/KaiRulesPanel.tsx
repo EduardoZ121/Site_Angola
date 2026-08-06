@@ -2,13 +2,15 @@
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import { listKaiRules, upsertKaiRule, type FinanceKaiRuleRow } from '../../services/finance-client';
 import { Feedback, PanelSection, useFeedback, type PanelProps } from './shared';
 
 export function KaiRulesPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [rules, setRules] = useState<FinanceKaiRuleRow[]>([]);
   const [loading, setLoading] = useState(true);

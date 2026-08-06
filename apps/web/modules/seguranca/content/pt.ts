@@ -1,0 +1,108 @@
+/** Centro de Segurança — copy pt-AO (ADR-026). */
+export const segurancaCopyPt = {
+  eyebrow: 'Identity & Security',
+  title: 'Centro de Segurança',
+  subtitle: 'Confirmações, sessões, dispositivos e nível de segurança da conta Kuteka.',
+  verifiedBadge: 'Verificado',
+  pendingBadge: 'Pendente',
+  kyc: {
+    complete: 'KYC completo',
+    level: 'KYC nível {n}',
+    initial: 'KYC inicial',
+    notStarted: 'KYC por iniciar',
+  },
+  securityLevel: 'Nível de segurança',
+  emailLabel: 'Email',
+  phoneLabel: 'Telefone',
+  kycStatus: 'Estado KYC',
+  openTrustCenter: 'Abrir Centro de Confiança',
+  lastLogin: 'Último login',
+  noRecordYet: 'Ainda sem registo',
+  mfaLabel: '2FA',
+  mfaActive: 'Activo',
+  mfaPreparing: 'Preparado — activação futura',
+  infraReady: 'Infra pronta',
+  phoneVerifySection: {
+    title: 'Verificar telefone (OTP SMS)',
+    hint: 'Fluxo sandbox pronto para Twilio, MessageBird ou Infobip (Angola).',
+    numberLabel: 'Número',
+    sendCode: 'Enviar código',
+    otpLabel: 'Código de 6 dígitos',
+    confirmPhone: 'Confirmar telefone',
+  },
+  devices: {
+    title: 'Dispositivos activos',
+    empty: 'Inventário preparado. Os dispositivos aparecerão quando a flag estiver activa.',
+    fallbackName: 'Dispositivo',
+    seenAt: 'Visto {date}',
+  },
+  sessions: {
+    title: 'Sessões abertas',
+    emptyPrefix: 'Gestão remota de sessões preparada (flag',
+    emptySuffix: ').',
+    unknownIp: 'IP desconhecido',
+    terminate: 'Terminar',
+  },
+  history: {
+    title: 'Histórico de autenticações e alterações',
+    empty:
+      'Ainda sem eventos. Logins, recuperações e alterações sensíveis aparecerão aqui — com notificação quando marcado.',
+    notifySuffix: ' · notificar',
+  },
+  actions: {
+    sandboxHint: 'Sandbox: use o código {code}',
+    codeSent: 'Código enviado. Introduza os 6 dígitos abaixo.',
+    phoneVerified: 'Telefone verificado com sucesso.',
+    sessionRevoked: 'Sessão marcada como terminada.',
+  },
+  scoreLabels: {
+    excellent: 'Excelente',
+    high: 'Bom',
+    medium: 'Moderado',
+    low: 'A reforçar',
+  },
+  events: {
+    otp_issued: 'Código OTP emitido',
+    otp_verified: 'Código OTP validado',
+    session_revoked: 'Sessão terminada remotamente',
+    login_new: 'Novo login',
+    device_new: 'Novo dispositivo',
+    password_changed: 'Palavra-passe alterada',
+    email_changed: 'Email alterado',
+    phone_changed: 'Telefone alterado',
+    document_updated: 'Documento actualizado',
+    banking_added: 'Conta bancária adicionada',
+    recovery_started: 'Recuperação de conta iniciada',
+    permissions_changed: 'Permissões alteradas',
+  },
+  client: {
+    authUnavailable: 'Autenticação indisponível neste ambiente.',
+    loadError: 'Não foi possível carregar o Centro de Segurança.',
+    networkErrorLoad: 'Erro de rede ao carregar segurança.',
+    invalidPhone: 'Indique um número de telefone válido (ex.: +2449XXXXXXXX).',
+    otpSendError: 'Não foi possível enviar o código.',
+    otpIssueError: 'Não foi possível emitir o código OTP.',
+    networkErrorOtpIssue: 'Erro de rede ao emitir OTP.',
+    otpLengthError: 'Introduza o código de 6 dígitos.',
+    otpInvalidGeneric: 'Código inválido.',
+    otpErrors: {
+      invalid_code: 'Código incorrecto. Tente novamente.',
+      expired: 'O código expirou. Peça um novo.',
+      already_used: 'Este código já foi utilizado.',
+      too_many_attempts: 'Demasiadas tentativas. Peça um novo código.',
+      challenge_not_found: 'Desafio não encontrado. Peça um novo código.',
+      forbidden: 'Não tem permissão para validar este código.',
+    },
+    otpValidateFallback: 'Não foi possível validar o código.',
+    networkErrorOtpValidate: 'Erro de rede ao validar OTP.',
+    revokeError: 'Não foi possível terminar a sessão.',
+    revokeNotFound: 'Sessão não encontrada ou já terminada.',
+    networkErrorGeneric: 'Erro de rede.',
+  },
+} as const;
+
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type SegurancaCopy = DeepStringify<typeof segurancaCopyPt>;

@@ -8,8 +8,9 @@ import {
   KUTEKA_PAY_WEBHOOK_EVENTS,
 } from '@kuteka/validation';
 import { Badge, Button, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import { formatAoaAmount } from '../../lib/format';
 import { listFinanceProducts, type FinanceProductRow } from '../../services/finance-client';
 import {
@@ -34,7 +35,8 @@ const STATUS_VARIANT: Record<string, 'success' | 'warning' | 'danger' | 'default
 };
 
 export function PayEnginePanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [adapters, setAdapters] = useState<KutekaPayAdapterHealth[]>([]);
   const [intents, setIntents] = useState<KutekaPayIntentRow[]>([]);

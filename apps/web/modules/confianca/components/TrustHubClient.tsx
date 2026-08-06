@@ -6,12 +6,13 @@ import { TRUST_DOC_TYPES } from '@kuteka/validation';
 import { Badge, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getConfiancaCopy } from '../content/pt';
+import { getConfiancaCopy } from '../content';
 import { listMyTrustDocuments, type TrustDocumentRow } from '../services/trust-client';
 
 function latestByType(rows: TrustDocumentRow[]) {
@@ -23,7 +24,8 @@ function latestByType(rows: TrustDocumentRow[]) {
 }
 
 export function TrustHubClient() {
-  const copy = getConfiancaCopy();
+  const { locale } = useLocale();
+  const copy = getConfiancaCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('trust.manage');
   const isAdmin = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');

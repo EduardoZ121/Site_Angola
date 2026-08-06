@@ -2,8 +2,9 @@
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   formatAoaAmount,
   listReconciliationRuns,
@@ -19,7 +20,8 @@ function isoDate(offsetDays: number): string {
 }
 
 export function ReconPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [runs, setRuns] = useState<FinanceReconRunRow[]>([]);
   const [loading, setLoading] = useState(true);

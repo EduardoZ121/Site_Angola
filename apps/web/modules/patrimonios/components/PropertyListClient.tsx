@@ -6,17 +6,19 @@ import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getPatrimoniosCopy } from '../content/pt';
+import { getPatrimoniosCopy } from '../content';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
 import { PartnerLifecyclePanel } from './PartnerLifecyclePanel';
 
 export function PropertyListClient() {
-  const copy = getPatrimoniosCopy();
+  const { locale } = useLocale();
+  const copy = getPatrimoniosCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage =
     sessionStatus === 'ready' && !!session?.permissions.includes('properties.manage');
@@ -60,10 +62,10 @@ export function PropertyListClient() {
 
   const nextSteps = [
     ...(canHousing
-      ? [{ href: '/app/habitacao/explorar', label: 'Ver como Cliente', primary: true as const }]
-      : [{ href: '/app', label: 'Ir ao painel', primary: true as const }]),
+      ? [{ href: '/app/habitacao/explorar', label: copy.seeInHousing, primary: true as const }]
+      : [{ href: '/app', label: copy.nextSteps.goDashboard, primary: true as const }]),
     ...(canManage ? [{ href: '/app/patrimonios/novo', label: copy.activate }] : []),
-    { href: '/app/confianca', label: 'Verificar conta' },
+    { href: '/app/confianca', label: copy.nextSteps.verifyAccount },
   ];
 
   return (
@@ -101,9 +103,9 @@ export function PropertyListClient() {
             primaryHref="/auth/onboarding/papeis"
             primaryLabel={copy.activateRole}
             steps={[
-              { href: '/app', label: 'Ir ao painel', primary: true },
-              { href: '/app/confianca', label: 'Verificar conta' },
-              { href: '/app/agente', label: 'Ver área Agente' },
+              { href: '/app', label: copy.nextSteps.goDashboard, primary: true },
+              { href: '/app/confianca', label: copy.nextSteps.verifyAccount },
+              { href: '/app/agente', label: copy.nextSteps.seeAgentArea },
             ]}
           />
         ) : null}
@@ -188,7 +190,7 @@ export function PropertyListClient() {
               </section>
             ) : null}
 
-            <FlowNextSteps title="Continuar o fluxo" steps={nextSteps} />
+            <FlowNextSteps title={copy.nextSteps.continueFlowTitle} steps={nextSteps} />
           </SoftListSlot>
         ) : null}
       </div>

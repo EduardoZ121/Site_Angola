@@ -3,7 +3,10 @@
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { formatAoa } from '@/lib/format/aoa';
-import { CONSERVATION_LABELS, LIFECYCLE_LABELS, asHistoryList } from '../lib/manual-ops-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG, type AppLocale } from '@/modules/i18n/types';
+import { getListingsCopy } from '../content';
+import { asHistoryList, getConservationLabels, getLifecycleLabels } from '../lib/manual-ops-labels';
 import type { EnrichedListing } from '../types';
 import { KutekaScoreGauge } from './KutekaScoreGauge';
 
@@ -17,10 +20,10 @@ function Metric({ label, value, hint }: { label: string; value: string; hint?: s
   );
 }
 
-function formatDate(iso: string | null | undefined): string {
+function formatDate(iso: string | null | undefined, locale: AppLocale): string {
   if (!iso) return '—';
   try {
-    return new Date(iso).toLocaleDateString('pt-AO');
+    return new Date(iso).toLocaleDateString(LOCALE_INTL_TAG[locale]);
   } catch {
     return iso;
   }
@@ -37,6 +40,10 @@ type Metrics = {
  * Cockpit de Saúde do Património — Manual Cap.10.10.
  */
 export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale).health;
+  const conservationLabels = getConservationLabels(locale);
+  const lifecycleLabels = getLifecycleLabels(locale);
   const score = row.kuteka_score != null ? Number(row.kuteka_score) : null;
   const maintenance = asHistoryList(row.maintenance_history);
   const inspections = asHistoryList(row.inspection_history);
@@ -73,19 +80,19 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
 
   const risk =
     score == null
-      ? { label: 'Por avaliar', tone: 'kuteka-detail-chip' }
+      ? { label: copy.riskUnrated, tone: 'kuteka-detail-chip' }
       : score >= 80
-        ? { label: 'Risco baixo', tone: 'kuteka-detail-chip kuteka-detail-chip--accent' }
+        ? { label: copy.riskLow, tone: 'kuteka-detail-chip kuteka-detail-chip--accent' }
         : score >= 60
-          ? { label: 'Risco moderado', tone: 'kuteka-detail-chip' }
-          : { label: 'Risco elevado', tone: 'kuteka-detail-chip' };
+          ? { label: copy.riskModerate, tone: 'kuteka-detail-chip' }
+          : { label: copy.riskHigh, tone: 'kuteka-detail-chip' };
 
   const tip =
     row.needs_renovation || (score != null && score < 75)
-      ? 'Pequenas melhorias na fachada e fotografia profissional podem aumentar o valor de mercado até cerca de 8%.'
+      ? copy.tipRenovation
       : score != null && score >= 85
-        ? 'Património em excelente condição — mantenha inspeções semestrais e actualize o PDK após qualquer obra.'
-        : 'Agende a próxima manutenção preventiva e confirme a documentação no Passaporte Digital.';
+        ? copy.tipExcellent
+        : copy.tipDefault;
 
   const valueSeries = valuations
     .filter((v) => typeof (v as { price_aoa?: number }).price_aoa === 'number' || v.score != null)
@@ -94,13 +101,11 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
   return (
     <section id="saude" className="kuteka-detail-panel p-5 sm:p-6" aria-labelledby="health-heading">
       <div className="border-b border-[var(--kuteka-detail-line)] pb-4">
-        <p className="kuteka-detail-eyebrow">Cockpit patrimonial</p>
+        <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
         <h2 id="health-heading" className="kuteka-detail-title mt-1">
-          Painel de Saúde do Património
+          {copy.title}
         </h2>
-        <p className="kuteka-detail-meta mt-1">
-          Acompanhe o Índice Kuteka, alertas, evolução e recomendações automáticas.
-        </p>
+        <p className="kuteka-detail-meta mt-1">{copy.subtitle}</p>
       </div>
 
       <div className="mt-5 grid gap-6 lg:grid-cols-[auto_1fr] lg:items-start">
@@ -110,52 +115,58 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
             <span className={risk.tone}>{risk.label}</span>
             {row.needs_renovation ? (
               <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-                Alerta: remodelação recomendada
+                {copy.renovationAlert}
               </span>
             ) : (
-              <span className="kuteka-detail-chip">Sem remodelação urgente</span>
+              <span className="kuteka-detail-chip">{copy.noUrgentRenovation}</span>
             )}
             {nextMaint && nextMaint.getTime() < Date.now() + 30 * 86400000 ? (
               <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-                Manutenção prevista em breve
+                {copy.upcomingMaintenance}
               </span>
             ) : null}
           </div>
 
           <dl className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <Metric
-              label="Estado geral"
+              label={copy.overallState}
               value={
-                LIFECYCLE_LABELS[row.lifecycle_status ?? ''] ??
+                lifecycleLabels[row.lifecycle_status ?? ''] ??
                 row.lifecycle_status ??
-                'Em preparação'
+                copy.preparing
               }
             />
             <Metric
-              label="Conservação"
+              label={copy.conservation}
               value={
-                CONSERVATION_LABELS[row.conservation_state ?? ''] ?? row.conservation_state ?? '—'
+                conservationLabels[row.conservation_state ?? ''] ?? row.conservation_state ?? '—'
               }
             />
-            <Metric label="Valor estimado" value={formatAoa(row.price_aoa, row.purpose)} />
-            <Metric label="Última manutenção" value={formatDate(row.last_maintenance_at)} />
-            <Metric label="Última inspeção" value={formatDate(row.last_inspection_at)} />
+            <Metric label={copy.estimatedValue} value={formatAoa(row.price_aoa, row.purpose)} />
             <Metric
-              label="Próxima manutenção"
-              value={nextMaint ? formatDate(nextMaint.toISOString()) : 'A definir'}
+              label={copy.lastMaintenance}
+              value={formatDate(row.last_maintenance_at, locale)}
             />
             <Metric
-              label="Próxima inspeção"
-              value={nextInsp ? formatDate(nextInsp.toISOString()) : 'A definir'}
+              label={copy.lastInspection}
+              value={formatDate(row.last_inspection_at, locale)}
+            />
+            <Metric
+              label={copy.nextMaintenance}
+              value={nextMaint ? formatDate(nextMaint.toISOString(), locale) : copy.toDefine}
+            />
+            <Metric
+              label={copy.nextInspection}
+              value={nextInsp ? formatDate(nextInsp.toISOString(), locale) : copy.toDefine}
             />
             {metrics ? (
               <>
-                <Metric label="Visualizações (30d)" value={String(metrics.views_30d)} />
-                <Metric label="Visitas (30d)" value={String(metrics.visits_30d)} />
-                <Metric label="Propostas (30d)" value={String(metrics.proposals_30d)} />
+                <Metric label={copy.views30d} value={String(metrics.views_30d)} />
+                <Metric label={copy.visits30d} value={String(metrics.visits_30d)} />
+                <Metric label={copy.proposals30d} value={String(metrics.proposals_30d)} />
                 {metrics.estimated_yield_pct != null ? (
                   <Metric
-                    label="Rentabilidade estimada"
+                    label={copy.estimatedYield}
                     value={`${Number(metrics.estimated_yield_pct).toFixed(1)}%`}
                   />
                 ) : null}
@@ -167,7 +178,7 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
 
       {valueSeries.length > 0 ? (
         <div className="mt-6">
-          <h3 className="kuteka-detail-subtitle">Evolução do imóvel / valor</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.valueEvolution}</h3>
           <ul className="mt-3 flex flex-wrap gap-2">
             {valueSeries.map((v, idx) => {
               const price = (v as { price_aoa?: number }).price_aoa;
@@ -175,7 +186,7 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
                 <li key={idx} className="kuteka-detail-review min-w-[8rem] flex-1">
                   <p className="kuteka-detail-meta">{v.at ?? '—'}</p>
                   <p className="kuteka-detail-value mt-1">
-                    {v.score != null ? `Índice ${v.score}` : '—'}
+                    {v.score != null ? copy.indexLabel.replace('{score}', String(v.score)) : '—'}
                   </p>
                   {price != null ? (
                     <p className="kuteka-detail-body mt-1">{formatAoa(price, row.purpose)}</p>
@@ -188,19 +199,29 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
       ) : null}
 
       <div className="mt-6 rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3">
-        <p className="text-xs font-bold uppercase tracking-wide text-emerald-900">Dica Kuteka</p>
+        <p className="text-xs font-bold uppercase tracking-wide text-emerald-900">
+          {copy.tipLabel}
+        </p>
         <p className="mt-1 text-sm font-medium text-emerald-950">{tip}</p>
       </div>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-3">
-        <HistoryBlock title="Histórico técnico" items={maintenance} />
-        <HistoryBlock title="Inspeções" items={inspections} />
         <HistoryBlock
-          title="Valorizações"
+          title={copy.technicalHistory}
+          items={maintenance}
+          noRecords={copy.noRecords}
+        />
+        <HistoryBlock title={copy.inspections} items={inspections} noRecords={copy.noRecords} />
+        <HistoryBlock
+          title={copy.valuations}
           items={valuations.map((v) => ({
             at: v.at,
-            note: v.score != null ? `Índice ${v.score}${v.note ? ` · ${v.note}` : ''}` : v.note,
+            note:
+              v.score != null
+                ? `${copy.indexLabel.replace('{score}', String(v.score))}${v.note ? ` · ${v.note}` : ''}`
+                : v.note,
           }))}
+          noRecords={copy.noRecords}
         />
       </div>
     </section>
@@ -210,15 +231,17 @@ export function PropertyHealthPanel({ row }: { row: EnrichedListing }) {
 function HistoryBlock({
   title,
   items,
+  noRecords,
 }: {
   title: string;
   items: Array<{ at?: string; note?: string }>;
+  noRecords: string;
 }) {
   return (
     <div>
       <h3 className="kuteka-detail-subtitle">{title}</h3>
       {items.length === 0 ? (
-        <p className="kuteka-detail-meta mt-2">Sem registos ainda.</p>
+        <p className="kuteka-detail-meta mt-2">{noRecords}</p>
       ) : (
         <ul className="mt-2 flex flex-col gap-2">
           {items.slice(0, 5).map((item, idx) => (

@@ -39,6 +39,8 @@ import {
   type FinanceUpsertProductInput,
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getFinanceCopy } from '../content';
 import { formatAoaAmount } from '../lib/format';
 
 export { formatAoaAmount };
@@ -174,17 +176,10 @@ export type RevenueSnapshot = {
   custodyMode: string;
 };
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar os dados financeiros. Tente novamente.',
-  saveError: 'Não conseguimos guardar agora. Tente novamente.',
-  forbidden: 'Sem permissão financeira.',
-  quoteError: 'Não conseguimos obter a cotação. Tente novamente.',
-  payError: 'Não conseguimos iniciar o pagamento. Tente novamente.',
-};
-
 export async function fetchRevenueSnapshot(): Promise<
   { ok: true; data: RevenueSnapshot } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('finance_revenue_snapshot');
@@ -223,6 +218,7 @@ export async function fetchRevenueSnapshot(): Promise<
 export async function listFinanceProducts(): Promise<
   { ok: true; data: FinanceProductRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -243,6 +239,7 @@ export async function listFinanceProducts(): Promise<
 export async function listPriceRules(): Promise<
   { ok: true; data: FinancePriceRuleRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -262,6 +259,7 @@ export async function listPriceRules(): Promise<
 export async function updatePriceRule(
   input: FinanceUpdatePriceRuleInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeUpdatePriceRuleSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -287,6 +285,7 @@ export async function updatePriceRule(
 export async function listLedgerEntries(
   limit = 50,
 ): Promise<{ ok: true; data: FinanceLedgerRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -306,6 +305,7 @@ export async function listLedgerEntries(
 export async function listGateways(): Promise<
   { ok: true; data: FinanceGatewayRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -323,6 +323,7 @@ export async function listGateways(): Promise<
 export async function listCommissions(): Promise<
   { ok: true; data: FinanceCommissionRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -340,6 +341,7 @@ export async function listCommissions(): Promise<
 export async function listInvoices(
   limit = 30,
 ): Promise<{ ok: true; data: FinanceInvoiceRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -357,6 +359,7 @@ export async function listInvoices(
 export async function quoteProduct(
   input: FinanceQuoteInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeQuoteSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.quoteError };
@@ -379,6 +382,7 @@ export async function quoteProduct(
 export async function createSandboxPayment(
   input: FinanceSandboxPaymentInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeSandboxPaymentSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.payError };
@@ -401,6 +405,7 @@ export async function createSandboxPayment(
 export async function captureSandboxPayment(
   input: FinanceCaptureInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeCaptureSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.payError };
@@ -420,6 +425,7 @@ export async function captureSandboxPayment(
 export async function grantCredits(
   input: FinanceGrantCreditsInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeGrantCreditsSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -441,6 +447,7 @@ export async function grantCredits(
 export async function listCampaigns(): Promise<
   { ok: true; data: FinanceCampaignRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -461,6 +468,7 @@ export async function setCampaignActive(
   id: string,
   active: boolean,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { error } = await client.from('finance_campaigns').update({ active }).eq('id', id);
@@ -474,6 +482,7 @@ export async function setCampaignActive(
 export async function listMyConsents(): Promise<
   { ok: true; data: FinanceConsentRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -491,6 +500,7 @@ export async function upsertConsent(
   scope: FinanceConsentScope,
   granted: boolean,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const {
@@ -613,6 +623,7 @@ export type CreditBalance = { balance: number; currency: string };
 export async function fetchMyCreditBalance(): Promise<
   { ok: true; data: CreditBalance } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('finance_my_credit_balance');
@@ -630,6 +641,7 @@ export async function fetchMyCreditBalance(): Promise<
 export async function redeemCredits(
   input: FinanceRedeemCreditsInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeRedeemCreditsSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -651,6 +663,7 @@ export async function redeemCredits(
 export async function listRefunds(
   limit = 30,
 ): Promise<{ ok: true; data: FinanceRefundRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -670,6 +683,7 @@ export async function listRefunds(
 export async function createRefund(
   input: FinanceCreateRefundInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeCreateRefundSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -692,6 +706,7 @@ export async function createRefund(
 export async function listDisputes(
   limit = 30,
 ): Promise<{ ok: true; data: FinanceDisputeRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -711,6 +726,7 @@ export async function listDisputes(
 export async function openDispute(
   input: FinanceOpenDisputeInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeOpenDisputeSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -732,6 +748,7 @@ export async function openDispute(
 export async function listReconciliationRuns(
   limit = 20,
 ): Promise<{ ok: true; data: FinanceReconRunRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -751,6 +768,7 @@ export async function listReconciliationRuns(
 export async function runReconciliation(
   input: FinanceRunReconciliationInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeRunReconciliationSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -772,6 +790,7 @@ export async function runReconciliation(
 export async function generateInvoicePdf(
   input: FinanceInvoicePdfInput,
 ): Promise<{ ok: true; data: { html: string; number: string } } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeInvoicePdfSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -795,6 +814,7 @@ export async function generateInvoicePdf(
 export async function markInvoiceEmailed(
   input: FinanceMarkInvoiceEmailedInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeMarkInvoiceEmailedSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -815,6 +835,7 @@ export async function markInvoiceEmailed(
 export async function upsertProduct(
   input: FinanceUpsertProductInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeUpsertProductSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -845,6 +866,7 @@ export async function upsertProduct(
 export async function setCommission(
   input: FinanceSetCommissionInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeSetCommissionSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -871,6 +893,7 @@ export async function setCommission(
 export async function listKaiRules(): Promise<
   { ok: true; data: FinanceKaiRuleRow[] } | { ok: false; message: string }
 > {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -890,6 +913,7 @@ export async function listKaiRules(): Promise<
 export async function upsertKaiRule(
   input: FinanceUpsertKaiRuleInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeUpsertKaiRuleSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -918,6 +942,7 @@ export async function upsertKaiRule(
 export async function listFraudFlags(
   limit = 30,
 ): Promise<{ ok: true; data: FinanceFraudFlagRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -937,6 +962,7 @@ export async function listFraudFlags(
 export async function flagFraud(
   input: FinanceFlagFraudInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeFlagFraudSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -961,6 +987,7 @@ export async function flagFraud(
 export async function resolveFraud(
   input: FinanceResolveFraudInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeResolveFraudSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -982,6 +1009,7 @@ export async function resolveFraud(
 export async function listCrmAccounts(
   limit = 60,
 ): Promise<{ ok: true; data: FinanceCrmAccountRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -1003,6 +1031,7 @@ export async function listCrmAccounts(
 export async function upsertCrmAccount(
   input: FinanceUpsertCrmAccountInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeUpsertCrmAccountSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -1030,6 +1059,7 @@ export async function upsertCrmAccount(
 export async function listAccountingExports(
   limit = 20,
 ): Promise<{ ok: true; data: FinanceExportRow[] } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -1049,6 +1079,7 @@ export async function listAccountingExports(
 export async function createAccountingExport(
   input: FinanceCreateExportInput,
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
   const parsed = financeCreateExportSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };

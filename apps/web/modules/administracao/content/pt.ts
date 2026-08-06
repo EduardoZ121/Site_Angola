@@ -44,6 +44,8 @@ export const administracaoCopyPt = {
   },
 } as const;
 
-export function getAdministracaoCopy() {
-  return administracaoCopyPt;
-}
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type AdministracaoCopy = DeepStringify<typeof administracaoCopyPt>;

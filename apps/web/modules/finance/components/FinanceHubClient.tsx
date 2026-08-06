@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import {
@@ -30,7 +31,7 @@ import {
   listPaymentReminders,
   type PaymentReminderRow,
 } from '@/modules/monetization/services/monetization-client';
-import { getFinanceHubCopy } from '../content/pt';
+import { getFinanceHubCopy } from '../content';
 
 /**
  * User-facing finance hub — pay-per-use sandbox + invoices.
@@ -44,7 +45,8 @@ function openHtml(html: string) {
 }
 
 export function FinanceHubClient() {
-  const hubCopy = getFinanceHubCopy();
+  const { locale } = useLocale();
+  const hubCopy = getFinanceHubCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const ready = sessionStatus === 'ready';
   const [products, setProducts] = useState<FinanceProductRow[]>([]);

@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { HousingPropertyRow } from '@/modules/habitacao/services/housing-client';
-import { appendFeedPage, FEED_MARKER_THEMES } from './feed-stream';
+import { appendFeedPage, getFeedMarkerThemes } from './feed-stream';
+
+const FEED_MARKER_THEMES = getFeedMarkerThemes('pt');
 
 function row(id: string): HousingPropertyRow {
   return {

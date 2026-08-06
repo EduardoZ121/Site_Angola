@@ -7,8 +7,9 @@ import {
 } from '@kuteka/validation';
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
 import { ENRICHED_PROPERTY_SELECT, ENRICHED_PROPERTY_SELECT_V13 } from '@/modules/listings/types';
-import { getPatrimoniosCopy } from '../content/pt';
+import { getPatrimoniosCopy } from '../content';
 import { uploadPropertyMedia, type LocalMediaDraft } from './property-media-client';
 
 export type PropertyRow = {
@@ -124,7 +125,7 @@ function mapPrimaryServiceType(management: string, services: string[]): string {
 export async function listMyProperties(): Promise<
   { ok: true; data: PropertyRow[] } | { ok: false; message: string }
 > {
-  const copy = getPatrimoniosCopy();
+  const copy = getPatrimoniosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const full = await client
@@ -156,7 +157,7 @@ const PROPERTY_SELECT_CORE =
 export async function getProperty(
   id: string,
 ): Promise<{ ok: true; data: PropertyRow } | { ok: false; message: string }> {
-  const copy = getPatrimoniosCopy();
+  const copy = getPatrimoniosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const enriched = await client
@@ -199,7 +200,7 @@ export async function activateProperty(
   input: ActivatePropertyInput,
   mediaDrafts: LocalMediaDraft[] = [],
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
-  const copy = getPatrimoniosCopy();
+  const copy = getPatrimoniosCopy(resolveUiLocale());
   const parsed = activatePropertySchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };

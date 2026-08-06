@@ -6,6 +6,7 @@ import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
 import {
   listPropertyMedia,
@@ -16,7 +17,7 @@ import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { NotifyAvailabilityButton } from '@/modules/ops/components/NotifyAvailabilityButton';
-import { getHabitacaoCopy } from '../content/pt';
+import { getHabitacaoCopy } from '../content';
 import {
   expressInterest,
   getActiveProperty,
@@ -25,7 +26,8 @@ import {
 } from '../services/housing-client';
 
 export function HousingDetailClient({ id }: { id: string }) {
-  const copy = getHabitacaoCopy();
+  const { locale } = useLocale();
+  const copy = getHabitacaoCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canExplore =
     sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');

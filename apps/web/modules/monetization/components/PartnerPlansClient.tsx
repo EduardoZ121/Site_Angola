@@ -5,9 +5,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { getMonetizationCopy } from '@/modules/monetization/content';
+import { partnerPlanBlurb, partnerPlanName } from '@/modules/monetization/lib/catalog';
 import {
   PARTNER_PLAN_OPTIONS,
   activatePartnerPlan,
@@ -20,6 +24,9 @@ import {
  */
 export function PartnerPlansClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { locale } = useLocale();
+  const copy = getMonetizationCopy(locale).partnerPlans;
+  const dateLocale = LOCALE_INTL_TAG[locale];
   const canPartner =
     sessionStatus === 'ready' &&
     (!!session?.permissions.includes('properties.manage') ||
@@ -57,7 +64,7 @@ export function PartnerPlansClient() {
       setError(result.message);
       return;
     }
-    setMessage(`Plano activado (sandbox). Subscrição ${String(result.data.subscriptionId ?? '')}`);
+    setMessage(copy.messages.activated.replace('{id}', String(result.data.subscriptionId ?? '')));
     await load();
   }
 
@@ -69,24 +76,20 @@ export function PartnerPlansClient() {
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Parceiro</p>
-          <Heading level={1}>Planos Parceiro Kuteka</Heading>
-          <Text className="mt-1 text-slate-700">
-            Bronze, Silver e Gold — receita B2B recorrente. Pagamento sandbox até Multicaixa/EMIS.
-          </Text>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+          <Heading level={1}>{copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/app/patrimonios" className={cn(buttonVariants({ variant: 'secondary' }))}>
-              Patrimónios
+              {copy.patrimoniosLink}
             </Link>
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>
-              Financeiro
+              {getMonetizationCopy(locale).common.financeiro}
             </Link>
           </div>
         </header>
 
-        {denied ? (
-          <ForbiddenPanel message="Planos Parceiro exigem papel de parceiro patrimonial ou Super Admin." />
-        ) : null}
+        {denied ? <ForbiddenPanel message={copy.forbidden} /> : null}
 
         {error ? (
           <p className="rounded-kuteka border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
@@ -102,7 +105,7 @@ export function PartnerPlansClient() {
         {canPartner ? (
           <SoftListSlot pending={loading}>
             <section className="kuteka-detail-panel p-5">
-              <h2 className="kuteka-detail-title">Escolher plano</h2>
+              <h2 className="kuteka-detail-title">{copy.chooseTitle}</h2>
               <ul className="mt-4 grid gap-3 sm:grid-cols-3">
                 {PARTNER_PLAN_OPTIONS.map((plan) => (
                   <li
@@ -110,19 +113,23 @@ export function PartnerPlansClient() {
                     className="flex flex-col gap-3 rounded-kuteka border border-slate-200 p-4"
                   >
                     <div>
-                      <p className="text-lg font-semibold text-slate-900">{plan.name}</p>
-                      <p className="mt-1 text-sm text-slate-600">{plan.blurb}</p>
+                      <p className="text-lg font-semibold text-slate-900">
+                        {partnerPlanName(plan.code, locale)}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-600">
+                        {partnerPlanBlurb(plan.code, locale)}
+                      </p>
                       <p className="mt-2 font-mono text-xs text-slate-500">{plan.code}</p>
                     </div>
                     {activeCodes.has(plan.code) ? (
-                      <Badge variant="success">Activo</Badge>
+                      <Badge variant="success">{copy.active}</Badge>
                     ) : (
                       <Button
                         type="button"
                         loading={busy === plan.code}
                         onClick={() => void activate(plan.code)}
                       >
-                        Activar (sandbox)
+                        {copy.activateSandbox}
                       </Button>
                     )}
                   </li>
@@ -131,16 +138,22 @@ export function PartnerPlansClient() {
             </section>
 
             <section className="kuteka-detail-panel p-5">
-              <h2 className="kuteka-detail-title">Subscrições</h2>
+              <h2 className="kuteka-detail-title">{copy.subscriptionsTitle}</h2>
               <ul className="mt-3 divide-y divide-slate-200">
                 {subs.map((s) => (
                   <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                     <div>
                       <p className="font-medium text-slate-900">{s.product_code}</p>
                       <p className="text-xs text-slate-500">
-                        desde {new Date(s.started_at).toLocaleDateString('pt-PT')}
+                        {copy.since.replace(
+                          '{date}',
+                          new Date(s.started_at).toLocaleDateString(dateLocale),
+                        )}
                         {s.renews_at
-                          ? ` · renova ${new Date(s.renews_at).toLocaleDateString('pt-PT')}`
+                          ? copy.renewsSuffix.replace(
+                              '{date}',
+                              new Date(s.renews_at).toLocaleDateString(dateLocale),
+                            )
                           : ''}
                       </p>
                     </div>
@@ -150,7 +163,7 @@ export function PartnerPlansClient() {
                   </li>
                 ))}
                 {subs.length === 0 ? (
-                  <li className="py-3 text-sm text-slate-500">Nenhum plano activo ainda.</li>
+                  <li className="py-3 text-sm text-slate-500">{copy.empty}</li>
                 ) : null}
               </ul>
             </section>

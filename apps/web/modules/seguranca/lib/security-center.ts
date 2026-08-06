@@ -1,3 +1,5 @@
+import type { AppLocale } from '@/modules/i18n/types';
+import { getSegurancaCopy } from '../content';
 import { normalizeAngolaPhone } from '../providers/sms-otp';
 
 export type SecurityDevice = {
@@ -59,29 +61,17 @@ export function securityScoreBand(score: number): 'low' | 'medium' | 'high' | 'e
   return 'low';
 }
 
-export function securityScoreLabel(score: number): string {
+export function securityScoreLabel(score: number, locale: AppLocale = 'pt'): string {
   const band = securityScoreBand(score);
-  if (band === 'excellent') return 'Excelente';
-  if (band === 'high') return 'Bom';
-  if (band === 'medium') return 'Moderado';
-  return 'A reforçar';
+  const labels = getSegurancaCopy(locale).scoreLabels;
+  if (band === 'excellent') return labels.excellent;
+  if (band === 'high') return labels.high;
+  if (band === 'medium') return labels.medium;
+  return labels.low;
 }
 
-export function formatSecurityEvent(type: string): string {
-  const map: Record<string, string> = {
-    otp_issued: 'Código OTP emitido',
-    otp_verified: 'Código OTP validado',
-    session_revoked: 'Sessão terminada remotamente',
-    login_new: 'Novo login',
-    device_new: 'Novo dispositivo',
-    password_changed: 'Palavra-passe alterada',
-    email_changed: 'Email alterado',
-    phone_changed: 'Telefone alterado',
-    document_updated: 'Documento actualizado',
-    banking_added: 'Conta bancária adicionada',
-    recovery_started: 'Recuperação de conta iniciada',
-    permissions_changed: 'Permissões alteradas',
-  };
+export function formatSecurityEvent(type: string, locale: AppLocale = 'pt'): string {
+  const map = getSegurancaCopy(locale).events as Record<string, string>;
   return map[type] ?? type.replace(/_/g, ' ');
 }
 

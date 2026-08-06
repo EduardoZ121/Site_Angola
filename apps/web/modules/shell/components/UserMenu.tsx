@@ -275,13 +275,13 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
     {
       href: '/app/centro-confianca',
       label: shell.items.centroConfianca,
-      hint: 'Estado da conta, UTS e próximos passos',
+      hint: shell.userMenu.centroConfiancaHint,
       icon: 'docs',
     },
     {
       href: '/app/centro-seguranca',
       label: shell.items.centroSeguranca,
-      hint: 'Email, telefone, sessões e nível de segurança',
+      hint: shell.userMenu.centroSegurancaHint,
       icon: 'docs',
     },
     {
@@ -451,7 +451,10 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
                       KYC_LEVEL_LABELS[Math.min(4, Math.max(0, trustStrip.kycLevel)) as KycLevel]
                     }
                   >
-                    {roleBadges.length} papel{roleBadges.length === 1 ? '' : 'éis'}
+                    {roleBadges.length}{' '}
+                    {roleBadges.length === 1
+                      ? shell.userMenu.roleCountSingular
+                      : shell.userMenu.roleCountPlural}
                   </span>
                 </div>
               ) : null}
@@ -460,7 +463,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
                 className="mt-1 inline-block text-xs font-semibold text-[#92400e] underline-offset-2 hover:underline"
                 onClick={() => setOpen(false)}
               >
-                Centro de Confiança
+                {shell.items.centroConfianca}
               </Link>
               <Link
                 href="/app/perfil"

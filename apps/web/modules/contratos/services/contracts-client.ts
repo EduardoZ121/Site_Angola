@@ -7,7 +7,8 @@ import {
   type CreatePropertyContractInput,
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { getContratosCopy } from '../content/pt';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getContratosCopy } from '../content';
 
 export type ContractPropertySummary = {
   id: string;
@@ -50,10 +51,10 @@ const CONTRACT_SELECT =
 function contractMessage(errorMessage: string | undefined, fallback: string) {
   const msg = errorMessage?.toLowerCase() ?? '';
   if (msg.includes('contracts.manage') || msg.includes('policy') || msg.includes('42501')) {
-    return getContratosCopy().forbidden;
+    return getContratosCopy(resolveUiLocale()).forbidden;
   }
   if (msg.includes('kyc') || msg.includes('identity verification')) {
-    return getContratosCopy().kycRequired;
+    return getContratosCopy(resolveUiLocale()).kycRequired;
   }
   return fallback;
 }
@@ -67,7 +68,7 @@ export function getContractProperty(row: ContractRow): ContractPropertySummary |
 export async function listContracts(): Promise<
   { ok: true; data: ContractRow[] } | { ok: false; message: string }
 > {
-  const copy = getContratosCopy();
+  const copy = getContratosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -87,7 +88,7 @@ export async function listContracts(): Promise<
 export async function getContract(
   id: string,
 ): Promise<{ ok: true; data: ContractRow } | { ok: false; message: string }> {
-  const copy = getContratosCopy();
+  const copy = getContratosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -109,7 +110,7 @@ export async function getContract(
 export async function listContractProperties(): Promise<
   { ok: true; data: ContractPropertyOption[] } | { ok: false; message: string }
 > {
-  const copy = getContratosCopy();
+  const copy = getContratosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -130,7 +131,7 @@ export async function listContractProperties(): Promise<
 export async function createPropertyContract(
   input: CreatePropertyContractInput,
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
-  const copy = getContratosCopy();
+  const copy = getContratosCopy(resolveUiLocale());
   const parsed = createPropertyContractSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -163,7 +164,7 @@ async function transitionContract(
   input: ContractTransitionInput,
   rpcName: 'accept_property_contract' | 'cancel_property_contract' | 'complete_property_contract',
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getContratosCopy();
+  const copy = getContratosCopy(resolveUiLocale());
   const parsed = contractTransitionSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.transitionError };

@@ -14,11 +14,18 @@ import {
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getMonetizationCopy } from '../content';
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar a Assistência 24h. Tente novamente.',
-  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
-};
+function copy() {
+  const locale = resolveUiLocale();
+  const monetization = getMonetizationCopy(locale);
+  return {
+    loadError: monetization.assistencia.loadError,
+    actionError: monetization.common.actionError,
+    locale,
+  };
+}
 
 export type AssistenciaRequestDetail = {
   id: string;
@@ -58,14 +65,18 @@ const REQUEST_SELECT =
 type ActionResult = { ok: true; data: Record<string, unknown> } | { ok: false; message: string };
 
 async function callRpc(fn: string, args: Record<string, unknown>): Promise<ActionResult> {
+  const c = copy();
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc(fn, args);
     if (error || !data)
-      return { ok: false, message: mapIdentityGateMessage(error?.message, copy.actionError) };
+      return {
+        ok: false,
+        message: mapIdentityGateMessage(error?.message, c.actionError, c.locale),
+      };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: c.actionError };
   }
 }
 
@@ -75,11 +86,11 @@ export async function fetchAssistenciaContext(): Promise<
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('assistencia_my_context');
-    if (error || !data) return { ok: false, message: error?.message || copy.loadError };
+    if (error || !data) return { ok: false, message: error?.message || copy().loadError };
     const raw = data as { canOperate?: boolean };
     return { ok: true, data: { canOperate: Boolean(raw.canOperate) } };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -94,10 +105,10 @@ export async function listAssistenciaRequests(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as AssistenciaRequestDetail[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -105,7 +116,7 @@ export async function listAssistenciaEvents(
   requestId: string,
 ): Promise<{ ok: true; data: AssistenciaEvent[] } | { ok: false; message: string }> {
   const parsed = assistenciaRequestIdSchema.safeParse({ requestId });
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -114,10 +125,10 @@ export async function listAssistenciaEvents(
       .eq('request_id', parsed.data.requestId)
       .order('created_at', { ascending: true })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as AssistenciaEvent[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -126,7 +137,7 @@ export async function createAssistenciaRequest(
 ): Promise<ActionResult> {
   const parsed = assistenciaCreateSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('create_assistencia_request', {
     p_category: parsed.data.category,
@@ -138,7 +149,7 @@ export async function createAssistenciaRequest(
 
 export async function activateAssistencia(input: AssistenciaRequestIdInput): Promise<ActionResult> {
   const parsed = assistenciaRequestIdSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('assistencia_activate', { p_request_id: parsed.data.requestId });
 }
 
@@ -146,7 +157,7 @@ export async function startAssistencia(
   input: AssistenciaOperatorActionInput,
 ): Promise<ActionResult> {
   const parsed = assistenciaOperatorActionSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('assistencia_start', {
     p_request_id: parsed.data.requestId,
     p_note: parsed.data.note ?? null,
@@ -157,7 +168,7 @@ export async function completeAssistencia(
   input: AssistenciaOperatorActionInput,
 ): Promise<ActionResult> {
   const parsed = assistenciaOperatorActionSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('assistencia_complete', {
     p_request_id: parsed.data.requestId,
     p_note: parsed.data.note ?? null,
@@ -166,7 +177,7 @@ export async function completeAssistencia(
 
 export async function cancelAssistencia(input: AssistenciaCancelInput): Promise<ActionResult> {
   const parsed = assistenciaCancelSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('assistencia_cancel', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,
@@ -175,7 +186,7 @@ export async function cancelAssistencia(input: AssistenciaCancelInput): Promise<
 
 export async function failAssistencia(input: AssistenciaFailInput): Promise<ActionResult> {
   const parsed = assistenciaFailSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('assistencia_fail', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,

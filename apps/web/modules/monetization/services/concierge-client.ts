@@ -12,11 +12,18 @@ import {
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getMonetizationCopy } from '../content';
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar os pedidos Concierge. Tente novamente.',
-  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
-};
+function copy() {
+  const locale = resolveUiLocale();
+  const monetization = getMonetizationCopy(locale);
+  return {
+    loadError: monetization.concierge.loadError,
+    actionError: monetization.common.actionError,
+    locale,
+  };
+}
 
 export type ConciergeRequestDetail = {
   id: string;
@@ -58,14 +65,18 @@ const REQUEST_SELECT =
 type ActionResult = { ok: true; data: Record<string, unknown> } | { ok: false; message: string };
 
 async function callRpc(fn: string, args: Record<string, unknown>): Promise<ActionResult> {
+  const c = copy();
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc(fn, args);
     if (error || !data)
-      return { ok: false, message: mapIdentityGateMessage(error?.message, copy.actionError) };
+      return {
+        ok: false,
+        message: mapIdentityGateMessage(error?.message, c.actionError, c.locale),
+      };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: c.actionError };
   }
 }
 
@@ -75,11 +86,11 @@ export async function fetchConciergeContext(): Promise<
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('concierge_my_context');
-    if (error || !data) return { ok: false, message: error?.message || copy.loadError };
+    if (error || !data) return { ok: false, message: error?.message || copy().loadError };
     const raw = data as { canOperate?: boolean };
     return { ok: true, data: { canOperate: Boolean(raw.canOperate) } };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -94,10 +105,10 @@ export async function listConciergeRequests(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ConciergeRequestDetail[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -112,17 +123,17 @@ export async function listConciergeEvents(
       .eq('request_id', requestId)
       .order('created_at', { ascending: true })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ConciergeEvent[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
 export async function createConciergeRequest(input: ConciergeCreateInput): Promise<ActionResult> {
   const parsed = conciergeCreateSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('create_concierge_request', {
     p_category: parsed.data.category,
@@ -134,7 +145,7 @@ export async function createConciergeRequest(input: ConciergeCreateInput): Promi
 
 export async function startConcierge(input: ConciergeOperatorActionInput): Promise<ActionResult> {
   const parsed = conciergeOperatorActionSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('concierge_start', {
     p_request_id: parsed.data.requestId,
     p_note: parsed.data.note ?? null,
@@ -145,7 +156,7 @@ export async function completeConcierge(
   input: ConciergeOperatorActionInput,
 ): Promise<ActionResult> {
   const parsed = conciergeOperatorActionSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('concierge_complete', {
     p_request_id: parsed.data.requestId,
     p_note: parsed.data.note ?? null,
@@ -154,7 +165,7 @@ export async function completeConcierge(
 
 export async function cancelConcierge(input: ConciergeCancelInput): Promise<ActionResult> {
   const parsed = conciergeCancelSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('concierge_cancel', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,
@@ -163,7 +174,7 @@ export async function cancelConcierge(input: ConciergeCancelInput): Promise<Acti
 
 export async function failConcierge(input: ConciergeFailInput): Promise<ActionResult> {
   const parsed = conciergeFailSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('concierge_fail', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,

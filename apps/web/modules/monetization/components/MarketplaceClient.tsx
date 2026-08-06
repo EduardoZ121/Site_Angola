@@ -5,13 +5,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Heading, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import type { AppLocale } from '@/modules/i18n/types';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
+import { getMonetizationCopy, type MonetizationCopy } from '@/modules/monetization/content';
 import {
   PROVIDER_CATEGORIES,
   orderStatusLabel,
   orderStatusTone,
+  providerCategoryLabel,
 } from '@/modules/monetization/lib/catalog';
 import {
   listServiceProviders,
@@ -36,13 +40,13 @@ import {
 
 type TabKey = 'providers' | 'orders' | 'inbox';
 
-function slaLabel(order: ServiceOrderDetail): string | null {
+function slaLabel(order: ServiceOrderDetail, common: MonetizationCopy['common']): string | null {
   if (!order.sla_due_at) return null;
-  if (order.sla_breached) return 'SLA ultrapassado';
+  if (order.sla_breached) return common.slaBreached;
   const due = new Date(order.sla_due_at).getTime();
   const hours = Math.round((due - Date.now()) / 3_600_000);
-  if (hours <= 0) return 'SLA no limite';
-  return `SLA em ${hours}h`;
+  if (hours <= 0) return common.slaAtLimit;
+  return common.slaInHours.replace('{hours}', String(hours));
 }
 
 /**
@@ -52,6 +56,9 @@ function slaLabel(order: ServiceOrderDetail): string | null {
  */
 export function MarketplaceClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { locale } = useLocale();
+  const copy = getMonetizationCopy(locale).marketplace;
+  const common = getMonetizationCopy(locale).common;
   const ready = sessionStatus === 'ready';
 
   const [tab, setTab] = useState<TabKey>('providers');
@@ -65,7 +72,7 @@ export function MarketplaceClient() {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
 
-  const [title, setTitle] = useState('Pedido de serviço');
+  const [title, setTitle] = useState('');
   const [slaHours, setSlaHours] = useState('48');
   const [quoteAmounts, setQuoteAmounts] = useState<Record<string, string>>({});
   const [ratings, setRatings] = useState<Record<string, string>>({});
@@ -123,33 +130,30 @@ export function MarketplaceClient() {
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Marketplace operacional</p>
-          <Heading level={1}>Rede de serviços Kuteka</Heading>
-          <Text className="mt-1 text-slate-700">
-            Prestador → orçamento → aceitação → execução → pagamento (Kuteka Pay) → avaliação. A
-            comissão fica no Ledger (take-rate B2B — sem escrow).
-          </Text>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+          <Heading level={1}>{copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'secondary' }))}>
-              Mudança Inteligente
+              {copy.smartMoveLink}
             </Link>
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>
-              Financeiro
+              {common.financeiro}
             </Link>
           </div>
         </header>
 
         <nav className="flex flex-wrap gap-2">
           <TabButton active={tab === 'providers'} onClick={() => setTab('providers')}>
-            Prestadores
+            {copy.tabs.providers}
           </TabButton>
           <TabButton active={tab === 'orders'} onClick={() => setTab('orders')}>
-            Os meus pedidos
+            {copy.tabs.myOrders}
           </TabButton>
           {showInbox ? (
             <TabButton active={tab === 'inbox'} onClick={() => setTab('inbox')}>
-              Pedidos recebidos
+              {copy.tabs.inbox}
               {inbox.length > 0 ? (
                 <span className="ml-2 rounded-full bg-white/70 px-1.5 text-xs">{inbox.length}</span>
               ) : null}
@@ -179,18 +183,26 @@ export function MarketplaceClient() {
               slaHours={slaHours}
               setSlaHours={setSlaHours}
               busyId={busyId}
+              locale={locale}
+              copy={copy}
               onRequest={(provider) =>
                 run(
                   provider.id,
                   () =>
                     createOrder({
                       providerId: provider.id,
-                      title: title.trim() || `Serviço ${provider.business_name}`,
+                      title:
+                        title.trim() ||
+                        copy.providersPanel.titleDefault ||
+                        `Serviço ${provider.business_name}`,
                       category: provider.category,
-                      description: `Pedido via marketplace Kuteka · ${provider.business_name}`,
+                      description: copy.providersPanel.serviceOfProvider.replace(
+                        '{name}',
+                        provider.business_name,
+                      ),
                       slaHours: Number(slaHours) || 48,
                     }),
-                  'Pedido criado. Aguarda orçamento do prestador.',
+                  copy.messages.requestCreated,
                 )
               }
             />
@@ -202,23 +214,26 @@ export function MarketplaceClient() {
               busyId={busyId}
               ratings={ratings}
               setRatings={setRatings}
-              onAccept={(o) => run(o.id, () => acceptQuote({ orderId: o.id }), 'Orçamento aceite.')}
+              locale={locale}
+              copy={copy}
+              common={common}
+              onAccept={(o) =>
+                run(o.id, () => acceptQuote({ orderId: o.id }), copy.messages.quoteAccepted)
+              }
               onPay={(o) =>
                 run(
                   o.id,
                   () => payOrder({ orderId: o.id, gatewayCode: 'sandbox' }),
-                  'Pagamento processado via Kuteka Pay. Comissão registada no Ledger.',
+                  copy.messages.paid,
                 )
               }
               onRate={(o) => {
                 const score = Number(ratings[o.id] ?? '5');
-                return run(
-                  o.id,
-                  () => rateOrder({ orderId: o.id, score }),
-                  'Avaliação registada. Obrigado!',
-                );
+                return run(o.id, () => rateOrder({ orderId: o.id, score }), copy.messages.rated);
               }}
-              onCancel={(o) => run(o.id, () => cancelOrder({ orderId: o.id }), 'Pedido cancelado.')}
+              onCancel={(o) =>
+                run(o.id, () => cancelOrder({ orderId: o.id }), copy.messages.cancelled)
+              }
             />
           ) : null}
 
@@ -228,19 +243,24 @@ export function MarketplaceClient() {
               busyId={busyId}
               quoteAmounts={quoteAmounts}
               setQuoteAmounts={setQuoteAmounts}
+              locale={locale}
+              copy={copy}
+              common={common}
               onQuote={(o) => {
                 const amount = Number(quoteAmounts[o.id] ?? o.amount_aoa ?? 25000);
                 return run(
                   o.id,
                   () => submitQuote({ orderId: o.id, amount }),
-                  'Orçamento enviado ao cliente.',
+                  copy.messages.quoteSent,
                 );
               }}
-              onStart={(o) => run(o.id, () => startOrder({ orderId: o.id }), 'Execução iniciada.')}
+              onStart={(o) => run(o.id, () => startOrder({ orderId: o.id }), copy.messages.started)}
               onComplete={(o) =>
-                run(o.id, () => completeOrder({ orderId: o.id }), 'Serviço concluído.')
+                run(o.id, () => completeOrder({ orderId: o.id }), copy.messages.completed)
               }
-              onCancel={(o) => run(o.id, () => cancelOrder({ orderId: o.id }), 'Pedido cancelado.')}
+              onCancel={(o) =>
+                run(o.id, () => cancelOrder({ orderId: o.id }), copy.messages.cancelled)
+              }
             />
           ) : null}
         </SoftListSlot>
@@ -274,17 +294,30 @@ function TabButton({
   );
 }
 
-function OrderMeta({ order }: { order: ServiceOrderDetail }) {
+function OrderMeta({
+  order,
+  copy,
+  common,
+}: {
+  order: ServiceOrderDetail;
+  copy: MonetizationCopy['marketplace'];
+  common: MonetizationCopy['common'];
+}) {
   const amount = order.quoted_amount_aoa ?? order.amount_aoa;
-  const sla = slaLabel(order);
+  const sla = slaLabel(order, common);
   return (
     <p className="mt-1 text-xs text-slate-500">
-      {amount != null ? `${formatAoaAmount(Number(amount))}` : 'Sem orçamento'}
+      {amount != null ? `${formatAoaAmount(Number(amount))}` : copy.orderMeta.noQuote}
       {order.commission_aoa != null
-        ? ` · comissão ${formatAoaAmount(Number(order.commission_aoa))}`
+        ? copy.orderMeta.commissionSuffix.replace(
+            '{amount}',
+            formatAoaAmount(Number(order.commission_aoa)),
+          )
         : ''}
-      {order.payment_intent_id ? ' · pago' : ''}
-      {order.rating_score != null ? ` · ★ ${Number(order.rating_score).toFixed(1)}` : ''}
+      {order.payment_intent_id ? copy.orderMeta.paidSuffix : ''}
+      {order.rating_score != null
+        ? copy.orderMeta.ratingSuffix.replace('{score}', Number(order.rating_score).toFixed(1))
+        : ''}
       {sla ? ` · ${sla}` : ''}
     </p>
   );
@@ -299,6 +332,8 @@ function ProvidersPanel({
   slaHours,
   setSlaHours,
   busyId,
+  locale,
+  copy,
   onRequest,
 }: {
   providers: ServiceProviderRow[];
@@ -309,18 +344,21 @@ function ProvidersPanel({
   slaHours: string;
   setSlaHours: (v: string) => void;
   busyId: string | null;
+  locale: AppLocale;
+  copy: MonetizationCopy['marketplace'];
   onRequest: (provider: ServiceProviderRow) => void;
 }) {
+  const p = copy.providersPanel;
   return (
     <section className="kuteka-detail-panel p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 className="kuteka-detail-title">Prestadores activos</h2>
-          <p className="kuteka-detail-body mt-1">Filtre por categoria e peça um serviço.</p>
+          <h2 className="kuteka-detail-title">{p.title}</h2>
+          <p className="kuteka-detail-body mt-1">{p.hint}</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <div>
-            <Label htmlFor="cat">Categoria</Label>
+            <Label htmlFor="cat">{p.categoryLabel}</Label>
             <select
               id="cat"
               className="w-full min-w-[10rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
@@ -329,13 +367,13 @@ function ProvidersPanel({
             >
               {PROVIDER_CATEGORIES.map((c) => (
                 <option key={c.value} value={c.value}>
-                  {c.label}
+                  {providerCategoryLabel(c.value, locale)}
                 </option>
               ))}
             </select>
           </div>
           <div>
-            <Label htmlFor="sla">SLA (horas)</Label>
+            <Label htmlFor="sla">{p.slaLabel}</Label>
             <input
               id="sla"
               inputMode="numeric"
@@ -347,39 +385,43 @@ function ProvidersPanel({
         </div>
       </div>
       <div className="mt-3">
-        <Label htmlFor="title">Título do pedido</Label>
+        <Label htmlFor="title">{p.titleLabel}</Label>
         <input
           id="title"
           className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          placeholder={p.titleDefault}
         />
       </div>
       <ul className="mt-4 divide-y divide-slate-200">
-        {providers.map((p) => (
+        {providers.map((prov) => (
           <li
-            key={p.id}
+            key={prov.id}
             className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
-              <p className="font-medium text-slate-900">{p.business_name}</p>
-              <p className="text-sm text-slate-600">{p.description}</p>
+              <p className="font-medium text-slate-900">{prov.business_name}</p>
+              <p className="text-sm text-slate-600">{prov.description}</p>
               <p className="mt-1 text-xs text-slate-500">
-                {p.category}
-                {p.municipality ? ` · ${p.municipality}` : ''}
-                {p.province ? `, ${p.province}` : ''}
-                {p.rating != null ? ` · ★ ${Number(p.rating).toFixed(1)}` : ''}
-                {p.is_demo ? ' · demo' : ''}
+                {providerCategoryLabel(prov.category, locale)}
+                {prov.municipality ? ` · ${prov.municipality}` : ''}
+                {prov.province ? `, ${prov.province}` : ''}
+                {prov.rating != null ? ` · ★ ${Number(prov.rating).toFixed(1)}` : ''}
+                {prov.is_demo ? ' · demo' : ''}
               </p>
             </div>
-            <Button type="button" size="sm" loading={busyId === p.id} onClick={() => onRequest(p)}>
-              Pedir serviço
+            <Button
+              type="button"
+              size="sm"
+              loading={busyId === prov.id}
+              onClick={() => onRequest(prov)}
+            >
+              {p.requestService}
             </Button>
           </li>
         ))}
-        {providers.length === 0 ? (
-          <li className="py-3 text-sm text-slate-500">Sem prestadores nesta categoria.</li>
-        ) : null}
+        {providers.length === 0 ? <li className="py-3 text-sm text-slate-500">{p.empty}</li> : null}
       </ul>
     </section>
   );
@@ -390,6 +432,9 @@ function ClientOrdersPanel({
   busyId,
   ratings,
   setRatings,
+  locale,
+  copy,
+  common,
   onAccept,
   onPay,
   onRate,
@@ -399,14 +444,18 @@ function ClientOrdersPanel({
   busyId: string | null;
   ratings: Record<string, string>;
   setRatings: (v: Record<string, string>) => void;
+  locale: AppLocale;
+  copy: MonetizationCopy['marketplace'];
+  common: MonetizationCopy['common'];
   onAccept: (o: ServiceOrderDetail) => void;
   onPay: (o: ServiceOrderDetail) => void;
   onRate: (o: ServiceOrderDetail) => void;
   onCancel: (o: ServiceOrderDetail) => void;
 }) {
+  const m = copy.myOrdersPanel;
   return (
     <section className="kuteka-detail-panel p-5">
-      <h2 className="kuteka-detail-title">Os meus pedidos</h2>
+      <h2 className="kuteka-detail-title">{m.title}</h2>
       <ul className="mt-3 divide-y divide-slate-200">
         {orders.map((o) => {
           const busy = busyId === o.id;
@@ -419,28 +468,32 @@ function ClientOrdersPanel({
                   <p className="text-sm font-medium text-slate-900">
                     {o.title} · {providerName(o)}
                   </p>
-                  <OrderMeta order={o} />
+                  <OrderMeta order={o} copy={copy} common={common} />
                   {o.quote_notes ? (
-                    <p className="mt-1 text-xs text-slate-500">Nota: {o.quote_notes}</p>
+                    <p className="mt-1 text-xs text-slate-500">
+                      {m.notePrefix.replace('{value}', o.quote_notes)}
+                    </p>
                   ) : null}
                 </div>
-                <Badge variant={orderStatusTone(o.status)}>{orderStatusLabel(o.status)}</Badge>
+                <Badge variant={orderStatusTone(o.status)}>
+                  {orderStatusLabel(o.status, locale)}
+                </Badge>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 {o.status === 'quoted' ? (
                   <Button type="button" size="sm" loading={busy} onClick={() => onAccept(o)}>
-                    Aceitar orçamento
+                    {m.acceptQuote}
                   </Button>
                 ) : null}
                 {o.status === 'completed' && !paid ? (
                   <Button type="button" size="sm" loading={busy} onClick={() => onPay(o)}>
-                    Pagar com Kuteka Pay
+                    {m.payWithKutekaPay}
                   </Button>
                 ) : null}
                 {o.status === 'completed' && paid && !rated ? (
                   <div className="flex items-center gap-2">
                     <select
-                      aria-label="Avaliação"
+                      aria-label={m.ratingAria}
                       className="rounded-kuteka border border-slate-300 bg-white px-2 py-1 text-sm"
                       value={ratings[o.id] ?? '5'}
                       onChange={(e) => setRatings({ ...ratings, [o.id]: e.target.value })}
@@ -452,7 +505,7 @@ function ClientOrdersPanel({
                       ))}
                     </select>
                     <Button type="button" size="sm" loading={busy} onClick={() => onRate(o)}>
-                      Avaliar
+                      {m.rate}
                     </Button>
                   </div>
                 ) : null}
@@ -464,21 +517,19 @@ function ClientOrdersPanel({
                     loading={busy}
                     onClick={() => onCancel(o)}
                   >
-                    Cancelar
+                    {common.cancel}
                   </Button>
                 ) : null}
                 {rated ? (
                   <span className="text-xs text-emerald-700">
-                    Avaliado ★ {Number(o.rating_score).toFixed(1)}
+                    {m.ratedLabel.replace('{score}', Number(o.rating_score).toFixed(1))}
                   </span>
                 ) : null}
               </div>
             </li>
           );
         })}
-        {orders.length === 0 ? (
-          <li className="py-3 text-sm text-slate-500">Ainda sem pedidos.</li>
-        ) : null}
+        {orders.length === 0 ? <li className="py-3 text-sm text-slate-500">{m.empty}</li> : null}
       </ul>
     </section>
   );
@@ -489,6 +540,9 @@ function ProviderInboxPanel({
   busyId,
   quoteAmounts,
   setQuoteAmounts,
+  locale,
+  copy,
+  common,
   onQuote,
   onStart,
   onComplete,
@@ -498,17 +552,19 @@ function ProviderInboxPanel({
   busyId: string | null;
   quoteAmounts: Record<string, string>;
   setQuoteAmounts: (v: Record<string, string>) => void;
+  locale: AppLocale;
+  copy: MonetizationCopy['marketplace'];
+  common: MonetizationCopy['common'];
   onQuote: (o: ServiceOrderDetail) => void;
   onStart: (o: ServiceOrderDetail) => void;
   onComplete: (o: ServiceOrderDetail) => void;
   onCancel: (o: ServiceOrderDetail) => void;
 }) {
+  const inboxCopy = copy.inboxPanel;
   return (
     <section className="kuteka-detail-panel p-5">
-      <h2 className="kuteka-detail-title">Pedidos recebidos</h2>
-      <p className="kuteka-detail-body mt-1">
-        Envie orçamentos, inicie e conclua serviços. Demos podem ser operados por finance.manage.
-      </p>
+      <h2 className="kuteka-detail-title">{inboxCopy.title}</h2>
+      <p className="kuteka-detail-body mt-1">{inboxCopy.hint}</p>
       <ul className="mt-3 divide-y divide-slate-200">
         {orders.map((o) => {
           const busy = busyId === o.id;
@@ -519,34 +575,40 @@ function ProviderInboxPanel({
                   <p className="text-sm font-medium text-slate-900">
                     {o.title} · {providerName(o)}
                   </p>
-                  <OrderMeta order={o} />
+                  <p className="mt-1 text-xs text-slate-500">
+                    {o.quoted_amount_aoa != null || o.amount_aoa != null
+                      ? formatAoaAmount(Number(o.quoted_amount_aoa ?? o.amount_aoa))
+                      : copy.orderMeta.noQuote}
+                  </p>
                 </div>
-                <Badge variant={orderStatusTone(o.status)}>{orderStatusLabel(o.status)}</Badge>
+                <Badge variant={orderStatusTone(o.status)}>
+                  {orderStatusLabel(o.status, locale)}
+                </Badge>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 {o.status === 'requested' || o.status === 'quoted' ? (
                   <div className="flex items-center gap-2">
                     <input
-                      aria-label="Valor do orçamento (AOA)"
+                      aria-label={inboxCopy.amountAria}
                       inputMode="numeric"
-                      placeholder="Valor AOA"
+                      placeholder={inboxCopy.amountPlaceholder}
                       className="w-32 rounded-kuteka border border-slate-300 bg-white px-2 py-1 text-sm"
                       value={quoteAmounts[o.id] ?? String(o.amount_aoa ?? '')}
                       onChange={(e) => setQuoteAmounts({ ...quoteAmounts, [o.id]: e.target.value })}
                     />
                     <Button type="button" size="sm" loading={busy} onClick={() => onQuote(o)}>
-                      {o.status === 'quoted' ? 'Reorçamentar' : 'Enviar orçamento'}
+                      {o.status === 'quoted' ? inboxCopy.requote : inboxCopy.sendQuote}
                     </Button>
                   </div>
                 ) : null}
                 {o.status === 'accepted' ? (
                   <Button type="button" size="sm" loading={busy} onClick={() => onStart(o)}>
-                    Iniciar execução
+                    {inboxCopy.startExecution}
                   </Button>
                 ) : null}
                 {o.status === 'in_progress' ? (
                   <Button type="button" size="sm" loading={busy} onClick={() => onComplete(o)}>
-                    Concluir serviço
+                    {inboxCopy.completeService}
                   </Button>
                 ) : null}
                 {['requested', 'quoted', 'accepted', 'in_progress'].includes(o.status) ? (
@@ -557,7 +619,7 @@ function ProviderInboxPanel({
                     loading={busy}
                     onClick={() => onCancel(o)}
                   >
-                    Cancelar
+                    {common.cancel}
                   </Button>
                 ) : null}
               </div>
@@ -565,7 +627,7 @@ function ProviderInboxPanel({
           );
         })}
         {orders.length === 0 ? (
-          <li className="py-3 text-sm text-slate-500">Sem pedidos recebidos.</li>
+          <li className="py-3 text-sm text-slate-500">{inboxCopy.empty}</li>
         ) : null}
       </ul>
     </section>

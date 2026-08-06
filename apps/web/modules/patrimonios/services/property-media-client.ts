@@ -2,7 +2,8 @@
 
 import { createBrowserClient } from '@/lib/supabase/client';
 import { compressImageFile } from '@/lib/media/compress-image';
-import { getPatrimoniosCopy } from '../content/pt';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getPatrimoniosCopy } from '../content';
 
 export type PropertyMediaRow = {
   id: string;
@@ -26,7 +27,7 @@ export type LocalMediaDraft = {
 export async function listPropertyMedia(
   propertyId: string,
 ): Promise<{ ok: true; data: PropertyMediaRow[] } | { ok: false; message: string }> {
-  const copy = getPatrimoniosCopy();
+  const copy = getPatrimoniosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -46,7 +47,7 @@ export async function uploadPropertyMedia(
   propertyId: string,
   drafts: LocalMediaDraft[],
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getPatrimoniosCopy();
+  const copy = getPatrimoniosCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {

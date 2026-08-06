@@ -7,15 +7,17 @@ import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
 import { ListingPerformanceCockpit } from '@/modules/listings/components/ListingPerformanceCockpit';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getPatrimoniosCopy } from '../content/pt';
+import { getPatrimoniosCopy } from '../content';
 import { getProperty, type PropertyRow } from '../services/properties-client';
 import { listPropertyMedia, type PropertyMediaRow } from '../services/property-media-client';
 
 export function PropertyDetailClient({ id }: { id: string }) {
-  const copy = getPatrimoniosCopy();
+  const { locale } = useLocale();
+  const copy = getPatrimoniosCopy(locale);
   const [row, setRow] = useState<PropertyRow | null>(null);
   const [media, setMedia] = useState<PropertyMediaRow[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -73,22 +75,22 @@ export function PropertyDetailClient({ id }: { id: string }) {
           <>
             <EmptyState
               title={copy.loadError}
-              description={error ?? 'Este património pode ter sido removido ou não está acessível.'}
+              description={error ?? copy.nextSteps.detailErrorHint}
               action={
                 <Link
                   href="/app/patrimonios"
                   className={cn(buttonVariants({ variant: 'primary' }))}
                 >
-                  Ver patrimónios
+                  {copy.nextSteps.seeProperties}
                 </Link>
               }
             />
             <FlowNextSteps
-              title="Começar de novo"
-              kaiHint="Active um património ou complete a verificação da conta."
+              title={copy.nextSteps.startOverTitle}
+              kaiHint={copy.nextSteps.startOverHint}
               steps={[
                 { href: '/app/patrimonios/novo', label: copy.activate, primary: true },
-                { href: '/app/centro-confianca', label: 'Centro de Confiança' },
+                { href: '/app/centro-confianca', label: copy.nextSteps.trustCenter },
               ]}
             />
           </>
@@ -115,21 +117,20 @@ export function PropertyDetailClient({ id }: { id: string }) {
             />
 
             <p className="kuteka-detail-panel px-4 py-3 text-sm text-stone-700">
-              Quando activo, este anúncio fica disponível em Habitação para o Cliente — com a mesma
-              ficha premium, mapa e reputação.
+              {copy.detailNote}
             </p>
 
             <FlowNextSteps
-              title="Próximo passo sugerido"
-              kaiHint="Partilhe o anúncio em Habitação para gerar visitas, ou avance para contrato quando tiver interessados."
+              title={copy.nextSteps.suggestedTitle}
+              kaiHint={copy.nextSteps.suggestedHint}
               steps={[
                 {
                   href: `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`,
                   label: copy.seeInHousing,
                   primary: true,
                 },
-                { href: '/app/centro-confianca', label: 'Centro de Confiança' },
-                { href: '/app/contratos/novo', label: 'Criar contrato' },
+                { href: '/app/centro-confianca', label: copy.nextSteps.trustCenter },
+                { href: '/app/contratos/novo', label: copy.nextSteps.createContract },
               ]}
             />
           </>

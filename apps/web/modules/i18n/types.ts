@@ -18,6 +18,14 @@ export const LOCALE_HTML_LANG: Record<AppLocale, string> = {
   es: 'es',
 };
 
+/** BCP-47 tag for Intl date/number formatting per locale (pt keeps Angola formatting). */
+export const LOCALE_INTL_TAG: Record<AppLocale, string> = {
+  pt: 'pt-AO',
+  en: 'en-US',
+  fr: 'fr-FR',
+  es: 'es-ES',
+};
+
 export function isAppLocale(value: unknown): value is AppLocale {
   return typeof value === 'string' && (APP_LOCALES as readonly string[]).includes(value);
 }

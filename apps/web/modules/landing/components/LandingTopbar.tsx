@@ -5,15 +5,16 @@ import { cn } from '@kuteka/shared';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { BrandMark } from '@/modules/authentication/components/BrandMark';
-import { landingContent } from '../content';
-
-const c = landingContent;
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getLandingCopy } from '../content';
 
 /**
  * Topbar: transparent over hero → glass on scroll.
  * Past the hero, switches to a light glass so it stays discreet on white sections (PASSO 1 §A).
  */
 export function LandingTopbar() {
+  const { locale } = useLocale();
+  const c = getLandingCopy(locale);
   const [scrolled, setScrolled] = useState(false);
   const [overLight, setOverLight] = useState(false);
 

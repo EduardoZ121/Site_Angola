@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   fetchRevenueSnapshot,
   formatAoaAmount,
@@ -11,7 +12,8 @@ import {
 import { Feedback, Metric, PanelSection } from './shared';
 
 export function RevenuePanel() {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const [snapshot, setSnapshot] = useState<RevenueSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

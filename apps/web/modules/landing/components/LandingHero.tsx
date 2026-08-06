@@ -1,12 +1,15 @@
+'use client';
+
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import Image from 'next/image';
 import Link from 'next/link';
-import { landingContent } from '../content';
-
-const c = landingContent;
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getLandingCopy } from '../content';
 
 export function LandingHero() {
+  const { locale } = useLocale();
+  const c = getLandingCopy(locale);
   return (
     <section
       aria-labelledby="landing-hero-title"

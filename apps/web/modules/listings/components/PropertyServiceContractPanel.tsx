@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { SERVICE_LABELS } from '../lib/manual-ops-labels';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getServiceLabels } from '../lib/manual-ops-labels';
 
 type ServiceContract = {
   id: string;
@@ -64,6 +65,8 @@ function fmtDate(value: string | null | undefined): string {
  * Contrato Kuteka ↔ Parceiro Patrimonial — Manual Cap.7 (contrato real).
  */
 export function PropertyServiceContractPanel({ propertyId }: { propertyId: string }) {
+  const { locale } = useLocale();
+  const serviceLabels = getServiceLabels(locale);
   const [rows, setRows] = useState<ServiceContract[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -190,7 +193,7 @@ export function PropertyServiceContractPanel({ propertyId }: { propertyId: strin
                   <ul className="mt-3 flex flex-wrap gap-1.5">
                     {services.map((svc) => (
                       <li key={svc} className="kuteka-detail-chip">
-                        {SERVICE_LABELS[svc] ?? svc}
+                        {serviceLabels[svc] ?? svc}
                       </li>
                     ))}
                   </ul>

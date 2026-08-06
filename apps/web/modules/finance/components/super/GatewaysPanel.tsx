@@ -3,8 +3,9 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FINANCE_URGENCY_BANDS } from '@kuteka/validation';
 import { Badge, Button, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   captureSandboxPayment,
   createSandboxPayment,
@@ -16,7 +17,8 @@ import {
 import { Feedback, PanelSection, selectClass, useFeedback, type PanelProps } from './shared';
 
 export function GatewaysPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [gateways, setGateways] = useState<FinanceGatewayRow[]>([]);
   const [products, setProducts] = useState<FinanceProductRow[]>([]);

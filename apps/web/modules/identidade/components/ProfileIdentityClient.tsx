@@ -7,9 +7,11 @@ import { ID_DOC_KINDS, MARITAL_STATUS_CODES, SEX_CODES } from '@kuteka/validatio
 import { Badge, Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getIdentidadeCopy } from '../content/pt';
+import { getIdentidadeCopy } from '../content';
 import {
   KIS_STEPS,
   KYC_LEVEL_LABELS,
@@ -90,7 +92,8 @@ function nextAfter(step: KisStepId): KisStepId {
 }
 
 export function ProfileIdentityClient() {
-  const copy = getIdentidadeCopy();
+  const { locale } = useLocale();
+  const copy = getIdentidadeCopy(locale);
   const searchParams = useSearchParams();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const [bundle, setBundle] = useState<IdentityBundle | null>(null);
@@ -359,7 +362,7 @@ export function ProfileIdentityClient() {
   async function onDocument(e: FormEvent) {
     e.preventDefault();
     if (!frontFile || !backFile) {
-      setError('Carregue a frente e o verso do documento.');
+      setError(copy.documentUploadRequired);
       return;
     }
     setBusy('document');
@@ -508,7 +511,7 @@ export function ProfileIdentityClient() {
         ) : null}
 
         <SoftListSlot pending={loading && !bundle}>
-          <nav className="kuteka-detail-panel overflow-x-auto p-3" aria-label="Passos do KIS">
+          <nav className="kuteka-detail-panel overflow-x-auto p-3" aria-label={copy.stepsNavLabel}>
             <ol className="flex min-w-max gap-1 sm:flex-wrap sm:min-w-0">
               {KIS_STEPS.map((item) => {
                 const done = stepDone(item.id, bundle);
@@ -589,7 +592,7 @@ export function ProfileIdentityClient() {
                     href="/app/centro-confianca"
                     className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
                   >
-                    Centro de Confiança
+                    {copy.kycCta}
                   </Link>
                 </div>
               ) : (
@@ -599,7 +602,7 @@ export function ProfileIdentityClient() {
                     href="/app/centro-confianca"
                     className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
                   >
-                    Centro de Confiança
+                    {copy.kycCta}
                   </Link>
                 </div>
               )}
@@ -607,7 +610,7 @@ export function ProfileIdentityClient() {
                 <p className="mt-3 text-sm text-amber-800">
                   {copy.kycGateBody}{' '}
                   <Link href="/app/centro-confianca" className="underline">
-                    Centro de Confiança
+                    {copy.kycCta}
                   </Link>
                 </p>
               ) : null}
@@ -938,7 +941,7 @@ export function ProfileIdentityClient() {
                 </div>
               </div>
               {busy === 'avatar' || busy === 'selfie' ? (
-                <p className="mt-2 text-sm text-slate-600">A carregar…</p>
+                <p className="mt-2 text-sm text-slate-600">{copy.loading}</p>
               ) : null}
               {bundle?.profile.avatar_url ? (
                 <div className="mt-4">
@@ -1141,7 +1144,7 @@ export function ProfileIdentityClient() {
               <div className="mt-6">
                 <h3 className="text-sm font-semibold text-slate-900">{copy.privacy.history}</h3>
                 {!privacyLoaded ? (
-                  <p className="mt-2 text-sm text-slate-500">A carregar…</p>
+                  <p className="mt-2 text-sm text-slate-500">{copy.loading}</p>
                 ) : changes.length === 0 ? (
                   <p className="mt-2 text-sm text-slate-500">{copy.privacy.historyEmpty}</p>
                 ) : (
@@ -1150,7 +1153,7 @@ export function ProfileIdentityClient() {
                       <li key={row.id} className="px-3 py-2 text-sm">
                         <p className="font-medium text-slate-800">{row.field_name}</p>
                         <p className="text-xs text-slate-500">
-                          {new Date(row.created_at).toLocaleString('pt-AO')}
+                          {new Date(row.created_at).toLocaleString(LOCALE_INTL_TAG[locale])}
                         </p>
                         <p className="mt-0.5 text-xs text-slate-600">
                           {(row.old_value ?? '—').slice(0, 40)} →{' '}
@@ -1165,7 +1168,7 @@ export function ProfileIdentityClient() {
               <div className="mt-6">
                 <h3 className="text-sm font-semibold text-slate-900">{copy.privacy.accessLogs}</h3>
                 {!privacyLoaded ? (
-                  <p className="mt-2 text-sm text-slate-500">A carregar…</p>
+                  <p className="mt-2 text-sm text-slate-500">{copy.loading}</p>
                 ) : accessLogs.length === 0 ? (
                   <p className="mt-2 text-sm text-slate-500">{copy.privacy.accessLogsEmpty}</p>
                 ) : (
@@ -1174,7 +1177,8 @@ export function ProfileIdentityClient() {
                       <li key={row.id} className="px-3 py-2 text-sm">
                         <p className="font-medium text-slate-800">{row.action}</p>
                         <p className="text-xs text-slate-500">
-                          {new Date(row.created_at).toLocaleString('pt-AO')} · {row.entity_type}
+                          {new Date(row.created_at).toLocaleString(LOCALE_INTL_TAG[locale])} ·{' '}
+                          {row.entity_type}
                         </p>
                       </li>
                     ))}

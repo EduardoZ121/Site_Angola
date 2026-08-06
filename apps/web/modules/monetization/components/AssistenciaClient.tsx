@@ -6,14 +6,19 @@ import { Badge, Button, Heading, Label, Text, buttonVariants } from '@kuteka/ui'
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
+import { getMonetizationCopy } from '@/modules/monetization/content';
 import {
   ASSISTENCIA_CATEGORY_OPTIONS,
   ASSISTENCIA_URGENCY_OPTIONS,
   assistenciaCategoryLabel,
+  assistenciaCategoryOptionLabel,
   assistenciaStatusLabel,
   assistenciaStatusTone,
   assistenciaUrgencyLabel,
+  assistenciaUrgencyOptionLabel,
   type AssistenciaCategoryValue,
   type AssistenciaUrgencyValue,
 } from '@/modules/monetization/lib/catalog';
@@ -35,6 +40,10 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 
 export function AssistenciaClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { locale } = useLocale();
+  const copy = getMonetizationCopy(locale).assistencia;
+  const common = getMonetizationCopy(locale).common;
+  const dateLocale = LOCALE_INTL_TAG[locale];
   const [rows, setRows] = useState<AssistenciaRequestDetail[]>([]);
   const [events, setEvents] = useState<Record<string, AssistenciaEvent[]>>({});
   const [openTimeline, setOpenTimeline] = useState<string | null>(null);
@@ -101,7 +110,7 @@ export function AssistenciaClient() {
     });
     setBusyId(null);
     if (!result.ok) return setError(result.message);
-    setMessage('Rascunho criado. Confirme o pagamento para activar a assistência.');
+    setMessage(copy.messages.created);
     setNotes('');
     setPropertyId('');
     await load();
@@ -121,19 +130,16 @@ export function AssistenciaClient() {
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Assistência 24h</p>
-          <Heading level={1}>Ajuda urgente para o seu imóvel</Heading>
-          <Text className="mt-1 text-slate-700">
-            Registe a ocorrência e a equipa Kuteka coordena a assistência. A chamada custa cerca de
-            5 000 Kz via Kuteka Pay; o cancelamento antes do início devolve 100% em créditos.
-          </Text>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+          <Heading level={1}>{copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'secondary' }))}>
-              Financeiro
+              {common.financeiro}
             </Link>
             <Link href="/app/servicos" className={cn(buttonVariants({ variant: 'ghost' }))}>
-              Prestadores
+              {copy.providersLink}
             </Link>
           </div>
         </header>
@@ -151,10 +157,10 @@ export function AssistenciaClient() {
 
         <SoftListSlot pending={loading}>
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Novo pedido urgente</h2>
+            <h2 className="kuteka-detail-title">{copy.newRequestTitle}</h2>
             <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
               <div>
-                <Label htmlFor="assistencia-category">Categoria</Label>
+                <Label htmlFor="assistencia-category">{copy.categoryLabel}</Label>
                 <select
                   id="assistencia-category"
                   className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
@@ -163,13 +169,13 @@ export function AssistenciaClient() {
                 >
                   {ASSISTENCIA_CATEGORY_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
-                      {option.label}
+                      {assistenciaCategoryOptionLabel(option.value, locale)}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
-                <Label htmlFor="assistencia-urgency">Urgência</Label>
+                <Label htmlFor="assistencia-urgency">{copy.urgencyLabel}</Label>
                 <select
                   id="assistencia-urgency"
                   className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
@@ -178,13 +184,13 @@ export function AssistenciaClient() {
                 >
                   {ASSISTENCIA_URGENCY_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
-                      {option.label}
+                      {assistenciaUrgencyOptionLabel(option.value, locale)}
                     </option>
                   ))}
                 </select>
               </div>
               <div className="sm:col-span-2">
-                <Label htmlFor="assistencia-notes">O que aconteceu?</Label>
+                <Label htmlFor="assistencia-notes">{copy.notesLabel}</Label>
                 <textarea
                   id="assistencia-notes"
                   required
@@ -193,29 +199,29 @@ export function AssistenciaClient() {
                   className="min-h-[110px] w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
                   value={notes}
                   onChange={(event) => setNotes(event.target.value)}
-                  placeholder="Descreva o problema, riscos e indicações para chegar ao local…"
+                  placeholder={copy.notesPlaceholder}
                 />
               </div>
               <div className="sm:col-span-2">
-                <Label htmlFor="assistencia-property">ID do imóvel (opcional)</Label>
+                <Label htmlFor="assistencia-property">{copy.propertyLabel}</Label>
                 <input
                   id="assistencia-property"
                   className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
                   value={propertyId}
                   onChange={(event) => setPropertyId(event.target.value)}
-                  placeholder="UUID do imóvel"
+                  placeholder={copy.propertyPlaceholder}
                 />
               </div>
               <Button type="submit" loading={busyId === 'create'} className="sm:col-span-2">
-                Criar pedido
+                {copy.submit}
               </Button>
             </form>
           </section>
 
           <section className="kuteka-detail-panel p-5">
             <div className="flex items-center justify-between gap-2">
-              <h2 className="kuteka-detail-title">Pedidos de assistência</h2>
-              {canOperate ? <Badge variant="default">Operador</Badge> : null}
+              <h2 className="kuteka-detail-title">{copy.requestsTitle}</h2>
+              {canOperate ? <Badge variant="default">{copy.operatorBadge}</Badge> : null}
             </div>
             <ul className="mt-3 divide-y divide-slate-200">
               {rows.map((row) => {
@@ -226,30 +232,37 @@ export function AssistenciaClient() {
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div>
                         <p className="font-medium text-slate-900">
-                          {assistenciaCategoryLabel(row.category)}
+                          {assistenciaCategoryLabel(row.category, locale)}
                         </p>
                         <p className="mt-1 text-sm font-medium text-rose-700">
-                          {assistenciaUrgencyLabel(row.urgency)}
+                          {assistenciaUrgencyLabel(row.urgency, locale)}
                         </p>
                         <p className="mt-1 max-w-2xl text-sm text-slate-600">{row.notes}</p>
                         <p className="mt-1 text-xs text-slate-500">
                           {row.call_fee_aoa
-                            ? `Taxa ${formatAoaAmount(Number(row.call_fee_aoa))}`
-                            : 'Taxa estimada 5 000 Kz'}
-                          {row.payment_intent_id ? ' · Kuteka Pay' : ''}
-                          {row.property_id ? ` · imóvel ${row.property_id.slice(0, 8)}` : ''}
+                            ? copy.feeAmount.replace(
+                                '{amount}',
+                                formatAoaAmount(Number(row.call_fee_aoa)),
+                              )
+                            : copy.feeEstimate}
+                          {row.payment_intent_id ? copy.paidSuffix : ''}
+                          {row.property_id
+                            ? copy.propertySuffix.replace('{id}', row.property_id.slice(0, 8))
+                            : ''}
                         </p>
                         {row.operator_notes ? (
                           <p className="mt-1 text-sm text-slate-600">
-                            Operação: {row.operator_notes}
+                            {copy.operationPrefix.replace('{value}', row.operator_notes)}
                           </p>
                         ) : null}
                         {row.failure_reason ? (
-                          <p className="mt-1 text-sm text-rose-700">Motivo: {row.failure_reason}</p>
+                          <p className="mt-1 text-sm text-rose-700">
+                            {common.reason.replace('{value}', row.failure_reason)}
+                          </p>
                         ) : null}
                       </div>
                       <Badge variant={assistenciaStatusTone(row.status)}>
-                        {assistenciaStatusLabel(row.status)}
+                        {assistenciaStatusLabel(row.status, locale)}
                       </Badge>
                     </div>
 
@@ -262,11 +275,11 @@ export function AssistenciaClient() {
                             run(
                               row.id,
                               () => activateAssistencia({ requestId: row.id }),
-                              'Pedido activo. Taxa cobrada via Kuteka Pay (sandbox).',
+                              copy.messages.activated,
                             )
                           }
                         >
-                          Pagar e activar
+                          {copy.payAndActivate}
                         </Button>
                       ) : null}
                       {owned && ['draft', 'awaiting_payment', 'active'].includes(row.status) ? (
@@ -278,17 +291,17 @@ export function AssistenciaClient() {
                             run(
                               row.id,
                               () => cancelAssistencia({ requestId: row.id }),
-                              'Pedido cancelado. Reembolso integral aplicado quando cobrado.',
+                              copy.messages.cancelled,
                             )
                           }
                         >
-                          Cancelar
+                          {common.cancel}
                         </Button>
                       ) : null}
                       {canOperate && ['active', 'in_progress'].includes(row.status) ? (
                         <input
-                          aria-label="Nota do operador"
-                          placeholder="Nota operacional (opcional)"
+                          aria-label={copy.operatorNoteAria}
+                          placeholder={copy.operatorNotePlaceholder}
                           className="w-64 rounded-kuteka border border-slate-300 bg-white px-2 py-1 text-sm"
                           value={operatorNotes[row.id] ?? ''}
                           onChange={(event) =>
@@ -311,11 +324,11 @@ export function AssistenciaClient() {
                                   requestId: row.id,
                                   note: operatorNotes[row.id] || null,
                                 }),
-                              'Assistência iniciada.',
+                              copy.messages.started,
                             )
                           }
                         >
-                          Iniciar
+                          {copy.start}
                         </Button>
                       ) : null}
                       {canOperate && row.status === 'in_progress' ? (
@@ -330,11 +343,11 @@ export function AssistenciaClient() {
                                   requestId: row.id,
                                   note: operatorNotes[row.id] || null,
                                 }),
-                              'Assistência concluída.',
+                              copy.messages.completed,
                             )
                           }
                         >
-                          Concluir
+                          {copy.complete}
                         </Button>
                       ) : null}
                       {canOperate && ['active', 'in_progress'].includes(row.status) ? (
@@ -348,13 +361,13 @@ export function AssistenciaClient() {
                               () =>
                                 failAssistencia({
                                   requestId: row.id,
-                                  reason: operatorNotes[row.id] || 'Assistência não concluída.',
+                                  reason: operatorNotes[row.id] || copy.failReasonDefault,
                                 }),
-                              'Pedido marcado como falhado. Reembolso integral aplicado.',
+                              copy.messages.failed,
                             )
                           }
                         >
-                          Marcar falha
+                          {copy.markFail}
                         </Button>
                       ) : null}
                       <button
@@ -362,7 +375,7 @@ export function AssistenciaClient() {
                         className="text-xs font-medium text-brand-700 hover:underline"
                         onClick={() => void toggleTimeline(row.id)}
                       >
-                        {openTimeline === row.id ? 'Ocultar cronologia' : 'Ver cronologia'}
+                        {openTimeline === row.id ? common.hideTimeline : common.viewTimeline}
                       </button>
                     </div>
 
@@ -375,11 +388,11 @@ export function AssistenciaClient() {
                               ? ` · ${timelineEvent.from_status} → ${timelineEvent.to_status}`
                               : ''}
                             {timelineEvent.note ? ` · ${timelineEvent.note}` : ''}
-                            {` · ${new Date(timelineEvent.created_at).toLocaleString('pt-PT')}`}
+                            {` · ${new Date(timelineEvent.created_at).toLocaleString(dateLocale)}`}
                           </li>
                         ))}
                         {(events[row.id] ?? []).length === 0 ? (
-                          <li className="text-xs text-slate-500">Sem eventos.</li>
+                          <li className="text-xs text-slate-500">{common.noEvents}</li>
                         ) : null}
                       </ol>
                     ) : null}
@@ -387,7 +400,7 @@ export function AssistenciaClient() {
                 );
               })}
               {rows.length === 0 ? (
-                <li className="py-3 text-sm text-slate-500">Ainda sem pedidos de assistência.</li>
+                <li className="py-3 text-sm text-slate-500">{copy.emptyList}</li>
               ) : null}
             </ul>
           </section>

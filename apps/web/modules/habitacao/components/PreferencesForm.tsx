@@ -5,17 +5,19 @@ import Link from 'next/link';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getHabitacaoCopy } from '../content/pt';
+import { getHabitacaoCopy } from '../content';
 import { getClientPreferences, saveClientPreferences } from '../services/housing-client';
 
 const PURPOSES = ['rent', 'sale', 'both'] as const;
 
 export function PreferencesForm() {
-  const copy = getHabitacaoCopy();
+  const { locale } = useLocale();
+  const copy = getHabitacaoCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canExplore =
     sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');

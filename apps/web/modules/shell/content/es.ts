@@ -28,6 +28,10 @@ export const shellCopyEs: ShellCopy = {
   userMenu: {
     profile: 'Perfil',
     profileHint: 'Mis datos personales',
+    centroConfiancaHint: 'Estado de la cuenta, UTS y próximos pasos',
+    centroSegurancaHint: 'Email, teléfono, sesiones y nivel de seguridad',
+    roleCountSingular: 'rol',
+    roleCountPlural: 'roles',
     roles: 'Mis roles',
     rolesHint: 'Activar o gestionar roles de la cuenta',
     patrimonios: 'Mis patrimonios',
@@ -150,4 +154,69 @@ export const shellCopyEs: ShellCopy = {
   securityCenterHint: 'Email, teléfono, sesiones, dispositivos y nivel de seguridad de la cuenta.',
   feedEndTitle: 'Llegó al final del inventario actual',
   feedEndBody: 'Los nuevos patrimonios aparecen aquí en cuanto se publiquen.',
+  feed: {
+    activateRoleTitle: 'Active el papel Cliente para ver el feed',
+    activateRoleBody:
+      'El feed continuo muestra patrimonios, destacados y recomendaciones en cuanto tenga acceso a Vivienda.',
+    activateRoleCta: 'Activar papel',
+    warmingTitle: 'Feed calentando',
+    warmingBody: 'Aún no hay anuncios activos. Publique su primer patrimonio o explore Vivienda.',
+    exploreWithFilters: 'Explorar con filtros',
+    markers: {
+      new: { title: 'Patrimonios nuevos', hint: 'Acaban de entrar en la plataforma.' },
+      featured: {
+        title: 'Destacados',
+        hint: 'Selección con presencia premium.',
+        badge: 'Destacado',
+      },
+      nearby: { title: 'Cerca de usted', hint: 'Inventario relevante para explorar ahora.' },
+      recommend: {
+        title: 'Recomendaciones',
+        hint: 'Sugerencias basadas en el inventario activo.',
+      },
+      trends: { title: 'Tendencias', hint: 'Lo que la comunidad está viendo.' },
+      premium: {
+        title: 'Inmuebles premium',
+        hint: 'Patrimonio de gama alta.',
+        badge: 'Premium',
+      },
+      contracts: {
+        title: 'Actividad de contratos',
+        hint: 'Formalización avanzando en la plataforma.',
+        badge: 'Contratos',
+      },
+      news: { title: 'Novedades', hint: 'Actualizaciones recientes del marketplace.' },
+      smart: {
+        title: 'Recomendaciones inteligentes',
+        hint: 'Preparación para el motor KAI.',
+        badge: 'KAI prep',
+      },
+      more: { title: 'Más patrimonios', hint: 'Siga explorando — el feed no termina aquí.' },
+      sponsored: {
+        title: 'Anuncios patrocinados',
+        hint: 'Campañas e inventario en promoción.',
+        badge: 'Patrocinado',
+      },
+    },
+    linkCard: {
+      title: 'Explorar vivienda con filtros',
+      hint: 'Ajuste ubicación, finalidad y tipología sin salir de la plataforma.',
+      cta: 'Abrir explorar',
+    },
+  },
+  institutional: {
+    badge: 'Kuteka · v1.0 Beta',
+    backToLanding: 'Volver a la Landing',
+    contactKuteka: 'Contactar a Kuteka',
+  },
+  errors: {
+    routeErrorTitle: 'Error',
+    routeErrorBody: 'Estamos teniendo dificultades para mostrar esta página. Inténtelo de nuevo.',
+    retry: 'Intentar de nuevo',
+    globalErrorTitle: 'Algo salió mal',
+    globalErrorBody: 'Ocurrió un error inesperado. Puede intentarlo de nuevo.',
+    notFoundTitle: 'Página no encontrada',
+    notFoundBody: 'El recurso solicitado no existe.',
+    goHome: 'Ir a la fundación',
+  },
 };

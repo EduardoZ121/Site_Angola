@@ -5,8 +5,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { getIdentidadeCopy } from '../content';
 import { formatCompleteness, statusGlyph, statusLabel, statusTone } from '../lib/kyc';
 import { buildTrustCenterModel, type TrustCenterModel } from '../lib/trust-center';
 import { loadMyIdentity, type IdentityBundle } from '../services/identity-client';
@@ -40,6 +42,9 @@ function accountGlyph(status: TrustCenterModel['accountStatus']): string {
  * Centro de Confiança Kuteka — vista estilo banca digital sobre o KIS.
  */
 export function TrustCenterClient() {
+  const { locale } = useLocale();
+  const copy = getIdentidadeCopy(locale);
+  const tc = copy.trustCenter;
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const [bundle, setBundle] = useState<IdentityBundle | null>(null);
   const [loading, setLoading] = useState(true);
@@ -63,18 +68,19 @@ export function TrustCenterClient() {
     if (sessionStatus === 'error') setLoading(false);
   }, [load, sessionStatus]);
 
-  const model = useMemo(() => (bundle ? buildTrustCenterModel(bundle) : null), [bundle]);
+  const model = useMemo(
+    () => (bundle ? buildTrustCenterModel(bundle, copy) : null),
+    [bundle, copy],
+  );
   const nextHref = model ? (STEP_HREF[model.nextStepId] ?? '/app/perfil') : '/app/perfil';
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Kuteka Identity System</p>
-          <Heading level={1}>Centro de Confiança Kuteka</Heading>
-          <Text className="mt-1 text-slate-700">
-            Veja o que já validou, o que falta e porque alguns serviços ainda estão bloqueados.
-          </Text>
+          <p className="kuteka-detail-eyebrow">{tc.kicker}</p>
+          <Heading level={1}>{tc.title}</Heading>
+          <Text className="mt-1 text-slate-700">{tc.subtitle}</Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
         </header>
 
@@ -89,7 +95,7 @@ export function TrustCenterClient() {
             <>
               <section className="kuteka-detail-panel grid gap-4 p-5 sm:grid-cols-3">
                 <div>
-                  <p className="kuteka-detail-micro">Estado da conta</p>
+                  <p className="kuteka-detail-micro">{tc.accountStatusLabel}</p>
                   <p className="mt-1 flex items-center gap-2 text-lg font-semibold text-slate-900">
                     <span aria-hidden>{accountGlyph(model.accountStatus)}</span>
                     {model.accountLabel}
@@ -99,15 +105,15 @@ export function TrustCenterClient() {
                   </Badge>
                 </div>
                 <div>
-                  <p className="kuteka-detail-micro">UTS</p>
+                  <p className="kuteka-detail-micro">{tc.utsLabel}</p>
                   <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
                     {Math.round(model.uts)}
-                    <span className="text-base font-normal text-slate-500">/100</span>
+                    <span className="text-base font-normal text-slate-500">{tc.utsOutOf}</span>
                   </p>
                   <p className="mt-1 text-sm font-medium text-slate-700">{model.utsBandLabel}</p>
                 </div>
                 <div>
-                  <p className="kuteka-detail-micro">Perfil KIS</p>
+                  <p className="kuteka-detail-micro">{tc.profileLabel}</p>
                   <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
                     {formatCompleteness(model.completeness)}
                   </p>
@@ -128,7 +134,7 @@ export function TrustCenterClient() {
 
               <section className="kuteka-detail-panel p-5" aria-labelledby="trust-pillars">
                 <h2 id="trust-pillars" className="kuteka-detail-title">
-                  Pilares de confiança
+                  {tc.pillarsTitle}
                 </h2>
                 <ul className="mt-3 divide-y divide-slate-200 rounded-kuteka border border-slate-200 bg-white">
                   {model.pillars.map((pillar) => (
@@ -144,8 +150,8 @@ export function TrustCenterClient() {
                       </span>
                       <Badge variant={statusTone(pillar.status)}>
                         {pillar.status === 'missing'
-                          ? 'Ainda não adicionado'
-                          : statusLabel(pillar.status)}
+                          ? tc.pillarMissingLabel
+                          : statusLabel(pillar.status, tc.statusLabels)}
                       </Badge>
                     </li>
                   ))}
@@ -154,7 +160,7 @@ export function TrustCenterClient() {
 
               <section className="kuteka-detail-panel p-5" aria-labelledby="trust-next">
                 <h2 id="trust-next" className="kuteka-detail-title">
-                  Próximo passo
+                  {tc.nextStepSectionTitle}
                 </h2>
                 <p className="mt-2 text-base font-medium text-slate-900">{model.nextStepTitle}</p>
                 <Text className="mt-1 text-slate-700">{model.nextStepBody}</Text>
@@ -167,31 +173,27 @@ export function TrustCenterClient() {
                 ) : null}
                 <div className="mt-4 flex flex-wrap gap-2">
                   <Link href={nextHref} className={cn(buttonVariants({ variant: 'primary' }))}>
-                    Continuar no KIS
+                    {tc.continueKis}
                   </Link>
                   <Link href="/app/perfil" className={cn(buttonVariants({ variant: 'secondary' }))}>
-                    Abrir identidade
+                    {tc.openIdentity}
                   </Link>
                   <Link href="/app/confianca" className={cn(buttonVariants({ variant: 'ghost' }))}>
-                    Checklist Confiança
+                    {tc.trustChecklist}
                   </Link>
                 </div>
               </section>
 
               <section className="kuteka-detail-panel p-5">
-                <h2 className="kuteka-detail-title">Porque isto importa</h2>
-                <Text className="mt-2 text-slate-700">
-                  O Centro de Confiança é a leitura humana do KIS. Contratos, Kuteka Pay, reservas e
-                  serviços usam estes estados — sem pedir de novo o que já validou. O KAI usa o
-                  mesmo sinal para sugerir o próximo desbloqueio.
-                </Text>
+                <h2 className="kuteka-detail-title">{tc.whyTitle}</h2>
+                <Text className="mt-2 text-slate-700">{tc.whyBody}</Text>
                 <Button
                   type="button"
                   variant="secondary"
                   className="mt-3"
                   onClick={() => void load()}
                 >
-                  Actualizar estado
+                  {tc.refresh}
                 </Button>
               </section>
             </>
