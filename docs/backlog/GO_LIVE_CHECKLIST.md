@@ -1,5 +1,7 @@
 # Checklist go-live Kuteka (mínimo)
 
+> **Nota (2026-08-06):** este documento passa a ser o histórico de execução. A referência **oficial** de prontidão de lançamento ("Bloco Zero") é agora [`docs/product/GO_LIVE_READINESS.md`](../product/GO_LIVE_READINESS.md), actualizada a cada Sprint Beta ([Charter](../product/SPRINT_BETA_CHARTER.md)). Consultar sempre esse documento primeiro; este ficheiro não é reescrito a cada sprint.
+
 ## Já feito (Core v1.0)
 
 - [x] Landing

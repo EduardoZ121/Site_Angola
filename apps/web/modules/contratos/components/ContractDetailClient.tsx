@@ -10,6 +10,7 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getPartySnapshot } from '@/modules/identidade/services/identity-client';
+import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
@@ -214,7 +215,9 @@ export function ContractDetailClient({ id }: { id: string }) {
               <Badge variant={statusVariant(row.status)}>
                 {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
               </Badge>
-              {row.is_demo ? <Badge variant="default">Demo</Badge> : null}
+              {inventoryBadge(row.is_demo) ? (
+                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+              ) : null}
             </div>
           ) : null}
         </header>

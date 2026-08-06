@@ -47,6 +47,7 @@ export const financeCopyPt = {
     gateways: 'Gateways',
     flags: 'Service Health',
     campaigns: 'Campanhas',
+    kocc: 'Controlo Operacional',
   },
   metrics: {
     captured: 'Cobranças capturadas',

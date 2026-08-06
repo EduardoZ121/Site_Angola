@@ -9,12 +9,13 @@ export const contratosCopyPt = {
   creating: 'A preparar…',
   created: 'Contrato preparado para aceitação.',
   detailTitle: 'Detalhe do contrato',
-  demoNote: 'Dados demo: contratos ligados ao inventário KTK-DEMO para mostrar a operação em uso.',
+  demoNote:
+    'Inventário Beta: contratos de exemplo ligados ao catálogo KTK para mostrar a operação em uso.',
   emptyTitle: 'Sem contratos ainda',
   empty:
     'Quando Confiança e Administração validarem as partes, prepare o primeiro contrato para seguir para Pagamentos.',
   emptyDemo:
-    'Se a base estiver vazia, execute a migration PRD-008 para carregar contratos demo KTK-CTR.',
+    'Se a base estiver vazia, execute a migration PRD-008 para carregar contratos de inventário Beta KTK-CTR.',
   loadError: 'Estamos a ter dificuldade em mostrar os contratos. Tente novamente.',
   saveError: 'Não conseguimos preparar o contrato. Verifique os dados e tente novamente.',
   transitionError: 'Não conseguimos actualizar o contrato. Tente novamente.',

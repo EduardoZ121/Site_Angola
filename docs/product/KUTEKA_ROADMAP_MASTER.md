@@ -1,18 +1,21 @@
 # KUTEKA ROADMAP MASTER
 
-| Campo        | Valor                                                                                                     |
-| ------------ | --------------------------------------------------------------------------------------------------------- |
-| **Versão**   | 1.1                                                                                                       |
-| **Data**     | 2026-08-05                                                                                                |
-| **Estado**   | Auditoria de maturidade pós–Fase D + alinhamento a versões comerciais                                     |
-| **Produção** | https://kutekalink.com                                                                                    |
-| **Repo**     | EduardoZ121/Site_Angola · branch `main`                                                                   |
-| **Fontes**   | Core v1.0 · ADRs 001–024 · Arquitectura Financeira v1.0 · migrations `0001`–`0028` · código em `apps/web` |
-| **Operação** | [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md) (KOS) — empresa diária + versões v1.0–v3.0     |
+| Campo          | Valor                                                                                                                                      |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Versão**     | 1.1                                                                                                                                        |
+| **Data**       | 2026-08-05                                                                                                                                 |
+| **Estado**     | Auditoria de maturidade pós–Fase D + alinhamento a versões comerciais                                                                      |
+| **Produção**   | https://kutekalink.com                                                                                                                     |
+| **Repo**       | EduardoZ121/Site_Angola · branch `main`                                                                                                    |
+| **Fontes**     | Core v1.0 · ADRs 001–024 · Arquitectura Financeira v1.0 · migrations `0001`–`0028` · código em `apps/web`                                  |
+| **Operação**   | [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md) (KOS) — empresa diária + versões v1.0–v3.0                                      |
+| **Governação** | [SPRINT_BETA_CHARTER.md](./SPRINT_BETA_CHARTER.md) — fase de Arquitectura encerrada; **Kuteka v1.0 Beta Operação** activa desde 2026-08-06 |
 
 ---
 
 ## 0. Síntese executiva
+
+> **Declaração de fase (2026-08-06):** a fase de Arquitectura está encerrada (ver [SPRINT_BETA_CHARTER.md](./SPRINT_BETA_CHARTER.md)). A Kuteka opera agora em **v1.0 Beta Operação**, organizada por Sprints Beta 1→5. Nenhuma funcionalidade nova entra sem Sprint Beta + objectivo de negócio + critério de sucesso mensurável — regra permanente descrita no Charter e no [KOS §0](./KUTEKA_OPERATING_SYSTEM.md).
 
 A **Fase D do roadmap financeiro** (primeiro conjunto de serviços comerciais sobre a infra A/B/C) está **concluída**. Isso **não** significa que a monetização ou a plataforma estejam concluídas — significa que o ciclo **Ledger → Kuteka Pay (sandbox) → Marketplace → cinco serviços N5 de negócio** está fechado em produto e schema.
 
@@ -319,19 +322,21 @@ flowchart LR
 
 ## 8. Referências canónicas
 
-| Documento                                                                        | Uso                                                 |
-| -------------------------------------------------------------------------------- | --------------------------------------------------- |
-| [ARQUITETURA_FINANCEIRA_KUTEKA.md](../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md)  | Filosofia financeira v1.0                           |
-| [docs/finance/README.md](../finance/README.md)                                   | Ordem Fases A–E / D1–D5                             |
-| [KUTEKA_PLATFORM_CORE_V1.md](./KUTEKA_PLATFORM_CORE_V1.md)                       | Congelamento Core                                   |
-| [CORE_V1_MATURITY_REPORT.md](../backlog/CORE_V1_MATURITY_REPORT.md)              | Maturidade Core                                     |
-| [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md)                       | Operação empresarial + versões comerciais v1.0–v3.0 |
-| [ADR-025 KIS](../architecture/ADR-025-kis-identity-system.md)                    | Identidade jurídica / KYC                           |
-| [ADR-026 Identity Security](../architecture/ADR-026-identity-security-center.md) | OTP dual, SMS, Centro de Segurança, 2FA preparado   |
-| [GO_LIVE_CHECKLIST.md](../backlog/GO_LIVE_CHECKLIST.md)                          | Checklist beta (alinhar a KOS §8)                   |
-| [MANUAL_VS_PLATFORM.md](../engineering/MANUAL_VS_PLATFORM.md)                    | PDK / ICK / Saúde                                   |
-| ADRs `001`–`024`                                                                 | Decisões por módulo                                 |
-| Migrations `0001`–`0028`                                                         | Schema efectivo                                     |
+| Documento                                                                        | Uso                                                               |
+| -------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| [SPRINT_BETA_CHARTER.md](./SPRINT_BETA_CHARTER.md)                               | Governação — fase Beta Operação, regra de Sprint Beta obrigatória |
+| [GO_LIVE_READINESS.md](./GO_LIVE_READINESS.md)                                   | Bloco Zero — checklist vivo de prontidão                          |
+| [ARQUITETURA_FINANCEIRA_KUTEKA.md](../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md)  | Filosofia financeira v1.0                                         |
+| [docs/finance/README.md](../finance/README.md)                                   | Ordem Fases A–E / D1–D5                                           |
+| [KUTEKA_PLATFORM_CORE_V1.md](./KUTEKA_PLATFORM_CORE_V1.md)                       | Congelamento Core                                                 |
+| [CORE_V1_MATURITY_REPORT.md](../backlog/CORE_V1_MATURITY_REPORT.md)              | Maturidade Core                                                   |
+| [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md)                       | Operação empresarial + versões comerciais v1.0–v3.0               |
+| [ADR-025 KIS](../architecture/ADR-025-kis-identity-system.md)                    | Identidade jurídica / KYC                                         |
+| [ADR-026 Identity Security](../architecture/ADR-026-identity-security-center.md) | OTP dual, SMS, Centro de Segurança, 2FA preparado                 |
+| [GO_LIVE_CHECKLIST.md](../backlog/GO_LIVE_CHECKLIST.md)                          | Checklist beta (alinhar a KOS §8)                                 |
+| [MANUAL_VS_PLATFORM.md](../engineering/MANUAL_VS_PLATFORM.md)                    | PDK / ICK / Saúde                                                 |
+| ADRs `001`–`024`                                                                 | Decisões por módulo                                               |
+| Migrations `0001`–`0028`                                                         | Schema efectivo                                                   |
 
 ---
 

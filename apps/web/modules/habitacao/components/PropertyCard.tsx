@@ -4,6 +4,7 @@ import { Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { getHabitacaoCopy } from '../content';
 import type { HousingPropertyRow } from '../services/housing-client';
 
@@ -36,7 +37,9 @@ function PropertyCardComponent({ row }: { row: HousingPropertyRow }) {
           <Badge variant="brand">
             {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
           </Badge>
-          {row.is_demo ? <Badge variant="default">Demo</Badge> : null}
+          {inventoryBadge(row.is_demo) ? (
+            <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+          ) : null}
         </div>
         <div>
           <h3 className="text-base font-semibold text-slate-900">

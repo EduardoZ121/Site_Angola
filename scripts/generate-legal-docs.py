@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCES = [
     ROOT / "docs/legal/TERMOS_UTILIZACAO_v1.md",
     ROOT / "docs/legal/POLITICA_PRIVACIDADE_v1.md",
+    ROOT / "docs/legal/POLITICA_COOKIES_v1.md",
     ROOT / "docs/help/MANUAL_UTILIZADOR_v1.md",
 ]
 OUT_DOCS = ROOT / "docs" / "legal" / "exports"

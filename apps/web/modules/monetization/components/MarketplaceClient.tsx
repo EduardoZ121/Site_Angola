@@ -7,6 +7,7 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import type { AppLocale } from '@/modules/i18n/types';
+import { publicModuleBadge } from '@/modules/kocc/lib/public-label';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
@@ -408,7 +409,7 @@ function ProvidersPanel({
                 {prov.municipality ? ` · ${prov.municipality}` : ''}
                 {prov.province ? `, ${prov.province}` : ''}
                 {prov.rating != null ? ` · ★ ${Number(prov.rating).toFixed(1)}` : ''}
-                {prov.is_demo ? ' · demo' : ''}
+                {prov.is_demo ? ` · ${publicModuleBadge('beta_public')}` : ''}
               </p>
             </div>
             <Button

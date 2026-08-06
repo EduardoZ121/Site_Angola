@@ -132,6 +132,8 @@ export const landingCopyPt: LandingCopy = {
     links: [
       { href: '/termos', label: 'Termos de utilização' },
       { href: '/privacidade', label: 'Política de privacidade' },
+      { href: '/cookies', label: 'Política de cookies' },
+      { href: '/documentacao', label: 'Documentação' },
       { href: '/contacto', label: 'Contacto' },
     ],
     copyright: `© ${new Date().getFullYear()} Kuteka · Angola`,

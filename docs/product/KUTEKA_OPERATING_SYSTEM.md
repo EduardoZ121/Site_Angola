@@ -1,12 +1,13 @@
 # KUTEKA OPERATING SYSTEM (KOS)
 
-| Campo           | Valor                                                                                                        |
-| --------------- | ------------------------------------------------------------------------------------------------------------ |
-| **Versão**      | 1.0                                                                                                          |
-| **Data**        | 2026-08-05                                                                                                   |
-| **Natureza**    | Operação empresarial diária — **não** é especificação de software                                            |
-| **Complementa** | [KUTEKA_ROADMAP_MASTER.md](./KUTEKA_ROADMAP_MASTER.md) (plataforma) · Arquitectura Financeira v1.0 (negócio) |
-| **Produção**    | https://kutekalink.com                                                                                       |
+| Campo           | Valor                                                                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Versão**      | 1.0                                                                                                                                              |
+| **Data**        | 2026-08-05                                                                                                                                       |
+| **Natureza**    | Operação empresarial diária — **não** é especificação de software                                                                                |
+| **Complementa** | [KUTEKA_ROADMAP_MASTER.md](./KUTEKA_ROADMAP_MASTER.md) (plataforma) · Arquitectura Financeira v1.0 (negócio)                                     |
+| **Governação**  | [SPRINT_BETA_CHARTER.md](./SPRINT_BETA_CHARTER.md) — fase de Arquitectura encerrada; Sprints Beta 1→5 governam o trabalho a partir de 2026-08-06 |
+| **Produção**    | https://kutekalink.com                                                                                                                           |
 
 Este documento define **como a empresa Kuteka funciona**: quem decide, quem executa, em quanto tempo, com que indicadores, e como escala.  
 Software (rotas, RPCs, Super Admin) é a **ferramenta**; o KOS é o **modo de operar**.
@@ -21,7 +22,8 @@ Software (rotas, RPCs, Super Admin) é a **ferramenta**; o KOS é o **modo de op
 4. **Configuração > código.** Preços, flags e gateways vivem no Super Admin (`/app/super`).
 5. **Versões comerciais > módulos.** A partir de agora o trabalho serve `v1.0` / `v1.5` / `v2.0` / `v3.0` (§10), não “terminar todos os módulos”.
 6. **Papéis empilháveis.** Em beta, a mesma pessoa pode exercer vários chapéus; o organograma descreve **funções**, não headcount obrigatório.
-7. **Demo ≠ produção.** Contas `demo.*` e gateway `sandbox` saem do caminho crítico antes de beta pública.
+7. **Demo interno sim, "Demo" visível não.** Contas e dados `demo.*` podem continuar a existir para uso interno (testes, formação, ensaios de plantão), mas **o utilizador final nunca vê a palavra "Demo"** em nenhum ecrã, módulo ou serviço. O Super Administrador controla o estado público de cada módulo através do **KOCC** (Kuteka Operations Control Center, painel dentro do Super Admin / Command Center — MVP pendente, ver [GO_LIVE_READINESS.md](./GO_LIVE_READINESS.md)). Os únicos rótulos públicos permitidos são: **Beta** · **Acesso antecipado** · **Disponível em breve** · **Comercial activo**. Contas `demo.*@kuteka.local` continuam banidas do caminho crítico de produção antes de beta pública alargada (§8.4).
+8. **Sprint Beta obrigatória.** Nenhuma funcionalidade nova entra em desenvolvimento sem estar associada a uma Sprint Beta activa, com objectivo de negócio e critério de sucesso mensurável — regra permanente definida em [SPRINT_BETA_CHARTER.md](./SPRINT_BETA_CHARTER.md) §2.
 
 ---
 

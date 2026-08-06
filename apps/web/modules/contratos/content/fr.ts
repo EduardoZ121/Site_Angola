@@ -12,12 +12,12 @@ export const contratosCopyFr: ContratosCopy = {
   created: 'Contrat préparé pour acceptation.',
   detailTitle: 'Détail du contrat',
   demoNote:
-    'Données de démonstration : contrats liés à l’inventaire KTK-DEMO pour montrer le processus en action.',
+    'Inventaire Bêta : contrats liés à l’inventaire KTK-DEMO pour montrer le processus en action.',
   emptyTitle: 'Aucun contrat pour le moment',
   empty:
     'Lorsque Confiance et Administration auront validé les parties, préparez le premier contrat pour passer aux Paiements.',
   emptyDemo:
-    'Si la base est vide, exécutez la migration PRD-008 pour charger les contrats de démonstration KTK-CTR.',
+    'Si la base est vide, exécutez la migration PRD-008 pour charger les contrats d’inventaire Bêta KTK-CTR.',
   loadError: 'Nous avons du mal à afficher les contrats. Veuillez réessayer.',
   saveError: 'Nous n’avons pas pu préparer le contrat. Vérifiez les données et réessayez.',
   transitionError: 'Nous n’avons pas pu mettre à jour le contrat. Veuillez réessayer.',
