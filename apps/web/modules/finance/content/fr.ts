@@ -49,6 +49,7 @@ export const financeCopyFr: FinanceCopy = {
     gateways: 'Passerelles',
     flags: 'Service Health',
     campaigns: 'Campagnes',
+    kocc: 'Contrôle opérationnel',
   },
   metrics: {
     captured: 'Charges capturées',

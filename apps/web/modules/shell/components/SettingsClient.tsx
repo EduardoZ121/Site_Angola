@@ -67,12 +67,20 @@ export function SettingsClient() {
           {s.privacy}
         </h2>
         <p className="kuteka-detail-body mt-1">{s.privacyHint}</p>
-        <Link
-          href="/privacidade"
-          className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-3 w-fit')}
-        >
-          {s.privacy}
-        </Link>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Link
+            href="/privacidade"
+            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+          >
+            {s.privacy}
+          </Link>
+          <Link
+            href="/cookies"
+            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+          >
+            {shell.helpExtra.cookies}
+          </Link>
+        </div>
       </section>
 
       <section className="kuteka-detail-panel p-5" aria-labelledby="settings-security">

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
@@ -139,8 +140,16 @@ export function InstitutionalDocument({
   backLabel,
 }: Props) {
   const { locale } = useLocale();
-  const shell = getShellCopy(locale).institutional;
+  const shellCopy = getShellCopy(locale);
+  const shell = shellCopy.institutional;
+  const pathname = usePathname();
   const blocks = parseMarkdownDocument(markdown).filter((b) => b.type !== 'h1');
+
+  const legalLinks = [
+    { href: '/termos', label: shellCopy.helpExtra.terms },
+    { href: '/privacidade', label: shellCopy.helpExtra.privacy },
+    { href: '/cookies', label: shellCopy.helpExtra.cookies },
+  ].filter((link) => link.href !== pathname);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-12 md:py-16">
@@ -172,13 +181,31 @@ export function InstitutionalDocument({
         ))}
       </article>
 
-      <div className="mt-12 flex flex-wrap gap-4 border-t border-slate-200 pt-6">
-        <Link href={backHref} className="text-sm font-medium text-brand-700 hover:underline">
-          {backLabel ?? shell.backToLanding}
-        </Link>
-        <Link href="/contacto" className="text-sm text-slate-600 hover:underline">
-          {shell.contactKuteka}
-        </Link>
+      <div className="mt-12 border-t border-slate-200 pt-6">
+        {legalLinks.length > 0 ? (
+          <nav
+            aria-label="Documentos legais relacionados"
+            className="flex flex-wrap gap-x-5 gap-y-2"
+          >
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-slate-600 hover:underline"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        ) : null}
+        <div className="mt-4 flex flex-wrap gap-4">
+          <Link href={backHref} className="text-sm font-medium text-brand-700 hover:underline">
+            {backLabel ?? shell.backToLanding}
+          </Link>
+          <Link href="/contacto" className="text-sm text-slate-600 hover:underline">
+            {shell.contactKuteka}
+          </Link>
+        </div>
       </div>
     </main>
   );

@@ -77,16 +77,22 @@ export const shellCopyEs: ShellCopy = {
     saveLocale: 'Idioma guardado en las preferencias de la cuenta',
   },
   helpPage: {
-    title: 'Centro de Ayuda',
-    subtitle: 'Guías para publicar, comprar, arrendar y operar en Kuteka.',
+    title: 'Centro de Documentación Kuteka',
+    subtitle: 'Manual, FAQ, glosario, novedades y estado de los servicios — todo en un solo lugar.',
     manual: 'Manual del usuario',
     faq: 'Preguntas frecuentes',
+    glossario: 'Glosario',
+    novidades: 'Novedades',
+    estado: 'Estado de los Servicios',
+    roadmap: 'Hoja de ruta pública',
     videos: 'Vídeos',
     tutorials: 'Tutoriales',
     howPublish: 'Cómo publicar',
     howBuy: 'Cómo comprar',
     howRent: 'Cómo arrendar',
     contactCta: '¿Aún necesita ayuda? Contáctenos',
+    publicNotice:
+      'Está viendo el Centro de Documentación público. Inicie sesión para una experiencia completa y personalizada.',
   },
   contactPage: {
     title: 'Contactar a Kuteka',
@@ -142,7 +148,9 @@ export const shellCopyEs: ShellCopy = {
   helpExtra: {
     terms: 'Términos de Uso',
     privacy: 'Política de Privacidad',
+    cookies: 'Política de Cookies',
     securityCenter: 'Centro de Seguridad',
+    contactSupport: 'Contactar soporte',
     downloadManualPdf: 'Descargar Manual (PDF)',
     downloadManualWord: 'Descargar Manual (Word)',
     videosPending:

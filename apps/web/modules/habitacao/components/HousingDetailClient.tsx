@@ -7,6 +7,7 @@ import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
 import {
   listPropertyMedia,
@@ -111,7 +112,9 @@ export function HousingDetailClient({ id }: { id: string }) {
           {row ? (
             <div className="flex flex-wrap gap-2">
               <Badge variant="success">Activo</Badge>
-              {row.is_demo ? <Badge variant="default">Demo</Badge> : null}
+              {inventoryBadge(row.is_demo) ? (
+                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+              ) : null}
             </div>
           ) : null}
         </header>

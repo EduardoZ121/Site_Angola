@@ -7,6 +7,7 @@ import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
@@ -123,7 +124,7 @@ export function ContractsHubClient() {
                   ['Activo', stats.active],
                   ['Pendente', stats.pending],
                   ['Concluído', stats.completed],
-                  ['Demo', stats.demo],
+                  ['Inventário Beta', stats.demo],
                 ] as const
               ).map(([label, value]) => (
                 <div
@@ -187,7 +188,9 @@ export function ContractsHubClient() {
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <p className="font-mono text-xs text-slate-500">{row.code}</p>
-                              {row.is_demo ? <Badge variant="default">Demo</Badge> : null}
+                              {inventoryBadge(row.is_demo) ? (
+                                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+                              ) : null}
                             </div>
                             <h3 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">
                               {row.title}

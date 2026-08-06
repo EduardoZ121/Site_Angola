@@ -26,6 +26,7 @@ import { PayEnginePanel } from './super/PayEnginePanel';
 import { GatewaysPanel } from './super/GatewaysPanel';
 import { FeatureFlagsPanel } from './super/FeatureFlagsPanel';
 import { CampaignsPanel } from './super/CampaignsPanel';
+import { KoccCenterClient } from '@/modules/kocc/components/KoccCenterClient';
 
 type TabKey =
   | 'revenue'
@@ -43,7 +44,8 @@ type TabKey =
   | 'payengine'
   | 'gateways'
   | 'flags'
-  | 'campaigns';
+  | 'campaigns'
+  | 'kocc';
 
 export function SuperCommandCenter() {
   const { locale } = useLocale();
@@ -76,6 +78,7 @@ export function SuperCommandCenter() {
     { key: 'gateways', label: copy.tabs.gateways },
     { key: 'flags', label: copy.tabs.flags },
     { key: 'campaigns', label: copy.tabs.campaigns },
+    { key: 'kocc', label: copy.tabs.kocc },
   ];
 
   const panels: Record<TabKey, ReactNode> = {
@@ -95,6 +98,7 @@ export function SuperCommandCenter() {
     gateways: <GatewaysPanel canManage={canManage} />,
     flags: <FeatureFlagsPanel canManage={canManage} />,
     campaigns: <CampaignsPanel canManage={canManage} />,
+    kocc: <KoccCenterClient canManage={canManage} />,
   };
 
   return (
