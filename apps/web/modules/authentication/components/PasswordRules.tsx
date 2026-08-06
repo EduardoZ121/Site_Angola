@@ -1,4 +1,7 @@
+'use client';
+
 import { passwordRules } from '@kuteka/validation';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 
 interface PasswordRulesProps {
@@ -6,7 +9,8 @@ interface PasswordRulesProps {
 }
 
 export function PasswordRules({ password }: PasswordRulesProps) {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const rules = [
     { id: 'min', label: copy.register.password.ruleMin, ok: passwordRules.minLength(password) },
     { id: 'upper', label: copy.register.password.ruleUpper, ok: passwordRules.hasUpper(password) },

@@ -34,17 +34,22 @@ type LocaleProviderProps = {
   profileLocale?: string | null;
 };
 
+function readStoredLocale(): AppLocale {
+  if (typeof window === 'undefined') return 'pt';
+  try {
+    return normalizeLocale(window.localStorage.getItem(LOCALE_STORAGE_KEY));
+  } catch {
+    return 'pt';
+  }
+}
+
 export function LocaleProvider({ children, profileLocale }: LocaleProviderProps) {
-  const [locale, setLocaleState] = useState<AppLocale>('pt');
-  const [ready, setReady] = useState(false);
+  // Sync init from localStorage avoids a first paint in Portuguese when FR/EN/ES is selected.
+  const [locale, setLocaleState] = useState<AppLocale>(() => readStoredLocale());
+  const [ready, setReady] = useState(typeof window !== 'undefined');
 
   useEffect(() => {
-    let stored: string | null = null;
-    try {
-      stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-    } catch {
-      stored = null;
-    }
+    const stored = readStoredLocale();
     const next = normalizeLocale(profileLocale || stored || 'pt');
     setLocaleState(next);
     setReady(true);

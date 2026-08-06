@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getAuthCopy } from '@/modules/authentication/content';
 import { EmptyState } from './EmptyState';
 
 type SessionStatus = 'loading' | 'ready' | 'error';
@@ -21,19 +23,20 @@ type SessionStatusGateProps = {
  * While status === 'loading', children stay mounted and decide soft placeholders.
  */
 export function SessionStatusGate({ status, error, children }: SessionStatusGateProps) {
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
+
   if (status === 'error') {
     return (
       <EmptyState
-        title="Sessão indisponível"
-        description={
-          error ?? 'A sua sessão expirou ou não foi validada. Entre novamente para continuar.'
-        }
+        title={copy.common.sessionExpired}
+        description={error ?? copy.app.loadError}
         action={
           <Link
             href="/auth/entrar?next=%2Fapp"
             className={cn(buttonVariants({ variant: 'primary' }))}
           >
-            Entrar
+            {copy.login.submit}
           </Link>
         }
       />

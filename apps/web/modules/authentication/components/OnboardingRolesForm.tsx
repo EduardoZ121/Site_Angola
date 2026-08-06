@@ -4,12 +4,14 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { resolveSafeNextPath } from '@kuteka/auth';
 import { onboardingRolesSchema, type SelfServeRoleCode } from '@kuteka/validation';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { activateSelfServeRoles } from '../services/auth-client';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
 export function OnboardingRolesForm() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');

@@ -1,6 +1,9 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 
 interface BrandMarkProps {
@@ -42,7 +45,8 @@ export function BrandMark({
   size = 'md',
   variant = 'inline',
 }: BrandMarkProps) {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const dims = variant === 'shell' ? SHELL_SIZE[size] : INLINE_SIZE[size];
 
   if (variant === 'shell') {
@@ -66,7 +70,16 @@ export function BrandMark({
           unoptimized
         />
         <p className="mt-1.5 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[#08263f]/80">
-          Gestão patrimonial
+          {
+            (
+              {
+                pt: 'Gestão patrimonial',
+                en: 'Property management',
+                fr: 'Gestion patrimoniale',
+                es: 'Gestión patrimonial',
+              } as const
+            )[locale]
+          }
         </p>
       </Link>
     );

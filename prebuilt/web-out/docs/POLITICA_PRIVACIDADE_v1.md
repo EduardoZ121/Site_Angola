@@ -31,11 +31,11 @@ O responsável pelo tratamento dos dados pessoais recolhidos através da Kuteka 
 
 Para qualquer questão relacionada com privacidade, protecção de dados ou exercício de direitos, disponibilizamos os seguintes contactos:
 
-| Assunto | Contacto |
-|---|---|
+| Assunto                                               | Contacto                   |
+| ----------------------------------------------------- | -------------------------- |
 | Encarregado de Protecção de Dados (DPO) / privacidade | privacidade@kutekalink.com |
-| Contacto geral | contacto@kutekalink.com |
-| Sítio institucional | https://kutekalink.com |
+| Contacto geral                                        | contacto@kutekalink.com    |
+| Sítio institucional                                   | https://kutekalink.com     |
 
 Nomeámos um ponto de contacto dedicado às matérias de privacidade (função de DPO / encarregado de protecção de dados) que centraliza os pedidos dos titulares, acompanha a conformidade dos tratamentos e serve de interlocutor com a autoridade de controlo competente. Todos os pedidos relativos a esta política deverão, preferencialmente, ser dirigidos ao endereço **privacidade@kutekalink.com**.
 
@@ -45,15 +45,15 @@ A Kuteka recolhe apenas os dados necessários para prestar os seus serviços de 
 
 A tabela seguinte resume as principais categorias de dados tratados.
 
-| Categoria | Exemplos de dados | Origem |
-|---|---|---|
-| **Dados de conta** | Nome, endereço de correio electrónico, número de telefone, palavra-passe (armazenada de forma cifrada/derivada), tipo de conta e papel na plataforma | Fornecidos pelo titular |
-| **Dados de perfil** | Fotografia de perfil, preferências, idioma, dados de contacto complementares, informação da entidade que representa (no caso de parceiros) | Fornecidos pelo titular |
-| **Documentos KYC / KIS** | Documento de identificação (bilhete de identidade, passaporte ou equivalente), número de identificação, comprovativos de morada, e — quando aplicável — selfie ou verificação biométrica de correspondência | Fornecidos pelo titular / validados por prestadores |
-| **Dados financeiros** | Dados de operações patrimoniais, movimentos, registos de transacções (ledger), informação bancária associada a levantamentos ou recebimentos, histórico de pagamentos | Fornecidos pelo titular / gerados pela plataforma |
-| **Dados de utilização** | Funcionalidades acedidas, acções realizadas, histórico de interacções, registos de actividade na conta | Gerados automaticamente |
-| **Dados de dispositivo e sessão** | Endereço IP, tipo e versão de dispositivo e navegador, sistema operativo, identificadores de sessão, tokens de autenticação, data e hora de acesso | Gerados automaticamente |
-| **Comunicações** | Mensagens de apoio, pedidos submetidos, correspondência por correio electrónico ou SMS, respostas a inquéritos | Fornecidos pelo titular |
+| Categoria                         | Exemplos de dados                                                                                                                                                                                           | Origem                                              |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| **Dados de conta**                | Nome, endereço de correio electrónico, número de telefone, palavra-passe (armazenada de forma cifrada/derivada), tipo de conta e papel na plataforma                                                        | Fornecidos pelo titular                             |
+| **Dados de perfil**               | Fotografia de perfil, preferências, idioma, dados de contacto complementares, informação da entidade que representa (no caso de parceiros)                                                                  | Fornecidos pelo titular                             |
+| **Documentos KYC / KIS**          | Documento de identificação (bilhete de identidade, passaporte ou equivalente), número de identificação, comprovativos de morada, e — quando aplicável — selfie ou verificação biométrica de correspondência | Fornecidos pelo titular / validados por prestadores |
+| **Dados financeiros**             | Dados de operações patrimoniais, movimentos, registos de transacções (ledger), informação bancária associada a levantamentos ou recebimentos, histórico de pagamentos                                       | Fornecidos pelo titular / gerados pela plataforma   |
+| **Dados de utilização**           | Funcionalidades acedidas, acções realizadas, histórico de interacções, registos de actividade na conta                                                                                                      | Gerados automaticamente                             |
+| **Dados de dispositivo e sessão** | Endereço IP, tipo e versão de dispositivo e navegador, sistema operativo, identificadores de sessão, tokens de autenticação, data e hora de acesso                                                          | Gerados automaticamente                             |
+| **Comunicações**                  | Mensagens de apoio, pedidos submetidos, correspondência por correio electrónico ou SMS, respostas a inquéritos                                                                                              | Fornecidos pelo titular                             |
 
 Não recolhemos deliberadamente categorias especiais de dados (por exemplo, dados relativos a saúde, convicções religiosas ou filiação política) para além do estritamente necessário à verificação de identidade. Quando o tratamento de dados biométricos for necessário para confirmar a identidade (ver secção 5), este é realizado com salvaguardas reforçadas e, sempre que a lei o exija, com o consentimento explícito do titular.
 
@@ -70,24 +70,24 @@ Tratamos os dados pessoais apenas para finalidades determinadas, explícitas e l
 
 A tabela seguinte relaciona as principais finalidades com as respectivas bases de legitimidade.
 
-| Finalidade | Base de legitimidade |
-|---|---|
-| Criação, autenticação e gestão da conta | Execução de contrato |
-| Verificação de identidade (KYC / KIS) | Obrigação legal; execução de contrato |
-| Processamento de pagamentos e manutenção do ledger | Execução de contrato; obrigação legal |
-| Prevenção de fraude e segurança da plataforma | Interesse legítimo; obrigação legal |
-| Apoio ao utilizador e gestão de comunicações | Execução de contrato; interesse legítimo |
-| Cumprimento de obrigações fiscais e de facturação | Obrigação legal |
-| Melhoria de serviços e análise estatística agregada | Interesse legítimo |
-| Comunicações de marketing (quando existam) | Consentimento |
-| Cookies não essenciais e analítica | Consentimento |
-| Tratamento biométrico de correspondência facial (quando aplicável) | Consentimento; obrigação legal |
+| Finalidade                                                         | Base de legitimidade                     |
+| ------------------------------------------------------------------ | ---------------------------------------- |
+| Criação, autenticação e gestão da conta                            | Execução de contrato                     |
+| Verificação de identidade (KYC / KIS)                              | Obrigação legal; execução de contrato    |
+| Processamento de pagamentos e manutenção do ledger                 | Execução de contrato; obrigação legal    |
+| Prevenção de fraude e segurança da plataforma                      | Interesse legítimo; obrigação legal      |
+| Apoio ao utilizador e gestão de comunicações                       | Execução de contrato; interesse legítimo |
+| Cumprimento de obrigações fiscais e de facturação                  | Obrigação legal                          |
+| Melhoria de serviços e análise estatística agregada                | Interesse legítimo                       |
+| Comunicações de marketing (quando existam)                         | Consentimento                            |
+| Cookies não essenciais e analítica                                 | Consentimento                            |
+| Tratamento biométrico de correspondência facial (quando aplicável) | Consentimento; obrigação legal           |
 
 Quando o tratamento assentar no interesse legítimo, o titular tem o direito de se opor por motivos relacionados com a sua situação particular, nos termos da secção 12. Quando assentar no consentimento, este pode ser retirado a qualquer momento, sem que tal comprometa a licitude do tratamento efectuado até ao momento da retirada.
 
 ## 5. KIS / KYC — tratamento especial de documentos de identidade
 
-O cumprimento das obrigações de **conhecimento do cliente** (KYC — *Know Your Customer* / KIS — *Know Your Investor* ou congénere) é uma componente essencial de uma plataforma patrimonial responsável e, em muitos casos, uma exigência legal. Este tratamento merece salvaguardas reforçadas, que descrevemos nesta secção com transparência.
+O cumprimento das obrigações de **conhecimento do cliente** (KYC — _Know Your Customer_ / KIS — _Know Your Investor_ ou congénere) é uma componente essencial de uma plataforma patrimonial responsável e, em muitos casos, uma exigência legal. Este tratamento merece salvaguardas reforçadas, que descrevemos nesta secção com transparência.
 
 **Documentos de identidade.** Para verificar a identidade do titular, poderemos solicitar a apresentação de um documento de identificação válido (bilhete de identidade, passaporte ou documento equivalente), do respectivo número de identificação e, quando necessário, de comprovativos de morada. Estes documentos são recolhidos exclusivamente para fins de verificação, prevenção de fraude e cumprimento de obrigações legais.
 
@@ -107,11 +107,11 @@ Os documentos de identidade e os dados de verificação são conservados pelos p
 
 O **Kuteka Pay** é o serviço através do qual são processadas as operações de pagamento na plataforma. O tratamento dos dados de pagamento obedece às seguintes regras de transparência e segurança.
 
-**Recurso a gateways de pagamento.** As operações de pagamento são processadas com recurso a fornecedores especializados (*gateways* de pagamento) que operam sob os seus próprios padrões de segurança. Estes prestadores tratam os dados estritamente necessários à execução e validação das transacções.
+**Recurso a gateways de pagamento.** As operações de pagamento são processadas com recurso a fornecedores especializados (_gateways_ de pagamento) que operam sob os seus próprios padrões de segurança. Estes prestadores tratam os dados estritamente necessários à execução e validação das transacções.
 
-**Não armazenamento do número completo do cartão.** A **Kuteka não armazena o número completo do cartão de pagamento** (PAN — *Primary Account Number*). Quando um pagamento por cartão é efectuado, os dados sensíveis do cartão são tratados directamente pelo *gateway* de pagamento, podendo a Kuteka reter apenas referências não sensíveis (por exemplo, os últimos dígitos, a rede do cartão ou um identificador tokenizado) para fins de reconciliação e apresentação ao titular.
+**Não armazenamento do número completo do cartão.** A **Kuteka não armazena o número completo do cartão de pagamento** (PAN — _Primary Account Number_). Quando um pagamento por cartão é efectuado, os dados sensíveis do cartão são tratados directamente pelo _gateway_ de pagamento, podendo a Kuteka reter apenas referências não sensíveis (por exemplo, os últimos dígitos, a rede do cartão ou um identificador tokenizado) para fins de reconciliação e apresentação ao titular.
 
-**Ledger de transacções.** A plataforma mantém um registo estruturado das operações (*ledger*), destinado a assegurar a integridade, a rastreabilidade e a reconciliação dos movimentos patrimoniais e financeiros. Este registo é essencial para a exactidão dos saldos, para a resolução de disputas e para o cumprimento de obrigações contabilísticas e legais.
+**Ledger de transacções.** A plataforma mantém um registo estruturado das operações (_ledger_), destinado a assegurar a integridade, a rastreabilidade e a reconciliação dos movimentos patrimoniais e financeiros. Este registo é essencial para a exactidão dos saldos, para a resolução de disputas e para o cumprimento de obrigações contabilísticas e legais.
 
 **Finalidades.** Os dados de pagamento são tratados para executar as operações solicitadas, prevenir e detectar fraude, cumprir obrigações fiscais e de facturação e responder a reclamações ou pedidos de esclarecimento.
 
@@ -130,7 +130,7 @@ A Kuteka utiliza cookies e tecnologias similares (armazenamento local, identific
 A segurança dos dados é uma prioridade permanente. Adoptamos medidas técnicas e organizativas adequadas para proteger os dados pessoais contra o acesso não autorizado, a divulgação, a alteração ou a destruição indevidas, incluindo:
 
 - **Encriptação em trânsito** — as comunicações entre o dispositivo do titular e a plataforma são protegidas por protocolos de encriptação (por exemplo, TLS/HTTPS).
-- **Segurança ao nível dos dados (RLS)** — aplicamos políticas de segurança ao nível das linhas de dados (*Row-Level Security*) para garantir que cada utilizador só acede aos dados a que tem efectivamente direito.
+- **Segurança ao nível dos dados (RLS)** — aplicamos políticas de segurança ao nível das linhas de dados (_Row-Level Security_) para garantir que cada utilizador só acede aos dados a que tem efectivamente direito.
 - **Autenticação reforçada (OTP)** — utilizamos mecanismos de verificação, incluindo códigos de uso único (OTP), para reforçar a autenticação e proteger o acesso à conta.
 - **Centro de Segurança** — disponibilizamos ao titular um espaço onde pode consultar e gerir aspectos da segurança da sua conta, como sessões activas e eventos relevantes.
 - **Retenção de eventos de segurança** — registamos e conservamos eventos de segurança (por exemplo, tentativas de acesso e alterações sensíveis) durante um período adequado, para efeitos de detecção de anomalias, investigação de incidentes e cumprimento de obrigações legais.
@@ -143,16 +143,16 @@ Conservamos os dados pessoais apenas durante o tempo necessário para as finalid
 
 A tabela seguinte indica os prazos de conservação por categoria. Os prazos legais específicos prevalecem sempre que a lei aplicável estabeleça períodos diferentes dos aqui indicados.
 
-| Categoria de dados | Prazo de conservação de referência |
-|---|---|
-| Dados de conta activa | Enquanto a conta se mantiver activa |
-| Dados de perfil | Enquanto a conta se mantiver activa; eliminados ou anonimizados após o encerramento |
-| Documentos e dados KYC / KIS | Conservados durante a relação e, após o encerramento da conta, pelo período legalmente exigido para comprovação do cumprimento das obrigações de identificação |
-| Registos financeiros e ledger de transacções | Pelo período exigido pela legislação contabilística e fiscal aplicável |
-| Dados de facturação | Pelo período exigido pela legislação fiscal aplicável |
-| Registos (logs) de utilização e de dispositivo/sessão | Por um período limitado, adequado a fins de segurança e diagnóstico |
-| Eventos de segurança | Por um período adequado à detecção de anomalias e à investigação de incidentes |
-| Comunicações de apoio | Enquanto necessário à gestão do pedido e por período razoável posterior para efeitos de comprovação |
+| Categoria de dados                                    | Prazo de conservação de referência                                                                                                                             |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dados de conta activa                                 | Enquanto a conta se mantiver activa                                                                                                                            |
+| Dados de perfil                                       | Enquanto a conta se mantiver activa; eliminados ou anonimizados após o encerramento                                                                            |
+| Documentos e dados KYC / KIS                          | Conservados durante a relação e, após o encerramento da conta, pelo período legalmente exigido para comprovação do cumprimento das obrigações de identificação |
+| Registos financeiros e ledger de transacções          | Pelo período exigido pela legislação contabilística e fiscal aplicável                                                                                         |
+| Dados de facturação                                   | Pelo período exigido pela legislação fiscal aplicável                                                                                                          |
+| Registos (logs) de utilização e de dispositivo/sessão | Por um período limitado, adequado a fins de segurança e diagnóstico                                                                                            |
+| Eventos de segurança                                  | Por um período adequado à detecção de anomalias e à investigação de incidentes                                                                                 |
+| Comunicações de apoio                                 | Enquanto necessário à gestão do pedido e por período razoável posterior para efeitos de comprovação                                                            |
 
 Após o encerramento de uma conta, procedemos à eliminação ou anonimização dos dados que já não sejam necessários, conservando apenas aqueles cuja retenção seja imposta por lei ou justificada por interesse legítimo (por exemplo, defesa em processos ou prevenção de fraude), pelos prazos estritamente necessários.
 
@@ -171,7 +171,7 @@ Poderemos ainda partilhar dados com autoridades públicas, judiciais ou regulado
 
 ## 11. Transferências internacionais
 
-A Kuteka recorre a infra-estruturas de computação em nuvem (*cloud*) e a prestadores de serviço que podem estar localizados, ou tratar dados, fora de Angola. Em consequência, alguns dos seus dados poderão ser transferidos e tratados noutras jurisdições.
+A Kuteka recorre a infra-estruturas de computação em nuvem (_cloud_) e a prestadores de serviço que podem estar localizados, ou tratar dados, fora de Angola. Em consequência, alguns dos seus dados poderão ser transferidos e tratados noutras jurisdições.
 
 Sempre que ocorram transferências internacionais de dados, procuramos assegurar salvaguardas adequadas, designadamente:
 
@@ -223,14 +223,14 @@ Tratando-se de uma plataforma em fase Beta, poderão ocorrer actualizações com
 
 Para qualquer questão, pedido ou reclamação relacionada com esta Política de Privacidade ou com o tratamento dos seus dados pessoais, utilize os seguintes contactos:
 
-| Assunto | Contacto |
-|---|---|
+| Assunto                                               | Contacto                   |
+| ----------------------------------------------------- | -------------------------- |
 | Privacidade / Encarregado de Protecção de Dados (DPO) | privacidade@kutekalink.com |
-| Contacto geral | contacto@kutekalink.com |
-| Sítio institucional | https://kutekalink.com |
+| Contacto geral                                        | contacto@kutekalink.com    |
+| Sítio institucional                                   | https://kutekalink.com     |
 
 ---
 
-*Esta Política de Privacidade foi elaborada com base na legislação angolana aplicável à protecção de dados pessoais e inspirada em boas práticas internacionais de protecção de dados, incluindo os princípios subjacentes ao Regulamento Geral sobre a Protecção de Dados (RGPD/GDPR) e à Lei Geral de Protecção de Dados (LGPD). Esta referência é feita a título de alinhamento de princípios e boas práticas, não constituindo qualquer declaração de certificação formal de conformidade com esses regimes.*
+_Esta Política de Privacidade foi elaborada com base na legislação angolana aplicável à protecção de dados pessoais e inspirada em boas práticas internacionais de protecção de dados, incluindo os princípios subjacentes ao Regulamento Geral sobre a Protecção de Dados (RGPD/GDPR) e à Lei Geral de Protecção de Dados (LGPD). Esta referência é feita a título de alinhamento de princípios e boas práticas, não constituindo qualquer declaração de certificação formal de conformidade com esses regimes._
 
 **Luanda, 5 de Agosto de 2026.**

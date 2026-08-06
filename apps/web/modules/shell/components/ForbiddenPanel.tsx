@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '../content';
 import { FlowNextSteps, type FlowStep } from './FlowNextSteps';
 
 type ForbiddenPanelProps = {
@@ -16,12 +18,19 @@ type ForbiddenPanelProps = {
 export function ForbiddenPanel({
   message,
   primaryHref = '/auth/onboarding/papeis',
-  primaryLabel = 'Activar papel',
-  steps = [
-    { href: '/app', label: 'Ir ao painel', primary: true },
-    { href: '/app/confianca', label: 'Verificar conta' },
-  ],
+  primaryLabel,
+  steps,
 }: ForbiddenPanelProps) {
+  const { locale } = useLocale();
+  const shell = getShellCopy(locale);
+  const label = primaryLabel ?? shell.forbidden.activateRole;
+  const nextSteps =
+    steps ??
+    ([
+      { href: '/app', label: shell.forbidden.goDashboard, primary: true },
+      { href: '/app/confianca', label: shell.forbidden.verifyAccount },
+    ] satisfies FlowStep[]);
+
   return (
     <div className="flex flex-col gap-6">
       <div
@@ -33,10 +42,10 @@ export function ForbiddenPanel({
           href={primaryHref}
           className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-3 inline-flex')}
         >
-          {primaryLabel}
+          {label}
         </Link>
       </div>
-      <FlowNextSteps title="Continuar noutro caminho" steps={steps} />
+      <FlowNextSteps title={shell.forbidden.continueElsewhere} steps={nextSteps} />
     </div>
   );
 }

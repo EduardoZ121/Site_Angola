@@ -129,4 +129,25 @@ export const shellCopyEn: ShellCopy = {
     switch: 'Switch role',
     home: 'Go to home',
   },
+  forbidden: {
+    activateRole: 'Activate role',
+    goDashboard: 'Go to dashboard',
+    verifyAccount: 'Verify account',
+    continueElsewhere: 'Continue another way',
+  },
+  helpExtra: {
+    terms: 'Terms of Use',
+    privacy: 'Privacy Policy',
+    securityCenter: 'Security Center',
+    downloadManualPdf: 'Download Manual (PDF)',
+    downloadManualWord: 'Download Manual (Word)',
+    videosPending:
+      'Video tutorials will be published progressively. Until then, use the written tutorials in this manual and the shortcuts above.',
+  },
+  brandTagline: 'Property management',
+  loadingMore: 'Loading more…',
+  loadingContent: 'Loading content…',
+  securityCenterHint: 'Email, phone, sessions, devices and account security level.',
+  feedEndTitle: 'You reached the end of the current inventory',
+  feedEndBody: 'New properties appear here as soon as they are published.',
 };

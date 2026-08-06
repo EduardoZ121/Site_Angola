@@ -6,6 +6,8 @@ import { Badge, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PropertyCard } from '@/modules/habitacao/components/PropertyCard';
 import { exploreActivePropertiesPage } from '@/modules/habitacao/services/housing-client';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '../content';
 import { appendFeedPage, type FeedStreamItem } from '../feed/feed-stream';
 import { SoftListSlot } from './SoftListSlot';
 
@@ -77,6 +79,8 @@ const FeedListing = memo(function FeedListing({
  * Markers are inline in the stream (LinkedIn-style), not finite page sections.
  */
 export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
+  const { locale } = useLocale();
+  const shell = getShellCopy(locale);
   const [items, setItems] = useState<FeedStreamItem[]>([]);
   const [offset, setOffset] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -225,18 +229,14 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
 
           {loadingMore ? (
             <p className="kuteka-detail-panel py-2 text-center text-xs text-stone-700">
-              A carregar mais…
+              {shell.loadingMore}
             </p>
           ) : null}
 
           {!hasMore && items.length > 0 ? (
             <div className="kuteka-detail-panel px-4 py-4 text-center">
-              <p className="text-sm font-medium text-slate-900">
-                Chegou ao fim do inventário actual
-              </p>
-              <Text className="mt-1 text-sm text-stone-700">
-                Novos patrimónios aparecem aqui assim que forem publicados.
-              </Text>
+              <p className="text-sm font-medium text-slate-900">{shell.feedEndTitle}</p>
+              <Text className="mt-1 text-sm text-stone-700">{shell.feedEndBody}</Text>
               <Link
                 href="/app/habitacao/explorar"
                 className={cn(

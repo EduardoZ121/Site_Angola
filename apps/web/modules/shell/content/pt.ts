@@ -128,6 +128,27 @@ export const shellCopyPt = {
     switch: 'Mudar de papel',
     home: 'Ir ao início',
   },
+  forbidden: {
+    activateRole: 'Activar papel',
+    goDashboard: 'Ir ao painel',
+    verifyAccount: 'Verificar conta',
+    continueElsewhere: 'Continuar noutro caminho',
+  },
+  helpExtra: {
+    terms: 'Termos de Utilização',
+    privacy: 'Política de Privacidade',
+    securityCenter: 'Centro de Segurança',
+    downloadManualPdf: 'Descarregar Manual (PDF)',
+    downloadManualWord: 'Descarregar Manual (Word)',
+    videosPending:
+      'Os tutoriais em vídeo serão publicados progressivamente. Até lá, use os tutoriais escritos deste manual e os atalhos acima.',
+  },
+  brandTagline: 'Gestão patrimonial',
+  loadingMore: 'A carregar mais…',
+  loadingContent: 'A carregar conteúdo…',
+  securityCenterHint: 'Email, telefone, sessões, dispositivos e nível de segurança da conta.',
+  feedEndTitle: 'Chegou ao fim do inventário actual',
+  feedEndBody: 'Novos patrimónios aparecem aqui assim que forem publicados.',
 } as const;
 
 type DeepStringify<T> = {

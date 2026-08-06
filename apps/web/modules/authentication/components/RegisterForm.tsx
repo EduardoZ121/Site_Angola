@@ -4,13 +4,15 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { passwordRules, registerSchema } from '@kuteka/validation';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { signUp } from '../services/auth-client';
 import { PasswordRules } from './PasswordRules';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
 export function RegisterForm() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');

@@ -82,9 +82,7 @@ export function SettingsClient() {
         <div className="mt-3 flex flex-col gap-3">
           <div>
             <p className="kuteka-detail-label">{s.security}</p>
-            <p className="kuteka-detail-body">
-              Email, telefone, sessões, dispositivos e nível de segurança da conta.
-            </p>
+            <p className="kuteka-detail-body">{shell.securityCenterHint}</p>
             <Link
               href="/app/centro-seguranca"
               className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-2 w-fit')}

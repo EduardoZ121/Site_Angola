@@ -1,5 +1,9 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '../content';
 
 type SoftListSlotProps = {
   /** True only on the first fetch with no cached rows. */
@@ -19,6 +23,9 @@ export function SoftListSlot({
   minHeightClassName = 'min-h-[14rem]',
   children,
 }: SoftListSlotProps) {
+  const { locale } = useLocale();
+  const shell = getShellCopy(locale);
+
   return (
     <div
       className={cn(minHeightClassName, className)}
@@ -27,7 +34,7 @@ export function SoftListSlot({
     >
       {pending ? (
         <div className={cn('kuteka-glass', minHeightClassName)}>
-          <span className="sr-only">A carregar conteúdo…</span>
+          <span className="sr-only">{shell.loadingContent}</span>
         </div>
       ) : (
         children

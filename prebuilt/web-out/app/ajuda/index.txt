@@ -1,17 +1,17 @@
 1:"$Sreact.fragment"
-2:I[35695,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","8457","static/chunks/8457-523fd7c5eeb9eed5.js","5702","static/chunks/5702-0d6d0537f6f76815.js","7177","static/chunks/app/layout-ecd343db63c42661.js"],""]
-3:I[76366,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","8457","static/chunks/8457-523fd7c5eeb9eed5.js","5702","static/chunks/5702-0d6d0537f6f76815.js","7177","static/chunks/app/layout-ecd343db63c42661.js"],"Providers"]
+2:I[35695,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-2df0de63cf3e6696.js"],""]
+3:I[76366,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-2df0de63cf3e6696.js"],"Providers"]
 4:I[27719,[],""]
 5:I[89645,["4573","static/chunks/4573-8765300bdcbcaac8.js","1751","static/chunks/1751-b44ed00183172839.js","8039","static/chunks/app/error-1f9b648ea8f90f89.js"],"default"]
 6:I[38427,[],""]
-7:I[41614,["4573","static/chunks/4573-8765300bdcbcaac8.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","8227","static/chunks/8227-5852925305f24ff5.js","5522","static/chunks/app/(marketing)/page-f1fbcdb9aaf48d13.js"],""]
-8:I[977,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","8457","static/chunks/8457-523fd7c5eeb9eed5.js","8227","static/chunks/8227-5852925305f24ff5.js","5702","static/chunks/5702-0d6d0537f6f76815.js","9674","static/chunks/9674-dcf27bda7889c3cd.js","2631","static/chunks/2631-9bebb185e707b5f0.js","4944","static/chunks/app/(app)/layout-8761c103308177b0.js"],"AppShell"]
-9:I[62917,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","8457","static/chunks/8457-523fd7c5eeb9eed5.js","5702","static/chunks/5702-0d6d0537f6f76815.js","9674","static/chunks/9674-dcf27bda7889c3cd.js","7409","static/chunks/app/(app)/app/ajuda/page-b0f6eabeb6085edd.js"],"HelpCenterClient"]
+7:I[41614,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","3778","static/chunks/3778-ca45aded40364c97.js","8071","static/chunks/8071-5e022a169dc00c43.js","5522","static/chunks/app/(marketing)/page-6328d907038c2c3b.js"],""]
+8:I[977,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","3778","static/chunks/3778-ca45aded40364c97.js","8071","static/chunks/8071-5e022a169dc00c43.js","2736","static/chunks/2736-fa509ddd7b9ff6fe.js","5866","static/chunks/5866-d115a509ec4aa567.js","4944","static/chunks/app/(app)/layout-6007a0122452a6fa.js"],"AppShell"]
+9:I[62917,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","2736","static/chunks/2736-fa509ddd7b9ff6fe.js","7409","static/chunks/app/(app)/app/ajuda/page-fb028335b6a8b96c.js"],"HelpCenterClient"]
 d:I[40545,["4573","static/chunks/4573-8765300bdcbcaac8.js","1751","static/chunks/1751-b44ed00183172839.js","4219","static/chunks/app/global-error-81ca8c162c127546.js"],"default"]
 :HL["/_next/static/media/bb3ef058b751a6ad-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/css/e4a14bdd053fc1bc.css","style"]
-a:T3f63,# Manual do Utilizador Kuteka
+a:T4788,# Manual do Utilizador Kuteka
 
 **Manual do Utilizador / Centro de Ajuda · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
@@ -23,18 +23,18 @@ Contacto de suporte: contacto@kutekalink.com · Centro de Ajuda na app: `/app/aj
 
 Este manual ensina a utilizar a plataforma Kuteka na versão **1.0 Beta**. Está organizado por **papéis** (Cliente, Parceiro Patrimonial, Agente Certificado, Prestador, Administrador e Super Administrador) e por **módulos transversais** (conta, identidade KIS, segurança, contratos e pagamentos).
 
-| Se pretender… | Vá à secção |
-| --- | --- |
-| Criar conta e começar | §2 e §3 |
-| Procurar casa / arrendar / comprar | §4 |
-| Publicar e gerir imóveis | §5 |
-| Mediar como agente | §6 |
-| Responder a pedidos de serviço | §7 |
-| Operar administração | §8 |
-| Parametrizar a plataforma | §9 |
-| Completar KYC / confiança | §10 |
-| Proteger a conta | §11 |
-| Respostas rápidas | §15 FAQ e §16 Glossário |
+| Se pretender…                      | Vá à secção             |
+| ---------------------------------- | ----------------------- |
+| Criar conta e começar              | §2 e §3                 |
+| Procurar casa / arrendar / comprar | §4                      |
+| Publicar e gerir imóveis           | §5                      |
+| Mediar como agente                 | §6                      |
+| Responder a pedidos de serviço     | §7                      |
+| Operar administração               | §8                      |
+| Parametrizar a plataforma          | §9                      |
+| Completar KYC / confiança          | §10                     |
+| Proteger a conta                   | §11                     |
+| Respostas rápidas                  | §15 FAQ e §16 Glossário |
 
 Na Beta, alguns pagamentos correm em **sandbox** (simulação). Sempre que isso afecte o que vê no ecrã, o manual indica-o explicitamente.
 
@@ -69,9 +69,9 @@ Produção pública: **https://kutekalink.com**
 
 Após o registo, a Kuteka pede confirmação em `/auth/verificar`:
 
-| Método | Como funciona |
-| --- | --- |
-| **A — Link** | Abra o email da Kuteka e clique no link de confirmação. |
+| Método             | Como funciona                                                       |
+| ------------------ | ------------------------------------------------------------------- |
+| **A — Link**       | Abra o email da Kuteka e clique no link de confirmação.             |
 | **B — Código OTP** | Introduza na aplicação o código de **6 dígitos** recebido no email. |
 
 Se o link não abrir (cliente de correio, telemóvel, etc.), use o código. Pode **reenviar** email e código com intervalo de segurança.
@@ -156,14 +156,14 @@ Em `/app/financeiro` consulte (conforme disponibilidade na sua conta):
 
 ### 4.5 Serviços comerciais (Cliente)
 
-| Serviço | Rota | O que faz |
-| --- | --- | --- |
-| Mudança Inteligente | `/app/mudanca` | Pedido assistido de mudança com match |
-| Encontrar Casa | `/app/encontrar-casa` | Procura prioritária assistida |
-| Concierge | `/app/concierge` | Pedidos de apoio personalizado |
-| Garantia Kuteka | `/app/garantia` | Activação de garantia mensal (sandbox na Beta) |
-| Assistência 24h | `/app/assistencia` | Pedido urgente ao imóvel |
-| Prestadores | `/app/servicos` | Marketplace de orçamentos |
+| Serviço             | Rota                  | O que faz                                      |
+| ------------------- | --------------------- | ---------------------------------------------- |
+| Mudança Inteligente | `/app/mudanca`        | Pedido assistido de mudança com match          |
+| Encontrar Casa      | `/app/encontrar-casa` | Procura prioritária assistida                  |
+| Concierge           | `/app/concierge`      | Pedidos de apoio personalizado                 |
+| Garantia Kuteka     | `/app/garantia`       | Activação de garantia mensal (sandbox na Beta) |
+| Assistência 24h     | `/app/assistencia`    | Pedido urgente ao imóvel                       |
+| Prestadores         | `/app/servicos`       | Marketplace de orçamentos                      |
 
 Na Beta, a cobrança destes serviços passa pelo **Kuteka Pay em sandbox** até o gateway real estar activo. O fluxo de estados (pedido → pagamento → execução) já é o de produção.
 
@@ -226,12 +226,12 @@ Mantenha dados de contacto e identidade (KIS) actualizados — pedidos de maior 
 
 Requer permissão `admin.panel`.
 
-| Área | Rota | Função |
-| --- | --- | --- |
-| Administração | `/app/admin` | Resumo operacional |
-| Utilizadores | `/app/admin/utilizadores` | Contas e papéis |
-| Confiança | `/app/confianca` | Checklist e submissões |
-| Revisão | `/app/confianca/revisao` | Aprovar / rejeitar verificações |
+| Área          | Rota                      | Função                          |
+| ------------- | ------------------------- | ------------------------------- |
+| Administração | `/app/admin`              | Resumo operacional              |
+| Utilizadores  | `/app/admin/utilizadores` | Contas e papéis                 |
+| Confiança     | `/app/confianca`          | Checklist e submissões          |
+| Revisão       | `/app/confianca/revisao`  | Aprovar / rejeitar verificações |
 
 O Administrador **não** altera o motor económico global (preços, gateways) — isso é Super Admin.
 
@@ -325,13 +325,13 @@ A ferramenta apoia a formalização; a validade jurídica depende da lei angolan
 
 ## 13. Pagamentos — Kuteka Pay
 
-| Conceito | Significado na Beta |
-| --- | --- |
-| Kuteka Pay | Único motor de pagamento da plataforma |
-| Sandbox | Pagamento simulado; estados reais no sistema |
-| Produção | Gateway real (ex.: Multicaixa/EMIS) — activação comunicada pela Kuteka |
-| Ledger | Registo auditável de cada movimento |
-| Créditos | Unidades internas; não são depósito bancário |
+| Conceito   | Significado na Beta                                                    |
+| ---------- | ---------------------------------------------------------------------- |
+| Kuteka Pay | Único motor de pagamento da plataforma                                 |
+| Sandbox    | Pagamento simulado; estados reais no sistema                           |
+| Produção   | Gateway real (ex.: Multicaixa/EMIS) — activação comunicada pela Kuteka |
+| Ledger     | Registo auditável de cada movimento                                    |
+| Créditos   | Unidades internas; não são depósito bancário                           |
 
 O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reembolsado) e histórico no hub financeiro / no serviço que originou a cobrança.
 
@@ -420,44 +420,44 @@ O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reem
 
 ## 16. Glossário
 
-| Termo | Significado |
-| --- | --- |
-| **KIS** | Kuteka Identity System — identidade e KYC |
-| **KYC** | Know Your Customer — verificação do utilizador |
-| **UTS** | Índice de confiança / trust score da conta |
-| **ICK** | Indicador de qualidade/confiança do imóvel (quando disponível) |
-| **PDK** | Passaporte Digital Kuteka do imóvel (painel na ficha) |
-| **Ledger** | Livro-razão digital de movimentos financeiros |
-| **Kuteka Pay** | Motor único de pagamentos |
-| **Sandbox** | Ambiente de pagamento simulado |
-| **Plus** | Subscrição opcional Kuteka Plus |
-| **SLA** | Acordo de nível de serviço (prazos operacionais) |
-| **B2B2C** | Modelo empresa → parceiros → consumidor |
-| **Parceiro Patrimonial** | Quem publica e gere patrimónios |
-| **Agente Certificado** | Mediador verificado pela Kuteka |
-| **OTP** | Código de uso único (email/SMS) |
-| **RLS** | Row Level Security — isolamento de dados na base |
+| Termo                    | Significado                                                    |
+| ------------------------ | -------------------------------------------------------------- |
+| **KIS**                  | Kuteka Identity System — identidade e KYC                      |
+| **KYC**                  | Know Your Customer — verificação do utilizador                 |
+| **UTS**                  | Índice de confiança / trust score da conta                     |
+| **ICK**                  | Indicador de qualidade/confiança do imóvel (quando disponível) |
+| **PDK**                  | Passaporte Digital Kuteka do imóvel (painel na ficha)          |
+| **Ledger**               | Livro-razão digital de movimentos financeiros                  |
+| **Kuteka Pay**           | Motor único de pagamentos                                      |
+| **Sandbox**              | Ambiente de pagamento simulado                                 |
+| **Plus**                 | Subscrição opcional Kuteka Plus                                |
+| **SLA**                  | Acordo de nível de serviço (prazos operacionais)               |
+| **B2B2C**                | Modelo empresa → parceiros → consumidor                        |
+| **Parceiro Patrimonial** | Quem publica e gere patrimónios                                |
+| **Agente Certificado**   | Mediador verificado pela Kuteka                                |
+| **OTP**                  | Código de uso único (email/SMS)                                |
+| **RLS**                  | Row Level Security — isolamento de dados na base               |
 
 ---
 
 ## 17. Contactos e suporte
 
-| Canal | Utilização |
-| --- | --- |
-| Centro de Ajuda | `/app/ajuda` |
-| Contacto | `/contacto` |
-| Email geral | contacto@kutekalink.com |
-| Privacidade | privacidade@kutekalink.com |
-| Jurídico | juridico@kutekalink.com |
-| Site | https://kutekalink.com |
+| Canal           | Utilização                 |
+| --------------- | -------------------------- |
+| Centro de Ajuda | `/app/ajuda`               |
+| Contacto        | `/contacto`                |
+| Email geral     | contacto@kutekalink.com    |
+| Privacidade     | privacidade@kutekalink.com |
+| Jurídico        | juridico@kutekalink.com    |
+| Site            | https://kutekalink.com     |
 
 Horário de atendimento de referência na Beta: dias úteis, 09:00–18:00 (WAT), salvo comunicação em contrário.
 
 ---
 
-*Documento oficial de suporte ao utilizador — Kuteka v1.0 Beta.*  
-*Luanda, 5 de Agosto de 2026 · Equipa Kuteka*
-0:{"P":null,"b":"bRsHD3vM-sEZ7v41U2-L2","p":"","c":["","app","ajuda",""],"i":false,"f":[[["",{"children":["(app)",{"children":["app",{"children":["ajuda",{"children":["__PAGE__",{}]}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/e4a14bdd053fc1bc.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"mx-auto flex min-h-[60vh] max-w-lg flex-col justify-center gap-4 px-6","children":[["$","h1",null,{"className":"text-4xl font-semibold tracking-tight text-slate-900","children":"Página não encontrada"}],["$","p",null,{"className":"text-base leading-relaxed text-slate-700","children":"O recurso pedido não existe."}],["$","$L7",null,{"href":"/","className":"text-brand-600 hover:underline","children":"Ir para a fundação"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(app)",["$","$1","c",{"children":[null,["$","$L8",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}]]}],{"children":["app",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["ajuda",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L9",null,{"manualMarkdown":"$a"}],null,"$Lb"]}],{},null,false]},null,false]},null,false]},null,false]},null,false],"$Lc",false]],"m":"$undefined","G":["$d",[]],"s":false,"S":true}
+_Documento oficial de suporte ao utilizador — Kuteka v1.0 Beta._  
+_Luanda, 5 de Agosto de 2026 · Equipa Kuteka_
+0:{"P":null,"b":"f-tEdPlyF1v1-th3PjlOQ","p":"","c":["","app","ajuda",""],"i":false,"f":[[["",{"children":["(app)",{"children":["app",{"children":["ajuda",{"children":["__PAGE__",{}]}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/e4a14bdd053fc1bc.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"mx-auto flex min-h-[60vh] max-w-lg flex-col justify-center gap-4 px-6","children":[["$","h1",null,{"className":"text-4xl font-semibold tracking-tight text-slate-900","children":"Página não encontrada"}],["$","p",null,{"className":"text-base leading-relaxed text-slate-700","children":"O recurso pedido não existe."}],["$","$L7",null,{"href":"/","className":"text-brand-600 hover:underline","children":"Ir para a fundação"}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(app)",["$","$1","c",{"children":[null,["$","$L8",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}]]}],{"children":["app",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["ajuda",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L9",null,{"manualMarkdown":"$a"}],null,"$Lb"]}],{},null,false]},null,false]},null,false]},null,false]},null,false],"$Lc",false]],"m":"$undefined","G":["$d",[]],"s":false,"S":true}
 e:I[56974,[],"OutletBoundary"]
 10:I[41795,[],"AsyncMetadataOutlet"]
 12:I[56974,[],"ViewportBoundary"]
