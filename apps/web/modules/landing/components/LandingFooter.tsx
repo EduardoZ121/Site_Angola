@@ -1,9 +1,12 @@
-import Link from 'next/link';
-import { landingContent } from '../content';
+'use client';
 
-const c = landingContent;
+import Link from 'next/link';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getLandingCopy } from '../content';
 
 export function LandingFooter() {
+  const { locale } = useLocale();
+  const c = getLandingCopy(locale);
   return (
     <footer className="border-t border-slate-200 bg-white py-10">
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">

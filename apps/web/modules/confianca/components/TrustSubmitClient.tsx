@@ -7,14 +7,16 @@ import { TRUST_DOC_TYPES } from '@kuteka/validation';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getConfiancaCopy } from '../content/pt';
+import { getConfiancaCopy } from '../content';
 import { submitTrustDocument } from '../services/trust-client';
 
 export function TrustSubmitClient() {
-  const copy = getConfiancaCopy();
+  const { locale } = useLocale();
+  const copy = getConfiancaCopy(locale);
   const router = useRouter();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('trust.manage');

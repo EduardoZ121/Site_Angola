@@ -81,6 +81,7 @@ const FeedListing = memo(function FeedListing({
 export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
   const { locale } = useLocale();
   const shell = getShellCopy(locale);
+  const feed = shell.feed;
   const [items, setItems] = useState<FeedStreamItem[]>([]);
   const [offset, setOffset] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
@@ -112,7 +113,7 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
       }
 
       setError(null);
-      setItems((prev) => appendFeedPage(prev, result.data.rows, nextPageIndex));
+      setItems((prev) => appendFeedPage(prev, result.data.rows, nextPageIndex, locale));
       setOffset(result.data.nextOffset);
       setPageIndex(nextPageIndex + 1);
       setHasMore(result.data.hasMore);
@@ -120,7 +121,7 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
       setLoadingMore(false);
       inflight.current = false;
     },
-    [canExplore],
+    [canExplore, locale],
   );
 
   useEffect(() => {
@@ -163,16 +164,13 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
   if (!canExplore) {
     return (
       <div className="kuteka-glass p-5">
-        <p className="font-medium text-slate-900">Active o papel Cliente para ver o feed</p>
-        <Text className="mt-1 text-sm text-slate-600">
-          O feed contínuo mostra patrimónios, destaques e recomendações assim que tiver acesso a
-          Habitação.
-        </Text>
+        <p className="font-medium text-slate-900">{feed.activateRoleTitle}</p>
+        <Text className="mt-1 text-sm text-slate-600">{feed.activateRoleBody}</Text>
         <Link
           href="/auth/onboarding/papeis"
           className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'mt-4 inline-flex')}
         >
-          Activar papel
+          {feed.activateRoleCta}
         </Link>
       </div>
     );
@@ -191,10 +189,8 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
 
       {hydrated && !error && items.length === 0 ? (
         <div className="kuteka-glass p-5">
-          <p className="font-medium text-slate-900">Feed a aquecer</p>
-          <Text className="mt-1 text-sm text-slate-600">
-            Ainda não há anúncios activos. Publique o primeiro património ou explore Habitação.
-          </Text>
+          <p className="font-medium text-slate-900">{feed.warmingTitle}</p>
+          <Text className="mt-1 text-sm text-slate-600">{feed.warmingBody}</Text>
         </div>
       ) : null}
 
@@ -244,7 +240,7 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
                   'mt-3 inline-flex',
                 )}
               >
-                Explorar com filtros
+                {feed.exploreWithFilters}
               </Link>
             </div>
           ) : null}

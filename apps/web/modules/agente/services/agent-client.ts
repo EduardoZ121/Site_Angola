@@ -8,7 +8,8 @@ import {
 } from '@kuteka/validation';
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { getAgenteCopy } from '../content/pt';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getAgenteCopy } from '../content';
 
 export type AgentPropertyRow = {
   id: string;
@@ -47,7 +48,7 @@ const PROPERTY_SELECT =
 export async function getAgentPreferences(): Promise<
   { ok: true; data: AgentPreferencesRow | null } | { ok: false; message: string }
 > {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -72,7 +73,7 @@ export async function getAgentPreferences(): Promise<
 export async function saveAgentPreferences(
   input: AgentPreferencesInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   const parsed = agentPreferencesSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -120,7 +121,7 @@ export type ExploreFilters = {
 export async function exploreActiveProperties(
   filters: ExploreFilters = {},
 ): Promise<{ ok: true; data: AgentPropertyRow[] } | { ok: false; message: string }> {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     let query = client
@@ -151,7 +152,7 @@ export async function exploreActiveProperties(
 export async function getActiveProperty(
   id: string,
 ): Promise<{ ok: true; data: AgentPropertyRow } | { ok: false; message: string }> {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -172,7 +173,7 @@ export async function getActiveProperty(
 export async function listMyAssignments(): Promise<
   { ok: true; data: AgentAssignmentRow[] } | { ok: false; message: string }
 > {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -208,7 +209,7 @@ export async function listMyAssignments(): Promise<
 export async function getMyAssignmentForProperty(
   propertyId: string,
 ): Promise<{ ok: true; data: AgentAssignmentRow | null } | { ok: false; message: string }> {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -234,7 +235,7 @@ export async function getMyAssignmentForProperty(
 export async function activateAssignment(
   input: ActivateAssignmentInput,
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
-  const copy = getAgenteCopy();
+  const copy = getAgenteCopy(resolveUiLocale());
   const parsed = activateAssignmentSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };

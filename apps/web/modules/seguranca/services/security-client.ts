@@ -2,10 +2,16 @@
 
 import { createBrowserClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '@/modules/authentication/lib/supabase-config';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getSegurancaCopy } from '../content';
 import { getSmsOtpProvider, normalizeAngolaPhone } from '../providers/sms-otp';
 import type { SecurityCenterSnapshot } from '../lib/security-center';
 
 export type SecurityClientResult<T = void> = { ok: true; data: T } | { ok: false; message: string };
+
+function copy() {
+  return getSegurancaCopy(resolveUiLocale()).client;
+}
 
 function clientOrNull() {
   if (!isSupabaseConfigured()) return null;
@@ -30,21 +36,21 @@ export async function loadSecurityCenterSnapshot(): Promise<
 > {
   const client = clientOrNull();
   if (!client) {
-    return { ok: false, message: 'Autenticação indisponível neste ambiente.' };
+    return { ok: false, message: copy().authUnavailable };
   }
   try {
     const { data, error } = await client.rpc('get_security_center_snapshot');
     if (error) {
       return {
         ok: false,
-        message: error.message || 'Não foi possível carregar o Centro de Segurança.',
+        message: error.message || copy().loadError,
       };
     }
     return { ok: true, data: data as SecurityCenterSnapshot };
   } catch (err) {
     return {
       ok: false,
-      message: err instanceof Error ? err.message : 'Erro de rede ao carregar segurança.',
+      message: err instanceof Error ? err.message : copy().networkErrorLoad,
     };
   }
 }
@@ -57,14 +63,14 @@ export async function issueSecurityOtp(input: {
 }): Promise<SecurityClientResult<IssueOtpResult>> {
   const client = clientOrNull();
   if (!client) {
-    return { ok: false, message: 'Autenticação indisponível neste ambiente.' };
+    return { ok: false, message: copy().authUnavailable };
   }
 
   let destination = input.destination.trim();
   if (input.channel === 'sms') {
     const normalized = normalizeAngolaPhone(destination);
     if (!normalized) {
-      return { ok: false, message: 'Indique um número de telefone válido (ex.: +2449XXXXXXXX).' };
+      return { ok: false, message: copy().invalidPhone };
     }
     destination = normalized;
   }
@@ -77,7 +83,7 @@ export async function issueSecurityOtp(input: {
       p_user_id: input.userId ?? null,
     });
     if (error) {
-      return { ok: false, message: error.message || 'Não foi possível enviar o código.' };
+      return { ok: false, message: error.message || copy().otpSendError };
     }
     const row = data as {
       ok?: boolean;
@@ -89,7 +95,7 @@ export async function issueSecurityOtp(input: {
       provider?: string;
     };
     if (!row?.ok || !row.challengeId) {
-      return { ok: false, message: 'Não foi possível emitir o código OTP.' };
+      return { ok: false, message: copy().otpIssueError };
     }
 
     if (input.channel === 'sms' && row.sandboxCode) {
@@ -114,7 +120,7 @@ export async function issueSecurityOtp(input: {
   } catch (err) {
     return {
       ok: false,
-      message: err instanceof Error ? err.message : 'Erro de rede ao emitir OTP.',
+      message: err instanceof Error ? err.message : copy().networkErrorOtpIssue,
     };
   }
 }
@@ -125,11 +131,11 @@ export async function verifySecurityOtp(input: {
 }): Promise<SecurityClientResult<{ purpose: string; channel: string; recoveryReady?: boolean }>> {
   const client = clientOrNull();
   if (!client) {
-    return { ok: false, message: 'Autenticação indisponível neste ambiente.' };
+    return { ok: false, message: copy().authUnavailable };
   }
   const code = input.code.replace(/\D/g, '').slice(0, 6);
   if (code.length !== 6) {
-    return { ok: false, message: 'Introduza o código de 6 dígitos.' };
+    return { ok: false, message: copy().otpLengthError };
   }
   try {
     const { data, error } = await client.rpc('security_verify_otp', {
@@ -137,7 +143,7 @@ export async function verifySecurityOtp(input: {
       p_code: code,
     });
     if (error) {
-      return { ok: false, message: error.message || 'Código inválido.' };
+      return { ok: false, message: error.message || copy().otpInvalidGeneric };
     }
     const row = data as {
       ok?: boolean;
@@ -147,17 +153,10 @@ export async function verifySecurityOtp(input: {
       recoveryReady?: boolean;
     };
     if (!row?.ok) {
-      const map: Record<string, string> = {
-        invalid_code: 'Código incorrecto. Tente novamente.',
-        expired: 'O código expirou. Peça um novo.',
-        already_used: 'Este código já foi utilizado.',
-        too_many_attempts: 'Demasiadas tentativas. Peça um novo código.',
-        challenge_not_found: 'Desafio não encontrado. Peça um novo código.',
-        forbidden: 'Não tem permissão para validar este código.',
-      };
+      const map = copy().otpErrors as Record<string, string>;
       return {
         ok: false,
-        message: map[row?.error ?? ''] ?? 'Não foi possível validar o código.',
+        message: map[row?.error ?? ''] ?? copy().otpValidateFallback,
       };
     }
     return {
@@ -171,7 +170,7 @@ export async function verifySecurityOtp(input: {
   } catch (err) {
     return {
       ok: false,
-      message: err instanceof Error ? err.message : 'Erro de rede ao validar OTP.',
+      message: err instanceof Error ? err.message : copy().networkErrorOtpValidate,
     };
   }
 }
@@ -181,24 +180,24 @@ export async function revokeSecuritySession(
 ): Promise<SecurityClientResult<{ sessionId: string }>> {
   const client = clientOrNull();
   if (!client) {
-    return { ok: false, message: 'Autenticação indisponível neste ambiente.' };
+    return { ok: false, message: copy().authUnavailable };
   }
   try {
     const { data, error } = await client.rpc('security_revoke_session', {
       p_session_id: sessionId,
     });
     if (error) {
-      return { ok: false, message: error.message || 'Não foi possível terminar a sessão.' };
+      return { ok: false, message: error.message || copy().revokeError };
     }
     const row = data as { ok?: boolean; sessionId?: string; error?: string };
     if (!row?.ok) {
-      return { ok: false, message: 'Sessão não encontrada ou já terminada.' };
+      return { ok: false, message: copy().revokeNotFound };
     }
     return { ok: true, data: { sessionId: row.sessionId ?? sessionId } };
   } catch (err) {
     return {
       ok: false,
-      message: err instanceof Error ? err.message : 'Erro de rede.',
+      message: err instanceof Error ? err.message : copy().networkErrorGeneric,
     };
   }
 }

@@ -3,11 +3,13 @@ import Link from 'next/link';
 import { Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
-import { getHabitacaoCopy } from '../content/pt';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getHabitacaoCopy } from '../content';
 import type { HousingPropertyRow } from '../services/housing-client';
 
 function PropertyCardComponent({ row }: { row: HousingPropertyRow }) {
-  const copy = getHabitacaoCopy();
+  const { locale } = useLocale();
+  const copy = getHabitacaoCopy(locale);
   const href = `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`;
 
   return (

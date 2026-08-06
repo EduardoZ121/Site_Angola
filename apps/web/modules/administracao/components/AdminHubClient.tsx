@@ -5,12 +5,13 @@ import { useEffect, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getAdministracaoCopy } from '../content/pt';
+import { getAdministracaoCopy } from '../content';
 import {
   fetchPlatformStats,
   listPendingInterests,
@@ -19,7 +20,8 @@ import {
 } from '../services/admin-client';
 
 export function AdminHubClient() {
-  const copy = getAdministracaoCopy();
+  const { locale } = useLocale();
+  const copy = getAdministracaoCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const allowed = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
   const accessPending = sessionStatus === 'loading';

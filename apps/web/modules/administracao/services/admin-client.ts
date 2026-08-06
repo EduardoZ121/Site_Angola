@@ -2,7 +2,8 @@
 
 import { assignCertifiedAgentSchema, type AssignCertifiedAgentInput } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { getAdministracaoCopy } from '../content/pt';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getAdministracaoCopy } from '../content';
 
 export type AdminUserRow = {
   id: string;
@@ -36,7 +37,7 @@ export type AdminInterestRow = {
 export async function fetchPlatformStats(): Promise<
   { ok: true; data: PlatformStats } | { ok: false; message: string }
 > {
-  const copy = getAdministracaoCopy();
+  const copy = getAdministracaoCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('admin_platform_stats');
@@ -51,7 +52,7 @@ export async function fetchPlatformStats(): Promise<
 export async function listAdminUsers(): Promise<
   { ok: true; data: AdminUserRow[] } | { ok: false; message: string }
 > {
-  const copy = getAdministracaoCopy();
+  const copy = getAdministracaoCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data: profiles, error: profilesError } = await client
@@ -100,7 +101,7 @@ export async function listAdminUsers(): Promise<
 export async function listPendingInterests(): Promise<
   { ok: true; data: AdminInterestRow[] } | { ok: false; message: string }
 > {
-  const copy = getAdministracaoCopy();
+  const copy = getAdministracaoCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -133,7 +134,7 @@ export async function listPendingInterests(): Promise<
 export async function assignCertifiedAgent(
   input: AssignCertifiedAgentInput,
 ): Promise<{ ok: true; already?: boolean } | { ok: false; message: string }> {
-  const copy = getAdministracaoCopy();
+  const copy = getAdministracaoCopy(resolveUiLocale());
   const parsed = assignCertifiedAgentSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.loadError };

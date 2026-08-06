@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
+import { getIdentidadeCopy } from '@/modules/identidade/content';
 import { buildKisKaiSuggestions } from '@/modules/identidade/lib/trust-center';
 import { loadMyIdentity } from '@/modules/identidade/services/identity-client';
 import { KaiInsightCards } from '@/modules/ops/components/KaiInsightCards';
@@ -94,7 +95,9 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
       const [data, identity] = await Promise.all([loadOpsStats(user.id), loadMyIdentity()]);
       if (!cancelled) {
         setStats(data);
-        setKisInsights(identity.ok ? buildKisKaiSuggestions(identity.data) : []);
+        setKisInsights(
+          identity.ok ? buildKisKaiSuggestions(identity.data, getIdentidadeCopy(locale)) : [],
+        );
         setLoading(false);
       }
     }
@@ -102,7 +105,7 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
     return () => {
       cancelled = true;
     };
-  }, [session.roles, mode]);
+  }, [session.roles, mode, locale]);
 
   const insights = useMemo(() => {
     const ops = stats ? buildKaiInsights(mode, stats) : [];

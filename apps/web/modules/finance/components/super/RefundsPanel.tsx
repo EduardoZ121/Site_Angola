@@ -3,8 +3,9 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FINANCE_REFUND_MODES } from '@kuteka/validation';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   createRefund,
   formatAoaAmount,
@@ -16,7 +17,8 @@ import {
 import { Feedback, PanelSection, selectClass, useFeedback, type PanelProps } from './shared';
 
 export function RefundsPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [refunds, setRefunds] = useState<FinanceRefundRow[]>([]);
   const [charges, setCharges] = useState<FinanceLedgerRow[]>([]);

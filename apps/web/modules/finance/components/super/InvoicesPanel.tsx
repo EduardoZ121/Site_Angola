@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Badge, Button } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   formatAoaAmount,
   generateInvoicePdf,
@@ -21,7 +22,8 @@ function openHtml(html: string) {
 }
 
 export function InvoicesPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [invoices, setInvoices] = useState<FinanceInvoiceRow[]>([]);
   const [loading, setLoading] = useState(true);

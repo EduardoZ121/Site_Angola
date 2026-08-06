@@ -8,7 +8,8 @@ import {
 } from '@kuteka/validation';
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { getConfiancaCopy } from '../content/pt';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getConfiancaCopy } from '../content';
 
 export type TrustDocumentRow = {
   id: string;
@@ -30,7 +31,7 @@ const TRUST_SELECT =
 export async function listMyTrustDocuments(): Promise<
   { ok: true; data: TrustDocumentRow[] } | { ok: false; message: string }
 > {
-  const copy = getConfiancaCopy();
+  const copy = getConfiancaCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -57,7 +58,7 @@ export async function listMyTrustDocuments(): Promise<
 export async function listPendingTrustDocuments(): Promise<
   { ok: true; data: TrustDocumentRow[] } | { ok: false; message: string }
 > {
-  const copy = getConfiancaCopy();
+  const copy = getConfiancaCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -83,7 +84,7 @@ export async function listPendingTrustDocuments(): Promise<
 export async function submitTrustDocument(
   input: SubmitTrustDocumentInput,
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
-  const copy = getConfiancaCopy();
+  const copy = getConfiancaCopy(resolveUiLocale());
   const parsed = submitTrustDocumentSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -139,7 +140,7 @@ export async function submitTrustDocument(
 export async function reviewTrustDocument(
   input: ReviewTrustDocumentInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getConfiancaCopy();
+  const copy = getConfiancaCopy(resolveUiLocale());
   const parsed = reviewTrustDocumentSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -158,7 +159,7 @@ export async function reviewTrustDocument(
         return { ok: false, message: copy.reviewForbidden };
       }
       if (error.message?.toLowerCase().includes('rejection reason')) {
-        return { ok: false, message: copy.rejectionReasonLabel + ' é obrigatório.' };
+        return { ok: false, message: copy.rejectionReasonRequired };
       }
       return { ok: false, message: copy.saveError };
     }

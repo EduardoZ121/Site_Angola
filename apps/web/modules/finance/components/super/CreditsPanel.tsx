@@ -3,8 +3,9 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   formatAoaAmount,
   grantCredits,
@@ -14,7 +15,8 @@ import {
 import { Feedback, PanelSection, useFeedback, type PanelProps } from './shared';
 
 export function CreditsPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [creditUserId, setCreditUserId] = useState('');
   const [creditAmount, setCreditAmount] = useState('2000');

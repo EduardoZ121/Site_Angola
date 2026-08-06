@@ -13,12 +13,16 @@ import { Badge, Button, Heading, Label, Text, buttonVariants } from '@kuteka/ui'
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
+import { getMonetizationCopy } from '@/modules/monetization/content';
 import {
   FIND_HOME_TYPOLOGY_OPTIONS,
   findHomeStatusLabel,
   findHomeStatusTone,
   findHomeTypologyLabel,
+  findHomeTypologyOptionLabel,
   type FindHomeTypologyValue,
 } from '@/modules/monetization/lib/catalog';
 import {
@@ -37,15 +41,24 @@ import {
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 
-function slaLabel(row: FindHomeRequestDetail) {
+function slaLabel(
+  row: FindHomeRequestDetail,
+  common: ReturnType<typeof getMonetizationCopy>['common'],
+) {
   if (!row.sla_due_at || ['completed', 'cancelled', 'failed'].includes(row.status)) return null;
-  if (row.sla_breached) return 'SLA ultrapassado';
+  if (row.sla_breached) return common.slaBreached;
   const hours = Math.round((new Date(row.sla_due_at).getTime() - Date.now()) / 3_600_000);
-  return hours < 48 ? `SLA em ${Math.max(0, hours)}h` : `SLA em ${Math.round(hours / 24)}d`;
+  return hours < 48
+    ? common.slaInHours.replace('{hours}', String(Math.max(0, hours)))
+    : common.slaInDays.replace('{days}', String(Math.round(hours / 24)));
 }
 
 export function FindHomeClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { locale } = useLocale();
+  const copy = getMonetizationCopy(locale).findHome;
+  const common = getMonetizationCopy(locale).common;
+  const dateLocale = LOCALE_INTL_TAG[locale];
   const [rows, setRows] = useState<FindHomeRequestDetail[]>([]);
   const [events, setEvents] = useState<Record<string, FindHomeEvent[]>>({});
   const [openTimeline, setOpenTimeline] = useState<string | null>(null);
@@ -122,31 +135,39 @@ export function FindHomeClient() {
     });
     setBusyId(null);
     if (!result.ok) return setError(result.message);
-    setMessage('Procura prioritária activa. Taxa cobrada via Kuteka Pay (sandbox).');
+    setMessage(copy.messages.created);
     setNotes('');
     await load();
   }
+
+  const fields: [string, string, string, Dispatch<SetStateAction<string>>, string][] = [
+    ['province', copy.provinceLabel, province, setProvince, copy.provincePlaceholder],
+    [
+      'municipality',
+      copy.municipalityLabel,
+      municipality,
+      setMunicipality,
+      copy.municipalityPlaceholder,
+    ],
+  ];
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Encontrar Casa</p>
-          <Heading level={1}>Procura prioritária assistida</Heading>
-          <Text className="mt-1 text-slate-700">
-            Partilhe o que procura e a Kuteka coordena KAI e operadores. Há uma única taxa de
-            prioridade via Kuteka Pay; explorar casas continua gratuito.
-          </Text>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+          <Heading level={1}>{copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
               href="/app/habitacao/explorar"
               className={cn(buttonVariants({ variant: 'secondary' }))}
             >
-              Explorar gratuitamente
+              {copy.exploreLink}
             </Link>
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>
-              Financeiro
+              {common.financeiro}
             </Link>
           </div>
         </header>
@@ -164,28 +185,23 @@ export function FindHomeClient() {
 
         <SoftListSlot pending={loading}>
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Novo pedido</h2>
+            <h2 className="kuteka-detail-title">{copy.newRequestTitle}</h2>
             <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
-              {[
-                ['province', 'Província', province, setProvince, 'Luanda'],
-                ['municipality', 'Município', municipality, setMunicipality, 'Belas'],
-              ].map(([id, label, value, setter, placeholder]) => (
-                <div key={id as string}>
-                  <Label htmlFor={id as string}>{label as string}</Label>
+              {fields.map(([id, label, value, setter, placeholder]) => (
+                <div key={id}>
+                  <Label htmlFor={id}>{label}</Label>
                   <input
-                    id={id as string}
+                    id={id}
                     required
                     className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
-                    value={value as string}
-                    onChange={(event) =>
-                      (setter as Dispatch<SetStateAction<string>>)(event.target.value)
-                    }
-                    placeholder={placeholder as string}
+                    value={value}
+                    onChange={(event) => setter(event.target.value)}
+                    placeholder={placeholder}
                   />
                 </div>
               ))}
               <div>
-                <Label htmlFor="typology">Tipologia</Label>
+                <Label htmlFor="typology">{copy.typologyLabel}</Label>
                 <select
                   id="typology"
                   className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
@@ -194,13 +210,13 @@ export function FindHomeClient() {
                 >
                   {FIND_HOME_TYPOLOGY_OPTIONS.map((option) => (
                     <option key={option.value} value={option.value}>
-                      {option.label}
+                      {findHomeTypologyOptionLabel(option.value, locale)}
                     </option>
                   ))}
                 </select>
               </div>
               <div>
-                <Label htmlFor="budget">Orçamento máximo (Kz)</Label>
+                <Label htmlFor="budget">{copy.budgetLabel}</Label>
                 <input
                   id="budget"
                   required
@@ -212,58 +228,73 @@ export function FindHomeClient() {
                 />
               </div>
               <div className="sm:col-span-2">
-                <Label htmlFor="notes">Preferências / notas</Label>
+                <Label htmlFor="notes">{copy.notesLabel}</Label>
                 <textarea
                   id="notes"
                   className="min-h-[80px] w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
                   value={notes}
                   onChange={(event) => setNotes(event.target.value)}
-                  placeholder="Zona, acessos, condições essenciais…"
+                  placeholder={copy.notesPlaceholder}
                 />
               </div>
               <Button type="submit" loading={busyId === 'create'} className="sm:col-span-2">
-                Activar procura prioritária (sandbox)
+                {copy.submit}
               </Button>
             </form>
           </section>
 
           <section className="kuteka-detail-panel p-5">
             <div className="flex items-center justify-between">
-              <h2 className="kuteka-detail-title">Pedidos</h2>
-              {canOperate ? <Badge variant="default">Operador</Badge> : null}
+              <h2 className="kuteka-detail-title">{copy.requestsTitle}</h2>
+              {canOperate ? <Badge variant="default">{copy.operatorBadge}</Badge> : null}
             </div>
             <ul className="mt-3 divide-y divide-slate-200">
               {rows.map((row) => {
                 const owned = row.client_id === uid;
                 const busy = busyId === row.id;
+                const sla = slaLabel(row, common);
                 return (
                   <li key={row.id} className="flex flex-col gap-2 py-4">
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div>
                         <p className="font-medium text-slate-900">
-                          {[row.province, row.municipality, findHomeTypologyLabel(row.typology)]
+                          {[
+                            row.province,
+                            row.municipality,
+                            findHomeTypologyLabel(row.typology, locale),
+                          ]
                             .filter(Boolean)
                             .join(' · ')}
                         </p>
                         <p className="mt-1 text-xs text-slate-500">
                           {row.budget_max_aoa
-                            ? `Até ${formatAoaAmount(Number(row.budget_max_aoa))}`
-                            : 'Orçamento aberto'}
+                            ? copy.budgetUpTo.replace(
+                                '{amount}',
+                                formatAoaAmount(Number(row.budget_max_aoa)),
+                              )
+                            : copy.budgetOpen}
                           {row.priority_amount_aoa
-                            ? ` · prioridade ${formatAoaAmount(Number(row.priority_amount_aoa))}`
+                            ? copy.priorityAmountSuffix.replace(
+                                '{amount}',
+                                formatAoaAmount(Number(row.priority_amount_aoa)),
+                              )
                             : ''}
-                          {row.payment_intent_id ? ' · paga' : ''}
-                          {slaLabel(row) ? ` · ${slaLabel(row)}` : ''}
+                          {row.payment_intent_id ? copy.paidSuffix : ''}
+                          {sla ? ` · ${sla}` : ''}
                         </p>
                         {row.match_notes ? (
-                          <p className="mt-1 text-sm text-slate-600">Match: {row.match_notes}</p>
+                          <p className="mt-1 text-sm text-slate-600">
+                            {copy.matchPrefix.replace('{value}', row.match_notes)}
+                          </p>
                         ) : null}
                         {row.failure_reason ? (
-                          <p className="mt-1 text-sm text-rose-700">Motivo: {row.failure_reason}</p>
+                          <p className="mt-1 text-sm text-rose-700">
+                            {common.reason.replace('{value}', row.failure_reason)}
+                          </p>
                         ) : null}
                       </div>
                       <Badge variant={findHomeStatusTone(row.status)}>
-                        {findHomeStatusLabel(row.status)}
+                        {findHomeStatusLabel(row.status, locale)}
                       </Badge>
                     </div>
 
@@ -277,11 +308,11 @@ export function FindHomeClient() {
                               run(
                                 row.id,
                                 () => acceptFindHomeMatch({ requestId: row.id }),
-                                'Casa aceite. Pedido concluído sem taxa adicional.',
+                                copy.messages.accepted,
                               )
                             }
                           >
-                            Aceitar casa
+                            {copy.acceptHome}
                           </Button>
                           <Button
                             size="sm"
@@ -291,11 +322,11 @@ export function FindHomeClient() {
                               run(
                                 row.id,
                                 () => rejectFindHomeMatch({ requestId: row.id }),
-                                'Casa recusada. Procura retomada.',
+                                copy.messages.rejected,
                               )
                             }
                           >
-                            Recusar
+                            {copy.reject}
                           </Button>
                         </>
                       ) : null}
@@ -308,18 +339,18 @@ export function FindHomeClient() {
                             run(
                               row.id,
                               () => cancelFindHome({ requestId: row.id }),
-                              'Pedido cancelado. Reembolso integral aplicado.',
+                              copy.messages.cancelled,
                             )
                           }
                         >
-                          Cancelar
+                          {common.cancel}
                         </Button>
                       ) : null}
                       {canOperate && row.status === 'active' ? (
                         <>
                           <input
-                            aria-label="ID do imóvel encontrado"
-                            placeholder="ID do imóvel (opcional)"
+                            aria-label={copy.matchInputAria}
+                            placeholder={copy.matchInputPlaceholder}
                             className="w-56 rounded-kuteka border border-slate-300 bg-white px-2 py-1 text-sm"
                             value={matchInputs[row.id] ?? ''}
                             onChange={(event) =>
@@ -341,11 +372,11 @@ export function FindHomeClient() {
                                     matchedPropertyId: matchInputs[row.id]?.trim() || null,
                                     notes: 'Casa proposta pela Kuteka.',
                                   }),
-                                'Match registado. Cliente notificado.',
+                                copy.messages.matched,
                               )
                             }
                           >
-                            Registar match
+                            {copy.registerMatch}
                           </Button>
                         </>
                       ) : null}
@@ -358,12 +389,15 @@ export function FindHomeClient() {
                             run(
                               row.id,
                               () =>
-                                failFindHome({ requestId: row.id, reason: 'SLA não cumprido.' }),
-                              'Pedido falhado. Reembolso integral aplicado.',
+                                failFindHome({
+                                  requestId: row.id,
+                                  reason: copy.failReasonDefault,
+                                }),
+                              copy.messages.failed,
                             )
                           }
                         >
-                          Falhar (SLA)
+                          {copy.failSla}
                         </Button>
                       ) : null}
                       <button
@@ -371,7 +405,7 @@ export function FindHomeClient() {
                         className="text-xs font-medium text-brand-700 hover:underline"
                         onClick={() => void toggleTimeline(row.id)}
                       >
-                        {openTimeline === row.id ? 'Ocultar cronologia' : 'Ver cronologia'}
+                        {openTimeline === row.id ? common.hideTimeline : common.viewTimeline}
                       </button>
                     </div>
 
@@ -384,11 +418,11 @@ export function FindHomeClient() {
                               ? ` · ${event.from_status} → ${event.to_status}`
                               : ''}
                             {event.note ? ` · ${event.note}` : ''}
-                            {` · ${new Date(event.created_at).toLocaleString('pt-PT')}`}
+                            {` · ${new Date(event.created_at).toLocaleString(dateLocale)}`}
                           </li>
                         ))}
                         {(events[row.id] ?? []).length === 0 ? (
-                          <li className="text-xs text-slate-500">Sem eventos.</li>
+                          <li className="text-xs text-slate-500">{common.noEvents}</li>
                         ) : null}
                       </ol>
                     ) : null}
@@ -396,7 +430,7 @@ export function FindHomeClient() {
                 );
               })}
               {rows.length === 0 ? (
-                <li className="py-3 text-sm text-slate-500">Ainda sem pedidos de procura.</li>
+                <li className="py-3 text-sm text-slate-500">{copy.emptyList}</li>
               ) : null}
             </ul>
           </section>

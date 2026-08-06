@@ -1,3 +1,6 @@
+import type { AppLocale } from '@/modules/i18n/types';
+import { getMonetizationCopy } from '../content';
+
 export type SmartMoveUrgency = 'planned_90' | 'priority_60' | 'urgent_30' | 'emergency_14';
 
 export const URGENCY_OPTIONS: { value: SmartMoveUrgency; label: string; days: number }[] = [
@@ -6,6 +9,10 @@ export const URGENCY_OPTIONS: { value: SmartMoveUrgency; label: string; days: nu
   { value: 'urgent_30', label: 'Urgente (15–30 dias)', days: 22 },
   { value: 'emergency_14', label: 'Emergência (1–14 dias)', days: 10 },
 ];
+
+export function urgencyOptionLabel(value: SmartMoveUrgency, locale: AppLocale = 'pt'): string {
+  return getMonetizationCopy(locale).catalog.urgency[value];
+}
 
 export const PROVIDER_CATEGORIES = [
   { value: 'all', label: 'Todas' },
@@ -22,6 +29,13 @@ export const PROVIDER_CATEGORIES = [
   { value: 'other', label: 'Outros' },
 ] as const;
 
+export type ProviderCategoryValue = (typeof PROVIDER_CATEGORIES)[number]['value'];
+
+export function providerCategoryLabel(value: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.providerCategories as Record<string, string>;
+  return catalog[value] ?? value;
+}
+
 export type OrderStatus =
   'requested' | 'quoted' | 'accepted' | 'in_progress' | 'completed' | 'cancelled' | 'disputed';
 
@@ -35,8 +49,9 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   disputed: 'Em disputa',
 };
 
-export function orderStatusLabel(status: string): string {
-  return ORDER_STATUS_LABELS[status as OrderStatus] ?? status;
+export function orderStatusLabel(status: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.orderStatus as Record<string, string>;
+  return catalog[status] ?? status;
 }
 
 export function orderStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
@@ -67,8 +82,9 @@ export const SMART_MOVE_STATUS_LABELS: Record<SmartMoveStatus, string> = {
   failed: 'Falhado',
 };
 
-export function smartMoveStatusLabel(status: string): string {
-  return SMART_MOVE_STATUS_LABELS[status as SmartMoveStatus] ?? status;
+export function smartMoveStatusLabel(status: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.smartMoveStatus as Record<string, string>;
+  return catalog[status] ?? status;
 }
 
 export function smartMoveStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
@@ -95,8 +111,9 @@ export const URGENCY_LABELS: Record<SmartMoveUrgency, string> = {
   emergency_14: 'Emergência (1–14 dias)',
 };
 
-export function urgencyLabel(band: string): string {
-  return URGENCY_LABELS[band as SmartMoveUrgency] ?? band;
+export function urgencyLabel(band: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.urgency as Record<string, string>;
+  return catalog[band] ?? band;
 }
 
 export type FindHomeTypologyValue =
@@ -115,9 +132,20 @@ export const FIND_HOME_TYPOLOGY_OPTIONS: { value: FindHomeTypologyValue; label: 
   { value: 'outro', label: 'Outro' },
 ];
 
-export function findHomeTypologyLabel(value: string | null | undefined): string {
-  if (!value) return 'Sem tipologia';
-  return FIND_HOME_TYPOLOGY_OPTIONS.find((o) => o.value === value)?.label ?? value;
+export function findHomeTypologyOptionLabel(
+  value: FindHomeTypologyValue,
+  locale: AppLocale = 'pt',
+): string {
+  return getMonetizationCopy(locale).catalog.findHomeTypology[value];
+}
+
+export function findHomeTypologyLabel(
+  value: string | null | undefined,
+  locale: AppLocale = 'pt',
+): string {
+  const copy = getMonetizationCopy(locale).catalog;
+  if (!value) return copy.findHomeTypologyNone;
+  return (copy.findHomeTypology as Record<string, string>)[value] ?? value;
 }
 
 export type FindHomeStatus =
@@ -133,8 +161,9 @@ export const FIND_HOME_STATUS_LABELS: Record<FindHomeStatus, string> = {
   failed: 'Sem solução',
 };
 
-export function findHomeStatusLabel(status: string): string {
-  return FIND_HOME_STATUS_LABELS[status as FindHomeStatus] ?? status;
+export function findHomeStatusLabel(status: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.findHomeStatus as Record<string, string>;
+  return catalog[status] ?? status;
 }
 
 export function findHomeStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
@@ -171,8 +200,16 @@ export const CONCIERGE_CATEGORY_OPTIONS: { value: ConciergeCategoryValue; label:
   { value: 'other', label: 'Outro pedido' },
 ];
 
-export function conciergeCategoryLabel(value: string): string {
-  return CONCIERGE_CATEGORY_OPTIONS.find((option) => option.value === value)?.label ?? value;
+export function conciergeCategoryOptionLabel(
+  value: ConciergeCategoryValue,
+  locale: AppLocale = 'pt',
+): string {
+  return getMonetizationCopy(locale).catalog.conciergeCategory[value];
+}
+
+export function conciergeCategoryLabel(value: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.conciergeCategory as Record<string, string>;
+  return catalog[value] ?? value;
 }
 
 export type ConciergeStatus =
@@ -188,8 +225,9 @@ export const CONCIERGE_STATUS_LABELS: Record<ConciergeStatus, string> = {
   failed: 'Falhado',
 };
 
-export function conciergeStatusLabel(status: string): string {
-  return CONCIERGE_STATUS_LABELS[status as ConciergeStatus] ?? status;
+export function conciergeStatusLabel(status: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.conciergeStatus as Record<string, string>;
+  return catalog[status] ?? status;
 }
 
 export function conciergeStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
@@ -221,8 +259,9 @@ export const GARANTIA_STATUS_LABELS: Record<GarantiaStatus, string> = {
   failed: 'Falhada',
 };
 
-export function garantiaStatusLabel(status: string): string {
-  return GARANTIA_STATUS_LABELS[status as GarantiaStatus] ?? status;
+export function garantiaStatusLabel(status: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.garantiaStatus as Record<string, string>;
+  return catalog[status] ?? status;
 }
 
 export function garantiaStatusTone(status: string): 'default' | 'warning' | 'success' | 'danger' {
@@ -257,8 +296,16 @@ export const ASSISTENCIA_CATEGORY_OPTIONS: {
   { value: 'other', label: 'Outra emergência' },
 ];
 
-export function assistenciaCategoryLabel(value: string): string {
-  return ASSISTENCIA_CATEGORY_OPTIONS.find((option) => option.value === value)?.label ?? value;
+export function assistenciaCategoryOptionLabel(
+  value: AssistenciaCategoryValue,
+  locale: AppLocale = 'pt',
+): string {
+  return getMonetizationCopy(locale).catalog.assistenciaCategory[value];
+}
+
+export function assistenciaCategoryLabel(value: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.assistenciaCategory as Record<string, string>;
+  return catalog[value] ?? value;
 }
 
 export type AssistenciaUrgencyValue = 'urgent' | 'emergency';
@@ -271,8 +318,16 @@ export const ASSISTENCIA_URGENCY_OPTIONS: {
   { value: 'emergency', label: 'Emergência — risco imediato' },
 ];
 
-export function assistenciaUrgencyLabel(value: string): string {
-  return ASSISTENCIA_URGENCY_OPTIONS.find((option) => option.value === value)?.label ?? value;
+export function assistenciaUrgencyOptionLabel(
+  value: AssistenciaUrgencyValue,
+  locale: AppLocale = 'pt',
+): string {
+  return getMonetizationCopy(locale).catalog.assistenciaUrgency[value];
+}
+
+export function assistenciaUrgencyLabel(value: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.assistenciaUrgency as Record<string, string>;
+  return catalog[value] ?? value;
 }
 
 export type AssistenciaStatus =
@@ -288,8 +343,9 @@ export const ASSISTENCIA_STATUS_LABELS: Record<AssistenciaStatus, string> = {
   failed: 'Falhada',
 };
 
-export function assistenciaStatusLabel(status: string): string {
-  return ASSISTENCIA_STATUS_LABELS[status as AssistenciaStatus] ?? status;
+export function assistenciaStatusLabel(status: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.assistenciaStatus as Record<string, string>;
+  return catalog[status] ?? status;
 }
 
 export function assistenciaStatusTone(
@@ -328,3 +384,15 @@ export const PARTNER_PLAN_OPTIONS = [
     blurb: 'Máxima exposição + KAI comercial + suporte prioritário.',
   },
 ] as const;
+
+export type PartnerPlanCode = (typeof PARTNER_PLAN_OPTIONS)[number]['code'];
+
+export function partnerPlanName(code: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.partnerPlanNames as Record<string, string>;
+  return catalog[code] ?? code;
+}
+
+export function partnerPlanBlurb(code: string, locale: AppLocale = 'pt'): string {
+  const catalog = getMonetizationCopy(locale).catalog.partnerPlanBlurbs as Record<string, string>;
+  return catalog[code] ?? '';
+}

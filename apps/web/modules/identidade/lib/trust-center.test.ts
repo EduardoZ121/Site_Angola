@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import { getIdentidadeCopy } from '../content';
 import { buildTrustCenterModel, buildKisKaiSuggestions, utsBand } from './trust-center';
 import type { IdentityBundle } from '../services/identity-client';
+
+const ptCopy = getIdentidadeCopy('pt');
 
 function sampleBundle(overrides?: Partial<IdentityBundle['profile']>): IdentityBundle {
   return {
@@ -48,7 +51,7 @@ describe('trust center', () => {
   });
 
   it('builds model with next step for phone', () => {
-    const model = buildTrustCenterModel(sampleBundle());
+    const model = buildTrustCenterModel(sampleBundle(), ptCopy);
     expect(model.accountStatus).toBe('pending');
     expect(model.nextStepId).toBe('contacts');
     expect(model.nextStepTitle.toLowerCase()).toContain('telefone');
@@ -56,7 +59,7 @@ describe('trust center', () => {
   });
 
   it('emits KAI suggestions toward trust center', () => {
-    const tips = buildKisKaiSuggestions(sampleBundle({ kyc_level: 0, trust_index: 15 }));
+    const tips = buildKisKaiSuggestions(sampleBundle({ kyc_level: 0, trust_index: 15 }), ptCopy);
     expect(tips[0]?.href).toBe('/app/centro-confianca');
     expect(tips[0]?.title.toLowerCase()).toMatch(/kuteka pay|identidade|perfil/);
   });

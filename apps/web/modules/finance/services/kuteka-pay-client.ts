@@ -13,6 +13,8 @@ import {
   type KutekaPaySimulateWebhookInput,
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getFinanceCopy } from '../content';
 
 /**
  * Kuteka Pay — cliente do motor de pagamento unificado.
@@ -22,16 +24,9 @@ import { createBrowserClient } from '@/lib/supabase/client';
  * gateway directamente. O payment intent é a única fonte de verdade.
  */
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar o Kuteka Pay. Tente novamente.',
-  createError: 'Não conseguimos iniciar o pagamento. Tente novamente.',
-  captureError: 'Não conseguimos confirmar o pagamento. Tente novamente.',
-  failError: 'Não conseguimos actualizar o estado do pagamento. Tente novamente.',
-  cancelError: 'Não conseguimos cancelar o pagamento. Tente novamente.',
-  statusError: 'Não conseguimos obter o estado do pagamento. Tente novamente.',
-  webhookError: 'Não conseguimos simular o evento de pagamento. Tente novamente.',
-  saveError: 'Não conseguimos guardar agora. Tente novamente.',
-};
+function copy() {
+  return getFinanceCopy(resolveUiLocale()).payEngineErrors;
+}
 
 export type KutekaPayClientAction =
   | { type: 'auto_capture_ready' }
@@ -95,7 +90,7 @@ export async function createIntent(
 ): Promise<{ ok: true; data: KutekaPayIntentResult } | { ok: false; message: string }> {
   const parsed = kutekaPayCreateIntentSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.createError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().createError };
   }
   try {
     const client = createBrowserClient();
@@ -112,7 +107,7 @@ export async function createIntent(
       p_metadata: {},
       p_amount_override: parsed.data.amountOverride ?? null,
     });
-    if (error || !data) return { ok: false, message: error?.message ?? copy.createError };
+    if (error || !data) return { ok: false, message: error?.message ?? copy().createError };
     const raw = data as Record<string, unknown>;
     return {
       ok: true,
@@ -129,7 +124,7 @@ export async function createIntent(
       },
     };
   } catch {
-    return { ok: false, message: copy.createError };
+    return { ok: false, message: copy().createError };
   }
 }
 
@@ -138,17 +133,17 @@ export async function capture(
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
   const parsed = kutekaPayIntentIdSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.captureError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().captureError };
   }
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('kuteka_pay_capture', {
       p_intent_id: parsed.data.paymentIntentId,
     });
-    if (error || !data) return { ok: false, message: error?.message ?? copy.captureError };
+    if (error || !data) return { ok: false, message: error?.message ?? copy().captureError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.captureError };
+    return { ok: false, message: copy().captureError };
   }
 }
 
@@ -157,7 +152,7 @@ export async function fail(
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
   const parsed = kutekaPayFailSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.failError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().failError };
   }
   try {
     const client = createBrowserClient();
@@ -166,10 +161,10 @@ export async function fail(
       p_code: parsed.data.code ?? null,
       p_message: parsed.data.message ?? null,
     });
-    if (error || !data) return { ok: false, message: error?.message ?? copy.failError };
+    if (error || !data) return { ok: false, message: error?.message ?? copy().failError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.failError };
+    return { ok: false, message: copy().failError };
   }
 }
 
@@ -178,17 +173,17 @@ export async function cancel(
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
   const parsed = kutekaPayIntentIdSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.cancelError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().cancelError };
   }
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('kuteka_pay_cancel', {
       p_intent_id: parsed.data.paymentIntentId,
     });
-    if (error || !data) return { ok: false, message: error?.message ?? copy.cancelError };
+    if (error || !data) return { ok: false, message: error?.message ?? copy().cancelError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.cancelError };
+    return { ok: false, message: copy().cancelError };
   }
 }
 
@@ -197,17 +192,17 @@ export async function status(
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
   const parsed = kutekaPayIntentIdSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.statusError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().statusError };
   }
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('kuteka_pay_status', {
       p_intent_id: parsed.data.paymentIntentId,
     });
-    if (error || !data) return { ok: false, message: error?.message ?? copy.statusError };
+    if (error || !data) return { ok: false, message: error?.message ?? copy().statusError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.statusError };
+    return { ok: false, message: copy().statusError };
   }
 }
 
@@ -216,7 +211,7 @@ export async function simulateWebhook(
 ): Promise<{ ok: true; data: Record<string, unknown> } | { ok: false; message: string }> {
   const parsed = kutekaPaySimulateWebhookSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.webhookError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().webhookError };
   }
   try {
     const client = createBrowserClient();
@@ -224,10 +219,10 @@ export async function simulateWebhook(
       p_intent_id: parsed.data.paymentIntentId,
       p_event: parsed.data.event,
     });
-    if (error || !data) return { ok: false, message: error?.message ?? copy.webhookError };
+    if (error || !data) return { ok: false, message: error?.message ?? copy().webhookError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.webhookError };
+    return { ok: false, message: copy().webhookError };
   }
 }
 
@@ -236,17 +231,17 @@ export async function setDefaultGateway(
 ): Promise<{ ok: true } | { ok: false; message: string }> {
   const parsed = kutekaPaySetDefaultGatewaySchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().saveError };
   }
   try {
     const client = createBrowserClient();
     const { error } = await client.rpc('kuteka_pay_set_default_gateway', {
       p_code: parsed.data.gatewayCode,
     });
-    if (error) return { ok: false, message: error.message || copy.saveError };
+    if (error) return { ok: false, message: error.message || copy().saveError };
     return { ok: true };
   } catch {
-    return { ok: false, message: copy.saveError };
+    return { ok: false, message: copy().saveError };
   }
 }
 
@@ -256,11 +251,11 @@ export async function fetchAdapterHealth(): Promise<
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('kuteka_pay_adapter_health');
-    if (error || !data) return { ok: false, message: copy.loadError };
+    if (error || !data) return { ok: false, message: copy().loadError };
     const raw = data as { adapters?: KutekaPayAdapterHealth[] };
     return { ok: true, data: raw.adapters ?? [] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -276,10 +271,10 @@ export async function listIntents(
       )
       .order('created_at', { ascending: false })
       .limit(limit);
-    if (error) return { ok: false, message: copy.loadError };
+    if (error) return { ok: false, message: copy().loadError };
     return { ok: true, data: (data as KutekaPayIntentRow[]) ?? [] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -295,10 +290,10 @@ export async function listPayEvents(
       .eq('payment_intent_id', intentId)
       .order('created_at', { ascending: true })
       .limit(limit);
-    if (error) return { ok: false, message: copy.loadError };
+    if (error) return { ok: false, message: copy().loadError };
     return { ok: true, data: (data as KutekaPayEventRow[]) ?? [] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 

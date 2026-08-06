@@ -16,6 +16,8 @@ import {
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getMonetizationCopy } from '../content';
 
 /**
  * Marketplace operacional (Fase C).
@@ -26,10 +28,15 @@ import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-ga
  * unificado Kuteka Pay (nenhum caminho de pagamento isolado).
  */
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar o marketplace. Tente novamente.',
-  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
-};
+function copy() {
+  const locale = resolveUiLocale();
+  const monetization = getMonetizationCopy(locale);
+  return {
+    loadError: monetization.marketplace.loadError,
+    actionError: monetization.common.actionError,
+    locale,
+  };
+}
 
 export type MarketplaceProviderContext = {
   id: string;
@@ -97,7 +104,7 @@ export async function fetchMarketplaceContext(): Promise<
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('marketplace_my_context');
-    if (error || !data) return { ok: false, message: error?.message || copy.loadError };
+    if (error || !data) return { ok: false, message: error?.message || copy().loadError };
     const raw = data as {
       canManage?: boolean;
       isProvider?: boolean;
@@ -112,7 +119,7 @@ export async function fetchMarketplaceContext(): Promise<
       },
     };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -130,10 +137,10 @@ export async function listMyOrders(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ServiceOrderDetail[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -150,10 +157,10 @@ export async function listProviderInbox(
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ServiceOrderDetail[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -168,31 +175,35 @@ export async function listOrderEvents(
       .eq('order_id', orderId)
       .order('created_at', { ascending: true })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ServiceOrderEvent[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
 type ActionResult = { ok: true; data: Record<string, unknown> } | { ok: false; message: string };
 
 async function callRpc(fn: string, args: Record<string, unknown>): Promise<ActionResult> {
+  const c = copy();
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc(fn, args);
     if (error || !data)
-      return { ok: false, message: mapIdentityGateMessage(error?.message, copy.actionError) };
+      return {
+        ok: false,
+        message: mapIdentityGateMessage(error?.message, c.actionError, c.locale),
+      };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: c.actionError };
   }
 }
 
 export async function createOrder(input: MarketplaceCreateOrderInput): Promise<ActionResult> {
   const parsed = marketplaceCreateOrderSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('marketplace_create_order', {
     p_provider_id: parsed.data.providerId,
@@ -207,7 +218,7 @@ export async function createOrder(input: MarketplaceCreateOrderInput): Promise<A
 export async function submitQuote(input: MarketplaceSubmitQuoteInput): Promise<ActionResult> {
   const parsed = marketplaceSubmitQuoteSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('marketplace_submit_quote', {
     p_order_id: parsed.data.orderId,
@@ -218,25 +229,25 @@ export async function submitQuote(input: MarketplaceSubmitQuoteInput): Promise<A
 
 export async function acceptQuote(input: MarketplaceOrderIdInput): Promise<ActionResult> {
   const parsed = marketplaceOrderIdSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('marketplace_accept_quote', { p_order_id: parsed.data.orderId });
 }
 
 export async function startOrder(input: MarketplaceOrderIdInput): Promise<ActionResult> {
   const parsed = marketplaceOrderIdSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('marketplace_start_order', { p_order_id: parsed.data.orderId });
 }
 
 export async function completeOrder(input: MarketplaceOrderIdInput): Promise<ActionResult> {
   const parsed = marketplaceOrderIdSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('marketplace_complete_order', { p_order_id: parsed.data.orderId });
 }
 
 export async function payOrder(input: MarketplacePayOrderInput): Promise<ActionResult> {
   const parsed = marketplacePayOrderSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('marketplace_pay_order', {
     p_order_id: parsed.data.orderId,
     p_gateway_code: parsed.data.gatewayCode,
@@ -245,7 +256,7 @@ export async function payOrder(input: MarketplacePayOrderInput): Promise<ActionR
 
 export async function cancelOrder(input: MarketplaceCancelOrderInput): Promise<ActionResult> {
   const parsed = marketplaceCancelOrderSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('marketplace_cancel_order', {
     p_order_id: parsed.data.orderId,
     p_reason: parsed.data.reason ?? null,
@@ -255,7 +266,7 @@ export async function cancelOrder(input: MarketplaceCancelOrderInput): Promise<A
 export async function rateOrder(input: MarketplaceRateOrderInput): Promise<ActionResult> {
   const parsed = marketplaceRateOrderSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('marketplace_rate_order', {
     p_order_id: parsed.data.orderId,

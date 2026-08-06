@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getAgenteCopy } from '../content/pt';
+import { getAgenteCopy } from '../content';
 import { AGENT_DEMO_PIPELINE } from '../demo/pipeline';
 import {
   getAgentPreferences,
@@ -21,7 +22,8 @@ import {
 const PURPOSES = ['rent', 'sale', 'both'] as const;
 
 export function AgentHubClient() {
-  const copy = getAgenteCopy();
+  const { locale } = useLocale();
+  const copy = getAgenteCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canOperate = sessionStatus === 'ready' && !!session?.permissions.includes('agent.operate');
   const isAdmin = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
@@ -97,7 +99,7 @@ export function AgentHubClient() {
               href="/app/habitacao/explorar"
               className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
             >
-              Ver inventário
+              {copy.viewHousingInventory}
             </Link>
             {canOperate ? (
               <Link
@@ -138,7 +140,7 @@ export function AgentHubClient() {
                       'inline-flex',
                     )}
                   >
-                    Activar agente (Admin)
+                    {copy.activateAgentAdmin}
                   </Link>
                 ) : null}
               </div>
@@ -331,13 +333,17 @@ export function AgentHubClient() {
         ) : null}
 
         <FlowNextSteps
-          title="Continuar o fluxo Kuteka"
+          title={copy.nextSteps.title}
           steps={[
-            { href: '/app/habitacao/explorar', label: 'Ver patrimónios activos', primary: true },
-            { href: '/app/confianca', label: 'Verificar conta' },
+            {
+              href: '/app/habitacao/explorar',
+              label: copy.nextSteps.viewActiveProperties,
+              primary: true,
+            },
+            { href: '/app/confianca', label: copy.nextSteps.verifyAccount },
             ...(isAdmin
-              ? [{ href: '/app/admin', label: 'Administração' }]
-              : [{ href: '/contacto', label: 'Contactar Kuteka' }]),
+              ? [{ href: '/app/admin', label: copy.nextSteps.administration }]
+              : [{ href: '/contacto', label: copy.nextSteps.contactKuteka }]),
           ]}
         />
       </div>

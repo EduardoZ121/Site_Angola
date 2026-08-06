@@ -16,16 +16,23 @@ import {
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getMonetizationCopy } from '../content';
 
 /**
  * Encontrar Casa D2 — procura prioritária sobre Ledger + Kuteka Pay.
  * Uma só taxa (priority_fee). Sem caminho de pagamento isolado.
  */
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar os pedidos de procura. Tente novamente.',
-  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
-};
+function copy() {
+  const locale = resolveUiLocale();
+  const monetization = getMonetizationCopy(locale);
+  return {
+    loadError: monetization.findHome.loadError,
+    actionError: monetization.common.actionError,
+    locale,
+  };
+}
 
 export type FindHomeRequestDetail = {
   id: string;
@@ -73,14 +80,18 @@ const REQUEST_SELECT =
 type ActionResult = { ok: true; data: Record<string, unknown> } | { ok: false; message: string };
 
 async function callRpc(fn: string, args: Record<string, unknown>): Promise<ActionResult> {
+  const c = copy();
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc(fn, args);
     if (error || !data)
-      return { ok: false, message: mapIdentityGateMessage(error?.message, copy.actionError) };
+      return {
+        ok: false,
+        message: mapIdentityGateMessage(error?.message, c.actionError, c.locale),
+      };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: c.actionError };
   }
 }
 
@@ -90,11 +101,11 @@ export async function fetchFindHomeContext(): Promise<
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('find_home_my_context');
-    if (error || !data) return { ok: false, message: error?.message || copy.loadError };
+    if (error || !data) return { ok: false, message: error?.message || copy().loadError };
     const raw = data as { canOperate?: boolean };
     return { ok: true, data: { canOperate: Boolean(raw.canOperate) } };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -109,10 +120,10 @@ export async function listFindHomeRequests(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as FindHomeRequestDetail[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -127,17 +138,17 @@ export async function listFindHomeEvents(
       .eq('request_id', requestId)
       .order('created_at', { ascending: true })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as FindHomeEvent[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
 export async function createFindHomeRequest(input: FindHomeCreateInput): Promise<ActionResult> {
   const parsed = findHomeCreateSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('create_find_home_request', {
     p_province: parsed.data.province ?? null,
@@ -152,7 +163,7 @@ export async function createFindHomeRequest(input: FindHomeCreateInput): Promise
 export async function matchFindHome(input: FindHomeMatchInput): Promise<ActionResult> {
   const parsed = findHomeMatchSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('find_home_match', {
     p_request_id: parsed.data.requestId,
@@ -163,13 +174,13 @@ export async function matchFindHome(input: FindHomeMatchInput): Promise<ActionRe
 
 export async function acceptFindHomeMatch(input: FindHomeRequestIdInput): Promise<ActionResult> {
   const parsed = findHomeRequestIdSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('find_home_accept_match', { p_request_id: parsed.data.requestId });
 }
 
 export async function rejectFindHomeMatch(input: FindHomeRejectInput): Promise<ActionResult> {
   const parsed = findHomeRejectSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('find_home_reject_match', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,
@@ -178,7 +189,7 @@ export async function rejectFindHomeMatch(input: FindHomeRejectInput): Promise<A
 
 export async function failFindHome(input: FindHomeFailInput): Promise<ActionResult> {
   const parsed = findHomeFailSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('find_home_fail', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,
@@ -187,7 +198,7 @@ export async function failFindHome(input: FindHomeFailInput): Promise<ActionResu
 
 export async function cancelFindHome(input: FindHomeCancelInput): Promise<ActionResult> {
   const parsed = findHomeCancelSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('find_home_cancel', {
     p_request_id: parsed.data.requestId,
     p_reason: parsed.data.reason ?? null,

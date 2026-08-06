@@ -5,8 +5,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { getSegurancaCopy, type SegurancaCopy } from '../content';
 import {
   formatSecurityEvent,
   securityScoreLabel,
@@ -19,19 +22,19 @@ import {
   verifySecurityOtp,
 } from '../services/security-client';
 
-function verifiedBadge(ok: boolean) {
+function verifiedBadge(ok: boolean, copy: SegurancaCopy) {
   return ok ? (
-    <Badge variant="success">Verificado</Badge>
+    <Badge variant="success">{copy.verifiedBadge}</Badge>
   ) : (
-    <Badge variant="warning">Pendente</Badge>
+    <Badge variant="warning">{copy.pendingBadge}</Badge>
   );
 }
 
-function kycLabel(level: number): string {
-  if (level >= 4) return 'KYC completo';
-  if (level >= 2) return `KYC nível ${level}`;
-  if (level >= 1) return 'KYC inicial';
-  return 'KYC por iniciar';
+function kycLabel(level: number, copy: SegurancaCopy): string {
+  if (level >= 4) return copy.kyc.complete;
+  if (level >= 2) return copy.kyc.level.replace('{n}', String(level));
+  if (level >= 1) return copy.kyc.initial;
+  return copy.kyc.notStarted;
 }
 
 /**
@@ -39,6 +42,9 @@ function kycLabel(level: number): string {
  */
 export function SecurityCenterClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { locale } = useLocale();
+  const copy = getSegurancaCopy(locale);
+  const dateLocale = LOCALE_INTL_TAG[locale];
   const [snap, setSnap] = useState<SecurityCenterSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -84,9 +90,9 @@ export function SecurityCenterClient() {
     }
     setChallengeId(result.data.challengeId);
     if (result.data.sandboxCode) {
-      setSandboxHint(`Sandbox: use o código ${result.data.sandboxCode}`);
+      setSandboxHint(copy.actions.sandboxHint.replace('{code}', result.data.sandboxCode));
     }
-    setActionMsg('Código enviado. Introduza os 6 dígitos abaixo.');
+    setActionMsg(copy.actions.codeSent);
   }
 
   async function onVerifyPhoneOtp() {
@@ -99,7 +105,7 @@ export function SecurityCenterClient() {
       setActionMsg(result.message);
       return;
     }
-    setActionMsg('Telefone verificado com sucesso.');
+    setActionMsg(copy.actions.phoneVerified);
     setChallengeId(null);
     setOtp('');
     setSandboxHint(null);
@@ -110,7 +116,7 @@ export function SecurityCenterClient() {
     setBusy(true);
     const result = await revokeSecuritySession(sessionId);
     setBusy(false);
-    setActionMsg(result.ok ? 'Sessão marcada como terminada.' : result.message);
+    setActionMsg(result.ok ? copy.actions.sessionRevoked : result.message);
     if (result.ok) void load();
   }
 
@@ -121,11 +127,9 @@ export function SecurityCenterClient() {
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Identity &amp; Security</p>
-          <Heading level={1}>Centro de Segurança</Heading>
-          <Text className="mt-1 text-slate-700">
-            Confirmações, sessões, dispositivos e nível de segurança da conta Kuteka.
-          </Text>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+          <Heading level={1}>{copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
         </header>
 
@@ -148,55 +152,57 @@ export function SecurityCenterClient() {
             <>
               <section className="kuteka-detail-panel grid gap-4 p-5 sm:grid-cols-3">
                 <div>
-                  <p className="kuteka-detail-micro">Nível de segurança</p>
+                  <p className="kuteka-detail-micro">{copy.securityLevel}</p>
                   <p className="mt-1 text-3xl font-semibold tabular-nums text-slate-900">
                     {snap.securityScore}
                     <span className="text-base font-normal text-slate-500">/100</span>
                   </p>
                   <p className="mt-1 text-sm font-medium text-slate-700">
-                    {securityScoreLabel(snap.securityScore)}
+                    {securityScoreLabel(snap.securityScore, locale)}
                   </p>
                 </div>
                 <div>
-                  <p className="kuteka-detail-micro">Email</p>
+                  <p className="kuteka-detail-micro">{copy.emailLabel}</p>
                   <p className="mt-1 break-all text-sm font-medium text-slate-900">
                     {snap.email ?? '—'}
                   </p>
-                  <div className="mt-2">{verifiedBadge(snap.emailVerified)}</div>
+                  <div className="mt-2">{verifiedBadge(snap.emailVerified, copy)}</div>
                 </div>
                 <div>
-                  <p className="kuteka-detail-micro">Telefone</p>
+                  <p className="kuteka-detail-micro">{copy.phoneLabel}</p>
                   <p className="mt-1 text-sm font-medium text-slate-900">{snap.phone ?? '—'}</p>
-                  <div className="mt-2">{verifiedBadge(snap.phoneVerified)}</div>
+                  <div className="mt-2">{verifiedBadge(snap.phoneVerified, copy)}</div>
                 </div>
               </section>
 
               <section className="kuteka-detail-panel grid gap-4 p-5 sm:grid-cols-3">
                 <div>
-                  <p className="kuteka-detail-micro">Estado KYC</p>
-                  <p className="mt-1 font-semibold text-slate-900">{kycLabel(snap.kycLevel)}</p>
+                  <p className="kuteka-detail-micro">{copy.kycStatus}</p>
+                  <p className="mt-1 font-semibold text-slate-900">
+                    {kycLabel(snap.kycLevel, copy)}
+                  </p>
                   <Link
                     href="/app/centro-confianca"
                     className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }), 'mt-2 px-0')}
                   >
-                    Abrir Centro de Confiança
+                    {copy.openTrustCenter}
                   </Link>
                 </div>
                 <div>
-                  <p className="kuteka-detail-micro">Último login</p>
+                  <p className="kuteka-detail-micro">{copy.lastLogin}</p>
                   <p className="mt-1 text-sm text-slate-800">
                     {snap.lastLoginAt
-                      ? new Date(snap.lastLoginAt).toLocaleString('pt-AO')
-                      : 'Ainda sem registo'}
+                      ? new Date(snap.lastLoginAt).toLocaleString(dateLocale)
+                      : copy.noRecordYet}
                   </p>
                 </div>
                 <div>
-                  <p className="kuteka-detail-micro">2FA</p>
+                  <p className="kuteka-detail-micro">{copy.mfaLabel}</p>
                   <p className="mt-1 text-sm text-slate-800">
-                    {snap.mfaEnabled ? 'Activo' : 'Preparado — activação futura'}
+                    {snap.mfaEnabled ? copy.mfaActive : copy.mfaPreparing}
                   </p>
                   <Badge className="mt-2" variant="default">
-                    {snap.flags.mfaPrepared ? 'Infra pronta' : '—'}
+                    {snap.flags.mfaPrepared ? copy.infraReady : '—'}
                   </Badge>
                 </div>
               </section>
@@ -204,14 +210,12 @@ export function SecurityCenterClient() {
               {!snap.phoneVerified ? (
                 <section className="kuteka-detail-panel p-5" aria-labelledby="phone-verify">
                   <h2 id="phone-verify" className="kuteka-detail-title">
-                    Verificar telefone (OTP SMS)
+                    {copy.phoneVerifySection.title}
                   </h2>
-                  <p className="mt-1 text-sm text-slate-600">
-                    Fluxo sandbox pronto para Twilio, MessageBird ou Infobip (Angola).
-                  </p>
+                  <p className="mt-1 text-sm text-slate-600">{copy.phoneVerifySection.hint}</p>
                   <div className="mt-4 flex flex-col gap-3 sm:max-w-md">
                     <label className="text-sm font-medium text-slate-800" htmlFor="sec-phone">
-                      Número
+                      {copy.phoneVerifySection.numberLabel}
                     </label>
                     <input
                       id="sec-phone"
@@ -228,13 +232,13 @@ export function SecurityCenterClient() {
                       disabled={busy || phone.trim().length < 8}
                       onClick={() => void onSendPhoneOtp()}
                     >
-                      Enviar código
+                      {copy.phoneVerifySection.sendCode}
                     </Button>
                     {sandboxHint ? <p className="text-sm text-amber-800">{sandboxHint}</p> : null}
                     {challengeId ? (
                       <>
                         <label className="text-sm font-medium text-slate-800" htmlFor="sec-otp">
-                          Código de 6 dígitos
+                          {copy.phoneVerifySection.otpLabel}
                         </label>
                         <input
                           id="sec-otp"
@@ -252,7 +256,7 @@ export function SecurityCenterClient() {
                           disabled={busy || otp.length !== 6}
                           onClick={() => void onVerifyPhoneOtp()}
                         >
-                          Confirmar telefone
+                          {copy.phoneVerifySection.confirmPhone}
                         </Button>
                       </>
                     ) : null}
@@ -262,21 +266,22 @@ export function SecurityCenterClient() {
 
               <section className="kuteka-detail-panel p-5" aria-labelledby="devices">
                 <h2 id="devices" className="kuteka-detail-title">
-                  Dispositivos activos
+                  {copy.devices.title}
                 </h2>
                 {activeDevices.length === 0 ? (
-                  <p className="mt-2 text-sm text-slate-600">
-                    Inventário preparado. Os dispositivos aparecerão quando a flag estiver activa.
-                  </p>
+                  <p className="mt-2 text-sm text-slate-600">{copy.devices.empty}</p>
                 ) : (
                   <ul className="mt-3 divide-y divide-slate-200 rounded-kuteka border border-slate-200 bg-white">
                     {activeDevices.map((d) => (
                       <li key={d.id} className="px-4 py-3 text-sm text-slate-800">
                         <span className="font-medium">
-                          {d.label ?? d.platform ?? 'Dispositivo'}
+                          {d.label ?? d.platform ?? copy.devices.fallbackName}
                         </span>
                         <span className="mt-0.5 block text-slate-500">
-                          Visto {new Date(d.last_seen_at).toLocaleString('pt-AO')}
+                          {copy.devices.seenAt.replace(
+                            '{date}',
+                            new Date(d.last_seen_at).toLocaleString(dateLocale),
+                          )}
                         </span>
                       </li>
                     ))}
@@ -286,12 +291,13 @@ export function SecurityCenterClient() {
 
               <section className="kuteka-detail-panel p-5" aria-labelledby="sessions">
                 <h2 id="sessions" className="kuteka-detail-title">
-                  Sessões abertas
+                  {copy.sessions.title}
                 </h2>
                 {openSessions.length === 0 ? (
                   <p className="mt-2 text-sm text-slate-600">
-                    Gestão remota de sessões preparada (flag{' '}
-                    <code className="text-xs">security.remote_session_revoke</code>).
+                    {copy.sessions.emptyPrefix}{' '}
+                    <code className="text-xs">security.remote_session_revoke</code>
+                    {copy.sessions.emptySuffix}
                   </p>
                 ) : (
                   <ul className="mt-3 divide-y divide-slate-200 rounded-kuteka border border-slate-200 bg-white">
@@ -301,9 +307,11 @@ export function SecurityCenterClient() {
                         className="flex flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm"
                       >
                         <div>
-                          <p className="font-medium text-slate-800">{s.ip ?? 'IP desconhecido'}</p>
+                          <p className="font-medium text-slate-800">
+                            {s.ip ?? copy.sessions.unknownIp}
+                          </p>
                           <p className="text-slate-500">
-                            {new Date(s.last_seen_at).toLocaleString('pt-AO')}
+                            {new Date(s.last_seen_at).toLocaleString(dateLocale)}
                           </p>
                         </div>
                         <Button
@@ -313,7 +321,7 @@ export function SecurityCenterClient() {
                           disabled={busy}
                           onClick={() => void onRevoke(s.id)}
                         >
-                          Terminar
+                          {copy.sessions.terminate}
                         </Button>
                       </li>
                     ))}
@@ -323,24 +331,21 @@ export function SecurityCenterClient() {
 
               <section className="kuteka-detail-panel p-5" aria-labelledby="history">
                 <h2 id="history" className="kuteka-detail-title">
-                  Histórico de autenticações e alterações
+                  {copy.history.title}
                 </h2>
                 {snap.recentEvents.length === 0 ? (
-                  <p className="mt-2 text-sm text-slate-600">
-                    Ainda sem eventos. Logins, recuperações e alterações sensíveis aparecerão aqui —
-                    com notificação quando marcado.
-                  </p>
+                  <p className="mt-2 text-sm text-slate-600">{copy.history.empty}</p>
                 ) : (
                   <ul className="mt-3 divide-y divide-slate-200 rounded-kuteka border border-slate-200 bg-white">
                     {snap.recentEvents.map((e) => (
                       <li key={e.id} className="px-4 py-3 text-sm">
                         <p className="font-medium text-slate-900">
-                          {formatSecurityEvent(e.event_type)}
+                          {formatSecurityEvent(e.event_type, locale)}
                         </p>
                         <p className="text-slate-500">
-                          {new Date(e.created_at).toLocaleString('pt-AO')}
+                          {new Date(e.created_at).toLocaleString(dateLocale)}
                           {e.channel ? ` · ${e.channel}` : ''}
-                          {e.notify ? ' · notificar' : ''}
+                          {e.notify ? copy.history.notifySuffix : ''}
                         </p>
                       </li>
                     ))}

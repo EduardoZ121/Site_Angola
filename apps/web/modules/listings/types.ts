@@ -120,6 +120,10 @@ export const ENRICHED_PROPERTY_SELECT_V13 =
 export const HOUSING_ENRICHED_SELECT_V13 =
   'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, description, video_url, virtual_tour_url, floor_plan_url, documents_url, year_built, renovated_year, area_useful_m2, area_total_m2, floors, bathrooms, parking_spaces, monthly_condo_aoa, condo_rules, amenities, latitude, longitude, location_exact, neighborhood, nearby_notes';
 
+/**
+ * @deprecated Use getAmenityLabels(locale) from '../lib/manual-ops-labels' instead.
+ * Kept as the Portuguese fallback for any legacy import.
+ */
 export const AMENITY_LABELS: Record<string, string> = {
   internet: 'Internet',
   energia: 'Energia',
@@ -131,6 +135,10 @@ export const AMENITY_LABELS: Record<string, string> = {
   acessibilidade: 'Acessibilidade',
 };
 
+/**
+ * @deprecated Use getListingsCopy(locale).subjects from '../content' instead.
+ * Kept as the Portuguese fallback for any legacy import.
+ */
 export const REVIEW_SUBJECT_LABELS: Record<string, string> = {
   property: 'Imóvel',
   owner: 'Proprietário',

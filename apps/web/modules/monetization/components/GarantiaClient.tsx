@@ -6,7 +6,10 @@ import { Badge, Button, Heading, Label, Text, buttonVariants } from '@kuteka/ui'
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
+import { getMonetizationCopy } from '@/modules/monetization/content';
 import { garantiaStatusLabel, garantiaStatusTone } from '@/modules/monetization/lib/catalog';
 import {
   activateGarantia,
@@ -24,6 +27,10 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 
 export function GarantiaClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { locale } = useLocale();
+  const copy = getMonetizationCopy(locale).garantia;
+  const common = getMonetizationCopy(locale).common;
+  const dateLocale = LOCALE_INTL_TAG[locale];
   const [rows, setRows] = useState<GarantiaSubscription[]>([]);
   const [events, setEvents] = useState<Record<string, GarantiaEvent[]>>({});
   const [openTimeline, setOpenTimeline] = useState<string | null>(null);
@@ -86,7 +93,7 @@ export function GarantiaClient() {
     });
     setBusyId(null);
     if (!result.ok) return setError(result.message);
-    setMessage('Rascunho criado. Active quando estiver pronto para pagar.');
+    setMessage(copy.messages.created);
     setPropertyId('');
     setContractId('');
     await load();
@@ -106,17 +113,13 @@ export function GarantiaClient() {
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">Garantia Kuteka</p>
-          <Heading level={1}>Protecção mensal opcional</Heading>
-          <Text className="mt-1 text-slate-700">
-            Cobertura por cerca de 3 500 Kz/mês, paga pela stack partilhada Kuteka Pay. O
-            cancelamento termina a cobertura; no mesmo dia da activação, a mensalidade é devolvida
-            integralmente em créditos.
-          </Text>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
+          <Heading level={1}>{copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
           <div className="mt-4">
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'secondary' }))}>
-              Financeiro
+              {common.financeiro}
             </Link>
           </div>
         </header>
@@ -134,41 +137,39 @@ export function GarantiaClient() {
 
         <SoftListSlot pending={loading}>
           <section className="kuteka-detail-panel p-5">
-            <h2 className="kuteka-detail-title">Nova subscrição</h2>
-            <p className="kuteka-detail-body mt-1">
-              Crie o rascunho e associe, se quiser, um imóvel ou contrato a que tem acesso.
-            </p>
+            <h2 className="kuteka-detail-title">{copy.newSubTitle}</h2>
+            <p className="kuteka-detail-body mt-1">{copy.newSubBody}</p>
             <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
               <div>
-                <Label htmlFor="garantia-property">ID do imóvel (opcional)</Label>
+                <Label htmlFor="garantia-property">{copy.propertyLabel}</Label>
                 <input
                   id="garantia-property"
                   className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
                   value={propertyId}
                   onChange={(event) => setPropertyId(event.target.value)}
-                  placeholder="UUID do imóvel"
+                  placeholder={copy.propertyPlaceholder}
                 />
               </div>
               <div>
-                <Label htmlFor="garantia-contract">ID do contrato (opcional)</Label>
+                <Label htmlFor="garantia-contract">{copy.contractLabel}</Label>
                 <input
                   id="garantia-contract"
                   className="w-full rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
                   value={contractId}
                   onChange={(event) => setContractId(event.target.value)}
-                  placeholder="UUID do contrato"
+                  placeholder={copy.contractPlaceholder}
                 />
               </div>
               <Button type="submit" loading={busyId === 'create'} className="sm:col-span-2">
-                Criar rascunho
+                {copy.submit}
               </Button>
             </form>
           </section>
 
           <section className="kuteka-detail-panel p-5">
             <div className="flex items-center justify-between gap-2">
-              <h2 className="kuteka-detail-title">Subscrições</h2>
-              {canOperate ? <Badge variant="default">Finanças</Badge> : null}
+              <h2 className="kuteka-detail-title">{copy.subscriptionsTitle}</h2>
+              {canOperate ? <Badge variant="default">{copy.operatorBadge}</Badge> : null}
             </div>
             <ul className="mt-3 divide-y divide-slate-200">
               {rows.map((row) => {
@@ -178,30 +179,36 @@ export function GarantiaClient() {
                   <li key={row.id} className="flex flex-col gap-3 py-4">
                     <div className="flex flex-wrap items-start justify-between gap-2">
                       <div>
-                        <p className="font-medium text-slate-900">Garantia mensal</p>
+                        <p className="font-medium text-slate-900">{copy.monthlyLabel}</p>
                         <p className="mt-1 text-sm text-slate-600">
                           {row.monthly_amount_aoa
                             ? formatAoaAmount(Number(row.monthly_amount_aoa))
-                            : '3 500 Kz/mês'}
-                          {row.payment_intent_id ? ' · Kuteka Pay' : ''}
-                          {row.property_id ? ` · imóvel ${row.property_id.slice(0, 8)}` : ''}
-                          {row.contract_id ? ` · contrato ${row.contract_id.slice(0, 8)}` : ''}
+                            : copy.defaultAmount}
+                          {row.payment_intent_id ? copy.paidSuffix : ''}
+                          {row.property_id
+                            ? copy.propertySuffix.replace('{id}', row.property_id.slice(0, 8))
+                            : ''}
+                          {row.contract_id
+                            ? copy.contractSuffix.replace('{id}', row.contract_id.slice(0, 8))
+                            : ''}
                         </p>
                         {row.coverage_starts_at ? (
                           <p className="mt-1 text-xs text-slate-500">
-                            Cobertura:{' '}
-                            {new Date(row.coverage_starts_at).toLocaleDateString('pt-PT')}
+                            {copy.coveragePrefix}
+                            {new Date(row.coverage_starts_at).toLocaleDateString(dateLocale)}
                             {row.coverage_ends_at
-                              ? ` — ${new Date(row.coverage_ends_at).toLocaleDateString('pt-PT')}`
+                              ? ` — ${new Date(row.coverage_ends_at).toLocaleDateString(dateLocale)}`
                               : ''}
                           </p>
                         ) : null}
                         {row.status_reason ? (
-                          <p className="mt-1 text-sm text-rose-700">Motivo: {row.status_reason}</p>
+                          <p className="mt-1 text-sm text-rose-700">
+                            {common.reason.replace('{value}', row.status_reason)}
+                          </p>
                         ) : null}
                       </div>
                       <Badge variant={garantiaStatusTone(row.status)}>
-                        {garantiaStatusLabel(row.status)}
+                        {garantiaStatusLabel(row.status, locale)}
                       </Badge>
                     </div>
 
@@ -214,11 +221,11 @@ export function GarantiaClient() {
                             run(
                               row.id,
                               () => activateGarantia({ subscriptionId: row.id }),
-                              'Garantia activa. Mensalidade cobrada via Kuteka Pay (sandbox).',
+                              copy.messages.activated,
                             )
                           }
                         >
-                          Activar e pagar
+                          {copy.activateAndPay}
                         </Button>
                       ) : null}
                       {(owned || canOperate) &&
@@ -235,19 +242,19 @@ export function GarantiaClient() {
                                   subscriptionId: row.id,
                                   reason: reasons[row.id] || null,
                                 }),
-                              'Garantia cancelada. O reembolso é aplicado quando elegível.',
+                              copy.messages.cancelled,
                             )
                           }
                         >
-                          Cancelar
+                          {common.cancel}
                         </Button>
                       ) : null}
                       {canOperate &&
                       ['awaiting_payment', 'active', 'past_due'].includes(row.status) ? (
                         <>
                           <input
-                            aria-label="Motivo do estado"
-                            placeholder="Motivo (opcional)"
+                            aria-label={copy.reasonAria}
+                            placeholder={copy.reasonPlaceholder}
                             className="w-56 rounded-kuteka border border-slate-300 bg-white px-2 py-1 text-sm"
                             value={reasons[row.id] ?? ''}
                             onChange={(event) =>
@@ -271,11 +278,11 @@ export function GarantiaClient() {
                                       status: 'past_due',
                                       reason: reasons[row.id] || null,
                                     }),
-                                  'Subscrição marcada com pagamento em atraso.',
+                                  copy.messages.pastDue,
                                 )
                               }
                             >
-                              Em atraso
+                              {copy.markPastDue}
                             </Button>
                           ) : null}
                           <Button
@@ -291,11 +298,11 @@ export function GarantiaClient() {
                                     status: 'failed',
                                     reason: reasons[row.id] || null,
                                   }),
-                                'Subscrição marcada como falhada.',
+                                copy.messages.failed,
                               )
                             }
                           >
-                            Marcar falha
+                            {copy.markFail}
                           </Button>
                         </>
                       ) : null}
@@ -304,7 +311,7 @@ export function GarantiaClient() {
                         className="text-xs font-medium text-brand-700 hover:underline"
                         onClick={() => void toggleTimeline(row.id)}
                       >
-                        {openTimeline === row.id ? 'Ocultar cronologia' : 'Ver cronologia'}
+                        {openTimeline === row.id ? common.hideTimeline : common.viewTimeline}
                       </button>
                     </div>
 
@@ -317,11 +324,11 @@ export function GarantiaClient() {
                               ? ` · ${timelineEvent.from_status} → ${timelineEvent.to_status}`
                               : ''}
                             {timelineEvent.note ? ` · ${timelineEvent.note}` : ''}
-                            {` · ${new Date(timelineEvent.created_at).toLocaleString('pt-PT')}`}
+                            {` · ${new Date(timelineEvent.created_at).toLocaleString(dateLocale)}`}
                           </li>
                         ))}
                         {(events[row.id] ?? []).length === 0 ? (
-                          <li className="text-xs text-slate-500">Sem eventos.</li>
+                          <li className="text-xs text-slate-500">{common.noEvents}</li>
                         ) : null}
                       </ol>
                     ) : null}
@@ -329,7 +336,7 @@ export function GarantiaClient() {
                 );
               })}
               {rows.length === 0 ? (
-                <li className="py-3 text-sm text-slate-500">Ainda sem subscrições Garantia.</li>
+                <li className="py-3 text-sm text-slate-500">{copy.emptyList}</li>
               ) : null}
             </ul>
           </section>

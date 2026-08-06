@@ -15,8 +15,23 @@ export const authCopyPt = {
     rateLimited:
       'Demasiados pedidos neste momento. Aguarde cerca de uma hora e tente novamente — ou entre se já criou a conta.',
     sessionExpired: 'A sua sessão expirou ou não foi iniciada. Entre novamente para continuar.',
+    sessionInvalid: 'Sessão inválida. Entre novamente para continuar.',
     showPassword: 'Mostrar',
     hidePassword: 'Ocultar',
+  },
+  emailOtp: {
+    sendFailed: 'Não foi possível enviar o código.',
+    invalidLength: 'Introduza o código de 6 dígitos.',
+    invalidGeneric: 'Código inválido.',
+    expired: 'O código expirou. Peça um novo.',
+    incorrect: 'Código incorrecto. Tente novamente.',
+    incorrectOrExpired: 'Código incorrecto ou expirado. Reenvie o email e tente novamente.',
+  },
+  actions: {
+    updatePasswordFailed: 'Não foi possível actualizar a password.',
+    resendEmailFailed: 'Não foi possível reenviar o email.',
+    activateRolesFailed: 'Não foi possível activar os papéis.',
+    saveNameFailed: 'Não foi possível guardar o nome.',
   },
   register: {
     title: 'Criar conta',

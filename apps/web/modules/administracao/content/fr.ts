@@ -1,0 +1,48 @@
+import type { AdministracaoCopy } from './pt';
+
+export const administracaoCopyFr: AdministracaoCopy = {
+  title: 'Administration',
+  subtitle:
+    'Tableau de bord opérationnel — comptes, patrimoines, agents, vérifications et demandes.',
+  permissionBadge: 'admin.panel',
+  users: 'Utilisateurs',
+  usersTitle: 'Utilisateurs et rôles',
+  usersHint: 'Lecture des comptes et attribution du rôle Agent Certifié.',
+  trustReview: 'Vérifications',
+  housingExplore: 'Patrimoines (vue Client)',
+  contracts: 'Contrats',
+  backToHub: 'Retour à l’Administration',
+  assignAgent: 'Attribuer Agent Certifié',
+  assigning: 'Attribution…',
+  assigned: 'Rôle Agent Certifié attribué.',
+  alreadyAgent: 'Cet utilisateur est déjà Agent Certifié.',
+  emptyUsersTitle: 'Aucun utilisateur',
+  emptyUsers: 'Il n’y a encore aucun profil à afficher.',
+  statsTitle: 'Résumé de la plateforme',
+  statsHint: 'Indicateurs opérationnels interconnectés des modules actifs.',
+  pendingTitle: 'Demandes en attente',
+  pendingHint: 'Intérêts de Client en attente de suivi.',
+  emptyPending: 'Aucune demande en attente pour le moment.',
+  openProperty: 'Ouvrir le patrimoine',
+  stats: {
+    profiles: 'Utilisateurs',
+    properties: 'Patrimoines actifs',
+    assignments: 'Suivis actifs',
+    agents: 'Agents Certifiés',
+    trust: 'Vérifications en attente',
+    interests: 'Intérêts en attente',
+    demo: 'Annonces de démonstration',
+    contractsActive: 'Contrats actifs',
+    contractsPending: 'Contrats en attente',
+  },
+  loadError: 'Nous avons du mal à afficher l’Administration. Veuillez réessayer.',
+  forbidden: 'Vous n’avez pas la permission d’accéder à l’Administration (admin.panel).',
+  mvpNote:
+    'Tableau de bord en direct : accédez aux utilisateurs, à la révision de Confiance et à l’inventaire du Client.',
+  roleLabels: {
+    client: 'Client',
+    patrimonial_partner: 'Partenaire Patrimonial',
+    certified_agent: 'Agent Certifié',
+    administrator: 'Administrateur',
+  },
+};

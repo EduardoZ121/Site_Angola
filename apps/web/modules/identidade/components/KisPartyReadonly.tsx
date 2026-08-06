@@ -2,7 +2,8 @@
 
 import type { IdentityPartySnapshot } from '@kuteka/types';
 import { Badge } from '@kuteka/ui';
-import { getIdentidadeCopy } from '../content/pt';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getIdentidadeCopy } from '../content';
 import { KYC_LEVEL_LABELS, type KycLevel } from '../lib/kyc';
 
 type KisPartyReadonlyProps = {
@@ -11,7 +12,8 @@ type KisPartyReadonlyProps = {
 };
 
 export function KisPartyReadonly({ snapshot, title }: KisPartyReadonlyProps) {
-  const copy = getIdentidadeCopy();
+  const { locale } = useLocale();
+  const copy = getIdentidadeCopy(locale);
   const level = (snapshot?.kycLevel ?? 0) as KycLevel;
   const legalName =
     snapshot?.legalFullName || snapshot?.preferredName || snapshot?.displayName || null;

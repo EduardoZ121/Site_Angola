@@ -42,6 +42,15 @@ export const agenteCopyPt = {
   openDetail: 'Abrir ficha',
   mvpNote:
     'Foque-se em cobertura e acompanhamentos. Visitas, propostas e Academia serão introduzidas em fases seguintes.',
+  viewHousingInventory: 'Ver inventário',
+  activateAgentAdmin: 'Activar agente (Admin)',
+  nextSteps: {
+    title: 'Continuar o fluxo Kuteka',
+    viewActiveProperties: 'Ver patrimónios activos',
+    verifyAccount: 'Verificar conta',
+    administration: 'Administração',
+    contactKuteka: 'Contactar Kuteka',
+  },
   fields: {
     purpose: 'Finalidade',
     province: 'Província',
@@ -70,6 +79,8 @@ export const agenteCopyPt = {
   },
 } as const;
 
-export function getAgenteCopy() {
-  return agenteCopyPt;
-}
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type AgenteCopy = DeepStringify<typeof agenteCopyPt>;

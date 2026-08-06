@@ -1,8 +1,9 @@
+'use client';
+
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { Reveal } from './Reveal';
 import { IconPatrimony, IconTransparency, IconTrust } from './LandingIcons';
-import { landingContent } from '../content';
-
-const c = landingContent;
+import { getLandingCopy } from '../content';
 
 const icons = {
   trust: IconTrust,
@@ -11,6 +12,8 @@ const icons = {
 } as const;
 
 export function LandingDifference() {
+  const { locale } = useLocale();
+  const c = getLandingCopy(locale);
   return (
     <section
       id={c.difference.id}

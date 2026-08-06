@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import { Badge, Button, Heading, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getAgenteCopy } from '../content/pt';
+import { getAgenteCopy } from '../content';
 import {
   activateAssignment,
   getActiveProperty,
@@ -16,7 +17,8 @@ import {
 } from '../services/agent-client';
 
 export function AgentDetailClient({ id }: { id: string }) {
-  const copy = getAgenteCopy();
+  const { locale } = useLocale();
+  const copy = getAgenteCopy(locale);
   const { session, status: sessionStatus } = useAppSession();
   const canOperate = sessionStatus === 'ready' && !!session?.permissions.includes('agent.operate');
   const [row, setRow] = useState<AgentPropertyRow | null>(null);

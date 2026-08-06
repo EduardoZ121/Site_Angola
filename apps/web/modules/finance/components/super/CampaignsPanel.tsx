@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Badge, Button } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   formatAoaAmount,
   listCampaigns,
@@ -13,7 +14,8 @@ import {
 import { Feedback, PanelSection, useFeedback, type PanelProps } from './shared';
 
 export function CampaignsPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [campaigns, setCampaigns] = useState<FinanceCampaignRow[]>([]);
   const [loading, setLoading] = useState(true);

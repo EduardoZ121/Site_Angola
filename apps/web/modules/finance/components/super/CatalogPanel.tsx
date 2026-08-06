@@ -7,8 +7,9 @@ import {
   type FinanceUpsertProductInput,
 } from '@kuteka/validation';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   listFinanceProducts,
   upsertProduct,
@@ -32,7 +33,8 @@ const emptyForm: FinanceUpsertProductInput = {
 };
 
 export function CatalogPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [products, setProducts] = useState<FinanceProductRow[]>([]);
   const [loading, setLoading] = useState(true);

@@ -8,6 +8,7 @@ import { CONTRACT_PURPOSES } from '@kuteka/validation';
 import { Button, Heading, Input, Label, Text, Textarea, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { KisGateBanner } from '@/modules/identidade/components/KisGateBanner';
 import { KisPartyReadonly } from '@/modules/identidade/components/KisPartyReadonly';
 import { getMyKycLevel, getMyPartySnapshot } from '@/modules/identidade/services/identity-client';
@@ -15,7 +16,7 @@ import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getContratosCopy } from '../content/pt';
+import { getContratosCopy } from '../content';
 import {
   createPropertyContract,
   listContractProperties,
@@ -23,7 +24,8 @@ import {
 } from '../services/contracts-client';
 
 export function CreateContractForm() {
-  const copy = getContratosCopy();
+  const { locale } = useLocale();
+  const copy = getContratosCopy(locale);
   const router = useRouter();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage =

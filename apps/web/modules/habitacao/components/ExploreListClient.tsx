@@ -7,12 +7,13 @@ import { PROPERTY_PURPOSES, PROPERTY_TYPES } from '@kuteka/validation';
 import { Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getHabitacaoCopy } from '../content/pt';
+import { getHabitacaoCopy } from '../content';
 import {
   exploreActivePropertiesPage,
   getClientPreferences,
@@ -32,7 +33,8 @@ type Filters = {
 };
 
 export function ExploreListClient() {
-  const copy = getHabitacaoCopy();
+  const { locale } = useLocale();
+  const copy = getHabitacaoCopy(locale);
   const searchParams = useSearchParams();
   const futureMode = searchParams?.get('disponibilidade') === 'futura';
   const { session, status: sessionStatus, error: sessionError } = useAppSession();

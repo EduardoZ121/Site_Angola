@@ -5,10 +5,11 @@ import { useState, type ReactNode } from 'react';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../content/pt';
+import { getFinanceCopy } from '../content';
 import { RevenuePanel } from './super/RevenuePanel';
 import { CatalogPanel } from './super/CatalogPanel';
 import { PricingPanel } from './super/PricingPanel';
@@ -45,7 +46,8 @@ type TabKey =
   | 'campaigns';
 
 export function SuperCommandCenter() {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const canManage = sessionStatus === 'ready' && !!session?.permissions.includes('finance.manage');
   const canRead =

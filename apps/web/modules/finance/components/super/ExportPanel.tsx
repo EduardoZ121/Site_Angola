@@ -3,8 +3,9 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FINANCE_EXPORT_FORMATS } from '@kuteka/validation';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   createAccountingExport,
   formatAoaAmount,
@@ -32,7 +33,8 @@ function downloadText(name: string, mime: string, content: string) {
 }
 
 export function ExportPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [exports, setExports] = useState<FinanceExportRow[]>([]);
   const [loading, setLoading] = useState(true);

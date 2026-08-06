@@ -1,4 +1,6 @@
+import { normalizeLocale, type AppLocale } from '@/modules/i18n/types';
 import type { HousingPropertyRow } from '@/modules/habitacao/services/housing-client';
+import { getShellCopy } from '../content';
 
 export type FeedMarkerTheme = {
   id: string;
@@ -7,69 +9,30 @@ export type FeedMarkerTheme = {
   badge?: string;
 };
 
-/** Rotating thematic markers — stream never “ends” at a section boundary. */
-export const FEED_MARKER_THEMES: readonly FeedMarkerTheme[] = [
-  {
-    id: 'new',
-    title: 'Patrimónios novos',
-    hint: 'Acabaram de entrar na plataforma.',
-  },
-  {
-    id: 'featured',
-    title: 'Em destaque',
-    hint: 'Selecção com presença premium.',
-    badge: 'Destaque',
-  },
-  {
-    id: 'nearby',
-    title: 'Próximos de si',
-    hint: 'Inventário relevante para explorar agora.',
-  },
-  {
-    id: 'recommend',
-    title: 'Recomendações',
-    hint: 'Sugestões com base no inventário activo.',
-  },
-  {
-    id: 'trends',
-    title: 'Tendências',
-    hint: 'O que a comunidade está a ver.',
-  },
-  {
-    id: 'premium',
-    title: 'Imóveis premium',
-    hint: 'Património de gama alta.',
-    badge: 'Premium',
-  },
-  {
-    id: 'contracts',
-    title: 'Actividade de contratos',
-    hint: 'Formalização a avançar na plataforma.',
-    badge: 'Contratos',
-  },
-  {
-    id: 'news',
-    title: 'Novidades',
-    hint: 'Actualizações recentes do marketplace.',
-  },
-  {
-    id: 'smart',
-    title: 'Recomendações inteligentes',
-    hint: 'Preparação para o motor KAI.',
-    badge: 'KAI prep',
-  },
-  {
-    id: 'more',
-    title: 'Mais patrimónios',
-    hint: 'Continue a explorar — o feed não acaba aqui.',
-  },
-  {
-    id: 'sponsored',
-    title: 'Anúncios patrocinados',
-    hint: 'Campanhas e inventário em promoção.',
-    badge: 'Patrocinado',
-  },
+const MARKER_IDS = [
+  'new',
+  'featured',
+  'nearby',
+  'recommend',
+  'trends',
+  'premium',
+  'contracts',
+  'news',
+  'smart',
+  'more',
+  'sponsored',
 ] as const;
+
+/** Rotating thematic markers — stream never “ends” at a section boundary. */
+export function getFeedMarkerThemes(
+  locale?: AppLocale | string | null,
+): readonly FeedMarkerTheme[] {
+  const markers = getShellCopy(normalizeLocale(locale)).feed.markers as Record<
+    string,
+    { title: string; hint: string; badge?: string }
+  >;
+  return MARKER_IDS.map((id) => ({ id, ...markers[id]! }));
+}
 
 export type FeedStreamItem =
   | {
@@ -100,11 +63,13 @@ export function appendFeedPage(
   existing: FeedStreamItem[],
   rows: HousingPropertyRow[],
   pageIndex: number,
+  locale?: AppLocale | string | null,
 ): FeedStreamItem[] {
   if (!rows.length) return existing;
 
+  const themes = getFeedMarkerThemes(locale);
   const next = [...existing];
-  const theme = FEED_MARKER_THEMES[pageIndex % FEED_MARKER_THEMES.length]!;
+  const theme = themes[pageIndex % themes.length]!;
   next.push({
     kind: 'marker',
     key: `marker-${theme.id}-p${pageIndex}`,
@@ -121,7 +86,7 @@ export function appendFeedPage(
 
     // Mid-page secondary cue keeps the stream feeling alive.
     if (index === 5 && rows.length > 7) {
-      const mid = FEED_MARKER_THEMES[(pageIndex + 3) % FEED_MARKER_THEMES.length]!;
+      const mid = themes[(pageIndex + 3) % themes.length]!;
       next.push({
         kind: 'marker',
         key: `marker-${mid.id}-mid-p${pageIndex}`,
@@ -132,13 +97,14 @@ export function appendFeedPage(
 
   // Soft continuity card every other page.
   if (pageIndex % 2 === 1) {
+    const linkCard = getShellCopy(normalizeLocale(locale)).feed.linkCard;
     next.push({
       kind: 'link-card',
       key: `link-explore-p${pageIndex}`,
-      title: 'Explorar habitação com filtros',
-      hint: 'Afine localização, finalidade e tipologia sem sair da plataforma.',
+      title: linkCard.title,
+      hint: linkCard.hint,
       href: '/app/habitacao/explorar',
-      cta: 'Abrir explorar',
+      cta: linkCard.cta,
     });
   }
 

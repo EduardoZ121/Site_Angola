@@ -12,11 +12,18 @@ import {
 } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { mapIdentityGateMessage } from '@/modules/identidade/lib/map-identity-gate';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getMonetizationCopy } from '../content';
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar as subscrições Garantia. Tente novamente.',
-  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
-};
+function copy() {
+  const locale = resolveUiLocale();
+  const monetization = getMonetizationCopy(locale);
+  return {
+    loadError: monetization.garantia.loadError,
+    actionError: monetization.common.actionError,
+    locale,
+  };
+}
 
 export type GarantiaSubscription = {
   id: string;
@@ -53,14 +60,18 @@ const SUBSCRIPTION_SELECT =
 type ActionResult = { ok: true; data: Record<string, unknown> } | { ok: false; message: string };
 
 async function callRpc(fn: string, args: Record<string, unknown>): Promise<ActionResult> {
+  const c = copy();
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc(fn, args);
     if (error || !data)
-      return { ok: false, message: mapIdentityGateMessage(error?.message, copy.actionError) };
+      return {
+        ok: false,
+        message: mapIdentityGateMessage(error?.message, c.actionError, c.locale),
+      };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: c.actionError };
   }
 }
 
@@ -70,11 +81,11 @@ export async function fetchGarantiaContext(): Promise<
   try {
     const client = createBrowserClient();
     const { data, error } = await client.rpc('garantia_my_context');
-    if (error || !data) return { ok: false, message: error?.message || copy.loadError };
+    if (error || !data) return { ok: false, message: error?.message || copy().loadError };
     const raw = data as { canOperate?: boolean };
     return { ok: true, data: { canOperate: Boolean(raw.canOperate) } };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -89,10 +100,10 @@ export async function listGarantiaSubscriptions(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as GarantiaSubscription[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -100,7 +111,7 @@ export async function listGarantiaEvents(
   subscriptionId: string,
 ): Promise<{ ok: true; data: GarantiaEvent[] } | { ok: false; message: string }> {
   const parsed = garantiaSubscriptionIdSchema.safeParse({ subscriptionId });
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   try {
     const client = createBrowserClient();
     const { data, error } = await client
@@ -109,10 +120,10 @@ export async function listGarantiaEvents(
       .eq('subscription_id', parsed.data.subscriptionId)
       .order('created_at', { ascending: true })
       .limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as GarantiaEvent[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -121,7 +132,7 @@ export async function createGarantiaSubscription(
 ): Promise<ActionResult> {
   const parsed = garantiaCreateSchema.safeParse(input);
   if (!parsed.success) {
-    return { ok: false, message: parsed.error.issues[0]?.message ?? copy.actionError };
+    return { ok: false, message: parsed.error.issues[0]?.message ?? copy().actionError };
   }
   return callRpc('create_garantia_subscription', {
     p_property_id: parsed.data.propertyId ?? null,
@@ -131,13 +142,13 @@ export async function createGarantiaSubscription(
 
 export async function activateGarantia(input: GarantiaSubscriptionIdInput): Promise<ActionResult> {
   const parsed = garantiaSubscriptionIdSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('garantia_activate', { p_subscription_id: parsed.data.subscriptionId });
 }
 
 export async function cancelGarantia(input: GarantiaCancelInput): Promise<ActionResult> {
   const parsed = garantiaCancelSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('garantia_cancel', {
     p_subscription_id: parsed.data.subscriptionId,
     p_reason: parsed.data.reason ?? null,
@@ -148,7 +159,7 @@ export async function markGarantiaPaymentStatus(
   input: GarantiaPaymentStatusInput,
 ): Promise<ActionResult> {
   const parsed = garantiaPaymentStatusSchema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: copy.actionError };
+  if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('garantia_mark_payment_status', {
     p_subscription_id: parsed.data.subscriptionId,
     p_status: parsed.data.status,

@@ -1,6 +1,8 @@
 'use client';
 
 import { createBrowserClient } from '@/lib/supabase/client';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getMonetizationCopy } from '../content';
 import type { SmartMoveUrgency } from '../lib/catalog';
 
 export type { SmartMoveUrgency } from '../lib/catalog';
@@ -77,10 +79,13 @@ export type PaymentReminderRow = {
   sent_at: string | null;
 };
 
-const copy = {
-  loadError: 'Estamos a ter dificuldade em mostrar estes dados. Tente novamente.',
-  actionError: 'Não conseguimos concluir esta acção. Tente novamente.',
-};
+function copy() {
+  const monetization = getMonetizationCopy(resolveUiLocale());
+  return {
+    loadError: monetization.common.loadError,
+    actionError: monetization.common.actionError,
+  };
+}
 
 export async function listSmartMoveRequests(): Promise<
   { ok: true; data: SmartMoveRequestRow[] } | { ok: false; message: string }
@@ -95,10 +100,10 @@ export async function listSmartMoveRequests(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as SmartMoveRequestRow[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -116,10 +121,10 @@ export async function createSmartMoveRequest(input: {
       p_contract_id: input.contractId ?? null,
       p_preferences: input.preferences ?? {},
     });
-    if (error || !data) return { ok: false, message: error?.message || copy.actionError };
+    if (error || !data) return { ok: false, message: error?.message || copy().actionError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: copy().actionError };
   }
 }
 
@@ -138,10 +143,10 @@ export async function listServiceProviders(
       .order('rating', { ascending: false });
     if (category && category !== 'all') q = q.eq('category', category);
     const { data, error } = await q.limit(50);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ServiceProviderRow[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -158,10 +163,10 @@ export async function listServiceOrders(): Promise<
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(30);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as ServiceOrderRow[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -183,10 +188,10 @@ export async function createServiceOrder(input: {
       p_property_id: input.propertyId ?? null,
       p_amount_aoa: input.amountAoa ?? null,
     });
-    if (error || !data) return { ok: false, message: error?.message || copy.actionError };
+    if (error || !data) return { ok: false, message: error?.message || copy().actionError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: copy().actionError };
   }
 }
 
@@ -199,10 +204,10 @@ export async function listPartnerPlans(): Promise<
       .from('partner_plan_subscriptions')
       .select('id,partner_id,product_code,status,started_at,renews_at')
       .order('started_at', { ascending: false });
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as PartnerPlanRow[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -214,10 +219,10 @@ export async function activatePartnerPlan(
     const { data, error } = await client.rpc('activate_partner_plan', {
       p_product_code: productCode,
     });
-    if (error || !data) return { ok: false, message: error?.message || copy.actionError };
+    if (error || !data) return { ok: false, message: error?.message || copy().actionError };
     return { ok: true, data: data as Record<string, unknown> };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: copy().actionError };
   }
 }
 
@@ -230,10 +235,10 @@ export async function listFeatureFlags(): Promise<
       .from('platform_feature_flags')
       .select('code,label,description,enabled,updated_at')
       .order('code');
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as FeatureFlagRow[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -247,10 +252,10 @@ export async function setFeatureFlag(
       p_code: code,
       p_enabled: enabled,
     });
-    if (error) return { ok: false, message: error.message || copy.actionError };
+    if (error) return { ok: false, message: error.message || copy().actionError };
     return { ok: true };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: copy().actionError };
   }
 }
 
@@ -264,10 +269,10 @@ export async function listPaymentReminders(
       .select('id,contract_payment_id,channel,offset_label,status,scheduled_for,sent_at')
       .order('scheduled_for', { ascending: true })
       .limit(limit);
-    if (error) return { ok: false, message: error.message || copy.loadError };
+    if (error) return { ok: false, message: error.message || copy().loadError };
     return { ok: true, data: (data ?? []) as PaymentReminderRow[] };
   } catch {
-    return { ok: false, message: copy.loadError };
+    return { ok: false, message: copy().loadError };
   }
 }
 
@@ -279,9 +284,9 @@ export async function scheduleRentReminders(
     const { data, error } = await client.rpc('schedule_rent_reminders', {
       p_contract_payment_id: contractPaymentId,
     });
-    if (error) return { ok: false, message: error.message || copy.actionError };
+    if (error) return { ok: false, message: error.message || copy().actionError };
     return { ok: true, count: Number(data ?? 0) };
   } catch {
-    return { ok: false, message: copy.actionError };
+    return { ok: false, message: copy().actionError };
   }
 }

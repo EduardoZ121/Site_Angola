@@ -28,6 +28,10 @@ export const shellCopyFr: ShellCopy = {
   userMenu: {
     profile: 'Profil',
     profileHint: 'Mes informations personnelles',
+    centroConfiancaHint: 'État du compte, UTS et prochaines étapes',
+    centroSegurancaHint: 'E-mail, téléphone, sessions et niveau de sécurité',
+    roleCountSingular: 'rôle',
+    roleCountPlural: 'rôles',
     roles: 'Mes rôles',
     rolesHint: 'Activer ou gérer les rôles du compte',
     patrimonios: 'Mes patrimoines',
@@ -150,4 +154,73 @@ export const shellCopyFr: ShellCopy = {
   securityCenterHint: 'E-mail, téléphone, sessions, appareils et niveau de sécurité du compte.',
   feedEndTitle: 'Vous avez atteint la fin de l’inventaire actuel',
   feedEndBody: 'Les nouveaux patrimoines apparaissent ici dès qu’ils sont publiés.',
+  feed: {
+    activateRoleTitle: 'Activez le rôle Client pour voir le fil',
+    activateRoleBody:
+      'Le fil continu affiche les patrimoines, les mises en avant et les recommandations dès que vous avez accès à Logement.',
+    activateRoleCta: 'Activer le rôle',
+    warmingTitle: 'Le fil se prépare',
+    warmingBody:
+      'Pas encore d’annonces actives. Publiez votre premier patrimoine ou explorez Logement.',
+    exploreWithFilters: 'Explorer avec des filtres',
+    markers: {
+      new: { title: 'Nouveaux patrimoines', hint: 'Viennent de rejoindre la plateforme.' },
+      featured: {
+        title: 'En vedette',
+        hint: 'Sélection avec présence premium.',
+        badge: 'En vedette',
+      },
+      nearby: { title: 'Près de vous', hint: 'Inventaire pertinent à explorer maintenant.' },
+      recommend: {
+        title: 'Recommandations',
+        hint: 'Suggestions basées sur l’inventaire actif.',
+      },
+      trends: { title: 'Tendances', hint: 'Ce que la communauté regarde.' },
+      premium: {
+        title: 'Biens premium',
+        hint: 'Patrimoine haut de gamme.',
+        badge: 'Premium',
+      },
+      contracts: {
+        title: 'Activité des contrats',
+        hint: 'Formalisation en cours sur la plateforme.',
+        badge: 'Contrats',
+      },
+      news: { title: 'Actualités', hint: 'Mises à jour récentes du marketplace.' },
+      smart: {
+        title: 'Recommandations intelligentes',
+        hint: 'Préparation pour le moteur KAI.',
+        badge: 'KAI prep',
+      },
+      more: {
+        title: 'Plus de patrimoines',
+        hint: 'Continuez à explorer — le fil ne s’arrête pas là.',
+      },
+      sponsored: {
+        title: 'Annonces sponsorisées',
+        hint: 'Campagnes et inventaire en promotion.',
+        badge: 'Sponsorisé',
+      },
+    },
+    linkCard: {
+      title: 'Explorer le logement avec des filtres',
+      hint: 'Affinez la localisation, l’objectif et la typologie sans quitter la plateforme.',
+      cta: 'Ouvrir explorer',
+    },
+  },
+  institutional: {
+    badge: 'Kuteka · v1.0 Beta',
+    backToLanding: 'Retour à la Landing',
+    contactKuteka: 'Contacter Kuteka',
+  },
+  errors: {
+    routeErrorTitle: 'Erreur',
+    routeErrorBody: 'Nous avons des difficultés à afficher cette page. Veuillez réessayer.',
+    retry: 'Réessayer',
+    globalErrorTitle: 'Une erreur est survenue',
+    globalErrorBody: 'Une erreur inattendue s’est produite. Vous pouvez réessayer.',
+    notFoundTitle: 'Page introuvable',
+    notFoundBody: 'La ressource demandée n’existe pas.',
+    goHome: 'Aller à la fondation',
+  },
 };

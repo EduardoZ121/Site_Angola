@@ -3,8 +3,9 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import { FINANCE_FRAUD_SEVERITIES, type FinanceFlagFraudInput } from '@kuteka/validation';
 import { Badge, Button, Input, Label } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getFinanceCopy } from '../../content/pt';
+import { getFinanceCopy } from '../../content';
 import {
   flagFraud,
   listFraudFlags,
@@ -24,7 +25,8 @@ const ENTITY_TYPES: FinanceFlagFraudInput['entityType'][] = [
 ];
 
 export function FraudPanel({ canManage }: PanelProps) {
-  const copy = getFinanceCopy();
+  const { locale } = useLocale();
+  const copy = getFinanceCopy(locale);
   const { error, setError, message, setMessage, busy, setBusy } = useFeedback();
   const [flags, setFlags] = useState<FinanceFraudFlagRow[]>([]);
   const [loading, setLoading] = useState(true);

@@ -8,7 +8,8 @@ import {
 } from '@kuteka/validation';
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { getHabitacaoCopy } from '../content/pt';
+import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import { getHabitacaoCopy } from '../content';
 
 import { HOUSING_ENRICHED_SELECT, HOUSING_ENRICHED_SELECT_V13 } from '@/modules/listings/types';
 
@@ -65,7 +66,7 @@ const PROPERTY_SELECT = HOUSING_ENRICHED_SELECT;
 export async function getClientPreferences(): Promise<
   { ok: true; data: ClientPreferencesRow | null } | { ok: false; message: string }
 > {
-  const copy = getHabitacaoCopy();
+  const copy = getHabitacaoCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {
@@ -90,7 +91,7 @@ export async function getClientPreferences(): Promise<
 export async function saveClientPreferences(
   input: ClientPreferencesInput,
 ): Promise<{ ok: true } | { ok: false; message: string }> {
-  const copy = getHabitacaoCopy();
+  const copy = getHabitacaoCopy(resolveUiLocale());
   const parsed = clientPreferencesSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
@@ -202,7 +203,7 @@ const PROPERTY_SELECT_FUTURE =
 export async function exploreActivePropertiesPage(
   params: ExplorePageParams = {},
 ): Promise<{ ok: true; data: ExplorePageResult } | { ok: false; message: string }> {
-  const copy = getHabitacaoCopy();
+  const copy = getHabitacaoCopy(resolveUiLocale());
   const offset = Math.max(0, params.offset ?? 0);
   const limit = Math.min(48, Math.max(1, params.limit ?? DEFAULT_EXPLORE_LIMIT));
   const futureOnly = Boolean(params.futureAvailability);
@@ -278,7 +279,7 @@ export async function exploreActiveProperties(
 export async function getActiveProperty(
   id: string,
 ): Promise<{ ok: true; data: HousingPropertyRow } | { ok: false; message: string }> {
-  const copy = getHabitacaoCopy();
+  const copy = getHabitacaoCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const enriched = await client
@@ -323,7 +324,7 @@ export async function getActiveProperty(
 export async function expressInterest(
   input: ExpressInterestInput,
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
-  const copy = getHabitacaoCopy();
+  const copy = getHabitacaoCopy(resolveUiLocale());
   const parsed = expressInterestSchema.safeParse(input);
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.interestError };
@@ -354,7 +355,7 @@ export async function listMyInterests(): Promise<
     }
   | { ok: false; message: string }
 > {
-  const copy = getHabitacaoCopy();
+  const copy = getHabitacaoCopy(resolveUiLocale());
   try {
     const client = createBrowserClient();
     const {

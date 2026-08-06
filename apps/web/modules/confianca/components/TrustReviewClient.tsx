@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
-import { getConfiancaCopy } from '../content/pt';
+import { getConfiancaCopy } from '../content';
 import {
   listPendingTrustDocuments,
   reviewTrustDocument,
@@ -17,7 +18,8 @@ import {
 } from '../services/trust-client';
 
 export function TrustReviewClient() {
-  const copy = getConfiancaCopy();
+  const { locale } = useLocale();
+  const copy = getConfiancaCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const allowed = sessionStatus === 'ready' && !!session?.permissions.includes('admin.panel');
   const accessPending = sessionStatus === 'loading';

@@ -28,6 +28,10 @@ export const shellCopyEn: ShellCopy = {
   userMenu: {
     profile: 'Profile',
     profileHint: 'My personal details',
+    centroConfiancaHint: 'Account status, UTS and next steps',
+    centroSegurancaHint: 'Email, phone, sessions and security level',
+    roleCountSingular: 'role',
+    roleCountPlural: 'roles',
     roles: 'My roles',
     rolesHint: 'Activate or manage account roles',
     patrimonios: 'My properties',
@@ -150,4 +154,69 @@ export const shellCopyEn: ShellCopy = {
   securityCenterHint: 'Email, phone, sessions, devices and account security level.',
   feedEndTitle: 'You reached the end of the current inventory',
   feedEndBody: 'New properties appear here as soon as they are published.',
+  feed: {
+    activateRoleTitle: 'Activate the Client role to see the feed',
+    activateRoleBody:
+      'The continuous feed shows properties, highlights and recommendations as soon as you have access to Housing.',
+    activateRoleCta: 'Activate role',
+    warmingTitle: 'Feed warming up',
+    warmingBody: 'No active listings yet. Publish your first property or explore Housing.',
+    exploreWithFilters: 'Explore with filters',
+    markers: {
+      new: { title: 'New properties', hint: 'Just joined the platform.' },
+      featured: {
+        title: 'Featured',
+        hint: 'Selection with premium presence.',
+        badge: 'Featured',
+      },
+      nearby: { title: 'Near you', hint: 'Relevant inventory to explore now.' },
+      recommend: {
+        title: 'Recommendations',
+        hint: 'Suggestions based on active inventory.',
+      },
+      trends: { title: 'Trends', hint: 'What the community is viewing.' },
+      premium: {
+        title: 'Premium properties',
+        hint: 'High-end properties.',
+        badge: 'Premium',
+      },
+      contracts: {
+        title: 'Contract activity',
+        hint: 'Formalization progressing on the platform.',
+        badge: 'Contracts',
+      },
+      news: { title: 'News', hint: 'Recent marketplace updates.' },
+      smart: {
+        title: 'Smart recommendations',
+        hint: 'Getting ready for the KAI engine.',
+        badge: 'KAI prep',
+      },
+      more: { title: 'More properties', hint: 'Keep exploring — the feed doesn’t end here.' },
+      sponsored: {
+        title: 'Sponsored listings',
+        hint: 'Campaigns and promoted inventory.',
+        badge: 'Sponsored',
+      },
+    },
+    linkCard: {
+      title: 'Explore housing with filters',
+      hint: 'Fine-tune location, purpose and typology without leaving the platform.',
+      cta: 'Open explore',
+    },
+  },
+  institutional: {
+    badge: 'Kuteka · v1.0 Beta',
+    backToLanding: 'Back to Landing',
+    contactKuteka: 'Contact Kuteka',
+  },
+  errors: {
+    routeErrorTitle: 'Error',
+    routeErrorBody: 'We are having trouble showing this page. Please try again.',
+    retry: 'Try again',
+    globalErrorTitle: 'Something went wrong',
+    globalErrorBody: 'An unexpected error occurred. You can try again.',
+    notFoundTitle: 'Page not found',
+    notFoundBody: 'The requested resource does not exist.',
+    goHome: 'Go to the foundation',
+  },
 };

@@ -3,7 +3,8 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Button, Text } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
-import { getPatrimoniosCopy } from '../content/pt';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getPatrimoniosCopy } from '../content';
 import type { LocalMediaDraft } from '../services/property-media-client';
 
 type PropertyMediaEditorProps = {
@@ -19,7 +20,8 @@ function newKey() {
 }
 
 export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMediaEditorProps) {
-  const copy = getPatrimoniosCopy();
+  const { locale } = useLocale();
+  const copy = getPatrimoniosCopy(locale);
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragOver, setDragOver] = useState(false);

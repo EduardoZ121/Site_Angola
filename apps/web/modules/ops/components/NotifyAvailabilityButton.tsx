@@ -4,8 +4,12 @@ import { useState } from 'react';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getOpsCopy } from '../content';
 
 export function NotifyAvailabilityButton({ propertyId }: { propertyId: string }) {
+  const { locale } = useLocale();
+  const copy = getOpsCopy(locale).notify;
   const [status, setStatus] = useState<'idle' | 'ok' | 'error'>('idle');
   const [busy, setBusy] = useState(false);
 
@@ -34,13 +38,9 @@ export function NotifyAvailabilityButton({ propertyId }: { propertyId: string })
         className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
         onClick={() => void requestNotify()}
       >
-        {status === 'ok' ? 'Notificação activada' : 'Notificar quando ficar disponível'}
+        {status === 'ok' ? copy.activatedLabel : copy.activateLabel}
       </button>
-      {status === 'error' ? (
-        <p className="kuteka-detail-meta">
-          Não conseguimos activar a notificação. Tente novamente.
-        </p>
-      ) : null}
+      {status === 'error' ? <p className="kuteka-detail-meta">{copy.error}</p> : null}
     </div>
   );
 }

@@ -1,10 +1,14 @@
+'use client';
+
 import { formatAoa } from '@/lib/format/aoa';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import {
-  CONSERVATION_LABELS,
-  CONSTRUCTION_LABELS,
-  MANAGEMENT_LABELS,
+  getAmenityLabels,
+  getConservationLabels,
+  getConstructionLabels,
+  getManagementLabels,
 } from '../lib/manual-ops-labels';
-import { AMENITY_LABELS, type EnrichedListing } from '../types';
+import type { EnrichedListing } from '../types';
 
 function yesNo(value: boolean | null | undefined): string | null {
   if (value == null) return null;
@@ -35,6 +39,11 @@ type PropertyFactsPanelProps = {
  * High-contrast facts panel — AA/AAA readable over cinematic atmosphere.
  */
 export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFactsPanelProps) {
+  const { locale } = useLocale();
+  const amenityLabels = getAmenityLabels(locale);
+  const conservationLabels = getConservationLabels(locale);
+  const constructionLabels = getConstructionLabels(locale);
+  const managementLabels = getManagementLabels(locale);
   const amenities = asAmenityList(row.amenities);
 
   return (
@@ -64,7 +73,7 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
         {row.management_level ? (
           <Fact
             label="Nível de gestão"
-            value={MANAGEMENT_LABELS[row.management_level] ?? row.management_level}
+            value={managementLabels[row.management_level] ?? row.management_level}
           />
         ) : null}
         <Fact label="Província" value={row.province || '—'} />
@@ -106,13 +115,13 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
         {row.conservation_state ? (
           <Fact
             label="Estado de conservação"
-            value={CONSERVATION_LABELS[row.conservation_state] ?? row.conservation_state}
+            value={conservationLabels[row.conservation_state] ?? row.conservation_state}
           />
         ) : null}
         {row.construction_status ? (
           <Fact
             label="Estado da construção"
-            value={CONSTRUCTION_LABELS[row.construction_status] ?? row.construction_status}
+            value={constructionLabels[row.construction_status] ?? row.construction_status}
           />
         ) : null}
         {row.renovated_year != null ? (
@@ -162,7 +171,7 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
           <ul className="mt-3 flex flex-wrap gap-2">
             {amenities.map((key) => (
               <li key={key} className="kuteka-detail-chip kuteka-detail-chip--accent">
-                {AMENITY_LABELS[key] ?? key}
+                {amenityLabels[key] ?? key}
               </li>
             ))}
           </ul>

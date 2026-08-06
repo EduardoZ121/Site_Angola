@@ -72,6 +72,8 @@ export const contratosCopyPt = {
   },
 } as const;
 
-export function getContratosCopy() {
-  return contratosCopyPt;
-}
+type DeepStringify<T> = {
+  [K in keyof T]: T[K] extends string ? string : DeepStringify<T[K]>;
+};
+
+export type ContratosCopy = DeepStringify<typeof contratosCopyPt>;

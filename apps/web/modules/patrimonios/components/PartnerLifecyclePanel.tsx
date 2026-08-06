@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import {
-  PARTNER_CATEGORY_LABELS,
-  PARTNER_LIFECYCLE_STAGES,
+  getPartnerCategoryLabels,
+  getPartnerLifecycleStages,
   mapDbLifecycleToStage,
 } from '@/modules/listings/lib/manual-ops-labels';
 
@@ -19,6 +20,9 @@ type PartnerProfile = {
  * Ciclo de vida do Parceiro Patrimonial + classificação A–G + ICK (Manual Cap.2–3).
  */
 export function PartnerLifecyclePanel() {
+  const { locale } = useLocale();
+  const partnerCategoryLabels = getPartnerCategoryLabels(locale);
+  const partnerLifecycleStages = getPartnerLifecycleStages(locale);
   const [profile, setProfile] = useState<PartnerProfile | null>(null);
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export function PartnerLifecyclePanel() {
   }, []);
 
   const activeStage = mapDbLifecycleToStage(profile?.partner_lifecycle);
-  const activeIdx = PARTNER_LIFECYCLE_STAGES.findIndex((s) => s.key === activeStage);
+  const activeIdx = partnerLifecycleStages.findIndex((s) => s.key === activeStage);
 
   return (
     <section className="kuteka-glass flex flex-col gap-4 p-5">
@@ -69,7 +73,7 @@ export function PartnerLifecyclePanel() {
         </span>
         <span className="rounded-kuteka border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-900">
           Categoria:{' '}
-          {PARTNER_CATEGORY_LABELS[profile?.partner_category ?? ''] ??
+          {partnerCategoryLabels[profile?.partner_category ?? ''] ??
             profile?.partner_category ??
             'Pendente'}
         </span>
@@ -82,7 +86,7 @@ export function PartnerLifecyclePanel() {
       </div>
 
       <ol className="grid gap-1.5 sm:grid-cols-3 lg:grid-cols-5">
-        {PARTNER_LIFECYCLE_STAGES.map((stage, idx) => {
+        {partnerLifecycleStages.map((stage, idx) => {
           const done = activeIdx >= 0 && idx <= activeIdx;
           const current = idx === activeIdx;
           return (
