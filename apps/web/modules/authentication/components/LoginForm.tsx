@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { loginSchema } from '@kuteka/validation';
 import { canAccessAdminPanel } from '@kuteka/auth';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { applyDestinationGate } from '../lib/destination-gate';
 import { signIn } from '../services/auth-client';
@@ -14,7 +15,8 @@ import { fetchAuthorizationContext } from '@kuteka/database';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
 export function LoginForm() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, type FormEvent } from 'react';
 import { Button, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import {
   issueEmailVerificationOtp,
@@ -23,7 +24,8 @@ function maskEmail(email: string): string {
 }
 
 export function VerifyPanel() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get('email') ?? '';

@@ -1,0 +1,220 @@
+import type { AuthCopy } from './pt';
+
+/** Auth UI copy — fr. */
+export const authCopyFr: AuthCopy = {
+  brand: {
+    name: 'Kuteka',
+  },
+  common: {
+    loading: 'Chargement…',
+    networkError: 'Impossible de terminer la demande. Vérifiez votre connexion et réessayez.',
+    configMissing:
+      'L’authentification n’est pas encore disponible dans cet environnement. Vous pouvez explorer la Landing ou revenir plus tard.',
+    nextStepRetry: 'Réessayez dans quelques minutes.',
+    rateLimited:
+      'Trop de demandes pour le moment. Attendez environ une heure puis réessayez — ou connectez-vous si vous avez déjà un compte.',
+    sessionExpired:
+      'Votre session a expiré ou n’a pas été démarrée. Connectez-vous à nouveau pour continuer.',
+    showPassword: 'Afficher',
+    hidePassword: 'Masquer',
+  },
+  register: {
+    title: 'Créer un compte',
+    subtitle: 'Commencez en quelques minutes. Un compte, vos rôles, votre espace Kuteka.',
+    email: {
+      label: 'E-mail',
+      hint: 'Nous utilisons l’e-mail pour protéger et récupérer le compte.',
+      placeholder: 'nom@email.com',
+    },
+    password: {
+      label: 'Mot de passe',
+      placeholder: 'Créez un mot de passe sécurisé',
+      ruleMin: 'Au moins 8 caractères',
+      ruleUpper: 'Une lettre majuscule',
+      ruleNumber: 'Un chiffre',
+    },
+    confirm: {
+      label: 'Confirmer le mot de passe',
+      placeholder: 'Répétez le mot de passe',
+    },
+    terms: {
+      label: 'J’accepte les Conditions d’utilisation',
+      linkLabel: 'Conditions d’utilisation',
+    },
+    submit: 'Créer un compte',
+    submitLoading: 'Création du compte…',
+    submitSuccess: 'Compte créé',
+    ctaLogin: 'Déjà un compte ? Se connecter',
+    duplicate: {
+      title: 'Cet e-mail a déjà un compte Kuteka.',
+      body: 'Au lieu de créer un autre compte, connectez-vous ou récupérez l’accès avec le même e-mail.',
+      login: 'Se connecter',
+      recover: 'Récupérer l’accès',
+    },
+  },
+  verify: {
+    title: 'Vérifiez votre e-mail',
+    subtitle:
+      'Confirmez avec le code à 6 chiffres ou ouvrez le lien dans l’e-mail Kuteka. Les deux méthodes sont valides.',
+    sentTo: 'Envoyé à',
+    dualHint:
+      'Préférez saisir le code OTP ci-dessous si le lien ne s’ouvre pas sur votre appareil ou client de messagerie.',
+    otpLabel: 'Code à 6 chiffres',
+    otpPlaceholder: '000000',
+    otpSubmit: 'Confirmer avec le code',
+    orLink: 'ou',
+    linkHint: 'Vous pouvez aussi ouvrir le lien de confirmation dans l’e-mail (Méthode A).',
+    sandboxHint: 'Environnement de test : code {code}',
+    resend: 'Renvoyer l’e-mail et le code',
+    resendLoading: 'Renvoi…',
+    resendSuccess: 'E-mail et code renvoyés. Vérifiez aussi les spams.',
+    cooldown: 'Vous pourrez renvoyer dans {seconds}s.',
+    confirming: 'Nous confirmons votre compte…',
+    already: {
+      title: 'Votre compte est déjà confirmé.',
+      cta: 'Entrer dans Kuteka',
+    },
+  },
+  login: {
+    title: 'Se connecter',
+    subtitle: 'Bon retour dans votre espace Kuteka.',
+    email: {
+      label: 'E-mail',
+      placeholder: 'nom@email.com',
+    },
+    password: {
+      label: 'Mot de passe',
+      show: 'Afficher',
+      placeholder: 'Votre mot de passe',
+    },
+    submit: 'Se connecter',
+    submitLoading: 'Connexion…',
+    submitSuccess: 'Session ouverte',
+    ctaRegister: 'Créer un compte',
+    ctaRecover: 'Mot de passe oublié ?',
+    errorGeneric:
+      'Impossible de se connecter. Vérifiez l’e-mail et le mot de passe. Si besoin, utilisez Récupérer l’accès.',
+  },
+  logout: {
+    title: 'Déconnexion',
+    pending: 'Fermeture sécurisée de votre session…',
+    done: 'Vous êtes déconnecté. Vous pouvez vous reconnecter quand vous voulez.',
+    expired: 'Votre session a expiré. Connectez-vous à nouveau pour continuer.',
+    action: 'Se déconnecter',
+  },
+  recover: {
+    request: {
+      title: 'Récupérer l’accès',
+      subtitle: 'Pas d’inquiétude. Nous vous aidons à récupérer l’accès en toute sécurité.',
+      channelLabel: 'Comment préférez-vous récupérer ?',
+      channelEmail: 'Par e-mail',
+      channelPhone: 'Par téléphone (SMS)',
+      channelBoth: 'E-mail et téléphone',
+      email: {
+        label: 'E-mail',
+      },
+      phone: {
+        label: 'Téléphone',
+        placeholder: '+2449XXXXXXXX',
+      },
+      otpLabel: 'Code à 6 chiffres',
+      otpSubmit: 'Valider le code',
+      sendOtp: 'Envoyer le code SMS',
+      phoneSuccess:
+        'Code SMS validé (sandbox). Définissez un nouveau mot de passe lorsque vous avez une session, ou utilisez aussi l’e-mail.',
+      phonePrepared:
+        'La récupération par SMS est préparée (sandbox). En production, elle utilisera le fournisseur SMS Kuteka.',
+      submit: 'Envoyer les instructions',
+      submitLoading: 'Envoi…',
+      back: 'Retour à Se connecter',
+      noemail: 'Pas d’accès à l’e-mail ? Contact',
+      success: 'S’il existe un compte avec cet e-mail, nous avons envoyé des instructions.',
+    },
+    confirm: {
+      title: 'Nouveau mot de passe',
+      subtitle: 'Définissez un mot de passe sécurisé pour récupérer l’accès à votre compte.',
+      password: {
+        label: 'Mot de passe',
+      },
+      confirm: {
+        label: 'Confirmer le mot de passe',
+      },
+      submit: 'Enregistrer',
+      submitLoading: 'Enregistrement…',
+      submitSuccess: 'Mot de passe mis à jour',
+    },
+  },
+  onboarding: {
+    welcomeTitle: 'Bienvenue sur Kuteka',
+    welcomeSubtitle: 'Votre compte est presque prêt. Terminons une configuration rapide.',
+    roles: {
+      title: 'Comment voulez-vous utiliser Kuteka ?',
+      hint: 'Indiquez comment vous souhaitez utiliser Kuteka. Vous pourrez modifier ou ajouter des rôles plus tard.',
+      client: 'Client',
+      clientDesc: 'Rechercher, réserver ou gérer votre parcours logement.',
+      partner: 'Partenaire patrimonial',
+      partnerDesc: 'Publier et gérer des patrimoines.',
+      multiRole:
+        'Vous pouvez en choisir un ou les deux. Le même compte peut cumuler plusieurs rôles.',
+      selectAtLeastOne: 'Choisissez au moins un rôle pour continuer.',
+      agentNote: 'Agent et Administrateur sont attribués par Kuteka.',
+      submit: 'Continuer',
+      submitLoading: 'Activation…',
+      success: 'Votre compte est prêt. Bienvenue sur Kuteka.',
+    },
+    profile: {
+      title: 'Comment préférez-vous être appelé ?',
+      subtitle: 'Ce nom apparaît dans votre espace Kuteka. Vous pourrez le modifier ensuite.',
+      displayName: {
+        label: 'Nom d’affichage',
+      },
+      submit: 'Continuer',
+      submitLoading: 'Enregistrement…',
+      skip: 'Continuer sans nom',
+    },
+  },
+  app: {
+    title: 'Tableau de bord Kuteka',
+    welcome: 'Bienvenue',
+    welcomeAnonymous: 'Bienvenue sur la plateforme',
+    emailLabel: 'E-mail',
+    userFallback: 'Utilisateur Kuteka',
+    active: 'Compte actif',
+    accountStatusTitle: 'État du compte',
+    accountStatusHint: 'Compte prêt à utiliser les modules disponibles.',
+    accountSummaryAria: 'Résumé du compte',
+    dashboardHint: 'La plateforme est prête — choisissez une action ou ouvrez un module.',
+    todayTitle: 'Que souhaitez-vous faire aujourd’hui ?',
+    todayHint: 'Raccourcis vers les actions les plus utilisées.',
+    quickActivateProperty: 'Activer un patrimoine',
+    quickExploreHousing: 'Explorer le logement',
+    quickAgent: 'Espace agent',
+    quickAdmin: 'Administration',
+    quickContracts: 'Contrats',
+    quickTrust: 'Vérifier le compte',
+    quickRoles: 'Gérer les rôles',
+    experienceHint: 'Cockpit et flux de cette expérience — changez de rôle dans le menu du compte.',
+    feedPreparing: 'Préparation de l’environnement continu…',
+    rolesLabel: 'Rôles actifs',
+    rolesHint: 'Le même compte peut cumuler plusieurs rôles.',
+    noRoles: 'Aucun rôle actif pour le moment',
+    modulesTitle: 'Modules de la plateforme',
+    modulesHint: 'Accès direct aux modules du noyau.',
+    upcomingTitle: 'Modules',
+    moduleAvailable: 'Actif',
+    moduleUnavailable: 'Bientôt',
+    loadError: 'Nous avons du mal à ouvrir votre espace. Réessayez dans un instant.',
+    stub: 'Utilisez les modules actifs avec le même compte et vos rôles.',
+    ctaLanding: 'Retour à la Landing',
+    ctaProfile: 'Profil',
+    ctaRoles: 'Gérer les rôles',
+    adminTitle: 'Administration',
+    adminStub:
+      'Espace admin (permission admin.panel) : résumé opérationnel, utilisateurs et revue Confiance.',
+    adminForbidden:
+      'Vous n’avez pas la permission pour cette zone (admin.panel). Si c’est une erreur, contactez Kuteka.',
+    configMissing:
+      'La zone authentifiée nécessite la configuration Supabase. Définissez les variables d’environnement et réessayez.',
+    loginRequired: 'Vous devez vous connecter pour accéder à cette zone.',
+  },
+};

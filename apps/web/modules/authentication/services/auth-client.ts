@@ -1,7 +1,7 @@
 import type { SelfServeRoleCode } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { isSupabaseConfigured } from '../lib/supabase-config';
-import { getAuthCopy } from '../content';
+import { getAuthCopy, resolveAuthLocale } from '../content';
 
 export type AuthClientResult<T = void> =
   | { ok: true; data: T }
@@ -11,13 +11,15 @@ export type AuthClientResult<T = void> =
       code?: 'duplicate_email' | 'generic' | 'config' | 'network' | 'rate_limited';
     };
 
-const copy = getAuthCopy();
+function authCopy() {
+  return getAuthCopy(resolveAuthLocale());
+}
 
 function configError(): AuthClientResult<never> {
   return {
     ok: false,
     code: 'config',
-    message: copy.common.configMissing,
+    message: authCopy().common.configMissing,
   };
 }
 
@@ -40,7 +42,7 @@ function mapAuthError(
   const msg = error.message ?? '';
   const code = error.code ?? '';
   if (isRateLimitMessage(`${msg} ${code}`, error.status)) {
-    return { ok: false, code: 'rate_limited', message: copy.common.rateLimited };
+    return { ok: false, code: 'rate_limited', message: authCopy().common.rateLimited };
   }
   if (
     /already|registered|exists|user_already/i.test(msg) ||
@@ -50,7 +52,7 @@ function mapAuthError(
     return {
       ok: false,
       code: 'duplicate_email',
-      message: `${copy.register.duplicate.title} ${copy.register.duplicate.body}`,
+      message: `${authCopy().register.duplicate.title} ${authCopy().register.duplicate.body}`,
     };
   }
   return {
@@ -63,10 +65,10 @@ function mapAuthError(
 function mapUnknownError(err: unknown, fallback: string): AuthClientResult<never> {
   const msg = err instanceof Error ? err.message : String(err);
   if (isRateLimitMessage(msg)) {
-    return { ok: false, code: 'rate_limited', message: copy.common.rateLimited };
+    return { ok: false, code: 'rate_limited', message: authCopy().common.rateLimited };
   }
   if (/fetch|network|Failed to fetch|Load failed/i.test(msg)) {
-    return { ok: false, code: 'network', message: copy.common.networkError };
+    return { ok: false, code: 'network', message: authCopy().common.networkError };
   }
   return { ok: false, code: 'generic', message: fallback };
 }
@@ -98,7 +100,7 @@ export async function signUp(input: {
     });
 
     if (error) {
-      return mapAuthError(error, copy.common.networkError);
+      return mapAuthError(error, authCopy().common.networkError);
     }
 
     // Supabase may return empty identities for existing email (anti-enumeration on some projects)
@@ -106,7 +108,7 @@ export async function signUp(input: {
       return {
         ok: false,
         code: 'duplicate_email',
-        message: `${copy.register.duplicate.title} ${copy.register.duplicate.body}`,
+        message: `${authCopy().register.duplicate.title} ${authCopy().register.duplicate.body}`,
       };
     }
 
@@ -121,7 +123,10 @@ export async function signUp(input: {
       },
     };
   } catch (err) {
-    return mapUnknownError(err, `${copy.common.networkError} ${copy.common.nextStepRetry}`);
+    return mapUnknownError(
+      err,
+      `${authCopy().common.networkError} ${authCopy().common.nextStepRetry}`,
+    );
   }
 }
 
@@ -140,19 +145,19 @@ export async function signIn(input: {
 
     if (error) {
       // R6 — generic login message
-      return { ok: false, code: 'generic', message: copy.login.errorGeneric };
+      return { ok: false, code: 'generic', message: authCopy().login.errorGeneric };
     }
 
     // Ensure session is persisted before the next navigation (static hosts).
     if (!data.session) {
       const { data: again } = await client.auth.getSession();
       if (!again.session) {
-        return { ok: false, code: 'generic', message: copy.common.sessionExpired };
+        return { ok: false, code: 'generic', message: authCopy().common.sessionExpired };
       }
     }
     return { ok: true, data: undefined };
   } catch (err) {
-    return mapUnknownError(err, copy.login.errorGeneric);
+    return mapUnknownError(err, authCopy().login.errorGeneric);
   }
 }
 
@@ -166,12 +171,12 @@ export async function signOut(): Promise<AuthClientResult> {
       return {
         ok: false,
         code: 'generic',
-        message: `${copy.common.networkError} ${copy.common.nextStepRetry}`,
+        message: `${authCopy().common.networkError} ${authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };
   } catch (err) {
-    return mapUnknownError(err, copy.common.networkError);
+    return mapUnknownError(err, authCopy().common.networkError);
   }
 }
 
@@ -193,7 +198,7 @@ export async function resetPasswordForEmail(input: {
     return { ok: true, data: undefined };
   } catch {
     // Network: still avoid enumeration; prefer guided retry
-    return { ok: false, code: 'network', message: copy.common.networkError };
+    return { ok: false, code: 'network', message: authCopy().common.networkError };
   }
 }
 
@@ -207,12 +212,12 @@ export async function updatePassword(input: { password: string }): Promise<AuthC
       return {
         ok: false,
         code: 'generic',
-        message: `Não foi possível actualizar a password. ${copy.common.nextStepRetry}`,
+        message: `Não foi possível actualizar a password. ${authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };
   } catch (err) {
-    return mapUnknownError(err, copy.common.networkError);
+    return mapUnknownError(err, authCopy().common.networkError);
   }
 }
 
@@ -226,11 +231,14 @@ export async function resendVerification(input: { email: string }): Promise<Auth
       email: input.email,
     });
     if (error) {
-      return mapAuthError(error, `Não foi possível reenviar o email. ${copy.common.nextStepRetry}`);
+      return mapAuthError(
+        error,
+        `Não foi possível reenviar o email. ${authCopy().common.nextStepRetry}`,
+      );
     }
     return { ok: true, data: undefined };
   } catch (err) {
-    return mapUnknownError(err, copy.common.networkError);
+    return mapUnknownError(err, authCopy().common.networkError);
   }
 }
 
@@ -268,7 +276,10 @@ export async function issueEmailVerificationOtp(input: {
       if (supabaseOtpRequested) {
         return { ok: true, data: { supabaseOtpRequested: true } };
       }
-      return mapAuthError(error, `Não foi possível enviar o código. ${copy.common.nextStepRetry}`);
+      return mapAuthError(
+        error,
+        `Não foi possível enviar o código. ${authCopy().common.nextStepRetry}`,
+      );
     }
     const row = data as { ok?: boolean; challengeId?: string; sandboxCode?: string };
     return {
@@ -283,7 +294,7 @@ export async function issueEmailVerificationOtp(input: {
     if (supabaseOtpRequested) {
       return { ok: true, data: { supabaseOtpRequested: true } };
     }
-    return mapUnknownError(err, copy.common.networkError);
+    return mapUnknownError(err, authCopy().common.networkError);
   }
 }
 
@@ -327,7 +338,7 @@ export async function verifyEmailOtpCode(input: {
         return {
           ok: false,
           code: 'generic',
-          message: `Código inválido. ${copy.common.nextStepRetry}`,
+          message: `Código inválido. ${authCopy().common.nextStepRetry}`,
         };
       }
       const row = data as { ok?: boolean; error?: string };
@@ -343,7 +354,7 @@ export async function verifyEmailOtpCode(input: {
             : 'Código incorrecto. Tente novamente.',
       };
     } catch (err) {
-      return mapUnknownError(err, copy.common.networkError);
+      return mapUnknownError(err, authCopy().common.networkError);
     }
   }
 
@@ -366,7 +377,7 @@ export async function activateSelfServeRoles(
       error: sessionError,
     } = await client.auth.getSession();
     if (sessionError || !session) {
-      return { ok: false, code: 'generic', message: copy.common.sessionExpired };
+      return { ok: false, code: 'generic', message: authCopy().common.sessionExpired };
     }
 
     const { error } = await client.rpc('activate_self_serve_roles', {
@@ -375,17 +386,17 @@ export async function activateSelfServeRoles(
     if (error) {
       const m = (error.message || '').toLowerCase();
       if (m.includes('authentication required') || m.includes('jwt') || error.code === 'PGRST301') {
-        return { ok: false, code: 'generic', message: copy.common.sessionExpired };
+        return { ok: false, code: 'generic', message: authCopy().common.sessionExpired };
       }
       return {
         ok: false,
         code: 'generic',
-        message: `Não foi possível activar os papéis. ${error.message || copy.common.nextStepRetry}`,
+        message: `Não foi possível activar os papéis. ${error.message || authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };
   } catch (err) {
-    return mapUnknownError(err, copy.common.networkError);
+    return mapUnknownError(err, authCopy().common.networkError);
   }
 }
 
@@ -413,11 +424,11 @@ export async function updateDisplayName(displayName: string): Promise<AuthClient
       return {
         ok: false,
         code: 'generic',
-        message: `Não foi possível guardar o nome. ${copy.common.nextStepRetry}`,
+        message: `Não foi possível guardar o nome. ${authCopy().common.nextStepRetry}`,
       };
     }
     return { ok: true, data: undefined };
   } catch (err) {
-    return mapUnknownError(err, copy.common.networkError);
+    return mapUnknownError(err, authCopy().common.networkError);
   }
 }

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
 import { recoverSchema } from '@kuteka/validation';
 import { Button } from '@kuteka/ui';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { resetPasswordForEmail } from '../services/auth-client';
 import { issueSecurityOtp, verifySecurityOtp } from '@/modules/seguranca/services/security-client';
@@ -12,7 +13,8 @@ import { SubmitButton, type SubmitState } from './SubmitButton';
 type RecoverChannel = 'email' | 'phone' | 'both';
 
 export function RecoverRequestForm() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const [channel, setChannel] = useState<RecoverChannel>('email');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');

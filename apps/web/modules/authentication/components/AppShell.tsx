@@ -6,13 +6,18 @@ import { useEffect, useRef, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
-import { LocaleProvider } from '@/modules/i18n/LocaleProvider';
+import { LocaleProvider, useLocale } from '@/modules/i18n/LocaleProvider';
+import { normalizeLocale, type AppLocale } from '@/modules/i18n/types';
 import { PlatformShell } from '@/modules/shell/components/PlatformShell';
 import { RoleExperienceProvider } from '@/modules/shell/components/RoleExperienceProvider';
 import { getAuthCopy } from '../content';
 import { isPublicSupabaseConfigured } from '../lib/public-config';
 import { AppSessionContext, type AppSessionData } from './app-session';
 import { BrandMark } from './BrandMark';
+
+function normalizeLocaleSafe(value: string): AppLocale {
+  return normalizeLocale(value);
+}
 
 type GateState = 'booting' | 'ready' | 'anon' | 'config';
 
@@ -77,14 +82,9 @@ function writeSessionCache(data: AppSessionData | null) {
   }
 }
 
-/**
- * Auth gate for /app + Platform Shell.
- * Stability rule: never flip sessionStatus back to loading after first ready
- * (TOKEN_REFRESHED must not remount module trees / skeletons).
- * Session cache: restore profile/permissions on first paint to avoid nav/Forbidden flash.
- */
-export function AppShell({ children }: { children: ReactNode }) {
-  const copy = getAuthCopy();
+function AppShellInner({ children }: { children: ReactNode }) {
+  const { locale, setLocale } = useLocale();
+  const copy = getAuthCopy(locale);
   const cachedRef = useRef<AppSessionData | null | undefined>(undefined);
   if (cachedRef.current === undefined) {
     cachedRef.current =
@@ -173,6 +173,15 @@ export function AppShell({ children }: { children: ReactNode }) {
         setSessionError(null);
         setSessionStatus('ready');
         sessionReadyOnce.current = true;
+        // Only seed from profile when the user has no explicit local preference yet.
+        try {
+          const stored = window.localStorage.getItem('kuteka-locale');
+          if (!stored && next.locale) {
+            setLocale(normalizeLocaleSafe(next.locale));
+          }
+        } catch {
+          /* ignore */
+        }
       } catch {
         if (!cancelled && gen === loadGeneration.current) {
           setSessionError(copy.app.loadError);
@@ -212,8 +221,6 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       setGate('ready');
 
-      // INITIAL_SESSION duplicates getSession — ignore after first resolve.
-      // TOKEN_REFRESHED / USER_UPDATED must refresh silently (no skeleton).
       if (event === 'INITIAL_SESSION' && sessionReadyOnce.current) {
         return;
       }
@@ -267,7 +274,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="relative z-10 flex max-w-lg flex-col gap-4 rounded-kuteka border border-white/15 bg-white/95 p-6 shadow-xl">
           <BrandMark tone="dark" href="/" size="md" variant="inline" />
           <Heading level={1}>{copy.login.title}</Heading>
-          <Text>É necessário entrar para aceder a esta área.</Text>
+          <Text>{copy.app.loginRequired}</Text>
           <Link
             href="/auth/entrar?next=%2Fapp"
             className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
@@ -279,19 +286,33 @@ export function AppShell({ children }: { children: ReactNode }) {
     );
   }
 
-  // booting OR ready — keep PlatformShell mounted (no boot flash swap).
   return (
     <AppSessionContext.Provider value={{ session, status: sessionStatus, error: sessionError }}>
-      <LocaleProvider profileLocale={session?.locale ?? null}>
-        <RoleExperienceProvider
-          roles={session?.roles ?? []}
-          permissions={session?.permissions ?? []}
-        >
-          <PlatformShell session={session} sessionStatus={sessionStatus}>
-            {children}
-          </PlatformShell>
-        </RoleExperienceProvider>
-      </LocaleProvider>
+      <RoleExperienceProvider roles={session?.roles ?? []} permissions={session?.permissions ?? []}>
+        <PlatformShell session={session} sessionStatus={sessionStatus}>
+          {children}
+        </PlatformShell>
+      </RoleExperienceProvider>
     </AppSessionContext.Provider>
   );
+}
+
+/**
+ * Auth gate for /app + Platform Shell.
+ * LocaleProvider wraps everything so anon/config/error screens follow the selected language.
+ */
+export function AppShell({ children }: { children: ReactNode }) {
+  const cached =
+    typeof window !== 'undefined' && peekStoredAuthSession() ? readSessionCache() : null;
+
+  return (
+    <LocaleProvider profileLocale={cached?.locale ?? null}>
+      <AppShellSyncedProfile>{children}</AppShellSyncedProfile>
+    </LocaleProvider>
+  );
+}
+
+/** Re-seed LocaleProvider when session profile locale arrives (via key remount avoided — use effect in provider). */
+function AppShellSyncedProfile({ children }: { children: ReactNode }) {
+  return <AppShellInner>{children}</AppShellInner>;
 }

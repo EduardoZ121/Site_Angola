@@ -6,6 +6,7 @@ import { canAccessAdminPanel } from '@kuteka/auth';
 import { fetchAuthorizationContext } from '@kuteka/database';
 import { newPasswordSchema, passwordRules } from '@kuteka/validation';
 import { createBrowserClient } from '@/lib/supabase/client';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { applyDestinationGate } from '../lib/destination-gate';
 import { isSupabaseConfigured } from '../lib/supabase-config';
@@ -14,7 +15,8 @@ import { PasswordRules } from './PasswordRules';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
 export function RecoverConfirmForm() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');

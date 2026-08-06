@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '@/modules/authentication/content';
 import { isSupabaseConfigured } from '@/modules/authentication/lib/supabase-config';
 import { signOut } from '@/modules/authentication/services/auth-client';
@@ -13,7 +14,8 @@ import { signOut } from '@/modules/authentication/services/auth-client';
  * F4 — logout page (static-export compatible; replaces Route Handler).
  */
 export default function LogoutPage() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const [done, setDone] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -47,7 +49,7 @@ export default function LogoutPage() {
       <Text>{done ? copy.logout.done : copy.logout.pending}</Text>
       {error ? <Text className="text-red-700">{error}</Text> : null}
       <Link href="/" className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}>
-        Voltar à Landing
+        {copy.app.ctaLanding}
       </Link>
     </main>
   );

@@ -129,4 +129,25 @@ export const shellCopyFr: ShellCopy = {
     switch: 'Changer de rôle',
     home: 'Aller à l’accueil',
   },
+  forbidden: {
+    activateRole: 'Activer un rôle',
+    goDashboard: 'Aller au tableau de bord',
+    verifyAccount: 'Vérifier le compte',
+    continueElsewhere: 'Continuer autrement',
+  },
+  helpExtra: {
+    terms: 'Conditions d’utilisation',
+    privacy: 'Politique de confidentialité',
+    securityCenter: 'Centre de Sécurité',
+    downloadManualPdf: 'Télécharger le Manuel (PDF)',
+    downloadManualWord: 'Télécharger le Manuel (Word)',
+    videosPending:
+      'Les tutoriels vidéo seront publiés progressivement. En attendant, utilisez les tutoriels écrits de ce manuel et les raccourcis ci-dessus.',
+  },
+  brandTagline: 'Gestion patrimoniale',
+  loadingMore: 'Chargement…',
+  loadingContent: 'Chargement du contenu…',
+  securityCenterHint: 'E-mail, téléphone, sessions, appareils et niveau de sécurité du compte.',
+  feedEndTitle: 'Vous avez atteint la fin de l’inventaire actuel',
+  feedEndBody: 'Les nouveaux patrimoines apparaissent ici dès qu’ils sont publiés.',
 };

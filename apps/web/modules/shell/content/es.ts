@@ -129,4 +129,25 @@ export const shellCopyEs: ShellCopy = {
     switch: 'Cambiar de rol',
     home: 'Ir al inicio',
   },
+  forbidden: {
+    activateRole: 'Activar rol',
+    goDashboard: 'Ir al panel',
+    verifyAccount: 'Verificar cuenta',
+    continueElsewhere: 'Continuar por otro camino',
+  },
+  helpExtra: {
+    terms: 'Términos de Uso',
+    privacy: 'Política de Privacidad',
+    securityCenter: 'Centro de Seguridad',
+    downloadManualPdf: 'Descargar Manual (PDF)',
+    downloadManualWord: 'Descargar Manual (Word)',
+    videosPending:
+      'Los tutoriales en vídeo se publicarán de forma progresiva. Mientras tanto, use los tutoriales escritos de este manual y los atajos de arriba.',
+  },
+  brandTagline: 'Gestión patrimonial',
+  loadingMore: 'Cargando más…',
+  loadingContent: 'Cargando contenido…',
+  securityCenterHint: 'Email, teléfono, sesiones, dispositivos y nivel de seguridad de la cuenta.',
+  feedEndTitle: 'Llegó al final del inventario actual',
+  feedEndBody: 'Los nuevos patrimonios aparecen aquí en cuanto se publiquen.',
 };

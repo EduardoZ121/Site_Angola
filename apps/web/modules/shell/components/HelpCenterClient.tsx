@@ -121,9 +121,9 @@ export function HelpCenterClient({ manualMarkdown }: Props) {
     { label: h.howPublish, href: '/app/patrimonios/novo' },
     { label: h.howBuy, href: '/app/habitacao/explorar' },
     { label: h.howRent, href: '/app/habitacao/explorar' },
-    { label: 'Termos de Utilização', href: '/termos' },
-    { label: 'Política de Privacidade', href: '/privacidade' },
-    { label: 'Centro de Segurança', href: '/app/centro-seguranca' },
+    { label: shell.helpExtra.terms, href: '/termos' },
+    { label: shell.helpExtra.privacy, href: '/privacidade' },
+    { label: shell.helpExtra.securityCenter, href: '/app/centro-seguranca' },
   ];
 
   return (
@@ -138,14 +138,14 @@ export function HelpCenterClient({ manualMarkdown }: Props) {
             download
             className={cn(buttonVariants({ variant: 'primary', size: 'sm' }))}
           >
-            Descarregar Manual (PDF)
+            {shell.helpExtra.downloadManualPdf}
           </a>
           <a
             href="/docs/MANUAL_UTILIZADOR_v1.docx"
             download
             className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
           >
-            Descarregar Manual (Word)
+            {shell.helpExtra.downloadManualWord}
           </a>
         </div>
       </header>
@@ -177,10 +177,7 @@ export function HelpCenterClient({ manualMarkdown }: Props) {
 
       <section className="kuteka-detail-panel flex flex-col gap-3 p-5" id="videos">
         <h2 className="kuteka-detail-title">{h.videos}</h2>
-        <p className="kuteka-detail-body">
-          Os tutoriais em vídeo serão publicados progressivamente. Até lá, use os tutoriais escritos
-          deste manual (§14) e os atalhos acima.
-        </p>
+        <p className="kuteka-detail-body">{shell.helpExtra.videosPending}</p>
         <Link
           href="/contacto"
           className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}

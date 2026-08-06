@@ -3,12 +3,14 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import { updateDisplayName } from '../services/auth-client';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
 export function OnboardingProfileForm() {
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get('next');

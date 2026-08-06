@@ -2,19 +2,17 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { AuthShell } from '@/modules/authentication/components/AuthShell';
 import { RecoverConfirmForm } from '@/modules/authentication/components/RecoverConfirmForm';
-import { getAuthCopy } from '@/modules/authentication/content';
+import { AuthLoadingFallback } from '@/modules/authentication/components/AuthLoadingFallback';
 
 export const metadata: Metadata = {
-  title: 'Nova password',
-  description: 'Defina uma nova password Kuteka.',
+  title: 'Kuteka · New password',
   robots: { index: false, follow: false },
 };
 
 export default function RecoverConfirmPage() {
-  const copy = getAuthCopy();
   return (
-    <AuthShell title={copy.recover.confirm.title} subtitle={copy.recover.confirm.subtitle}>
-      <Suspense fallback={<p className="text-slate-500">{copy.common.loading}</p>}>
+    <AuthShell kind="recoverConfirm">
+      <Suspense fallback={<AuthLoadingFallback />}>
         <RecoverConfirmForm />
       </Suspense>
     </AuthShell>

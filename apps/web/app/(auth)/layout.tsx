@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
+import { LocaleProvider } from '@/modules/i18n/LocaleProvider';
 import { AuthShell } from '@/modules/authentication/components/AuthShell';
 
 /**
- * Auth route group layout — shell chrome is applied per-page via AuthShell
- * so each screen can supply its own title/subtitle (one mission per screen).
+ * Auth route group — LocaleProvider so titles/forms follow the selected language.
  */
 export default function AuthLayout({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+  return <LocaleProvider>{children}</LocaleProvider>;
 }
 
 export { AuthShell };

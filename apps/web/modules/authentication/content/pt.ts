@@ -195,6 +195,7 @@ export const authCopyPt = {
       'Não tem permissão para aceder a esta área (admin.panel). Se acredita que isto é um erro, contacte a Kuteka.',
     configMissing:
       'A área autenticada requer a configuração do Supabase. Defina as variáveis de ambiente e volte a tentar.',
+    loginRequired: 'É necessário entrar para aceder a esta área.',
   },
 } as const;
 

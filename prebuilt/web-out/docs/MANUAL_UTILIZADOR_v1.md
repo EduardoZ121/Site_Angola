@@ -10,18 +10,18 @@ Contacto de suporte: contacto@kutekalink.com · Centro de Ajuda na app: `/app/aj
 
 Este manual ensina a utilizar a plataforma Kuteka na versão **1.0 Beta**. Está organizado por **papéis** (Cliente, Parceiro Patrimonial, Agente Certificado, Prestador, Administrador e Super Administrador) e por **módulos transversais** (conta, identidade KIS, segurança, contratos e pagamentos).
 
-| Se pretender… | Vá à secção |
-| --- | --- |
-| Criar conta e começar | §2 e §3 |
-| Procurar casa / arrendar / comprar | §4 |
-| Publicar e gerir imóveis | §5 |
-| Mediar como agente | §6 |
-| Responder a pedidos de serviço | §7 |
-| Operar administração | §8 |
-| Parametrizar a plataforma | §9 |
-| Completar KYC / confiança | §10 |
-| Proteger a conta | §11 |
-| Respostas rápidas | §15 FAQ e §16 Glossário |
+| Se pretender…                      | Vá à secção             |
+| ---------------------------------- | ----------------------- |
+| Criar conta e começar              | §2 e §3                 |
+| Procurar casa / arrendar / comprar | §4                      |
+| Publicar e gerir imóveis           | §5                      |
+| Mediar como agente                 | §6                      |
+| Responder a pedidos de serviço     | §7                      |
+| Operar administração               | §8                      |
+| Parametrizar a plataforma          | §9                      |
+| Completar KYC / confiança          | §10                     |
+| Proteger a conta                   | §11                     |
+| Respostas rápidas                  | §15 FAQ e §16 Glossário |
 
 Na Beta, alguns pagamentos correm em **sandbox** (simulação). Sempre que isso afecte o que vê no ecrã, o manual indica-o explicitamente.
 
@@ -56,9 +56,9 @@ Produção pública: **https://kutekalink.com**
 
 Após o registo, a Kuteka pede confirmação em `/auth/verificar`:
 
-| Método | Como funciona |
-| --- | --- |
-| **A — Link** | Abra o email da Kuteka e clique no link de confirmação. |
+| Método             | Como funciona                                                       |
+| ------------------ | ------------------------------------------------------------------- |
+| **A — Link**       | Abra o email da Kuteka e clique no link de confirmação.             |
 | **B — Código OTP** | Introduza na aplicação o código de **6 dígitos** recebido no email. |
 
 Se o link não abrir (cliente de correio, telemóvel, etc.), use o código. Pode **reenviar** email e código com intervalo de segurança.
@@ -143,14 +143,14 @@ Em `/app/financeiro` consulte (conforme disponibilidade na sua conta):
 
 ### 4.5 Serviços comerciais (Cliente)
 
-| Serviço | Rota | O que faz |
-| --- | --- | --- |
-| Mudança Inteligente | `/app/mudanca` | Pedido assistido de mudança com match |
-| Encontrar Casa | `/app/encontrar-casa` | Procura prioritária assistida |
-| Concierge | `/app/concierge` | Pedidos de apoio personalizado |
-| Garantia Kuteka | `/app/garantia` | Activação de garantia mensal (sandbox na Beta) |
-| Assistência 24h | `/app/assistencia` | Pedido urgente ao imóvel |
-| Prestadores | `/app/servicos` | Marketplace de orçamentos |
+| Serviço             | Rota                  | O que faz                                      |
+| ------------------- | --------------------- | ---------------------------------------------- |
+| Mudança Inteligente | `/app/mudanca`        | Pedido assistido de mudança com match          |
+| Encontrar Casa      | `/app/encontrar-casa` | Procura prioritária assistida                  |
+| Concierge           | `/app/concierge`      | Pedidos de apoio personalizado                 |
+| Garantia Kuteka     | `/app/garantia`       | Activação de garantia mensal (sandbox na Beta) |
+| Assistência 24h     | `/app/assistencia`    | Pedido urgente ao imóvel                       |
+| Prestadores         | `/app/servicos`       | Marketplace de orçamentos                      |
 
 Na Beta, a cobrança destes serviços passa pelo **Kuteka Pay em sandbox** até o gateway real estar activo. O fluxo de estados (pedido → pagamento → execução) já é o de produção.
 
@@ -213,12 +213,12 @@ Mantenha dados de contacto e identidade (KIS) actualizados — pedidos de maior 
 
 Requer permissão `admin.panel`.
 
-| Área | Rota | Função |
-| --- | --- | --- |
-| Administração | `/app/admin` | Resumo operacional |
-| Utilizadores | `/app/admin/utilizadores` | Contas e papéis |
-| Confiança | `/app/confianca` | Checklist e submissões |
-| Revisão | `/app/confianca/revisao` | Aprovar / rejeitar verificações |
+| Área          | Rota                      | Função                          |
+| ------------- | ------------------------- | ------------------------------- |
+| Administração | `/app/admin`              | Resumo operacional              |
+| Utilizadores  | `/app/admin/utilizadores` | Contas e papéis                 |
+| Confiança     | `/app/confianca`          | Checklist e submissões          |
+| Revisão       | `/app/confianca/revisao`  | Aprovar / rejeitar verificações |
 
 O Administrador **não** altera o motor económico global (preços, gateways) — isso é Super Admin.
 
@@ -312,13 +312,13 @@ A ferramenta apoia a formalização; a validade jurídica depende da lei angolan
 
 ## 13. Pagamentos — Kuteka Pay
 
-| Conceito | Significado na Beta |
-| --- | --- |
-| Kuteka Pay | Único motor de pagamento da plataforma |
-| Sandbox | Pagamento simulado; estados reais no sistema |
-| Produção | Gateway real (ex.: Multicaixa/EMIS) — activação comunicada pela Kuteka |
-| Ledger | Registo auditável de cada movimento |
-| Créditos | Unidades internas; não são depósito bancário |
+| Conceito   | Significado na Beta                                                    |
+| ---------- | ---------------------------------------------------------------------- |
+| Kuteka Pay | Único motor de pagamento da plataforma                                 |
+| Sandbox    | Pagamento simulado; estados reais no sistema                           |
+| Produção   | Gateway real (ex.: Multicaixa/EMIS) — activação comunicada pela Kuteka |
+| Ledger     | Registo auditável de cada movimento                                    |
+| Créditos   | Unidades internas; não são depósito bancário                           |
 
 O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reembolsado) e histórico no hub financeiro / no serviço que originou a cobrança.
 
@@ -407,40 +407,40 @@ O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reem
 
 ## 16. Glossário
 
-| Termo | Significado |
-| --- | --- |
-| **KIS** | Kuteka Identity System — identidade e KYC |
-| **KYC** | Know Your Customer — verificação do utilizador |
-| **UTS** | Índice de confiança / trust score da conta |
-| **ICK** | Indicador de qualidade/confiança do imóvel (quando disponível) |
-| **PDK** | Passaporte Digital Kuteka do imóvel (painel na ficha) |
-| **Ledger** | Livro-razão digital de movimentos financeiros |
-| **Kuteka Pay** | Motor único de pagamentos |
-| **Sandbox** | Ambiente de pagamento simulado |
-| **Plus** | Subscrição opcional Kuteka Plus |
-| **SLA** | Acordo de nível de serviço (prazos operacionais) |
-| **B2B2C** | Modelo empresa → parceiros → consumidor |
-| **Parceiro Patrimonial** | Quem publica e gere patrimónios |
-| **Agente Certificado** | Mediador verificado pela Kuteka |
-| **OTP** | Código de uso único (email/SMS) |
-| **RLS** | Row Level Security — isolamento de dados na base |
+| Termo                    | Significado                                                    |
+| ------------------------ | -------------------------------------------------------------- |
+| **KIS**                  | Kuteka Identity System — identidade e KYC                      |
+| **KYC**                  | Know Your Customer — verificação do utilizador                 |
+| **UTS**                  | Índice de confiança / trust score da conta                     |
+| **ICK**                  | Indicador de qualidade/confiança do imóvel (quando disponível) |
+| **PDK**                  | Passaporte Digital Kuteka do imóvel (painel na ficha)          |
+| **Ledger**               | Livro-razão digital de movimentos financeiros                  |
+| **Kuteka Pay**           | Motor único de pagamentos                                      |
+| **Sandbox**              | Ambiente de pagamento simulado                                 |
+| **Plus**                 | Subscrição opcional Kuteka Plus                                |
+| **SLA**                  | Acordo de nível de serviço (prazos operacionais)               |
+| **B2B2C**                | Modelo empresa → parceiros → consumidor                        |
+| **Parceiro Patrimonial** | Quem publica e gere patrimónios                                |
+| **Agente Certificado**   | Mediador verificado pela Kuteka                                |
+| **OTP**                  | Código de uso único (email/SMS)                                |
+| **RLS**                  | Row Level Security — isolamento de dados na base               |
 
 ---
 
 ## 17. Contactos e suporte
 
-| Canal | Utilização |
-| --- | --- |
-| Centro de Ajuda | `/app/ajuda` |
-| Contacto | `/contacto` |
-| Email geral | contacto@kutekalink.com |
-| Privacidade | privacidade@kutekalink.com |
-| Jurídico | juridico@kutekalink.com |
-| Site | https://kutekalink.com |
+| Canal           | Utilização                 |
+| --------------- | -------------------------- |
+| Centro de Ajuda | `/app/ajuda`               |
+| Contacto        | `/contacto`                |
+| Email geral     | contacto@kutekalink.com    |
+| Privacidade     | privacidade@kutekalink.com |
+| Jurídico        | juridico@kutekalink.com    |
+| Site            | https://kutekalink.com     |
 
 Horário de atendimento de referência na Beta: dias úteis, 09:00–18:00 (WAT), salvo comunicação em contrário.
 
 ---
 
-*Documento oficial de suporte ao utilizador — Kuteka v1.0 Beta.*  
-*Luanda, 5 de Agosto de 2026 · Equipa Kuteka*
+_Documento oficial de suporte ao utilizador — Kuteka v1.0 Beta._  
+_Luanda, 5 de Agosto de 2026 · Equipa Kuteka_

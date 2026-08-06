@@ -3,12 +3,14 @@
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '@/modules/authentication/content';
 
 function AuthIndexRedirect() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const copy = getAuthCopy();
+  const { locale } = useLocale();
+  const copy = getAuthCopy(locale);
 
   useEffect(() => {
     const next = searchParams.get('next');
@@ -24,7 +26,7 @@ function AuthIndexRedirect() {
 
 export default function AuthIndexPage() {
   return (
-    <Suspense fallback={<p className="px-6 py-16 text-slate-500">A carregar…</p>}>
+    <Suspense fallback={<p className="px-6 py-16 text-slate-500">…</p>}>
       <AuthIndexRedirect />
     </Suspense>
   );

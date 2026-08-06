@@ -28,4 +28,19 @@ describe('locale', () => {
     expect(getOpsCopy('fr').client.paymentsPaid).toContain('Paiements');
     expect(getOpsCopy('es').client.title).toContain('vivienda');
   });
+
+  it('does not mix Portuguese into French auth chrome', () => {
+    const fr = getAuthCopy('fr');
+    expect(fr.login.submit).toBe('Se connecter');
+    expect(fr.app.loadError).toContain('Réessayez');
+    expect(fr.app.loadError).not.toContain('Estamos a ter');
+    expect(fr.app.loginRequired).toContain('connecter');
+    expect(fr.common.sessionExpired).not.toMatch(/A sua sessão/);
+    expect(fr.verify.otpSubmit).toContain('Confirmer');
+  });
+
+  it('keeps English login distinct from Portuguese', () => {
+    expect(getAuthCopy('en').login.submit).toBe('Sign in');
+    expect(getAuthCopy('pt').login.submit).toBe('Entrar');
+  });
 });

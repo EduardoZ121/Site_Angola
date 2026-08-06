@@ -26,7 +26,7 @@ Para efeitos dos presentes Termos, e sempre que iniciados por maiúscula, os ter
 - **Prestador** — pessoa singular ou colectiva que oferece, através do Marketplace da Plataforma, serviços conexos ao domínio patrimonial (por exemplo, mudanças, limpeza, manutenção, assistência técnica ou serviços de concierge).
 - **Administrador** — colaborador ou entidade a quem a Kuteka atribui poderes de gestão operacional sobre determinados conteúdos, contas ou processos da Plataforma, nos limites do perfil que lhe é conferido.
 - **Super Administrador** — nível máximo de administração da Plataforma, competindo-lhe, designadamente, a parametrização de preços, comissões, planos, políticas e regras de negócio globais.
-- **KIS** — *Kuteka Identity System*, o sistema de identidade e verificação da Plataforma, que suporta os processos de conhecimento e validação do Utilizador (KYC) e a atribuição progressiva de níveis de confiança.
+- **KIS** — _Kuteka Identity System_, o sistema de identidade e verificação da Plataforma, que suporta os processos de conhecimento e validação do Utilizador (KYC) e a atribuição progressiva de níveis de confiança.
 - **Kuteka Pay** — o motor de pagamentos único da Plataforma, através do qual são processadas, orquestradas e registadas as operações financeiras suportadas pela Kuteka, mediante integração com gateways de pagamento.
 - **Ledger** — o registo interno, estruturado e auditável, de movimentos, transacções, créditos, comissões e demais lançamentos associados às operações da Plataforma, com finalidade de rastreabilidade e reconciliação.
 - **Anúncio** — a publicação, por um Utilizador habilitado, de um património, imóvel, oferta ou serviço na Plataforma, com a respectiva descrição, condições e elementos multimédia.
@@ -41,7 +41,7 @@ A Kuteka é uma plataforma de **intermediação tecnológica**. O seu objecto co
 
 A Kuteka **não é uma instituição bancária nem financeira**, não capta depósitos, não concede crédito e não exerce qualquer actividade sujeita a reserva legal do sector bancário ou financeiro. As referências a pagamentos, créditos ou ledger têm natureza estritamente operacional e destinam-se à orquestração e ao registo das operações suportadas pela Plataforma.
 
-A Kuteka **não presta serviços de custódia** de fundos nesta fase. O modo de custódia encontra-se, na versão 1.0 Beta, definido como `custody_mode=none`, o que significa que a Plataforma não retém, guarda nem administra fundos de terceiros em regime de carteira ou de garantia (*escrow*). Os fluxos financeiros, quando ocorram em ambiente de produção, processam-se através dos gateways de pagamento integrados, sem constituição de saldo custodiado pela Kuteka.
+A Kuteka **não presta serviços de custódia** de fundos nesta fase. O modo de custódia encontra-se, na versão 1.0 Beta, definido como `custody_mode=none`, o que significa que a Plataforma não retém, guarda nem administra fundos de terceiros em regime de carteira ou de garantia (_escrow_). Os fluxos financeiros, quando ocorram em ambiente de produção, processam-se através dos gateways de pagamento integrados, sem constituição de saldo custodiado pela Kuteka.
 
 A Kuteka **não é cartório, conservatória, notário nem entidade registral**. As ferramentas de formalização de contratos disponibilizadas destinam-se a facilitar a documentação da vontade das partes e não substituem, dispensam ou suprem quaisquer formalidades notariais, registais ou de reconhecimento que a lei angolana exija para a validade ou eficácia de determinados actos, designadamente em matéria de transmissão da propriedade imóvel.
 
@@ -70,7 +70,7 @@ O Utilizador obriga-se a utilizar a Plataforma de forma lícita, diligente e de 
 - Contornar o Kuteka Pay, aliciar contrapartes a concluir negócios fora da Plataforma com o intuito de evitar comissões, ou de qualquer modo defraudar o Operador ou outros Utilizadores;
 - Publicar conteúdos ilícitos, difamatórios, discriminatórios, violentos, obscenos ou que violem direitos de propriedade intelectual de terceiros;
 - Utilizar a Plataforma para fins de branqueamento de capitais, financiamento ilícito ou qualquer outra actividade proibida por lei;
-- Recolher dados de outros Utilizadores sem fundamento legítimo, praticar *scraping* não autorizado, ou introduzir vírus, código malicioso ou mecanismos que comprometam a segurança ou o funcionamento da Plataforma;
+- Recolher dados de outros Utilizadores sem fundamento legítimo, praticar _scraping_ não autorizado, ou introduzir vírus, código malicioso ou mecanismos que comprometam a segurança ou o funcionamento da Plataforma;
 - Tentar aceder, sem autorização, a áreas restritas, contas alheias ou infra-estruturas da Kuteka.
 
 A violação das presentes regras confere à Kuteka o direito de remover conteúdos, restringir funcionalidades, suspender ou encerrar contas e adoptar as demais medidas previstas na secção 23, sem prejuízo da responsabilidade civil e criminal do infractor.
@@ -101,7 +101,7 @@ Sempre que a lei angolana exija forma especial, intervenção notarial, reconhec
 
 ## 10. KIS, KYC e verificação de identidade
 
-A Plataforma integra o **Kuteka Identity System (KIS)**, que suporta os processos de conhecimento do Utilizador (*Know Your Customer* — KYC) e de verificação de identidade. Estes processos visam prevenir a fraude, proteger os Utilizadores, garantir a integridade das operações e cumprir as obrigações legais e regulamentares aplicáveis.
+A Plataforma integra o **Kuteka Identity System (KIS)**, que suporta os processos de conhecimento do Utilizador (_Know Your Customer_ — KYC) e de verificação de identidade. Estes processos visam prevenir a fraude, proteger os Utilizadores, garantir a integridade das operações e cumprir as obrigações legais e regulamentares aplicáveis.
 
 A verificação de identidade tem **obrigatoriedade progressiva**: o acesso a determinadas funcionalidades, níveis de operação, valores de transacção ou papéis na Plataforma pode ficar condicionado à conclusão bem-sucedida de níveis crescentes de verificação. A Kuteka pode solicitar, em qualquer momento, documentos de identificação, comprovativos e demais elementos necessários à validação da identidade e da legitimidade do Utilizador.
 
@@ -115,13 +115,13 @@ O processamento efectivo dos pagamentos é realizado através de **gateways** de
 
 Na presente **fase Beta**, as operações de pagamento decorrem em ambiente **sandbox**, isto é, em modo de teste e simulação, sem efeitos financeiros reais. A transição para o ambiente de produção, com efeitos financeiros efectivos, será oportunamente comunicada aos Utilizadores.
 
-Nesta fase, e em conformidade com o modo `custody_mode=none`, a Kuteka **não disponibiliza carteira (*wallet*) nem serviço de garantia (*escrow*)**, não retendo nem administrando saldos de fundos de terceiros. O Ledger regista os movimentos com finalidade de rastreabilidade e reconciliação, não constituindo depósito nem saldo mobilizável fora da Plataforma.
+Nesta fase, e em conformidade com o modo `custody_mode=none`, a Kuteka **não disponibiliza carteira (_wallet_) nem serviço de garantia (_escrow_)**, não retendo nem administrando saldos de fundos de terceiros. O Ledger regista os movimentos com finalidade de rastreabilidade e reconciliação, não constituindo depósito nem saldo mobilizável fora da Plataforma.
 
 ## 12. Preços, comissões e planos
 
 Os preços, comissões, taxas e planos aplicáveis à utilização da Plataforma são definidos e **parametrizados pelo Super Administrador**, podendo ser consultados nas áreas próprias da Plataforma e sendo actualizados de acordo com a política comercial em vigor.
 
-O modelo comercial assenta, por regra, num regime de **pagamento por utilização** (*pay-per-use*), no qual o Utilizador paga em função das funcionalidades e serviços que efectivamente utiliza. A Plataforma pode disponibilizar, de forma **opcional**, um plano de subscrição **Plus**, que confere condições, funcionalidades ou vantagens acrescidas, mediante contrapartida periódica.
+O modelo comercial assenta, por regra, num regime de **pagamento por utilização** (_pay-per-use_), no qual o Utilizador paga em função das funcionalidades e serviços que efectivamente utiliza. A Plataforma pode disponibilizar, de forma **opcional**, um plano de subscrição **Plus**, que confere condições, funcionalidades ou vantagens acrescidas, mediante contrapartida periódica.
 
 Aos Parceiros Patrimoniais e a determinados Utilizadores institucionais podem aplicar-se **comissões B2B preferenciais**, definidas caso a caso ou por segmento, no âmbito da política comercial da Kuteka. As condições preferenciais não são transmissíveis e vigoram apenas enquanto se mantiverem os pressupostos que as fundamentam.
 
@@ -139,12 +139,12 @@ A obtenção fraudulenta, o uso indevido ou a tentativa de conversão irregular 
 
 As condições de cancelamento e de reembolso dependem do estado de execução do serviço ou operação no momento do pedido, bem como da existência ou não de defeito ou de fraude. Aplica-se, com carácter geral, a seguinte tabela de regras:
 
-| Situação no momento do pedido | Regra de reembolso |
-| --- | --- |
-| Antes de iniciada a execução do serviço | Reembolso total, em numerário (pelo meio originário) ou em Créditos Kuteka, conforme a política aplicável |
-| Serviço em curso (execução parcial) | Reembolso parcial, proporcional à parte ainda não executada, deduzidos os custos já incorridos |
-| Serviço concluído | Sem direito a reembolso, salvo verificação de defeito imputável ao prestador ou à Kuteka |
-| Situação de fraude imputável ao Utilizador | Sem direito a reembolso, sem prejuízo das demais sanções e da responsabilidade legal |
+| Situação no momento do pedido              | Regra de reembolso                                                                                        |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| Antes de iniciada a execução do serviço    | Reembolso total, em numerário (pelo meio originário) ou em Créditos Kuteka, conforme a política aplicável |
+| Serviço em curso (execução parcial)        | Reembolso parcial, proporcional à parte ainda não executada, deduzidos os custos já incorridos            |
+| Serviço concluído                          | Sem direito a reembolso, salvo verificação de defeito imputável ao prestador ou à Kuteka                  |
+| Situação de fraude imputável ao Utilizador | Sem direito a reembolso, sem prejuízo das demais sanções e da responsabilidade legal                      |
 
 O pedido de cancelamento deve ser efectuado através dos meios disponibilizados na Plataforma. O apuramento da execução parcial, da existência de defeito e da eventual fraude é realizado pela Kuteka de forma fundamentada, podendo ser solicitados elementos comprovativos ao Utilizador. Os reembolsos, quando devidos, são processados através do Kuteka Pay, pelo meio originário de pagamento ou em Créditos Kuteka, consoante a política aplicável e a natureza da operação. Nada no presente número prejudica os direitos que a lei angolana reconheça imperativamente ao consumidor.
 
