@@ -3,6 +3,13 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Button, Text } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import {
+  isAcceptedPropertyMediaFile,
+  isVideoMediaFile,
+  mediaKindFromFile,
+  PROPERTY_MEDIA_ACCEPT,
+  MAX_PROPERTY_VIDEO_BYTES,
+} from '@/lib/media/property-media';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getPatrimoniosCopy } from '../content';
 import type { LocalMediaDraft } from '../services/property-media-client';
@@ -19,6 +26,31 @@ function newKey() {
     : `m-${Date.now()}-${Math.random()}`;
 }
 
+function MediaPreview({
+  url,
+  kind,
+  className,
+}: {
+  url: string;
+  kind: 'image' | 'video';
+  className?: string;
+}) {
+  if (kind === 'video') {
+    return (
+      <video
+        src={url}
+        className={className}
+        muted
+        playsInline
+        preload="metadata"
+        controls={false}
+      />
+    );
+  }
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={url} alt="" className={className} />;
+}
+
 export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMediaEditorProps) {
   const { locale } = useLocale();
   const copy = getPatrimoniosCopy(locale);
@@ -26,6 +58,7 @@ export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMedia
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   useEffect(() => {
     return () => {
@@ -39,15 +72,38 @@ export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMedia
   }, []);
 
   function addFiles(files: FileList | File[]) {
-    const list = Array.from(files).filter((f) => f.type.startsWith('image/'));
-    if (!list.length) return;
+    const incoming = Array.from(files);
+    const accepted: File[] = [];
+    let rejected = false;
+    let tooLarge = false;
+
+    for (const file of incoming) {
+      if (!isAcceptedPropertyMediaFile(file)) {
+        rejected = true;
+        continue;
+      }
+      if (isVideoMediaFile(file) && file.size > MAX_PROPERTY_VIDEO_BYTES) {
+        tooLarge = true;
+        continue;
+      }
+      accepted.push(file);
+    }
+
+    if (tooLarge) setNotice(copy.media.videoTooLarge);
+    else if (rejected) setNotice(copy.media.unsupported);
+    else setNotice(null);
+
+    if (!accepted.length) return;
+
     const next = [...value];
-    for (const file of list) {
+    for (const file of accepted) {
+      const kind = mediaKindFromFile(file);
       next.push({
         key: newKey(),
         file,
         previewUrl: URL.createObjectURL(file),
         isPrimary: next.length === 0,
+        kind,
       });
     }
     if (!next.some((m) => m.isPrimary) && next[0]) next[0].isPrimary = true;
@@ -75,6 +131,8 @@ export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMedia
     next.splice(to, 0, item!);
     onChange(next);
   }
+
+  const featured = value.find((m) => m.isPrimary) ?? value[0];
 
   return (
     <div className="flex flex-col gap-3">
@@ -114,7 +172,7 @@ export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMedia
           id={inputId}
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept={PROPERTY_MEDIA_ACCEPT}
           multiple
           className="sr-only"
           disabled={disabled}
@@ -125,64 +183,88 @@ export function PropertyMediaEditor({ value, onChange, disabled }: PropertyMedia
         />
       </div>
 
-      {value.length > 0 ? (
-        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {value.map((item, index) => (
-            <li
-              key={item.key}
-              draggable={!disabled}
-              onDragStart={() => setDragIndex(index)}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={() => {
-                if (dragIndex != null) reorder(dragIndex, index);
-                setDragIndex(null);
-              }}
-              className={cn(
-                'relative overflow-hidden rounded-kuteka border border-slate-200 bg-white',
-                item.isPrimary && 'ring-2 ring-brand-500',
-              )}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={item.previewUrl} alt="" className="aspect-[4/3] w-full object-cover" />
-              <div className="flex flex-wrap items-center gap-2 p-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={item.isPrimary ? 'primary' : 'secondary'}
-                  disabled={disabled}
-                  onClick={() => setPrimary(item.key)}
-                >
-                  {item.isPrimary ? copy.media.primary : copy.media.setPrimary}
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="secondary"
-                  disabled={disabled}
-                  onClick={() => removeAt(item.key)}
-                >
-                  {copy.media.remove}
-                </Button>
-              </div>
-              <span className="absolute left-2 top-2 rounded bg-slate-950/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
-                #{index + 1}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {notice ? (
+        <p className="rounded-kuteka border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-950">
+          {notice}
+        </p>
       ) : null}
 
       {value.length > 0 ? (
+        <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {value.map((item, index) => {
+            const kind = item.kind ?? (item.file ? mediaKindFromFile(item.file) : 'image');
+            return (
+              <li
+                key={item.key}
+                draggable={!disabled}
+                onDragStart={() => setDragIndex(index)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => {
+                  if (dragIndex != null) reorder(dragIndex, index);
+                  setDragIndex(null);
+                }}
+                className={cn(
+                  'relative overflow-hidden rounded-kuteka border border-slate-200 bg-white',
+                  item.isPrimary && 'ring-2 ring-brand-500',
+                )}
+              >
+                <MediaPreview
+                  url={item.previewUrl}
+                  kind={kind}
+                  className="aspect-[4/3] w-full object-cover bg-slate-100"
+                />
+                <div className="flex flex-wrap items-center gap-2 p-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={item.isPrimary ? 'primary' : 'secondary'}
+                    disabled={disabled}
+                    onClick={() => setPrimary(item.key)}
+                  >
+                    {item.isPrimary ? copy.media.primary : copy.media.setPrimary}
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    disabled={disabled}
+                    onClick={() => removeAt(item.key)}
+                  >
+                    {copy.media.remove}
+                  </Button>
+                </div>
+                <span className="absolute left-2 top-2 rounded bg-slate-950/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                  #{index + 1}
+                </span>
+                <span className="absolute right-2 top-2 rounded bg-slate-950/70 px-1.5 py-0.5 text-[10px] font-medium text-white">
+                  {kind === 'video' ? copy.media.badgeVideo : copy.media.badgePhoto}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : null}
+
+      {featured ? (
         <div className="rounded-kuteka border border-slate-200 bg-white p-3">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
             {copy.media.preview}
           </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={(value.find((m) => m.isPrimary) ?? value[0])!.previewUrl}
-            alt=""
-            className="aspect-[16/9] w-full max-w-xl rounded-kuteka object-cover"
-          />
+          {featured.kind === 'video' || (featured.file && isVideoMediaFile(featured.file)) ? (
+            <video
+              src={featured.previewUrl}
+              controls
+              playsInline
+              className="aspect-[16/9] w-full max-w-xl rounded-kuteka bg-slate-950 object-contain"
+            />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={featured.previewUrl}
+              alt=""
+              className="aspect-[16/9] w-full max-w-xl rounded-kuteka object-cover"
+            />
+          )}
         </div>
       ) : null}
     </div>
