@@ -20,12 +20,12 @@ Esta secção será actualizada progressivamente à medida que novas funcionalid
 
 A Kuteka evolui por **versões comerciais**, alinhadas com o roteiro interno de produto:
 
-| Versão | Foco |
-| --- | --- |
+| Versão                 | Foco                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------ |
 | **v1.0 Beta** (actual) | Lançamento em produção, operação mínima, núcleo gratuito + serviços pay-per-use em sandbox |
-| **v1.5** | Activação de pagamentos reais e reforço de SLA de suporte |
-| **v2.0** | Motor de recomendações KAI, marketplace mais maduro e expansão de idiomas |
-| **v3.0** | Ecossistema alargado — API pública, white label e expansão geográfica |
+| **v1.5**               | Activação de pagamentos reais e reforço de SLA de suporte                                  |
+| **v2.0**               | Motor de recomendações KAI, marketplace mais maduro e expansão de idiomas                  |
+| **v3.0**               | Ecossistema alargado — API pública, white label e expansão geográfica                      |
 
 As datas de transição entre versões dependem da validação de negócio, de parcerias de pagamento e de requisitos regulatórios, pelo que este roteiro é indicativo e pode ser ajustado. Actualizações relevantes serão sempre comunicadas nesta página.
 

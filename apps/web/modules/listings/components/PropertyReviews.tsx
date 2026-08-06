@@ -43,6 +43,7 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
   const copy = getListingsCopy(locale);
   const reviewsCopy = copy.reviews;
   const subjectLabels = copy.subjects as ListingsCopy['subjects'] & Record<string, string>;
+  const dimensionLabels = copy.dimensions as ListingsCopy['dimensions'] & Record<string, string>;
   const { session, status: sessionStatus } = useAppSession();
   const canWrite =
     sessionStatus === 'ready' && !!session?.permissions.includes('reputation.manage');
@@ -327,76 +328,101 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
       {!loaded ? <p className="kuteka-detail-meta mt-4">{reviewsCopy.loading}</p> : null}
 
       {loaded && rows.length === 0 ? (
-        <p className="kuteka-detail-body mt-4">{reviewsCopy.empty}</p>
+        <div className="mt-4 flex flex-col gap-1">
+          <p className="kuteka-detail-body">{reviewsCopy.empty}</p>
+          <p className="kuteka-detail-meta">{reviewsCopy.emptyEncourage}</p>
+        </div>
       ) : null}
 
       {rows.length > 0 ? (
         <ul className="mt-5 flex flex-col gap-3">
-          {rows.map((row) => (
-            <li key={row.id} className="kuteka-detail-review">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-                  {subjectLabels[row.subject_kind] ?? row.subject_kind}
-                </span>
-                <Stars rating={Number(row.rating)} ariaTemplate={reviewsCopy.starsAriaTemplate} />
-              </div>
-              <p className="kuteka-detail-meta mt-1">
-                {new Date(row.created_at).toLocaleDateString(LOCALE_INTL_TAG[locale])}
-              </p>
-              {row.comment ? <p className="kuteka-detail-body mt-2">{row.comment}</p> : null}
-
-              {row.owner_reply ? (
-                <div className="mt-3 rounded-kuteka border-l-4 border-[#08263f] bg-slate-50 px-3 py-2">
-                  <p className="text-xs font-bold uppercase tracking-wide text-[#08263f]">
-                    {reviewsCopy.ownerReply}
-                  </p>
-                  <p className="kuteka-detail-body mt-1">{row.owner_reply}</p>
-                </div>
-              ) : null}
-              {row.agent_reply ? (
-                <div className="mt-2 rounded-kuteka border-l-4 border-[#f0a91f] bg-amber-50/60 px-3 py-2">
-                  <p className="text-xs font-bold uppercase tracking-wide text-[#08263f]">
-                    {reviewsCopy.agentReply}
-                  </p>
-                  <p className="kuteka-detail-body mt-1">{row.agent_reply}</p>
-                </div>
-              ) : null}
-
-              {(canReplyOwner && !row.owner_reply) || (canReplyAgent && !row.agent_reply) ? (
-                <div className="mt-3 flex flex-col gap-2">
-                  <textarea
-                    value={replyDrafts[row.id] ?? ''}
-                    onChange={(e) =>
-                      setReplyDrafts((prev) => ({ ...prev, [row.id]: e.target.value }))
-                    }
-                    rows={2}
-                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
-                    placeholder={reviewsCopy.replyPlaceholder}
-                  />
-                  <div className="flex flex-wrap gap-2">
-                    {canReplyOwner && !row.owner_reply ? (
-                      <button
-                        type="button"
-                        className="kuteka-detail-chip kuteka-detail-chip--accent"
-                        onClick={() => void submitReply(row.id, 'owner')}
-                      >
-                        {reviewsCopy.replyAsOwner}
-                      </button>
-                    ) : null}
-                    {canReplyAgent && !row.agent_reply ? (
-                      <button
-                        type="button"
-                        className="kuteka-detail-chip kuteka-detail-chip--accent"
-                        onClick={() => void submitReply(row.id, 'agent')}
-                      >
-                        {reviewsCopy.replyAsAgent}
-                      </button>
-                    ) : null}
+          {rows.map((row) => {
+            const dimensionEntries = Object.entries(row.dimensions ?? {}).filter(
+              ([, value]) => typeof value === 'number' && !Number.isNaN(value),
+            );
+            return (
+              <li key={row.id} className="kuteka-detail-review">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="kuteka-detail-chip kuteka-detail-chip--accent">
+                      {subjectLabels[row.subject_kind] ?? row.subject_kind}
+                    </span>
+                    <span className="kuteka-detail-chip">{reviewsCopy.reviewerVerifiedLabel}</span>
+                    <span className="kuteka-detail-chip">{reviewsCopy.contractConfirmedBadge}</span>
                   </div>
+                  <Stars rating={Number(row.rating)} ariaTemplate={reviewsCopy.starsAriaTemplate} />
                 </div>
-              ) : null}
-            </li>
-          ))}
+                <p className="kuteka-detail-meta mt-1">
+                  {new Date(row.created_at).toLocaleDateString(LOCALE_INTL_TAG[locale])}
+                </p>
+                {row.comment ? <p className="kuteka-detail-body mt-2">{row.comment}</p> : null}
+                {dimensionEntries.length > 0 ? (
+                  <ul className="mt-2 flex flex-wrap gap-1.5">
+                    {dimensionEntries.map(([key, value]) => (
+                      <li
+                        key={key}
+                        className="kuteka-detail-chip inline-flex items-center gap-1 text-xs"
+                      >
+                        <span>{dimensionLabels[key] ?? key}</span>
+                        <span className="font-mono font-semibold">{String(value)}★</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {row.owner_reply ? (
+                  <div className="mt-3 rounded-kuteka border-l-4 border-[#08263f] bg-slate-50 px-3 py-2">
+                    <p className="text-xs font-bold uppercase tracking-wide text-[#08263f]">
+                      {reviewsCopy.ownerReply}
+                    </p>
+                    <p className="kuteka-detail-body mt-1">{row.owner_reply}</p>
+                  </div>
+                ) : null}
+                {row.agent_reply ? (
+                  <div className="mt-2 rounded-kuteka border-l-4 border-[#f0a91f] bg-amber-50/60 px-3 py-2">
+                    <p className="text-xs font-bold uppercase tracking-wide text-[#08263f]">
+                      {reviewsCopy.agentReply}
+                    </p>
+                    <p className="kuteka-detail-body mt-1">{row.agent_reply}</p>
+                  </div>
+                ) : null}
+
+                {(canReplyOwner && !row.owner_reply) || (canReplyAgent && !row.agent_reply) ? (
+                  <div className="mt-3 flex flex-col gap-2">
+                    <textarea
+                      value={replyDrafts[row.id] ?? ''}
+                      onChange={(e) =>
+                        setReplyDrafts((prev) => ({ ...prev, [row.id]: e.target.value }))
+                      }
+                      rows={2}
+                      className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm"
+                      placeholder={reviewsCopy.replyPlaceholder}
+                    />
+                    <div className="flex flex-wrap gap-2">
+                      {canReplyOwner && !row.owner_reply ? (
+                        <button
+                          type="button"
+                          className="kuteka-detail-chip kuteka-detail-chip--accent"
+                          onClick={() => void submitReply(row.id, 'owner')}
+                        >
+                          {reviewsCopy.replyAsOwner}
+                        </button>
+                      ) : null}
+                      {canReplyAgent && !row.agent_reply ? (
+                        <button
+                          type="button"
+                          className="kuteka-detail-chip kuteka-detail-chip--accent"
+                          onClick={() => void submitReply(row.id, 'agent')}
+                        >
+                          {reviewsCopy.replyAsAgent}
+                        </button>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       ) : null}
     </section>

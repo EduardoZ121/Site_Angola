@@ -8,6 +8,7 @@ import { formatAoa } from '@/lib/format/aoa';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
 import { ListingPerformanceCockpit } from '@/modules/listings/components/ListingPerformanceCockpit';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { MessagePropertyOwnerButton } from '@/modules/mensagens/components/MessagePropertyOwnerButton';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
@@ -119,6 +120,12 @@ export function PropertyDetailClient({ id }: { id: string }) {
             <p className="kuteka-detail-panel px-4 py-3 text-sm text-stone-700">
               {copy.detailNote}
             </p>
+
+            <MessagePropertyOwnerButton
+              propertyId={row.id}
+              ownerId={row.owner_id}
+              propertyTitle={row.title}
+            />
 
             <FlowNextSteps
               title={copy.nextSteps.suggestedTitle}

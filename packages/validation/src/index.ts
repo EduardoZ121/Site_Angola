@@ -280,3 +280,17 @@ export {
   type CreatePropertyContractInput,
   type ContractTransitionInput,
 } from './contracts';
+
+export {
+  CHAT_CONTEXT_TYPES,
+  CHAT_CONVERSATION_STATUSES,
+  CHAT_MESSAGE_KINDS,
+  chatStartDirectSchema,
+  chatSendMessageSchema,
+  chatConversationIdSchema,
+  chatSetStatusSchema,
+  type ChatStartDirectInput,
+  type ChatSendMessageInput,
+  type ChatConversationIdInput,
+  type ChatSetStatusInput,
+} from './chat';

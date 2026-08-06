@@ -8,16 +8,16 @@ Estado operacional indicativo dos principais serviços da plataforma. Nesta fase
 
 ## Estado actual
 
-| Serviço | Estado | Notas |
-| --- | --- | --- |
-| Plataforma web (`kutekalink.com`) | 🟢 Operacional | Acesso normal a landing, autenticação e área da conta |
-| Autenticação e contas | 🟢 Operacional | Registo, login, recuperação e verificação por email/OTP |
-| Exploração de habitação | 🟢 Operacional | Pesquisa, favoritos e ficha de imóveis |
-| Gestão de patrimónios (Parceiro) | 🟢 Operacional | Publicação e gestão de imóveis |
-| Contratos | 🟢 Operacional | Criação e acompanhamento de minutas |
-| Kuteka Pay | 🟡 Sandbox | Pagamentos em ambiente de simulação; gateway real em preparação |
-| Notificações | 🟢 Operacional | Alertas dentro da plataforma |
-| Centro de Segurança / Confiança | 🟢 Operacional | Consulta de UTS, sessões e nível de segurança |
+| Serviço                           | Estado         | Notas                                                           |
+| --------------------------------- | -------------- | --------------------------------------------------------------- |
+| Plataforma web (`kutekalink.com`) | 🟢 Operacional | Acesso normal a landing, autenticação e área da conta           |
+| Autenticação e contas             | 🟢 Operacional | Registo, login, recuperação e verificação por email/OTP         |
+| Exploração de habitação           | 🟢 Operacional | Pesquisa, favoritos e ficha de imóveis                          |
+| Gestão de patrimónios (Parceiro)  | 🟢 Operacional | Publicação e gestão de imóveis                                  |
+| Contratos                         | 🟢 Operacional | Criação e acompanhamento de minutas                             |
+| Kuteka Pay                        | 🟡 Sandbox     | Pagamentos em ambiente de simulação; gateway real em preparação |
+| Notificações                      | 🟢 Operacional | Alertas dentro da plataforma                                    |
+| Centro de Segurança / Confiança   | 🟢 Operacional | Consulta de UTS, sessões e nível de segurança                   |
 
 **Legenda:** 🟢 Operacional · 🟡 Em sandbox / capacidade limitada · 🔴 Indisponível
 

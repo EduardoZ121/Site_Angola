@@ -17,6 +17,7 @@ export type HousingPropertyRow = {
   id: string;
   code: string;
   title: string;
+  owner_id?: string | null;
   property_type: string;
   purpose: string;
   province: string | null;
@@ -51,6 +52,7 @@ export type HousingPropertyRow = {
   nearby_notes?: string | null;
   expected_available_on?: string | null;
   availability_note?: string | null;
+  kuteka_score?: number | null;
 };
 
 export type ClientPreferencesRow = {
@@ -190,10 +192,10 @@ function filterByQuery(rows: HousingPropertyRow[], query?: string | null): Housi
 }
 
 const PROPERTY_SELECT_CORE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score';
 
 const PROPERTY_SELECT_FUTURE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score';
 
 /**
  * Paginated explore — foundation for infinite feed at scale.

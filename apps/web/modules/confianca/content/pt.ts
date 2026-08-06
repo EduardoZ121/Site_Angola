@@ -61,6 +61,33 @@ export const confiancaCopyPt = {
     pending: 'Por submeter',
   },
   historyLabel: 'Histórico de verificações',
+  trustCard: {
+    title: 'Confiança',
+    ickLabel: 'Índice Kuteka (ICK)',
+    ratingLabel: 'Avaliação',
+    ratingTemplate: '{avg} ({count})',
+    noRating: 'Sem avaliações ainda',
+    contractsLabel: 'Contratos concluídos',
+    avgResponseLabel: 'Tempo médio de resposta',
+    avgResponseTemplate: '{n} min',
+    avgResponseUnknown: 'Sem dados',
+    kisLevelLabel: 'Nível KIS',
+    kisLevelTemplate: 'Nível {n}',
+    memberSinceLabel: 'Membro desde',
+    lastActivityLabel: 'Última atividade',
+    notAvailable: '—',
+    kaiTitle: 'KAI',
+  },
+  reputationKai: {
+    excellentRecent: 'Este imóvel possui excelente reputação nos últimos 12 meses.',
+    goodRecent: 'Boa reputação recente — avaliações consistentes nos últimos meses.',
+    avgRatingTemplate: 'Classificação média de {avg}/5 com {count} avaliação(ões).',
+    contractsTemplate: '{n} contrato(s) concluído(s) com sucesso.',
+    trustedProfile: 'Perfil com boa reputação e histórico consistente na Kuteka.',
+    highIck: 'Índice Kuteka elevado — confiança acima da média da plataforma.',
+    newProfile: 'Perfil ainda a construir histórico de reputação.',
+    verifiedIdentity: 'Identidade verificada ao nível KIS {n}.',
+  },
 } as const;
 
 type DeepStringify<T> = {

@@ -5,6 +5,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { MessagesTopbarButton } from '@/modules/mensagens/components/MessagesTopbarButton';
 import { getShellCopy } from '../content';
 import { notificationsForMode, unreadCount } from '../notifications';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -44,6 +45,8 @@ export function TopbarActions() {
   return (
     <div className="flex items-center gap-1 sm:gap-2">
       <LanguageSwitcher variant="compact" />
+
+      <MessagesTopbarButton />
 
       <div ref={rootRef} className="relative">
         <button
