@@ -5,6 +5,7 @@ export type ListingMedia = {
   public_url: string;
   sort_order: number;
   is_primary: boolean;
+  media_kind?: 'image' | 'video' | null;
 };
 
 /** Shared enriched listing shape for detail showcase (patrimonios + habitação). */
