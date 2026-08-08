@@ -106,5 +106,6 @@ Percentagens **conservadoras**. Reavaliar no fecho de cada Sprint Beta.
 | 1.1    | 2026-08-06 | Alinhamento à Missão PO: sequência Beta 1–5 oficial; KOCC + Centro de Docs + Cookies no escopo da Beta 1 |
 | 1.2    | 2026-08-08 | Beta 1 encerrada pelo PO; Beta 1.5A/1.5B; Painel Beta KOCC antes da Beta 2                               |
 | 1.3    | 2026-08-08 | Gate Beta 1.6 (Trust Governance) bloqueia abertura da Beta 2                                             |
+| 1.4    | 2026-08-08 | 1.6 completa: ciclo imóvel, social, Founder ops; regra pós–Beta 2 sem features estruturais               |
 
-**Próxima revisão:** ao fechar [Sprint Beta 1.6 Fase A](./SPRINT_BETA_1_6.md) e abrir Sprint Beta 2.
+**Próxima revisão:** ao aplicar migrations `0032`–`0038`, validar gate e abrir Sprint Beta 2.
