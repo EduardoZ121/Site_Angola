@@ -233,7 +233,7 @@ export async function activateProperty(
     const needsEval = propertyRequiresEvaluation(v.requestedServices, v.managementLevel);
     // Publication gate (Beta 1.6): never publish on create — always draft + in review.
     const publishStatus = 'draft';
-    const lifecycleStatus = 'em_analise_documental';
+    const lifecycleStatus = 'rascunho';
     const reviewStatus = 'in_review';
     const code = newPropertyCode();
 

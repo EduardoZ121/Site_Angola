@@ -2,7 +2,7 @@
 
 | Campo         | Valor                                                                                                                                      |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Versão**    | 1.3                                                                                                                                        |
+| **Versão**    | 1.4                                                                                                                                        |
 | **Data**      | 2026-08-08                                                                                                                                 |
 | **Natureza**  | Declaração de governação — encerra a fase de Arquitectura e abre a fase de Operação Beta                                                   |
 | **Aplica-se** | Todo o desenvolvimento a partir desta data (produto, engenharia, jurídico, operações)                                                      |
