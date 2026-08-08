@@ -2,7 +2,7 @@
 
 | Campo         | Valor                                                                             |
 | ------------- | --------------------------------------------------------------------------------- |
-| **Versão**    | 1.0                                                                               |
+| **Versão**    | 1.1                                                                               |
 | **Data**      | 2026-08-08                                                                        |
 | **Natureza**  | Gate estrutural **antes** da Sprint Beta 2 (Beta Pública)                         |
 | **Objectivo** | Reforçar Confiança, Governação, Qualidade de anúncios e Comunicação               |
@@ -32,37 +32,48 @@ Isto não são “features isoladas”: são pilares de uma plataforma imobiliá
 
 ## 3. Fases de entrega
 
-### Fase A — Mínimo para abrir Beta 2 (esta entrega de código)
+### Fase A — Mínimo para abrir Beta 2
 
-1. **Founders** — tabela + helpers de privilégio + caminho para contas reais (sem depender de `demo.super`).
-2. **Workflow de aprovação** — activação entra sempre em **Em análise**; fila Admin/Super; decisões + notificações ao Parceiro; motivos de pendência padronizados.
-3. **Ficha de activação** — campos em falta ligados à ficha (suítes, estacionamento, comodidades booleanas, mobilado, áreas).
-4. **Parâmetro de comissão** — `platform_commission_params` (base 35%) editável só por Founder/Owner.
+1. **Founders** — tabela + helpers + caminho para contas reais.
+2. **Workflow de aprovação** — Em análise → fila Admin/Super → notificações + pendências.
+3. **Ficha de activação rica** + **comissão** configurável (35%).
+4. **Quatro pilares de governação** (migration `0037`, UI em `/app/admin`) — ver §3.1.
 
-### Fase B — Imediatamente a seguir (ainda 1.6, antes ou em paralelo ao soft-launch)
+### Fase B — Ainda 1.6 (antes ou em paralelo ao soft-launch)
 
-5. SLA 12h úteis + escalação KOCC.
-6. Janela premium ~6h (`general_visible_at`).
-7. Modelos de gestão pós-remodelação + retenção contratual (transparência).
+5. SLA 12h úteis + escalação automática KOCC.
+6. Janela premium ~6h (exclusividade Encontrar Casa / Mudança / Concierge).
+7. Gestão pós-remodelação + retenção contratual.
 
-### Fase C — Engajamento (pode acompanhar primeiros utilizadores Beta)
+### Fase C — Engajamento
 
-8. Like / favorito / comentários / Q&A / denúncia / moderação.
+8. Like / favorito / comentários / Q&A sob a **galeria de fotos** da ficha (não escondido noutro sítio).
 9. Pesquisa global na topbar.
-10. Follow + notificações de comunidade.
+10. Follow + notificações de comunidade (já existe canal `content_reports` + Moderação).
+
+### 3.1 Quatro pilares (fecho da base empresarial)
+
+| Pilar                               | Entrega 1.6                                                                                                   | Estado                       |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **1. Auditoria Total**              | `write_audit_event` (utilizador, papéis, motivo, IP/UA, antes/depois) + **Audit Center** em `/app/admin`      | ✅ código                    |
+| **2. Governação e Moderação**       | Fila de publicação + `content_reports` + **Centro de Moderação**                                              | ✅ base; social UI na Fase C |
+| **3. Reputação Global**             | Trust Card + ICK + reviews; resumo enriquecido (positivas/negativas/papéis); timeline de actividade no perfil | ✅ base                      |
+| **4. Analytics Operacionais (KOS)** | `kos_ops_metrics` — SLA overdue, aprovação média, taxa rejeição, conversão interesse→contrato                 | ✅ base                      |
+
+**Arquitectura reservada (Conselho Kuteka):** papéis `co_founder`, `board_member`, `investor_readonly`, `auditor`, `supervisor` semeados sem abrir produto — prontos para activação futura.
 
 ## 4. Critério de saída → Sprint Beta 2
 
-- [ ] Migration `0036` aplicada no Supabase remoto
+- [ ] Migrations `0036` + `0037` aplicadas no Supabase remoto
 - [ ] Contas Founder reais ligadas em `founders` (PO fornece emails)
 - [ ] Novo património **não** aparece em Habitação até aprovação Admin/Super
-- [ ] Fila de revisão operacional em `/app/admin` (e visível a Super)
-- [ ] Decisões geram notificação ao Parceiro
+- [ ] Fila de revisão + Audit Center + Moderação + KOS Analytics visíveis em `/app/admin`
+- [ ] Decisões geram notificação + entrada na timeline do Parceiro
 - [ ] Comissão base configurável por Founder (default 35%)
 - [ ] Ficha de activação com campos ricos
 - [ ] PO confirma por escrito a abertura da Beta 2
 
-**Fora do critério mínimo (Fase A):** SLA automatizado, janela premium 6h, social completo, pesquisa global — documentados e sequenciados na Fase B/C.
+**Adiado (não bloqueia Beta 2):** social completo sob galeria, pesquisa global, SLA auto-escalação, receita por província.
 
 ## 5. Relação com Beta 2
 
