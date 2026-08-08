@@ -11,6 +11,8 @@ export const patrimoniosCopyFr: PatrimoniosCopy = {
   activate: 'Activer un patrimoine',
   activating: 'Activation…',
   activated: 'Patrimoine activé.',
+  submittedForReview:
+    'Patrimoine soumis. Il est En analyse par l’Administration et ne sera publié qu’après approbation.',
   backToList: 'Retour aux patrimoines',
   needPartner:
     'Pour activer un patrimoine, vous devez avoir le rôle Partenaire Patrimonial sur votre compte.',
@@ -94,6 +96,27 @@ export const patrimoniosCopyFr: PatrimoniosCopy = {
     construction: 'État de la construction',
     unfinishedIntent: 'Intention pour la construction inachevée',
     management: 'Niveau de gestion',
+    suites: 'Suites',
+    parkingSpaces: 'Places de stationnement',
+    furnished: 'Meublé',
+    landArea: 'Surface du terrain (m²)',
+    builtArea: 'Surface construite (m²)',
+    commissionSettlement: 'Règlement de la commission',
+  },
+  commissionSettlements: {
+    immediate: 'Immédiat',
+    after_first_rent: 'Après le premier loyer',
+    automatic_retention: 'Rétention automatique',
+  },
+  amenities: {
+    garage: 'Garage',
+    yard: 'Cour',
+    pool: 'Piscine',
+    garden: 'Jardin',
+    annex: 'Annexe',
+    equippedKitchen: 'Cuisine équipée',
+    balcony: 'Balcon',
+    terrace: 'Terrasse',
   },
   infra: {
     water: 'Eau courante',

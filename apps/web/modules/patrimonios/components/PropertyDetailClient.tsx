@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Heading, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
@@ -19,6 +20,8 @@ import { listPropertyMedia, type PropertyMediaRow } from '../services/property-m
 export function PropertyDetailClient({ id }: { id: string }) {
   const { locale } = useLocale();
   const copy = getPatrimoniosCopy(locale);
+  const searchParams = useSearchParams();
+  const showSubmittedBanner = searchParams.get('submitted') === '1';
   const [row, setRow] = useState<PropertyRow | null>(null);
   const [media, setMedia] = useState<PropertyMediaRow[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -54,6 +57,15 @@ export function PropertyDetailClient({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-5">
+      {showSubmittedBanner ? (
+        <div
+          className="rounded-kuteka border border-emerald-300/50 bg-emerald-50 px-4 py-3 text-sm text-emerald-950"
+          role="status"
+        >
+          {copy.submittedForReview}
+        </div>
+      ) : null}
+
       <header className="kuteka-detail-panel flex flex-col gap-3 p-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex flex-col gap-2">
           <Heading level={1}>{row?.title ?? copy.detailTitle}</Heading>

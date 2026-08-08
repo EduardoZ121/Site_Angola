@@ -48,6 +48,7 @@ export {
   UNFINISHED_INTENTS,
   CONSTRUCTION_STATUSES,
   CONSERVATION_STATES,
+  COMMISSION_SETTLEMENTS,
   propertyRequiresEvaluation,
   activatePropertySchema,
   expressInterestSchema,

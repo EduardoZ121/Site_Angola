@@ -42,6 +42,20 @@ export type PropertyRow = {
   floors?: number | null;
   bathrooms?: number | null;
   parking_spaces?: number | null;
+  suites?: number | null;
+  furnished?: boolean | null;
+  has_garage?: boolean | null;
+  has_yard?: boolean | null;
+  has_pool?: boolean | null;
+  has_garden?: boolean | null;
+  has_annex?: boolean | null;
+  has_equipped_kitchen?: boolean | null;
+  has_balcony?: boolean | null;
+  has_terrace?: boolean | null;
+  land_area_m2?: number | null;
+  built_area_m2?: number | null;
+  commission_settlement?: string | null;
+  review_status?: string | null;
   monthly_condo_aoa?: number | null;
   condo_rules?: string | null;
   amenities?: unknown;
@@ -217,8 +231,10 @@ export async function activateProperty(
     const v = parsed.data;
     const primary = mediaDrafts.find((m) => m.isPrimary) ?? mediaDrafts[0];
     const needsEval = propertyRequiresEvaluation(v.requestedServices, v.managementLevel);
-    const publishStatus = v.status ?? (needsEval ? 'draft' : 'active');
-    const lifecycleStatus = needsEval ? 'em_avaliacao' : 'publicado';
+    // Publication gate (Beta 1.6): never publish on create — always draft + in review.
+    const publishStatus = 'draft';
+    const lifecycleStatus = 'em_analise_documental';
+    const reviewStatus = 'in_review';
     const code = newPropertyCode();
 
     const amenities: string[] = [];
@@ -226,6 +242,10 @@ export async function activateProperty(
     if (v.hasElectricity) amenities.push('energia');
     if (v.hasPipedWater) amenities.push('agua');
     if (v.hasSecurity) amenities.push('seguranca');
+    if (v.hasGarage) amenities.push('garage');
+    if (v.hasPool) amenities.push('pool');
+    if (v.hasGarden) amenities.push('garden');
+    if (v.parkingSpaces != null && v.parkingSpaces > 0) amenities.push('estacionamento');
 
     const row: Record<string, unknown> = {
       owner_id: user.id,
@@ -240,6 +260,19 @@ export async function activateProperty(
       price_aoa: v.priceAoa ?? null,
       bedrooms: v.bedrooms ?? null,
       bathrooms: v.bathrooms ?? null,
+      suites: v.suites ?? null,
+      parking_spaces: v.parkingSpaces ?? null,
+      furnished: v.furnished ?? null,
+      has_garage: v.hasGarage ?? null,
+      has_yard: v.hasYard ?? null,
+      has_pool: v.hasPool ?? null,
+      has_garden: v.hasGarden ?? null,
+      has_annex: v.hasAnnex ?? null,
+      has_equipped_kitchen: v.hasEquippedKitchen ?? null,
+      has_balcony: v.hasBalcony ?? null,
+      has_terrace: v.hasTerrace ?? null,
+      land_area_m2: v.landAreaM2 ?? null,
+      built_area_m2: v.builtAreaM2 ?? null,
       area_total_m2: v.areaTotalM2 ?? null,
       area_useful_m2: v.areaUsefulM2 ?? null,
       year_built: v.yearBuilt ?? null,
@@ -266,7 +299,9 @@ export async function activateProperty(
       near_hospitals: v.nearHospitals ?? null,
       near_markets: v.nearMarkets ?? null,
       near_transport: v.nearTransport ?? null,
+      commission_settlement: v.commissionSettlement ?? null,
       lifecycle_status: lifecycleStatus,
+      review_status: reviewStatus,
       needs_renovation: (v.renovationRequests?.length ?? 0) > 0,
       pdk_code: `PDK-${code}`,
       amenities,
@@ -278,7 +313,7 @@ export async function activateProperty(
 
     let insertResult = await client.from('properties').insert(row).select('id').single();
 
-    // Before migration 0014: retry with core columns only.
+    // Before migration 0014 / 0036: retry with core columns only.
     if (insertResult.error) {
       const coreRow = {
         owner_id: user.id,
@@ -315,6 +350,15 @@ export async function activateProperty(
     if (mediaDrafts.length) {
       const mediaResult = await uploadPropertyMedia(propertyId, mediaDrafts);
       if (!mediaResult.ok) return mediaResult;
+    }
+
+    // Always submit for Admin/Super review — never auto-publish (Beta 1.6 gate).
+    const { error: reviewError } = await client.rpc('submit_property_for_review', {
+      p_property_id: propertyId,
+    });
+    if (reviewError) {
+      console.error('submit_property_for_review failed', reviewError);
+      return { ok: false, message: copy.saveError };
     }
 
     // Contrato de serviços Kuteka ↔ Parceiro (Manual Cap.7) — best-effort until migration.
@@ -364,7 +408,7 @@ export async function activateProperty(
       await client
         .from('profiles')
         .update({
-          partner_lifecycle: needsEval ? 'com_imovel_em_avaliacao' : 'imovel_publicado',
+          partner_lifecycle: 'com_imovel_em_avaliacao',
           updated_at: new Date().toISOString(),
         })
         .eq('id', user.id);
@@ -385,6 +429,9 @@ export async function activateProperty(
           requested_services: v.requestedServices,
           requires_evaluation: needsEval,
           status: publishStatus,
+          lifecycle_status: lifecycleStatus,
+          review_status: reviewStatus,
+          submitted_for_review: true,
         },
       });
     } catch {
