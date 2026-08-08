@@ -228,6 +228,80 @@ export const shellCopyPt = {
     notFoundBody: 'O recurso pedido não existe.',
     goHome: 'Ir para a fundação',
   },
+  hero: {
+    dashboard: {
+      alt: 'Moradia contemporânea ao entardecer',
+      eyebrow: 'Kuteka · Angola',
+      title: 'Plataforma imobiliária viva',
+      subtitle: 'Património, habitação e confiança — a continuação natural da Landing.',
+    },
+    patrimonios: {
+      alt: 'Moradia contemporânea com arquitectura premium',
+      eyebrow: 'Parceiro Patrimonial',
+      title: 'Publique património com presença',
+      subtitle: 'Fotografias, preço e galeria — o anúncio começa aqui.',
+    },
+    habitacao: {
+      alt: 'Interior residencial elegante',
+      eyebrow: 'Cliente',
+      title: 'Encontre habitação com transparência',
+      subtitle: 'Explore, filtre e demonstre interesse no inventário activo.',
+    },
+    agente: {
+      alt: 'Mediação e trabalho de campo',
+      eyebrow: 'Agente Certificado',
+      title: 'Acompanhe no terreno',
+      subtitle: 'Cobertura, visitas, interesses e pipeline num só lugar.',
+    },
+    confianca: {
+      alt: 'Documentação e verificação segura',
+      eyebrow: 'Verificação',
+      title: 'Relações seguras com evidência',
+      subtitle: 'Checklist clara — Em análise, Aprovado ou Rejeitado.',
+    },
+    contratos: {
+      alt: 'Mesa executiva com contrato e assinatura',
+      eyebrow: 'Contrato',
+      title: 'Formalize com clareza',
+      subtitle: 'Partes, valor, termos e aceitação antes de Pagamentos.',
+    },
+    admin: {
+      alt: 'Ambiente executivo de operação',
+      eyebrow: 'Operação',
+      title: 'Comando da plataforma',
+      subtitle: 'Contas, patrimónios, verificações e pedidos pendentes.',
+    },
+  },
+  flowNextSteps: {
+    defaultTitle: 'Continuar o percurso',
+    kaiEyebrow: 'KAI · Próximo passo',
+  },
+  betaFeedback: {
+    eyebrow: 'Acesso antecipado',
+    title: 'Partilhar feedback Beta',
+    subtitle:
+      'Ajude a melhorar a Kuteka antes do lançamento comercial. O Super Administrador vê isto no Painel Beta.',
+    kindFeedback: 'Sugestão / feedback',
+    kindBug: 'Reportar bug',
+    bodyLabel: 'Descrição',
+    placeholder: 'O que correu bem, o que falhou, ou o que gostaria de ver…',
+    submit: 'Enviar',
+    sending: 'A enviar…',
+    success: 'Obrigado — o seu contributo foi registado.',
+    error: 'Não conseguimos enviar. Tente novamente.',
+  },
+  firstActions: {
+    title: 'A sua primeira acção útil',
+    kaiHint: 'O KAI indica o próximo passo certo para o seu papel activo.',
+    clientExplore: 'Explorar habitação',
+    clientTrust: 'Completar identidade (KIS)',
+    partnerActivate: 'Activar património',
+    partnerInventory: 'Ver inventário em Habitação',
+    agentPipeline: 'Abrir pipeline do Agente',
+    adminPanel: 'Abrir Administração',
+    dualClient: 'Explorar como Cliente',
+    dualPartner: 'Publicar como Parceiro',
+  },
 } as const;
 
 type DeepStringify<T> = {

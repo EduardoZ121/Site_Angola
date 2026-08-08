@@ -61,4 +61,4 @@ Aplicar no Supabase remoto, por ordem:
 - [ ] Migrations `0033`/`0034` aplicadas no remoto (PO)
 - [ ] Smoke manual: abrir conversa + ver Trust Card numa ficha
 
-**Próximo:** Sprint Beta 2 — convidar utilizadores reais e recolher feedback.
+**Próximo:** [Sprint Beta 1.5B — Preparação para Utilizadores Reais](./SPRINT_BETA_1_5_PREP.md), depois Sprint Beta 2.

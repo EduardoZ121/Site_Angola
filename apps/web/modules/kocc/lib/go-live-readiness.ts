@@ -50,13 +50,20 @@ export const GO_LIVE_READINESS: GoLiveReadinessItem[] = [
   {
     key: 'public_copy_review',
     label: 'Nenhuma etiqueta interna ("Demo", "disabled") visível ao utilizador final',
-    status: 'in_progress',
-    note: 'KOCC substitui as etiquetas por estados públicos (Beta, Acesso antecipado, …).',
+    status: 'done',
+    note: 'KOCC + inventário Beta; badges públicos localizados (pt/en/fr/es).',
   },
   {
     key: 'observability',
     label: 'Auditoria e monitorização operacional (KOCC)',
     status: 'in_progress',
+    note: 'Painel Beta no código (migration 0035); aplicar no remoto.',
+  },
+  {
+    key: 'beta_panel',
+    label: 'Painel Beta — métricas e feedback estruturado',
+    status: 'in_progress',
+    note: 'UI em /app/super → KOCC; formulário em /app/ajuda.',
   },
 ];
 

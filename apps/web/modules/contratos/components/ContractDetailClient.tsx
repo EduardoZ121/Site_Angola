@@ -215,8 +215,8 @@ export function ContractDetailClient({ id }: { id: string }) {
               <Badge variant={statusVariant(row.status)}>
                 {copy.statuses[row.status as keyof typeof copy.statuses] ?? row.status}
               </Badge>
-              {inventoryBadge(row.is_demo) ? (
-                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+              {inventoryBadge(row.is_demo, locale) ? (
+                <Badge variant="default">{inventoryBadge(row.is_demo, locale)}</Badge>
               ) : null}
             </div>
           ) : null}

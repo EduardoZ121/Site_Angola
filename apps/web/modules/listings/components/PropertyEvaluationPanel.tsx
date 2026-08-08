@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { formatAoa } from '@/lib/format/aoa';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
+import { getListingsCopy } from '../content';
 import { KutekaScoreGauge } from './KutekaScoreGauge';
 
 type EvaluationRow = {
@@ -26,19 +29,6 @@ type EvaluationRow = {
   created_at: string;
 };
 
-const STATUS_LABELS: Record<string, string> = {
-  draft: 'Em preparação',
-  submitted: 'Submetida',
-  approved: 'Aprovada',
-  rejected: 'Rejeitada',
-};
-
-const RISK_LABELS: Record<string, string> = {
-  low: 'Risco baixo',
-  medium: 'Risco moderado',
-  high: 'Risco elevado',
-};
-
 function computeIndex(row: EvaluationRow): number | null {
   if (row.kuteka_index != null) return Number(row.kuteka_index);
   const parts = [
@@ -58,6 +48,8 @@ function computeIndex(row: EvaluationRow): number | null {
  * Avaliação técnica Cap.6 — checklist, pontuação, relatório e Índice Kuteka.
  */
 export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale).evaluation;
   const [row, setRow] = useState<EvaluationRow | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -111,7 +103,7 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
   if (!loaded) {
     return (
       <section className="kuteka-detail-panel p-5 sm:p-6">
-        <p className="kuteka-detail-meta">A carregar avaliação técnica…</p>
+        <p className="kuteka-detail-meta">{copy.loading}</p>
       </section>
     );
   }
@@ -124,23 +116,22 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
         aria-labelledby="eval-heading"
       >
         <h2 id="eval-heading" className="kuteka-detail-title">
-          Avaliação técnica
+          {copy.title}
         </h2>
-        <p className="kuteka-detail-body mt-2">
-          Ainda não existe relatório. Serviços de gestão, remodelação ou conclusão de obra exigem
-          avaliação Cap.6 antes da publicação plena.
-        </p>
+        <p className="kuteka-detail-body mt-2">{copy.empty}</p>
       </section>
     );
   }
 
+  const statusLabels = copy.status as Record<string, string>;
+  const riskLabels = copy.risk as Record<string, string>;
   const scores = [
-    { label: 'Estrutura', value: row.score_structure },
-    { label: 'Localização', value: row.score_location },
-    { label: 'Documentação', value: row.score_documentation },
-    { label: 'Acabamentos', value: row.score_finishes },
-    { label: 'Rentabilidade', value: row.score_profitability },
-    { label: 'Segurança', value: row.score_security },
+    { label: copy.dims.structure, value: row.score_structure },
+    { label: copy.dims.location, value: row.score_location },
+    { label: copy.dims.documentation, value: row.score_documentation },
+    { label: copy.dims.finishes, value: row.score_finishes },
+    { label: copy.dims.profitability, value: row.score_profitability },
+    { label: copy.dims.security, value: row.score_security },
   ];
 
   const checklistEntries = row.checklist ? Object.entries(row.checklist) : [];
@@ -156,18 +147,18 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
     >
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--kuteka-detail-line)] pb-4">
         <div>
-          <p className="kuteka-detail-eyebrow">Manual Cap.6</p>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
           <h2 id="eval-heading" className="kuteka-detail-title mt-1">
-            Avaliação técnica & comercial
+            {copy.titleFull}
           </h2>
         </div>
         <div className="flex flex-wrap gap-2">
           <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-            {STATUS_LABELS[row.status] ?? row.status}
+            {statusLabels[row.status] ?? row.status}
           </span>
           {row.risk_level ? (
             <span className="kuteka-detail-chip">
-              {RISK_LABELS[row.risk_level] ?? row.risk_level}
+              {riskLabels[row.risk_level] ?? row.risk_level}
             </span>
           ) : null}
           <button
@@ -175,29 +166,29 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
             onClick={() => window.print()}
             className="kuteka-detail-chip kuteka-detail-chip--accent"
           >
-            Relatório PDF / imprimir
+            {copy.printReport}
           </button>
         </div>
       </div>
 
       <div className="mt-5 grid gap-6 lg:grid-cols-[auto_1fr] lg:items-center">
-        <KutekaScoreGauge score={index} size="md" label="Índice calculado" />
+        <KutekaScoreGauge score={index} size="md" label={copy.calculatedIndex} />
         <dl className="grid gap-4 sm:grid-cols-2">
           <div className="kuteka-detail-fact">
-            <dt className="kuteka-detail-label">Preço sugerido</dt>
+            <dt className="kuteka-detail-label">{copy.suggestedPrice}</dt>
             <dd className="kuteka-detail-value">{formatAoa(row.suggested_price_aoa, 'sale')}</dd>
           </div>
           <div className="kuteka-detail-fact">
-            <dt className="kuteka-detail-label">Data do relatório</dt>
+            <dt className="kuteka-detail-label">{copy.reportDate}</dt>
             <dd className="kuteka-detail-value">
-              {new Date(row.created_at).toLocaleDateString('pt-AO')}
+              {new Date(row.created_at).toLocaleDateString(LOCALE_INTL_TAG[locale])}
             </dd>
           </div>
         </dl>
       </div>
 
       <div className="mt-5">
-        <h3 className="kuteka-detail-subtitle">Classificação por dimensão</h3>
+        <h3 className="kuteka-detail-subtitle">{copy.dimsTitle}</h3>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {scores.map((s) => (
             <li
@@ -215,7 +206,7 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
 
       {checklistEntries.length ? (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Checklist técnica</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.checklistTitle}</h3>
           <ul className="mt-2 grid gap-2 sm:grid-cols-2">
             {checklistEntries.map(([key, val]) => (
               <li key={key} className="kuteka-detail-chip capitalize">
@@ -228,7 +219,7 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
 
       {photos.length ? (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Fotografias da inspeção</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.inspectionPhotos}</h3>
           <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
             {photos.map((url) => (
               <li key={url} className="overflow-hidden rounded-kuteka border border-slate-200">
@@ -239,21 +230,19 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
           </ul>
         </div>
       ) : (
-        <p className="kuteka-detail-meta mt-5">
-          Fotografias de inspeção serão anexadas pelo Agente após a visita técnica.
-        </p>
+        <p className="kuteka-detail-meta mt-5">{copy.photosPending}</p>
       )}
 
       {row.report_notes ? (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Observações / relatório</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.reportNotes}</h3>
           <p className="kuteka-detail-body mt-2 whitespace-pre-wrap">{row.report_notes}</p>
         </div>
       ) : null}
 
       {row.recommendations || row.valuation_plan ? (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Recomendações & plano de valorização</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.recommendations}</h3>
           <p className="kuteka-detail-body mt-2 whitespace-pre-wrap">
             {row.recommendations || row.valuation_plan}
           </p>
@@ -262,7 +251,7 @@ export function PropertyEvaluationPanel({ propertyId }: { propertyId: string }) 
 
       {row.counter_proposal_notes ? (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Contraproposta de preço</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.counterProposal}</h3>
           <p className="kuteka-detail-body mt-2 whitespace-pre-wrap">
             {row.counter_proposal_notes}
           </p>

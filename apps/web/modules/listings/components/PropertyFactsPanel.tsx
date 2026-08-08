@@ -2,6 +2,8 @@
 
 import { formatAoa } from '@/lib/format/aoa';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
+import { getListingsCopy } from '../content';
 import {
   getAmenityLabels,
   getConservationLabels,
@@ -10,16 +12,6 @@ import {
 } from '../lib/manual-ops-labels';
 import type { EnrichedListing } from '../types';
 
-function yesNo(value: boolean | null | undefined): string | null {
-  if (value == null) return null;
-  return value ? 'Sim' : 'Não';
-}
-
-function asAmenityList(value: EnrichedListing['amenities']): string[] {
-  if (!Array.isArray(value)) return [];
-  return value.filter((item): item is string => typeof item === 'string');
-}
-
 function Fact({ label, value }: { label: string; value: string }) {
   return (
     <div className="kuteka-detail-fact">
@@ -27,6 +19,11 @@ function Fact({ label, value }: { label: string; value: string }) {
       <dd className="kuteka-detail-value">{value}</dd>
     </div>
   );
+}
+
+function asAmenityList(value: EnrichedListing['amenities']): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === 'string');
 }
 
 type PropertyFactsPanelProps = {
@@ -40,19 +37,30 @@ type PropertyFactsPanelProps = {
  */
 export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFactsPanelProps) {
   const { locale } = useLocale();
+  const copy = getListingsCopy(locale).facts;
   const amenityLabels = getAmenityLabels(locale);
   const conservationLabels = getConservationLabels(locale);
   const constructionLabels = getConstructionLabels(locale);
   const managementLabels = getManagementLabels(locale);
   const amenities = asAmenityList(row.amenities);
+  const intl = LOCALE_INTL_TAG[locale];
+
+  function yesNo(value: boolean | null | undefined): string | null {
+    if (value == null) return null;
+    return value ? copy.yes : copy.no;
+  }
+
+  function areaValue(n: number): string {
+    return copy.areaM2Template.replace('{n}', Number(n).toLocaleString(intl));
+  }
 
   return (
     <section className="kuteka-detail-panel p-5 sm:p-6" aria-labelledby="facts-heading">
       <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[var(--kuteka-detail-line)] pb-4">
         <div>
-          <p className="kuteka-detail-eyebrow">Ficha do património</p>
+          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
           <h2 id="facts-heading" className="kuteka-detail-title mt-1">
-            Informações essenciais
+            {copy.title}
           </h2>
         </div>
         <p className="kuteka-detail-price">{formatAoa(row.price_aoa, row.purpose)}</p>
@@ -60,7 +68,7 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
 
       {(row.description || row.notes) && (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Descrição</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.description}</h3>
           <p className="kuteka-detail-body mt-2 whitespace-pre-wrap">
             {row.description || row.notes}
           </p>
@@ -68,106 +76,103 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
       )}
 
       <dl className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Fact label="Tipologia" value={typeLabel} />
-        <Fact label="Finalidade comercial" value={purposeLabel} />
+        <Fact label={copy.typology} value={typeLabel} />
+        <Fact label={copy.commercialPurpose} value={purposeLabel} />
         {row.management_level ? (
           <Fact
-            label="Nível de gestão"
+            label={copy.managementLevel}
             value={managementLabels[row.management_level] ?? row.management_level}
           />
         ) : null}
-        <Fact label="Província" value={row.province || '—'} />
-        <Fact label="Município" value={row.municipality || '—'} />
-        <Fact label="Comuna" value={row.commune || '—'} />
-        <Fact label="Cidade" value={row.city || '—'} />
-        <Fact label="Bairro" value={row.neighborhood || '—'} />
-        <Fact label="Rua" value={row.address_line || '—'} />
-        <Fact label="Número" value={row.street_number || '—'} />
+        <Fact label={copy.province} value={row.province || '—'} />
+        <Fact label={copy.municipality} value={row.municipality || '—'} />
+        <Fact label={copy.commune} value={row.commune || '—'} />
+        <Fact label={copy.city} value={row.city || '—'} />
+        <Fact label={copy.neighborhood} value={row.neighborhood || '—'} />
+        <Fact label={copy.street} value={row.address_line || '—'} />
+        <Fact label={copy.streetNumber} value={row.street_number || '—'} />
         {row.latitude != null && row.longitude != null ? (
           <Fact
-            label="Coordenadas GPS"
+            label={copy.gps}
             value={`${Number(row.latitude).toFixed(5)}, ${Number(row.longitude).toFixed(5)}`}
           />
         ) : null}
-        {row.bedrooms != null ? <Fact label="Quartos" value={`T${row.bedrooms}`} /> : null}
+        {row.bedrooms != null ? <Fact label={copy.bedrooms} value={`T${row.bedrooms}`} /> : null}
         {row.bathrooms != null ? (
-          <Fact label="Casas de banho" value={String(row.bathrooms)} />
+          <Fact label={copy.bathrooms} value={String(row.bathrooms)} />
         ) : null}
         {row.area_useful_m2 != null ? (
-          <Fact
-            label="Área útil"
-            value={`${Number(row.area_useful_m2).toLocaleString('pt-AO')} m²`}
-          />
+          <Fact label={copy.usefulArea} value={areaValue(row.area_useful_m2)} />
         ) : null}
         {row.area_total_m2 != null ? (
+          <Fact label={copy.totalArea} value={areaValue(row.area_total_m2)} />
+        ) : null}
+        {row.floors != null ? <Fact label={copy.floors} value={String(row.floors)} /> : null}
+        {row.parking_spaces != null ? (
           <Fact
-            label="Área total"
-            value={`${Number(row.area_total_m2).toLocaleString('pt-AO')} m²`}
+            label={copy.parking}
+            value={copy.parkingTemplate.replace('{n}', String(row.parking_spaces))}
           />
         ) : null}
-        {row.floors != null ? <Fact label="Pisos" value={String(row.floors)} /> : null}
-        {row.parking_spaces != null ? (
-          <Fact label="Estacionamento" value={`${row.parking_spaces} lugar(es)`} />
-        ) : null}
         {row.year_built != null ? (
-          <Fact label="Ano de construção" value={String(row.year_built)} />
+          <Fact label={copy.yearBuilt} value={String(row.year_built)} />
         ) : null}
         {row.conservation_state ? (
           <Fact
-            label="Estado de conservação"
+            label={copy.conservation}
             value={conservationLabels[row.conservation_state] ?? row.conservation_state}
           />
         ) : null}
         {row.construction_status ? (
           <Fact
-            label="Estado da construção"
+            label={copy.construction}
             value={constructionLabels[row.construction_status] ?? row.construction_status}
           />
         ) : null}
         {row.renovated_year != null ? (
-          <Fact label="Remodelação" value={String(row.renovated_year)} />
+          <Fact label={copy.renovation} value={String(row.renovated_year)} />
         ) : null}
         {row.monthly_condo_aoa != null ? (
           <Fact
-            label="Custos mensais (condomínio)"
-            value={`${Number(row.monthly_condo_aoa).toLocaleString('pt-AO')} AOA`}
+            label={copy.monthlyCondo}
+            value={`${Number(row.monthly_condo_aoa).toLocaleString(intl)} AOA`}
           />
         ) : null}
         {yesNo(row.has_piped_water) ? (
-          <Fact label="Água canalizada" value={yesNo(row.has_piped_water)!} />
+          <Fact label={copy.pipedWater} value={yesNo(row.has_piped_water)!} />
         ) : null}
         {yesNo(row.has_electricity) ? (
-          <Fact label="Energia eléctrica" value={yesNo(row.has_electricity)!} />
+          <Fact label={copy.electricity} value={yesNo(row.has_electricity)!} />
         ) : null}
         {yesNo(row.has_generator) ? (
-          <Fact label="Gerador" value={yesNo(row.has_generator)!} />
+          <Fact label={copy.generator} value={yesNo(row.has_generator)!} />
         ) : null}
         {yesNo(row.has_internet) ? (
-          <Fact label="Internet" value={yesNo(row.has_internet)!} />
+          <Fact label={copy.internet} value={yesNo(row.has_internet)!} />
         ) : null}
         {yesNo(row.has_security) ? (
-          <Fact label="Segurança" value={yesNo(row.has_security)!} />
+          <Fact label={copy.security} value={yesNo(row.has_security)!} />
         ) : null}
         {yesNo(row.has_paved_street) ? (
-          <Fact label="Pavimentação" value={yesNo(row.has_paved_street)!} />
+          <Fact label={copy.pavedStreet} value={yesNo(row.has_paved_street)!} />
         ) : null}
         {yesNo(row.near_schools) ? (
-          <Fact label="Escolas próximas" value={yesNo(row.near_schools)!} />
+          <Fact label={copy.nearSchools} value={yesNo(row.near_schools)!} />
         ) : null}
         {yesNo(row.near_hospitals) ? (
-          <Fact label="Hospitais próximos" value={yesNo(row.near_hospitals)!} />
+          <Fact label={copy.nearHospitals} value={yesNo(row.near_hospitals)!} />
         ) : null}
         {yesNo(row.near_markets) ? (
-          <Fact label="Mercados próximos" value={yesNo(row.near_markets)!} />
+          <Fact label={copy.nearMarkets} value={yesNo(row.near_markets)!} />
         ) : null}
         {yesNo(row.near_transport) ? (
-          <Fact label="Transportes próximos" value={yesNo(row.near_transport)!} />
+          <Fact label={copy.nearTransport} value={yesNo(row.near_transport)!} />
         ) : null}
       </dl>
 
       {amenities.length ? (
         <div className="mt-6">
-          <h3 className="kuteka-detail-subtitle">Comodidades & serviços</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.amenitiesTitle}</h3>
           <ul className="mt-3 flex flex-wrap gap-2">
             {amenities.map((key) => (
               <li key={key} className="kuteka-detail-chip kuteka-detail-chip--accent">
@@ -180,7 +185,7 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
 
       {row.condo_rules ? (
         <div className="mt-6">
-          <h3 className="kuteka-detail-subtitle">Regras do condomínio</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.condoRulesTitle}</h3>
           <p className="kuteka-detail-body mt-2 whitespace-pre-wrap">{row.condo_rules}</p>
         </div>
       ) : null}
@@ -193,10 +198,10 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
             rel="noreferrer"
             className="kuteka-detail-chip kuteka-detail-chip--accent"
           >
-            Vídeo da casa
+            {copy.video}
           </a>
         ) : (
-          <span className="kuteka-detail-chip">Vídeo · em breve</span>
+          <span className="kuteka-detail-chip">{copy.videoSoon}</span>
         )}
         {row.virtual_tour_url ? (
           <a
@@ -205,10 +210,10 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
             rel="noreferrer"
             className="kuteka-detail-chip kuteka-detail-chip--accent"
           >
-            Visita 360°
+            {copy.tour}
           </a>
         ) : (
-          <span className="kuteka-detail-chip">Visita 360° · em breve</span>
+          <span className="kuteka-detail-chip">{copy.tourSoon}</span>
         )}
         {row.floor_plan_url ? (
           <a
@@ -217,10 +222,10 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
             rel="noreferrer"
             className="kuteka-detail-chip kuteka-detail-chip--accent"
           >
-            Planta
+            {copy.floorPlan}
           </a>
         ) : (
-          <span className="kuteka-detail-chip">Planta · em breve</span>
+          <span className="kuteka-detail-chip">{copy.floorPlanSoon}</span>
         )}
         {row.documents_url ? (
           <a
@@ -229,10 +234,10 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
             rel="noreferrer"
             className="kuteka-detail-chip kuteka-detail-chip--accent"
           >
-            Documentos
+            {copy.documents}
           </a>
         ) : (
-          <span className="kuteka-detail-chip">Documentos · sob pedido</span>
+          <span className="kuteka-detail-chip">{copy.documentsOnRequest}</span>
         )}
       </div>
     </section>

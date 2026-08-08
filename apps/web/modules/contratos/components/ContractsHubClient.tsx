@@ -117,14 +117,14 @@ export function ContractsHubClient() {
 
             <section
               className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-              aria-label="Resumo Contratos"
+              aria-label={copy.stats.summaryAria}
             >
               {(
                 [
-                  ['Activo', stats.active],
-                  ['Pendente', stats.pending],
-                  ['Concluído', stats.completed],
-                  ['Inventário Beta', stats.demo],
+                  [copy.stats.active, stats.active],
+                  [copy.stats.pending, stats.pending],
+                  [copy.stats.completed, stats.completed],
+                  [copy.stats.betaInventory, stats.demo],
                 ] as const
               ).map(([label, value]) => (
                 <div
@@ -188,8 +188,10 @@ export function ContractsHubClient() {
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <p className="font-mono text-xs text-slate-500">{row.code}</p>
-                              {inventoryBadge(row.is_demo) ? (
-                                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+                              {inventoryBadge(row.is_demo, locale) ? (
+                                <Badge variant="default">
+                                  {inventoryBadge(row.is_demo, locale)}
+                                </Badge>
                               ) : null}
                             </div>
                             <h3 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">

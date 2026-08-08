@@ -190,22 +190,20 @@ export function CreateContractForm() {
 
             {!loading && properties.length === 0 ? (
               <div className="rounded-kuteka border border-slate-200 bg-white px-4 py-4">
-                <p className="font-medium text-slate-800">Sem patrimónios activos para contratar</p>
-                <p className="mt-1 text-sm text-slate-500">
-                  Active um património ou use a Administração para acompanhar o inventário demo.
-                </p>
+                <p className="font-medium text-slate-800">{copy.emptyActivePropertiesTitle}</p>
+                <p className="mt-1 text-sm text-slate-500">{copy.emptyActivePropertiesHint}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Link
                     href="/app/patrimonios/novo"
                     className={cn(buttonVariants({ variant: 'primary', size: 'sm' }))}
                   >
-                    Activar património
+                    {copy.emptyActivePropertiesActivate}
                   </Link>
                   <Link
                     href="/app/habitacao/explorar"
                     className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
                   >
-                    Ver inventário
+                    {copy.emptyActivePropertiesViewInventory}
                   </Link>
                 </div>
               </div>

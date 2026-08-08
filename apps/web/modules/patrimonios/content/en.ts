@@ -6,7 +6,7 @@ export const patrimoniosCopyEn: PatrimoniosCopy = {
     'Activate a property with commercial purpose, Kuteka services, asset management and a full listing — aligned with the Operations Manual.',
   emptyTitle: 'No property activated',
   empty:
-    'Activate your first property with photos, requested services and management level. The demo inventory is already available under Housing.',
+    'Activate your first property with photos, requested services and management level. The Beta inventory is already available under Housing.',
   emptyCta: 'Activate your first property',
   activate: 'Activate Property',
   activating: 'Activating…',

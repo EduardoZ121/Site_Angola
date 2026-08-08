@@ -2,6 +2,8 @@
 
 import { cn } from '@kuteka/shared';
 import { mediaKindFromUrl } from '@/lib/media/property-media';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getListingsCopy } from '../content';
 import type { ListingMedia } from '../types';
 
 type PropertyGalleryProps = {
@@ -30,13 +32,18 @@ function GalleryThumb({ url, kind }: { url: string; kind: 'image' | 'video' }) {
 }
 
 export function PropertyGallery({ title, activeUrl, gallery, onSelect }: PropertyGalleryProps) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale).gallery;
   const activeKind = mediaKindFromUrl(
     activeUrl,
     gallery.find((m) => m.public_url === activeUrl)?.media_kind,
   );
 
   return (
-    <section className="kuteka-detail-panel overflow-hidden" aria-label={`Galeria de ${title}`}>
+    <section
+      className="kuteka-detail-panel overflow-hidden"
+      aria-label={copy.ariaTemplate.replace('{title}', title)}
+    >
       {activeUrl ? (
         <div className="bg-slate-200">
           {activeKind === 'video' ? (
@@ -59,7 +66,7 @@ export function PropertyGallery({ title, activeUrl, gallery, onSelect }: Propert
         </div>
       ) : (
         <div className="flex aspect-[16/9] items-center justify-center bg-slate-200">
-          <p className="kuteka-detail-meta">Sem fotografia ou vídeo</p>
+          <p className="kuteka-detail-meta">{copy.empty}</p>
         </div>
       )}
 
@@ -67,12 +74,16 @@ export function PropertyGallery({ title, activeUrl, gallery, onSelect }: Propert
         <ul className="flex gap-2 overflow-x-auto border-t border-[var(--kuteka-detail-line)] p-3">
           {gallery.map((m) => {
             const kind = mediaKindFromUrl(m.public_url, m.media_kind);
+            const kindLabel = kind === 'video' ? copy.video : copy.photo;
             return (
               <li key={m.id}>
                 <button
                   type="button"
                   onClick={() => onSelect(m.public_url)}
-                  aria-label={`${kind === 'video' ? 'Vídeo' : 'Fotografia'} ${m.sort_order + 1} de ${title}`}
+                  aria-label={copy.thumbAriaTemplate
+                    .replace('{kind}', kindLabel)
+                    .replace('{n}', String(m.sort_order + 1))
+                    .replace('{title}', title)}
                   aria-pressed={activeUrl === m.public_url}
                   className={cn(
                     'relative block overflow-hidden rounded-md border-2',

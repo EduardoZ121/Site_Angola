@@ -14,13 +14,16 @@ import { GO_LIVE_READINESS, goLiveReadinessSummary } from '../lib/go-live-readin
 import { KOCC_STATUS_OPTIONS, adminStatusLabel, publicStatusLabel } from '../lib/status-labels';
 import {
   listAudit,
+  listBetaMetrics,
   listFlags,
   parseCsvList,
   upsertFlag,
   type KoccAuditRow,
+  type KoccBetaMetrics,
   type KoccFlagRow,
   type KoccUpsertFlagInput,
 } from '../services/kocc-client';
+import { BetaPanelSection } from './BetaPanelSection';
 
 type PanelProps = {
   canManage: boolean;
@@ -74,9 +77,16 @@ export function KoccCenterClient({ canManage }: PanelProps) {
   const [audit, setAudit] = useState<KoccAuditRow[]>([]);
   const [drafts, setDrafts] = useState<Record<string, FlagDraft>>({});
   const [loading, setLoading] = useState(true);
+  const [betaMetrics, setBetaMetrics] = useState<KoccBetaMetrics | null>(null);
+  const [betaLoading, setBetaLoading] = useState(true);
+  const [betaError, setBetaError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const [flagsRes, auditRes] = await Promise.all([listFlags(), listAudit(30)]);
+    const [flagsRes, auditRes, metricsRes] = await Promise.all([
+      listFlags(),
+      listAudit(30),
+      listBetaMetrics(),
+    ]);
     if (flagsRes.ok) {
       setFlags(flagsRes.data);
       setDrafts((prev) => {
@@ -90,6 +100,14 @@ export function KoccCenterClient({ canManage }: PanelProps) {
       setError(flagsRes.message);
     }
     if (auditRes.ok) setAudit(auditRes.data);
+    if (metricsRes.ok) {
+      setBetaMetrics(metricsRes.data);
+      setBetaError(null);
+    } else {
+      setBetaMetrics(null);
+      setBetaError(metricsRes.message);
+    }
+    setBetaLoading(false);
     setLoading(false);
   }, [setError]);
 
@@ -140,6 +158,8 @@ export function KoccCenterClient({ canManage }: PanelProps) {
   return (
     <div className="flex flex-col gap-4">
       <Feedback error={error} message={message} />
+
+      <BetaPanelSection metrics={betaMetrics} loading={betaLoading} loadError={betaError} />
 
       <PanelSection
         title="Controlo Operacional (KOCC)"

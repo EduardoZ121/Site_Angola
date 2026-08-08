@@ -30,7 +30,7 @@ export const administracaoCopyEs: AdministracaoCopy = {
     agents: 'Agentes Certificados',
     trust: 'Verificaciones pendientes',
     interests: 'Intereses pendientes',
-    demo: 'Anuncios de demostración',
+    demo: 'Inventario Beta',
     contractsActive: 'Contratos activos',
     contractsPending: 'Contratos pendientes',
   },

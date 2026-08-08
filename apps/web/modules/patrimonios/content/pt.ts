@@ -4,7 +4,7 @@ export const patrimoniosCopyPt = {
     'Active património com finalidade comercial, serviços Kuteka, gestão patrimonial e ficha completa — alinhado ao Manual Operacional.',
   emptyTitle: 'Nenhum património activado',
   empty:
-    'Active o primeiro património com fotografias ou vídeos, serviços pretendidos e nível de gestão. O inventário de demonstração já está disponível em Habitação.',
+    'Active o primeiro património com fotografias ou vídeos, serviços pretendidos e nível de gestão. O inventário Beta já está disponível em Habitação.',
   emptyCta: 'Ativar o primeiro património',
   activate: 'Ativar Património',
   activating: 'A activar…',

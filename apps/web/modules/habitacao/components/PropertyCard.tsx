@@ -31,7 +31,7 @@ function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProp
       <Link
         href={href}
         className="block aspect-[16/10] bg-slate-100"
-        aria-label={`Fotografia: ${row.title}`}
+        aria-label={copy.photoAriaTemplate.replace('{title}', row.title)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -50,8 +50,8 @@ function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProp
           <Badge variant="brand">
             {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
           </Badge>
-          {inventoryBadge(row.is_demo) ? (
-            <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+          {inventoryBadge(row.is_demo, locale) ? (
+            <Badge variant="default">{inventoryBadge(row.is_demo, locale)}</Badge>
           ) : null}
         </div>
         <div>

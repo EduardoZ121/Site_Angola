@@ -9,16 +9,16 @@ export const agenteCopyPt = {
   saving: 'A guardar…',
   saved: 'Preferências guardadas.',
   needAgent:
-    'Operações reais requerem o papel Agente Certificado (atribuído pela Administração). Abaixo encontra uma demonstração do pipeline.',
-  demoTitle: 'Demonstração do pipeline',
+    'Operações reais requerem o papel Agente Certificado (atribuído pela Administração). Abaixo encontra uma pré-visualização Beta do pipeline.',
+  demoTitle: 'Pré-visualização Beta do pipeline',
   demoHint:
-    'Dados ilustrativos com o inventário demo — para experimentar a jornada sem permissão de agente.',
+    'Dados ilustrativos com o inventário Beta — para experimentar a jornada sem permissão de agente.',
   demoVisits: 'Visitas',
   demoAgenda: 'Agenda',
   demoPipeline: 'Pipeline',
   requestAgent: 'Pedir activação (contacto)',
   requestAgentHint:
-    'O papel Agente Certificado é atribuído pela Administração. Contacte a Kuteka ou continue a explorar a demonstração.',
+    'O papel Agente Certificado é atribuído pela Administração. Contacte a Kuteka ou continue a explorar a pré-visualização Beta.',
   loadError: 'Estamos a ter dificuldade em mostrar a área Agente. Tente novamente.',
   saveError: 'Não conseguimos guardar. Tente novamente.',
   forbidden: 'Não tem permissão de Agente Certificado.',

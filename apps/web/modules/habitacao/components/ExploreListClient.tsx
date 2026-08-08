@@ -335,10 +335,10 @@ export function ExploreListClient() {
                   </ul>
                   <div ref={sentinelRef} className="h-8 w-full" aria-hidden />
                   {loadingMore ? (
-                    <p className="py-2 text-center text-xs text-slate-500">A carregar mais…</p>
+                    <p className="py-2 text-center text-xs text-slate-500">{copy.loadingMore}</p>
                   ) : null}
                   {!hasMore ? (
-                    <Text className="text-center text-sm text-slate-500">Fim dos resultados</Text>
+                    <Text className="text-center text-sm text-slate-500">{copy.endOfResults}</Text>
                   ) : null}
                 </>
               ) : null}

@@ -6,15 +6,12 @@ export type HeroMediaSource = {
   imageMobile?: string;
   /** Optional lightweight loop; image always remains the fallback. */
   video?: string;
-  alt: string;
-  eyebrow: string;
-  title: string;
-  subtitle: string;
 };
 
 /**
  * Cinematic atmospheres — same visual language as the Landing hero.
  * Full-bleed second plane; never inset banner cards.
+ * Copy (alt/eyebrow/title/subtitle) lives in shell content packs.
  */
 export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
   dashboard: {
@@ -23,10 +20,6 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-white-luxury-home-exterior-and-pool-5061-large.mp4',
-    alt: 'Moradia contemporânea ao entardecer',
-    eyebrow: 'Kuteka · Angola',
-    title: 'Plataforma imobiliária viva',
-    subtitle: 'Património, habitação e confiança — a continuação natural da Landing.',
   },
   patrimonios: {
     image:
@@ -34,10 +27,6 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-modern-house-with-a-pool-5062-large.mp4',
-    alt: 'Moradia contemporânea com arquitectura premium',
-    eyebrow: 'Parceiro Patrimonial',
-    title: 'Publique património com presença',
-    subtitle: 'Fotografias, preço e galeria — o anúncio começa aqui.',
   },
   habitacao: {
     image:
@@ -45,10 +34,6 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-living-room-of-a-modern-luxury-house-4703-large.mp4',
-    alt: 'Interior residencial elegante',
-    eyebrow: 'Cliente',
-    title: 'Encontre habitação com transparência',
-    subtitle: 'Explore, filtre e demonstre interesse no inventário activo.',
   },
   agente: {
     image:
@@ -56,28 +41,16 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-11-large.mp4',
-    alt: 'Mediação e trabalho de campo',
-    eyebrow: 'Agente Certificado',
-    title: 'Acompanhe no terreno',
-    subtitle: 'Cobertura, visitas, interesses e pipeline num só lugar.',
   },
   confianca: {
     image:
       'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=2000&q=80',
     imageMobile: '/images/hero-mobile.jpg',
-    alt: 'Documentação e verificação segura',
-    eyebrow: 'Verificação',
-    title: 'Relações seguras com evidência',
-    subtitle: 'Checklist clara — Em análise, Aprovado ou Rejeitado.',
   },
   contratos: {
     image:
       'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=2000&q=80',
     imageMobile: '/images/hero-mobile.jpg',
-    alt: 'Mesa executiva com contrato e assinatura',
-    eyebrow: 'Contrato',
-    title: 'Formalize com clareza',
-    subtitle: 'Partes, valor, termos e aceitação antes de Pagamentos.',
   },
   admin: {
     image:
@@ -85,10 +58,6 @@ export const HERO_MEDIA: Record<HeroMediaPreset, HeroMediaSource> = {
     imageMobile: '/images/hero-mobile.jpg',
     video:
       'https://assets.mixkit.co/videos/preview/mixkit-modern-office-space-with-furniture-and-large-windows-4492-large.mp4',
-    alt: 'Ambiente executivo de operação',
-    eyebrow: 'Operação',
-    title: 'Comando da plataforma',
-    subtitle: 'Contas, patrimónios, verificações e pedidos pendentes.',
   },
 };
 

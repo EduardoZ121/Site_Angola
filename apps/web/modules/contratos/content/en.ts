@@ -12,11 +12,23 @@ export const contratosCopyEn: ContratosCopy = {
   created: 'Contract prepared for acceptance.',
   detailTitle: 'Contract detail',
   demoNote:
-    'Beta inventory: contracts linked to the KTK-DEMO inventory to show the process in use.',
+    'Beta inventory: sample contracts linked to the KTK catalogue to show the process in use.',
   emptyTitle: 'No contracts yet',
   empty:
     'Once Trust and Administration validate the parties, prepare the first contract to proceed to Payments.',
   emptyDemo: 'If the database is empty, run the PRD-008 migration to load KTK-CTR Beta contracts.',
+  emptyActivePropertiesTitle: 'No active properties to contract',
+  emptyActivePropertiesHint:
+    'Activate a property or use Administration to follow the Beta inventory.',
+  emptyActivePropertiesActivate: 'Activate property',
+  emptyActivePropertiesViewInventory: 'View inventory',
+  stats: {
+    summaryAria: 'Contracts summary',
+    active: 'Active',
+    pending: 'Pending',
+    completed: 'Completed',
+    betaInventory: 'Beta inventory',
+  },
   loadError: 'We are having trouble showing the contracts. Please try again.',
   saveError: 'We could not prepare the contract. Check the details and try again.',
   transitionError: 'We could not update the contract. Please try again.',

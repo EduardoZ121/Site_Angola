@@ -12,12 +12,24 @@ export const contratosCopyEs: ContratosCopy = {
   created: 'Contrato preparado para su aceptación.',
   detailTitle: 'Detalle del contrato',
   demoNote:
-    'Datos de demostración: contratos vinculados al inventario KTK-DEMO para mostrar el proceso en uso.',
+    'Inventario Beta: contratos de ejemplo vinculados al catálogo KTK para mostrar el proceso en uso.',
   emptyTitle: 'Aún no hay contratos',
   empty:
     'Cuando Confianza y Administración validen las partes, prepare el primer contrato para pasar a Pagos.',
   emptyDemo:
-    'Si la base de datos está vacía, ejecute la migración PRD-008 para cargar los contratos de demostración KTK-CTR.',
+    'Si la base de datos está vacía, ejecute la migración PRD-008 para cargar los contratos de inventario Beta KTK-CTR.',
+  emptyActivePropertiesTitle: 'Sin patrimonios activos para contratar',
+  emptyActivePropertiesHint:
+    'Active un patrimonio o use Administración para seguir el inventario Beta.',
+  emptyActivePropertiesActivate: 'Activar patrimonio',
+  emptyActivePropertiesViewInventory: 'Ver inventario',
+  stats: {
+    summaryAria: 'Resumen Contratos',
+    active: 'Activo',
+    pending: 'Pendiente',
+    completed: 'Concluido',
+    betaInventory: 'Inventario Beta',
+  },
   loadError: 'Estamos teniendo dificultades para mostrar los contratos. Inténtelo de nuevo.',
   saveError: 'No pudimos preparar el contrato. Verifique los datos e inténtelo de nuevo.',
   transitionError: 'No pudimos actualizar el contrato. Inténtelo de nuevo.',

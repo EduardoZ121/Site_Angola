@@ -11,16 +11,16 @@ export const agenteCopyFr: AgenteCopy = {
   saving: 'Enregistrement…',
   saved: 'Préférences enregistrées.',
   needAgent:
-    'Les opérations réelles nécessitent le rôle Agent Certifié (attribué par l’Administration). Ci-dessous une démonstration du pipeline.',
-  demoTitle: 'Démonstration du pipeline',
+    'Les opérations réelles nécessitent le rôle Agent Certifié (attribué par l’Administration). Ci-dessous une prévisualisation Bêta du pipeline.',
+  demoTitle: 'Prévisualisation Bêta du pipeline',
   demoHint:
-    'Données illustratives avec l’inventaire de démonstration — pour découvrir le parcours sans permission d’agent.',
+    'Données illustratives avec l’inventaire Bêta — pour découvrir le parcours sans permission d’agent.',
   demoVisits: 'Visites',
   demoAgenda: 'Agenda',
   demoPipeline: 'Pipeline',
   requestAgent: 'Demander l’activation (contact)',
   requestAgentHint:
-    'Le rôle Agent Certifié est attribué par l’Administration. Contactez Kuteka ou continuez à explorer la démonstration.',
+    'Le rôle Agent Certifié est attribué par l’Administration. Contactez Kuteka ou continuez à explorer la prévisualisation Bêta.',
   loadError: 'Nous avons du mal à afficher l’espace Agent. Veuillez réessayer.',
   saveError: 'Nous n’avons pas pu enregistrer. Veuillez réessayer.',
   forbidden: 'Vous n’avez pas la permission d’Agent Certifié.',

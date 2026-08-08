@@ -6,7 +6,7 @@ export const patrimoniosCopyEs: PatrimoniosCopy = {
     'Active un patrimonio con finalidad comercial, servicios Kuteka, gestión patrimonial y ficha completa — conforme al Manual Operativo.',
   emptyTitle: 'Ningún patrimonio activado',
   empty:
-    'Active su primer patrimonio con fotografías, servicios deseados y nivel de gestión. El inventario de demostración ya está disponible en Vivienda.',
+    'Active su primer patrimonio con fotografías, servicios deseados y nivel de gestión. El inventario Beta ya está disponible en Vivienda.',
   emptyCta: 'Activar el primer patrimonio',
   activate: 'Activar patrimonio',
   activating: 'Activando…',

@@ -28,7 +28,7 @@ export const administracaoCopyPt = {
     agents: 'Agentes Certificados',
     trust: 'Verificações pendentes',
     interests: 'Interesses pendentes',
-    demo: 'Anúncios demo',
+    demo: 'Inventário Beta',
     contractsActive: 'Contratos activos',
     contractsPending: 'Contratos pendentes',
   },
