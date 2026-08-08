@@ -53,7 +53,27 @@ export type HousingPropertyRow = {
   expected_available_on?: string | null;
   availability_note?: string | null;
   kuteka_score?: number | null;
+  review_status?: string | null;
+  general_visible_at?: string | null;
+  premium_visible_at?: string | null;
 };
+
+/**
+ * Real listings need Admin approval. Inventário Beta (`is_demo`) permanece visível.
+ * Após aprovação, `premium_visible_at` marca o início da janela; o exclusividade
+ * premium-only (~6h) entra na Fase B — até lá todos vêem a partir de premium_visible_at.
+ */
+export function isHousingRowPubliclyVisible(row: HousingPropertyRow, now = Date.now()): boolean {
+  if (row.is_demo) return true;
+  if (row.status !== 'active') return false;
+  const review = row.review_status ?? 'approved';
+  if (review !== 'approved') return false;
+  if (row.premium_visible_at) {
+    const premiumAt = Date.parse(row.premium_visible_at);
+    if (!Number.isNaN(premiumAt) && premiumAt > now) return false;
+  }
+  return true;
+}
 
 export type ClientPreferencesRow = {
   user_id: string;
@@ -192,10 +212,10 @@ function filterByQuery(rows: HousingPropertyRow[], query?: string | null): Housi
 }
 
 const PROPERTY_SELECT_CORE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score, review_status, general_visible_at, premium_visible_at';
 
 const PROPERTY_SELECT_FUTURE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score, review_status, general_visible_at, premium_visible_at';
 
 /**
  * Paginated explore — foundation for infinite feed at scale.
@@ -246,7 +266,9 @@ export async function exploreActivePropertiesPage(
     const { data, error } = await query.range(from, to);
     if (error) return { ok: false, message: copy.loadError };
 
-    let rows = filterByQuery((data as unknown as HousingPropertyRow[]) ?? [], params.query);
+    let rows = filterByQuery((data as unknown as HousingPropertyRow[]) ?? [], params.query).filter(
+      (row) => isHousingRowPubliclyVisible(row),
+    );
     const hasMore = rows.length > limit;
     if (hasMore) rows = rows.slice(0, limit);
 

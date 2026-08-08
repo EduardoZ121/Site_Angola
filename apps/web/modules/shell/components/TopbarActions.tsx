@@ -7,20 +7,44 @@ import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { MessagesTopbarButton } from '@/modules/mensagens/components/MessagesTopbarButton';
 import { getShellCopy } from '../content';
-import { notificationsForMode, unreadCount } from '../notifications';
+import { notificationsForMode, unreadCount, type ShellNotification } from '../notifications';
+import { fetchMyNotifications, markMyNotificationsRead } from '../services/notifications-client';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useRoleExperience } from './RoleExperienceProvider';
 
-/** Topbar: language + role-aware notifications. */
+/** Topbar: language + role-aware notifications (DB first, catalog fallback). */
 export function TopbarActions() {
   const { locale } = useLocale();
   const shell = getShellCopy(locale);
   const { mode } = useRoleExperience();
-  const items = notificationsForMode(mode, locale);
+  const catalogItems = notificationsForMode(mode, locale);
+  const [dbItems, setDbItems] = useState<ShellNotification[]>([]);
+  const items = dbItems.length > 0 ? dbItems : catalogItems;
   const count = unreadCount(items);
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const panelId = useId();
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchMyNotifications(20).then((rows) => {
+      if (!cancelled) setDbItems(rows);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [mode, locale]);
+
+  useEffect(() => {
+    if (!open || dbItems.length === 0) return;
+    const unreadIds = dbItems.filter((i) => i.unread).map((i) => i.id);
+    if (!unreadIds.length) return;
+    void markMyNotificationsRead(unreadIds).then(() => {
+      setDbItems((prev) => prev.map((i) => ({ ...i, unread: false })));
+    });
+    // Only when panel opens — not on every dbItems change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional open-gated mark-read
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
