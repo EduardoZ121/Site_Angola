@@ -276,6 +276,32 @@ export const shellCopyPt = {
     defaultTitle: 'Continuar o percurso',
     kaiEyebrow: 'KAI · Próximo passo',
   },
+  betaFeedback: {
+    eyebrow: 'Acesso antecipado',
+    title: 'Partilhar feedback Beta',
+    subtitle:
+      'Ajude a melhorar a Kuteka antes do lançamento comercial. O Super Administrador vê isto no Painel Beta.',
+    kindFeedback: 'Sugestão / feedback',
+    kindBug: 'Reportar bug',
+    bodyLabel: 'Descrição',
+    placeholder: 'O que correu bem, o que falhou, ou o que gostaria de ver…',
+    submit: 'Enviar',
+    sending: 'A enviar…',
+    success: 'Obrigado — o seu contributo foi registado.',
+    error: 'Não conseguimos enviar. Tente novamente.',
+  },
+  firstActions: {
+    title: 'A sua primeira acção útil',
+    kaiHint: 'O KAI indica o próximo passo certo para o seu papel activo.',
+    clientExplore: 'Explorar habitação',
+    clientTrust: 'Completar identidade (KIS)',
+    partnerActivate: 'Activar património',
+    partnerInventory: 'Ver inventário em Habitação',
+    agentPipeline: 'Abrir pipeline do Agente',
+    adminPanel: 'Abrir Administração',
+    dualClient: 'Explorar como Cliente',
+    dualPartner: 'Publicar como Parceiro',
+  },
 } as const;
 
 type DeepStringify<T> = {

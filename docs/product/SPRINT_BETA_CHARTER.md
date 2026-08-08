@@ -2,8 +2,8 @@
 
 | Campo         | Valor                                                                                                                                      |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Versão**    | 1.1                                                                                                                                        |
-| **Data**      | 2026-08-06                                                                                                                                 |
+| **Versão**    | 1.2                                                                                                                                        |
+| **Data**      | 2026-08-08                                                                                                                                 |
 | **Natureza**  | Declaração de governação — encerra a fase de Arquitectura e abre a fase de Operação Beta                                                   |
 | **Aplica-se** | Todo o desenvolvimento a partir desta data (produto, engenharia, jurídico, operações)                                                      |
 | **Fontes**    | [KUTEKA_ROADMAP_MASTER.md](./KUTEKA_ROADMAP_MASTER.md) · [KUTEKA_OPERATING_SYSTEM.md](./KUTEKA_OPERATING_SYSTEM.md) · Missão PO 2026-08-06 |
@@ -33,14 +33,15 @@ Registada também em [`AGENTS.md`](../../AGENTS.md) e no KOS (princípio 8).
 
 Sequência **aprovada pelo PO** (Missão Cursor 2026-08-06). Cada sprint fecha com critério de saída verificável antes de abrir a seguinte.
 
-| Sprint       | Objectivo de negócio                          | Foco principal                                                                                                                                                             |
-| ------------ | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Beta 1**   | Preparação para o Beta Público                | Legal (Termos, Privacidade, Cookies); Centro de Documentação; **KOCC MVP**; Go Live Readiness; BCP/DRP v0.9; Go-Live Hardening; estratégia Beta (sem “Demo” ao utilizador) |
-| **Beta 1.5** | Confiança + Comunicação (Chat + Trust Card)   | Mensagens integradas + reputação visível (Trust Card, avaliações, KAI) — ver [SPRINT_BETA_1_5.md](./SPRINT_BETA_1_5.md)                                                    |
-| **Beta 2**   | Lançamento do Beta Público                    | Convidar ~20 Parceiros, ~20 Clientes, ~5 Agentes, ~5 Prestadores; recolher feedback                                                                                        |
-| **Beta 3**   | Corrigir o que utilizadores reais encontrarem | Sem novas funcionalidades — só correcções e estabilização                                                                                                                  |
-| **Beta 4**   | Preparar integrações reais                    | SMTP, SMS, WhatsApp, Multicaixa, EMIS (quando houver credenciais)                                                                                                          |
-| **Beta 5**   | Primeiras receitas reais                      | Activação comercial controlada dos serviços pagos                                                                                                                          |
+| Sprint        | Objectivo de negócio                          | Foco principal                                                                                                                                                             |
+| ------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Beta 1**    | Preparação para o Beta Público                | Legal (Termos, Privacidade, Cookies); Centro de Documentação; **KOCC MVP**; Go Live Readiness; BCP/DRP v0.9; Go-Live Hardening; estratégia Beta (sem “Demo” ao utilizador) |
+| **Beta 1.5A** | Confiança + Comunicação (Chat + Trust Card)   | Mensagens integradas + reputação visível — ver [SPRINT_BETA_1_5.md](./SPRINT_BETA_1_5.md)                                                                                  |
+| **Beta 1.5B** | Preparação para Utilizadores Reais            | Auditoria i18n/UX/conteúdo/performance; inventário Beta vs real; onboarding; **Painel Beta KOCC** — ver [SPRINT_BETA_1_5_PREP.md](./SPRINT_BETA_1_5_PREP.md)               |
+| **Beta 2**    | Lançamento do Beta Público                    | Convidar ~20 Parceiros, ~20 Clientes, ~5 Agentes, ~5 Prestadores; recolher feedback; **sem features novas** excepto correcções                                             |
+| **Beta 3**    | Corrigir o que utilizadores reais encontrarem | Sem novas funcionalidades — só correcções e estabilização                                                                                                                  |
+| **Beta 4**    | Preparar integrações reais                    | SMTP, SMS, WhatsApp, Multicaixa, EMIS (quando houver credenciais)                                                                                                          |
+| **Beta 5**    | Primeiras receitas reais                      | Activação comercial controlada dos serviços pagos                                                                                                                          |
 
 ## 4. Sprint Beta 1 — escopo e critério de saída
 
@@ -67,7 +68,8 @@ Sprint Beta 1 dá-se por encerrada quando:
 4. Go Live Readiness Checklist existir e ser a referência oficial.
 5. Business Continuity v0.9 e Disaster Recovery v0.9 existirem.
 6. Plataforma estabilizada para Beta Público (sem “Demo” visível; módulos controláveis no KOCC).
-7. PO confirma, por escrito, a passagem a Sprint Beta 2.
+7. PO confirma, por escrito, a passagem — **confirmação oficial recebida 2026-08-08** (Sprint Beta 1 encerrada).
+8. Antes da Beta 2: concluir [Sprint Beta 1.5B — Preparação](./SPRINT_BETA_1_5_PREP.md) (auditoria + Painel Beta).
 
 **Fora de escopo desta sprint:** novos módulos, novas ideias, funcionalidades não relacionadas com o Beta.
 
@@ -101,5 +103,6 @@ Percentagens **conservadoras**. Reavaliar no fecho de cada Sprint Beta.
 | ------ | ---------- | -------------------------------------------------------------------------------------------------------- |
 | 1.0    | 2026-08-06 | Primeira edição (governação documental)                                                                  |
 | 1.1    | 2026-08-06 | Alinhamento à Missão PO: sequência Beta 1–5 oficial; KOCC + Centro de Docs + Cookies no escopo da Beta 1 |
+| 1.2    | 2026-08-08 | Beta 1 encerrada pelo PO; Beta 1.5A/1.5B; Painel Beta KOCC antes da Beta 2                               |
 
-**Próxima revisão:** ao fechar o critério de saída da Sprint Beta 1 (§4.2) e abrir Sprint Beta 2.
+**Próxima revisão:** ao fechar [Sprint Beta 1.5B](./SPRINT_BETA_1_5_PREP.md) e abrir Sprint Beta 2.

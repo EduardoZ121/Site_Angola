@@ -105,3 +105,77 @@ export function parseCsvList(value: string): string[] {
     .map((v) => v.trim())
     .filter(Boolean);
 }
+
+export type KoccFeatureUsage = {
+  code: string;
+  label: string;
+  count: number;
+};
+
+export type KoccBetaMetrics = {
+  generatedAt: string;
+  betaUsers: number;
+  profilesTotal: number;
+  propertiesReal: number;
+  propertiesBetaInventory: number;
+  visitsScheduled: number;
+  contractsStarted: number;
+  feedbackReceived: number;
+  bugsReported: number;
+  onboardingCompletionRate: number;
+  kisCompletionRate: number;
+  featuresMostUsed: KoccFeatureUsage[];
+  featuresLeastUsed: KoccFeatureUsage[];
+  featureUsageProxy: KoccFeatureUsage[];
+  modulesOperational: {
+    code: string;
+    label: string;
+    status: string;
+    enabled: boolean;
+  }[];
+};
+
+export async function listBetaMetrics(): Promise<Result<KoccBetaMetrics>> {
+  const copy = errors();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('kocc_beta_metrics');
+    if (error) return { ok: false, message: error.message || copy.loadError };
+    return { ok: true, data: data as KoccBetaMetrics };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function submitBetaFeedback(input: {
+  kind: 'feedback' | 'bug';
+  body: string;
+  pagePath?: string;
+}): Promise<Result<{ id: string }>> {
+  const copy = errors();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('kocc_submit_beta_feedback', {
+      p_kind: input.kind,
+      p_body: input.body,
+      p_page_path: input.pagePath ?? null,
+    });
+    if (error) return { ok: false, message: error.message || copy.saveError };
+    const row = data as { id?: string } | null;
+    return { ok: true, data: { id: row?.id ?? '' } };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function trackBetaFeature(code: string, label?: string): Promise<void> {
+  try {
+    const client = createBrowserClient();
+    await client.rpc('kocc_track_feature', {
+      p_feature_code: code,
+      p_label: label ?? null,
+    });
+  } catch {
+    /* non-blocking telemetry */
+  }
+}

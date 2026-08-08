@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { BetaFeedbackForm } from '@/modules/kocc/components/BetaFeedbackForm';
 import { getShellCopy } from '../content';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
@@ -276,16 +277,19 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
       </section>
 
       {!publicMode ? (
-        <section className="kuteka-detail-panel flex flex-col gap-3 p-5" id="videos">
-          <h2 className="kuteka-detail-title">{h.videos}</h2>
-          <p className="kuteka-detail-body">{shell.helpExtra.videosPending}</p>
-          <Link
-            href="/contacto"
-            className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
-          >
-            {h.contactCta}
-          </Link>
-        </section>
+        <>
+          <BetaFeedbackForm pagePath={basePath} />
+          <section className="kuteka-detail-panel flex flex-col gap-3 p-5" id="videos">
+            <h2 className="kuteka-detail-title">{h.videos}</h2>
+            <p className="kuteka-detail-body">{shell.helpExtra.videosPending}</p>
+            <Link
+              href="/contacto"
+              className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+            >
+              {h.contactCta}
+            </Link>
+          </section>
+        </>
       ) : null}
     </div>
   );

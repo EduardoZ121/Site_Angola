@@ -26,16 +26,17 @@ Este é o **Bloco Zero**: a lista honesta de tudo o que falta, está parcial ou 
 
 ## 1. Produto
 
-| Item                                                                                                       | Estado | Nota                                                                      |
-| ---------------------------------------------------------------------------------------------------------- | :----: | ------------------------------------------------------------------------- |
-| Core v1.0 congelado (Landing, Auth, Shell, Patrimónios, Habitação, Agente, Admin, Confiança)               |   🟢   | ADR-011; em produção                                                      |
-| Contratos + Identidade/KYC self-serve                                                                      |   🟢   | ADR-012, ADR-014; sem vendor eID externo                                  |
-| Kuteka Pay — motor unificado (sandbox)                                                                     |   🟢   | Único caminho de pagamento; adaptadores reais inactivos                   |
-| Marketplace + serviços D1–D5 (ciclo completo)                                                              |   🟢   | Sandbox — dinheiro simulado                                               |
-| Feature flags no Super Admin                                                                               |   🟢   | Config-first, já em uso                                                   |
-| KOCC — controlo de estado público por módulo (Beta/Acesso antecipado/Disponível em breve/Comercial activo) |   🟢   | MVP em `/app/super` → KOCC; migration `0032` (aplicar no Supabase remoto) |
-| Upload real de documentos de Confiança                                                                     |   🔴   | Hoje apenas notes/metadata                                                |
-| i18n cobertura total de módulos comerciais                                                                 |   🟡   | Shell + packs principais; profundidade parcial                            |
+| Item                                                                                                       | Estado | Nota                                                                              |
+| ---------------------------------------------------------------------------------------------------------- | :----: | --------------------------------------------------------------------------------- |
+| Core v1.0 congelado (Landing, Auth, Shell, Patrimónios, Habitação, Agente, Admin, Confiança)               |   🟢   | ADR-011; em produção                                                              |
+| Contratos + Identidade/KYC self-serve                                                                      |   🟢   | ADR-012, ADR-014; sem vendor eID externo                                          |
+| Kuteka Pay — motor unificado (sandbox)                                                                     |   🟢   | Único caminho de pagamento; adaptadores reais inactivos                           |
+| Marketplace + serviços D1–D5 (ciclo completo)                                                              |   🟢   | Sandbox — dinheiro simulado                                                       |
+| Feature flags no Super Admin                                                                               |   🟢   | Config-first, já em uso                                                           |
+| KOCC — controlo de estado público por módulo (Beta/Acesso antecipado/Disponível em breve/Comercial activo) |   🟢   | MVP em `/app/super` → KOCC; migration `0032` (aplicar no Supabase remoto)         |
+| KOCC — Painel Beta (métricas + feedback/bugs)                                                              |   🟡   | UI + migration `0035` no código; aplicar no Supabase remoto                       |
+| Upload real de documentos de Confiança                                                                     |   🔴   | Hoje apenas notes/metadata                                                        |
+| i18n cobertura total de módulos comerciais                                                                 |   🟡   | Fichas/badges/heroes/hubs localizados (Sprint 1.5B); metadata de páginas ainda PT |
 
 ## 2. Jurídico
 
