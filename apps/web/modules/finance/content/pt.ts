@@ -48,6 +48,7 @@ export const financeCopyPt = {
     flags: 'Service Health',
     campaigns: 'Campanhas',
     kocc: 'Controlo Operacional',
+    institutional: 'Gestão Institucional',
   },
   metrics: {
     captured: 'Cobranças capturadas',

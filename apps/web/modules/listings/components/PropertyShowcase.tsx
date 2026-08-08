@@ -11,6 +11,7 @@ import { PropertyHealthPanel } from './PropertyHealthPanel';
 import { PropertyMapPanel } from './PropertyMapPanel';
 import { PropertyReviews } from './PropertyReviews';
 import { PropertyServiceContractPanel } from './PropertyServiceContractPanel';
+import { PropertySocialPanel } from './PropertySocialPanel';
 import { PropertyTimeline } from './PropertyTimeline';
 import { PropertyTrustPanel } from './PropertyTrustPanel';
 
@@ -63,6 +64,7 @@ export function PropertyShowcase({
       />
       <PropertyTrustPanel propertyId={row.id} />
       <PropertyFactsPanel row={row} typeLabel={typeLabel} purposeLabel={purposeLabel} />
+      <PropertySocialPanel propertyId={row.id} />
       <nav aria-label={copy.navAria} className="kuteka-detail-panel flex flex-wrap gap-2 px-4 py-3">
         {[
           { href: '#pdk', label: copy.navPdk },

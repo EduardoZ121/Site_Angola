@@ -49,6 +49,18 @@ export const segurancaCopyPt = {
       'Ainda sem eventos. Logins, recuperações e alterações sensíveis aparecerão aqui — com notificação quando marcado.',
     notifySuffix: ' · notificar',
   },
+  emailChange: {
+    title: 'Alterar email',
+    hint: 'Pedido com confirmação dupla (código no email actual e no novo). Em beta os códigos podem aparecer aqui (beta_inline).',
+    newEmailLabel: 'Novo email',
+    request: 'Pedir alteração',
+    oldCodeLabel: 'Código do email actual',
+    newCodeLabel: 'Código do novo email',
+    confirm: 'Confirmar alteração',
+    betaCodesHint: 'Códigos beta — actual: {old} · novo: {new}',
+    requested: 'Pedido criado. Introduza os dois códigos abaixo.',
+    completed: 'Email actualizado com sucesso.',
+  },
   actions: {
     sandboxHint: 'Sandbox: use o código {code}',
     codeSent: 'Código enviado. Introduza os 6 dígitos abaixo.',

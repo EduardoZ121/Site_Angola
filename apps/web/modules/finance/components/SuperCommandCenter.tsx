@@ -27,6 +27,7 @@ import { GatewaysPanel } from './super/GatewaysPanel';
 import { FeatureFlagsPanel } from './super/FeatureFlagsPanel';
 import { CampaignsPanel } from './super/CampaignsPanel';
 import { KoccCenterClient } from '@/modules/kocc/components/KoccCenterClient';
+import { InstitutionalCenterClient } from '@/modules/kocc/components/InstitutionalCenterClient';
 
 type TabKey =
   | 'revenue'
@@ -45,7 +46,8 @@ type TabKey =
   | 'gateways'
   | 'flags'
   | 'campaigns'
-  | 'kocc';
+  | 'kocc'
+  | 'institutional';
 
 export function SuperCommandCenter() {
   const { locale } = useLocale();
@@ -79,6 +81,7 @@ export function SuperCommandCenter() {
     { key: 'flags', label: copy.tabs.flags },
     { key: 'campaigns', label: copy.tabs.campaigns },
     { key: 'kocc', label: copy.tabs.kocc },
+    { key: 'institutional', label: copy.tabs.institutional },
   ];
 
   const panels: Record<TabKey, ReactNode> = {
@@ -99,6 +102,7 @@ export function SuperCommandCenter() {
     flags: <FeatureFlagsPanel canManage={canManage} />,
     campaigns: <CampaignsPanel canManage={canManage} />,
     kocc: <KoccCenterClient canManage={canManage} />,
+    institutional: <InstitutionalCenterClient canManage={canManage} />,
   };
 
   return (
