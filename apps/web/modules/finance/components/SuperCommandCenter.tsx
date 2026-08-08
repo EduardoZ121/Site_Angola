@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
@@ -49,6 +49,31 @@ type TabKey =
   | 'kocc'
   | 'institutional';
 
+function initialTab(raw: string | null): TabKey {
+  const allowed: TabKey[] = [
+    'revenue',
+    'catalog',
+    'pricing',
+    'credits',
+    'refunds',
+    'disputes',
+    'recon',
+    'fraud',
+    'kai',
+    'crm',
+    'exports',
+    'invoices',
+    'payengine',
+    'gateways',
+    'flags',
+    'campaigns',
+    'kocc',
+    'institutional',
+  ];
+  if (raw && (allowed as string[]).includes(raw)) return raw as TabKey;
+  return 'revenue';
+}
+
 export function SuperCommandCenter() {
   const { locale } = useLocale();
   const copy = getFinanceCopy(locale);
@@ -62,6 +87,15 @@ export function SuperCommandCenter() {
   const denied = sessionStatus === 'ready' && !canRead;
 
   const [tab, setTab] = useState<TabKey>('revenue');
+
+  useEffect(() => {
+    try {
+      const raw = new URLSearchParams(window.location.search).get('tab');
+      setTab(initialTab(raw));
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const tabs: { key: TabKey; label: string }[] = [
     { key: 'revenue', label: copy.tabs.revenue },
@@ -116,6 +150,9 @@ export function SuperCommandCenter() {
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/app/admin" className={cn(buttonVariants({ variant: 'secondary' }))}>
               Admin operacional
+            </Link>
+            <Link href="/app/fundador" className={cn(buttonVariants({ variant: 'ghost' }))}>
+              Founder / bootstrap
             </Link>
             <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'ghost' }))}>
               Mudança Inteligente

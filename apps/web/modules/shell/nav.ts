@@ -44,6 +44,8 @@ export type ShellNavItem = {
   status: ShellNavStatus;
   /** When set, item is hidden unless the user has this effective permission. */
   requiresPermission?: PermissionCode;
+  /** When set, visible if the user has any of these permissions (overrides single check). */
+  requiresAnyPermission?: readonly PermissionCode[];
   /** When set, only these experience modes see the item. */
   experiences?: readonly ExperienceMode[];
   group: NavGroup;
@@ -67,6 +69,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'client_partner',
       'patrimonial_partner',
       'certified_agent',
+      'supervisor',
       'administrator',
       'super_administrator',
     ],
@@ -244,8 +247,8 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'admin',
     href: '/app/admin',
     status: 'active',
-    requiresPermission: 'admin.panel',
-    experiences: ['administrator', 'super_administrator'],
+    requiresAnyPermission: ['admin.panel', 'properties.review'],
+    experiences: ['supervisor', 'administrator', 'super_administrator'],
     group: 'admin',
   },
   {
@@ -377,7 +380,9 @@ export function isNavItemVisible(
   permissions: readonly string[],
   mode?: ExperienceMode,
 ): boolean {
-  if (item.requiresPermission && !permissions.includes(item.requiresPermission)) {
+  if (item.requiresAnyPermission?.length) {
+    if (!item.requiresAnyPermission.some((p) => permissions.includes(p))) return false;
+  } else if (item.requiresPermission && !permissions.includes(item.requiresPermission)) {
     return false;
   }
   if (mode && item.experiences && !item.experiences.includes(mode)) {

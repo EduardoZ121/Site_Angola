@@ -46,6 +46,7 @@ function firstActionSteps(
       ];
     case 'certified_agent':
       return [{ href: '/app/agente', label: fa.agentPipeline, primary: true }];
+    case 'supervisor':
     case 'administrator':
     case 'super_administrator':
       return [{ href: '/app/admin', label: fa.adminPanel, primary: true }];
@@ -92,6 +93,7 @@ function panelsForMode(mode: ExperienceMode, s: OpsStats | null, loading: boolea
           <FutureAvailabilityList s={s} />
         </>
       );
+    case 'supervisor':
     case 'administrator':
       return <AdminOpsCockpit s={s} loading={loading} />;
     case 'super_administrator':

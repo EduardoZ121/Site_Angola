@@ -14,6 +14,8 @@ type MessagePropertyOwnerButtonProps = {
   ownerId: string | null | undefined;
   propertyTitle?: string | null;
   className?: string;
+  /** Override default CTA label (e.g. Contactar Parceiro for ops). */
+  label?: string;
 };
 
 /**
@@ -28,6 +30,7 @@ export function MessagePropertyOwnerButton({
   ownerId,
   propertyTitle,
   className,
+  label,
 }: MessagePropertyOwnerButtonProps) {
   const { locale } = useLocale();
   const copy = getMensagensCopy(locale);
@@ -80,7 +83,7 @@ export function MessagePropertyOwnerButton({
   return (
     <div className={cn('flex flex-col gap-2', className)}>
       <Button type="button" variant="secondary" disabled={busy} onClick={() => void onClick()}>
-        {busy ? copy.cta.messageBusy : copy.cta.messageOwner}
+        {busy ? copy.cta.messageBusy : label || copy.cta.messageOwner}
       </Button>
       {feedback ? (
         <p

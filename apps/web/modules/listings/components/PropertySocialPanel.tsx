@@ -1,7 +1,6 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from '@kuteka/ui';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
@@ -30,6 +29,8 @@ type SocialPost = {
   created_at: string;
   author_name: string | null;
 };
+
+type PanelKey = 'comments' | 'ask' | 'share' | null;
 
 const EMPTY_SUMMARY: SocialSummary = {
   likes: 0,
@@ -83,11 +84,28 @@ function officialLabel(
   return null;
 }
 
+function actionChipClass(active: boolean, accent?: boolean): string {
+  return [
+    'inline-flex min-h-11 items-center gap-1.5 rounded-kuteka border px-3 py-2 text-sm font-semibold transition',
+    active
+      ? accent
+        ? 'border-sky-600 bg-sky-600 text-white'
+        : 'border-slate-900 bg-slate-900 text-white'
+      : 'border-slate-300 bg-white text-slate-800 hover:border-slate-500 hover:bg-slate-50',
+  ].join(' ');
+}
+
 /**
- * Social layer on the property sheet — likes, favorites, comments & Q&A.
- * Mounted under gallery + facts (PO: after description, before section nav).
+ * Social action bar — immediately under the photo gallery.
+ * Expandable chips (not separate pages): Like · Favorite · Comments · Ask · Share.
  */
-export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
+export function PropertySocialPanel({
+  propertyId,
+  propertyTitle,
+}: {
+  propertyId: string;
+  propertyTitle?: string | null;
+}) {
   const { locale } = useLocale();
   const copy = getListingsCopy(locale).social;
   const dateLocale = LOCALE_INTL_TAG[locale];
@@ -98,11 +116,16 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [composeKind, setComposeKind] = useState<'comment' | 'question'>('comment');
+  const [open, setOpen] = useState<PanelKey>(null);
   const [body, setBody] = useState('');
   const [answerDrafts, setAnswerDrafts] = useState<Record<string, string>>({});
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+
+  const shareUrl = useMemo(() => {
+    if (typeof window === 'undefined') return '';
+    return window.location.href;
+  }, []);
 
   const refresh = useCallback(async () => {
     const client = createBrowserClient();
@@ -131,10 +154,8 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
     };
   }, [refresh]);
 
-  const roots = useMemo(
-    () => posts.filter((p) => p.kind === 'comment' || p.kind === 'question'),
-    [posts],
-  );
+  const comments = useMemo(() => posts.filter((p) => p.kind === 'comment'), [posts]);
+  const questions = useMemo(() => posts.filter((p) => p.kind === 'question'), [posts]);
   const answersByParent = useMemo(() => {
     const map: Record<string, SocialPost[]> = {};
     for (const p of posts) {
@@ -144,8 +165,17 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
     return map;
   }, [posts]);
 
+  function togglePanel(key: Exclude<PanelKey, null>) {
+    setOpen((prev) => (prev === key ? null : key));
+    setErr(null);
+    setMsg(null);
+  }
+
   async function onToggleLike() {
-    if (!signedIn) return;
+    if (!signedIn) {
+      setErr(copy.signInHint);
+      return;
+    }
     setBusy(true);
     setErr(null);
     const client = createBrowserClient();
@@ -161,7 +191,10 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
   }
 
   async function onToggleFavorite() {
-    if (!signedIn) return;
+    if (!signedIn) {
+      setErr(copy.signInHint);
+      return;
+    }
     setBusy(true);
     setErr(null);
     const client = createBrowserClient();
@@ -176,7 +209,7 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
     setSummary(parseSummary(data));
   }
 
-  async function onSubmitPost(event: FormEvent) {
+  async function onSubmitPost(kind: 'comment' | 'question', event: FormEvent) {
     event.preventDefault();
     if (!signedIn || !body.trim()) return;
     setBusy(true);
@@ -185,7 +218,7 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
     const client = createBrowserClient();
     const { error } = await client.rpc('create_property_social_post', {
       p_property_id: propertyId,
-      p_kind: composeKind,
+      p_kind: kind,
       p_body: body.trim(),
       p_parent_id: null,
     });
@@ -240,198 +273,289 @@ export function PropertySocialPanel({ propertyId }: { propertyId: string }) {
     setMsg(copy.reportOk);
   }
 
+  async function onCopyLink() {
+    try {
+      await navigator.clipboard.writeText(shareUrl || window.location.href);
+      setMsg(copy.shareCopied);
+    } catch {
+      setErr(copy.shareError);
+    }
+  }
+
+  function onWhatsApp() {
+    const url = shareUrl || (typeof window !== 'undefined' ? window.location.href : '');
+    const text = encodeURIComponent(
+      `${propertyTitle ? `${propertyTitle} — ` : ''}${copy.shareWhatsAppPrefix} ${url}`,
+    );
+    window.open(`https://wa.me/?text=${text}`, '_blank', 'noopener,noreferrer');
+  }
+
+  async function onNativeShare() {
+    const url = shareUrl || window.location.href;
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: propertyTitle || copy.shareTitle,
+          text: copy.shareNativeText,
+          url,
+        });
+        setMsg(copy.shareOk);
+      } catch (e) {
+        if ((e as { name?: string })?.name !== 'AbortError') setErr(copy.shareError);
+      }
+      return;
+    }
+    await onCopyLink();
+  }
+
+  function renderPostList(items: SocialPost[], emptyLabel: string) {
+    if (items.length === 0) {
+      return <p className="text-sm text-slate-600">{emptyLabel}</p>;
+    }
+    return (
+      <ul className="flex flex-col gap-3">
+        {items.map((post) => {
+          const badge = post.is_official ? officialLabel(post.author_role, copy) : null;
+          const answers = answersByParent[post.id] ?? [];
+          return (
+            <li key={post.id} className="rounded-kuteka border border-slate-200 bg-white px-3 py-3">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <p className="text-sm font-semibold text-slate-900">{post.author_name || '—'}</p>
+                <time className="text-xs text-slate-500" dateTime={post.created_at}>
+                  {new Date(post.created_at).toLocaleString(dateLocale)}
+                </time>
+              </div>
+              {badge ? (
+                <span className="mt-1 inline-block rounded bg-sky-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-sky-900 ring-1 ring-sky-200">
+                  {badge}
+                </span>
+              ) : null}
+              <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800">{post.body}</p>
+              {signedIn ? (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline"
+                    disabled={busy}
+                    onClick={() => void onReport(post.id, 'spam')}
+                  >
+                    {copy.report}: {copy.reportSpam}
+                  </button>
+                  <button
+                    type="button"
+                    className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline"
+                    disabled={busy}
+                    onClick={() => void onReport(post.id, 'offensive')}
+                  >
+                    {copy.report}: {copy.reportOffensive}
+                  </button>
+                </div>
+              ) : null}
+              {answers.length > 0 ? (
+                <ul className="mt-3 space-y-2 border-l-2 border-slate-200 pl-3">
+                  {answers.map((ans) => {
+                    const ansBadge = ans.is_official ? officialLabel(ans.author_role, copy) : null;
+                    return (
+                      <li key={ans.id}>
+                        <p className="text-xs font-semibold text-slate-700">
+                          {ans.author_name || '—'}
+                        </p>
+                        {ansBadge ? (
+                          <span className="mt-0.5 inline-block rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-900 ring-1 ring-emerald-200">
+                            {ansBadge}
+                          </span>
+                        ) : null}
+                        <p className="mt-1 whitespace-pre-wrap text-sm text-slate-800">
+                          {ans.body}
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
+              {signedIn && post.kind === 'question' ? (
+                <div className="mt-3 flex flex-col gap-2">
+                  <textarea
+                    className="min-h-[3.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+                    value={answerDrafts[post.id] ?? ''}
+                    onChange={(e) =>
+                      setAnswerDrafts((prev) => ({ ...prev, [post.id]: e.target.value }))
+                    }
+                    placeholder={copy.answerPlaceholder}
+                    maxLength={4000}
+                  />
+                  <button
+                    type="button"
+                    disabled={busy || !(answerDrafts[post.id] ?? '').trim()}
+                    onClick={() => void onSubmitAnswer(post.id)}
+                    className="self-start rounded-kuteka bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                  >
+                    {copy.submitAnswer}
+                  </button>
+                </div>
+              ) : null}
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
   return (
-    <section id="social" className="kuteka-detail-panel p-5" aria-labelledby="property-social">
-      <h2 id="property-social" className="kuteka-detail-title">
-        {copy.title}
-      </h2>
-      <p className="mt-1 text-sm text-slate-600">{copy.subtitle}</p>
+    <section
+      id="social"
+      className="kuteka-detail-panel overflow-hidden"
+      aria-labelledby="property-social"
+    >
+      <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white px-3 py-3 sm:px-4">
+        <h2 id="property-social" className="sr-only">
+          {copy.title}
+        </h2>
+        <div className="flex flex-wrap gap-2" role="toolbar" aria-label={copy.toolbarAria}>
+          <button
+            type="button"
+            disabled={busy}
+            className={actionChipClass(summary.likedByMe, true)}
+            onClick={() => void onToggleLike()}
+            aria-pressed={summary.likedByMe}
+          >
+            <span aria-hidden>❤️</span>
+            {summary.likedByMe ? copy.unlike : copy.like}
+            <span className="tabular-nums opacity-80">{loaded ? summary.likes : '·'}</span>
+          </button>
+          <button
+            type="button"
+            disabled={busy}
+            className={actionChipClass(summary.favoritedByMe, true)}
+            onClick={() => void onToggleFavorite()}
+            aria-pressed={summary.favoritedByMe}
+          >
+            <span aria-hidden>⭐</span>
+            {summary.favoritedByMe ? copy.unfavorite : copy.favorite}
+            <span className="tabular-nums opacity-80">{loaded ? summary.favorites : '·'}</span>
+          </button>
+          <button
+            type="button"
+            className={actionChipClass(open === 'comments')}
+            onClick={() => togglePanel('comments')}
+            aria-expanded={open === 'comments'}
+          >
+            <span aria-hidden>💬</span>
+            {copy.comments}
+            <span className="tabular-nums opacity-80">{loaded ? summary.comments : '·'}</span>
+          </button>
+          <button
+            type="button"
+            className={actionChipClass(open === 'ask')}
+            onClick={() => togglePanel('ask')}
+            aria-expanded={open === 'ask'}
+          >
+            <span aria-hidden>❓</span>
+            {copy.ask}
+            <span className="tabular-nums opacity-80">{loaded ? summary.questions : '·'}</span>
+          </button>
+          <button
+            type="button"
+            className={actionChipClass(open === 'share')}
+            onClick={() => togglePanel('share')}
+            aria-expanded={open === 'share'}
+          >
+            <span aria-hidden>↗</span>
+            {copy.share}
+          </button>
+        </div>
+      </div>
 
-      {!loaded ? (
-        <p className="mt-3 text-sm text-slate-500">{copy.loading}</p>
-      ) : (
-        <>
-          <div className="mt-4 flex flex-wrap items-center gap-3">
-            <Button
-              type="button"
-              size="sm"
-              variant={summary.likedByMe ? 'primary' : 'secondary'}
-              disabled={!signedIn || busy}
-              onClick={() => void onToggleLike()}
-            >
-              {summary.likedByMe ? copy.unlike : copy.like} · {summary.likes}
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant={summary.favoritedByMe ? 'primary' : 'secondary'}
-              disabled={!signedIn || busy}
-              onClick={() => void onToggleFavorite()}
-            >
-              {summary.favoritedByMe ? copy.unfavorite : copy.favorite} · {summary.favorites}
-            </Button>
-            <span className="text-xs font-medium text-slate-600">
-              {copy.comments}: {summary.comments} · {copy.questions}: {summary.questions}
-            </span>
-          </div>
-
-          {!signedIn ? <p className="mt-3 text-sm text-slate-600">{copy.signInHint}</p> : null}
-          {err ? <p className="mt-2 text-sm text-rose-800">{err}</p> : null}
+      {(err || msg || !signedIn || open) && (
+        <div className="px-4 py-3">
+          {!signedIn ? <p className="text-sm text-slate-600">{copy.signInHint}</p> : null}
+          {err ? <p className="text-sm text-rose-800">{err}</p> : null}
           {msg ? (
-            <p className="mt-2 text-sm text-emerald-800" role="status">
+            <p className="text-sm text-emerald-800" role="status">
               {msg}
             </p>
           ) : null}
 
-          {signedIn ? (
-            <form className="mt-4 flex flex-col gap-3" onSubmit={(e) => void onSubmitPost(e)}>
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={composeKind === 'comment' ? 'primary' : 'ghost'}
-                  onClick={() => setComposeKind('comment')}
+          {open === 'comments' ? (
+            <div className="mt-3 flex flex-col gap-3">
+              {signedIn ? (
+                <form
+                  className="flex flex-col gap-2"
+                  onSubmit={(e) => void onSubmitPost('comment', e)}
                 >
-                  {copy.commentTab}
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={composeKind === 'question' ? 'primary' : 'ghost'}
-                  onClick={() => setComposeKind('question')}
-                >
-                  {copy.questionTab}
-                </Button>
-              </div>
-              <textarea
-                className="min-h-[5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                placeholder={
-                  composeKind === 'comment' ? copy.commentPlaceholder : copy.questionPlaceholder
-                }
-                maxLength={4000}
-              />
-              <Button
-                type="submit"
-                size="sm"
-                loading={busy}
-                disabled={busy || !body.trim()}
-                className="self-start"
-              >
-                {composeKind === 'comment' ? copy.submitComment : copy.submitQuestion}
-              </Button>
-            </form>
+                  <textarea
+                    className="min-h-[4.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    placeholder={copy.commentPlaceholder}
+                    maxLength={4000}
+                  />
+                  <button
+                    type="submit"
+                    disabled={busy || !body.trim()}
+                    className="self-start rounded-kuteka bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                  >
+                    {copy.submitComment}
+                  </button>
+                </form>
+              ) : null}
+              {renderPostList(comments, copy.emptyComments)}
+            </div>
           ) : null}
 
-          <ul className="mt-5 flex flex-col gap-4">
-            {roots.length === 0 ? (
-              <li className="text-sm text-slate-600">{copy.empty}</li>
-            ) : (
-              roots.map((post) => {
-                const badge =
-                  post.is_official && post.kind === 'answer'
-                    ? officialLabel(post.author_role, copy)
-                    : post.is_official
-                      ? officialLabel(post.author_role, copy)
-                      : null;
-                const answers = answersByParent[post.id] ?? [];
-                return (
-                  <li
-                    key={post.id}
-                    className="rounded-kuteka border border-slate-200 bg-white px-4 py-3"
+          {open === 'ask' ? (
+            <div className="mt-3 flex flex-col gap-3">
+              {signedIn ? (
+                <form
+                  className="flex flex-col gap-2"
+                  onSubmit={(e) => void onSubmitPost('question', e)}
+                >
+                  <textarea
+                    className="min-h-[4.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    placeholder={copy.questionPlaceholder}
+                    maxLength={4000}
+                  />
+                  <button
+                    type="submit"
+                    disabled={busy || !body.trim()}
+                    className="self-start rounded-kuteka bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
                   >
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <p className="text-sm font-semibold text-slate-900">
-                        {post.author_name || '—'}
-                        <span className="ml-2 text-xs font-medium uppercase tracking-wide text-slate-500">
-                          {post.kind === 'question' ? copy.questions : copy.comments}
-                        </span>
-                      </p>
-                      <time className="text-xs text-slate-500" dateTime={post.created_at}>
-                        {new Date(post.created_at).toLocaleString(dateLocale)}
-                      </time>
-                    </div>
-                    {badge ? (
-                      <span className="mt-1 inline-block rounded bg-sky-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-sky-900 ring-1 ring-sky-200">
-                        {badge}
-                      </span>
-                    ) : null}
-                    <p className="mt-2 whitespace-pre-wrap text-sm text-slate-800">{post.body}</p>
-                    {signedIn ? (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline"
-                          disabled={busy}
-                          onClick={() => void onReport(post.id, 'spam')}
-                        >
-                          {copy.report}: {copy.reportSpam}
-                        </button>
-                        <button
-                          type="button"
-                          className="text-xs font-semibold text-slate-600 underline-offset-2 hover:underline"
-                          disabled={busy}
-                          onClick={() => void onReport(post.id, 'offensive')}
-                        >
-                          {copy.report}: {copy.reportOffensive}
-                        </button>
-                      </div>
-                    ) : null}
+                    {copy.submitQuestion}
+                  </button>
+                </form>
+              ) : null}
+              {renderPostList(questions, copy.emptyQuestions)}
+            </div>
+          ) : null}
 
-                    {answers.length > 0 ? (
-                      <ul className="mt-3 space-y-2 border-l-2 border-slate-200 pl-3">
-                        {answers.map((ans) => {
-                          const ansBadge = ans.is_official
-                            ? officialLabel(ans.author_role, copy)
-                            : null;
-                          return (
-                            <li key={ans.id}>
-                              <p className="text-xs font-semibold text-slate-700">
-                                {ans.author_name || '—'}
-                              </p>
-                              {ansBadge ? (
-                                <span className="mt-0.5 inline-block rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-900 ring-1 ring-emerald-200">
-                                  {ansBadge}
-                                </span>
-                              ) : null}
-                              <p className="mt-1 whitespace-pre-wrap text-sm text-slate-800">
-                                {ans.body}
-                              </p>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    ) : null}
-
-                    {signedIn && post.kind === 'question' ? (
-                      <div className="mt-3 flex flex-col gap-2">
-                        <textarea
-                          className="min-h-[3.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-                          value={answerDrafts[post.id] ?? ''}
-                          onChange={(e) =>
-                            setAnswerDrafts((prev) => ({ ...prev, [post.id]: e.target.value }))
-                          }
-                          placeholder={copy.answerPlaceholder}
-                          maxLength={4000}
-                        />
-                        <Button
-                          type="button"
-                          size="sm"
-                          disabled={busy || !(answerDrafts[post.id] ?? '').trim()}
-                          onClick={() => void onSubmitAnswer(post.id)}
-                          className="self-start"
-                        >
-                          {copy.submitAnswer}
-                        </Button>
-                      </div>
-                    ) : null}
-                  </li>
-                );
-              })
-            )}
-          </ul>
-        </>
+          {open === 'share' ? (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={onWhatsApp}
+                className="rounded-kuteka border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-950"
+              >
+                WhatsApp
+              </button>
+              <button
+                type="button"
+                onClick={() => void onCopyLink()}
+                className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800"
+              >
+                {copy.copyLink}
+              </button>
+              <button
+                type="button"
+                onClick={() => void onNativeShare()}
+                className="rounded-kuteka border border-sky-300 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-950"
+              >
+                {copy.shareNative}
+              </button>
+            </div>
+          ) : null}
+        </div>
       )}
     </section>
   );

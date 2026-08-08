@@ -302,6 +302,12 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       hint: shell.userMenu.rolesHint,
       icon: 'roles',
     },
+    {
+      href: '/app/fundador',
+      label: 'Founder / Owner',
+      hint: 'Bootstrap, user_id e Gestão Institucional',
+      icon: 'roles',
+    },
     ...(canPartner
       ? [
           {

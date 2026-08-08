@@ -1,8 +1,9 @@
 import type { AdministracaoCopy } from './pt';
 
 export const administracaoCopyEn: AdministracaoCopy = {
-  title: 'Administration',
-  subtitle: 'Operational dashboard — accounts, properties, agents, verifications and requests.',
+  title: 'Administration · Work Center',
+  subtitle:
+    'Operational queue by role — publications, SLA, contact PP, audit and moderation. Not just a dashboard.',
   permissionBadge: 'admin.panel',
   users: 'Users',
   usersTitle: 'Users and roles',
@@ -23,10 +24,41 @@ export const administracaoCopyEn: AdministracaoCopy = {
   pendingHint: 'Client interests awaiting follow-up.',
   emptyPending: 'No pending requests at the moment.',
   openProperty: 'Open property',
-  publicationQueueTitle: 'Publication queue',
+  publicationQueueTitle: 'Work Center — Publications',
   publicationQueueHint:
-    'Properties under review — approve, mark pending, reject, or request corrections, a technical visit, or documents.',
+    'Operational queue: In review, Pending, SLA soon/overdue, Waiting PP/Agent. Decide with reason, notify and audit.',
   emptyQueue: 'No properties awaiting a publication decision.',
+  workBucketAll: 'All',
+  workBucketInReview: 'In review',
+  workBucketPending: 'Pending',
+  workBucketSlaSoon: 'SLA soon',
+  workBucketSlaOverdue: 'SLA overdue',
+  workBucketWaitingPp: 'Waiting PP',
+  workBucketWaitingAgent: 'Waiting Agent',
+  waitingLabel: 'Waiting',
+  partnerLabel: 'Partner (PP)',
+  assigneeLabel: 'Assignee',
+  nextActionLabel: 'Next action',
+  assignToMe: 'Assign to me',
+  assignBusy: 'Assigning…',
+  assignOk: 'Case assigned.',
+  contactPartner: 'Contact Partner',
+  rolePowerTitle: 'What can I do in this role?',
+  rolePowerSupervisor:
+    'Supervisor: review, pend, request documents/visit, contact PP, assign, SLA and moderation. Cannot approve or reject.',
+  rolePowerAdmin:
+    'Admin: everything Supervisor can do + approve/reject listings and manage ops/agents per permissions.',
+  rolePowerSuper:
+    'Super Admin: everything Admin can do + manage Admins/Supervisors, permissions, KOCC and critical settings.',
+  rolePowerFounder:
+    'Founder/Owner: maximum institutional control (Institutional Management + Super).',
+  inSheetReviewTitle: 'Publication decision',
+  inSheetReviewHint:
+    'Operational actions on this sheet — reason required when pending/rejecting; the PP is notified with the next step.',
+  inSheetNotInQueue: 'This property may not be in the active queue — actions can still apply.',
+  notesRequired: 'Note / message to PP',
+  supervisorCannotApprove: 'Supervisors cannot approve or reject — ask an Admin.',
+  supervisorScopeHint: 'As Supervisor you can pend, request documents/visit and contact the PP.',
   approve: 'Approve',
   pending: 'Pending',
   reject: 'Reject',
@@ -38,7 +70,7 @@ export const administracaoCopyEn: AdministracaoCopy = {
   decideBusy: 'Deciding…',
   decideOk: 'Decision recorded.',
   decideError: 'Could not record the decision. Check the reasons and try again.',
-  kaiScore: 'KAI score',
+  kaiScore: 'KAI score / risk',
   slaDeadline: 'SLA deadline',
   kosAnalyticsTitle: 'KOS Analytics',
   kosAnalyticsHint: 'Operational indicators for decisions — publication, SLA and conversion.',

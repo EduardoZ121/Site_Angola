@@ -11,6 +11,7 @@ export type ListingMedia = {
 /** Shared enriched listing shape for detail showcase (patrimonios + habitação). */
 export type EnrichedListing = {
   id: string;
+  owner_id?: string | null;
   code: string;
   title: string;
   property_type: string;

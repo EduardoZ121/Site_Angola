@@ -161,6 +161,29 @@ const CATALOG: Record<AppLocale, Catalog> = {
         unread: true,
       },
     ],
+    supervisor: [
+      {
+        id: 'sv1',
+        title: 'Fila de publicação',
+        body: 'Processos em análise e SLA a acompanhar.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv2',
+        title: 'Pendências PP',
+        body: 'Correcções e documentos aguardam o Parceiro.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv3',
+        title: 'Moderação',
+        body: 'Denúncias abertas na Central de Moderação.',
+        href: '/app/admin',
+        unread: true,
+      },
+    ],
     administrator: [
       {
         id: 'ad1',
@@ -361,6 +384,29 @@ const CATALOG: Record<AppLocale, Catalog> = {
         title: 'Tasks',
         body: 'Today’s field checklist.',
         href: '/app/agente',
+        unread: true,
+      },
+    ],
+    supervisor: [
+      {
+        id: 'sv1',
+        title: 'Fila de publicação',
+        body: 'Processos em análise e SLA a acompanhar.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv2',
+        title: 'Pendências PP',
+        body: 'Correcções e documentos aguardam o Parceiro.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv3',
+        title: 'Moderação',
+        body: 'Denúncias abertas na Central de Moderação.',
+        href: '/app/admin',
         unread: true,
       },
     ],
@@ -567,6 +613,29 @@ const CATALOG: Record<AppLocale, Catalog> = {
         unread: true,
       },
     ],
+    supervisor: [
+      {
+        id: 'sv1',
+        title: 'Fila de publicação',
+        body: 'Processos em análise e SLA a acompanhar.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv2',
+        title: 'Pendências PP',
+        body: 'Correcções e documentos aguardam o Parceiro.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv3',
+        title: 'Moderação',
+        body: 'Denúncias abertas na Central de Moderação.',
+        href: '/app/admin',
+        unread: true,
+      },
+    ],
     administrator: [
       {
         id: 'ad1',
@@ -767,6 +836,29 @@ const CATALOG: Record<AppLocale, Catalog> = {
         title: 'Tareas',
         body: 'Checklist del día en terreno.',
         href: '/app/agente',
+        unread: true,
+      },
+    ],
+    supervisor: [
+      {
+        id: 'sv1',
+        title: 'Fila de publicação',
+        body: 'Processos em análise e SLA a acompanhar.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv2',
+        title: 'Pendências PP',
+        body: 'Correcções e documentos aguardam o Parceiro.',
+        href: '/app/admin',
+        unread: true,
+      },
+      {
+        id: 'sv3',
+        title: 'Moderação',
+        body: 'Denúncias abertas na Central de Moderação.',
+        href: '/app/admin',
         unread: true,
       },
     ],

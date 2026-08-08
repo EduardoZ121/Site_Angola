@@ -36,6 +36,10 @@ export type PublicationQueueItem = {
   city: string | null;
   cover_image_url: string | null;
   owner_id: string;
+  owner_name: string | null;
+  owner_email: string | null;
+  assigned_to: string | null;
+  assigned_name: string | null;
   lifecycle_status: string | null;
   marketplace_status: string | null;
 };
@@ -92,6 +96,10 @@ function parseQueueItem(raw: unknown): PublicationQueueItem | null {
     city: typeof raw.city === 'string' ? raw.city : null,
     cover_image_url: typeof raw.cover_image_url === 'string' ? raw.cover_image_url : null,
     owner_id: typeof raw.owner_id === 'string' ? raw.owner_id : '',
+    owner_name: typeof raw.owner_name === 'string' ? raw.owner_name : null,
+    owner_email: typeof raw.owner_email === 'string' ? raw.owner_email : null,
+    assigned_to: typeof raw.assigned_to === 'string' ? raw.assigned_to : null,
+    assigned_name: typeof raw.assigned_name === 'string' ? raw.assigned_name : null,
     lifecycle_status: typeof raw.lifecycle_status === 'string' ? raw.lifecycle_status : null,
     marketplace_status: typeof raw.marketplace_status === 'string' ? raw.marketplace_status : null,
   };
@@ -144,6 +152,25 @@ export async function listPendingReasons(): Promise<
         sort_order: Number(row.sort_order ?? 0),
       })),
     };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function assignPublicationReview(
+  reviewId: string,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getAdministracaoCopy(resolveUiLocale());
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.rpc('admin_assign_publication_review', {
+      p_review_id: reviewId,
+      p_assignee_id: null,
+    });
+    if (error) {
+      return { ok: false, message: error.message || copy.loadError };
+    }
+    return { ok: true };
   } catch {
     return { ok: false, message: copy.loadError };
   }
