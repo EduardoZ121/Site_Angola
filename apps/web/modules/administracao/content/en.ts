@@ -23,6 +23,23 @@ export const administracaoCopyEn: AdministracaoCopy = {
   pendingHint: 'Client interests awaiting follow-up.',
   emptyPending: 'No pending requests at the moment.',
   openProperty: 'Open property',
+  publicationQueueTitle: 'Publication queue',
+  publicationQueueHint:
+    'Properties under review — approve, mark pending, reject, or request corrections, a technical visit, or documents.',
+  emptyQueue: 'No properties awaiting a publication decision.',
+  approve: 'Approve',
+  pending: 'Pending',
+  reject: 'Reject',
+  requestCorrections: 'Request corrections',
+  requestVisit: 'Request technical visit',
+  requestDocs: 'Request documents',
+  notes: 'Notes (optional)',
+  reasons: 'Reasons',
+  decideBusy: 'Deciding…',
+  decideOk: 'Decision recorded.',
+  decideError: 'Could not record the decision. Check the reasons and try again.',
+  kaiScore: 'KAI score',
+  slaDeadline: 'SLA deadline',
   stats: {
     profiles: 'Users',
     properties: 'Active properties',
@@ -35,7 +52,8 @@ export const administracaoCopyEn: AdministracaoCopy = {
     contractsPending: 'Pending contracts',
   },
   loadError: 'We are having trouble showing Administration. Please try again.',
-  forbidden: 'You do not have permission to access Administration (admin.panel).',
+  forbidden:
+    'You do not have permission to access Administration (admin.panel or properties.review).',
   mvpNote: 'Live dashboard: navigate to users, Trust review and the Client inventory.',
   roleLabels: {
     client: 'Client',

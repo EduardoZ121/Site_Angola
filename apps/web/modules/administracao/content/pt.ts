@@ -21,6 +21,23 @@ export const administracaoCopyPt = {
   pendingHint: 'Interesses de Cliente a aguardar acompanhamento.',
   emptyPending: 'Sem pedidos pendentes neste momento.',
   openProperty: 'Abrir património',
+  publicationQueueTitle: 'Fila de publicação',
+  publicationQueueHint:
+    'Patrimónios em análise — aprove, coloque em pendência, rejeite ou peça correcções, visita técnica ou documentos.',
+  emptyQueue: 'Sem patrimónios a aguardar decisão de publicação.',
+  approve: 'Aprovar',
+  pending: 'Pendência',
+  reject: 'Rejeitar',
+  requestCorrections: 'Pedir correcções',
+  requestVisit: 'Pedir visita técnica',
+  requestDocs: 'Pedir documentos',
+  notes: 'Notas (opcional)',
+  reasons: 'Motivos',
+  decideBusy: 'A decidir…',
+  decideOk: 'Decisão registada.',
+  decideError: 'Não foi possível registar a decisão. Verifique os motivos e tente novamente.',
+  kaiScore: 'Índice KAI',
+  slaDeadline: 'Prazo SLA',
   stats: {
     profiles: 'Utilizadores',
     properties: 'Patrimónios activos',
@@ -33,7 +50,7 @@ export const administracaoCopyPt = {
     contractsPending: 'Contratos pendentes',
   },
   loadError: 'Estamos a ter dificuldade em mostrar a Administração. Tente novamente.',
-  forbidden: 'Não tem permissão para aceder à Administração (admin.panel).',
+  forbidden: 'Não tem permissão para aceder à Administração (admin.panel ou properties.review).',
   mvpNote:
     'Dashboard vivo: navegue para utilizadores, revisão de Confiança e inventário do Cliente.',
   roleLabels: {

@@ -24,6 +24,23 @@ export const administracaoCopyFr: AdministracaoCopy = {
   pendingHint: 'Intérêts de Client en attente de suivi.',
   emptyPending: 'Aucune demande en attente pour le moment.',
   openProperty: 'Ouvrir le patrimoine',
+  publicationQueueTitle: 'File de publication',
+  publicationQueueHint:
+    'Patrimoines en analyse — approuvez, mettez en attente, rejetez ou demandez des corrections, une visite technique ou des documents.',
+  emptyQueue: 'Aucun patrimoine en attente d’une décision de publication.',
+  approve: 'Approuver',
+  pending: 'En attente',
+  reject: 'Rejeter',
+  requestCorrections: 'Demander des corrections',
+  requestVisit: 'Demander une visite technique',
+  requestDocs: 'Demander des documents',
+  notes: 'Notes (facultatif)',
+  reasons: 'Motifs',
+  decideBusy: 'Décision en cours…',
+  decideOk: 'Décision enregistrée.',
+  decideError: 'Impossible d’enregistrer la décision. Vérifiez les motifs et réessayez.',
+  kaiScore: 'Indice KAI',
+  slaDeadline: 'Échéance SLA',
   stats: {
     profiles: 'Utilisateurs',
     properties: 'Patrimoines actifs',
@@ -36,7 +53,8 @@ export const administracaoCopyFr: AdministracaoCopy = {
     contractsPending: 'Contrats en attente',
   },
   loadError: 'Nous avons du mal à afficher l’Administration. Veuillez réessayer.',
-  forbidden: 'Vous n’avez pas la permission d’accéder à l’Administration (admin.panel).',
+  forbidden:
+    'Vous n’avez pas la permission d’accéder à l’Administration (admin.panel ou properties.review).',
   mvpNote:
     'Tableau de bord en direct : accédez aux utilisateurs, à la révision de Confiance et à l’inventaire du Client.',
   roleLabels: {
