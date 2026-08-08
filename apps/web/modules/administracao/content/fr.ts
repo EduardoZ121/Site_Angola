@@ -31,7 +31,7 @@ export const administracaoCopyFr: AdministracaoCopy = {
     agents: 'Agents Certifiés',
     trust: 'Vérifications en attente',
     interests: 'Intérêts en attente',
-    demo: 'Annonces de démonstration',
+    demo: 'Inventaire Bêta',
     contractsActive: 'Contrats actifs',
     contractsPending: 'Contrats en attente',
   },

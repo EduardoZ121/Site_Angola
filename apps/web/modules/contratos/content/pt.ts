@@ -16,6 +16,18 @@ export const contratosCopyPt = {
     'Quando Confiança e Administração validarem as partes, prepare o primeiro contrato para seguir para Pagamentos.',
   emptyDemo:
     'Se a base estiver vazia, execute a migration PRD-008 para carregar contratos de inventário Beta KTK-CTR.',
+  emptyActivePropertiesTitle: 'Sem patrimónios activos para contratar',
+  emptyActivePropertiesHint:
+    'Active um património ou use a Administração para acompanhar o inventário Beta.',
+  emptyActivePropertiesActivate: 'Activar património',
+  emptyActivePropertiesViewInventory: 'Ver inventário',
+  stats: {
+    summaryAria: 'Resumo Contratos',
+    active: 'Activo',
+    pending: 'Pendente',
+    completed: 'Concluído',
+    betaInventory: 'Inventário Beta',
+  },
   loadError: 'Estamos a ter dificuldade em mostrar os contratos. Tente novamente.',
   saveError: 'Não conseguimos preparar o contrato. Verifique os dados e tente novamente.',
   transitionError: 'Não conseguimos actualizar o contrato. Tente novamente.',

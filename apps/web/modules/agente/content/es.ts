@@ -11,16 +11,16 @@ export const agenteCopyEs: AgenteCopy = {
   saving: 'Guardando…',
   saved: 'Preferencias guardadas.',
   needAgent:
-    'Las operaciones reales requieren el rol de Agente Certificado (asignado por la Administración). Abajo encontrará una demostración del flujo de trabajo.',
-  demoTitle: 'Demostración del flujo de trabajo',
+    'Las operaciones reales requieren el rol de Agente Certificado (asignado por la Administración). Abajo encontrará una vista previa Beta del flujo de trabajo.',
+  demoTitle: 'Vista previa Beta del flujo de trabajo',
   demoHint:
-    'Datos ilustrativos con el inventario de demostración — para probar el recorrido sin permiso de agente.',
+    'Datos ilustrativos con el inventario Beta — para probar el recorrido sin permiso de agente.',
   demoVisits: 'Visitas',
   demoAgenda: 'Agenda',
   demoPipeline: 'Flujo de trabajo',
   requestAgent: 'Solicitar activación (contacto)',
   requestAgentHint:
-    'El rol de Agente Certificado lo asigna la Administración. Contacte a Kuteka o continúe explorando la demostración.',
+    'El rol de Agente Certificado lo asigna la Administración. Contacte a Kuteka o continúe explorando la vista previa Beta.',
   loadError: 'Estamos teniendo dificultades para mostrar el área de Agente. Inténtelo de nuevo.',
   saveError: 'No pudimos guardar. Inténtelo de nuevo.',
   forbidden: 'No tiene permiso de Agente Certificado.',

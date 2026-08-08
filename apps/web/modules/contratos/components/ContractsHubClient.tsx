@@ -117,14 +117,14 @@ export function ContractsHubClient() {
 
             <section
               className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4"
-              aria-label="Resumo Contratos"
+              aria-label={copy.stats.summaryAria}
             >
               {(
                 [
-                  ['Activo', stats.active],
-                  ['Pendente', stats.pending],
-                  ['Concluído', stats.completed],
-                  ['Inventário Beta', stats.demo],
+                  [copy.stats.active, stats.active],
+                  [copy.stats.pending, stats.pending],
+                  [copy.stats.completed, stats.completed],
+                  [copy.stats.betaInventory, stats.demo],
                 ] as const
               ).map(([label, value]) => (
                 <div

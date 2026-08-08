@@ -31,7 +31,7 @@ function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProp
       <Link
         href={href}
         className="block aspect-[16/10] bg-slate-100"
-        aria-label={`Fotografia: ${row.title}`}
+        aria-label={copy.photoAriaTemplate.replace('{title}', row.title)}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img

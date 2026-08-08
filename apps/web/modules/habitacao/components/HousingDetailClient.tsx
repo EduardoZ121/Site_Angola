@@ -125,20 +125,24 @@ export function HousingDetailClient({ id }: { id: string }) {
             <>
               <EmptyState
                 title={copy.loadError}
-                description={error ?? 'Este anúncio pode já não estar activo.'}
+                description={error ?? copy.detail.inactiveHint}
                 action={
                   <Link
                     href="/app/habitacao/explorar"
                     className={cn(buttonVariants({ variant: 'primary' }))}
                   >
-                    Explorar habitação
+                    {copy.exploreTitle}
                   </Link>
                 }
               />
               <FlowNextSteps
                 steps={[
-                  { href: '/app/habitacao/explorar', label: 'Explorar inventário', primary: true },
-                  { href: '/app/confianca', label: 'Verificar conta' },
+                  {
+                    href: '/app/habitacao/explorar',
+                    label: copy.detail.stepExplore,
+                    primary: true,
+                  },
+                  { href: '/app/confianca', label: copy.goTrust },
                 ]}
               />
             </>
@@ -193,7 +197,7 @@ export function HousingDetailClient({ id }: { id: string }) {
                       href="/app/contratos"
                       className={cn(buttonVariants({ variant: 'secondary' }))}
                     >
-                      Preparar contrato
+                      {copy.detail.prepareContract}
                     </Link>
                   ) : null}
                   <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
@@ -209,12 +213,14 @@ export function HousingDetailClient({ id }: { id: string }) {
               </div>
 
               <FlowNextSteps
-                title="Continuar o percurso"
+                title={copy.detail.nextTitle}
                 steps={[
-                  { href: '/app/agente', label: 'Agente acompanha', primary: true },
-                  ...(canContracts ? [{ href: '/app/contratos', label: 'Preparar contrato' }] : []),
-                  { href: '/app/confianca', label: 'Confiança verifica' },
-                  { href: '/app/habitacao/explorar', label: 'Mais patrimónios' },
+                  { href: '/app/agente', label: copy.detail.stepAgent, primary: true },
+                  ...(canContracts
+                    ? [{ href: '/app/contratos', label: copy.detail.stepContract }]
+                    : []),
+                  { href: '/app/confianca', label: copy.detail.stepTrust },
+                  { href: '/app/habitacao/explorar', label: copy.detail.stepMore },
                 ]}
               />
             </>
