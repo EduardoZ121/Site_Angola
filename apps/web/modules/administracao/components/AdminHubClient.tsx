@@ -18,6 +18,9 @@ import {
   type AdminInterestRow,
   type PlatformStats,
 } from '../services/admin-client';
+import { AuditCenterPanel } from './AuditCenterPanel';
+import { KosAnalyticsPanel } from './KosAnalyticsPanel';
+import { ModerationCenterPanel } from './ModerationCenterPanel';
 import { PublicationReviewQueue } from './PublicationReviewQueue';
 
 function hasAdminAccess(permissions: string[] | undefined): boolean {
@@ -127,7 +130,13 @@ export function AdminHubClient() {
           <>
             <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
+            <KosAnalyticsPanel />
+
             <PublicationReviewQueue />
+
+            <AuditCenterPanel />
+
+            <ModerationCenterPanel />
 
             <SoftListSlot pending={loading && !stats}>
               <section className="flex flex-col gap-3" aria-labelledby="stats-heading">
