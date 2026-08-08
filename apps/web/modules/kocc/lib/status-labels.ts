@@ -7,11 +7,9 @@
  * `./public-label`) first. The end-user-facing copy set is intentionally
  * small and reassuring; it never contains the word "Demo", "disabled",
  * "admin" or any other internal jargon.
- *
- * This module intentionally hardcodes Portuguese copy (the platform's
- * primary language for operator-facing tooling) rather than wiring a full
- * i18n pack — matching the "minimal i18n" scope of Sprint Beta 1.
  */
+
+import { normalizeLocale, type AppLocale } from '@/modules/i18n/types';
 
 export const KOCC_OPERATIONAL_STATUSES = [
   'beta_public',
@@ -31,10 +29,9 @@ export function isKoccOperationalStatus(value: string): value is KoccOperational
 }
 
 /**
- * Public-facing label (pt-PT/pt-AO), shown on end-user badges (property
- * cards, contract detail, marketplace, etc). Every status resolves to one of
- * a handful of reassuring phrases — never the raw internal status, and never
- * "Demo".
+ * Public-facing labels shown on end-user badges (property cards, contract
+ * detail, marketplace, etc). Every status resolves to one of a handful of
+ * reassuring phrases — never the raw internal status, and never "Demo".
  */
 const PUBLIC_LABEL_PT: Record<KoccOperationalStatus, string> = {
   beta_public: 'Beta',
@@ -46,6 +43,46 @@ const PUBLIC_LABEL_PT: Record<KoccOperationalStatus, string> = {
   // admin_only / disabled must never leak "admin" or "disabled" to end users.
   admin_only: 'Em preparação',
   disabled: 'Disponível em breve',
+};
+
+const PUBLIC_LABEL_EN: Record<KoccOperationalStatus, string> = {
+  beta_public: 'Beta',
+  beta_private: 'Early access',
+  invite_only: 'Early access',
+  commercial_active: 'Commercially active',
+  preparing: 'In preparation',
+  maintenance: 'Under maintenance',
+  admin_only: 'In preparation',
+  disabled: 'Coming soon',
+};
+
+const PUBLIC_LABEL_FR: Record<KoccOperationalStatus, string> = {
+  beta_public: 'Bêta',
+  beta_private: 'Accès anticipé',
+  invite_only: 'Accès anticipé',
+  commercial_active: 'Commercialement actif',
+  preparing: 'En préparation',
+  maintenance: 'En maintenance',
+  admin_only: 'En préparation',
+  disabled: 'Bientôt disponible',
+};
+
+const PUBLIC_LABEL_ES: Record<KoccOperationalStatus, string> = {
+  beta_public: 'Beta',
+  beta_private: 'Acceso anticipado',
+  invite_only: 'Acceso anticipado',
+  commercial_active: 'Comercialmente activo',
+  preparing: 'En preparación',
+  maintenance: 'En mantenimiento',
+  admin_only: 'En preparación',
+  disabled: 'Disponible pronto',
+};
+
+const PUBLIC_BY_LOCALE: Record<AppLocale, Record<KoccOperationalStatus, string>> = {
+  pt: PUBLIC_LABEL_PT,
+  en: PUBLIC_LABEL_EN,
+  fr: PUBLIC_LABEL_FR,
+  es: PUBLIC_LABEL_ES,
 };
 
 /**
@@ -66,9 +103,13 @@ const ADMIN_LABEL_PT: Record<KoccOperationalStatus, string> = {
 
 const FALLBACK_STATUS: KoccOperationalStatus = 'beta_public';
 
-export function publicStatusLabel(status: string | null | undefined): string {
-  if (status && isKoccOperationalStatus(status)) return PUBLIC_LABEL_PT[status];
-  return PUBLIC_LABEL_PT[FALLBACK_STATUS];
+export function publicStatusLabel(
+  status: string | null | undefined,
+  locale: AppLocale | string = 'pt',
+): string {
+  const pack = PUBLIC_BY_LOCALE[normalizeLocale(locale)] ?? PUBLIC_LABEL_PT;
+  if (status && isKoccOperationalStatus(status)) return pack[status];
+  return pack[FALLBACK_STATUS];
 }
 
 export function adminStatusLabel(status: string | null | undefined): string {

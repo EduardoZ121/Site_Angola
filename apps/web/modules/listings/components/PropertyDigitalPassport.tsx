@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getListingsCopy } from '../content';
 import {
   asHistoryList,
   getConstructionLabels,
@@ -50,6 +51,7 @@ export function PropertyDigitalPassport({
   mediaCount?: number;
 }) {
   const { locale } = useLocale();
+  const copy = getListingsCopy(locale).passport;
   const constructionLabels = getConstructionLabels(locale);
   const conservationLabels = getConservationLabels(locale);
   const managementLabels = getManagementLabels(locale);
@@ -128,9 +130,9 @@ export function PropertyDigitalPassport({
             </svg>
           </span>
           <div>
-            <p className="kuteka-detail-eyebrow">Passaporte Digital KTK</p>
+            <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
             <h2 id="pdk-heading" className="kuteka-detail-title mt-1">
-              Identidade permanente do imóvel
+              {copy.title}
             </h2>
             <p className="kuteka-detail-meta mt-1 font-mono">{pdk}</p>
           </div>
@@ -140,52 +142,52 @@ export function PropertyDigitalPassport({
           onClick={printPdk}
           className="kuteka-detail-chip kuteka-detail-chip--accent inline-flex items-center gap-1.5 px-3 py-2"
         >
-          Ver / imprimir documento
+          {copy.printButton}
         </button>
       </div>
 
       <div className="mt-5 grid gap-6 lg:grid-cols-[auto_1fr] lg:items-center">
         <KutekaScoreGauge score={row.kuteka_score} size="md" />
         <dl className="grid gap-4 sm:grid-cols-2">
-          <Fact label="Código patrimonial" value={row.code} />
+          <Fact label={copy.propertyCode} value={row.code} />
           <Fact
-            label="Ano de construção"
+            label={copy.yearBuilt}
             value={row.year_built != null ? String(row.year_built) : '—'}
           />
           <Fact
-            label="Estado da construção"
+            label={copy.constructionStatus}
             value={
               constructionLabels[row.construction_status ?? ''] ?? row.construction_status ?? '—'
             }
           />
           <Fact
-            label="Conservação"
+            label={copy.conservation}
             value={
               conservationLabels[row.conservation_state ?? ''] ?? row.conservation_state ?? '—'
             }
           />
           <Fact
-            label="Gestão contratada"
+            label={copy.contractedManagement}
             value={managementLabels[row.management_level ?? ''] ?? row.management_level ?? '—'}
           />
           <Fact
-            label="Obra inacabada"
+            label={copy.unfinishedWorks}
             value={unfinishedLabels[row.unfinished_intent ?? ''] ?? row.unfinished_intent ?? '—'}
           />
         </dl>
       </div>
 
       <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-5">
-        <StatChip label="Proprietários" value={Math.max(owners.length, 1)} />
-        <StatChip label="Contratos" value={contractCount} />
-        <StatChip label="Avaliações" value={reviewCount} />
-        <StatChip label="Manutenções" value={maintenance.length} />
-        <StatChip label="Fotografias" value={mediaCount} />
+        <StatChip label={copy.owners} value={Math.max(owners.length, 1)} />
+        <StatChip label={copy.contracts} value={contractCount} />
+        <StatChip label={copy.reviews} value={reviewCount} />
+        <StatChip label={copy.maintenances} value={maintenance.length} />
+        <StatChip label={copy.photos} value={mediaCount} />
       </div>
 
       {services.length ? (
         <div className="mt-5">
-          <h3 className="kuteka-detail-subtitle">Serviços Kuteka</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.kutekaServices}</h3>
           <ul className="mt-2 flex flex-wrap gap-2">
             {services.map((svc) => (
               <li key={svc} className="kuteka-detail-chip kuteka-detail-chip--accent">
@@ -198,7 +200,7 @@ export function PropertyDigitalPassport({
 
       {renovations.length ? (
         <div className="mt-4">
-          <h3 className="kuteka-detail-subtitle">Remodelações / valorização</h3>
+          <h3 className="kuteka-detail-subtitle">{copy.renovations}</h3>
           <ul className="mt-2 flex flex-wrap gap-2">
             {renovations.map((item) => (
               <li key={item} className="kuteka-detail-chip">
@@ -211,26 +213,42 @@ export function PropertyDigitalPassport({
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
         <MiniHistory
-          title="Histórico de proprietários"
+          title={copy.ownerHistory}
           items={owners}
-          empty="Titular actual na Kuteka"
+          empty={copy.ownerHistoryEmpty}
+          indexLabel={copy.indexLabel}
         />
-        <MiniHistory title="Histórico comercial / valorizações" items={valuations} />
-        <MiniHistory title="Histórico de manutenção" items={maintenance} />
-        <MiniHistory title="Histórico de inspeções" items={inspections} />
+        <MiniHistory
+          title={copy.commercialHistory}
+          items={valuations}
+          empty={copy.historyEmpty}
+          indexLabel={copy.indexLabel}
+        />
+        <MiniHistory
+          title={copy.maintenanceHistory}
+          items={maintenance}
+          empty={copy.historyEmpty}
+          indexLabel={copy.indexLabel}
+        />
+        <MiniHistory
+          title={copy.inspectionHistory}
+          items={inspections}
+          empty={copy.historyEmpty}
+          indexLabel={copy.indexLabel}
+        />
       </div>
 
       {(row.legal_notes || row.commercial_notes || row.documents_url) && (
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           {row.legal_notes ? (
             <div className="kuteka-detail-review">
-              <h3 className="kuteka-detail-subtitle">Documentação / jurídico</h3>
+              <h3 className="kuteka-detail-subtitle">{copy.legalDocs}</h3>
               <p className="kuteka-detail-body mt-1">{row.legal_notes}</p>
             </div>
           ) : null}
           {row.commercial_notes ? (
             <div className="kuteka-detail-review">
-              <h3 className="kuteka-detail-subtitle">Notas comerciais</h3>
+              <h3 className="kuteka-detail-subtitle">{copy.commercialNotes}</h3>
               <p className="kuteka-detail-body mt-1">{row.commercial_notes}</p>
             </div>
           ) : null}
@@ -241,7 +259,7 @@ export function PropertyDigitalPassport({
               rel="noreferrer"
               className="kuteka-detail-chip kuteka-detail-chip--accent w-fit"
             >
-              Abrir documentos validados
+              {copy.openDocuments}
             </a>
           ) : null}
         </div>
@@ -253,11 +271,13 @@ export function PropertyDigitalPassport({
 function MiniHistory({
   title,
   items,
-  empty = 'Sem registos ainda — serão adicionados ao longo do ciclo de vida.',
+  empty,
+  indexLabel,
 }: {
   title: string;
   items: Array<{ at?: string; note?: string; score?: number }>;
-  empty?: string;
+  empty: string;
+  indexLabel: string;
 }) {
   return (
     <div>
@@ -270,7 +290,8 @@ function MiniHistory({
             <li key={`${title}-${idx}`} className="kuteka-detail-body text-sm">
               <span className="font-medium text-[#08263f]">{item.at ?? '—'}</span>
               {' · '}
-              {item.note ?? (item.score != null ? `Índice ${item.score}` : '—')}
+              {item.note ??
+                (item.score != null ? indexLabel.replace('{score}', String(item.score)) : '—')}
             </li>
           ))}
         </ul>

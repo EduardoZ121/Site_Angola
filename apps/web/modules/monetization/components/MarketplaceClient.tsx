@@ -409,7 +409,7 @@ function ProvidersPanel({
                 {prov.municipality ? ` · ${prov.municipality}` : ''}
                 {prov.province ? `, ${prov.province}` : ''}
                 {prov.rating != null ? ` · ★ ${Number(prov.rating).toFixed(1)}` : ''}
-                {prov.is_demo ? ` · ${publicModuleBadge('beta_public')}` : ''}
+                {prov.is_demo ? ` · ${publicModuleBadge('beta_public', locale)}` : ''}
               </p>
             </div>
             <Button

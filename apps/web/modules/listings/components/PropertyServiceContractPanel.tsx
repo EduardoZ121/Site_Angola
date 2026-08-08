@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { LOCALE_INTL_TAG, type AppLocale } from '@/modules/i18n/types';
+import { getListingsCopy } from '../content';
 import { getServiceLabels } from '../lib/manual-ops-labels';
 
 type ServiceContract = {
@@ -26,36 +28,10 @@ type ServiceContract = {
   updated_at?: string;
 };
 
-const TYPE_LABELS: Record<string, string> = {
-  intermediation_sale: 'Intermediação de venda',
-  intermediation_rent: 'Intermediação de arrendamento',
-  full_management: 'Gestão total',
-  patrimonial_valuation: 'Valorização patrimonial',
-  legal_admin: 'Serviços jurídicos e administrativos',
-  photography: 'Sessão fotográfica',
-  technical_visit: 'Visita técnica',
-  renovation: 'Remodelação',
-  construction_finish: 'Conclusão de construção',
-  home_staging: 'Home Staging',
-  cleaning: 'Limpeza',
-  maintenance: 'Manutenção',
-  works_supervision: 'Fiscalização de obra',
-  condo_admin: 'Administração de condomínio',
-  evaluation: 'Avaliação profissional',
-};
-
-const STATUS_LABELS: Record<string, string> = {
-  draft: 'Rascunho',
-  pending_acceptance: 'Pendente de aceitação',
-  active: 'Activo',
-  completed: 'Concluído',
-  cancelled: 'Cancelado',
-};
-
-function fmtDate(value: string | null | undefined): string {
+function fmtDate(value: string | null | undefined, locale: AppLocale): string {
   if (!value) return '—';
   try {
-    return new Date(value).toLocaleDateString('pt-AO');
+    return new Date(value).toLocaleDateString(LOCALE_INTL_TAG[locale]);
   } catch {
     return value;
   }
@@ -66,7 +42,10 @@ function fmtDate(value: string | null | undefined): string {
  */
 export function PropertyServiceContractPanel({ propertyId }: { propertyId: string }) {
   const { locale } = useLocale();
+  const copy = getListingsCopy(locale).serviceContract;
   const serviceLabels = getServiceLabels(locale);
+  const typeLabels = copy.types as Record<string, string>;
+  const statusLabels = copy.status as Record<string, string>;
   const [rows, setRows] = useState<ServiceContract[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -122,23 +101,16 @@ export function PropertyServiceContractPanel({ propertyId }: { propertyId: strin
       aria-labelledby="svc-contract-heading"
     >
       <div className="border-b border-[var(--kuteka-detail-line)] pb-4">
-        <p className="kuteka-detail-eyebrow">Manual Cap.7</p>
+        <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
         <h2 id="svc-contract-heading" className="kuteka-detail-title mt-1">
-          Contrato de serviços Kuteka ↔ Parceiro
+          {copy.title}
         </h2>
-        <p className="kuteka-detail-meta mt-1">
-          Estado, validade, assinatura e histórico — distinto do contrato Cliente–Parceiro.
-        </p>
+        <p className="kuteka-detail-meta mt-1">{copy.subtitle}</p>
       </div>
 
-      {!loaded ? <p className="kuteka-detail-meta mt-4">A carregar contratos…</p> : null}
+      {!loaded ? <p className="kuteka-detail-meta mt-4">{copy.loading}</p> : null}
 
-      {loaded && rows.length === 0 ? (
-        <p className="kuteka-detail-body mt-4">
-          Ainda não existe contrato de serviços. Ao activar património com serviços Kuteka, o
-          sistema gera automaticamente um rascunho contratual.
-        </p>
-      ) : null}
+      {loaded && rows.length === 0 ? <p className="kuteka-detail-body mt-4">{copy.empty}</p> : null}
 
       {rows.length > 0 ? (
         <ul className="mt-5 flex flex-col gap-4">
@@ -152,39 +124,47 @@ export function PropertyServiceContractPanel({ propertyId }: { propertyId: strin
                   <div>
                     <p className="font-mono text-sm font-semibold text-[#08263f]">{row.code}</p>
                     <p className="kuteka-detail-meta mt-0.5">
-                      Versão {row.version || '1.0'} · Exclusividade: {row.exclusivity}
+                      {copy.versionExclusivityTemplate
+                        .replace('{version}', row.version || '1.0')
+                        .replace('{exclusivity}', row.exclusivity)}
                     </p>
                   </div>
                   <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-                    {STATUS_LABELS[row.status] ?? row.status}
+                    {statusLabels[row.status] ?? row.status}
                   </span>
                 </div>
 
                 <p className="kuteka-detail-body mt-3 font-medium">
-                  {TYPE_LABELS[row.service_type] ?? row.service_type}
+                  {typeLabels[row.service_type] ?? row.service_type}
                 </p>
 
                 <dl className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
                   <div>
-                    <dt className="kuteka-detail-label">Criado</dt>
-                    <dd className="kuteka-detail-value text-sm">{fmtDate(row.created_at)}</dd>
+                    <dt className="kuteka-detail-label">{copy.created}</dt>
+                    <dd className="kuteka-detail-value text-sm">
+                      {fmtDate(row.created_at, locale)}
+                    </dd>
                   </div>
                   <div>
-                    <dt className="kuteka-detail-label">Válido de</dt>
-                    <dd className="kuteka-detail-value text-sm">{fmtDate(row.valid_from)}</dd>
+                    <dt className="kuteka-detail-label">{copy.validFrom}</dt>
+                    <dd className="kuteka-detail-value text-sm">
+                      {fmtDate(row.valid_from, locale)}
+                    </dd>
                   </div>
                   <div>
-                    <dt className="kuteka-detail-label">Válido até</dt>
-                    <dd className="kuteka-detail-value text-sm">{fmtDate(row.valid_until)}</dd>
+                    <dt className="kuteka-detail-label">{copy.validUntil}</dt>
+                    <dd className="kuteka-detail-value text-sm">
+                      {fmtDate(row.valid_until, locale)}
+                    </dd>
                   </div>
                   <div>
-                    <dt className="kuteka-detail-label">Assinatura</dt>
+                    <dt className="kuteka-detail-label">{copy.signature}</dt>
                     <dd className="kuteka-detail-value text-sm">
                       {row.signature_name
-                        ? `${row.signature_name} · ${fmtDate(row.signed_at)}`
+                        ? `${row.signature_name} · ${fmtDate(row.signed_at, locale)}`
                         : row.status === 'pending_acceptance'
-                          ? 'Aguarda aceitação'
-                          : 'Pendente'}
+                          ? copy.awaitingAcceptance
+                          : copy.pending}
                     </dd>
                   </div>
                 </dl>
@@ -208,7 +188,7 @@ export function PropertyServiceContractPanel({ propertyId }: { propertyId: strin
 
                 {row.cancelled_at ? (
                   <p className="mt-2 text-sm font-medium text-red-700">
-                    Cancelado em {fmtDate(row.cancelled_at)}
+                    {copy.cancelledOnTemplate.replace('{date}', fmtDate(row.cancelled_at, locale))}
                     {row.cancel_reason ? ` — ${row.cancel_reason}` : ''}
                   </p>
                 ) : null}
@@ -219,7 +199,7 @@ export function PropertyServiceContractPanel({ propertyId }: { propertyId: strin
                     onClick={() => window.print()}
                     className="kuteka-detail-chip kuteka-detail-chip--accent"
                   >
-                    Download / imprimir PDF
+                    {copy.downloadPdf}
                   </button>
                   {row.document_url ? (
                     <a
@@ -228,11 +208,11 @@ export function PropertyServiceContractPanel({ propertyId }: { propertyId: strin
                       rel="noreferrer"
                       className="kuteka-detail-chip kuteka-detail-chip--accent"
                     >
-                      Abrir documento
+                      {copy.openDocument}
                     </a>
                   ) : null}
                   {row.status === 'active' ? (
-                    <span className="kuteka-detail-chip">Renovação: contacte a Kuteka</span>
+                    <span className="kuteka-detail-chip">{copy.renewalContact}</span>
                   ) : null}
                 </div>
               </li>

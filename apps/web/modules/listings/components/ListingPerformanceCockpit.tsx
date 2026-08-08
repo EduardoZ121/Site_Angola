@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { formatAoa } from '@/lib/format/aoa';
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getListingsCopy } from '../content';
 
 type CockpitMetrics = {
   views_30d: number;
@@ -36,6 +38,8 @@ export function ListingPerformanceCockpit({
   priceAoa,
   purpose,
 }: ListingPerformanceCockpitProps) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale).cockpit;
   const [metrics, setMetrics] = useState<CockpitMetrics | null>(null);
   const [favorites, setFavorites] = useState(0);
 
@@ -79,36 +83,43 @@ export function ListingPerformanceCockpit({
       ? Math.round(priceAoa * (score != null && score >= 75 ? 1.03 : 0.98))
       : Math.round(priceAoa * (score != null && score >= 75 ? 1.04 : 0.97));
   const probability =
-    score == null ? '—' : score >= 80 ? 'Alta' : score >= 60 ? 'Média' : 'A melhorar';
+    score == null
+      ? '—'
+      : score >= 80
+        ? copy.probabilityHigh
+        : score >= 60
+          ? copy.probabilityMedium
+          : copy.probabilityImprove;
 
   return (
     <section className="kuteka-detail-panel p-5" aria-labelledby="listing-cockpit">
       <h2 id="listing-cockpit" className="kuteka-detail-title">
-        Cockpit do anúncio
+        {copy.title}
       </h2>
-      <p className="kuteka-detail-body mt-1">
-        Desempenho dos últimos 30 dias e leitura sugerida pela inteligência Kuteka.
-      </p>
+      <p className="kuteka-detail-body mt-1">{copy.subtitle}</p>
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        <Chip label="Visualizações" value={String(metrics?.views_30d ?? 0)} />
-        <Chip label="Favoritos" value={String(favorites)} />
-        <Chip label="Visitas" value={String(metrics?.visits_30d ?? 0)} />
-        <Chip label="Propostas" value={String(metrics?.proposals_30d ?? 0)} />
+        <Chip label={copy.views} value={String(metrics?.views_30d ?? 0)} />
+        <Chip label={copy.favorites} value={String(favorites)} />
+        <Chip label={copy.visits} value={String(metrics?.visits_30d ?? 0)} />
+        <Chip label={copy.proposals} value={String(metrics?.proposals_30d ?? 0)} />
       </div>
       <div className="mt-3 grid gap-2 sm:grid-cols-3">
-        <Chip label="Score do anúncio" value={score != null ? `${score}/100` : 'Por avaliar'} />
+        <Chip label={copy.listingScore} value={score != null ? `${score}/100` : copy.unrated} />
         <Chip
-          label="Preço recomendado (KAI)"
+          label={copy.recommendedPrice}
           value={formatAoa(recommended, purpose === 'sale' ? 'sale' : 'rent')}
         />
         <Chip
-          label={purpose === 'sale' ? 'Probabilidade de venda' : 'Probabilidade de arrendamento'}
+          label={purpose === 'sale' ? copy.saleProbability : copy.rentProbability}
           value={probability}
         />
       </div>
       {metrics?.estimated_yield_pct != null ? (
         <p className="mt-3 text-sm text-stone-700">
-          Rendimento estimado: <strong>{Number(metrics.estimated_yield_pct).toFixed(1)}%</strong>
+          {copy.estimatedYieldTemplate.replace(
+            '{pct}',
+            Number(metrics.estimated_yield_pct).toFixed(1),
+          )}
         </p>
       ) : null}
     </section>

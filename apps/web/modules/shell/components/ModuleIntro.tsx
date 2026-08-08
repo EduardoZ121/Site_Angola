@@ -1,4 +1,8 @@
-import { HERO_MEDIA, type HeroMediaPreset } from '../media/hero-media';
+'use client';
+
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getShellCopy } from '../content';
+import type { HeroMediaPreset } from '../media/hero-media';
 
 /**
  * Atmospheric identity strip — Landing-aligned (light type over cinematic veil).
@@ -11,7 +15,8 @@ export function ModuleIntro({
   preset: HeroMediaPreset;
   compact?: boolean;
 }) {
-  const source = HERO_MEDIA[preset];
+  const { locale } = useLocale();
+  const source = getShellCopy(locale).hero[preset];
   return (
     <div className={`kuteka-module-intro${compact ? ' kuteka-module-intro--compact' : ''}`}>
       <p className="kuteka-module-intro__eyebrow">{source.eyebrow}</p>

@@ -113,8 +113,8 @@ export function HousingDetailClient({ id }: { id: string }) {
           {row ? (
             <div className="flex flex-wrap gap-2">
               <Badge variant="success">Activo</Badge>
-              {inventoryBadge(row.is_demo) ? (
-                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+              {inventoryBadge(row.is_demo, locale) ? (
+                <Badge variant="default">{inventoryBadge(row.is_demo, locale)}</Badge>
               ) : null}
             </div>
           ) : null}

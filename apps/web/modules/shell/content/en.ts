@@ -228,4 +228,52 @@ export const shellCopyEn: ShellCopy = {
     notFoundBody: 'The requested resource does not exist.',
     goHome: 'Go to the foundation',
   },
+  hero: {
+    dashboard: {
+      alt: 'Contemporary home at dusk',
+      eyebrow: 'Kuteka · Angola',
+      title: 'A living real-estate platform',
+      subtitle: 'Property, housing and trust — the natural continuation of the Landing.',
+    },
+    patrimonios: {
+      alt: 'Contemporary home with premium architecture',
+      eyebrow: 'Property Partner',
+      title: 'Publish property with presence',
+      subtitle: 'Photos, price and gallery — the listing starts here.',
+    },
+    habitacao: {
+      alt: 'Elegant residential interior',
+      eyebrow: 'Client',
+      title: 'Find housing with transparency',
+      subtitle: 'Explore, filter and show interest in the active inventory.',
+    },
+    agente: {
+      alt: 'Field mediation and fieldwork',
+      eyebrow: 'Certified Agent',
+      title: 'Follow on the ground',
+      subtitle: 'Coverage, visits, interests and pipeline in one place.',
+    },
+    confianca: {
+      alt: 'Secure documentation and verification',
+      eyebrow: 'Verification',
+      title: 'Safe relationships with evidence',
+      subtitle: 'Clear checklist — Under review, Approved or Rejected.',
+    },
+    contratos: {
+      alt: 'Executive table with contract and signature',
+      eyebrow: 'Contract',
+      title: 'Formalize with clarity',
+      subtitle: 'Parties, value, terms and acceptance before Payments.',
+    },
+    admin: {
+      alt: 'Executive operations environment',
+      eyebrow: 'Operations',
+      title: 'Platform command',
+      subtitle: 'Accounts, properties, verifications and pending requests.',
+    },
+  },
+  flowNextSteps: {
+    defaultTitle: 'Continue the journey',
+    kaiEyebrow: 'KAI · Next step',
+  },
 };

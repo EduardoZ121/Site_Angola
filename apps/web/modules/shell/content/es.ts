@@ -228,4 +228,52 @@ export const shellCopyEs: ShellCopy = {
     notFoundBody: 'El recurso solicitado no existe.',
     goHome: 'Ir a la fundación',
   },
+  hero: {
+    dashboard: {
+      alt: 'Vivienda contemporánea al atardecer',
+      eyebrow: 'Kuteka · Angola',
+      title: 'Plataforma inmobiliaria viva',
+      subtitle: 'Patrimonio, vivienda y confianza — la continuación natural de la Landing.',
+    },
+    patrimonios: {
+      alt: 'Vivienda contemporánea con arquitectura premium',
+      eyebrow: 'Socio patrimonial',
+      title: 'Publique patrimonio con presencia',
+      subtitle: 'Fotografías, precio y galería — el anuncio empieza aquí.',
+    },
+    habitacao: {
+      alt: 'Interior residencial elegante',
+      eyebrow: 'Cliente',
+      title: 'Encuentre vivienda con transparencia',
+      subtitle: 'Explore, filtre y muestre interés en el inventario activo.',
+    },
+    agente: {
+      alt: 'Mediación y trabajo de campo',
+      eyebrow: 'Agente certificado',
+      title: 'Acompañe en el terreno',
+      subtitle: 'Cobertura, visitas, intereses y pipeline en un solo lugar.',
+    },
+    confianca: {
+      alt: 'Documentación y verificación segura',
+      eyebrow: 'Verificación',
+      title: 'Relaciones seguras con evidencia',
+      subtitle: 'Checklist clara — En análisis, Aprobado o Rechazado.',
+    },
+    contratos: {
+      alt: 'Mesa ejecutiva con contrato y firma',
+      eyebrow: 'Contrato',
+      title: 'Formalice con claridad',
+      subtitle: 'Partes, valor, términos y aceptación antes de Pagos.',
+    },
+    admin: {
+      alt: 'Ambiente ejecutivo de operación',
+      eyebrow: 'Operación',
+      title: 'Comando de la plataforma',
+      subtitle: 'Cuentas, patrimonios, verificaciones y solicitudes pendientes.',
+    },
+  },
+  flowNextSteps: {
+    defaultTitle: 'Continuar el recorrido',
+    kaiEyebrow: 'KAI · Siguiente paso',
+  },
 };

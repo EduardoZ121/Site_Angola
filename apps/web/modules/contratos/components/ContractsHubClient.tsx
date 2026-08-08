@@ -188,8 +188,10 @@ export function ContractsHubClient() {
                           <div className="min-w-0">
                             <div className="flex flex-wrap items-center gap-2">
                               <p className="font-mono text-xs text-slate-500">{row.code}</p>
-                              {inventoryBadge(row.is_demo) ? (
-                                <Badge variant="default">{inventoryBadge(row.is_demo)}</Badge>
+                              {inventoryBadge(row.is_demo, locale) ? (
+                                <Badge variant="default">
+                                  {inventoryBadge(row.is_demo, locale)}
+                                </Badge>
                               ) : null}
                             </div>
                             <h3 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">

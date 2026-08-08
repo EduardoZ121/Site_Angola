@@ -1,5 +1,8 @@
 'use client';
 
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getListingsCopy, type ListingsCopy } from '../content';
+
 type PropertyMapPanelProps = {
   latitude: number | null | undefined;
   longitude: number | null | undefined;
@@ -16,21 +19,43 @@ type PropertyMapPanelProps = {
 
 type Poi = { label: string; eta: string; kind: string };
 
-function buildPois(props: PropertyMapPanelProps): Poi[] {
+function buildPois(
+  props: Pick<
+    PropertyMapPanelProps,
+    'nearSchools' | 'nearHospitals' | 'nearMarkets' | 'nearTransport'
+  >,
+  copy: ListingsCopy['map'],
+): Poi[] {
   const items: Poi[] = [];
   if (props.nearSchools !== false) {
-    items.push({ label: 'Escolas / colégios', eta: '5–12 min', kind: 'educação' });
+    items.push({
+      label: copy.poiSchools,
+      eta: copy.poiSchoolsEta,
+      kind: copy.poiSchoolsKind,
+    });
   }
   if (props.nearHospitals !== false) {
-    items.push({ label: 'Hospitais / clínicas', eta: '10–20 min', kind: 'saúde' });
+    items.push({
+      label: copy.poiHospitals,
+      eta: copy.poiHospitalsEta,
+      kind: copy.poiHospitalsKind,
+    });
   }
   if (props.nearMarkets !== false) {
-    items.push({ label: 'Mercados / supermercados', eta: '5–15 min', kind: 'comércio' });
+    items.push({
+      label: copy.poiMarkets,
+      eta: copy.poiMarketsEta,
+      kind: copy.poiMarketsKind,
+    });
   }
   if (props.nearTransport !== false) {
-    items.push({ label: 'Transportes públicos', eta: '5–10 min', kind: 'mobilidade' });
+    items.push({
+      label: copy.poiTransport,
+      eta: copy.poiTransportEta,
+      kind: copy.poiTransportKind,
+    });
   }
-  items.push({ label: 'Bancos / ATM', eta: '8–18 min', kind: 'serviços' });
+  items.push({ label: copy.poiBanks, eta: copy.poiBanksEta, kind: copy.poiBanksKind });
   return items;
 }
 
@@ -50,15 +75,16 @@ export function PropertyMapPanel({
   nearMarkets,
   nearTransport,
 }: PropertyMapPanelProps) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale).map;
+
   if (latitude == null || longitude == null || Number.isNaN(latitude) || Number.isNaN(longitude)) {
     return (
       <section className="kuteka-detail-panel p-5" aria-labelledby="map-heading">
         <h2 id="map-heading" className="kuteka-detail-title">
-          Localização
+          {copy.title}
         </h2>
-        <p className="kuteka-detail-body mt-2">
-          Mapa disponível quando o património tiver coordenadas GPS no registo.
-        </p>
+        <p className="kuteka-detail-body mt-2">{copy.noCoords}</p>
       </section>
     );
   }
@@ -72,14 +98,7 @@ export function PropertyMapPanel({
   const place = [neighborhood, city, province].filter(Boolean).join(' · ');
   const streetView = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${latitude},${longitude}`;
   const googleMaps = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-  const pois = buildPois({
-    latitude,
-    longitude,
-    nearSchools,
-    nearHospitals,
-    nearMarkets,
-    nearTransport,
-  });
+  const pois = buildPois({ nearSchools, nearHospitals, nearMarkets, nearTransport }, copy);
 
   return (
     <section className="kuteka-detail-panel overflow-hidden" aria-labelledby="map-heading">
@@ -87,12 +106,10 @@ export function PropertyMapPanel({
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
             <h2 id="map-heading" className="kuteka-detail-title">
-              Localização & envolvente
+              {copy.titleWithSurroundings}
             </h2>
             <p className="kuteka-detail-meta mt-1">
-              {exact
-                ? 'Localização exacta (autorizada)'
-                : 'Zona aproximada (privacidade do proprietário)'}
+              {exact ? copy.exactLocation : copy.approximateLocation}
               {place ? ` · ${place}` : ''}
             </p>
           </div>
@@ -103,7 +120,7 @@ export function PropertyMapPanel({
               rel="noreferrer"
               className="kuteka-detail-chip kuteka-detail-chip--accent"
             >
-              OpenStreetMap
+              {copy.openStreetMap}
             </a>
             <a
               href={streetView}
@@ -111,17 +128,17 @@ export function PropertyMapPanel({
               rel="noreferrer"
               className="kuteka-detail-chip kuteka-detail-chip--accent"
             >
-              Street View
+              {copy.streetView}
             </a>
             <a href={googleMaps} target="_blank" rel="noreferrer" className="kuteka-detail-chip">
-              Google Maps
+              {copy.googleMaps}
             </a>
           </div>
         </div>
       </div>
       <div className="aspect-[16/9] w-full bg-slate-200 sm:aspect-[21/9]">
         <iframe
-          title="Mapa do património"
+          title={copy.iframeTitle}
           src={src}
           className="h-full w-full border-0"
           loading="lazy"
@@ -129,7 +146,7 @@ export function PropertyMapPanel({
         />
       </div>
       <div className="space-y-3 px-5 py-4">
-        <h3 className="kuteka-detail-subtitle">Pontos de interesse próximos</h3>
+        <h3 className="kuteka-detail-subtitle">{copy.poisTitle}</h3>
         <ul className="grid gap-2 sm:grid-cols-2">
           {pois.map((poi) => (
             <li
@@ -145,10 +162,7 @@ export function PropertyMapPanel({
           ))}
         </ul>
         {nearbyNotes ? <p className="kuteka-detail-body">{nearbyNotes}</p> : null}
-        <p className="kuteka-detail-meta">
-          Tempos estimados em condições normais de trânsito — confirme no Street View / mapa
-          completo.
-        </p>
+        <p className="kuteka-detail-meta">{copy.etaDisclaimer}</p>
       </div>
     </section>
   );

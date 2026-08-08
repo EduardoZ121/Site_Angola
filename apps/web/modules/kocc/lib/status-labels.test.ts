@@ -24,6 +24,13 @@ describe('KOCC status labels', () => {
     expect(publicStatusLabel('maintenance')).toBe('Em manutenção');
   });
 
+  it('maps known statuses to the expected public en labels', () => {
+    expect(publicStatusLabel('beta_public', 'en')).toBe('Beta');
+    expect(publicStatusLabel('beta_private', 'en')).toBe('Early access');
+    expect(publicStatusLabel('commercial_active', 'en')).toBe('Commercially active');
+    expect(publicStatusLabel('maintenance', 'en')).toBe('Under maintenance');
+  });
+
   it('falls back to the beta_public label for unknown/empty status', () => {
     expect(publicStatusLabel(undefined)).toBe('Beta');
     expect(publicStatusLabel(null)).toBe('Beta');

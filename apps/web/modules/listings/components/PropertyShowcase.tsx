@@ -1,5 +1,7 @@
 'use client';
 
+import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { getListingsCopy } from '../content';
 import type { EnrichedListing, ListingMedia } from '../types';
 import { PropertyDigitalPassport } from './PropertyDigitalPassport';
 import { PropertyEvaluationPanel } from './PropertyEvaluationPanel';
@@ -33,6 +35,8 @@ export function PropertyShowcase({
   typeLabel,
   purposeLabel,
 }: PropertyShowcaseProps) {
+  const { locale } = useLocale();
+  const copy = getListingsCopy(locale).showcase;
   const gallery =
     media.length > 0
       ? media
@@ -59,17 +63,14 @@ export function PropertyShowcase({
       />
       <PropertyTrustPanel propertyId={row.id} />
       <PropertyFactsPanel row={row} typeLabel={typeLabel} purposeLabel={purposeLabel} />
-      <nav
-        aria-label="Secções da ficha"
-        className="kuteka-detail-panel flex flex-wrap gap-2 px-4 py-3"
-      >
+      <nav aria-label={copy.navAria} className="kuteka-detail-panel flex flex-wrap gap-2 px-4 py-3">
         {[
-          { href: '#pdk', label: 'Passaporte Digital' },
-          { href: '#saude', label: 'Painel de Saúde' },
-          { href: '#avaliacao', label: 'Avaliação Técnica' },
-          { href: '#contrato-kuteka', label: 'Contrato Kuteka' },
-          { href: '#historico', label: 'Histórico' },
-          { href: '#avaliacoes', label: 'Avaliações' },
+          { href: '#pdk', label: copy.navPdk },
+          { href: '#saude', label: copy.navHealth },
+          { href: '#avaliacao', label: copy.navEvaluation },
+          { href: '#contrato-kuteka', label: copy.navContract },
+          { href: '#historico', label: copy.navHistory },
+          { href: '#avaliacoes', label: copy.navReviews },
         ].map((item) => (
           <a
             key={item.href}
