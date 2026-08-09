@@ -43,6 +43,8 @@ export const listingsCopyEs: ListingsCopy = {
     comments: 'Comentarios',
     questions: 'Preguntas',
     ask: 'Preguntar',
+    evaluate: 'Valorar',
+    tapHint: 'Toque un botón arriba para comentar, preguntar o compartir.',
     like: 'Me gusta',
     unlike: 'Quitar me gusta',
     favorite: 'Favorito',

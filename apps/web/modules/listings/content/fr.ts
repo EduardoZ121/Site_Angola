@@ -42,6 +42,8 @@ export const listingsCopyFr: ListingsCopy = {
     comments: 'Commentaires',
     questions: 'Questions',
     ask: 'Demander',
+    evaluate: 'Évaluer',
+    tapHint: 'Touchez un bouton ci-dessus pour commenter, demander ou partager.',
     like: 'J’aime',
     unlike: 'Retirer le j’aime',
     favorite: 'Favori',

@@ -78,11 +78,15 @@ const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
     'trust.manage',
     'contracts.manage',
     'housing.explore',
-    'properties.manage',
     'agent.operate',
     'reputation.manage',
     'finance.read',
   ],
+  /**
+   * Super Admin lens = operação + governação — NÃO inclui properties.manage
+   * para o cockpit não se comportar como Parceiro Patrimonial.
+   * Habitação fica disponível em leitura/revisão via housing.explore + properties.review.
+   */
   super_administrator: [
     'platform.access',
     'admin.panel',
@@ -93,7 +97,6 @@ const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
     'trust.manage',
     'contracts.manage',
     'housing.explore',
-    'properties.manage',
     'agent.operate',
     'reputation.manage',
     'finance.manage',

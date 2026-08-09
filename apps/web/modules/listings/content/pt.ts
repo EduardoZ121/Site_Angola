@@ -41,6 +41,8 @@ export const listingsCopyPt = {
     comments: 'Comentários',
     questions: 'Perguntas',
     ask: 'Perguntar',
+    evaluate: 'Avaliar',
+    tapHint: 'Toque num botão acima para comentar, perguntar ou partilhar.',
     like: 'Gostar',
     unlike: 'Remover gosto',
     favorite: 'Favoritar',

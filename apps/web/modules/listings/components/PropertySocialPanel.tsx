@@ -116,7 +116,7 @@ export function PropertySocialPanel({
   const [posts, setPosts] = useState<SocialPost[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [open, setOpen] = useState<PanelKey>(null);
+  const [open, setOpen] = useState<PanelKey>('comments');
   const [body, setBody] = useState('');
   const [answerDrafts, setAnswerDrafts] = useState<Record<string, string>>({});
   const [msg, setMsg] = useState<string | null>(null);
@@ -404,14 +404,15 @@ export function PropertySocialPanel({
   return (
     <section
       id="social"
-      className="kuteka-detail-panel overflow-hidden"
+      className="kuteka-detail-panel overflow-hidden border-2 border-[#c45c26]/40 shadow-sm"
       aria-labelledby="property-social"
     >
-      <div className="border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white px-3 py-3 sm:px-4">
-        <h2 id="property-social" className="sr-only">
+      <div className="border-b border-[#c45c26]/25 bg-gradient-to-r from-[#fff7f0] to-white px-3 py-3 sm:px-4">
+        <h2 id="property-social" className="text-sm font-bold tracking-tight text-slate-900">
           {copy.title}
         </h2>
-        <div className="flex flex-wrap gap-2" role="toolbar" aria-label={copy.toolbarAria}>
+        <p className="mt-0.5 text-xs text-slate-600">{copy.subtitle}</p>
+        <div className="mt-3 flex flex-wrap gap-2" role="toolbar" aria-label={copy.toolbarAria}>
           <button
             type="button"
             disabled={busy}
@@ -454,6 +455,10 @@ export function PropertySocialPanel({
             {copy.ask}
             <span className="tabular-nums opacity-80">{loaded ? summary.questions : '·'}</span>
           </button>
+          <a href="#avaliacoes" className={actionChipClass(false)}>
+            <span aria-hidden>★</span>
+            {copy.evaluate}
+          </a>
           <button
             type="button"
             className={actionChipClass(open === 'share')}
@@ -466,97 +471,97 @@ export function PropertySocialPanel({
         </div>
       </div>
 
-      {(err || msg || !signedIn || open) && (
-        <div className="px-4 py-3">
-          {!signedIn ? <p className="text-sm text-slate-600">{copy.signInHint}</p> : null}
-          {err ? <p className="text-sm text-rose-800">{err}</p> : null}
-          {msg ? (
-            <p className="text-sm text-emerald-800" role="status">
-              {msg}
-            </p>
-          ) : null}
+      <div className="px-4 py-3">
+        {!signedIn ? <p className="text-sm text-slate-600">{copy.signInHint}</p> : null}
+        {err ? <p className="text-sm text-rose-800">{err}</p> : null}
+        {msg ? (
+          <p className="text-sm text-emerald-800" role="status">
+            {msg}
+          </p>
+        ) : null}
 
-          {open === 'comments' ? (
-            <div className="mt-3 flex flex-col gap-3">
-              {signedIn ? (
-                <form
-                  className="flex flex-col gap-2"
-                  onSubmit={(e) => void onSubmitPost('comment', e)}
+        {open === 'comments' ? (
+          <div className="mt-2 flex flex-col gap-3">
+            {signedIn ? (
+              <form
+                className="flex flex-col gap-2"
+                onSubmit={(e) => void onSubmitPost('comment', e)}
+              >
+                <textarea
+                  className="min-h-[4.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder={copy.commentPlaceholder}
+                  maxLength={4000}
+                />
+                <button
+                  type="submit"
+                  disabled={busy || !body.trim()}
+                  className="self-start rounded-kuteka bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
                 >
-                  <textarea
-                    className="min-h-[4.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    placeholder={copy.commentPlaceholder}
-                    maxLength={4000}
-                  />
-                  <button
-                    type="submit"
-                    disabled={busy || !body.trim()}
-                    className="self-start rounded-kuteka bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
-                  >
-                    {copy.submitComment}
-                  </button>
-                </form>
-              ) : null}
-              {renderPostList(comments, copy.emptyComments)}
-            </div>
-          ) : null}
+                  {copy.submitComment}
+                </button>
+              </form>
+            ) : null}
+            {renderPostList(comments, copy.emptyComments)}
+          </div>
+        ) : null}
 
-          {open === 'ask' ? (
-            <div className="mt-3 flex flex-col gap-3">
-              {signedIn ? (
-                <form
-                  className="flex flex-col gap-2"
-                  onSubmit={(e) => void onSubmitPost('question', e)}
+        {open === 'ask' ? (
+          <div className="mt-2 flex flex-col gap-3">
+            {signedIn ? (
+              <form
+                className="flex flex-col gap-2"
+                onSubmit={(e) => void onSubmitPost('question', e)}
+              >
+                <textarea
+                  className="min-h-[4.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  placeholder={copy.questionPlaceholder}
+                  maxLength={4000}
+                />
+                <button
+                  type="submit"
+                  disabled={busy || !body.trim()}
+                  className="self-start rounded-kuteka bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
                 >
-                  <textarea
-                    className="min-h-[4.5rem] rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    placeholder={copy.questionPlaceholder}
-                    maxLength={4000}
-                  />
-                  <button
-                    type="submit"
-                    disabled={busy || !body.trim()}
-                    className="self-start rounded-kuteka bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
-                  >
-                    {copy.submitQuestion}
-                  </button>
-                </form>
-              ) : null}
-              {renderPostList(questions, copy.emptyQuestions)}
-            </div>
-          ) : null}
+                  {copy.submitQuestion}
+                </button>
+              </form>
+            ) : null}
+            {renderPostList(questions, copy.emptyQuestions)}
+          </div>
+        ) : null}
 
-          {open === 'share' ? (
-            <div className="mt-3 flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={onWhatsApp}
-                className="rounded-kuteka border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-950"
-              >
-                WhatsApp
-              </button>
-              <button
-                type="button"
-                onClick={() => void onCopyLink()}
-                className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800"
-              >
-                {copy.copyLink}
-              </button>
-              <button
-                type="button"
-                onClick={() => void onNativeShare()}
-                className="rounded-kuteka border border-sky-300 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-950"
-              >
-                {copy.shareNative}
-              </button>
-            </div>
-          ) : null}
-        </div>
-      )}
+        {open === 'share' ? (
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={onWhatsApp}
+              className="rounded-kuteka border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-950"
+            >
+              WhatsApp
+            </button>
+            <button
+              type="button"
+              onClick={() => void onCopyLink()}
+              className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-800"
+            >
+              {copy.copyLink}
+            </button>
+            <button
+              type="button"
+              onClick={() => void onNativeShare()}
+              className="rounded-kuteka border border-sky-300 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-950"
+            >
+              {copy.shareNative}
+            </button>
+          </div>
+        ) : null}
+
+        {!open ? <p className="mt-1 text-xs text-slate-500">{copy.tapHint}</p> : null}
+      </div>
     </section>
   );
 }

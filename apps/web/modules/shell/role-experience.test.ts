@@ -53,4 +53,18 @@ describe('role experience', () => {
     expect(resolveExperience(['client', 'patrimonial_partner'], 'client')).toBe('client');
     expect(resolveExperience(['client'], 'patrimonial_partner')).toBe('client');
   });
+
+  it('super admin lens does not expose partner activate (properties.manage)', () => {
+    const effective = permissionsForExperience('super_administrator', [
+      'platform.access',
+      'admin.panel',
+      'properties.manage',
+      'housing.explore',
+      'finance.manage',
+      'properties.review',
+    ]);
+    expect(effective).toContain('finance.manage');
+    expect(effective).toContain('properties.review');
+    expect(effective).not.toContain('properties.manage');
+  });
 });

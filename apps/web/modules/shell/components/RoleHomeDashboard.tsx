@@ -23,39 +23,14 @@ import { getShellCopy } from '../content';
 import type { ExperienceMode } from '../role-experience';
 import { FlowNextSteps, type FlowStep } from './FlowNextSteps';
 import { useRoleExperience } from './RoleExperienceProvider';
+import { operatingProfileFor, ROLE_HOME_CTA_LABELS_PT } from '../role-operating-matrix';
 
-function firstActionSteps(
-  mode: ExperienceMode,
-  fa: ReturnType<typeof getShellCopy>['firstActions'],
-): FlowStep[] {
-  switch (mode) {
-    case 'client':
-      return [
-        { href: '/app/habitacao/explorar', label: fa.clientExplore, primary: true },
-        { href: '/app/centro-confianca', label: fa.clientTrust },
-      ];
-    case 'patrimonial_partner':
-      return [
-        { href: '/app/patrimonios/novo', label: fa.partnerActivate, primary: true },
-        { href: '/app/habitacao/explorar', label: fa.partnerInventory },
-      ];
-    case 'client_partner':
-      return [
-        { href: '/app/habitacao/explorar', label: fa.dualClient, primary: true },
-        { href: '/app/patrimonios/novo', label: fa.dualPartner },
-      ];
-    case 'certified_agent':
-      return [{ href: '/app/agente', label: fa.agentPipeline, primary: true }];
-    case 'supervisor':
-    case 'administrator':
-    case 'super_administrator':
-      return [{ href: '/app/admin', label: fa.adminPanel, primary: true }];
-    default:
-      return [
-        { href: '/app/habitacao/explorar', label: fa.clientExplore, primary: true },
-        { href: '/app/centro-confianca', label: fa.clientTrust },
-      ];
-  }
+function firstActionSteps(mode: ExperienceMode): FlowStep[] {
+  return operatingProfileFor(mode).homeCtas.map((cta) => ({
+    href: cta.href,
+    label: ROLE_HOME_CTA_LABELS_PT[cta.labelKey],
+    primary: Boolean(cta.primary),
+  }));
 }
 
 type RoleHomeDashboardProps = {
@@ -150,7 +125,7 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
   }, [kisInsights, mode, stats]);
 
   const shell = getShellCopy(locale);
-  const firstSteps = firstActionSteps(mode, shell.firstActions);
+  const firstSteps = firstActionSteps(mode);
 
   return (
     <div className="flex flex-col gap-4">

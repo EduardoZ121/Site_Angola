@@ -82,13 +82,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/habitacao/explorar',
     status: 'active',
     requiresPermission: 'housing.explore',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'cliente',
   },
   {
@@ -124,13 +118,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/habitacao/explorar?disponibilidade=futura',
     status: 'active',
     requiresPermission: 'housing.explore',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'geral',
   },
   {
@@ -149,7 +137,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/patrimonios',
     status: 'active',
     requiresPermission: 'properties.manage',
-    experiences: ['patrimonial_partner', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['patrimonial_partner', 'client_partner'],
     group: 'parceiro',
   },
   {
@@ -280,7 +268,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'mudanca',
     href: '/app/mudanca',
     status: 'active',
-    experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['client', 'client_partner'],
     group: 'cliente',
   },
   {
@@ -288,7 +276,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'encontrar',
     href: '/app/encontrar-casa',
     status: 'active',
-    experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['client', 'client_partner'],
     group: 'cliente',
   },
   {
@@ -296,13 +284,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'concierge',
     href: '/app/concierge',
     status: 'active',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'geral',
   },
   {
@@ -310,13 +292,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'garantia',
     href: '/app/garantia',
     status: 'active',
-    experiences: [
-      'client',
-      'patrimonial_partner',
-      'client_partner',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'patrimonial_partner', 'client_partner'],
     group: 'geral',
   },
   {
@@ -324,13 +300,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'assistencia',
     href: '/app/assistencia',
     status: 'active',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'geral',
   },
   {
@@ -338,13 +308,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'servicos',
     href: '/app/servicos',
     status: 'active',
-    experiences: [
-      'client',
-      'client_partner',
-      'patrimonial_partner',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'patrimonial_partner'],
     group: 'geral',
   },
   {
@@ -353,7 +317,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/parceiro/planos',
     status: 'active',
     requiresPermission: 'properties.manage',
-    experiences: ['patrimonial_partner', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['patrimonial_partner', 'client_partner'],
     group: 'parceiro',
   },
   {

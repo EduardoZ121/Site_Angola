@@ -64,6 +64,7 @@ export function PropertyShowcase({
         onSelect={onSelectMedia}
       />
       <PropertySocialPanel propertyId={row.id} propertyTitle={row.title} />
+      <PropertyReviews propertyId={row.id} />
       <PropertyPublicationActions
         propertyId={row.id}
         ownerId={row.owner_id}
@@ -108,7 +109,6 @@ export function PropertyShowcase({
         nearTransport={row.near_transport}
       />
       <PropertyTimeline propertyId={row.id} />
-      <PropertyReviews propertyId={row.id} />
     </div>
   );
 }

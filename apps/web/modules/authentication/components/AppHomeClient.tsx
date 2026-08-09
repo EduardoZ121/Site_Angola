@@ -5,15 +5,21 @@ import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
 import { RoleHomeDashboard } from '@/modules/shell/components/RoleHomeDashboard';
+import { RoleMissionPanel } from '@/modules/shell/components/RoleMissionPanel';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 import { modeBadgeLabel } from '@/modules/i18n/experience-labels';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import {
+  operatingProfileFor,
+  ROLE_HOME_CTA_LABELS_PT,
+} from '@/modules/shell/role-operating-matrix';
 import { getAuthCopy } from '../content';
 import { useAppSession } from './app-session';
 
 /**
- * /app home — experience cockpit + continuous Feed.
+ * /app home — experience cockpit driven by the official role operating matrix.
+ * CTAs follow mission of the active experience, not raw permission soup.
  */
 export function AppHomeClient() {
   const { locale } = useLocale();
@@ -66,12 +72,13 @@ export function AppHomeClient() {
   if (!session) return null;
 
   const greetingName = session.displayName;
-  const canManage = effectivePermissions.includes('properties.manage');
+  const profile = operatingProfileFor(mode);
   const canHousing = effectivePermissions.includes('housing.explore');
-  const canContracts = effectivePermissions.includes('contracts.manage');
-  const canAgent = effectivePermissions.includes('agent.operate');
-  const canAdmin = effectivePermissions.includes('admin.panel');
-  const showFeed = canHousing || mode === 'client_partner' || mode === 'certified_agent';
+  const showFeed =
+    mode === 'client' ||
+    mode === 'client_partner' ||
+    mode === 'certified_agent' ||
+    (mode === 'patrimonial_partner' && canHousing);
 
   return (
     <div className="flex flex-col gap-4">
@@ -81,62 +88,28 @@ export function AppHomeClient() {
           <h1 className="truncate text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
             {greetingName ? `${copy.app.welcome}, ${greetingName}` : copy.app.welcomeAnonymous}
           </h1>
-          <p className="kuteka-detail-body mt-0.5">{copy.app.experienceHint}</p>
+          <p className="kuteka-detail-body mt-0.5">{profile.mission}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {canManage ? (
+          {profile.homeCtas.map((cta) => (
             <Link
-              href="/app/patrimonios/novo"
-              className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
-            >
-              {copy.app.quickActivateProperty}
-            </Link>
-          ) : null}
-          {canHousing ? (
-            <Link
-              href="/app/habitacao/explorar"
+              key={`${cta.href}-${cta.labelKey}`}
+              href={cta.href}
               className={cn(
-                buttonVariants({ variant: canManage ? 'secondary' : 'primary', size: 'sm' }),
+                buttonVariants({
+                  variant: cta.primary ? 'primary' : 'secondary',
+                  size: 'sm',
+                }),
                 'w-fit',
               )}
             >
-              {copy.app.quickExploreHousing}
+              {ROLE_HOME_CTA_LABELS_PT[cta.labelKey]}
             </Link>
-          ) : null}
-          {canAgent ? (
-            <Link
-              href="/app/agente"
-              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
-            >
-              {copy.app.quickAgent}
-            </Link>
-          ) : null}
-          {canAdmin ? (
-            <Link
-              href="/app/admin"
-              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
-            >
-              {copy.app.quickAdmin}
-            </Link>
-          ) : null}
-          {canContracts ? (
-            <Link
-              href="/app/contratos"
-              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
-            >
-              {copy.app.quickContracts}
-            </Link>
-          ) : null}
-          {!canManage && !canHousing && !canAgent && !canAdmin ? (
-            <Link
-              href="/auth/onboarding/papeis"
-              className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
-            >
-              {copy.app.quickRoles}
-            </Link>
-          ) : null}
+          ))}
         </div>
       </header>
+
+      <RoleMissionPanel mode={mode} />
 
       <RoleHomeDashboard session={session} />
 
