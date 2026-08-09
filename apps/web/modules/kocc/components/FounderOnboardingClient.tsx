@@ -182,40 +182,32 @@ export function FounderOnboardingClient() {
 
           {(identity?.isFounder || identity?.isOwner) && (
             <section className="kuteka-detail-panel flex flex-col gap-3 p-5">
-              <h2 className="text-sm font-semibold text-slate-900">
-                Passo 2 — Experiência Founder
-              </h2>
+              <h2 className="text-sm font-semibold text-slate-900">Passo 2 — Founder Center</h2>
               <p className="text-sm text-slate-700">
-                Após o claim, a conta recebe Super Admin de superfície. Use o seletor de papel no
-                menu da conta → <strong>Superadministrador</strong>, depois:
+                Após o claim, use o seletor de papel → <strong>Founder / Owner</strong>. A home e o
+                menu abrem o Founder Center (não o cockpit de Cliente/Parceiro).
               </p>
               <ul className="list-disc space-y-1 pl-5 text-sm text-slate-800">
                 <li>
-                  <Link href="/app/super?tab=institutional" className="font-semibold underline">
-                    /app/super → Gestão Institucional
+                  <Link href="/app/fundador?tab=pessoas" className="font-semibold underline">
+                    Founder Center → Pessoas
                   </Link>{' '}
                   — Fundadores, Co-Founders, Super Admin, Admin, Supervisor
                 </li>
-                <li>Feature Flags, KOCC, auditoria e configurações críticas</li>
+                <li>Feature Flags, KOCC, auditoria e escalações no próprio Center</li>
                 <li>
                   <Link href="/app/centro-seguranca" className="font-semibold underline">
                     Centro de Segurança → Alterar email
                   </Link>{' '}
                   (dupla confirmação; user_id permanece)
                 </li>
-                <li>
-                  <Link href="/app/admin" className="font-semibold underline">
-                    /app/admin
-                  </Link>{' '}
-                  — Central de Trabalho operacional
-                </li>
               </ul>
               <div className="flex flex-wrap gap-2">
                 <Link
-                  href="/app/super"
+                  href="/app/fundador"
                   className={cn(buttonVariants({ variant: 'primary' }), 'w-fit')}
                 >
-                  Abrir Super / Gestão Institucional
+                  Abrir Founder Center
                 </Link>
                 <Link
                   href="/app/centro-seguranca"

@@ -10,6 +10,7 @@ import type { AppLocale } from '@/modules/i18n/types';
 import { publicModuleBadge } from '@/modules/kocc/lib/public-label';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 import { formatAoaAmount } from '@/modules/finance/lib/format';
 import { getMonetizationCopy, type MonetizationCopy } from '@/modules/monetization/content';
 import {
@@ -57,10 +58,12 @@ function slaLabel(order: ServiceOrderDetail, common: MonetizationCopy['common'])
  */
 export function MarketplaceClient() {
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { mode } = useRoleExperience();
   const { locale } = useLocale();
   const copy = getMonetizationCopy(locale).marketplace;
   const common = getMonetizationCopy(locale).common;
   const ready = sessionStatus === 'ready';
+  const isProviderMode = mode === 'service_provider';
 
   const [tab, setTab] = useState<TabKey>('providers');
   const [ctx, setCtx] = useState<MarketplaceContext | null>(null);
@@ -106,6 +109,10 @@ export function MarketplaceClient() {
     if (ready) void load();
   }, [load, ready]);
 
+  useEffect(() => {
+    if (isProviderMode && showInbox) setTab('inbox');
+  }, [isProviderMode, showInbox]);
+
   const run = useCallback(
     async (
       id: string,
@@ -131,14 +138,44 @@ export function MarketplaceClient() {
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
         <header className="kuteka-detail-panel p-5">
-          <p className="kuteka-detail-eyebrow">{copy.eyebrow}</p>
-          <Heading level={1}>{copy.title}</Heading>
-          <Text className="mt-1 text-slate-700">{copy.subtitle}</Text>
+          <p className="kuteka-detail-eyebrow">
+            {isProviderMode ? 'Prestador · Operação' : copy.eyebrow}
+          </p>
+          <Heading level={1}>{isProviderMode ? 'Área do Prestador' : copy.title}</Heading>
+          <Text className="mt-1 text-slate-700">
+            {isProviderMode
+              ? 'Pedido → Orçamento → Aceite → Serviço → Agenda → Evidências → Conclusão → Pagamento → Avaliação.'
+              : copy.subtitle}
+          </Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
+          {isProviderMode ? (
+            <ol className="mt-4 grid gap-2 sm:grid-cols-3 lg:grid-cols-5">
+              {[
+                'Pedido',
+                'Orçamento',
+                'Aceite',
+                'Serviço',
+                'Agenda',
+                'Evidências',
+                'Conclusão',
+                'Pagamento',
+                'Avaliação',
+              ].map((step, i) => (
+                <li
+                  key={step}
+                  className="rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-800"
+                >
+                  {i + 1}. {step}
+                </li>
+              ))}
+            </ol>
+          ) : null}
           <div className="mt-4 flex flex-wrap gap-2">
-            <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'secondary' }))}>
-              {copy.smartMoveLink}
-            </Link>
+            {!isProviderMode ? (
+              <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                {copy.smartMoveLink}
+              </Link>
+            ) : null}
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>
               {common.financeiro}
             </Link>
@@ -607,6 +644,12 @@ function ProviderInboxPanel({
                     {inboxCopy.startExecution}
                   </Button>
                 ) : null}
+                {o.status === 'accepted' || o.status === 'in_progress' ? (
+                  <p className="w-full text-xs text-slate-500">
+                    Agenda: confirme a janela com o Cliente em Mensagens. Evidências: fotografe /
+                    descreva o trabalho antes de concluir (nota no histórico do pedido).
+                  </p>
+                ) : null}
                 {o.status === 'in_progress' ? (
                   <Button type="button" size="sm" loading={busy} onClick={() => onComplete(o)}>
                     {inboxCopy.completeService}
@@ -622,6 +665,11 @@ function ProviderInboxPanel({
                   >
                     {common.cancel}
                   </Button>
+                ) : null}
+                {o.status === 'completed' ? (
+                  <p className="w-full text-xs text-emerald-800">
+                    Conclusão registada — aguarde pagamento e avaliação do Cliente.
+                  </p>
                 ) : null}
               </div>
             </li>

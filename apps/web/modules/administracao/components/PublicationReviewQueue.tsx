@@ -395,14 +395,25 @@ export function PublicationReviewQueue() {
                     </div>
                   </div>
 
-                  {item.owner_id ? (
-                    <MessagePropertyOwnerButton
-                      propertyId={item.property_id}
-                      ownerId={item.owner_id}
-                      propertyTitle={item.title}
-                      label={copy.contactPartner}
-                    />
-                  ) : null}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {item.owner_id ? (
+                      <MessagePropertyOwnerButton
+                        propertyId={item.property_id}
+                        ownerId={item.owner_id}
+                        propertyTitle={item.title}
+                        label={copy.contactPartner}
+                      />
+                    ) : null}
+                    <Link
+                      href="/app/admin#escalacoes"
+                      className={cn(
+                        buttonVariants({ variant: 'ghost', size: 'sm' }),
+                        'w-fit text-xs',
+                      )}
+                    >
+                      Escalar (Admin → Super → Founder)
+                    </Link>
+                  </div>
 
                   {catalog.length > 0 ? (
                     <fieldset className="flex flex-col gap-2">

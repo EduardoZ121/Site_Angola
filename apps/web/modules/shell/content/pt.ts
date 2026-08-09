@@ -22,6 +22,7 @@ export const shellCopyPt = {
     cliente: 'Cliente',
     parceiro: 'Parceiro Patrimonial',
     agente: 'Agente',
+    prestador: 'Prestador',
     admin: 'Administração',
   },
   userMenu: {
@@ -132,6 +133,8 @@ export const shellCopyPt = {
     assistencia: 'Assistência 24h',
     servicos: 'Prestadores',
     planos: 'Planos Parceiro',
+    fundador: 'Founder Center',
+    escalacoes: 'Escalações',
   },
   routeBlocked: {
     title: 'Área indisponível neste papel',

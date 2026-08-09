@@ -227,6 +227,86 @@ export function AgentHubClient() {
 
         {canOperate ? (
           <SoftListSlot pending={loading && assignments.length === 0}>
+            <section
+              className="kuteka-detail-panel flex flex-col gap-3 p-5"
+              aria-label="Operação mínima do Agente"
+            >
+              <p className="kuteka-detail-eyebrow">Operação do dia</p>
+              <Heading level={2}>Agenda → Relatórios</Heading>
+              <Text className="text-sm text-slate-600">
+                Missão: fechar visitas e follow-up nos imóveis atribuídos. Escalone bloqueios ao
+                Supervisor.
+              </Text>
+              <ol className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { href: '/app/agente#agenda', label: '1. Agenda' },
+                  { href: '/app/agente#visitas', label: '2. Visitas' },
+                  { href: '/app/agente#imoveis', label: '3. Imóveis atribuídos' },
+                  { href: '/app/agente#clientes', label: '4. Clientes' },
+                  { href: '/app/agente#tarefas', label: '5. Tarefas' },
+                  { href: '/app/agente#followup', label: '6. Follow-up' },
+                  { href: '/app/agente#relatorios', label: '7. Relatórios' },
+                  { href: '/app/agente#notificacoes', label: '8. Notificações' },
+                ].map((step) => (
+                  <li key={step.href}>
+                    <a
+                      href={step.href}
+                      className="block rounded-kuteka border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-800 hover:border-brand-300"
+                    >
+                      {step.label}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <section id="agenda" className="flex flex-col gap-2">
+              <Heading level={2}>Agenda</Heading>
+              <Text className="text-sm text-slate-600">
+                Compromissos do dia com base nos imóveis atribuídos e visitas planeadas.
+              </Text>
+              <ul className="flex flex-col gap-2">
+                {assignments.slice(0, 3).map((row) => (
+                  <li
+                    key={`agenda-${row.id}`}
+                    className="rounded-kuteka border border-slate-200 bg-white px-4 py-3 text-sm"
+                  >
+                    <p className="font-medium text-slate-900">
+                      Rever {row.property?.title ?? row.property_id}
+                    </p>
+                    <p className="text-slate-500">Prioridade: contacto / visita / follow-up</p>
+                  </li>
+                ))}
+                {!loading && assignments.length === 0 ? (
+                  <li className="text-sm text-slate-500">
+                    Sem itens na agenda — explore inventário.
+                  </li>
+                ) : null}
+              </ul>
+            </section>
+
+            <section id="visitas" className="flex flex-col gap-2">
+              <Heading level={2}>Visitas</Heading>
+              <Text className="text-sm text-slate-600">
+                Abra o inventário habitacional ou o detalhe do imóvel atribuído para marcar /
+                confirmar visitas.
+              </Text>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/app/habitacao?vista=visitas"
+                  className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+                >
+                  Vista de visitas
+                </Link>
+                <Link
+                  href="/app/agente/explorar"
+                  className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+                >
+                  Inventário do Agente
+                </Link>
+              </div>
+            </section>
+
             <section className="flex max-w-xl flex-col gap-4">
               <div>
                 <Heading level={2}>{copy.preferencesTitle}</Heading>
@@ -290,7 +370,7 @@ export function AgentHubClient() {
               ) : null}
             </section>
 
-            <section className="flex flex-col gap-3">
+            <section id="imoveis" className="flex flex-col gap-3">
               <Heading level={2}>{copy.assignmentsTitle}</Heading>
               {!loading && assignments.length === 0 ? (
                 <EmptyState
@@ -328,6 +408,66 @@ export function AgentHubClient() {
                   </li>
                 ))}
               </ul>
+            </section>
+
+            <section id="clientes" className="kuteka-detail-panel flex flex-col gap-2 p-5">
+              <Heading level={2}>Clientes</Heading>
+              <Text className="text-sm text-slate-600">
+                Acompanhe interessados e mensagens. Contacte o Cliente antes de escalar.
+              </Text>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/app/mensagens"
+                  className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+                >
+                  Mensagens
+                </Link>
+                <Link
+                  href="/app/contratos"
+                  className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+                >
+                  Propostas / contratos
+                </Link>
+              </div>
+            </section>
+
+            <section id="tarefas" className="kuteka-detail-panel flex flex-col gap-2 p-5">
+              <Heading level={2}>Tarefas</Heading>
+              <ul className="list-disc space-y-1 pl-5 text-sm text-slate-700">
+                <li>Confirmar visitas do dia</li>
+                <li>Actualizar estado dos imóveis atribuídos</li>
+                <li>Registar follow-up pós-visita</li>
+                <li>Escalar bloqueios ao Supervisor (não ao Founder)</li>
+              </ul>
+            </section>
+
+            <section id="followup" className="kuteka-detail-panel flex flex-col gap-2 p-5">
+              <Heading level={2}>Follow-up</Heading>
+              <Text className="text-sm text-slate-600">
+                Depois de cada visita: mensagem ao Cliente, nota ao Parceiro se necessário, e
+                actualização do pipeline.
+              </Text>
+              <Link
+                href="/app/mensagens"
+                className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+              >
+                Abrir follow-up em Mensagens
+              </Link>
+            </section>
+
+            <section id="relatorios" className="kuteka-detail-panel flex flex-col gap-2 p-5">
+              <Heading level={2}>Relatórios</Heading>
+              <Text className="text-sm text-slate-600">
+                Resumo mínimo: {assignments.length} imóvel(is) atribuído(s). Relatórios avançados
+                entram após validação Beta.
+              </Text>
+            </section>
+
+            <section id="notificacoes" className="kuteka-detail-panel flex flex-col gap-2 p-5">
+              <Heading level={2}>Notificações</Heading>
+              <Text className="text-sm text-slate-600">
+                Use o sino do shell para visitas, clientes e tarefas do papel Agente.
+              </Text>
             </section>
           </SoftListSlot>
         ) : null}

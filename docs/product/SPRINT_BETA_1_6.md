@@ -1,11 +1,11 @@
 # Sprint Beta 1.6 — Trust Governance Gate
 
-| Campo         | Valor                                                                              |
-| ------------- | ---------------------------------------------------------------------------------- |
-| **Versão**    | 1.3                                                                                |
-| **Data**      | 2026-08-08                                                                         |
-| **Natureza**  | Gate estrutural **antes** da Sprint Beta 2                                         |
-| **Objectivo** | Fechar governação, ciclo do imóvel, social, Founder ops e reutilização transversal |
+| Campo         | Valor                                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------ |
+| **Versão**    | 1.4                                                                                        |
+| **Data**      | 2026-08-09                                                                                 |
+| **Natureza**  | Gate estrutural **antes** da Sprint Beta 2                                                 |
+| **Objectivo** | Fechar governação + matriz operacional B+C (Founder/Supervisor/Agente/Prestador/Escalação) |
 
 ## 1. Decisão
 
@@ -13,12 +13,13 @@ A Beta 2 **não abre** até o critério de saída abaixo. Arquitectura de produt
 
 ## 2. Entregas (código)
 
-| Área                                              | Migration / UI                                           |
-| ------------------------------------------------- | -------------------------------------------------------- |
-| Aprovação + Founders + comissão                   | `0036` · fila `/app/admin`                               |
-| Quatro pilares (Audit, Moderação, Reputação, KOS) | `0037` · painéis Admin                                   |
-| Ciclo completo imóvel + social + Founder ops      | `0038` · social na ficha · Gestão Institucional no Super |
-| Poder operacional Supervisor/Admin + atribuição   | `0039` · Central de Trabalho · acções na ficha           |
+| Área                                                          | Migration / UI                                                                    |
+| ------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Aprovação + Founders + comissão                               | `0036` · fila `/app/admin`                                                        |
+| Quatro pilares (Audit, Moderação, Reputação, KOS)             | `0037` · painéis Admin                                                            |
+| Ciclo completo imóvel + social + Founder ops                  | `0038` · social na ficha · Gestão Institucional no Super                          |
+| Poder operacional Supervisor/Admin + atribuição               | `0039` · Central de Trabalho · acções na ficha                                    |
+| Matriz B+C (Founder Center, Supervisor, Prestador, Escalação) | `0040` · modos `founder`/`service_provider` · `/app/fundador` Center · Escalações |
 
 ### Ciclo do imóvel (visível na Timeline + KOS)
 
@@ -57,13 +58,16 @@ Guia em **`/app/fundador`** (sem exigir `finance.manage`) · bootstrap único ·
 
 Ops (PO):
 
-1. Aplicar `0032` → … → `0038` → **`0039`**
-2. Validar **visualmente**:
-   - Imóvel → barra social sob fotos e usar cada acção
-   - Conta real → `/app/fundador` → Founder/Owner → Gestão Institucional
-   - Entrar como Supervisor / Admin / Super / Agente e ver «o que posso fazer» + executar
+1. Aplicar `0032` → … → `0039` → **`0040`**
+2. Validar **visualmente / por papel** (critério PO — código ≠ concluído):
+   - Entrar como **Founder → Super → Admin → Supervisor → Agente → Prestador → Parceiro → Cliente**
+   - Em cada conta: missão, o que fazer hoje, o que pode, para quem escalar
+   - Founder Center (`/app/fundador`): Pessoas / Flags / KOCC / Auditoria / Escalações
+   - Supervisor: Cockpit + fila + escalação (sem aprovar/rejeitar)
+   - Prestador: inbox com fluxo Pedido→…→Avaliação
 3. Bootstrap Founder real (não `demo.*`) + ligar Co-Founder / Admins pela UI
-4. Confirmação escrita do PO
+4. Confirmação escrita do PO **antes** de autorizar Beta 2
+5. **Não** abrir Board / Investor / Academia / Founder financeiro profundo nesta sprint
 
 ## 5. Regra permanente após Beta 2
 

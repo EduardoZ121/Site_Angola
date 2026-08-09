@@ -21,7 +21,8 @@ export type RoleHomeCta = {
     | 'services'
     | 'security'
     | 'kocc'
-    | 'moderation';
+    | 'moderation'
+    | 'escalations';
   primary?: boolean;
 };
 
@@ -99,7 +100,25 @@ export const ROLE_OPERATING_MATRIX: Record<ExperienceMode, RoleOperatingProfile>
       { href: '/app/habitacao/explorar', labelKey: 'exploreHousing' },
       { href: '/app/contratos', labelKey: 'contracts' },
     ],
-    cockpitHint: 'Agenda → CRM → Visitas → Tarefas → Relatórios',
+    cockpitHint: 'Agenda → Visitas → Imóveis → Clientes → Tarefas → Follow-up → Relatórios',
+  },
+  service_provider: {
+    mission: 'Executar serviços contratados através da Kuteka.',
+    reportsTo: 'Admin / Super Admin (operação)',
+    mustDo: [
+      'Receber pedidos e enviar orçamentos',
+      'Aceitar, agendar e executar serviços',
+      'Enviar evidências e concluir',
+      'Acompanhar pagamento e avaliações',
+    ],
+    mustNot: ['Aprovar patrimónios', 'Gerir Admins', 'Alterar comissões da plataforma'],
+    homeCtas: [
+      { href: '/app/servicos', labelKey: 'services', primary: true },
+      { href: '/app/financeiro', labelKey: 'contracts' },
+      { href: '/app/centro-confianca', labelKey: 'trust' },
+    ],
+    cockpitHint:
+      'Pedido → Orçamento → Aceite → Serviço → Agenda → Evidências → Conclusão → Pagamento → Avaliação',
   },
   supervisor: {
     mission: 'Executar e supervisionar o trabalho operacional diário.',
@@ -118,10 +137,12 @@ export const ROLE_OPERATING_MATRIX: Record<ExperienceMode, RoleOperatingProfile>
     ],
     homeCtas: [
       { href: '/app/admin', labelKey: 'workCenter', primary: true },
+      { href: '/app/admin#escalacoes', labelKey: 'escalations' },
       { href: '/app/confianca/revisao', labelKey: 'trust' },
+      { href: '/app/admin/utilizadores', labelKey: 'agentArea' },
       { href: '/app/mensagens', labelKey: 'moderation' },
     ],
-    cockpitHint: 'Central de Trabalho → SLA → Contactar PP → Escalações',
+    cockpitHint: 'Central de Trabalho → SLA → Contactar PP → Atribuir Agente → Escalações',
   },
   administrator: {
     mission: 'Gerir os processos operacionais da Kuteka.',
@@ -168,6 +189,28 @@ export const ROLE_OPERATING_MATRIX: Record<ExperienceMode, RoleOperatingProfile>
     ],
     cockpitHint: 'Super / KOCC → Central de Trabalho → Pessoas → Segurança → Auditoria',
   },
+  founder: {
+    mission: 'Proprietário e autoridade máxima da Kuteka — governação institucional.',
+    reportsTo: '— (topo da hierarquia)',
+    mustDo: [
+      'Gerir Founders / Co-Founders / Super Admins',
+      'Feature Flags, KOCC e configurações críticas',
+      'Métricas executivas e auditoria global',
+      'Supervisionar operação e segurança',
+    ],
+    mustNot: [
+      'Operar como Parceiro Activando património no cockpit Founder',
+      'Usar contas demo.* para governação de produção',
+    ],
+    homeCtas: [
+      { href: '/app/fundador', labelKey: 'founderCenter', primary: true },
+      { href: '/app/super', labelKey: 'superCommand' },
+      { href: '/app/admin', labelKey: 'workCenter' },
+      { href: '/app/super?tab=kocc', labelKey: 'kocc' },
+      { href: '/app/centro-seguranca', labelKey: 'security' },
+    ],
+    cockpitHint: 'Empresa → Pessoas → Operação → Financeiro → Segurança → KOCC → Auditoria',
+  },
 };
 
 export const ROLE_HOME_CTA_LABELS_PT: Record<RoleHomeCta['labelKey'], string> = {
@@ -184,6 +227,7 @@ export const ROLE_HOME_CTA_LABELS_PT: Record<RoleHomeCta['labelKey'], string> = 
   security: 'Centro de Segurança',
   kocc: 'KOCC operacional',
   moderation: 'Utilizadores / Moderação',
+  escalations: 'Escalações',
 };
 
 export function operatingProfileFor(mode: ExperienceMode): RoleOperatingProfile {

@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
-import { FounderOnboardingClient } from '@/modules/kocc/components/FounderOnboardingClient';
+import { FounderCenterClient } from '@/modules/kocc/components/FounderCenterClient';
 
 export const metadata: Metadata = {
-  title: 'Founder / Owner · Kuteka',
+  title: 'Founder Center · Kuteka',
   robots: { index: false, follow: false },
 };
 
 export default function FundadorPage() {
-  return <FounderOnboardingClient />;
+  return <FounderCenterClient />;
 }

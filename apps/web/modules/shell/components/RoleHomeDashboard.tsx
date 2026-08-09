@@ -10,8 +10,11 @@ import {
   AdminOpsCockpit,
   AgentOpsCockpit,
   ClientOpsCockpit,
+  FounderOpsCockpit,
   FutureAvailabilityList,
   PartnerOpsCockpit,
+  ProviderOpsCockpit,
+  SupervisorOpsCockpit,
 } from '@/modules/ops/components/StakeholderCockpits';
 import { buildKaiInsights } from '@/modules/ops/kai-insights';
 import { loadOpsStats } from '@/modules/ops/load-ops-stats';
@@ -68,11 +71,16 @@ function panelsForMode(mode: ExperienceMode, s: OpsStats | null, loading: boolea
           <FutureAvailabilityList s={s} />
         </>
       );
+    case 'service_provider':
+      return <ProviderOpsCockpit s={s} loading={loading} />;
     case 'supervisor':
+      return <SupervisorOpsCockpit s={s} loading={loading} />;
     case 'administrator':
       return <AdminOpsCockpit s={s} loading={loading} />;
     case 'super_administrator':
       return <AdminOpsCockpit s={s} loading={loading} executive />;
+    case 'founder':
+      return <FounderOpsCockpit s={s} loading={loading} />;
     default:
       return <ClientOpsCockpit s={s} loading={loading} />;
   }

@@ -35,7 +35,9 @@ export type ShellNavLabelKey =
   | 'garantia'
   | 'assistencia'
   | 'servicos'
-  | 'planos';
+  | 'planos'
+  | 'fundador'
+  | 'escalacoes';
 
 export type ShellNavItem = {
   id: string;
@@ -72,6 +74,8 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'supervisor',
       'administrator',
       'super_administrator',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -172,6 +176,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -188,6 +195,8 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'founder',
     ],
     group: 'geral',
   },
@@ -203,6 +212,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -218,6 +230,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -227,7 +242,13 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/agente',
     status: 'active',
     requiresPermission: 'agent.operate',
-    experiences: ['certified_agent', 'administrator', 'super_administrator'],
+    experiences: [
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+      'supervisor',
+      'founder',
+    ],
     group: 'agente',
   },
   {
@@ -236,7 +257,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/admin',
     status: 'active',
     requiresAnyPermission: ['admin.panel', 'properties.review'],
-    experiences: ['supervisor', 'administrator', 'super_administrator'],
+    experiences: ['supervisor', 'administrator', 'super_administrator', 'founder'],
     group: 'admin',
   },
   {
@@ -245,7 +266,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/super',
     status: 'active',
     requiresPermission: 'finance.manage',
-    experiences: ['super_administrator'],
+    experiences: ['super_administrator', 'founder'],
     group: 'admin',
   },
   {
@@ -260,6 +281,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -308,7 +332,16 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'servicos',
     href: '/app/servicos',
     status: 'active',
-    experiences: ['client', 'client_partner', 'patrimonial_partner'],
+    experiences: [
+      'client',
+      'client_partner',
+      'patrimonial_partner',
+      'founder',
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+      'supervisor',
+    ],
     group: 'geral',
   },
   {
@@ -319,6 +352,31 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     requiresPermission: 'properties.manage',
     experiences: ['patrimonial_partner', 'client_partner'],
     group: 'parceiro',
+  },
+  {
+    id: 'servicosPrestador',
+    labelKey: 'servicos',
+    href: '/app/servicos',
+    status: 'active',
+    experiences: ['service_provider'],
+    group: 'prestador',
+  },
+  {
+    id: 'fundador',
+    labelKey: 'fundador',
+    href: '/app/fundador',
+    status: 'active',
+    experiences: ['founder'],
+    group: 'admin',
+  },
+  {
+    id: 'escalacoes',
+    labelKey: 'escalacoes',
+    href: '/app/admin#escalacoes',
+    status: 'active',
+    requiresAnyPermission: ['admin.panel', 'properties.review'],
+    experiences: ['supervisor', 'administrator', 'super_administrator', 'founder'],
+    group: 'admin',
   },
   {
     id: 'conta',
@@ -375,7 +433,7 @@ export function groupNavItems(items: readonly ShellNavItem[]): {
   group: NavGroup;
   items: ShellNavItem[];
 }[] {
-  const order: NavGroup[] = ['geral', 'cliente', 'parceiro', 'agente', 'admin'];
+  const order: NavGroup[] = ['geral', 'cliente', 'parceiro', 'agente', 'prestador', 'admin'];
   const map = new Map<NavGroup, ShellNavItem[]>();
   for (const item of items) {
     const list = map.get(item.group) ?? [];

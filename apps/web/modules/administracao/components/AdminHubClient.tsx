@@ -18,7 +18,9 @@ import {
   type AdminInterestRow,
   type PlatformStats,
 } from '../services/admin-client';
+import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 import { AuditCenterPanel } from './AuditCenterPanel';
+import { EscalationPanel } from './EscalationPanel';
 import { KosAnalyticsPanel } from './KosAnalyticsPanel';
 import { ModerationCenterPanel } from './ModerationCenterPanel';
 import { PublicationReviewQueue } from './PublicationReviewQueue';
@@ -32,6 +34,8 @@ export function AdminHubClient() {
   const { locale } = useLocale();
   const copy = getAdministracaoCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { mode } = useRoleExperience();
+  const isSupervisor = mode === 'supervisor';
   const allowed = sessionStatus === 'ready' && hasAdminAccess(session?.permissions);
   const accessPending = sessionStatus === 'loading';
   const denied = sessionStatus === 'ready' && !allowed;
@@ -79,8 +83,12 @@ export function AdminHubClient() {
       <div className="flex flex-col gap-8">
         <header className="kuteka-glass flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="flex flex-col gap-2">
-            <Heading level={1}>{copy.title}</Heading>
-            <Text className="text-slate-600">{copy.subtitle}</Text>
+            <Heading level={1}>{isSupervisor ? 'Cockpit do Supervisor' : copy.title}</Heading>
+            <Text className="text-slate-600">
+              {isSupervisor
+                ? 'Processos atribuídos, análise de patrimónios, pendências, SLA, contacto com PP, atribuição de Agentes e escalação para Admin.'
+                : copy.subtitle}
+            </Text>
           </div>
           {allowed ? (
             <div className="flex flex-wrap gap-2">
@@ -89,6 +97,18 @@ export function AdminHubClient() {
                 className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
               >
                 {copy.trustReview}
+              </Link>
+              <Link
+                href="/app/mensagens"
+                className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+              >
+                Contactar PP
+              </Link>
+              <Link
+                href="/app/admin#escalacoes"
+                className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+              >
+                Escalações
               </Link>
               <Link
                 href="/app/habitacao/explorar"
@@ -106,7 +126,7 @@ export function AdminHubClient() {
                 href="/app/admin/utilizadores"
                 className={cn(buttonVariants({ variant: 'primary' }), 'w-fit shrink-0')}
               >
-                {copy.users}
+                {isSupervisor ? 'Atribuir Agentes' : copy.users}
               </Link>
             </div>
           ) : null}
@@ -134,9 +154,11 @@ export function AdminHubClient() {
 
             <PublicationReviewQueue />
 
+            <EscalationPanel />
+
             <AuditCenterPanel />
 
-            <ModerationCenterPanel />
+            {!isSupervisor ? <ModerationCenterPanel /> : null}
 
             <SoftListSlot pending={loading && !stats}>
               <section className="flex flex-col gap-3" aria-labelledby="stats-heading">

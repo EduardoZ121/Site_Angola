@@ -13,20 +13,23 @@ Legenda: 🟢 Implementado e funcional · 🟡 Parcial · 🔴 Ausente
 
 ## Tabela-resumo (pedido PO)
 
-| Papel         | Experiência própria                           | Dashboard | Menu | Tarefas | Ações                                  | Permissões | Limitações | Estado               |
-| ------------- | --------------------------------------------- | --------- | ---- | ------- | -------------------------------------- | ---------- | ---------- | -------------------- |
-| Founder/Owner | 🟡 (colapsa em Super Admin + `/app/fundador`) | 🟡        | 🟡   | 🟡      | 🟡                                     | 🟡         | 🟡         | **🟡 Parcial**       |
-| Co-Founder    | 🟡 (mesmo Super; badge)                       | 🟡        | 🟡   | 🟡      | 🟡                                     | 🟡         | 🟡         | **🟡 Parcial**       |
-| Super Admin   | 🟢 (modo `super_administrator`)               | 🟢        | 🟡   | 🟢      | 🟢                                     | 🟢         | 🟡         | **🟡 Parcial**       |
-| Admin         | 🟢 (`administrator`)                          | 🟢        | 🟡   | 🟢      | 🟢                                     | 🟢         | 🟡         | **🟡 Parcial**       |
-| Supervisor    | 🟡 (modo existe; menu quase vazio)            | 🟡        | 🔴   | 🟡      | 🟡                                     | 🟡         | 🟢         | **🟡 Parcial**       |
-| Agente        | 🟢 (`certified_agent`)                        | 🟡        | 🟢   | 🟡      | 🟡                                     | 🟢         | 🟢         | **🟡 Parcial**       |
-| Prestador     | 🔴 (sem ExperienceMode)                       | 🔴        | 🔴   | 🔴      | 🟡 (`/app/servicos` inbox se linked)   | 🟡         | 🔴         | **🔴 Ausente**       |
-| Parceiro      | 🟢 (`patrimonial_partner`)                    | 🟢        | 🟢   | 🟢      | 🟢                                     | 🟢         | 🟢         | **🟢 Mais avançado** |
-| Cliente       | 🟢 (`client`)                                 | 🟢        | 🟢   | 🟢      | 🟢                                     | 🟢         | 🟢         | **🟢 Mais avançado** |
-| Board         | 🔴 (papel BD reservado)                       | 🔴        | 🔴   | 🔴      | 🔴                                     | 🔴         | 🔴         | **🔴 Ausente**       |
-| Investor      | 🔴 (papel BD reservado)                       | 🔴        | 🔴   | 🔴      | 🔴                                     | 🔴         | 🔴         | **🔴 Ausente**       |
-| Auditor       | 🔴 (sem modo UI; perms BD parciais)           | 🔴        | 🔴   | 🔴      | 🟡 (audit.read se tiver Admin surface) | 🟡         | 🔴         | **🔴 Ausente**       |
+| Papel         | Experiência própria                                      | Dashboard | Menu | Tarefas | Ações                     | Permissões | Limitações | Estado                   |
+| ------------- | -------------------------------------------------------- | --------- | ---- | ------- | ------------------------- | ---------- | ---------- | ------------------------ |
+| Founder/Owner | 🟢 modo `founder` + Founder Center `/app/fundador`       | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟡         | **🟢 Ops B+C** (validar) |
+| Co-Founder    | 🟢 mesmo modo `founder` (badge Co-Founder)               | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟡         | **🟢 Ops B+C** (validar) |
+| Super Admin   | 🟢 (modo `super_administrator`)                          | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟡         | **🟢**                   |
+| Admin         | 🟢 (`administrator`)                                     | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟡         | **🟢**                   |
+| Supervisor    | 🟢 cockpit + menu ops + escalação                        | 🟢        | 🟢   | 🟢      | 🟢 (sem aprovar/rejeitar) | 🟢         | 🟢         | **🟢 Ops B+C** (validar) |
+| Agente        | 🟢 hub Agenda→Relatórios                                 | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟡         | **🟢 Ops B+C** (validar) |
+| Prestador     | 🟢 modo `service_provider` + fluxo mínimo em `/servicos` | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟡         | **🟢 Ops B+C** (validar) |
+| Parceiro      | 🟢 (`patrimonial_partner`)                               | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟢         | **🟢 Mais avançado**     |
+| Cliente       | 🟢 (`client`)                                            | 🟢        | 🟢   | 🟢      | 🟢                        | 🟢         | 🟢         | **🟢 Mais avançado**     |
+| Board         | 🔴 backlog v1.1+                                         | 🔴        | 🔴   | 🔴      | 🔴                        | 🔴         | 🔴         | **🔴 Fora de escopo**    |
+| Investor      | 🔴 backlog v1.1+                                         | 🔴        | 🔴   | 🔴      | 🔴                        | 🔴         | 🔴         | **🔴 Fora de escopo**    |
+| Auditor       | 🔴 backlog v1.1+                                         | 🔴        | 🔴   | 🔴      | 🟡                        | 🟡         | 🔴         | **🔴 Fora de escopo**    |
+
+> **Actualização 2026-08-09 (sprint B+C):** gaps Founder / Supervisor / Agente / Prestador / Escalação fechados em código (`0040` + UI).  
+> **Critério PO:** só considerar concluído após login real em cada papel e validação visual/funcional. Beta 2 continua bloqueada.
 
 ---
 
@@ -205,8 +208,12 @@ Legenda: 🟢 Implementado e funcional · 🟡 Parcial · 🔴 Ausente
 
 ## Conclusão honesta
 
-A alteração do **Home do Super Admin** e o painel Missão foram necessários, mas **não fecham a matriz**.
+O pacote **B+C** (Founder Center, Supervisor cockpit, Agente min-ops, Prestador experience, Escalação formal) está **em código** e preserva Cliente/Parceiro 🟢.
 
-Hoje a plataforma tem **3 experiências maduras** (Cliente, Parceiro, e o bloco Admin/Super), **1 parcial forte** (Agente), **1 parcial fraca** (Supervisor), **Founder/Co-Founder colapsados no Super**, e **Prestador / Board / Investor / Auditor sem experiência própria**.
+**Ainda não autorizar Beta 2** até o PO validar login real:
 
-**Não classificar a matriz como concluída** até cada papel da tabela-resumo deixar de ter 🔴 nas colunas Experiência / Dashboard / Menu / Tarefas — ou o PO marcar explicitamente esses papéis como **D (fora da Beta 2)**.
+`Founder → Super Admin → Admin → Supervisor → Agente → Prestador → Parceiro → Cliente`
+
+e confirmar em cada conta: missão, o que fazer hoje, o que pode, para quem escalar.
+
+Board / Investor / Auditor / Academia / Founder financeiro profundo = **v1.1+** (explícito fora de escopo).
