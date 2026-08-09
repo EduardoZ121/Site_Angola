@@ -7,7 +7,7 @@ import { LanguageSwitcher } from '@/modules/shell/components/LanguageSwitcher';
 export const metadata: Metadata = {
   title: 'Centro de Documentação Kuteka',
   description:
-    'Manual do utilizador, FAQ, glossário, novidades e estado dos serviços da Kuteka — acesso público, sem necessidade de sessão iniciada.',
+    'Manuais operacionais completos (utilizador, administração e matriz de papéis), FAQ, glossário, novidades e estado dos serviços — acesso público.',
   robots: { index: true, follow: true },
 };
 

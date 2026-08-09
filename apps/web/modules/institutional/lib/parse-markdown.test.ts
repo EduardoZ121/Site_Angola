@@ -21,4 +21,19 @@ Texto **negrito**.
     expect(blocks.some((b) => b.type === 'ul')).toBe(true);
     expect(blocks.some((b) => b.type === 'table')).toBe(true);
   });
+
+  it('parses fenced code blocks as pre (wireframes)', () => {
+    const blocks = parseMarkdownDocument(`## Wireframe
+
+\`\`\`
+MODELO DE INTERFACE — exemplo conceptual
+| KUTEKA |
+\`\`\`
+`);
+    const pre = blocks.find((b) => b.type === 'pre');
+    expect(pre).toBeTruthy();
+    if (pre && pre.type === 'pre') {
+      expect(pre.text).toContain('MODELO DE INTERFACE');
+    }
+  });
 });

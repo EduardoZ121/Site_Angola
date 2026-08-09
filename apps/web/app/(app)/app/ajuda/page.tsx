@@ -3,7 +3,7 @@ import { HelpCenterClient } from '@/modules/shell/components/HelpCenterClient';
 import { loadHelpDocs } from '@/modules/institutional/lib/help-docs';
 
 export const metadata: Metadata = {
-  title: 'Centro de Documentação Kuteka · Manual, FAQ, Glossário',
+  title: 'Centro de Documentação Kuteka · Manuais, Matriz, FAQ',
   robots: { index: false, follow: false },
 };
 

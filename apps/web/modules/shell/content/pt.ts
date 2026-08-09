@@ -78,8 +78,12 @@ export const shellCopyPt = {
   },
   helpPage: {
     title: 'Centro de Documentação Kuteka',
-    subtitle: 'Manual, FAQ, glossário, novidades e estado dos serviços — tudo num só lugar.',
-    manual: 'Manual do utilizador',
+    subtitle:
+      'Manuais operacionais completos, matriz de papéis, FAQ, glossário, novidades e estado dos serviços.',
+    manual: 'Manual do utilizador (completo)',
+    manualUtilizador: 'Manual completo do utilizador',
+    manualOperacional: 'Manual operacional e administrativo',
+    matrizGovernanca: 'Matriz de papéis e governação',
     faq: 'Perguntas frequentes',
     glossario: 'Glossário',
     novidades: 'Novidades',
@@ -93,6 +97,19 @@ export const shellCopyPt = {
     contactCta: 'Ainda precisa de ajuda? Contacte-nos',
     publicNotice:
       'Está a ver o Centro de Documentação público. Inicie sessão para uma experiência completa e personalizada.',
+    byRole: 'Ajuda por papel',
+    byRoleHint:
+      'Abra o guia operacional do seu papel (menus, acções e limites reais da plataforma).',
+    roleGuide: 'Guia activo',
+    jumpHint: 'Atalho para a ficha deste papel:',
+    roleCliente: 'Cliente',
+    roleParceiro: 'Parceiro Patrimonial',
+    roleAgente: 'Agente',
+    rolePrestador: 'Prestador',
+    roleSupervisor: 'Supervisor',
+    roleAdmin: 'Administrador',
+    roleSuper: 'Superadministrador',
+    roleFounder: 'Founder / Owner',
   },
   contactPage: {
     title: 'Contactar a Kuteka',
