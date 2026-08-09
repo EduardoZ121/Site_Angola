@@ -38,6 +38,28 @@ describe('activatePropertySchema', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('accepts rich activation fields and commission settlement', () => {
+    const parsed = activatePropertySchema.parse({
+      title: 'Moradia Talatona',
+      propertyType: 'house',
+      purpose: 'rent',
+      managementLevel: 'announce_only',
+      requestedServices: ['announce'],
+      suites: 2,
+      parkingSpaces: 1,
+      furnished: true,
+      hasGarage: true,
+      hasPool: false,
+      hasGarden: true,
+      landAreaM2: 450,
+      builtAreaM2: 220,
+      commissionSettlement: 'after_first_rent',
+    });
+    expect(parsed.suites).toBe(2);
+    expect(parsed.commissionSettlement).toBe('after_first_rent');
+    expect(parsed.hasGarage).toBe(true);
+  });
 });
 
 describe('propertyRequiresEvaluation', () => {

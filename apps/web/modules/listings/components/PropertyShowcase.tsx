@@ -11,6 +11,8 @@ import { PropertyHealthPanel } from './PropertyHealthPanel';
 import { PropertyMapPanel } from './PropertyMapPanel';
 import { PropertyReviews } from './PropertyReviews';
 import { PropertyServiceContractPanel } from './PropertyServiceContractPanel';
+import { PropertyPublicationActions } from '@/modules/administracao/components/PropertyPublicationActions';
+import { PropertySocialPanel } from './PropertySocialPanel';
 import { PropertyTimeline } from './PropertyTimeline';
 import { PropertyTrustPanel } from './PropertyTrustPanel';
 
@@ -61,6 +63,14 @@ export function PropertyShowcase({
         gallery={gallery}
         onSelect={onSelectMedia}
       />
+      <PropertySocialPanel propertyId={row.id} propertyTitle={row.title} />
+      <PropertyReviews propertyId={row.id} />
+      <PropertyPublicationActions
+        propertyId={row.id}
+        ownerId={row.owner_id}
+        propertyTitle={row.title}
+        lifecycleStatus={row.lifecycle_status}
+      />
       <PropertyTrustPanel propertyId={row.id} />
       <PropertyFactsPanel row={row} typeLabel={typeLabel} purposeLabel={purposeLabel} />
       <nav aria-label={copy.navAria} className="kuteka-detail-panel flex flex-wrap gap-2 px-4 py-3">
@@ -99,7 +109,6 @@ export function PropertyShowcase({
         nearTransport={row.near_transport}
       />
       <PropertyTimeline propertyId={row.id} />
-      <PropertyReviews propertyId={row.id} />
     </div>
   );
 }

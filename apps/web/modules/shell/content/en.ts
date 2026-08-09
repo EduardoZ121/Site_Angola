@@ -23,6 +23,7 @@ export const shellCopyEn: ShellCopy = {
     cliente: 'Client',
     parceiro: 'Property Partner',
     agente: 'Agent',
+    prestador: 'Provider',
     admin: 'Administration',
   },
   userMenu: {
@@ -133,6 +134,8 @@ export const shellCopyEn: ShellCopy = {
     assistencia: '24h Assistance',
     servicos: 'Providers',
     planos: 'Partner Plans',
+    fundador: 'Founder Center',
+    escalacoes: 'Escalations',
   },
   routeBlocked: {
     title: 'Area unavailable in this role',

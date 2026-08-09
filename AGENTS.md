@@ -14,6 +14,14 @@ Nenhuma funcionalidade entra em desenvolvimento sem estar associada a:
 
 Se não cumprir os três, **adiar**. Fonte: [`docs/product/SPRINT_BETA_CHARTER.md`](docs/product/SPRINT_BETA_CHARTER.md).
 
+### Após abertura da Sprint Beta 2
+
+**Não criar funcionalidades estruturais novas.** Só: bugs, UX, performance, segurança, confiança, feedback Beta e métricas KOS. Features novas → backlog v1.1+. Ver [`docs/product/SPRINT_BETA_1_6.md`](docs/product/SPRINT_BETA_1_6.md) §5.
+
+### Princípio transversal
+
+Informação introduzida **uma vez** deve ser reutilizada automaticamente pelos módulos autorizados (KIS→contratos/pay; aprovação→feed/KAI/KOS; social→reputação→ICK→KAI).
+
 ## O que priorizar
 
 - Confiança, operação da empresa, monetização, menos trabalho manual, segurança, UX significativa.

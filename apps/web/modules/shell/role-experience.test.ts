@@ -3,6 +3,7 @@ import {
   availableExperiences,
   canAccessPath,
   defaultExperience,
+  homePathForExperience,
   permissionsForExperience,
   resolveExperience,
 } from './role-experience';
@@ -52,5 +53,34 @@ describe('role experience', () => {
   it('resolves stored preference when still available', () => {
     expect(resolveExperience(['client', 'patrimonial_partner'], 'client')).toBe('client');
     expect(resolveExperience(['client'], 'patrimonial_partner')).toBe('client');
+  });
+
+  it('super admin lens does not expose partner activate (properties.manage)', () => {
+    const effective = permissionsForExperience('super_administrator', [
+      'platform.access',
+      'admin.panel',
+      'properties.manage',
+      'housing.explore',
+      'finance.manage',
+      'properties.review',
+    ]);
+    expect(effective).toContain('finance.manage');
+    expect(effective).toContain('properties.review');
+    expect(effective).not.toContain('properties.manage');
+  });
+
+  it('defaults to founder when founder role is present', () => {
+    expect(defaultExperience(['founder', 'super_administrator', 'client'])).toBe('founder');
+    expect(availableExperiences(['founder', 'co_founder'])).toContain('founder');
+  });
+
+  it('defaults to service_provider ahead of client when both exist', () => {
+    expect(defaultExperience(['service_provider', 'client'])).toBe('service_provider');
+  });
+
+  it('maps home paths for founder and prestador', () => {
+    expect(homePathForExperience('founder')).toBe('/app/fundador');
+    expect(homePathForExperience('service_provider')).toBe('/app/servicos');
+    expect(homePathForExperience('supervisor')).toBe('/app/admin');
   });
 });

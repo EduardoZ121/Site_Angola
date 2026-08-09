@@ -35,6 +35,7 @@ Este é o **Bloco Zero**: a lista honesta de tudo o que falta, está parcial ou 
 | Feature flags no Super Admin                                                                               |   🟢   | Config-first, já em uso                                                           |
 | KOCC — controlo de estado público por módulo (Beta/Acesso antecipado/Disponível em breve/Comercial activo) |   🟢   | MVP em `/app/super` → KOCC; migration `0032` (aplicar no Supabase remoto)         |
 | KOCC — Painel Beta (métricas + feedback/bugs)                                                              |   🟡   | UI + migration `0035` no código; aplicar no Supabase remoto                       |
+| Aprovação de publicações + Founders (Trust Governance)                                                     |   🟡   | Sprint Beta 1.6 Fase A — migration `0036`; **gate antes da Beta 2**               |
 | Upload real de documentos de Confiança                                                                     |   🔴   | Hoje apenas notes/metadata                                                        |
 | i18n cobertura total de módulos comerciais                                                                 |   🟡   | Fichas/badges/heroes/hubs localizados (Sprint 1.5B); metadata de páginas ainda PT |
 

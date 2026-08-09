@@ -138,6 +138,100 @@ export function AgentOpsCockpit({ s, loading }: { s: OpsStats | null; loading: b
   );
 }
 
+export function SupervisorOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
+  return (
+    <OpsCockpitShell
+      loading={loading}
+      eyebrow="Supervisor · Operação diária"
+      title="Cockpit do Supervisor"
+      subtitle="Processos atribuídos, análise de patrimónios, pendências, SLA, contacto PP e escalação."
+      stats={[
+        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0) },
+        { label: 'Parceiros', value: String(s?.partnersCount ?? 0) },
+        { label: 'Agentes', value: String(s?.agentsCount ?? 0) },
+        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
+        { label: 'Libertações futuras', value: String(s?.propertiesFutureFree ?? 0) },
+        { label: 'Interessados (rede)', value: String(s?.pipelineInterests ?? 0) },
+      ]}
+      links={[
+        { href: '/app/admin', label: 'Central de Trabalho', primary: true },
+        { href: '/app/admin#escalacoes', label: 'Escalações' },
+        { href: '/app/mensagens', label: 'Contactar PP' },
+        { href: '/app/admin/utilizadores', label: 'Atribuir Agentes' },
+        { href: '/app/confianca/revisao', label: 'Confiança' },
+        { href: '/app/agente', label: 'Área Agente' },
+      ]}
+    >
+      <div className="kuteka-ops-pipeline mt-4">
+        <p className="kuteka-ops-block__title">Fluxo do dia</p>
+        <p className="kuteka-ops-pipeline__flow">
+          Fila → Análise → Pendência / SLA → Contactar PP → Atribuir Agente → Escalar (Admin)
+        </p>
+        <p className="kuteka-ops-block__meta mt-2">
+          Não aprova nem rejeita definitivamente — escala para Admin com motivo e prazo.
+        </p>
+      </div>
+    </OpsCockpitShell>
+  );
+}
+
+export function FounderOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
+  return (
+    <OpsCockpitShell
+      loading={loading}
+      eyebrow="Founder / Owner"
+      title="Founder Center · visão executiva"
+      subtitle="Governação, pessoas institucionais, flags, KOCC, auditoria e escalações no topo."
+      stats={[
+        { label: 'Utilizadores', value: String(s?.users ?? 0) },
+        { label: 'Parceiros', value: String(s?.partnersCount ?? 0) },
+        { label: 'Agentes', value: String(s?.agentsCount ?? 0) },
+        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
+        {
+          label: 'Ocupação',
+          value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—',
+        },
+        { label: 'Receita mensal', value: formatAoa(s?.monthlyRevenueAoa) },
+      ]}
+      links={[
+        { href: '/app/fundador', label: 'Founder Center', primary: true },
+        { href: '/app/fundador?tab=pessoas', label: 'Gestão Institucional' },
+        { href: '/app/fundador?tab=flags', label: 'Feature Flags' },
+        { href: '/app/fundador?tab=kocc', label: 'KOCC' },
+        { href: '/app/fundador?tab=escalacoes', label: 'Escalações' },
+        { href: '/app/super', label: 'Super Command' },
+      ]}
+    >
+      <div className="kuteka-ops-pipeline mt-4">
+        <p className="kuteka-ops-block__title">Hierarquia</p>
+        <p className="kuteka-ops-pipeline__flow">Supervisor → Admin → Super Admin → Founder</p>
+      </div>
+    </OpsCockpitShell>
+  );
+}
+
+export function ProviderOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
+  return (
+    <OpsCockpitShell
+      loading={loading}
+      eyebrow="Prestador · Serviços"
+      title="Fluxo mínimo operacional"
+      subtitle="Pedido → Orçamento → Aceite → Serviço → Agenda → Evidências → Conclusão → Pagamento → Avaliação."
+      stats={[
+        { label: 'Manutenções abertas (rede)', value: String(s?.maintenanceOpen ?? 0) },
+        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
+        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0) },
+      ]}
+      links={[
+        { href: '/app/servicos', label: 'Inbox de serviços', primary: true },
+        { href: '/app/financeiro', label: 'Pagamentos' },
+        { href: '/app/centro-confianca', label: 'Confiança' },
+        { href: '/app/mensagens', label: 'Mensagens' },
+      ]}
+    />
+  );
+}
+
 export function AdminOpsCockpit({
   s,
   loading,

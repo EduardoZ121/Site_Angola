@@ -72,6 +72,12 @@ export const CONSERVATION_STATES = [
   'under_construction',
 ] as const;
 
+export const COMMISSION_SETTLEMENTS = [
+  'immediate',
+  'after_first_rent',
+  'automatic_retention',
+] as const;
+
 const optionalTrimmed = z.string().trim().max(160).optional().or(z.literal(''));
 
 const optionalPositive = z
@@ -143,6 +149,19 @@ export const activatePropertySchema = z
     priceAoa: optionalPositive,
     bedrooms: optionalNonNegInt,
     bathrooms: optionalNonNegInt,
+    suites: optionalNonNegInt,
+    parkingSpaces: optionalNonNegInt,
+    furnished: optionalBool,
+    hasGarage: optionalBool,
+    hasYard: optionalBool,
+    hasPool: optionalBool,
+    hasGarden: optionalBool,
+    hasAnnex: optionalBool,
+    hasEquippedKitchen: optionalBool,
+    hasBalcony: optionalBool,
+    hasTerrace: optionalBool,
+    landAreaM2: optionalPositive,
+    builtAreaM2: optionalPositive,
     areaTotalM2: optionalPositive,
     areaUsefulM2: optionalPositive,
     yearBuilt: z
@@ -174,6 +193,7 @@ export const activatePropertySchema = z
     nearHospitals: optionalBool,
     nearMarkets: optionalBool,
     nearTransport: optionalBool,
+    commissionSettlement: z.enum(COMMISSION_SETTLEMENTS).optional().nullable(),
     status: z.enum(PROPERTY_STATUSES).optional(),
   })
   .superRefine((data, ctx) => {

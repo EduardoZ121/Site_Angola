@@ -2,7 +2,7 @@
 
 | Campo         | Valor                                                                                                                                      |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Versão**    | 1.2                                                                                                                                        |
+| **Versão**    | 1.4                                                                                                                                        |
 | **Data**      | 2026-08-08                                                                                                                                 |
 | **Natureza**  | Declaração de governação — encerra a fase de Arquitectura e abre a fase de Operação Beta                                                   |
 | **Aplica-se** | Todo o desenvolvimento a partir desta data (produto, engenharia, jurídico, operações)                                                      |
@@ -38,7 +38,8 @@ Sequência **aprovada pelo PO** (Missão Cursor 2026-08-06). Cada sprint fecha c
 | **Beta 1**    | Preparação para o Beta Público                | Legal (Termos, Privacidade, Cookies); Centro de Documentação; **KOCC MVP**; Go Live Readiness; BCP/DRP v0.9; Go-Live Hardening; estratégia Beta (sem “Demo” ao utilizador) |
 | **Beta 1.5A** | Confiança + Comunicação (Chat + Trust Card)   | Mensagens integradas + reputação visível — ver [SPRINT_BETA_1_5.md](./SPRINT_BETA_1_5.md)                                                                                  |
 | **Beta 1.5B** | Preparação para Utilizadores Reais            | Auditoria i18n/UX/conteúdo/performance; inventário Beta vs real; onboarding; **Painel Beta KOCC** — ver [SPRINT_BETA_1_5_PREP.md](./SPRINT_BETA_1_5_PREP.md)               |
-| **Beta 2**    | Lançamento do Beta Público                    | Convidar ~20 Parceiros, ~20 Clientes, ~5 Agentes, ~5 Prestadores; recolher feedback; **sem features novas** excepto correcções                                             |
+| **Beta 1.6**  | Trust Governance Gate                         | Aprovação de publicações, Founders, ficha rica, comissão configurável — **bloqueia Beta 2** — ver [SPRINT_BETA_1_6.md](./SPRINT_BETA_1_6.md)                               |
+| **Beta 2**    | Lançamento do Beta Público                    | Só após saída da 1.6 Fase A; ~20 Parceiros/Clientes + Agentes/Prestadores; feedback; sem features novas excepto correcções                                                 |
 | **Beta 3**    | Corrigir o que utilizadores reais encontrarem | Sem novas funcionalidades — só correcções e estabilização                                                                                                                  |
 | **Beta 4**    | Preparar integrações reais                    | SMTP, SMS, WhatsApp, Multicaixa, EMIS (quando houver credenciais)                                                                                                          |
 | **Beta 5**    | Primeiras receitas reais                      | Activação comercial controlada dos serviços pagos                                                                                                                          |
@@ -104,5 +105,7 @@ Percentagens **conservadoras**. Reavaliar no fecho de cada Sprint Beta.
 | 1.0    | 2026-08-06 | Primeira edição (governação documental)                                                                  |
 | 1.1    | 2026-08-06 | Alinhamento à Missão PO: sequência Beta 1–5 oficial; KOCC + Centro de Docs + Cookies no escopo da Beta 1 |
 | 1.2    | 2026-08-08 | Beta 1 encerrada pelo PO; Beta 1.5A/1.5B; Painel Beta KOCC antes da Beta 2                               |
+| 1.3    | 2026-08-08 | Gate Beta 1.6 (Trust Governance) bloqueia abertura da Beta 2                                             |
+| 1.4    | 2026-08-08 | 1.6 completa: ciclo imóvel, social, Founder ops; regra pós–Beta 2 sem features estruturais               |
 
-**Próxima revisão:** ao fechar [Sprint Beta 1.5B](./SPRINT_BETA_1_5_PREP.md) e abrir Sprint Beta 2.
+**Próxima revisão:** ao aplicar migrations `0032`–`0038`, validar gate e abrir Sprint Beta 2.

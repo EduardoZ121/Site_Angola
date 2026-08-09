@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
@@ -27,6 +27,7 @@ import { GatewaysPanel } from './super/GatewaysPanel';
 import { FeatureFlagsPanel } from './super/FeatureFlagsPanel';
 import { CampaignsPanel } from './super/CampaignsPanel';
 import { KoccCenterClient } from '@/modules/kocc/components/KoccCenterClient';
+import { InstitutionalCenterClient } from '@/modules/kocc/components/InstitutionalCenterClient';
 
 type TabKey =
   | 'revenue'
@@ -45,7 +46,33 @@ type TabKey =
   | 'gateways'
   | 'flags'
   | 'campaigns'
-  | 'kocc';
+  | 'kocc'
+  | 'institutional';
+
+function initialTab(raw: string | null): TabKey {
+  const allowed: TabKey[] = [
+    'revenue',
+    'catalog',
+    'pricing',
+    'credits',
+    'refunds',
+    'disputes',
+    'recon',
+    'fraud',
+    'kai',
+    'crm',
+    'exports',
+    'invoices',
+    'payengine',
+    'gateways',
+    'flags',
+    'campaigns',
+    'kocc',
+    'institutional',
+  ];
+  if (raw && (allowed as string[]).includes(raw)) return raw as TabKey;
+  return 'revenue';
+}
 
 export function SuperCommandCenter() {
   const { locale } = useLocale();
@@ -60,6 +87,15 @@ export function SuperCommandCenter() {
   const denied = sessionStatus === 'ready' && !canRead;
 
   const [tab, setTab] = useState<TabKey>('revenue');
+
+  useEffect(() => {
+    try {
+      const raw = new URLSearchParams(window.location.search).get('tab');
+      setTab(initialTab(raw));
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const tabs: { key: TabKey; label: string }[] = [
     { key: 'revenue', label: copy.tabs.revenue },
@@ -79,6 +115,7 @@ export function SuperCommandCenter() {
     { key: 'flags', label: copy.tabs.flags },
     { key: 'campaigns', label: copy.tabs.campaigns },
     { key: 'kocc', label: copy.tabs.kocc },
+    { key: 'institutional', label: copy.tabs.institutional },
   ];
 
   const panels: Record<TabKey, ReactNode> = {
@@ -99,6 +136,7 @@ export function SuperCommandCenter() {
     flags: <FeatureFlagsPanel canManage={canManage} />,
     campaigns: <CampaignsPanel canManage={canManage} />,
     kocc: <KoccCenterClient canManage={canManage} />,
+    institutional: <InstitutionalCenterClient canManage={canManage} />,
   };
 
   return (
@@ -112,6 +150,9 @@ export function SuperCommandCenter() {
           <div className="mt-4 flex flex-wrap gap-2">
             <Link href="/app/admin" className={cn(buttonVariants({ variant: 'secondary' }))}>
               Admin operacional
+            </Link>
+            <Link href="/app/fundador" className={cn(buttonVariants({ variant: 'ghost' }))}>
+              Founder / bootstrap
             </Link>
             <Link href="/app/mudanca" className={cn(buttonVariants({ variant: 'ghost' }))}>
               Mudança Inteligente

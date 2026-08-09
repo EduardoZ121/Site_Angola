@@ -13,6 +13,8 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { KYC_LEVEL_LABELS, type KycLevel } from '@/modules/identidade/lib/kyc';
 import { getShellCopy } from '../content';
 import type { ExperienceMode } from '../role-experience';
+import { useInstitutionalIdentity } from '../hooks/useInstitutionalIdentity';
+import { institutionalBadge } from '../lib/institutional-badge';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useRoleExperience } from './RoleExperienceProvider';
 
@@ -202,6 +204,16 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
   const shell = getShellCopy(locale);
   const router = useRouter();
   const { mode, available, setMode, effectivePermissions } = useRoleExperience();
+  const { identity } = useInstitutionalIdentity(sessionStatus === 'ready' && !!session);
+  const identityBadge =
+    identity && (identity.isFounder || identity.isOwner || identity.isSystemDemo)
+      ? institutionalBadge({
+          isOwner: identity.isOwner,
+          isFounder: identity.isFounder,
+          isSystemDemo: identity.isSystemDemo,
+          roles: identity.roles,
+        })
+      : null;
   const [open, setOpen] = useState(false);
   const [trustStrip, setTrustStrip] = useState<{
     kycLevel: number;
@@ -288,6 +300,12 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       href: '/auth/onboarding/papeis',
       label: shell.userMenu.roles,
       hint: shell.userMenu.rolesHint,
+      icon: 'roles',
+    },
+    {
+      href: '/app/fundador',
+      label: 'Founder / Owner',
+      hint: 'Bootstrap, user_id e Gestão Institucional',
       icon: 'roles',
     },
     ...(canPartner
@@ -404,6 +422,13 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
           <span className="mt-0.5 block truncate text-xs font-medium text-[#fde68a]">
             {modeLabel}
           </span>
+          {identityBadge ? (
+            <span
+              className={`mt-1 inline-flex max-w-full truncate rounded px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${identityBadge.className}`}
+            >
+              {identityBadge.label}
+            </span>
+          ) : null}
         </span>
         <span aria-hidden className="hidden text-xs text-slate-200 sm:inline">
           ▾
@@ -429,6 +454,13 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-slate-900">{headerName}</p>
               <p className="kuteka-mode-chip mt-1">{modeLabel}</p>
+              {identityBadge ? (
+                <span
+                  className={`mt-1 inline-flex rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${identityBadge.className}`}
+                >
+                  {identityBadge.label}
+                </span>
+              ) : null}
               <p className="mt-1 truncate text-xs font-medium text-stone-700">
                 {shell.accountLabel}: {accountRoles}
               </p>

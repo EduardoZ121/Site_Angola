@@ -6,6 +6,7 @@ import { FormEvent, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Heading, Text, Input, Label, Textarea, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import {
+  COMMISSION_SETTLEMENTS,
   CONSERVATION_STATES,
   CONSTRUCTION_STATUSES,
   KUTEKA_SERVICES,
@@ -82,6 +83,19 @@ type ActivatePropertyDraft = {
   priceAoa: string;
   bedrooms: string;
   bathrooms: string;
+  suites: string;
+  parkingSpaces: string;
+  furnished: boolean | null;
+  hasGarage: boolean | null;
+  hasYard: boolean | null;
+  hasPool: boolean | null;
+  hasGarden: boolean | null;
+  hasAnnex: boolean | null;
+  hasEquippedKitchen: boolean | null;
+  hasBalcony: boolean | null;
+  hasTerrace: boolean | null;
+  landArea: string;
+  builtArea: string;
   areaTotal: string;
   areaUseful: string;
   yearBuilt: string;
@@ -95,6 +109,7 @@ type ActivatePropertyDraft = {
   nearHospitals: boolean | null;
   nearMarkets: boolean | null;
   nearTransport: boolean | null;
+  commissionSettlement: (typeof COMMISSION_SETTLEMENTS)[number] | '';
   media: MediaDraftMeta[];
   savedAt: string;
 };
@@ -224,6 +239,19 @@ export function ActivatePropertyForm() {
   const [priceAoa, setPriceAoa] = useState('');
   const [bedrooms, setBedrooms] = useState('');
   const [bathrooms, setBathrooms] = useState('');
+  const [suites, setSuites] = useState('');
+  const [parkingSpaces, setParkingSpaces] = useState('');
+  const [furnished, setFurnished] = useState<boolean | null>(null);
+  const [hasGarage, setHasGarage] = useState<boolean | null>(null);
+  const [hasYard, setHasYard] = useState<boolean | null>(null);
+  const [hasPool, setHasPool] = useState<boolean | null>(null);
+  const [hasGarden, setHasGarden] = useState<boolean | null>(null);
+  const [hasAnnex, setHasAnnex] = useState<boolean | null>(null);
+  const [hasEquippedKitchen, setHasEquippedKitchen] = useState<boolean | null>(null);
+  const [hasBalcony, setHasBalcony] = useState<boolean | null>(null);
+  const [hasTerrace, setHasTerrace] = useState<boolean | null>(null);
+  const [landArea, setLandArea] = useState('');
+  const [builtArea, setBuiltArea] = useState('');
   const [areaTotal, setAreaTotal] = useState('');
   const [areaUseful, setAreaUseful] = useState('');
   const [yearBuilt, setYearBuilt] = useState('');
@@ -237,6 +265,9 @@ export function ActivatePropertyForm() {
   const [nearHospitals, setNearHospitals] = useState<boolean | null>(null);
   const [nearMarkets, setNearMarkets] = useState<boolean | null>(null);
   const [nearTransport, setNearTransport] = useState<boolean | null>(null);
+  const [commissionSettlement, setCommissionSettlement] = useState<
+    (typeof COMMISSION_SETTLEMENTS)[number] | ''
+  >('');
   const [media, setMedia] = useState<LocalMediaDraft[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
@@ -272,6 +303,19 @@ export function ActivatePropertyForm() {
       priceAoa,
       bedrooms,
       bathrooms,
+      suites,
+      parkingSpaces,
+      furnished,
+      hasGarage,
+      hasYard,
+      hasPool,
+      hasGarden,
+      hasAnnex,
+      hasEquippedKitchen,
+      hasBalcony,
+      hasTerrace,
+      landArea,
+      builtArea,
       areaTotal,
       areaUseful,
       yearBuilt,
@@ -285,6 +329,7 @@ export function ActivatePropertyForm() {
       nearHospitals,
       nearMarkets,
       nearTransport,
+      commissionSettlement,
       media: mediaToMeta(media),
       savedAt: new Date().toISOString(),
     };
@@ -325,6 +370,19 @@ export function ActivatePropertyForm() {
     setPriceAoa(draft.priceAoa ?? '');
     setBedrooms(draft.bedrooms ?? '');
     setBathrooms(draft.bathrooms ?? '');
+    setSuites(draft.suites ?? '');
+    setParkingSpaces(draft.parkingSpaces ?? '');
+    setFurnished(draft.furnished ?? null);
+    setHasGarage(draft.hasGarage ?? null);
+    setHasYard(draft.hasYard ?? null);
+    setHasPool(draft.hasPool ?? null);
+    setHasGarden(draft.hasGarden ?? null);
+    setHasAnnex(draft.hasAnnex ?? null);
+    setHasEquippedKitchen(draft.hasEquippedKitchen ?? null);
+    setHasBalcony(draft.hasBalcony ?? null);
+    setHasTerrace(draft.hasTerrace ?? null);
+    setLandArea(draft.landArea ?? '');
+    setBuiltArea(draft.builtArea ?? '');
     setAreaTotal(draft.areaTotal ?? '');
     setAreaUseful(draft.areaUseful ?? '');
     setYearBuilt(draft.yearBuilt ?? '');
@@ -338,6 +396,14 @@ export function ActivatePropertyForm() {
     setNearHospitals(draft.nearHospitals ?? null);
     setNearMarkets(draft.nearMarkets ?? null);
     setNearTransport(draft.nearTransport ?? null);
+    if (
+      draft.commissionSettlement === '' ||
+      COMMISSION_SETTLEMENTS.includes(
+        draft.commissionSettlement as (typeof COMMISSION_SETTLEMENTS)[number],
+      )
+    ) {
+      setCommissionSettlement(draft.commissionSettlement ?? '');
+    }
     setMedia(metaToMedia(Array.isArray(draft.media) ? draft.media : []));
     const restoredStep =
       typeof draft.step === 'number' && draft.step >= 0 && draft.step < totalSteps ? draft.step : 0;
@@ -460,6 +526,19 @@ export function ActivatePropertyForm() {
         priceAoa: parseNum(priceAoa),
         bedrooms: parseNum(bedrooms),
         bathrooms: parseNum(bathrooms),
+        suites: parseNum(suites),
+        parkingSpaces: parseNum(parkingSpaces),
+        furnished,
+        hasGarage,
+        hasYard,
+        hasPool,
+        hasGarden,
+        hasAnnex,
+        hasEquippedKitchen,
+        hasBalcony,
+        hasTerrace,
+        landAreaM2: parseNum(landArea),
+        builtAreaM2: parseNum(builtArea),
         areaTotalM2: parseNum(areaTotal),
         areaUsefulM2: parseNum(areaUseful),
         yearBuilt: parseNum(yearBuilt),
@@ -475,6 +554,7 @@ export function ActivatePropertyForm() {
         nearHospitals,
         nearMarkets,
         nearTransport,
+        commissionSettlement: commissionSettlement || null,
       },
       media,
     );
@@ -485,7 +565,7 @@ export function ActivatePropertyForm() {
       return;
     }
     clearDraft();
-    router.push(`/app/patrimonios/detalhe?id=${result.id}`);
+    router.push(`/app/patrimonios/detalhe?id=${result.id}&submitted=1`);
   }
 
   const stepLabel = copy.wizard.steps[currentStepId];
@@ -637,6 +717,28 @@ export function ActivatePropertyForm() {
                 onChange={(e) => setPriceAoa(e.target.value)}
                 placeholder={copy.fields.pricePlaceholder}
               />
+            </div>
+            <div className="flex flex-col gap-2">
+              <FieldLabel htmlFor="commissionSettlement">
+                {copy.fields.commissionSettlement}
+              </FieldLabel>
+              <select
+                id="commissionSettlement"
+                value={commissionSettlement}
+                onChange={(e) =>
+                  setCommissionSettlement(
+                    e.target.value as (typeof COMMISSION_SETTLEMENTS)[number] | '',
+                  )
+                }
+                className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-900"
+              >
+                <option value="">—</option>
+                {COMMISSION_SETTLEMENTS.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {copy.commissionSettlements[opt]}
+                  </option>
+                ))}
+              </select>
             </div>
           </section>
         ) : null}
@@ -894,6 +996,26 @@ export function ActivatePropertyForm() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="suites">{copy.fields.suites}</FieldLabel>
+                  <Input
+                    id="suites"
+                    inputMode="numeric"
+                    value={suites}
+                    onChange={(e) => setSuites(e.target.value)}
+                    placeholder="2"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="parkingSpaces">{copy.fields.parkingSpaces}</FieldLabel>
+                  <Input
+                    id="parkingSpaces"
+                    inputMode="numeric"
+                    value={parkingSpaces}
+                    onChange={(e) => setParkingSpaces(e.target.value)}
+                    placeholder="1"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
                   <FieldLabel htmlFor="areaTotal">{copy.fields.areaTotal}</FieldLabel>
                   <Input
                     id="areaTotal"
@@ -912,6 +1034,24 @@ export function ActivatePropertyForm() {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="landArea">{copy.fields.landArea}</FieldLabel>
+                  <Input
+                    id="landArea"
+                    inputMode="decimal"
+                    value={landArea}
+                    onChange={(e) => setLandArea(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="builtArea">{copy.fields.builtArea}</FieldLabel>
+                  <Input
+                    id="builtArea"
+                    inputMode="decimal"
+                    value={builtArea}
+                    onChange={(e) => setBuiltArea(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
                   <FieldLabel htmlFor="yearBuilt">{copy.fields.yearBuilt}</FieldLabel>
                   <Input
                     id="yearBuilt"
@@ -921,6 +1061,62 @@ export function ActivatePropertyForm() {
                     placeholder="2018"
                   />
                 </div>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <TriBool
+                  id="furnished"
+                  label={copy.fields.furnished}
+                  value={furnished}
+                  onChange={setFurnished}
+                />
+                <TriBool
+                  id="garage"
+                  label={copy.amenities.garage}
+                  value={hasGarage}
+                  onChange={setHasGarage}
+                />
+                <TriBool
+                  id="yard"
+                  label={copy.amenities.yard}
+                  value={hasYard}
+                  onChange={setHasYard}
+                />
+                <TriBool
+                  id="pool"
+                  label={copy.amenities.pool}
+                  value={hasPool}
+                  onChange={setHasPool}
+                />
+                <TriBool
+                  id="garden"
+                  label={copy.amenities.garden}
+                  value={hasGarden}
+                  onChange={setHasGarden}
+                />
+                <TriBool
+                  id="annex"
+                  label={copy.amenities.annex}
+                  value={hasAnnex}
+                  onChange={setHasAnnex}
+                />
+                <TriBool
+                  id="equippedKitchen"
+                  label={copy.amenities.equippedKitchen}
+                  value={hasEquippedKitchen}
+                  onChange={setHasEquippedKitchen}
+                />
+                <TriBool
+                  id="balcony"
+                  label={copy.amenities.balcony}
+                  value={hasBalcony}
+                  onChange={setHasBalcony}
+                />
+                <TriBool
+                  id="terrace"
+                  label={copy.amenities.terrace}
+                  value={hasTerrace}
+                  onChange={setHasTerrace}
+                />
               </div>
             </section>
 
@@ -1016,6 +1212,12 @@ export function ActivatePropertyForm() {
               <div>
                 <dt className="kuteka-detail-label">{copy.fields.price}</dt>
                 <dd className="kuteka-detail-value">{priceAoa.trim() || '—'}</dd>
+              </div>
+              <div>
+                <dt className="kuteka-detail-label">{copy.fields.commissionSettlement}</dt>
+                <dd className="kuteka-detail-value">
+                  {commissionSettlement ? copy.commissionSettlements[commissionSettlement] : '—'}
+                </dd>
               </div>
               <div>
                 <dt className="kuteka-detail-label">{copy.fields.province}</dt>

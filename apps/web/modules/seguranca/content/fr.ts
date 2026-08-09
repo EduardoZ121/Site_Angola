@@ -51,6 +51,18 @@ export const segurancaCopyFr: SegurancaCopy = {
       'Pas encore d’événements. Connexions, récupérations et modifications sensibles apparaîtront ici — avec notification si marquées.',
     notifySuffix: ' · notifier',
   },
+  emailChange: {
+    title: 'Changer l’e-mail',
+    hint: 'Confirmation double (code sur l’e-mail actuel et le nouveau). En bêta, les codes peuvent apparaître ici (beta_inline).',
+    newEmailLabel: 'Nouvel e-mail',
+    request: 'Demander le changement',
+    oldCodeLabel: 'Code de l’e-mail actuel',
+    newCodeLabel: 'Code du nouvel e-mail',
+    confirm: 'Confirmer le changement',
+    betaCodesHint: 'Codes bêta — actuel : {old} · nouveau : {new}',
+    requested: 'Demande créée. Saisissez les deux codes ci-dessous.',
+    completed: 'E-mail mis à jour avec succès.',
+  },
   actions: {
     sandboxHint: 'Sandbox : utilisez le code {code}',
     codeSent: 'Code envoyé. Saisissez les 6 chiffres ci-dessous.',

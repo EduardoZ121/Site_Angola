@@ -330,6 +330,8 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   assistencia: IconTools,
   servicos: IconTools,
   planos: IconPlan,
+  fundador: IconSuper,
+  escalacoes: IconAdmin,
 };
 
 export function NavIcon({

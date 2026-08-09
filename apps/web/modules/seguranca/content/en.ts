@@ -51,6 +51,18 @@ export const segurancaCopyEn: SegurancaCopy = {
       'No events yet. Logins, recoveries and sensitive changes will appear here — with notification when flagged.',
     notifySuffix: ' · notify',
   },
+  emailChange: {
+    title: 'Change email',
+    hint: 'Dual confirmation (code on current and new email). In beta, codes may appear here (beta_inline).',
+    newEmailLabel: 'New email',
+    request: 'Request change',
+    oldCodeLabel: 'Code from current email',
+    newCodeLabel: 'Code from new email',
+    confirm: 'Confirm change',
+    betaCodesHint: 'Beta codes — current: {old} · new: {new}',
+    requested: 'Request created. Enter both codes below.',
+    completed: 'Email updated successfully.',
+  },
   actions: {
     sandboxHint: 'Sandbox: use code {code}',
     codeSent: 'Code sent. Enter the 6 digits below.',

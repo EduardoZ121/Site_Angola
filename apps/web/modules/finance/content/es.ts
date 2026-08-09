@@ -50,6 +50,7 @@ export const financeCopyEs: FinanceCopy = {
     flags: 'Service Health',
     campaigns: 'Campañas',
     kocc: 'Control Operativo',
+    institutional: 'Gestión institucional',
   },
   metrics: {
     captured: 'Cargos capturados',

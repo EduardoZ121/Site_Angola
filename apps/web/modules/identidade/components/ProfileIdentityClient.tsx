@@ -17,6 +17,7 @@ import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { UserActivityTimeline } from '@/modules/shell/components/UserActivityTimeline';
 import { getIdentidadeCopy } from '../content';
 import {
   KIS_STEPS,
@@ -646,6 +647,9 @@ export function ProfileIdentityClient() {
                   </Link>
                 </p>
               ) : null}
+              <div className="mt-6">
+                <UserActivityTimeline userId={bundle?.profile.id} limit={15} />
+              </div>
             </section>
           ) : null}
 

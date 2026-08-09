@@ -35,7 +35,9 @@ export type ShellNavLabelKey =
   | 'garantia'
   | 'assistencia'
   | 'servicos'
-  | 'planos';
+  | 'planos'
+  | 'fundador'
+  | 'escalacoes';
 
 export type ShellNavItem = {
   id: string;
@@ -44,6 +46,8 @@ export type ShellNavItem = {
   status: ShellNavStatus;
   /** When set, item is hidden unless the user has this effective permission. */
   requiresPermission?: PermissionCode;
+  /** When set, visible if the user has any of these permissions (overrides single check). */
+  requiresAnyPermission?: readonly PermissionCode[];
   /** When set, only these experience modes see the item. */
   experiences?: readonly ExperienceMode[];
   group: NavGroup;
@@ -67,8 +71,11 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'client_partner',
       'patrimonial_partner',
       'certified_agent',
+      'supervisor',
       'administrator',
       'super_administrator',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -79,13 +86,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/habitacao/explorar',
     status: 'active',
     requiresPermission: 'housing.explore',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'cliente',
   },
   {
@@ -121,13 +122,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/habitacao/explorar?disponibilidade=futura',
     status: 'active',
     requiresPermission: 'housing.explore',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'geral',
   },
   {
@@ -146,7 +141,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/patrimonios',
     status: 'active',
     requiresPermission: 'properties.manage',
-    experiences: ['patrimonial_partner', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['patrimonial_partner', 'client_partner'],
     group: 'parceiro',
   },
   {
@@ -181,6 +176,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -197,6 +195,8 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'founder',
     ],
     group: 'geral',
   },
@@ -212,6 +212,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -227,6 +230,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -236,7 +242,13 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/agente',
     status: 'active',
     requiresPermission: 'agent.operate',
-    experiences: ['certified_agent', 'administrator', 'super_administrator'],
+    experiences: [
+      'certified_agent',
+      'administrator',
+      'super_administrator',
+      'supervisor',
+      'founder',
+    ],
     group: 'agente',
   },
   {
@@ -244,8 +256,8 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'admin',
     href: '/app/admin',
     status: 'active',
-    requiresPermission: 'admin.panel',
-    experiences: ['administrator', 'super_administrator'],
+    requiresAnyPermission: ['admin.panel', 'properties.review'],
+    experiences: ['supervisor', 'administrator', 'super_administrator', 'founder'],
     group: 'admin',
   },
   {
@@ -254,7 +266,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/super',
     status: 'active',
     requiresPermission: 'finance.manage',
-    experiences: ['super_administrator'],
+    experiences: ['super_administrator', 'founder'],
     group: 'admin',
   },
   {
@@ -269,6 +281,9 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
+      'service_provider',
+      'founder',
     ],
     group: 'geral',
   },
@@ -277,7 +292,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'mudanca',
     href: '/app/mudanca',
     status: 'active',
-    experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['client', 'client_partner'],
     group: 'cliente',
   },
   {
@@ -285,7 +300,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'encontrar',
     href: '/app/encontrar-casa',
     status: 'active',
-    experiences: ['client', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['client', 'client_partner'],
     group: 'cliente',
   },
   {
@@ -293,13 +308,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'concierge',
     href: '/app/concierge',
     status: 'active',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'geral',
   },
   {
@@ -307,13 +316,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'garantia',
     href: '/app/garantia',
     status: 'active',
-    experiences: [
-      'client',
-      'patrimonial_partner',
-      'client_partner',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'patrimonial_partner', 'client_partner'],
     group: 'geral',
   },
   {
@@ -321,13 +324,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     labelKey: 'assistencia',
     href: '/app/assistencia',
     status: 'active',
-    experiences: [
-      'client',
-      'client_partner',
-      'certified_agent',
-      'administrator',
-      'super_administrator',
-    ],
+    experiences: ['client', 'client_partner', 'certified_agent'],
     group: 'geral',
   },
   {
@@ -339,8 +336,11 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'client',
       'client_partner',
       'patrimonial_partner',
+      'founder',
+      'certified_agent',
       'administrator',
       'super_administrator',
+      'supervisor',
     ],
     group: 'geral',
   },
@@ -350,8 +350,33 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/parceiro/planos',
     status: 'active',
     requiresPermission: 'properties.manage',
-    experiences: ['patrimonial_partner', 'client_partner', 'administrator', 'super_administrator'],
+    experiences: ['patrimonial_partner', 'client_partner'],
     group: 'parceiro',
+  },
+  {
+    id: 'servicosPrestador',
+    labelKey: 'servicos',
+    href: '/app/servicos',
+    status: 'active',
+    experiences: ['service_provider'],
+    group: 'prestador',
+  },
+  {
+    id: 'fundador',
+    labelKey: 'fundador',
+    href: '/app/fundador',
+    status: 'active',
+    experiences: ['founder'],
+    group: 'admin',
+  },
+  {
+    id: 'escalacoes',
+    labelKey: 'escalacoes',
+    href: '/app/admin#escalacoes',
+    status: 'active',
+    requiresAnyPermission: ['admin.panel', 'properties.review'],
+    experiences: ['supervisor', 'administrator', 'super_administrator', 'founder'],
+    group: 'admin',
   },
   {
     id: 'conta',
@@ -377,7 +402,9 @@ export function isNavItemVisible(
   permissions: readonly string[],
   mode?: ExperienceMode,
 ): boolean {
-  if (item.requiresPermission && !permissions.includes(item.requiresPermission)) {
+  if (item.requiresAnyPermission?.length) {
+    if (!item.requiresAnyPermission.some((p) => permissions.includes(p))) return false;
+  } else if (item.requiresPermission && !permissions.includes(item.requiresPermission)) {
     return false;
   }
   if (mode && item.experiences && !item.experiences.includes(mode)) {
@@ -406,7 +433,7 @@ export function groupNavItems(items: readonly ShellNavItem[]): {
   group: NavGroup;
   items: ShellNavItem[];
 }[] {
-  const order: NavGroup[] = ['geral', 'cliente', 'parceiro', 'agente', 'admin'];
+  const order: NavGroup[] = ['geral', 'cliente', 'parceiro', 'agente', 'prestador', 'admin'];
   const map = new Map<NavGroup, ShellNavItem[]>();
   for (const item of items) {
     const list = map.get(item.group) ?? [];
