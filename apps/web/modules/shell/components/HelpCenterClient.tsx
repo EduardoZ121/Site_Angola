@@ -10,6 +10,12 @@ import { BetaFeedbackForm } from '@/modules/kocc/components/BetaFeedbackForm';
 import { getShellCopy } from '../content';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
+import {
+  HELP_ROLE_SLUGS,
+  helpFocusForRole,
+  isHelpRoleSlug,
+  type HelpRoleSlug,
+} from '@/modules/institutional/lib/help-role';
 
 export type HelpCenterProps = {
   /** Markdown sources for every section of the Documentation Center. */
@@ -21,9 +27,20 @@ export type HelpCenterProps = {
    * Center, in-app quick actions) and shows a note inviting sign-in.
    */
   publicMode?: boolean;
+  /** Optional role focus from `/app/ajuda/[papel]`. */
+  roleFocus?: HelpRoleSlug | null;
 };
 
-const SECTION_IDS = ['manual', 'faq', 'glossario', 'novidades', 'estado'] as const;
+const SECTION_IDS = [
+  'manualUtilizador',
+  'manualOperacional',
+  'matrizGovernanca',
+  'manual',
+  'faq',
+  'glossario',
+  'novidades',
+  'estado',
+] as const;
 type SectionId = (typeof SECTION_IDS)[number];
 
 function isSectionId(value: string | null | undefined): value is SectionId {
@@ -139,20 +156,54 @@ function BlockView({ block }: { block: MdBlock }) {
       );
     case 'hr':
       return <hr className="my-6 border-slate-200" />;
+    case 'pre':
+      return (
+        <pre className="mt-3 overflow-x-auto rounded-kuteka border border-slate-200 bg-slate-950 px-3 py-3 font-mono text-[11px] leading-4 text-slate-100 sm:text-xs sm:leading-5">
+          {block.text}
+        </pre>
+      );
     default:
       return null;
   }
 }
 
-function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: HelpCenterProps) {
+const ROLE_LABEL_KEYS: Record<HelpRoleSlug, keyof ReturnType<typeof getShellCopy>['helpPage']> = {
+  cliente: 'roleCliente',
+  parceiro: 'roleParceiro',
+  agente: 'roleAgente',
+  prestador: 'rolePrestador',
+  supervisor: 'roleSupervisor',
+  admin: 'roleAdmin',
+  super: 'roleSuper',
+  founder: 'roleFounder',
+};
+
+function HelpCenterInner({
+  docs,
+  basePath = '/app/ajuda',
+  publicMode = false,
+  roleFocus = null,
+}: HelpCenterProps) {
   const { locale } = useLocale();
   const shell = getShellCopy(locale);
   const h = shell.helpPage;
   const searchParams = useSearchParams();
   const requestedSection = searchParams?.get('sec');
-  const section: SectionId = isSectionId(requestedSection) ? requestedSection : 'manual';
+  const requestedRole = searchParams?.get('papel');
+  const roleFromQuery = isHelpRoleSlug(requestedRole) ? requestedRole : null;
+  const activeRole = roleFocus ?? roleFromQuery;
+
+  const focus = activeRole ? helpFocusForRole(activeRole) : null;
+  const section: SectionId = isSectionId(requestedSection)
+    ? requestedSection
+    : focus
+      ? focus.section
+      : 'manualUtilizador';
 
   const markdownBySection: Record<SectionId, string> = {
+    manualUtilizador: docs.manualUtilizador,
+    manualOperacional: docs.manualOperacional,
+    matrizGovernanca: docs.matrizGovernanca,
     manual: docs.manual,
     faq: docs.faq,
     glossario: docs.glossario,
@@ -162,7 +213,9 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
   const blocks = parseMarkdownDocument(markdownBySection[section]).filter((b) => b.type !== 'h1');
 
   const sectionCards: { id: SectionId; label: string }[] = [
-    { id: 'manual', label: h.manual },
+    { id: 'manualUtilizador', label: h.manualUtilizador },
+    { id: 'manualOperacional', label: h.manualOperacional },
+    { id: 'matrizGovernanca', label: h.matrizGovernanca },
     { id: 'faq', label: h.faq },
     { id: 'glossario', label: h.glossario },
     { id: 'novidades', label: h.novidades },
@@ -188,6 +241,39 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
       : [{ label: shell.helpExtra.securityCenter, href: '/app/centro-seguranca' }]),
   ];
 
+  const downloads = [
+    {
+      label: `${h.manualUtilizador} (PDF)`,
+      href: '/docs/MANUAL_UTILIZADOR_COMPLETO_v2.pdf',
+      primary: true,
+    },
+    {
+      label: `${h.manualUtilizador} (Word)`,
+      href: '/docs/MANUAL_UTILIZADOR_COMPLETO_v2.docx',
+      primary: false,
+    },
+    {
+      label: `${h.manualOperacional} (PDF)`,
+      href: '/docs/MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.pdf',
+      primary: false,
+    },
+    {
+      label: `${h.manualOperacional} (Word)`,
+      href: '/docs/MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.docx',
+      primary: false,
+    },
+    {
+      label: `${h.matrizGovernanca} (PDF)`,
+      href: '/docs/MATRIZ_PAPEIS_PERMISSOES_GOVERNANCA_v2.pdf',
+      primary: false,
+    },
+    {
+      label: `${h.matrizGovernanca} (Word)`,
+      href: '/docs/MATRIZ_PAPEIS_PERMISSOES_GOVERNANCA_v2.docx',
+      primary: false,
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-5">
       <header className="kuteka-detail-panel p-5">
@@ -199,32 +285,66 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
             {h.publicNotice}
           </p>
         ) : null}
+        {activeRole ? (
+          <p className="mt-3 text-sm text-slate-700">
+            {h.roleGuide}: <strong>{String(h[ROLE_LABEL_KEYS[activeRole]])}</strong>
+          </p>
+        ) : null}
         <div className="mt-4 flex flex-wrap gap-2">
-          <a
-            href="/docs/MANUAL_UTILIZADOR_v1.pdf"
-            download
-            className={cn(buttonVariants({ variant: 'primary', size: 'sm' }))}
-          >
-            {shell.helpExtra.downloadManualPdf}
-          </a>
-          <a
-            href="/docs/MANUAL_UTILIZADOR_v1.docx"
-            download
-            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }))}
-          >
-            {shell.helpExtra.downloadManualWord}
-          </a>
+          {downloads.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              download
+              className={cn(
+                buttonVariants({ variant: item.primary ? 'primary' : 'secondary', size: 'sm' }),
+              )}
+            >
+              {item.label}
+            </a>
+          ))}
         </div>
       </header>
+
+      <section className="kuteka-detail-panel p-5" aria-label={h.byRole}>
+        <h2 className="text-sm font-semibold text-slate-900">{h.byRole}</h2>
+        <p className="mt-1 text-sm text-slate-600">{h.byRoleHint}</p>
+        <ul className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+          {HELP_ROLE_SLUGS.map((slug) => {
+            const active = activeRole === slug;
+            const focus = helpFocusForRole(slug);
+            const href = basePath.startsWith('/app/ajuda')
+              ? `/app/ajuda/${slug}`
+              : `${basePath}?sec=${focus.section}&papel=${slug}#${focus.headingHint}`;
+            return (
+              <li key={slug}>
+                <Link
+                  href={href}
+                  aria-current={active ? 'page' : undefined}
+                  className={cn(
+                    'kuteka-detail-fact block p-3 text-sm transition hover:bg-amber-50/60',
+                    active && 'border-amber-400 bg-amber-50/80',
+                  )}
+                >
+                  <p className="font-bold text-slate-900">{String(h[ROLE_LABEL_KEYS[slug]])}</p>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
 
       <section className="kuteka-detail-panel p-5" aria-label="Secções do Centro de Documentação">
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {sectionCards.map((card) => {
             const active = card.id === section;
+            const href = activeRole
+              ? `${basePath}?sec=${card.id}&papel=${activeRole}`
+              : `${basePath}?sec=${card.id}`;
             return (
               <li key={card.id}>
                 <Link
-                  href={`${basePath}?sec=${card.id}`}
+                  href={href}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
                     'kuteka-detail-fact block p-4 transition hover:bg-amber-50/60',
@@ -269,6 +389,14 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
       </section>
 
       <section className="kuteka-detail-panel p-5" id="conteudo">
+        {focus ? (
+          <p className="mb-2 text-xs text-slate-500">
+            {h.jumpHint}{' '}
+            <a className="font-medium text-brand-700 underline" href={`#${focus.headingHint}`}>
+              #{focus.headingHint}
+            </a>
+          </p>
+        ) : null}
         <article>
           {blocks.map((block, i) => (
             <BlockView key={i} block={block} />

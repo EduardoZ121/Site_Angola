@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fapp\u002Fajuda\u002F[papel]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

@@ -4,9 +4,10 @@ export type MdBlock =
   | { type: 'quote'; text: string }
   | { type: 'ul' | 'ol'; items: string[] }
   | { type: 'table'; rows: string[][] }
+  | { type: 'pre'; text: string }
   | { type: 'hr' };
 
-/** Lightweight Markdown subset for institutional documents (headings, lists, tables, quotes). */
+/** Lightweight Markdown subset for institutional documents (headings, lists, tables, quotes, fenced pre). */
 export function parseMarkdownDocument(md: string): MdBlock[] {
   const lines = md.replace(/\r\n/g, '\n').split('\n');
   const blocks: MdBlock[] = [];
@@ -26,6 +27,18 @@ export function parseMarkdownDocument(md: string): MdBlock[] {
       flush();
       blocks.push({ type: 'hr' });
       i += 1;
+      continue;
+    }
+    if (line.trimStart().startsWith('```')) {
+      flush();
+      i += 1;
+      const body: string[] = [];
+      while (i < lines.length && !(lines[i] ?? '').trimStart().startsWith('```')) {
+        body.push(lines[i] ?? '');
+        i += 1;
+      }
+      if (i < lines.length) i += 1;
+      blocks.push({ type: 'pre', text: body.join('\n') });
       continue;
     }
     if (line.startsWith('#')) {

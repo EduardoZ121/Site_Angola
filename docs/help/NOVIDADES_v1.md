@@ -6,6 +6,16 @@ Notas curtas, em estilo de changelog, sobre o que muda na Beta. Actualizar a cad
 
 ---
 
+## 9 de Agosto de 2026
+
+**Manuais operacionais oficiais v2 (PDF + Word).**
+
+- Publicado o **Manual completo do utilizador** (Cliente, Parceiro, Agente, Prestador).
+- Publicado o **Manual operacional e administrativo** (Supervisor, Admin, Super Admin, Founder) com tutoriais de pendência, aprovação, escalação e Founder Center.
+- Publicada a **Matriz de papéis, permissões e governação**.
+- Centro de Documentação (`/documentacao` e `/app/ajuda`) reorganizado por papel (`/app/ajuda/cliente`, `/app/ajuda/supervisor`, etc.).
+- Cada funcionalidade está marcada com o estado real da plataforma (implementado / parcial / planeado). Não inventamos ecrãs.
+
 ## 6 de Agosto de 2026
 
 **Documentos e ajuda actualizados.**

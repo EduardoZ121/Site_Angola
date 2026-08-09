@@ -38,6 +38,8 @@ while IFS= read -r -d '' route; do
 done < <(find app -type f -name 'route.ts' -print0 2>/dev/null || true)
 
 export STATIC_EXPORT=1
+# Force production for Next static export (dev NODE_ENV breaks prerender).
+export NODE_ENV=production
 export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://kutekalink.com}"
 export NEXT_PUBLIC_ENABLE_DEV_TOOLS=false
 

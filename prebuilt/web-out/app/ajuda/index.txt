@@ -2,462 +2,3330 @@
 2:I[35695,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-18e6dad961ddf743.js"],""]
 3:I[76366,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-18e6dad961ddf743.js"],"Providers"]
 4:I[27719,[],""]
-5:I[89645,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1980","static/chunks/1980-fad6eadd8ad3d1c9.js","8039","static/chunks/app/error-fc206a867a9b591d.js"],"default"]
+5:I[89645,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1980","static/chunks/1980-f22d54b27c35c4d0.js","8039","static/chunks/app/error-fc206a867a9b591d.js"],"default"]
 6:I[38427,[],""]
-7:I[85415,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-fad6eadd8ad3d1c9.js","4345","static/chunks/app/not-found-1b535a11807f525e.js"],"default"]
-8:I[8811,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","3778","static/chunks/3778-ca45aded40364c97.js","1980","static/chunks/1980-fad6eadd8ad3d1c9.js","8071","static/chunks/8071-d587bb3472b9b65a.js","1626","static/chunks/1626-c73c906c7324d101.js","9052","static/chunks/9052-e9326d739c4ce015.js","1934","static/chunks/1934-7b0d85263595293b.js","4944","static/chunks/app/(app)/layout-dcea8b0c198ea409.js"],"AppShell"]
-9:I[75048,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-fad6eadd8ad3d1c9.js","9052","static/chunks/9052-e9326d739c4ce015.js","5048","static/chunks/5048-9b295c1557bbb1d4.js","7409","static/chunks/app/(app)/app/ajuda/page-3d404c1611d577d2.js"],"HelpCenterClient"]
-11:I[40545,["4573","static/chunks/4573-8765300bdcbcaac8.js","1980","static/chunks/1980-fad6eadd8ad3d1c9.js","4219","static/chunks/app/global-error-450719285615af4f.js"],"default"]
+7:I[85415,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-f22d54b27c35c4d0.js","4345","static/chunks/app/not-found-1b535a11807f525e.js"],"default"]
+8:I[8811,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","3778","static/chunks/3778-ca45aded40364c97.js","1980","static/chunks/1980-f22d54b27c35c4d0.js","8071","static/chunks/8071-d587bb3472b9b65a.js","1626","static/chunks/1626-c73c906c7324d101.js","9052","static/chunks/9052-e9326d739c4ce015.js","1934","static/chunks/1934-7b0d85263595293b.js","4944","static/chunks/app/(app)/layout-dcea8b0c198ea409.js"],"AppShell"]
+9:I[75048,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-f22d54b27c35c4d0.js","9052","static/chunks/9052-e9326d739c4ce015.js","5048","static/chunks/5048-bd0b90e9d639cc13.js","7409","static/chunks/app/(app)/app/ajuda/page-3d404c1611d577d2.js"],"HelpCenterClient"]
+14:I[40545,["4573","static/chunks/4573-8765300bdcbcaac8.js","1980","static/chunks/1980-f22d54b27c35c4d0.js","4219","static/chunks/app/global-error-450719285615af4f.js"],"default"]
 :HL["/_next/static/media/bb3ef058b751a6ad-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["/_next/static/css/7f92f74c7c7c7b81.css","style"]
-a:T4788,# Manual do Utilizador Kuteka
+:HL["/_next/static/css/90898f585bd9cef0.css","style"]
+a:T8d4d,# KUTEKA — MANUAL COMPLETO DO UTILIZADOR
 
-**Manual do Utilizador / Centro de Ajuda · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
+**Versão:** 2.0 · **Data:** 2026-08-09 · **Idioma:** Português europeu (estilo PT-AO da plataforma: Activar, etc.)
 
-Contacto de suporte: contacto@kutekalink.com · Centro de Ajuda na app: `/app/ajuda`
+**Produção:** https://kutekalink.com · **Ajuda:** `/app/ajuda` · **Documentação:** `/documentação`
 
----
+**Auditoria:** `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
+
+**Destinatários:** Cliente · Parceiro Patrimonial · Agente Certificado · Prestador
+
+Papéis Supervisor / Admin / Super / Founder: ver `MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.md`.
+
+Este manual baseia-se em código, migrações e validação pós-deploy — não em aspiração de produto.
 
 ## 0. Como usar este manual
 
-Este manual ensina a utilizar a plataforma Kuteka na versão **1.0 Beta**. Está organizado por **papéis** (Cliente, Parceiro Patrimonial, Agente Certificado, Prestador, Administrador e Super Administrador) e por **módulos transversais** (conta, identidade KIS, segurança, contratos e pagamentos).
+- Confirme o papel DB e a experiência activa (seletor no menu da conta).
+- Leia a ficha completa do seu papel (secções 5 a 8 — cada uma com 19 subsecções).
+- Use as jornadas (9 a 11), confiança (12), comúnicação (13), serviços (14), checklists (15) e "onde vejo X" (16).
+- Respeite a legenda de estado: 🟡/🔵/🔴/⚪ nunca devem ser tratados como fluxo fechado.
 
-| Se pretender…                      | Vá à secção             |
-| ---------------------------------- | ----------------------- |
-| Criar conta e começar              | §2 e §3                 |
-| Procurar casa / arrendar / comprar | §4                      |
-| Publicar e gerir imóveis           | §5                      |
-| Mediar como agente                 | §6                      |
-| Responder a pedidos de serviço     | §7                      |
-| Operar administração               | §8                      |
-| Parametrizar a plataforma          | §9                      |
-| Completar KYC / confiança          | §10                     |
-| Proteger a conta                   | §11                     |
-| Respostas rápidas                  | §15 FAQ e §16 Glossário |
+## 1. Legenda de estado (oficial)
 
-Na Beta, alguns pagamentos correm em **sandbox** (simulação). Sempre que isso afecte o que vê no ecrã, o manual indica-o explicitamente.
+| Símbolo | Significado |
+|---------|-------------|
+| 🟢 IMPLEMENTADO | Existe em código + validado pós-deploy (ou equivalente confirmado) |
+| 🟡 PARCIAL | Existe UI/RPC mas fluxo incompleto, demo, ou pairing em falta |
+| 🔵 PREPARADO | Infra/SQL/RPC prontos; UI limitada ou sem claim Founder real |
+| 🟠 EM BETA | Disponível em Beta com restrições documentadas |
+| 🔴 NÃO IMPLEMENTADO | Sem ecrã/fluxo utilizável na plataforma actual |
+| ⚪ PLANEADO v1.1+ | Explicitamente adiado / backlog pós-Beta 2 |
 
----
-
-## 1. O que é a Kuteka
-
-A Kuteka é uma plataforma **B2B2C** de gestão patrimonial e imobiliária em Angola. Liga num só espaço:
-
-- **Clientes** que exploram habitação e pedem serviços;
-- **Parceiros Patrimoniais** que activam e gerem imóveis;
-- **Agentes Certificados** que mediçam e operam;
-- **Prestadores** que orçamentam e executam serviços;
-- **Administração / Super Administração** que operam e parametrizam a plataforma.
-
-O núcleo de exploração (pesquisa, favoritos, conta) é **gratuito**. Serviços de valor acrescentado são **pay-per-use**, planos de parceiro, Kuteka Plus opcional e comissões. Nesta fase **não há carteira nem escrow**: a Kuteka não segura dinheiro do cliente (`custody_mode = none`).
-
-Produção pública: **https://kutekalink.com**
-
----
-
-## 2. Primeiros passos
+## 2. Entrar na plataforma 🟢
 
 ### 2.1 Criar conta
 
-1. Abra https://kutekalink.com e escolha **Criar conta** (`/auth/registar`).
-2. Indique um **email** válido e uma **palavra-passe** segura (mínimo 8 caracteres, com maiúscula e número).
-3. Aceite os **Termos de Utilização** (obrigatório).
-4. Confirme a criação.
+- Abrir https://kutekalink.com e escolher Criar conta (`/auth/registar`).
+- Indicar email válido e palavra-passe segura (mínimo 8 caracteres, com maiúscula e número).
+- Aceitar os Termos de Utilização (obrigatório).
+- Confirmar email em `/auth/verificar` — método A (link) ou B (OTP de 6 dígitos). Pode reenviar com intervalo de segurança.
 
-### 2.2 Verificar o email (dois métodos)
-
-Após o registo, a Kuteka pede confirmação em `/auth/verificar`:
-
-| Método             | Como funciona                                                       |
-| ------------------ | ------------------------------------------------------------------- |
-| **A — Link**       | Abra o email da Kuteka e clique no link de confirmação.             |
-| **B — Código OTP** | Introduza na aplicação o código de **6 dígitos** recebido no email. |
-
-Se o link não abrir (cliente de correio, telemóvel, etc.), use o código. Pode **reenviar** email e código com intervalo de segurança.
-
-### 2.3 Entrar e recuperar acesso
+### 2.2 Entrar e recuperar
 
 - Entrar: `/auth/entrar` com email e palavra-passe.
-- Recuperar: `/auth/recuperar` — escolha **email**, **telefone (SMS)** ou **ambos**.
-- Após verificação, defina uma **nova palavra-passe** em `/auth/recuperar/confirmar`.
+- Recuperar: `/auth/recuperar` — email, telefone (SMS) ou ambos; confirmar em `/auth/recuperar/confirmar`.
 
-### 2.4 Escolher papéis (onboarding)
+### 2.3 Onboarding de papéis self-serve 🟢
 
-Em `/auth/onboarding/papeis` seleccione um ou ambos:
+Em `/auth/onboarding/papeis` seleccione Cliente, Parceiro Patrimonial, ou ambos (experiência `client_partner`).
 
-- **Cliente** — procurar e contratar;
-- **Parceiro Patrimonial** — publicar e gerir patrimónios.
+**Não self-serve:** Agente Certificado, Prestador, Supervisor, Administrador, Superadministrador, Founder/Co-Founder — atribuição pela operação / Founder.
 
-Agente e Administrador **não** são self-serve: são atribuídos pela Kuteka. A mesma conta pode acumular vários papéis; mude de experiência no **menu da conta**.
+### 2.4 Nome e painel
 
-### 2.5 Nome de apresentação
+- Nome de apresentação em `/auth/onboarding/perfil` (alterável depois em Perfil).
+- Área autenticada: `/app`. A home efectiva depende da experiência activa (secção 3).
 
-Em `/auth/onboarding/perfil` indique como prefere ser chamado. Pode alterar depois em **Perfil**.
+```
+MODELO DE INTERFACE — exemplo conceptual
++----------------------------------------------------------+
+| KUTEKA                         [Experiência v] [Conta]   |
+|----------------------------------------------------------|
+| Email                                                    |
+| Palavra-passe                                            |
+| [ Entrar ]          Recuperar acesso                     |
+| Criar conta -> /auth/registar                            |
++----------------------------------------------------------+
+```
+
+## 3. Como saber o seu papel (experiência) 🟢
+
+### 3.1 Papel DB vs experiência UI
+
+| Conceito | Onde | Governa |
+|----------|------|---------|
+| Papel DB (`roles` / `user_roles`) | Servidor + RLS | O que a conta pode fazer de verdade |
+| Experiência (`ExperienceMode`) | UI (`kuteka-active-experience`) | Menus, home, missão, lens de permissões |
+
+Permissões UI = intersecção(permissões reais da sessao, `MODE_LENS[experiência]`). Trocar o seletor **não escala** poderes.
+
+### 3.2 Experiências existentes
+
+`client` · `patrimonial_partner` · `client_partner` · `certified_agent` · `service_provider` · `supervisor` · `administrator` · `super_administrator` · `founder`
+
+Nota: papel DB `co_founder` usa o modo UI `founder`.
+
+### 3.3 Homes oficiais
+
+| Experiência | Home |
+|-------------|------|
+| Cliente | `/app/habitacao/explorar` |
+| Parceiro Patrimonial | `/app/patrimonios` |
+| Agente Certificado | `/app/agente` |
+| Prestador | `/app/servicos` |
+| Supervisor / Administrador | `/app/admin` |
+| Superadministrador | `/app/super` |
+| Founder | `/app/fundador` |
+| Cliente+Parceiro (default path) | `/app` |
+
+### 3.4 Onde mudar a experiência
+
+Menu da conta (canto da interface) -> seletor de experiência com os modos disponiveis para os papeis da sessao. Preferência em `localStorage`.
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++----------------------------------+
+| Conta · utilizador@dominio       |
+| KYC n · UTS · ICK                |
+|----------------------------------|
+| Experiência activa:              |
+|  (*) Cliente                     |
+|  ( ) Parceiro Patrimonial        |
+|  ( ) ...                         |
+|----------------------------------|
+| Centro de Confiança              |
+| Centro de Segurança              |
+| Perfil · Ajuda · Sair            |
++----------------------------------+
+```
+
+## 4. Hierarquia + KAI + papeis fora da cadeia
+
+```
+                 +-----------------------+
+                 | Founder / Owner       |
+                 | (+ Co-Founder)        |
+                 +-----------+-----------+
+                             |
+                 +-----------v-----------+
+                 | Superadministrador    |
+                 +-----------+-----------+
+                             |
+                 +-----------v-----------+
+                 | Administrador         |
+                 +-----------+-----------+
+                             |
+                 +-----------v-----------+
+                 | Supervisor            |
+                 +--+--------+--------+--+
+                    |        |        |
+           +--------v--+ +---v----+ +-v----------+
+           | Agente    | | PP     | | Prestador  |
+           +-----+-----+ +---+----+ +-----+------+
+                 |           |            |
+                 +-----+-----+------+-----+
+                       |
+                 +-----v-----+
+                 | Cliente   |
+                 +-----------+
+
+  [*] KAI = camada AI transversal (score preliminar na fila) -- NAO e papel humano
+  [o] Board / Investor / Auditor -- sem ExperienceMode UI (branco/vermelho no cockpit)
+      Auditor: permissões na BD apenas; consulta institucional fora da cadeia ops diaria
+```
+
+Matriz completa de permissões: `MATRIZ_PAPEIS_PERMISSOES_GOVERNANCA_v2.md`.
+
+## 5. Ficha completa — CLIENTE 🟢
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 5.1 Missão oficial
+
+Encontrar, arrendar ou comprar habitação e contratar serviços Kuteka.
+
+### 5.2 Reporta a
+
+Agente / Administração (suporte).
+
+### 5.3 Home e CTAs
+
+Home: `/app/habitacao/explorar`. CTAs: Centro de Confiança, Contratos, Serviços.
+
+### 5.4 Menu real (nav.ts)
+
+- Geral: Inicio `/app`, Mensagens, Futuro (habitação futura), Contratos, Confiança `/app/confianca`, Centro de Confiança, Centro de Segurança, Financeiro, Concierge, Assistencia, Serviços, Conta/Perfil.
+- Cliente: Explorar, Residencia (`?vista=residencia`), Favoritos/Interesses (`?vista=interesses`), Visitas (`?vista=visitas`), Propostas (`/app/contratos`), Mudanca, Encontrar Casa, Garantia.
+- Não ve: Patrimónios, Activar, Admin, Super, Fundador, Area do Agente (sem `agent.operate`).
+
+### 5.5 Pode fazer (mustDo)
+
+- Procurar e favoritar imóveis.
+- Comentar, perguntar e partilhar na ficha.
+- Pedir visitas e celebrar contratos.
+- Avaliar imóvel, Parceiro, Agente e Prestador (onde a UI existir).
+
+### 5.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar publicações.
+- Gerir comissões da plataforma.
+- Activar património de terceiros.
+- Criar escalações operacionais (requer `properties.review`).
+
+### 5.7 Rotas principais
+
+`/app/habitacao/explorar`; vistas residencia/interesses/visitas; `/app/contratos`; `/app/servicos`; `/app/mudanca`; `/app/encontrar-casa`; `/app/concierge`; `/app/garantia`; `/app/assistencia`; `/app/mensagens`; `/app/centro-confianca`; `/app/centro-seguranca`; `/app/financeiro`; `/app/perfil`; `/app/confianca`.
+
+### 5.8 Fluxo do dia (cockpitHint)
+
+Feed → Favoritos → Visitas → Propostas → Contratos → Residencia
+
+### 5.9 Património / habitação
+
+Explora inventario publicado e janela premium. Não gere patrimónios alheios. Social na ficha 🟢.
+
+### 5.10 Contratos
+
+`/app/contratos` para propostas/contratos 🟢 (profundidade comercial continua a evoluir em Beta).
+
+### 5.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Completar identidade no Centro de Confiança. Menu mostra KYC / UTS / ICK. Gates de confiança afectam actos sensiveis.
+
+### 5.12 Mensagens / chat
+
+Listagem de conversas 🟢. `kuteka_chat_start_direct` Cliente↔PP/Agente frequentemente recusado sem contract/role pairing 🟡.
+
+### 5.13 Social e avaliações
+
+Gostar, favoritar, comentar, perguntar, partilhar, denunciar na ficha 🟢. Avaliações via PropertyReviews / marketplace em fluxos separados.
+
+### 5.14 Financeiro e pagamentos
+
+`/app/financeiro` superfície de utilizador 🟡. Kuteka Pay / dinheiro real parcial; sandbox em varios fluxos.
+
+### 5.15 Serviços
+
+Pedir serviços em `/app/servicos` (lado cliente) 🟡 — ciclo ponta-a-ponta não fechado no audit.
+
+### 5.16 Como pedir ajuda / escalar
+
+Ajuda `/app/ajuda`, documentação `/documentação`, Mensagens, contacto. Não usa EscalationPanel.
+
+### 5.17 Limitações Beta honestas
+
+Chat pairing 🟡; superfícies Mudanca/Concierge/Encontrar Casa podem estar incompletas; sem Board/Investor.
+
+### 5.18 Checklist do primeiro dia
+
+- Verificar email e sessao.
+- Completar perfil.
+- Abrir Centro de Confiança e iniciar KIS/KYC.
+- Explorar o feed e favoritar pelo menos um imóvel.
+- Pedir visita se aplicavel.
+- Rever Contratos / Propostas.
+
+### 5.19 Erros frequentes e o que fazer
+
+- Sem permissão em `/app/patrimonios` → experiência Cliente sem `properties.manage` (esperado).
+- Chat não inicia → pairing/contrato em falta 🟡.
+- Imóvel não aparece no feed → pode estar em janela premium (so premium) ou ainda não publicado.
+
+## 6. Ficha completa — PARCEIRO PATRIMONIAL 🟢
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 6.1 Missão oficial
+
+Fornecer e gerir património através da Kuteka.
+
+### 6.2 Reporta a
+
+Supervisor / Admin (aprovacao e operação).
+
+### 6.3 Home e CTAs
+
+Primario: Activar património `/app/patrimonios/novo`. Lista `/app/patrimonios`. Confiança; Planos `/app/parceiro/planos`.
+
+### 6.4 Menu real (nav.ts)
+
+- Parceiro: Patrimónios, Activar, Relatórios (atalho `/app`), Planos.
+- Geral: Inicio, Mensagens, Contratos, Confiança, Centros, Financeiro, Garantia, Serviços, Conta.
+- Sem papel Cliente: não ve Explorar/Residencia/Favoritos/Visitas do grupo cliente. Com ambos os papeis use experiência Cliente+Parceiro.
+
+### 6.5 Pode fazer (mustDo)
+
+- Registar e activar património.
+- Documentos, fotos, preco e localizacao (incl. GPS).
+- Responder a pedidos e autorizar visitas.
+- Celebrar contratos e acompanhar receitas (conforme UI disponível).
+
+### 6.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar a própria publicacao.
+- Gerir Admins.
+- Alterar comissões da plataforma (so Founder via RPC/DB — sem UI).
+
+### 6.7 Rotas principais
+
+`/app/patrimonios`, `/app/patrimonios/novo`, `/app/parceiro/planos`, `/app/contratos`, `/app/confianca`, `/app/centro-confianca`, `/app/mensagens`, `/app/financeiro`, `/app/garantia`, `/app/servicos`, `/app/perfil`.
+
+### 6.8 Fluxo do dia (cockpitHint)
+
+Patrimónios → Ocupacao → Receitas → Contratos → PDK → Saude
+
+### 6.9 Património / habitação
+
+- Ciclo canónico (0038 + SPRINT_BETA_1_6): rascunho → submetido → em_analise_kai → em_analise_admin → pendente/correcoes → (apos approve) janela_premium → publicado → …
+- Etapas posteriores (reservado/contrato/arrendado/utilizacao/…): 🟡/⚪ conforme automacao.
+- Pós-deploy: Admin approve define `lifecycle_status = janela_premium` (~6h premium_visible / general_visible).
+- PP corrige pendências; não decide approve/reject.
+
+### 6.10 Contratos
+
+Contratos em `/app/contratos`. Contratos de serviços Kuteka podem ser gerados no registo quando ha gestao/avaliação 🟡.
+
+### 6.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Motivo de pendencia real: `partner_identity_unconfirmed` — completar verificacao KIS/KYC no Centro de Confiança antes de republicar.
+
+### 6.12 Mensagens / chat
+
+Listagem 🟢; start_direct com Cliente pode exigir pairing 🟡. Ops contactam PP a partir da Central (Mensagens).
+
+### 6.13 Social e avaliações
+
+Ve interacções sociais nas fichas; responde perguntas quando o fluxo o permitir. Denuncias vao a moderacao.
+
+### 6.14 Financeiro e pagamentos
+
+Receitas/planos 🟡. Comissão 35% não e editavel pelo PP.
+
+### 6.15 Serviços
+
+Planos de parceiro + pedidos de remodelacao/obra no registo 🟡. Rede completa de prestadores 🔴/⚪.
+
+### 6.16 Como pedir ajuda / escalar
+
+Corrigir o que a pendencia indica; contactar ops via Mensagens/Ajuda. Supervisor/Admin contactam o PP.
+
+### 6.17 Limitações Beta honestas
+
+Publicacao gated por revisao; motor ICK A–G simplificado 🟡; metrica live de saude parcial; video/360 depende de upload.
+
+### 6.18 Checklist do primeiro dia
+
+- Completar KYC de Parceiro.
+- Activar património com docs + >=5 fotos + fachada/rua + GPS valido.
+- Submeter para analise.
+- Acompanhar notificações de pendencia/correcao.
+- Corrigir e resubmeter.
+- Confirmar estado janela_premium / publicado apos aprovacao Admin.
+
+### 6.19 Erros frequentes e o que fazer
+
+- Pendencia: abrir notificacao e códigos de motivo (lista oficial na secção 9 / manual ops).
+- Rejeicao Admin → lifecycle `arquivado`.
+- Tentar auto-aprovar → impossivel (so Adminish).
+
+## 7. Ficha completa — AGENTE CERTIFICADO 🟢 hub · 🟡 secções demo/parcial
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 7.1 Missão oficial
+
+Executar operações no terreno — visitas, verificacao e acompanhamento.
+
+### 7.2 Reporta a
+
+Supervisor / Admin.
+
+### 7.3 Home e CTAs
+
+Home: `/app/agente`. CTAs: explorar habitação, contratos.
+
+### 7.4 Menu real (nav.ts)
+
+- Agente: Area do Agente `/app/agente`.
+- Tambem: Explorar, Futuro, Contratos, Confiança, Centros, Mensagens, Financeiro, Concierge, Assistencia, Serviços, Conta.
+- Itens Admin/Super/Fundador não aparecem sem permissões ops.
+
+### 7.5 Pode fazer (mustDo)
+
+- Visitar e inspecionar imóveis.
+- Actualizar PDK e relatórios (conforme dados disponiveis).
+- Acompanhar clientes e follow-up.
+- Reportar irregularidades ao Supervisor.
+
+### 7.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar publicações (bloqueado: `properties.review required`).
+- Alterar comissões.
+- Nomear Admins.
+
+### 7.7 Rotas principais
+
+`/app/agente` com ancoras: Agenda, Visitas, Imóveis, Clientes, Tarefas, Follow-up, Relatórios, Notificações; `/app/habitacao/explorar`; `/app/contratos`; mensagens; confiança; financeiro.
+
+### 7.8 Fluxo do dia (cockpitHint)
+
+Agenda → Visitas → Imóveis → Clientes → Tarefas → Follow-up → Relatórios
+
+### 7.9 Património / habitação
+
+Trabalha imóveis atribuídos. Pedido ops `request_technical_visit` → lifecycle `em_inspecao_técnica`. Pode abrir inventario habitacional.
+
+### 7.10 Contratos
+
+Acompanha `/app/contratos` 🟡 (mediação completa não fechada).
+
+### 7.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Credencial de agente no fluxo documental quando aplicavel; não decide revisao KYC institucional (`/app/confianca/revisao` e ops).
+
+### 7.12 Mensagens / chat
+
+Chat 🟡 (pairing). Contactar Cliente/PP quando permitido.
+
+### 7.13 Social e avaliações
+
+Pode usar exploracao/social no inventario; denuncia alimenta moderacao.
+
+### 7.14 Financeiro e pagamentos
+
+`/app/financeiro` superfície 🟡 — não gere Ledger/Super.
+
+### 7.15 Serviços
+
+Ve `/app/servicos` no menu; não e a inbox de Prestador.
+
+### 7.16 Como pedir ajuda / escalar
+
+Bloqueios → Supervisor. Atribuicao de agentes: `/app/admin/utilizadores` (ops).
+
+### 7.17 Limitações Beta honestas
+
+Hub existe 🟢; varias listas usam pipeline demo / assignments quando existem 🟡. Relatórios avancados 🟡.
+
+### 7.18 Checklist do primeiro dia
+
+- Confirmar experiência Agente Certificado.
+- Abrir `/app/agente` e percorrer Agenda → Notificações.
+- Rever imóveis atribuídos.
+- Confirmar/abrir visitas.
+- Registar follow-up.
+- Escalar irregularidade ao Supervisor.
+
+### 7.19 Erros frequentes e o que fazer
+
+- Decidir publicacao → erro de permissão (esperado).
+- Agenda vazia → sem `agent_assignments` (normal em conta nova/demo sem carga).
+
+## 8. Ficha completa — PRESTADOR 🟡
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 8.1 Missão oficial
+
+Executar serviços contratados através da Kuteka.
+
+### 8.2 Reporta a
+
+Admin / Super Admin (operação).
+
+### 8.3 Home e CTAs
+
+Home: `/app/servicos` (Area do Prestador). CTAs: Financeiro, Centro de Confiança.
+
+### 8.4 Menu real (nav.ts)
+
+- Item dedicado Serviços (grupo prestador) → `/app/servicos`.
+- Tambem: Inicio, Mensagens, Contratos, Centros de Confiança/Segurança, Financeiro, Conta.
+- Não ve menus de Activar património / Admin (sem perms).
+
+### 8.5 Pode fazer (mustDo)
+
+- Receber pedidos e enviar orçamentos.
+- Aceitar, agendar e executar serviços.
+- Enviar evidências e concluir.
+- Acompanhar pagamento e avaliações (UI de fluxo mínimo).
+
+### 8.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar patrimónios.
+- Gerir Admins.
+- Alterar comissões da plataforma.
+
+### 8.7 Rotas principais
+
+`/app/servicos`, `/app/financeiro`, `/app/centro-confianca`, `/app/centro-seguranca`, `/app/mensagens`, `/app/contratos`, `/app/perfil`.
+
+### 8.8 Fluxo do dia (cockpitHint)
+
+Pedido → Orçamento → Aceite → Servico → Agenda → Evidências → Conclusão → Pagamento → Avaliação
+
+### 8.9 Património / habitação
+
+Não gere publicacao de património. Pode participar em remodelacao quando existir pedido 🟡.
+
+### 8.10 Contratos
+
+Ligacao marketplace / contratos de servico 🟡.
+
+### 8.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Completar Centro de Confiança para elegibilidade a trabalhos sensiveis.
+
+### 8.12 Mensagens / chat
+
+Mensagens com Cliente para confirmar agenda 🟡.
+
+### 8.13 Social e avaliações
+
+Avaliação no fecho do fluxo; reviews marketplace separados da barra social da ficha de imóvel.
+
+### 8.14 Financeiro e pagamentos
+
+Pagamento em `/app/financeiro` 🟡; Kuteka Pay real parcial.
+
+### 8.15 Serviços
+
+Inbox provider em `/app/servicos` com passos do fluxo visiveis 🟡. Criacao ponta-a-ponta de pedido não exercitada no pós-deploy sob nomes `marketplace_create_order`.
+
+### 8.16 Como pedir ajuda / escalar
+
+Problemas de execucao → Admin/Super via suporte/Mensagens. Não cria escalacao formal de publicacao.
+
+### 8.17 Limitações Beta honestas
+
+Tratar ciclo Pedido→Pagamento como Beta parcial ate validação ponta-a-ponta.
+
+### 8.18 Checklist do primeiro dia
+
+- Login com papel Prestador.
+- Abrir `/app/servicos` e confirmar Area do Prestador.
+- Rever inbox / pedidos.
+- Responder orçamento e aceitar.
+- Confirmar agenda em Mensagens.
+- Carregar evidências → concluir → pagamento → avaliação.
+
+### 8.19 Erros frequentes e o que fazer
+
+- Sem pedidos → marketplace vazio ou conta nova (esperado).
+- Abrir `/app/admin` → Forbidden sem `admin.panel` / `properties.review`.
+
+## 8A. Wireframes das homes de utilizador
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+CLIENTE — /app/habitacao/explorar
++----------------------------------------------------------------+
+| KUTEKA | Explorar | Residencia | Favoritos | Visitas | ...     |
+|----------------------------------------------------------------|
+| Feed de habitação (full-bleed cards de inventario)             |
+| [Filtros]  [Disponibilidade futura]                            |
+| Imóvel A   Imóvel B   Imóvel C                                 |
+| CTA: ver ficha → social (Gostar|Favoritar|Comentar|Perguntar)  |
++----------------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+PARCEIRO — /app/patrimonios
++----------------------------------------------------------------+
+| Patrimónios | Activar | Planos | Contratos | Confiança         |
+|----------------------------------------------------------------|
+| [ Activar património ]                                         |
+| Lista: código | título | lifecycle_status | acções             |
+| Painel PDK / Saude (na ficha)                                  |
++----------------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+AGENTE — /app/agente
++----------------------------------------------------------------+
+| Area do Agente                                                 |
+| 1 Agenda 2 Visitas 3 Imóveis 4 Clientes                        |
+| 5 Tarefas 6 Follow-up 7 Relatórios 8 Notificações              |
+|----------------------------------------------------------------|
+| Secção activa: lista / atalhos / demo pipeline quando vazio    |
++----------------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+PRESTADOR — /app/servicos
++----------------------------------------------------------------+
+| Area do Prestador                                              |
+| Pedido → Orçamento → Aceite → Servico → Agenda →               |
+| Evidências → Conclusão → Pagamento → Avaliação                 |
+|----------------------------------------------------------------|
+| Inbox de pedidos | detalhe | acções do passo actual            |
++----------------------------------------------------------------+
+```
+
+## 9. Jornada do Cliente (ponta a ponta)
+
+Estado geral do percurso comercial longo: 🟢 explorar/social/visitas/contratos básicos · 🟡 negociação profunda / pay real / chat pairing.
+
+```
+Interessados → Visitas → Propostas → Negociacao → Contrato
+    → Mudanca → Ocupacao → Renovacao
+(trechos finais 🟡/⚪ conforme modulo)
+```
+
+### 9.1 Passo a passo operacional
+
+- Entrar e escolher experiência Cliente.
+- Completar Centro de Confiança (KIS→KYC).
+- Explorar `/app/habitacao/explorar`; usar Futuro se quiser disponibilidade futura.
+- Na ficha: Gostar / Favoritar / Comentar / Perguntar / Partilhar / Denunciar 🟢.
+- Guardar interesses (`?vista=interesses`) e gerir visitas (`?vista=visitas`).
+- Abrir propostas/contratos em `/app/contratos`.
+- Residencia (`?vista=residencia`) apos ocupação.
+- Serviços opcionais `/app/servicos`; Mudanca / Concierge / Garantia / Assistencia conforme necessidade 🟡.
+
+### 9.2 O que o Cliente ve na ficha (social) 🟢
+
+Barra imediatamente abaixo da galeria: Gostar | Favoritar | Comentarios | Perguntar | Partilhar. Paineis expansíveis (não páginas novas). Partilha: WhatsApp, copiar link, Web Share.
+
+## 10. Capitulo do Agente — operação de terreno
+
+Hub `/app/agente` 🟢 com oito blocos. Conteudo pode misturar assignments reais e demonstração 🟡.
+
+### 10.1 Sequencia do dia
+
+- Agenda: compromissos derivados de atribuições.
+- Visitas: abrir vista de visitas habitação ou detalhe do imóvel.
+- Imóveis atribuídos: priorizar contacto / visita / follow-up.
+- Clientes: acompanhamento dos interessados ligados.
+- Tarefas e Follow-up: fechar pendentes do dia.
+- Relatórios / Notificações: fecho e alertas.
+
+### 10.2 Relacao com publicacao
+
+Quando ops pedem visita técnica, o imóvel fica `em_inspecao_técnica`. O Agente executa no terreno e reporta; **nao** aprova. Motivo tipico: `technical_visit_needed` / `fraud_suspicion`.
+
+### 10.3 Wireframe visita
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++--------------------------------------------------+
+| Visita técnica · imóvel CODE-123                 |
+| Estado lifecycle: em_inspecao_técnica            |
+|--------------------------------------------------|
+| Checklist: fachada | interiores | docs | GPS     |
+| Notas do agente                                  |
+| [ Guardar ]  [ Reportar irregularidade → Supv ]  |
++--------------------------------------------------+
+(Conceitual — use as secções reais do hub + ficha do imóvel)
+```
+
+## 11. Capitulo do Prestador
+
+UI `/app/servicos` em modo provider mostra a missão e a cadeia de passos 🟡.
+
+### 11.1 Papel em cada passo
+
+| Passo | Quem age | Estado |
+|-------|----------|--------|
+| Pedido | Cliente (ou ops) cria necessidade | 🟡 |
+| Orçamento | Prestador responde | 🟡 |
+| Aceite | Cliente/fluxo confirma | 🟡 |
+| Servico / Agenda | Prestador + Cliente (Mensagens) | 🟡 |
+| Evidências | Prestador carrega prova | 🟡 |
+| Conclusão | Prestador fecha | 🟡 |
+| Pagamento | Financeiro / Pay parcial | 🟡 |
+| Avaliação | Cliente avalia Prestador | 🟡 |
+
+Não confundir com aprovacao de património (ops) nem com comissão 35% (Founder RPC).
+
+## 12. Confiança: KIS → KYC → UTS → ICK → Trust Center 🟢/🟡
+
+### 12.1 Mapa
+
+```
+KIS (identidade) --> KYC (niveis 0..4) --> UTS (score utilizador)
+                                      \-> documentos Trust
+Parceiro / imóvel ----------------------> ICK (score patrimonial) 🟡 motor
+Tudo converge no Centro de Confiança `/app/centro-confianca`
+Revisão ops: `/app/confianca/revisao` (Supervisor/Admin/...)
+Página legado/atalho: `/app/confianca`
+```
+
+### 12.2 O que fazer como utilizador
+
+- Abrir `/app/centro-confianca` e seguir próximos passos mostrados.
+- Submeter documentos de identidade / morada / título (conforme pedido).
+- Aguardar revisao ops quando status pending/under_review.
+- PP: identidade não confirmada bloqueia publicacao limpa (`partner_identity_unconfirmed`).
+
+### 12.3 Centro de Segurança
+
+`/app/centro-seguranca` — email/telefone, sessões, score de segurança. Identidade institucional permanente e o `user_id` (importante se alguma vez for promovido).
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++--------------------------------------------------+
+| Centro de Confiança                              |
+| KYC nivel n | UTS xx | ICK yy (se PP)            |
+|--------------------------------------------------|
+| Próximos passos                                  |
+| [ Enviar documento ] [ Actualizar dados ]        |
+| Histórico de submissoes                          |
++--------------------------------------------------+
+```
+
+## 13. Comúnicacao 🟡
+
+- Mensagens: `/app/mensagens` — listagem e unread 🟢.
+- Iniciar conversa directa: muitas vezes exige contract ou role pairing 🟡 — documentado como parcial.
+- Contactar PP a partir da Central de Trabalho (ops) usa o mesmo canal de mensagens.
+- Notificações shell existem (catálogo + eventos); push/inbox dedicado não e produto completo 🟡.
+- Ajuda: `/app/ajuda` e `/documentação`.
+
+## 14. Serviços — fluxos com papel em cada passo
+
+### 14.1 Marketplace generico
+
+Cliente pede → Prestador orçamento/executa → avaliação. Estado 🟡.
+
+### 14.2 Serviços na activacao de património (PP)
+
+No Activar Património o PP indica serviços pretendidos / nivel de gestao. Pode gerar contrato de serviços Kuteka e exigir avaliação (`em_avaliação`) 🟡.
+
+### 14.3 Planos de parceiro
+
+`/app/parceiro/planos` 🟢 rota; profundidade comercial 🟡.
+
+### 14.4 Quem não intervem
+
+Cliente não aprova património. Prestador não aprova património. Agente não aprova. Comissão so Founder (RPC).
+
+## 15. Checklists do primeiro dia (resumo)
+
+| Papel | Top 5 |
+|-------|-------|
+| Cliente | Email → Perfil → Confiança → Explorar → Favoritar |
+| PP | KYC → Activar completo → Submeter → Notificações → Corrigir pendências |
+| Agente | Experiência Agente → Hub → Atribuições → Visitas → Follow-up |
+| Prestador | Experiência Prestador → `/app/servicos` → Inbox → Orçamento → Agenda |
+
+## 16. Onde vejo X? (respostas rapidas)
+
+| Quero ver… | Onde |
+|------------|------|
+| Meu papel / experiência | Menu da conta → seletor |
+| Habitação / feed | `/app/habitacao/explorar` |
+| Favoritos | `/app/habitacao?vista=interesses` |
+| Visitas | `/app/habitacao?vista=visitas` |
+| Residencia | `/app/habitacao?vista=residencia` |
+| Meus patrimónios | `/app/patrimonios` |
+| Activar imóvel | `/app/patrimonios/novo` |
+| Planos PP | `/app/parceiro/planos` |
+| Area Agente | `/app/agente` |
+| Area Prestador | `/app/servicos` (modo provider) |
+| Contratos / propostas | `/app/contratos` |
+| Mensagens | `/app/mensagens` |
+| Confiança / KYC | `/app/centro-confianca` |
+| Segurança da conta | `/app/centro-seguranca` |
+| Financeiro | `/app/financeiro` |
+| Perfil | `/app/perfil` |
+| Ajuda | `/app/ajuda` |
+| Docs publicas | `/documentação` |
+| Central ops (se for ops) | `/app/admin` |
+| Super (se for Super/Founder) | `/app/super` |
+| Founder Center | `/app/fundador` |
+| Comissão 35% UI | 🔴 não existe — Founder RPC/DB |
+| Board / Investor dashboard | 🔴/⚪ sem ExperienceMode |
+
+## 17. Ciclo de vida do imóvel (referência partilhada)
+
+```
+rascunho → submetido → em_analise_kai → em_analise_admin
+  → pendente | correcoes | em_analise_documental | em_inspecao_técnica | em_preparacao
+  → (Adminish approve) janela_premium 🟢 validado pós-deploy
+  → publicado (apos janela ~6h / promote_premium_window_properties)
+  → reservado / contrato / arrendado|vendido / em_utilizacao
+  → libertacao_prevista / disponível_novamente / em_manutencao / ...
+  → arquivado (reject)
+Etapas tardias: 🟡 automacao parcial · ⚪ planeado aprofundar v1.1+
+```
+
+### 17.1 Motivos oficiais de pendencia (labels 0036)
+
+| code | label_pt |
+|------|----------|
+| `partner_identity_unconfirmed` | Identidade do Parceiro Patrimonial não confirmada |
+| `property_document_insufficient` | Documento do imóvel insuficiente |
+| `not_in_advertiser_name` | Imóvel não esta em nome do anunciante |
+| `photos_insufficient` | Fotografias insuficientes |
+| `no_facade_photos` | Não existem fotografias da fachada |
+| `no_street_photos` | Não existem fotografias da rua |
+| `address_inconsistent` | Endereço inconsistente |
+| `gps_invalid` | GPS invalido |
+| `contradictory_info` | Informação contraditória |
+| `fraud_suspicion` | Suspeita de fraude |
+| `technical_visit_needed` | Visita técnica necessária |
+| `additional_docs` | Documentação adicional necessária |
+
+Tutorial completo de pendencia/aprovacao: manual operacional administrativo.
+
+## 18. Cliente + Parceiro na mesma conta 🟢
+
+Se tem ambos os papeis DB, a experiência `client_partner` fica disponível. Missão: usar Kuteka como Cliente e como Parceiro. MustNot: aprovar publicações institucionais; alterar governação. Cockpit: modo integrado.
+
+## 19. Glossario mínimo
+
+| Termo | Significado curto |
+|-------|-------------------|
+| ExperienceMode | Lens de UI por papel |
+| MODE_LENS | Permissões expostas por experiência |
+| PDK | Passaporte Digital Kuteka do imóvel |
+| KAI | Camada AI transversal (score preliminar) |
+| KIS | Identidade / identidade Kuteka |
+| KYC | Know Your Customer (niveis) |
+| UTS | Score de confiança do utilizador |
+| ICK | Score/confiança patrimonial |
+| KOCC | Centro operacional/comando (Super/Founder) |
+| Janela premium | ~6h apos approve antes do feed geral |
+| Adminish | Founder/Owner/Admin/Super/Co-Founder (pode approve/reject) |
+
+## 20. Fontes de verdade
+
+- `apps/web/modules/shell/role-experience.ts`
+- `apps/web/modules/shell/role-operating-matrix.ts`
+- `apps/web/modules/shell/nav.ts`
+- `apps/web/modules/administração/services/publication-review-client.ts`
+- SQL `0036` `0038` `0039` `0040`
+- `docs/product/ROLE_OPERATING_VALIDATION_POST_DEPLOY.md`
+- `docs/product/SPRINT_BETA_1_6.md`
+- `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
+
+Fim do Manual Completo do Utilizador v2.
+
+
+
+## Apêndice A — Procedimentos passo a passo (utilizador)
+
+### A.1 Favoritar e perguntar num imóvel 🟢
+1. Abrir `/app/habitacao/explorar` e entrar na ficha.
+2. Na barra **abaixo das fotos**: tocar **Favoritar** (passa a «Remover favorito»).
+3. Tocar **Perguntar**, escrever a pergunta, enviar.
+4. Opcional: **Comentar**, **Partilhar** (WhatsApp / copiar link / Web Share), **Denunciar**.
+5. Confirmar em `/app/habitacao?vista=interesses` que o favorito aparece.
+
+### A.2 Pedir visita (Cliente) 🟢/🟡
+1. Na ficha ou em Visitas, iniciar pedido de visita conforme UI disponível.
+2. Acompanhar em `/app/habitacao?vista=visitas`.
+3. Se o chat directo falhar com «contract or role pairing required», usar o canal que a plataforma oferecer após interesse/contrato 🟡.
+
+### A.3 Activar património (PP) — checklist de qualidade antes de submeter 🟢
+1. `/app/patrimonios/novo`.
+2. Preencher morada, comuna/bairro, GPS no mapa.
+3. Carregar documento de propriedade (ou equivalente).
+4. Mínimo 5 fotografias + fachada + rua.
+5. Preço, tipologia, áreas sem contradições.
+6. Serviços Kuteka / nível de gestão (se aplicável).
+7. Submeter e anotar o código do imóvel.
+8. Abrir Centro de Confiança se identidade PP incompleta.
+
+### A.4 Responder a pendência (PP) 🟢
+1. Ler notificação (título «Publicação em pendência» / correcções / documentos / visita).
+2. Identificar `pending_reason_codes` e soluções (`solution_pt`).
+3. Corrigir na ficha do património.
+4. Republicar/resubmeter conforme fluxo.
+5. Aguardar nova análise (não tentar auto-aprovar).
+
+### A.5 Dia do Agente (mínimo) 🟡/🟢
+1. `/app/agente` → percorrer âncoras 1–8.
+2. Em Imóveis atribuídos, abrir ficha e planear visita.
+3. Usar vista `/app/habitacao?vista=visitas` se útil.
+4. Follow-up e reportar irregularidade ao Supervisor (Mensagens / processo ops).
+
+### A.6 Dia do Prestador (mínimo) 🟡
+1. `/app/servicos` — confirmar «Área do Prestador».
+2. Abrir pedido → orçamento → aceite.
+3. Confirmar agenda em `/app/mensagens`.
+4. Evidências → conclusão → pagamento → avaliação.
 
 ---
 
-## 3. Navegação da plataforma
+## Apêndice B — Tabela «O que acontece se…»
 
-### 3.1 Área autenticada (`/app`)
-
-Após login, entra no **painel** com atalhos para o seu papel activo: explorar habitação, activar património, contratos, serviços, administração, etc.
-
-### 3.2 Menu da conta
-
-No canto da interface encontra:
-
-- Perfil e papéis;
-- **Centro de Confiança** (`/app/centro-confianca`) — estado KYC / UTS;
-- **Centro de Segurança** (`/app/centro-seguranca`) — email/telefone, sessões, score;
-- Definições, ajuda e terminar sessão.
-
-### 3.3 Mudar de papel
-
-Use **Mudar de papel** no menu. Os menus, o dashboard e os atalhos adaptam-se imediatamente à experiência escolhida (Cliente, Parceiro, Agente, Admin, Super Admin).
-
-### 3.4 Idioma
-
-Em Definições (`/app/definicoes`) pode alternar entre português, inglês, francês e espanhol (cobertura em evolução na Beta).
+| Situação | Resultado esperado | Estado |
+|----------|-------------------|--------|
+| Cliente abre `/app/admin` | Forbidden / sem menu | 🟢 |
+| PP tenta aprovar o próprio imóvel | Sem decisão adminish | 🟢 |
+| Agente chama decide publication | `properties.review required` | 🟢 |
+| Supervisor aprova | `administrator required for approve/reject` | 🟢 |
+| Admin aprova | `janela_premium` ~6h | 🟢 |
+| Admin rejeita | `arquivado` | 🟢 |
+| Cliente start_direct sem pairing | Recusa pairing | 🟡 |
+| Demo claim Founder | Bloqueado | 🟢 |
+| Prestador sem pedidos | Inbox vazia | 🟡 esperado |
 
 ---
 
-## 4. Guia do Cliente
+## Apêndice C — Mapa mental Cliente
 
-### 4.1 Explorar habitação
-
-1. Abra `/app/habitacao/explorar` (ou o atalho **Explorar Habitação**).
-2. Filtre por tipologia, localização, preço, disponibilidade (incluindo **disponibilidade futura**).
-3. Abra a ficha do imóvel para fotos, descrição, mapa e contacto operacional.
-
-### 4.2 Residência, favoritos e visitas
-
-- **Residência** — vista do seu percurso habitacional.
-- **Favoritos / Interesses** — guarde imóveis para comparar.
-- **Visitas** — acompanhe pedidos e agendamentos associados ao seu papel.
-
-### 4.3 Propostas e contratos
-
-Quando avançar numa intenção (arrendamento ou compra):
-
-1. Acompanhe propostas em Contratos / Propostas.
-2. Formalize em `/app/contratos` quando a intenção estiver aprovada.
-3. Leia partes, valor e termos antes de aceitar.
-
-### 4.4 Hub financeiro do utilizador
-
-Em `/app/financeiro` consulte (conforme disponibilidade na sua conta):
-
-- faturas e movimentos;
-- créditos Kuteka;
-- consentimentos;
-- lembretes de renda;
-- Kuteka Plus (opcional).
-
-### 4.5 Serviços comerciais (Cliente)
-
-| Serviço             | Rota                  | O que faz                                      |
-| ------------------- | --------------------- | ---------------------------------------------- |
-| Mudança Inteligente | `/app/mudanca`        | Pedido assistido de mudança com match          |
-| Encontrar Casa      | `/app/encontrar-casa` | Procura prioritária assistida                  |
-| Concierge           | `/app/concierge`      | Pedidos de apoio personalizado                 |
-| Garantia Kuteka     | `/app/garantia`       | Activação de garantia mensal (sandbox na Beta) |
-| Assistência 24h     | `/app/assistencia`    | Pedido urgente ao imóvel                       |
-| Prestadores         | `/app/servicos`       | Marketplace de orçamentos                      |
-
-Na Beta, a cobrança destes serviços passa pelo **Kuteka Pay em sandbox** até o gateway real estar activo. O fluxo de estados (pedido → pagamento → execução) já é o de produção.
+```
+Explorar ──► Ficha ──► Social (🟢)
+   │            │
+   │            ├── Visita ──► Proposta ──► Contrato (🟢/🟡)
+   │            └── Pergunta / Mensagem (🟡 pairing)
+   ├── Favoritos / Interesses
+   ├── Residência (após ocupação)
+   └── Serviços / Mudança / Concierge (🟡)
+Confiança ──► KYC/UTS ──► gates
+Segurança ──► email/sessões
+```
 
 ---
 
-## 5. Guia do Parceiro Patrimonial
+## Apêndice D — Mapa mental Parceiro
 
-### 5.1 Activar património
-
-1. Mude para a experiência **Parceiro Patrimonial**.
-2. Abra `/app/patrimonios/novo` (**Ativar Património**).
-3. Preencha localização, tipologia, condições, preços e media.
-4. Publique e acompanhe em `/app/patrimonios`.
-
-### 5.2 Gerir anúncios
-
-Na lista e na ficha (`/app/patrimonios/detalhe`):
-
-- actualize disponibilidade e preço;
-- acompanhe interesses e visitas;
-- consulte indicadores de saúde / PDK quando disponíveis na ficha.
-
-### 5.3 Planos Parceiro
-
-Em `/app/parceiro/planos` escolha **Bronze**, **Silver** ou **Gold** conforme benefícios e preço publicados no Super Admin. A activação na Beta pode decorrer em sandbox.
-
-### 5.4 Contratos e prestadores
-
-- Formalize arrendamentos/compras em `/app/contratos`.
-- Contrate serviços de manutenção ou mudanças via `/app/servicos`.
+```
+Activar ──► Submeter ──► Fila ops
+                │
+                ├── Pendência ──► Corrigir ──► Reanálise
+                ├── Visita técnica (Agente)
+                └── Approve ──► Janela premium ──► Publicado
+PDK / Saúde / Planos / Contratos / Receitas (🟡 profundidade)
+```
 
 ---
 
-## 6. Guia do Agente Certificado
+## Apêndice E — Contactos e ajuda
 
-Papel atribuído pela Kuteka (não self-serve).
-
-1. Entre com a conta certificada e seleccione a experiência **Agente**.
-2. `/app/agente` — cockpit operacional.
-3. `/app/agente/explorar` — inventário e oportunidades.
-4. `/app/agente/detalhe` — acompanhamento de um processo concreto.
-
-Responsabilidades típicas: validar informação, mediar visitas, apoiar propostas e manter a qualidade do inventário. Cumprir as regras de conduta e o nível de confiança exigido.
-
----
-
-## 7. Guia do Prestador
-
-1. Aceda ao Marketplace em `/app/servicos`.
-2. Consulte pedidos abertos compatíveis com a sua categoria.
-3. Envie **orçamento**.
-4. Após aceitação e pagamento (Kuteka Pay), execute o serviço.
-5. Actualize o estado até conclusão; a comissão Kuteka é registada no Ledger.
-
-Mantenha dados de contacto e identidade (KIS) actualizados — pedidos de maior valor exigem níveis KYC mais elevados.
+| Canal | Rota / valor |
+|-------|----------------|
+| Ajuda na app | `/app/ajuda` |
+| Documentação | `/documentacao` |
+| Mensagens | `/app/mensagens` |
+| Produção | https://kutekalink.com |
+| Manuais ops | `MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.md` |
+| Matriz | `MATRIZ_PAPEIS_PERMISSOES_GOVERNANCA_v2.md` |
 
 ---
 
-## 8. Guia do Administrador
+*Documento gerado para operação real Kuteka Beta — alinhado ao snap de auditoria 2026-08-09.*
+b:T8d4d,# KUTEKA — MANUAL COMPLETO DO UTILIZADOR
 
-Requer permissão `admin.panel`.
+**Versão:** 2.0 · **Data:** 2026-08-09 · **Idioma:** Português europeu (estilo PT-AO da plataforma: Activar, etc.)
 
-| Área          | Rota                      | Função                          |
-| ------------- | ------------------------- | ------------------------------- |
-| Administração | `/app/admin`              | Resumo operacional              |
-| Utilizadores  | `/app/admin/utilizadores` | Contas e papéis                 |
-| Confiança     | `/app/confianca`          | Checklist e submissões          |
-| Revisão       | `/app/confianca/revisao`  | Aprovar / rejeitar verificações |
+**Produção:** https://kutekalink.com · **Ajuda:** `/app/ajuda` · **Documentação:** `/documentação`
 
-O Administrador **não** altera o motor económico global (preços, gateways) — isso é Super Admin.
+**Auditoria:** `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
+
+**Destinatários:** Cliente · Parceiro Patrimonial · Agente Certificado · Prestador
+
+Papéis Supervisor / Admin / Super / Founder: ver `MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.md`.
+
+Este manual baseia-se em código, migrações e validação pós-deploy — não em aspiração de produto.
+
+## 0. Como usar este manual
+
+- Confirme o papel DB e a experiência activa (seletor no menu da conta).
+- Leia a ficha completa do seu papel (secções 5 a 8 — cada uma com 19 subsecções).
+- Use as jornadas (9 a 11), confiança (12), comúnicação (13), serviços (14), checklists (15) e "onde vejo X" (16).
+- Respeite a legenda de estado: 🟡/🔵/🔴/⚪ nunca devem ser tratados como fluxo fechado.
+
+## 1. Legenda de estado (oficial)
+
+| Símbolo | Significado |
+|---------|-------------|
+| 🟢 IMPLEMENTADO | Existe em código + validado pós-deploy (ou equivalente confirmado) |
+| 🟡 PARCIAL | Existe UI/RPC mas fluxo incompleto, demo, ou pairing em falta |
+| 🔵 PREPARADO | Infra/SQL/RPC prontos; UI limitada ou sem claim Founder real |
+| 🟠 EM BETA | Disponível em Beta com restrições documentadas |
+| 🔴 NÃO IMPLEMENTADO | Sem ecrã/fluxo utilizável na plataforma actual |
+| ⚪ PLANEADO v1.1+ | Explicitamente adiado / backlog pós-Beta 2 |
+
+## 2. Entrar na plataforma 🟢
+
+### 2.1 Criar conta
+
+- Abrir https://kutekalink.com e escolher Criar conta (`/auth/registar`).
+- Indicar email válido e palavra-passe segura (mínimo 8 caracteres, com maiúscula e número).
+- Aceitar os Termos de Utilização (obrigatório).
+- Confirmar email em `/auth/verificar` — método A (link) ou B (OTP de 6 dígitos). Pode reenviar com intervalo de segurança.
+
+### 2.2 Entrar e recuperar
+
+- Entrar: `/auth/entrar` com email e palavra-passe.
+- Recuperar: `/auth/recuperar` — email, telefone (SMS) ou ambos; confirmar em `/auth/recuperar/confirmar`.
+
+### 2.3 Onboarding de papéis self-serve 🟢
+
+Em `/auth/onboarding/papeis` seleccione Cliente, Parceiro Patrimonial, ou ambos (experiência `client_partner`).
+
+**Não self-serve:** Agente Certificado, Prestador, Supervisor, Administrador, Superadministrador, Founder/Co-Founder — atribuição pela operação / Founder.
+
+### 2.4 Nome e painel
+
+- Nome de apresentação em `/auth/onboarding/perfil` (alterável depois em Perfil).
+- Área autenticada: `/app`. A home efectiva depende da experiência activa (secção 3).
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++----------------------------------------------------------+
+| KUTEKA                         [Experiência v] [Conta]   |
+|----------------------------------------------------------|
+| Email                                                    |
+| Palavra-passe                                            |
+| [ Entrar ]          Recuperar acesso                     |
+| Criar conta -> /auth/registar                            |
++----------------------------------------------------------+
+```
+
+## 3. Como saber o seu papel (experiência) 🟢
+
+### 3.1 Papel DB vs experiência UI
+
+| Conceito | Onde | Governa |
+|----------|------|---------|
+| Papel DB (`roles` / `user_roles`) | Servidor + RLS | O que a conta pode fazer de verdade |
+| Experiência (`ExperienceMode`) | UI (`kuteka-active-experience`) | Menus, home, missão, lens de permissões |
+
+Permissões UI = intersecção(permissões reais da sessao, `MODE_LENS[experiência]`). Trocar o seletor **não escala** poderes.
+
+### 3.2 Experiências existentes
+
+`client` · `patrimonial_partner` · `client_partner` · `certified_agent` · `service_provider` · `supervisor` · `administrator` · `super_administrator` · `founder`
+
+Nota: papel DB `co_founder` usa o modo UI `founder`.
+
+### 3.3 Homes oficiais
+
+| Experiência | Home |
+|-------------|------|
+| Cliente | `/app/habitacao/explorar` |
+| Parceiro Patrimonial | `/app/patrimonios` |
+| Agente Certificado | `/app/agente` |
+| Prestador | `/app/servicos` |
+| Supervisor / Administrador | `/app/admin` |
+| Superadministrador | `/app/super` |
+| Founder | `/app/fundador` |
+| Cliente+Parceiro (default path) | `/app` |
+
+### 3.4 Onde mudar a experiência
+
+Menu da conta (canto da interface) -> seletor de experiência com os modos disponiveis para os papeis da sessao. Preferência em `localStorage`.
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++----------------------------------+
+| Conta · utilizador@dominio       |
+| KYC n · UTS · ICK                |
+|----------------------------------|
+| Experiência activa:              |
+|  (*) Cliente                     |
+|  ( ) Parceiro Patrimonial        |
+|  ( ) ...                         |
+|----------------------------------|
+| Centro de Confiança              |
+| Centro de Segurança              |
+| Perfil · Ajuda · Sair            |
++----------------------------------+
+```
+
+## 4. Hierarquia + KAI + papeis fora da cadeia
+
+```
+                 +-----------------------+
+                 | Founder / Owner       |
+                 | (+ Co-Founder)        |
+                 +-----------+-----------+
+                             |
+                 +-----------v-----------+
+                 | Superadministrador    |
+                 +-----------+-----------+
+                             |
+                 +-----------v-----------+
+                 | Administrador         |
+                 +-----------+-----------+
+                             |
+                 +-----------v-----------+
+                 | Supervisor            |
+                 +--+--------+--------+--+
+                    |        |        |
+           +--------v--+ +---v----+ +-v----------+
+           | Agente    | | PP     | | Prestador  |
+           +-----+-----+ +---+----+ +-----+------+
+                 |           |            |
+                 +-----+-----+------+-----+
+                       |
+                 +-----v-----+
+                 | Cliente   |
+                 +-----------+
+
+  [*] KAI = camada AI transversal (score preliminar na fila) -- NAO e papel humano
+  [o] Board / Investor / Auditor -- sem ExperienceMode UI (branco/vermelho no cockpit)
+      Auditor: permissões na BD apenas; consulta institucional fora da cadeia ops diaria
+```
+
+Matriz completa de permissões: `MATRIZ_PAPEIS_PERMISSOES_GOVERNANCA_v2.md`.
+
+## 5. Ficha completa — CLIENTE 🟢
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 5.1 Missão oficial
+
+Encontrar, arrendar ou comprar habitação e contratar serviços Kuteka.
+
+### 5.2 Reporta a
+
+Agente / Administração (suporte).
+
+### 5.3 Home e CTAs
+
+Home: `/app/habitacao/explorar`. CTAs: Centro de Confiança, Contratos, Serviços.
+
+### 5.4 Menu real (nav.ts)
+
+- Geral: Inicio `/app`, Mensagens, Futuro (habitação futura), Contratos, Confiança `/app/confianca`, Centro de Confiança, Centro de Segurança, Financeiro, Concierge, Assistencia, Serviços, Conta/Perfil.
+- Cliente: Explorar, Residencia (`?vista=residencia`), Favoritos/Interesses (`?vista=interesses`), Visitas (`?vista=visitas`), Propostas (`/app/contratos`), Mudanca, Encontrar Casa, Garantia.
+- Não ve: Patrimónios, Activar, Admin, Super, Fundador, Area do Agente (sem `agent.operate`).
+
+### 5.5 Pode fazer (mustDo)
+
+- Procurar e favoritar imóveis.
+- Comentar, perguntar e partilhar na ficha.
+- Pedir visitas e celebrar contratos.
+- Avaliar imóvel, Parceiro, Agente e Prestador (onde a UI existir).
+
+### 5.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar publicações.
+- Gerir comissões da plataforma.
+- Activar património de terceiros.
+- Criar escalações operacionais (requer `properties.review`).
+
+### 5.7 Rotas principais
+
+`/app/habitacao/explorar`; vistas residencia/interesses/visitas; `/app/contratos`; `/app/servicos`; `/app/mudanca`; `/app/encontrar-casa`; `/app/concierge`; `/app/garantia`; `/app/assistencia`; `/app/mensagens`; `/app/centro-confianca`; `/app/centro-seguranca`; `/app/financeiro`; `/app/perfil`; `/app/confianca`.
+
+### 5.8 Fluxo do dia (cockpitHint)
+
+Feed → Favoritos → Visitas → Propostas → Contratos → Residencia
+
+### 5.9 Património / habitação
+
+Explora inventario publicado e janela premium. Não gere patrimónios alheios. Social na ficha 🟢.
+
+### 5.10 Contratos
+
+`/app/contratos` para propostas/contratos 🟢 (profundidade comercial continua a evoluir em Beta).
+
+### 5.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Completar identidade no Centro de Confiança. Menu mostra KYC / UTS / ICK. Gates de confiança afectam actos sensiveis.
+
+### 5.12 Mensagens / chat
+
+Listagem de conversas 🟢. `kuteka_chat_start_direct` Cliente↔PP/Agente frequentemente recusado sem contract/role pairing 🟡.
+
+### 5.13 Social e avaliações
+
+Gostar, favoritar, comentar, perguntar, partilhar, denunciar na ficha 🟢. Avaliações via PropertyReviews / marketplace em fluxos separados.
+
+### 5.14 Financeiro e pagamentos
+
+`/app/financeiro` superfície de utilizador 🟡. Kuteka Pay / dinheiro real parcial; sandbox em varios fluxos.
+
+### 5.15 Serviços
+
+Pedir serviços em `/app/servicos` (lado cliente) 🟡 — ciclo ponta-a-ponta não fechado no audit.
+
+### 5.16 Como pedir ajuda / escalar
+
+Ajuda `/app/ajuda`, documentação `/documentação`, Mensagens, contacto. Não usa EscalationPanel.
+
+### 5.17 Limitações Beta honestas
+
+Chat pairing 🟡; superfícies Mudanca/Concierge/Encontrar Casa podem estar incompletas; sem Board/Investor.
+
+### 5.18 Checklist do primeiro dia
+
+- Verificar email e sessao.
+- Completar perfil.
+- Abrir Centro de Confiança e iniciar KIS/KYC.
+- Explorar o feed e favoritar pelo menos um imóvel.
+- Pedir visita se aplicavel.
+- Rever Contratos / Propostas.
+
+### 5.19 Erros frequentes e o que fazer
+
+- Sem permissão em `/app/patrimonios` → experiência Cliente sem `properties.manage` (esperado).
+- Chat não inicia → pairing/contrato em falta 🟡.
+- Imóvel não aparece no feed → pode estar em janela premium (so premium) ou ainda não publicado.
+
+## 6. Ficha completa — PARCEIRO PATRIMONIAL 🟢
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 6.1 Missão oficial
+
+Fornecer e gerir património através da Kuteka.
+
+### 6.2 Reporta a
+
+Supervisor / Admin (aprovacao e operação).
+
+### 6.3 Home e CTAs
+
+Primario: Activar património `/app/patrimonios/novo`. Lista `/app/patrimonios`. Confiança; Planos `/app/parceiro/planos`.
+
+### 6.4 Menu real (nav.ts)
+
+- Parceiro: Patrimónios, Activar, Relatórios (atalho `/app`), Planos.
+- Geral: Inicio, Mensagens, Contratos, Confiança, Centros, Financeiro, Garantia, Serviços, Conta.
+- Sem papel Cliente: não ve Explorar/Residencia/Favoritos/Visitas do grupo cliente. Com ambos os papeis use experiência Cliente+Parceiro.
+
+### 6.5 Pode fazer (mustDo)
+
+- Registar e activar património.
+- Documentos, fotos, preco e localizacao (incl. GPS).
+- Responder a pedidos e autorizar visitas.
+- Celebrar contratos e acompanhar receitas (conforme UI disponível).
+
+### 6.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar a própria publicacao.
+- Gerir Admins.
+- Alterar comissões da plataforma (so Founder via RPC/DB — sem UI).
+
+### 6.7 Rotas principais
+
+`/app/patrimonios`, `/app/patrimonios/novo`, `/app/parceiro/planos`, `/app/contratos`, `/app/confianca`, `/app/centro-confianca`, `/app/mensagens`, `/app/financeiro`, `/app/garantia`, `/app/servicos`, `/app/perfil`.
+
+### 6.8 Fluxo do dia (cockpitHint)
+
+Patrimónios → Ocupacao → Receitas → Contratos → PDK → Saude
+
+### 6.9 Património / habitação
+
+- Ciclo canónico (0038 + SPRINT_BETA_1_6): rascunho → submetido → em_analise_kai → em_analise_admin → pendente/correcoes → (apos approve) janela_premium → publicado → …
+- Etapas posteriores (reservado/contrato/arrendado/utilizacao/…): 🟡/⚪ conforme automacao.
+- Pós-deploy: Admin approve define `lifecycle_status = janela_premium` (~6h premium_visible / general_visible).
+- PP corrige pendências; não decide approve/reject.
+
+### 6.10 Contratos
+
+Contratos em `/app/contratos`. Contratos de serviços Kuteka podem ser gerados no registo quando ha gestao/avaliação 🟡.
+
+### 6.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Motivo de pendencia real: `partner_identity_unconfirmed` — completar verificacao KIS/KYC no Centro de Confiança antes de republicar.
+
+### 6.12 Mensagens / chat
+
+Listagem 🟢; start_direct com Cliente pode exigir pairing 🟡. Ops contactam PP a partir da Central (Mensagens).
+
+### 6.13 Social e avaliações
+
+Ve interacções sociais nas fichas; responde perguntas quando o fluxo o permitir. Denuncias vao a moderacao.
+
+### 6.14 Financeiro e pagamentos
+
+Receitas/planos 🟡. Comissão 35% não e editavel pelo PP.
+
+### 6.15 Serviços
+
+Planos de parceiro + pedidos de remodelacao/obra no registo 🟡. Rede completa de prestadores 🔴/⚪.
+
+### 6.16 Como pedir ajuda / escalar
+
+Corrigir o que a pendencia indica; contactar ops via Mensagens/Ajuda. Supervisor/Admin contactam o PP.
+
+### 6.17 Limitações Beta honestas
+
+Publicacao gated por revisao; motor ICK A–G simplificado 🟡; metrica live de saude parcial; video/360 depende de upload.
+
+### 6.18 Checklist do primeiro dia
+
+- Completar KYC de Parceiro.
+- Activar património com docs + >=5 fotos + fachada/rua + GPS valido.
+- Submeter para analise.
+- Acompanhar notificações de pendencia/correcao.
+- Corrigir e resubmeter.
+- Confirmar estado janela_premium / publicado apos aprovacao Admin.
+
+### 6.19 Erros frequentes e o que fazer
+
+- Pendencia: abrir notificacao e códigos de motivo (lista oficial na secção 9 / manual ops).
+- Rejeicao Admin → lifecycle `arquivado`.
+- Tentar auto-aprovar → impossivel (so Adminish).
+
+## 7. Ficha completa — AGENTE CERTIFICADO 🟢 hub · 🟡 secções demo/parcial
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 7.1 Missão oficial
+
+Executar operações no terreno — visitas, verificacao e acompanhamento.
+
+### 7.2 Reporta a
+
+Supervisor / Admin.
+
+### 7.3 Home e CTAs
+
+Home: `/app/agente`. CTAs: explorar habitação, contratos.
+
+### 7.4 Menu real (nav.ts)
+
+- Agente: Area do Agente `/app/agente`.
+- Tambem: Explorar, Futuro, Contratos, Confiança, Centros, Mensagens, Financeiro, Concierge, Assistencia, Serviços, Conta.
+- Itens Admin/Super/Fundador não aparecem sem permissões ops.
+
+### 7.5 Pode fazer (mustDo)
+
+- Visitar e inspecionar imóveis.
+- Actualizar PDK e relatórios (conforme dados disponiveis).
+- Acompanhar clientes e follow-up.
+- Reportar irregularidades ao Supervisor.
+
+### 7.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar publicações (bloqueado: `properties.review required`).
+- Alterar comissões.
+- Nomear Admins.
+
+### 7.7 Rotas principais
+
+`/app/agente` com ancoras: Agenda, Visitas, Imóveis, Clientes, Tarefas, Follow-up, Relatórios, Notificações; `/app/habitacao/explorar`; `/app/contratos`; mensagens; confiança; financeiro.
+
+### 7.8 Fluxo do dia (cockpitHint)
+
+Agenda → Visitas → Imóveis → Clientes → Tarefas → Follow-up → Relatórios
+
+### 7.9 Património / habitação
+
+Trabalha imóveis atribuídos. Pedido ops `request_technical_visit` → lifecycle `em_inspecao_técnica`. Pode abrir inventario habitacional.
+
+### 7.10 Contratos
+
+Acompanha `/app/contratos` 🟡 (mediação completa não fechada).
+
+### 7.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Credencial de agente no fluxo documental quando aplicavel; não decide revisao KYC institucional (`/app/confianca/revisao` e ops).
+
+### 7.12 Mensagens / chat
+
+Chat 🟡 (pairing). Contactar Cliente/PP quando permitido.
+
+### 7.13 Social e avaliações
+
+Pode usar exploracao/social no inventario; denuncia alimenta moderacao.
+
+### 7.14 Financeiro e pagamentos
+
+`/app/financeiro` superfície 🟡 — não gere Ledger/Super.
+
+### 7.15 Serviços
+
+Ve `/app/servicos` no menu; não e a inbox de Prestador.
+
+### 7.16 Como pedir ajuda / escalar
+
+Bloqueios → Supervisor. Atribuicao de agentes: `/app/admin/utilizadores` (ops).
+
+### 7.17 Limitações Beta honestas
+
+Hub existe 🟢; varias listas usam pipeline demo / assignments quando existem 🟡. Relatórios avancados 🟡.
+
+### 7.18 Checklist do primeiro dia
+
+- Confirmar experiência Agente Certificado.
+- Abrir `/app/agente` e percorrer Agenda → Notificações.
+- Rever imóveis atribuídos.
+- Confirmar/abrir visitas.
+- Registar follow-up.
+- Escalar irregularidade ao Supervisor.
+
+### 7.19 Erros frequentes e o que fazer
+
+- Decidir publicacao → erro de permissão (esperado).
+- Agenda vazia → sem `agent_assignments` (normal em conta nova/demo sem carga).
+
+## 8. Ficha completa — PRESTADOR 🟡
+
+*Fonte: `role-operating-matrix.ts` + `nav.ts` + rotas reais + validação pós-deploy.*
+
+### 8.1 Missão oficial
+
+Executar serviços contratados através da Kuteka.
+
+### 8.2 Reporta a
+
+Admin / Super Admin (operação).
+
+### 8.3 Home e CTAs
+
+Home: `/app/servicos` (Area do Prestador). CTAs: Financeiro, Centro de Confiança.
+
+### 8.4 Menu real (nav.ts)
+
+- Item dedicado Serviços (grupo prestador) → `/app/servicos`.
+- Tambem: Inicio, Mensagens, Contratos, Centros de Confiança/Segurança, Financeiro, Conta.
+- Não ve menus de Activar património / Admin (sem perms).
+
+### 8.5 Pode fazer (mustDo)
+
+- Receber pedidos e enviar orçamentos.
+- Aceitar, agendar e executar serviços.
+- Enviar evidências e concluir.
+- Acompanhar pagamento e avaliações (UI de fluxo mínimo).
+
+### 8.6 Não deve / não pode (mustNot + gates)
+
+- Aprovar patrimónios.
+- Gerir Admins.
+- Alterar comissões da plataforma.
+
+### 8.7 Rotas principais
+
+`/app/servicos`, `/app/financeiro`, `/app/centro-confianca`, `/app/centro-seguranca`, `/app/mensagens`, `/app/contratos`, `/app/perfil`.
+
+### 8.8 Fluxo do dia (cockpitHint)
+
+Pedido → Orçamento → Aceite → Servico → Agenda → Evidências → Conclusão → Pagamento → Avaliação
+
+### 8.9 Património / habitação
+
+Não gere publicacao de património. Pode participar em remodelacao quando existir pedido 🟡.
+
+### 8.10 Contratos
+
+Ligacao marketplace / contratos de servico 🟡.
+
+### 8.11 Confiança (KIS / KYC / UTS / ICK / Trust Center)
+
+Completar Centro de Confiança para elegibilidade a trabalhos sensiveis.
+
+### 8.12 Mensagens / chat
+
+Mensagens com Cliente para confirmar agenda 🟡.
+
+### 8.13 Social e avaliações
+
+Avaliação no fecho do fluxo; reviews marketplace separados da barra social da ficha de imóvel.
+
+### 8.14 Financeiro e pagamentos
+
+Pagamento em `/app/financeiro` 🟡; Kuteka Pay real parcial.
+
+### 8.15 Serviços
+
+Inbox provider em `/app/servicos` com passos do fluxo visiveis 🟡. Criacao ponta-a-ponta de pedido não exercitada no pós-deploy sob nomes `marketplace_create_order`.
+
+### 8.16 Como pedir ajuda / escalar
+
+Problemas de execucao → Admin/Super via suporte/Mensagens. Não cria escalacao formal de publicacao.
+
+### 8.17 Limitações Beta honestas
+
+Tratar ciclo Pedido→Pagamento como Beta parcial ate validação ponta-a-ponta.
+
+### 8.18 Checklist do primeiro dia
+
+- Login com papel Prestador.
+- Abrir `/app/servicos` e confirmar Area do Prestador.
+- Rever inbox / pedidos.
+- Responder orçamento e aceitar.
+- Confirmar agenda em Mensagens.
+- Carregar evidências → concluir → pagamento → avaliação.
+
+### 8.19 Erros frequentes e o que fazer
+
+- Sem pedidos → marketplace vazio ou conta nova (esperado).
+- Abrir `/app/admin` → Forbidden sem `admin.panel` / `properties.review`.
+
+## 8A. Wireframes das homes de utilizador
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+CLIENTE — /app/habitacao/explorar
++----------------------------------------------------------------+
+| KUTEKA | Explorar | Residencia | Favoritos | Visitas | ...     |
+|----------------------------------------------------------------|
+| Feed de habitação (full-bleed cards de inventario)             |
+| [Filtros]  [Disponibilidade futura]                            |
+| Imóvel A   Imóvel B   Imóvel C                                 |
+| CTA: ver ficha → social (Gostar|Favoritar|Comentar|Perguntar)  |
++----------------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+PARCEIRO — /app/patrimonios
++----------------------------------------------------------------+
+| Patrimónios | Activar | Planos | Contratos | Confiança         |
+|----------------------------------------------------------------|
+| [ Activar património ]                                         |
+| Lista: código | título | lifecycle_status | acções             |
+| Painel PDK / Saude (na ficha)                                  |
++----------------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+AGENTE — /app/agente
++----------------------------------------------------------------+
+| Area do Agente                                                 |
+| 1 Agenda 2 Visitas 3 Imóveis 4 Clientes                        |
+| 5 Tarefas 6 Follow-up 7 Relatórios 8 Notificações              |
+|----------------------------------------------------------------|
+| Secção activa: lista / atalhos / demo pipeline quando vazio    |
++----------------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+PRESTADOR — /app/servicos
++----------------------------------------------------------------+
+| Area do Prestador                                              |
+| Pedido → Orçamento → Aceite → Servico → Agenda →               |
+| Evidências → Conclusão → Pagamento → Avaliação                 |
+|----------------------------------------------------------------|
+| Inbox de pedidos | detalhe | acções do passo actual            |
++----------------------------------------------------------------+
+```
+
+## 9. Jornada do Cliente (ponta a ponta)
+
+Estado geral do percurso comercial longo: 🟢 explorar/social/visitas/contratos básicos · 🟡 negociação profunda / pay real / chat pairing.
+
+```
+Interessados → Visitas → Propostas → Negociacao → Contrato
+    → Mudanca → Ocupacao → Renovacao
+(trechos finais 🟡/⚪ conforme modulo)
+```
+
+### 9.1 Passo a passo operacional
+
+- Entrar e escolher experiência Cliente.
+- Completar Centro de Confiança (KIS→KYC).
+- Explorar `/app/habitacao/explorar`; usar Futuro se quiser disponibilidade futura.
+- Na ficha: Gostar / Favoritar / Comentar / Perguntar / Partilhar / Denunciar 🟢.
+- Guardar interesses (`?vista=interesses`) e gerir visitas (`?vista=visitas`).
+- Abrir propostas/contratos em `/app/contratos`.
+- Residencia (`?vista=residencia`) apos ocupação.
+- Serviços opcionais `/app/servicos`; Mudanca / Concierge / Garantia / Assistencia conforme necessidade 🟡.
+
+### 9.2 O que o Cliente ve na ficha (social) 🟢
+
+Barra imediatamente abaixo da galeria: Gostar | Favoritar | Comentarios | Perguntar | Partilhar. Paineis expansíveis (não páginas novas). Partilha: WhatsApp, copiar link, Web Share.
+
+## 10. Capitulo do Agente — operação de terreno
+
+Hub `/app/agente` 🟢 com oito blocos. Conteudo pode misturar assignments reais e demonstração 🟡.
+
+### 10.1 Sequencia do dia
+
+- Agenda: compromissos derivados de atribuições.
+- Visitas: abrir vista de visitas habitação ou detalhe do imóvel.
+- Imóveis atribuídos: priorizar contacto / visita / follow-up.
+- Clientes: acompanhamento dos interessados ligados.
+- Tarefas e Follow-up: fechar pendentes do dia.
+- Relatórios / Notificações: fecho e alertas.
+
+### 10.2 Relacao com publicacao
+
+Quando ops pedem visita técnica, o imóvel fica `em_inspecao_técnica`. O Agente executa no terreno e reporta; **nao** aprova. Motivo tipico: `technical_visit_needed` / `fraud_suspicion`.
+
+### 10.3 Wireframe visita
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++--------------------------------------------------+
+| Visita técnica · imóvel CODE-123                 |
+| Estado lifecycle: em_inspecao_técnica            |
+|--------------------------------------------------|
+| Checklist: fachada | interiores | docs | GPS     |
+| Notas do agente                                  |
+| [ Guardar ]  [ Reportar irregularidade → Supv ]  |
++--------------------------------------------------+
+(Conceitual — use as secções reais do hub + ficha do imóvel)
+```
+
+## 11. Capitulo do Prestador
+
+UI `/app/servicos` em modo provider mostra a missão e a cadeia de passos 🟡.
+
+### 11.1 Papel em cada passo
+
+| Passo | Quem age | Estado |
+|-------|----------|--------|
+| Pedido | Cliente (ou ops) cria necessidade | 🟡 |
+| Orçamento | Prestador responde | 🟡 |
+| Aceite | Cliente/fluxo confirma | 🟡 |
+| Servico / Agenda | Prestador + Cliente (Mensagens) | 🟡 |
+| Evidências | Prestador carrega prova | 🟡 |
+| Conclusão | Prestador fecha | 🟡 |
+| Pagamento | Financeiro / Pay parcial | 🟡 |
+| Avaliação | Cliente avalia Prestador | 🟡 |
+
+Não confundir com aprovacao de património (ops) nem com comissão 35% (Founder RPC).
+
+## 12. Confiança: KIS → KYC → UTS → ICK → Trust Center 🟢/🟡
+
+### 12.1 Mapa
+
+```
+KIS (identidade) --> KYC (niveis 0..4) --> UTS (score utilizador)
+                                      \-> documentos Trust
+Parceiro / imóvel ----------------------> ICK (score patrimonial) 🟡 motor
+Tudo converge no Centro de Confiança `/app/centro-confianca`
+Revisão ops: `/app/confianca/revisao` (Supervisor/Admin/...)
+Página legado/atalho: `/app/confianca`
+```
+
+### 12.2 O que fazer como utilizador
+
+- Abrir `/app/centro-confianca` e seguir próximos passos mostrados.
+- Submeter documentos de identidade / morada / título (conforme pedido).
+- Aguardar revisao ops quando status pending/under_review.
+- PP: identidade não confirmada bloqueia publicacao limpa (`partner_identity_unconfirmed`).
+
+### 12.3 Centro de Segurança
+
+`/app/centro-seguranca` — email/telefone, sessões, score de segurança. Identidade institucional permanente e o `user_id` (importante se alguma vez for promovido).
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++--------------------------------------------------+
+| Centro de Confiança                              |
+| KYC nivel n | UTS xx | ICK yy (se PP)            |
+|--------------------------------------------------|
+| Próximos passos                                  |
+| [ Enviar documento ] [ Actualizar dados ]        |
+| Histórico de submissoes                          |
++--------------------------------------------------+
+```
+
+## 13. Comúnicacao 🟡
+
+- Mensagens: `/app/mensagens` — listagem e unread 🟢.
+- Iniciar conversa directa: muitas vezes exige contract ou role pairing 🟡 — documentado como parcial.
+- Contactar PP a partir da Central de Trabalho (ops) usa o mesmo canal de mensagens.
+- Notificações shell existem (catálogo + eventos); push/inbox dedicado não e produto completo 🟡.
+- Ajuda: `/app/ajuda` e `/documentação`.
+
+## 14. Serviços — fluxos com papel em cada passo
+
+### 14.1 Marketplace generico
+
+Cliente pede → Prestador orçamento/executa → avaliação. Estado 🟡.
+
+### 14.2 Serviços na activacao de património (PP)
+
+No Activar Património o PP indica serviços pretendidos / nivel de gestao. Pode gerar contrato de serviços Kuteka e exigir avaliação (`em_avaliação`) 🟡.
+
+### 14.3 Planos de parceiro
+
+`/app/parceiro/planos` 🟢 rota; profundidade comercial 🟡.
+
+### 14.4 Quem não intervem
+
+Cliente não aprova património. Prestador não aprova património. Agente não aprova. Comissão so Founder (RPC).
+
+## 15. Checklists do primeiro dia (resumo)
+
+| Papel | Top 5 |
+|-------|-------|
+| Cliente | Email → Perfil → Confiança → Explorar → Favoritar |
+| PP | KYC → Activar completo → Submeter → Notificações → Corrigir pendências |
+| Agente | Experiência Agente → Hub → Atribuições → Visitas → Follow-up |
+| Prestador | Experiência Prestador → `/app/servicos` → Inbox → Orçamento → Agenda |
+
+## 16. Onde vejo X? (respostas rapidas)
+
+| Quero ver… | Onde |
+|------------|------|
+| Meu papel / experiência | Menu da conta → seletor |
+| Habitação / feed | `/app/habitacao/explorar` |
+| Favoritos | `/app/habitacao?vista=interesses` |
+| Visitas | `/app/habitacao?vista=visitas` |
+| Residencia | `/app/habitacao?vista=residencia` |
+| Meus patrimónios | `/app/patrimonios` |
+| Activar imóvel | `/app/patrimonios/novo` |
+| Planos PP | `/app/parceiro/planos` |
+| Area Agente | `/app/agente` |
+| Area Prestador | `/app/servicos` (modo provider) |
+| Contratos / propostas | `/app/contratos` |
+| Mensagens | `/app/mensagens` |
+| Confiança / KYC | `/app/centro-confianca` |
+| Segurança da conta | `/app/centro-seguranca` |
+| Financeiro | `/app/financeiro` |
+| Perfil | `/app/perfil` |
+| Ajuda | `/app/ajuda` |
+| Docs publicas | `/documentação` |
+| Central ops (se for ops) | `/app/admin` |
+| Super (se for Super/Founder) | `/app/super` |
+| Founder Center | `/app/fundador` |
+| Comissão 35% UI | 🔴 não existe — Founder RPC/DB |
+| Board / Investor dashboard | 🔴/⚪ sem ExperienceMode |
+
+## 17. Ciclo de vida do imóvel (referência partilhada)
+
+```
+rascunho → submetido → em_analise_kai → em_analise_admin
+  → pendente | correcoes | em_analise_documental | em_inspecao_técnica | em_preparacao
+  → (Adminish approve) janela_premium 🟢 validado pós-deploy
+  → publicado (apos janela ~6h / promote_premium_window_properties)
+  → reservado / contrato / arrendado|vendido / em_utilizacao
+  → libertacao_prevista / disponível_novamente / em_manutencao / ...
+  → arquivado (reject)
+Etapas tardias: 🟡 automacao parcial · ⚪ planeado aprofundar v1.1+
+```
+
+### 17.1 Motivos oficiais de pendencia (labels 0036)
+
+| code | label_pt |
+|------|----------|
+| `partner_identity_unconfirmed` | Identidade do Parceiro Patrimonial não confirmada |
+| `property_document_insufficient` | Documento do imóvel insuficiente |
+| `not_in_advertiser_name` | Imóvel não esta em nome do anunciante |
+| `photos_insufficient` | Fotografias insuficientes |
+| `no_facade_photos` | Não existem fotografias da fachada |
+| `no_street_photos` | Não existem fotografias da rua |
+| `address_inconsistent` | Endereço inconsistente |
+| `gps_invalid` | GPS invalido |
+| `contradictory_info` | Informação contraditória |
+| `fraud_suspicion` | Suspeita de fraude |
+| `technical_visit_needed` | Visita técnica necessária |
+| `additional_docs` | Documentação adicional necessária |
+
+Tutorial completo de pendencia/aprovacao: manual operacional administrativo.
+
+## 18. Cliente + Parceiro na mesma conta 🟢
+
+Se tem ambos os papeis DB, a experiência `client_partner` fica disponível. Missão: usar Kuteka como Cliente e como Parceiro. MustNot: aprovar publicações institucionais; alterar governação. Cockpit: modo integrado.
+
+## 19. Glossario mínimo
+
+| Termo | Significado curto |
+|-------|-------------------|
+| ExperienceMode | Lens de UI por papel |
+| MODE_LENS | Permissões expostas por experiência |
+| PDK | Passaporte Digital Kuteka do imóvel |
+| KAI | Camada AI transversal (score preliminar) |
+| KIS | Identidade / identidade Kuteka |
+| KYC | Know Your Customer (niveis) |
+| UTS | Score de confiança do utilizador |
+| ICK | Score/confiança patrimonial |
+| KOCC | Centro operacional/comando (Super/Founder) |
+| Janela premium | ~6h apos approve antes do feed geral |
+| Adminish | Founder/Owner/Admin/Super/Co-Founder (pode approve/reject) |
+
+## 20. Fontes de verdade
+
+- `apps/web/modules/shell/role-experience.ts`
+- `apps/web/modules/shell/role-operating-matrix.ts`
+- `apps/web/modules/shell/nav.ts`
+- `apps/web/modules/administração/services/publication-review-client.ts`
+- SQL `0036` `0038` `0039` `0040`
+- `docs/product/ROLE_OPERATING_VALIDATION_POST_DEPLOY.md`
+- `docs/product/SPRINT_BETA_1_6.md`
+- `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
+
+Fim do Manual Completo do Utilizador v2.
+
+
+
+## Apêndice A — Procedimentos passo a passo (utilizador)
+
+### A.1 Favoritar e perguntar num imóvel 🟢
+1. Abrir `/app/habitacao/explorar` e entrar na ficha.
+2. Na barra **abaixo das fotos**: tocar **Favoritar** (passa a «Remover favorito»).
+3. Tocar **Perguntar**, escrever a pergunta, enviar.
+4. Opcional: **Comentar**, **Partilhar** (WhatsApp / copiar link / Web Share), **Denunciar**.
+5. Confirmar em `/app/habitacao?vista=interesses` que o favorito aparece.
+
+### A.2 Pedir visita (Cliente) 🟢/🟡
+1. Na ficha ou em Visitas, iniciar pedido de visita conforme UI disponível.
+2. Acompanhar em `/app/habitacao?vista=visitas`.
+3. Se o chat directo falhar com «contract or role pairing required», usar o canal que a plataforma oferecer após interesse/contrato 🟡.
+
+### A.3 Activar património (PP) — checklist de qualidade antes de submeter 🟢
+1. `/app/patrimonios/novo`.
+2. Preencher morada, comuna/bairro, GPS no mapa.
+3. Carregar documento de propriedade (ou equivalente).
+4. Mínimo 5 fotografias + fachada + rua.
+5. Preço, tipologia, áreas sem contradições.
+6. Serviços Kuteka / nível de gestão (se aplicável).
+7. Submeter e anotar o código do imóvel.
+8. Abrir Centro de Confiança se identidade PP incompleta.
+
+### A.4 Responder a pendência (PP) 🟢
+1. Ler notificação (título «Publicação em pendência» / correcções / documentos / visita).
+2. Identificar `pending_reason_codes` e soluções (`solution_pt`).
+3. Corrigir na ficha do património.
+4. Republicar/resubmeter conforme fluxo.
+5. Aguardar nova análise (não tentar auto-aprovar).
+
+### A.5 Dia do Agente (mínimo) 🟡/🟢
+1. `/app/agente` → percorrer âncoras 1–8.
+2. Em Imóveis atribuídos, abrir ficha e planear visita.
+3. Usar vista `/app/habitacao?vista=visitas` se útil.
+4. Follow-up e reportar irregularidade ao Supervisor (Mensagens / processo ops).
+
+### A.6 Dia do Prestador (mínimo) 🟡
+1. `/app/servicos` — confirmar «Área do Prestador».
+2. Abrir pedido → orçamento → aceite.
+3. Confirmar agenda em `/app/mensagens`.
+4. Evidências → conclusão → pagamento → avaliação.
 
 ---
 
-## 9. Guia do Super Administrador
+## Apêndice B — Tabela «O que acontece se…»
 
-Requer privilégios de Super Administrador. Área: `/app/super` (Revenue / Command Center).
-
-Use para:
-
-- catálogo de produtos e **preços**;
-- **feature flags** e disponibilidade de serviços;
-- configuração do **Kuteka Pay** (sandbox → gateways);
-- campanhas e créditos;
-- fraude, disputas e reconciliação;
-- visão de receita e saúde operacional.
-
-Boas práticas Beta:
-
-1. Não practique alterações de preço sem registo da decisão.
-2. Mantenha demos e contas `demo.*` fora do caminho crítico antes da beta pública alargada.
-3. Exija email e telefone verificados nas contas de administração (Centro de Segurança).
+| Situação | Resultado esperado | Estado |
+|----------|-------------------|--------|
+| Cliente abre `/app/admin` | Forbidden / sem menu | 🟢 |
+| PP tenta aprovar o próprio imóvel | Sem decisão adminish | 🟢 |
+| Agente chama decide publication | `properties.review required` | 🟢 |
+| Supervisor aprova | `administrator required for approve/reject` | 🟢 |
+| Admin aprova | `janela_premium` ~6h | 🟢 |
+| Admin rejeita | `arquivado` | 🟢 |
+| Cliente start_direct sem pairing | Recusa pairing | 🟡 |
+| Demo claim Founder | Bloqueado | 🟢 |
+| Prestador sem pedidos | Inbox vazia | 🟡 esperado |
 
 ---
 
-## 10. Identidade KIS (Kuteka Identity System)
+## Apêndice C — Mapa mental Cliente
 
-### 10.1 Porque existe
-
-O KIS aumenta a confiança entre partes. Níveis KYC mais altos desbloqueiam operações sensíveis (contratos, pagamentos, certos serviços).
-
-### 10.2 Completar o perfil
-
-Em `/app/perfil` complete, por passos:
-
-1. Contactos (telefone, email secundário);
-2. Dados pessoais;
-3. Documento de identificação (imagens);
-4. Fotografia / selfie quando pedida;
-5. Morada;
-6. Dados bancários (quando necessários a pagamentos/recebimentos);
-7. Preferências de privacidade.
-
-### 10.3 Centro de Confiança
-
-Em `/app/centro-confianca` veja:
-
-- estado da conta;
-- **UTS** (índice de confiança);
-- completude do perfil;
-- pilares (contacto, identidade, documento, morada, banking, foto);
-- próximo passo recomendado.
+```
+Explorar ──► Ficha ──► Social (🟢)
+   │            │
+   │            ├── Visita ──► Proposta ──► Contrato (🟢/🟡)
+   │            └── Pergunta / Mensagem (🟡 pairing)
+   ├── Favoritos / Interesses
+   ├── Residência (após ocupação)
+   └── Serviços / Mudança / Concierge (🟡)
+Confiança ──► KYC/UTS ──► gates
+Segurança ──► email/sessões
+```
 
 ---
 
-## 11. Segurança da conta
+## Apêndice D — Mapa mental Parceiro
 
-### 11.1 Centro de Segurança (`/app/centro-seguranca`)
-
-Consulta:
-
-- email verificado;
-- telefone verificado (OTP SMS — sandbox até fornecedor Angola activo);
-- nível KYC;
-- último login;
-- dispositivos e sessões (infra preparada);
-- histórico de eventos de autenticação;
-- **nível de segurança** da conta (0–100).
-
-### 11.2 Boas práticas
-
-- Use palavra-passe única e forte.
-- Confirme email e telefone.
-- Não partilhe códigos OTP.
-- Termine sessão em dispositivos partilhados (`/auth/sair`).
-- Em alterações sensíveis (email, telefone, password, documento, IBAN) a plataforma pode exigir novo OTP.
+```
+Activar ──► Submeter ──► Fila ops
+                │
+                ├── Pendência ──► Corrigir ──► Reanálise
+                ├── Visita técnica (Agente)
+                └── Approve ──► Janela premium ──► Publicado
+PDK / Saúde / Planos / Contratos / Receitas (🟡 profundidade)
+```
 
 ---
 
-## 12. Contratos
+## Apêndice E — Contactos e ajuda
 
-1. Abra `/app/contratos` ou **Novo** (`/app/contratos/novo`).
-2. Indique partes, imóvel/serviço, valor e termos.
-3. Percorra os estados até aceitação pelas partes.
-4. Consulte o detalhe em `/app/contratos/detalhe`.
-
-A ferramenta apoia a formalização; a validade jurídica depende da lei angolana e da capacidade das partes. Pagamentos associados seguem o Kuteka Pay.
-
----
-
-## 13. Pagamentos — Kuteka Pay
-
-| Conceito   | Significado na Beta                                                    |
-| ---------- | ---------------------------------------------------------------------- |
-| Kuteka Pay | Único motor de pagamento da plataforma                                 |
-| Sandbox    | Pagamento simulado; estados reais no sistema                           |
-| Produção   | Gateway real (ex.: Multicaixa/EMIS) — activação comunicada pela Kuteka |
-| Ledger     | Registo auditável de cada movimento                                    |
-| Créditos   | Unidades internas; não são depósito bancário                           |
-
-O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reembolsado) e histórico no hub financeiro / no serviço que originou a cobrança.
+| Canal | Rota / valor |
+|-------|----------------|
+| Ajuda na app | `/app/ajuda` |
+| Documentação | `/documentacao` |
+| Mensagens | `/app/mensagens` |
+| Produção | https://kutekalink.com |
+| Manuais ops | `MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.md` |
+| Matriz | `MATRIZ_PAPEIS_PERMISSOES_GOVERNANCA_v2.md` |
 
 ---
 
-## 14. Tutoriais rápidos
+*Documento gerado para operação real Kuteka Beta — alinhado ao snap de auditoria 2026-08-09.*
+c:T93be,# KUTEKA — MANUAL OPERACIONAL E ADMINISTRATIVO
 
-### 14.1 Publicar um imóvel (Parceiro)
+**Versão:** 2.0 · **Data:** 2026-08-09 · **Idioma:** Português europeu (PT-AO de plataforma)
 
-1. Mudar para papel Parceiro.
-2. `/app/patrimonios/novo`.
-3. Preencher dados e fotos.
-4. Guardar / publicar.
-5. Confirmar em `/app/patrimonios`.
+**Produção:** https://kutekalink.com · **Ajuda:** `/app/ajuda`
 
-### 14.2 Procurar casa (Cliente)
+**Auditoria:** `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
 
-1. `/app/habitacao/explorar`.
-2. Aplicar filtros.
-3. Abrir ficha; guardar favorito se desejar.
-4. Pedir visita ou avançar para proposta conforme o fluxo disponível.
+**Destinatários:** Supervisor · Administrador · Superadministrador · Founder/Owner (+ notas Co-Founder)
 
-### 14.3 Pedir Assistência 24h
+Utilizadores Cliente/PP/Agente/Prestador: ver `MANUAL_UTILIZADOR_COMPLETO_v2.md`.
 
-1. `/app/assistencia`.
-2. Descrever o incidente e o imóvel.
-3. Confirmar o pedido e o pagamento (sandbox na Beta).
-4. Acompanhar o estado até resolução.
+Baseado em código + migrações `0036`–`0040` + validação pós-deploy 2026-08-09. Não inventa ecrãs.
 
-### 14.4 Activar Garantia Kuteka
+## 1. Legenda de estado
 
-1. `/app/garantia`.
-2. Seleccionar o contexto elegível.
-3. Activar o plano mensal.
-4. Confirmar pagamento e estado activo.
+| Símbolo | Significado |
+|---------|-------------|
+| 🟢 IMPLEMENTADO | Código + validação pós-deploy |
+| 🟡 PARCIAL | UI/RPC incompletos ou demo |
+| 🔵 PREPARADO | Infra pronta; claim/uso real limitado |
+| 🟠 EM BETA | Beta com restrições |
+| 🔴 NÃO IMPLEMENTADO | Sem fluxo utilizável |
+| ⚪ PLANEADO v1.1+ | Backlog pós-Beta 2 |
+
+## 2. Hierarquia operacional
+
+```
+Founder / Owner  (+ Co-Founder usa modo founder)
+        |
+Superadministrador     <- autoridade máxima da operação diaria
+        |
+Administrador          <- approve / reject / pendenciar / moderar
+        |
+Supervisor             <- analisa / pendencia / docs / visita / atribui / escala
+        |                 NÃO approve/reject (SQL 0039)
+   +----+----+
+Agente   PP   Prestador
+        |
+     Cliente
+
+KAI: camada AI transversal (score preliminar na fila) — não e humano
+Board / Investor / Auditor: fora da cadeia ops UI (Auditor so perms DB)
+```
+
+Cadeia de escalação formal: Supervisor → Administrador → Superadministrador → Founder 🟢
+
+## 3. Entrar e seleccionar experiência ops 🟢
+
+- Login `/auth/entrar` com conta que tenha o papel DB correspondente (não self-serve).
+- Demos validadas no pós-deploy: demo.supervisor / demo.admin / demo.super (e demos de papeis de campo).
+- Menu da conta → experiência: Supervisor | Administrador | Superadministrador | Founder / Owner.
+- Default da UI prefere modos institucionais quando a conta os tem (`defaultExperience`).
+- Homes: Supervisor/Admin → `/app/admin`; Super → `/app/super`; Founder → `/app/fundador`.
+- `/app/fundador` e acessivel a qualquer sessao autenticada para bootstrap (sem PATH_RULE).
+
+## 4. Menus reais por experiência ops (`nav.ts`)
+
+### 4.1 Supervisor
+
+- Geral: Inicio, Mensagens, Contratos, Confiança, Centros, Financeiro, Concierge/Assistencia/Serviços conforme lista, Conta.
+- Agente: Area do Agente (tem `agent.operate` no lens).
+- Admin: Central `/app/admin`, Escalações `/app/admin#escalacoes`.
+- Nao: Super (`finance.manage`), Fundador (experiências founder only), Activar património.
+
+### 4.2 Administrador
+
+- Como Supervisor + moderacao completa na Central; CTAs utilizadores/contratos/confiança.
+- Lens inclui `finance.read` (não `finance.manage` → sem item Super por `requiresPermission`).
+
+### 4.3 Superadministrador
+
+- Admin + Super `/app/super` (requer `finance.manage` efectivo).
+- CTAs: Super, Central, KOCC `?tab=kocc`, Fundador (atalho), Centro de Segurança.
+
+### 4.4 Founder
+
+- Item Fundador `/app/fundador`; Super; Admin; Escalações; Centros; etc.
+- Founder Center tabs internas (não sao items nav separados): Empresa, Pessoas, Operação, Financeiro, Segurança, KOCC, Auditoria, Feature Flags, Escalações.
+
+## 5. Ficha completa — SUPERVISOR 🟢
+
+*Fonte: role-operating-matrix.ts + nav + SQL + pós-deploy.*
+
+### 5.1 Missão oficial
+
+Executar e supervisionar o trabalho operacional diário.
+
+### 5.2 Reporta a
+
+Administrador.
+
+### 5.3 Home e CTAs
+
+Home `/app/admin` (titulo UI: Cockpit do Supervisor). CTAs: Central, Escalações, Revisão Confiança, Utilizadores/Agentes, Mensagens.
+
+### 5.4 Menu / superfícies
+
+Central de Trabalho + PublicationReviewQueue + EscalationPanel `#escalacoes` + AuditCenter; sem ModerationCenterPanel completo (Admin ve moderacao extra).
+
+### 5.5 Pode fazer (mustDo)
+
+- Analisar patrimónios em fila.
+- Pendenciar e pedir documentos/visita/correcoes.
+- Contactar Parceiro e atribuir tarefas/reviews.
+- Acompanhar SLA e escalar para Admin.
+
+### 5.6 Não deve / gates (mustNot)
+
+- Aprovar ou rejeitar definitivamente (SQL: `administrator required for approve/reject`).
+- Alterar comissões.
+- Criar Super Admins.
+- Alterar configurações críticas / feature flags Founder.
+
+### 5.7 Decisões de publicacao
+
+Permitidas: `pending`, `request_corrections`, `request_technical_visit`, `request_documents` (+ contacto PP / assign). Proibidas: `approve`, `reject`.
+
+### 5.8 Utilizadores e atribuição
+
+`/app/admin/utilizadores` para atribuir agentes; `admin_assign_publication_review` para se auto-atribuir a um review.
+
+### 5.9 Confiança / moderacao
+
+Revisão `/app/confianca/revisao`; lens inclui `moderation.manage` / `trust.manage` / `audit.read`.
+
+### 5.10 Escalações
+
+Cria escalacao tipicamente para `administrator` (pode escolher Super/Founder). Resolve/assume conforme RPC.
+
+### 5.11 Comúnicacao
+
+Mensagens 🟡 pairing; botao Contactar PP na Central.
+
+### 5.12 Financeiro
+
+`/app/financeiro` superfície; sem Super Command.
+
+### 5.13 Auditoria
+
+Ve AuditCenterPanel na Central.
+
+### 5.14 KAI na fila
+
+Cada item da fila pode mostrar `kai_preliminary` (score/issues/suggestions) — apoio, não decisao automatica.
+
+### 5.15 Rotas-chave
+
+`/app/admin`, `/app/admin#escalacoes`, `/app/admin/utilizadores`, `/app/confianca/revisao`, `/app/mensagens`, `/app/agente`, `/app/contratos`.
+
+### 5.16 Fluxo do dia
+
+Central de Trabalho → SLA → Contactar PP → Atribuir Agente → Escalações
+
+### 5.17 Limitacoes honestas
+
+Não consegue fechar fila sozinho se o caso exige approve/reject — deve escalar.
+
+### 5.18 Checklist primeiro dia
+
+- Entrar como Supervisor e abrir `/app/admin`.
+- Rever fila PublicationReviewQueue + scores KAI.
+- Atribuir um processo a si.
+- Aplicar pending/docs/visita/correcoes com motivo real.
+- Contactar PP.
+- Criar escalacao se bloqueado para approve.
+
+### 5.19 Erros frequentes
+
+- Clicar Aprovar → erro `administrator required for approve/reject`.
+- Pendencia sem motivo/notas → `pending requires at least one reason code` (ou notas >=3 chars conforme regra SQL).
+
+## 6. Ficha completa — ADMINISTRADOR 🟢
+
+*Fonte: role-operating-matrix.ts + nav + SQL + pós-deploy.*
+
+### 6.1 Missão oficial
+
+Gerir os processos operacionais da Kuteka.
+
+### 6.2 Reporta a
+
+Super Administrador.
+
+### 6.3 Home e CTAs
+
+`/app/admin` Central de Trabalho. CTAs: Central, Utilizadores/Moderacao, Revisão Confiança, Contratos.
+
+### 6.4 Menu / superfícies
+
+Fila + Escalações + Auditoria + Moderacao + stats + KosAnalytics.
+
+### 6.5 Pode fazer (mustDo)
+
+- Aprovar / rejeitar / pendenciar publicacoes.
+- Atribuir Agentes e acompanhar contratos.
+- Gerir moderacao e KYC.
+- Contactar Parceiros.
+
+### 6.6 Não deve / gates (mustNot)
+
+- Alterar propriedade institucional do Founder.
+- Alterar comissões sem Super/Founder (RPC Founder-only).
+- Activar património como se fosse Parceiro no cockpit Admin.
+
+### 6.7 Decisões de publicacao
+
+Todas as decisões: approve | pending | reject | request_corrections | request_technical_visit | request_documents.
+
+### 6.8 Utilizadores e atribuição
+
+Utilizadores em `/app/admin/utilizadores`; não promove Founders (isso e Founder Center).
+
+### 6.9 Confiança / moderacao
+
+ModerationCenterPanel + `/app/confianca/revisao`.
+
+### 6.10 Escalações
+
+Recebe escalacoes do Supervisor; pode re-escalar a Super/Founder; acknowledge/resolve 🟢.
+
+### 6.11 Comúnicacao
+
+Mensagens + Contactar PP.
+
+### 6.12 Financeiro
+
+`finance.read` no lens; financeiro profundo no Super.
+
+### 6.13 Auditoria
+
+AuditCenterPanel + eventos de decisao/assign/escalacao.
+
+### 6.14 KAI na fila
+
+Usa KAI preliminar como apoio na fila.
+
+### 6.15 Rotas-chave
+
+`/app/admin`, utilizadores, confiança/revisão, contratos, mensagens, agente.
+
+### 6.16 Fluxo do dia
+
+Central de Trabalho — fila, não dashboard de estatisticas (missão).
+
+### 6.17 Limitacoes honestas
+
+Pode approve; validar sempre motivos e notas. Pos-approve: janela_premium.
+
+### 6.18 Checklist primeiro dia
+
+- Abrir Central e fila.
+- Tratar 1 pending e 1 approve em ambiente controlado.
+- Rever auditoria do acto.
+- Rever moderacao / KYC pendente.
+- Responder escalacao de Supervisor.
+
+### 6.19 Erros frequentes
+
+- Approve sem ser adminish → so se papel incorrecto.
+- RLS: não editar património alheio como PP.
+
+## 7. Ficha completa — SUPERADMINISTRADOR 🟢
+
+*Fonte: role-operating-matrix.ts + nav + SQL + pós-deploy.*
+
+### 7.1 Missão oficial
+
+Autoridade máxima da operação diaria, abaixo do Founder.
+
+### 7.2 Reporta a
+
+Founder / Owner.
+
+### 7.3 Home e CTAs
+
+Home `/app/super`. CTAs: Super, Central, KOCC, Founder Center, Centro de Segurança.
+
+### 7.4 Menu / superfícies
+
+Super Command Center (tabs incl. kocc etc.) + acesso Admin + atalho Fundador.
+
+### 7.5 Pode fazer (mustDo)
+
+- Supervisionar Admins, Supervisores e Agentes.
+- Gerir fila critica e moderacao.
+- KOCC operacional, fraude, Ledger e KAI (superfícies Super).
+- Consultar toda a operação.
+
+### 7.6 Não deve / gates (mustNot)
+
+- Activar património como Parceiro no cockpit principal.
+- Usar a plataforma como Cliente no cockpit principal.
+- Alterar propriedade institucional do Founder sem Owner.
+
+### 7.7 Decisões de publicacao
+
+Pode approve/reject (adminish). Preferir deixar fila rotineira ao Admin; intervir em crítico.
+
+### 7.8 Utilizadores e atribuição
+
+Supervisiona pessoas; promocao institucional Founder/Co-Founder/Super e no Founder Center (Owner).
+
+### 7.9 Confiança / moderacao
+
+Acesso confiança/moderacao/auditoria alargado; `executive.panel` + `finance.manage`.
+
+### 7.10 Escalações
+
+Recebe escalacoes de Admin; escala a Founder; resolve 🟢.
+
+### 7.11 Comúnicacao
+
+Mensagens ops 🟡.
+
+### 7.12 Financeiro
+
+Ledger/sandbox/receitas/Pay no Super 🟡 profundidade; dinheiro real parcial.
+
+### 7.13 Auditoria
+
+Auditoria global via paineis + Super.
+
+### 7.14 KAI na fila
+
+KAI visivel na operação/fila.
+
+### 7.15 Rotas-chave
+
+`/app/super`, `/app/admin`, `/app/fundador` (atalho), `/app/centro-seguranca`, `/app/super?tab=kocc`.
+
+### 7.16 Fluxo do dia
+
+Super / KOCC → Central de Trabalho → Pessoas → Segurança → Auditoria
+
+### 7.17 Limitacoes honestas
+
+Sem Founder role: ve guia bootstrap em `/app/fundador` se bootstrap aberto — não e Owner ate claim conta real.
+
+### 7.18 Checklist primeiro dia
+
+- Abrir `/app/super` e KOCC.
+- Rever Central critica.
+- Rever escalacoes.
+- Validar financeiro superfície.
+- Não usar demo.* para governação.
+
+### 7.19 Erros frequentes
+
+- Esperar menus Founder sem papel founder → so onboarding.
+- Comissão: sem UI — não procurar ecrã de 35%.
+
+## 8. Ficha completa — FOUNDER / OWNER 🟢 UI · 🔵/🟡 claim real em producao no snap
+
+*Fonte: role-operating-matrix.ts + nav + SQL + pós-deploy.*
+
+### 8.1 Missão oficial
+
+Proprietario e autoridade máxima da Kuteka — governação institucional.
+
+### 8.2 Reporta a
+
+— (topo da hierarquia).
+
+### 8.3 Home e CTAs
+
+Home `/app/fundador` Founder Center. CTAs: Fundador, Super, Central, KOCC, Segurança.
+
+### 8.4 Menu / superfícies
+
+Tabs: Empresa, Pessoas, Operação, Financeiro, Segurança, KOCC, Auditoria, Feature Flags, Escalações.
+
+### 8.5 Pode fazer (mustDo)
+
+- Gerir Founders / Co-Founders / Super Admins (e papeis institucionais via promote).
+- Feature Flags, KOCC e configurações críticas.
+- Métricas executivas e auditoria global.
+- Supervisionar operação e segurança.
+
+### 8.6 Não deve / gates (mustNot)
+
+- Operar como Parceiro Activando património no cockpit Founder.
+- Usar contas demo.* para governação de producao (bloqueadas no claim).
+
+### 8.7 Decisões de publicacao
+
+Adminish: pode approve/reject. Preferir Super/Admin para fila diaria; Founder no topo de escalacao.
+
+### 8.8 Utilizadores e atribuição
+
+Gestão Institucional (tab Pessoas): `founder_promote_user` com motivo obrigatório; demos rejeitadas.
+
+### 8.9 Confiança / moderacao
+
+Segurança + flags + auditoria + KOCC no Center.
+
+### 8.10 Escalações
+
+Topo da cadeia; resolve escalacoes críticas.
+
+### 8.11 Comúnicacao
+
+Institucional; Mensagens disponiveis.
+
+### 8.12 Financeiro
+
+Tab Financeiro e superfície com link ao Super — financeiro profundo ⚪/🟡 v1.1+. Comissão 35% via `founder_set_commission_param` (RPC/DB) 🔴 UI.
+
+### 8.13 Auditoria
+
+Tab Auditoria = AuditCenterPanel.
+
+### 8.14 KAI na fila
+
+KAI na operação; Founder não e substituto do KAI.
+
+### 8.15 Rotas-chave
+
+`/app/fundador`, `/app/super`, `/app/admin`, `/app/centro-seguranca`, `/app/admin#escalacoes`.
+
+### 8.16 Fluxo do dia
+
+Empresa → Pessoas → Operação → Financeiro → Segurança → KOCC → Auditoria
+
+### 8.17 Limitacoes honestas
+
+Snap 2026-08-09: bootstrap aberto; Owner real ainda não claimou; demos bloqueadas correctamente.
+
+### 8.18 Checklist primeiro dia
+
+- Conta real (não demo.*) autenticada.
+- Se bootstrap aberto: claim Owner (secção 9).
+- Seleccionar experiência Founder.
+- Percorrer todas as tabs do Center.
+- Promover Super/Admin/Supervisor com motivo.
+- Rever flags, KOCC, auditoria, escalacoes.
+
+### 8.19 Erros frequentes
+
+- demo.* claim → `system demo accounts cannot become Founder`.
+- Segundo claim automatico → impossivel (bootstrap fecha).
+
+## 9. Founder bootstrap — tutorial profundo 🟢/🔵
+
+### 9.1 O que e
+
+Mecanismo unico `founder_bootstrap_claim` para o primeiro Owner. UI: `FounderOnboardingClient` em `/app/fundador` quando `bootstrapOpen` e a conta ainda não e Founder.
+
+### 9.2 Pode fazer
+
+- Qualquer conta autenticada não-demo pode tentar o claim enquanto bootstrap estiver aberto.
+- Grava `user_id` em `founders` com `is_founder` e `is_owner`.
+- Fecha o bootstrap permanentemente apos sucesso.
+
+### 9.3 Como
+
+- Criar conta real (não `demo.*@kuteka.local`).
+- Entrar e abrir `/app/fundador`.
+- Confirmar email / user_id mostrados.
+- Clicar **Assumir como Founder / Owner**.
+- Recarregar sessao (sair/entrar) se menus não actualizaram.
+- Seleccionar experiência Founder / Owner.
+
+### 9.4 Consequencia
+
+- Conta torna-se Owner institucional; identidade permanente = `user_id` (email pode mudar depois no Centro de Segurança).
+- Bootstrap fecha — sem segunda oportunidade automatica.
+- Novos Co-Founders/Super/Admin/Supervisor criam-se em Pessoas (promote), não por novo bootstrap.
+
+### 9.5 Auditoria
+
+Eventos institucionais de claim/promote ficam no sistema de auditoria (`institutional.promote`, bootstrap). Rever tab Auditoria / paineis de audit.
+
+### 9.6 Co-Founder
+
+Owner em Gestão Institucional promove utilizador real a `co_founder` com motivo (>=3 chars). UI de experiência: modo `founder`. Demos rejeitadas. Co-Founder não substitui Owner automaticamente.
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++------------------------------------------------------+
+| Founder / Owner — Bootstrap                          |
+| user_id: ********-****-****-****-************        |
+| Bootstrap: ABERTO                                    |
+|------------------------------------------------------|
+| 1. Conta real autenticada                            |
+| 2. Confirmar identidade                              |
+| 3. [ Assumir como Founder / Owner ]                  |
+| (Contas demo.* bloqueadas)                           |
++------------------------------------------------------+
+```
+
+## 10. Founder Center — cada tab em profundidade
+
+Fonte UI: `FounderCenterClient` (`TabKey`: empresa, pessoas, operacao, financeiro, seguranca, kocc, auditoria, flags, escalacoes).
+
+### 10.1 Empresa
+- **O que é:** Identidade da sessão Founder (email, user_id, papéis, Owner).
+- **Pode fazer:** Consultar o mapa de quem está autenticado e a orientação Empresa→…→Auditoria.
+- **Como:** Abrir `/app/fundador` (tab default `empresa` ou `?tab=empresa`).
+- **Consequência:** Sem escrita própria nesta tab — leitura via `get_institutional_identity`.
+- **Auditoria:** Sem acto de escrita; identidade reflectida nos actos seguintes.
+
+### 10.2 Pessoas
+- **O que é:** Gestão Institucional (`InstitutionalCenterClient`).
+- **Pode fazer:** Listar directório; promover `founder` / `co_founder` / `super_administrator` / `administrator` / `supervisor` / `auditor` com motivo; gerir cadeia institucional.
+- **Como:** Tab Pessoas → `user_id` → papel alvo → motivo (>=3) → `founder_promote_user`. Demos rejeitadas; só Owner promove founders.
+- **Consequência:** Altera `user_roles` / registos `founders` conforme o target.
+- **Auditoria:** `institutional.promote` / `role_promoted`.
+
+### 10.3 Operação
+- **O que é:** Atalhos para a operação diária.
+- **Pode fazer:** Abrir Central de Trabalho, Utilizadores/Agentes, Revisão de Confiança.
+- **Como:** Links para `/app/admin`, `/app/admin/utilizadores`, `/app/confianca/revisao`.
+- **Consequência:** Não decide sozinho aqui — encaminha para superfícies ops.
+- **Auditoria:** Actos posteriores auditados no destino.
+
+### 10.4 Financeiro
+- **O que é:** Superfície financeira do Founder Center (aviso + ponte).
+- **Pode fazer:** Abrir Super Command para receitas/Pay/Ledger.
+- **Como:** Tab Financeiro → `/app/super`. Comissão 35% continua RPC `founder_set_commission_param` (sem UI).
+- **Consequência:** Sem redesenho financeiro profundo nesta sprint (⚪ v1.1+).
+- **Auditoria:** Alterações financeiras no Super/RPC.
+
+### 10.5 Segurança
+- **O que é:** Atalho ao Centro de Segurança.
+- **Pode fazer:** Alterar email/telefone/sessões sem perder `user_id`.
+- **Como:** `/app/centro-seguranca` (dupla confirmação de email).
+- **Consequência:** Contactos novos; identidade institucional permanente.
+- **Auditoria:** Eventos de segurança / mudança de contacto.
+
+### 10.6 KOCC
+- **O que é:** Centro KOCC (`KoccCenterClient`).
+- **Pode fazer:** Operar/consultar KOCC se `canManage`.
+- **Como:** Tab KOCC (paralelo a `/app/super?tab=kocc`).
+- **Consequência:** Config/métricas KOCC conforme implementação actual.
+- **Auditoria:** Actos KOCC quando aplicável.
+
+### 10.7 Auditoria
+- **O que é:** `AuditCenterPanel`.
+- **Pode fazer:** Consultar trilha operacional/institucional (approve, escalation, promote, etc.).
+- **Como:** Tab Auditoria → rever eventos.
+- **Consequência:** Superfície de leitura/evidência.
+- **Auditoria:** O próprio painel é a vista.
+
+### 10.8 Feature Flags
+- **O que é:** `FeatureFlagsPanel`.
+- **Pode fazer:** Activar/desactivar flags se `canManage`.
+- **Como:** Tab Feature Flags.
+- **Consequência:** Altera comportamento de features gated.
+- **Auditoria:** Alterações no subsistema de flags/audit.
+
+### 10.9 Escalações
+- **O que é:** `EscalationPanel` embutido.
+- **Pode fazer:** Ver, criar (se aplicável), acknowledge e resolver no topo da cadeia.
+- **Como:** Tab Escalações ou `/app/admin#escalacoes`.
+- **Consequência:** Status open→acknowledged/resolved/cancelled; notifica cadeia Supervisor→Admin→Super→Founder.
+- **Auditoria:** `escalation.create` / `acknowledged` / `resolved` 🟢.
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++-------------------------------------------------------------------+
+| Founder Center                                                    |
+| [Empresa][Pessoas][Operação][Financeiro][Segurança]               |
+| [KOCC][Auditoria][Feature Flags][Escalações]                      |
+|-------------------------------------------------------------------|
+| Conteudo da tab activa                                            |
+| Atalhos: Super | Central | Centro de Segurança                    |
++-------------------------------------------------------------------+
+```
+
+## 11. Gestão de utilizadores — quem promove quem 🟢
+
+RPC `founder_promote_user` (0038). Targets aceites: `founder`, `co_founder`, `super_administrator`, `administrator`, `supervisor`, `auditor`.
+
+```
+Owner (is_owner)
+  ├─ promove founder / co_founder          (so Owner)
+  ├─ promove super_administrator
+  ├─ promove administrator
+  ├─ promove supervisor
+  └─ promove auditor                       (perms DB; sem ExperienceMode UI)
+
+Regras:
+  - Motivo obrigatório
+  - Contas system demo NÃO podem ser promovidas
+  - Co-Founder usa experiência founder
+  - Admin de campo NÃO promove Super/Founder pela UI institucional
+  - Agente/Prestador/Cliente/PP: atribuição operacional distinta
+    (Admin utilizadores / onboarding self-serve) — não confundir com promote institucional
+```
+
+### 11.1 Matriz resumida
+
+| Actor | Pode promover |
+|-------|---------------|
+| Owner | founder, co_founder, super_administrator, administrator, supervisor, auditor |
+| Founder nao-Owner | conforme RPC/guards (founders: so Owner) |
+| Super / Admin UI ops | gestão operacional de agentes/utilizadores em `/app/admin/utilizadores` — não e bootstrap Owner |
+| Supervisor | atribui reviews/agentes; não promote institucional Founder |
+| Demo.* | 🔴 claim/promote institucional |
+
+## 12. Ciclo de vida do património e quem muda o estado
+
+```
+PP cria/edita rascunho
+  -> submete (submetido)
+  -> KAI / analise (em_analise_kai / em_analise_admin) 🟡 automacao KAI
+  -> Supervisor/Admin: pending | correcoes | docs | visita
+  -> Admin/Super/Founder: approve | reject
+       approve: review approved + status active
+                premium_visible_at=now
+                general_visible_at=now+6h
+                trigger sync -> lifecycle janela_premium 🟢 pós-deploy
+       reject: arquivado
+  -> promote_premium_window_properties: janela_premium -> publicado
+  -> contrato/ocupacao: triggers 0038 avancam estados 🟡
+```
+
+### 12.1 Quem altera o que
+
+| Accao | PP | Agente | Supervisor | Admin | Super | Founder |
+|-------|----|--------|------------|-------|-------|---------|
+| Criar/editar próprio | 🟢 | 🔴 | 🔴 | 🔴* | 🔴* | 🔴* |
+| Submeter | 🟢 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| pending/docs/visita/correcoes | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| approve/reject | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 |
+| assign review | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+
+*Ops não devem activar património como PP no cockpit; perms DB podem ainda listar `properties.manage` em Super/Admin (desalinhamento notado no pós-deploy) — a lens UI B+C mitiga.
+
+## 13. Tutorial completo — colocar em PENDENCIA 🟢
+
+### 13.1 Quando usar
+
+Quando o património não pode ser aprovado ainda, mas ha caminho de correcao. Decisao `pending` (ou variantes `request_*`).
+
+### 13.2 Quem
+
+Supervisor, Admin, Super, Founder (com `properties.review`).
+
+### 13.3 Passos
+
+- Abrir `/app/admin` → PublicationReviewQueue.
+- Seleccionar item; rever KAI preliminar (score/issues).
+- Opcional: Atribuir (`admin_assign_publication_review`).
+- Escolher decisao: `pending` ou `request_corrections` / `request_documents` / `request_technical_visit`.
+- Seleccionar pelo menos um motivo de `publication_pending_reasons` **ou** notas admin com >= 3 caracteres (regra SQL).
+- Confirmar `admin_decide_property_publication`.
+- Verificar notificacao ao PP e auditoria.
+
+### 13.4 Motivos oficiais (code → label → solution)
+
+| code | label_pt | solution_pt (resumo) |
+|------|----------|----------------------|
+| `partner_identity_unconfirmed` | Identidade do Parceiro Patrimonial não confirmada | Complete KIS/KYC no Centro de Confiança |
+| `property_document_insufficient` | Documento do imóvel insuficiente | Carregue titulo/documento validado |
+| `not_in_advertiser_name` | Imóvel não esta em nome do anunciante | Procuração / contrato social / autorização |
+| `photos_insufficient` | Fotografias insuficientes | Pelo menos 5 fotos nítidas |
+| `no_facade_photos` | Não existem fotografias da fachada | Fotos da fachada |
+| `no_street_photos` | Não existem fotografias da rua | Fotos da rua/envolvente |
+| `address_inconsistent` | Endereco inconsistente | Corrigir morada/bairro/municipio vs documento |
+| `gps_invalid` | GPS invalido | Actualizar coordenadas no mapa |
+| `contradictory_info` | Informacao contraditoria | Rever tipologia/areas/descricao |
+| `fraud_suspicion` | Suspeita de fraude | Visita técnica + validação documental reforçada |
+| `technical_visit_needed` | Visita técnica necessária | Visita de Agente Kuteka |
+| `additional_docs` | Documentação adicional necessária | Enviar docs indicados na notificacao |
+
+### 13.5 Efeitos no sistema
+
+| Decisao | review_status | lifecycle_status (0039) | property status |
+|---------|---------------|-------------------------|-----------------|
+| pending | pending | em_analise_documental | draft |
+| request_corrections | corrections_requested | em_preparacao | draft |
+| request_documents | documents_requested | em_analise_documental | draft |
+| request_technical_visit | technical_visit_requested | em_inspecao_técnica | draft |
+
+Trigger 0038 pode alinhar `pending`→`pendente`, `corrections_requested`→`correcoes` quando sincroniza a partir do review — operar pela decisao RPC e validar o estado final no imóvel.
+
+### 13.6 Wireframe pendencia
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++----------------------------------------------------------+
+| Fila de publicacao · item CODE-88                        |
+| KAI score: 62 | issues: fotos, GPS                       |
+|----------------------------------------------------------|
+| Decisao: ( ) approve  (*) pending  ( ) reject            |
+|          ( ) corrections ( ) documents ( ) technical visit|
+| Motivos: [x] photos_insufficient [x] gps_invalid         |
+| Notas admin: ________________________________           |
+| [ Atribuir-me ] [ Contactar PP ] [ Confirmar ] [ Escalar]|
++----------------------------------------------------------+
+```
+
+## 14. Tutorial completo — APROVAR 🟢
+
+### 14.1 Quem
+
+Administrador, Superadministrador, Founder/Owner/Co-Founder (adminish). Supervisor **nao**.
+
+### 14.2 Passos
+
+- Garantir que docs/fotos/identidade PP estao aceitáveis (ou que pendencias foram sanadas).
+- Abrir item na fila `/app/admin`.
+- Rever KAI + ficha + histórico de motivos.
+- Seleccionar `approve`.
+- Confirmar RPC `admin_decide_property_publication`.
+- Validar: `review_status=approved`, `properties.status=active`.
+- Validar lifecycle: `janela_premium` (pós-deploy) enquanto `general_visible_at` no futuro (~6h).
+- Apos janela: `publicado` via `promote_premium_window_properties` / tempo.
+- Rever notificacao ao PP e audit.
+
+### 14.3 Efeitos
+
+- `premium_visible_at = now`
+- `general_visible_at = now + 6 hours`
+- Notificacao: publicacao aprovada + acesso prioritario premium ~6h
+- Trigger pode forçar `janela_premium` quando general_visible_at > now
+
+### 14.4 Rejeitar (contraste)
+
+`reject` → review rejected, lifecycle `arquivado`, status draft. Exige motivos/notas. Irreversivel na pratica operacional corrente (republicar = novo ciclo).
+
+```
+MODELO DE INTERFACE — exemplo conceptual
++----------------------------------------------------------+
+| Aprovar publicacao · CODE-88                             |
+| Checklist humano: ID PP | docs | fotos | GPS | consist.  |
+| Decisao: (*) approve                                     |
+| [ Confirmar aprovacao ]                                  |
+| Pos-condicao esperada: lifecycle = janela_premium        |
++----------------------------------------------------------+
+```
+
+## 15. Escalações 🟢
+
+Componente `EscalationPanel`. Alvos: administrator | super_administrator | founder. Prioridades + dueHours. RPCs create/list/resolve.
+
+```
+Supervisor --cria--> Admin --ack/resolve ou re-escala--> Super --> Founder
+Audit: escalation.create / acknowledged / resolved
+UI: /app/admin#escalacoes  |  Founder Center tab Escalações
+Cliente/PP/Agente: NÃO criam (properties.review required) — validado pós-deploy
+```
+
+### 15.1 Como criar
+
+- Abrir painel Escalações (Central ou Founder).
+- Motivo textual + prioridade + prazo (horas) + alvo.
+- Opcional ligar propertyId/reviewId se o painel estiver no contexto do item.
+- Confirmar; verificar lista e auditoria.
+
+### 15.2 Como resolver
+
+Responsavel: acknowledge → trabalhar → resolve (ou cancel). Notas de resolucao automaticas curtas na UI (`Assumida…` / `Resolvida…`).
+
+## 16. Comúnicacao ops
+
+- Contactar PP: botao na Central → `/app/mensagens` 🟡 pairing.
+- Chat list OK; start_direct frequentemente bloqueado sem contrato/role pairing.
+- Não usar escalacao formal para simples dúvida — escalacao e para bloqueio de processo/SLA.
+
+## 17. Financeiro (ops) 🟡
+
+- Superfícies: `/app/financeiro` (geral), `/app/super` (comando), Founder tab Financeiro → link Super.
+- Ledger / sandbox / receitas: sobretudo Super.
+- Kuteka Pay: parcial.
+- Comissão plataforma 35%: tabela `platform_commission_params` + RPC `founder_set_commission_param` — **sem UI frontend**. So Founder via RPC/DB/service.
+- Não abrir Board/Investor financeiro nesta versao ⚪.
+
+## 18. Auditoria 🟢
+
+- Painel `AuditCenterPanel` na Central (e Founder tab).
+- Eventos relevantes: `publication.assign`, decisões de publicacao, `escalation.*`, `institutional.promote`, mudancas de flags.
+- Permissão tipica: `audit.read` / admin.panel / finance.manage conforme politicas SQL.
+
+## 19. Wireframes ops
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+FOUNDER CENTER — ver secção 10
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+SUPER — /app/super
++------------------------------------------------------+
+| Centro de Comando Super                              |
+| Tabs: ... | kocc | finanças | ...                    |
+|------------------------------------------------------|
+| Métricas / Ledger / KOCC / atalhos Admin             |
++------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+ADMIN — /app/admin
++------------------------------------------------------+
+| Central de Trabalho                                  |
+| [Revisão Confiança][Contactar PP][Escalações][Users] |
+|------------------------------------------------------|
+| KOS Analytics                                        |
+| PublicationReviewQueue  <--- fila principal          |
+| EscalationPanel                                      |
+| AuditCenterPanel                                     |
+| ModerationCenterPanel (Admin; não Supervisor)        |
+| Stats                                                |
++------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+SUPERVISOR — mesmo /app/admin com copy Cockpit do Supervisor
++------------------------------------------------------+
+| Cockpit do Supervisor                                |
+| Fila | SLA | Contactar PP | Atribuir | Escalações    |
+| SEM botoes efectivos de approve/reject (RPC bloqueia)|
++------------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+CENTRAL TRABALHO + PENDENCIA + APROVACAO — ver wireframes 13.6 e 14.4
+```
+
+## 20. Matrizes de trabalho diário
+
+### 20.1 Supervisor
+
+| Bloco | Accao | Output |
+|-------|-------|--------|
+| Manhã | Abrir fila + SLA | Lista priorizada |
+| Analise | KAI + ficha | Decisao pending/docs/visita/correcoes |
+| Contacto | Mensagens PP | PP informado |
+| Atribuição | Agente / self-assign | Owner do processo |
+| Bloqueio | Escalacao Admin | Caso sobe |
+
+### 20.2 Admin
+
+| Bloco | Accao | Output |
+|-------|-------|--------|
+| Fila critica | approve/reject/pending | Estados lifecycle correctos |
+| Escalações | ack/resolve/re-escalar | SLA fechado ou Super |
+| KYC/Moderacao | rever | Contas/conteudo tratados |
+| Agentes | atribuir | Cobertura terreno |
+
+### 20.3 Super
+
+| Bloco | Accao | Output |
+|-------|-------|--------|
+| KOCC | rever saude ops | Alertas |
+| Crítico | intervir fila/escalacoes | Desbloqueio |
+| Financeiro | Ledger/Pay superfície | Visibilidade 🟡 |
+| Pessoas | supervisionar Admins | Cadeia saudável |
+
+### 20.4 Founder
+
+| Bloco | Accao | Output |
+|-------|-------|--------|
+| Empresa/Pessoas | promote | Roles correctos |
+| Flags/KOCC | configurar | Comportamento gated |
+| Escalações topo | resolver | Fecho institucional |
+| Financeiro | Super + RPC comissão | Parametros |
+| Auditoria | rever | Evidência |
+
+## 21. KAI, Board, Investor, Auditor — notas finais
+
+- KAI: score preliminar na fila; não vota; não e papel.
+- Board/Investor: ⚪/🔴 sem ExperienceMode; não abrir nestes manuais como ecrã existente.
+- Auditor: papel DB + promote target; sem cockpit ExperienceMode; consulta institucional.
+
+## 22. Fontes de verdade
+
+- role-experience.ts · role-operating-matrix.ts · nav.ts
+- publication-review-client.ts · PublicationReviewQueue · AdminHubClient
+- EscalationPanel · escalation-client
+- FounderCenterClient · FounderOnboardingClient · institutional-client
+- SQL 0036, 0037, 0038, 0039, 0040
+- ROLE_OPERATING_VALIDATION_POST_DEPLOY.md · SPRINT_BETA_1_6.md
+- MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md
+
+Fim do Manual Operacional e Administrativo v2.
+
+
+
+## Apêndice A — Runbooks operacionais
+
+### A.1 Runbook SLA da fila
+1. Abrir `/app/admin` e ordenar mentalmente por `sla_deadline_at` / `escalated_at`.
+2. Self-assign nos itens sem dono.
+3. Se falta informação: `request_documents` ou `request_corrections` com codes.
+4. Se risco: `request_technical_visit` ou `fraud_suspicion` + escalação.
+5. Se pronto e for Adminish: `approve`.
+6. Se Supervidor e pronto: escalar a Admin com motivo «Pronto para approve».
+
+### A.2 Runbook fraude suspeita
+1. Decisão `pending` ou `request_technical_visit` com `fraud_suspicion` e/ou `technical_visit_needed`.
+2. Atribuir Agente via `/app/admin/utilizadores` / processo.
+3. Contactar PP com linguagem factual (sem acusação pública).
+4. Criar escalação prioridade alta a Admin/Super com prazo curto.
+5. Só Adminish rejeita (`arquivado`) após evidência.
+
+### A.3 Runbook escalate → resolve
+1. Criar escalação com reason + priority + dueHours + target.
+2. Alvo faz **acknowledge**.
+3. Trabalhar (fila, pessoas, KOCC).
+4. **resolve** com notas.
+5. Confirmar eventos `escalation.create` / `acknowledged` / `resolved` na auditoria.
+
+### A.4 Runbook primeiro Owner (produção)
+1. Conta real (não demo) com email confirmado.
+2. Confirmar `bootstrapOpen: true` em `/app/fundador`.
+3. Claim Owner.
+4. Sair/entrar; experiência Founder.
+5. Tab Pessoas: promover Super e Admin com motivos.
+6. Feature Flags / KOCC / Segurança email dual-confirm.
+7. **Não** publicar o procedimento de claim em canais abertos após fecho.
+
+### A.5 Runbook comissão 35%
+1. Não procurar ecrã — não existe.
+2. Founder autentica e chama `founder_set_commission_param` (SQL/RPC) com código/valor/notas.
+3. Validar linha em `platform_commission_params`.
+4. Registar mudança na auditoria/ops log interno.
 
 ---
 
-## 15. FAQ
+## Apêndice B — Scripts de validação mental (pós-acção)
 
-**1. A Kuteka é um banco?** Não. É plataforma de intermediação com motor de pagamentos (Kuteka Pay).
-
-**2. A Kuteka segura o meu dinheiro?** Não nesta fase (`custody_mode = none`).
-
-**3. Porque não recebo o email de confirmação?** Verifique Spam; use o código OTP de 6 dígitos; reenvie após o tempo de espera.
-
-**4. Posso ser Cliente e Parceiro na mesma conta?** Sim. Active ambos no onboarding ou em papéis.
-
-**5. Como me torno Agente?** A Kuteka atribui o papel após certificação; não é self-serve.
-
-**6. O que é o KIS?** Sistema de identidade e verificação (KYC) da Kuteka.
-
-**7. Preciso de KYC para explorar imóveis?** Em geral não para exploração básica; sim para operações sensíveis.
-
-**8. O que é UTS?** Índice de confiança da conta no Centro de Confiança.
-
-**9. Pagamentos na Beta são reais?** Enquanto o gateway estiver em sandbox, os valores são simulados; os estados do pedido são reais.
-
-**10. Como cancelo um serviço?** Siga o estado do pedido no respectivo módulo; reembolsos seguem a política dos Termos.
-
-**11. O que são Créditos Kuteka?** Unidades internas para funcionalidades; não são dinheiro depositado.
-
-**12. Posso apagar a conta?** Contacte contacto@kutekalink.com; retenção legal pode aplicar-se (ver Política de Privacidade).
-
-**13. Como denuncio um anúncio falso?** Contacte suporte ou, se for Admin, use as ferramentas de confiança/revisão.
-
-**14. A Garantia renova-se automaticamente?** Na Beta a activação é mensal/sandbox; renovação automática depende do gateway real.
-
-**15. O mapa mostra a morada exacta?** Pode mostrar zona aproximada por privacidade do proprietário.
-
-**16. Que idiomas existem?** PT, EN, FR, ES (cobertura parcial na Beta).
-
-**17. Onde leio os Termos?** https://kutekalink.com/termos — também PDF/Word para descarregar.
-
-**18. Onde leio a Privacidade?** https://kutekalink.com/privacidade
-
-**19. Esqueci a palavra-passe e não tenho email.** Use recuperação por telefone quando SMS estiver activo, ou contacte suporte com prova de identidade.
-
-**20. Contas demo ainda existem?** Contas `demo.*@kuteka.local` são apenas para demonstração interna e serão removidas/banidas antes da beta pública alargada.
-
-**21. O Super Admin pode ver os meus documentos KYC?** Acessos sensíveis são auditados; use apenas contas administrativas autorizadas.
-
-**22. Como contacto a Kuteka?** `/contacto` ou contacto@kutekalink.com
+| Após… | Verificar |
+|-------|-----------|
+| pending | review_status, lifecycle, notificação PP, reasons[] |
+| approve | status=active, janela_premium, premium/general_visible_at |
+| reject | arquivado + draft |
+| assign | assigned_to / assigned_at |
+| escalate | linha no EscalationPanel + audit |
+| promote | user_roles + directory + audit institutional.promote |
+| claim | founders is_owner, bootstrap fechado |
 
 ---
 
-## 16. Glossário
+## Apêndice C — Separação de deveres
 
-| Termo                    | Significado                                                    |
-| ------------------------ | -------------------------------------------------------------- |
-| **KIS**                  | Kuteka Identity System — identidade e KYC                      |
-| **KYC**                  | Know Your Customer — verificação do utilizador                 |
-| **UTS**                  | Índice de confiança / trust score da conta                     |
-| **ICK**                  | Indicador de qualidade/confiança do imóvel (quando disponível) |
-| **PDK**                  | Passaporte Digital Kuteka do imóvel (painel na ficha)          |
-| **Ledger**               | Livro-razão digital de movimentos financeiros                  |
-| **Kuteka Pay**           | Motor único de pagamentos                                      |
-| **Sandbox**              | Ambiente de pagamento simulado                                 |
-| **Plus**                 | Subscrição opcional Kuteka Plus                                |
-| **SLA**                  | Acordo de nível de serviço (prazos operacionais)               |
-| **B2B2C**                | Modelo empresa → parceiros → consumidor                        |
-| **Parceiro Patrimonial** | Quem publica e gere patrimónios                                |
-| **Agente Certificado**   | Mediador verificado pela Kuteka                                |
-| **OTP**                  | Código de uso único (email/SMS)                                |
-| **RLS**                  | Row Level Security — isolamento de dados na base               |
+```
+Quem analisa (Supervisor)  !=  Quem aprova (Adminish)
+Quem activa património (PP) !=  Quem publica (Adminish)
+Quem visita (Agente)       !=  Quem decide publicação
+Quem governa (Founder)     !=  Quem faz fila diária (Admin/Sup)
+Quem pontua (KAI)          !=  Quem decide (humano)
+```
 
 ---
 
-## 17. Contactos e suporte
+## Apêndice D — Glossário ops
 
-| Canal           | Utilização                 |
-| --------------- | -------------------------- |
-| Centro de Ajuda | `/app/ajuda`               |
-| Contacto        | `/contacto`                |
-| Email geral     | contacto@kutekalink.com    |
-| Privacidade     | privacidade@kutekalink.com |
-| Jurídico        | juridico@kutekalink.com    |
-| Site            | https://kutekalink.com     |
-
-Horário de atendimento de referência na Beta: dias úteis, 09:00–18:00 (WAT), salvo comunicação em contrário.
+| Termo | Definição operacional |
+|-------|----------------------|
+| Adminish | Founder/Owner/Co-Founder/Administrator/Super — pode approve/reject |
+| Central de Trabalho | `/app/admin` com fila + escalações + audit |
+| Cockpit do Supervisor | Mesmo `/app/admin` com copy/missão de Supervisor |
+| Janela premium | ~6 horas pós-approve antes do feed geral |
+| MODE_LENS | Máscara de permissões da experiência activa |
+| PATH_RULE | Gate de rota por permissão efectiva |
+| Bootstrap | Claim único do primeiro Owner |
+| System demo | Contas `demo.*` / `is_system_demo` — sem governação |
 
 ---
 
-_Documento oficial de suporte ao utilizador — Kuteka v1.0 Beta._  
-_Luanda, 5 de Agosto de 2026 · Equipa Kuteka_
-b:Td2e,# Perguntas Frequentes — Kuteka
+## Apêndice E — Wireframes adicionais
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+ESCALAÇÃO
++--------------------------------------------------+
+| Escalações operacionais                          |
+| Motivo: ________________________________         |
+| Alvo: [Admin v]  Prioridade: [Alta v]  Prazo: 12h|
+| [ Criar escalação ]                              |
+|--------------------------------------------------|
+| Lista: ID | alvo | prioridade | SLA | estado     |
+| [ Assumir ] [ Resolver ] [ Cancelar ]            |
++--------------------------------------------------+
+```
+
+```
+MODELO DE INTERFACE — exemplo conceptual
+PROMOÇÃO INSTITUCIONAL (Pessoas)
++--------------------------------------------------+
+| Directório institucional                         |
+| user_id | email | roles | demo?                  |
+|--------------------------------------------------|
+| Promover: papel [supervisor v]                   |
+| Motivo (obrigatório): ______________________     |
+| [ Promover ]   (demos bloqueadas)                |
++--------------------------------------------------+
+```
+
+---
+
+## Apêndice F — Matriz semanal sugerida
+
+| Dia | Supervisor | Admin | Super | Founder |
+|-----|------------|-------|-------|---------|
+| Seg | Fila SLA | Approves críticos | KOCC | Pessoas/Flags |
+| Ter | Pendências + PP | Moderação/KYC | Escalações | Auditoria |
+| Qua | Visitas técnicas | Contratos | Ledger superfície | Segurança |
+| Qui | Atribuição agentes | Fila + audit | Critico | KOCC |
+| Sex | Fecho SLA | Relatório ops | Super review | Escalação topo |
+| Fim-de-semana | Plantão só se SLA | Idem | Idem | Só crítico |
+
+---
+
+*Manual Operacional e Administrativo v2 — alinhado ao código e ao snap 2026-08-09.*
+d:T5c8d,# KUTEKA — MATRIZ DE PAPÉIS, PERMISSÕES E GOVERNANÇA
+
+**Versão:** 2.0 · **Data:** 2026-08-09
+
+**Auditoria:** `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
+
+Legenda nas células de acção: 🟢 permitido/implementado · 🟡 parcial · 🔴 negado/não existe · 🔵 preparado · ⚪ planeado v1.1+
+
+UI permissions = intersection(session permissions, MODE_LENS[experience]). RLS usa permissões reais.
+
+## 1. ExperienceMode ↔ papéis DB
+
+| ExperienceMode (UI) | Papéis DB que o activam | Home |
+|---------------------|-------------------------|------|
+| `client` | `client` | `/app/habitacao/explorar` |
+| `patrimonial_partner` | `patrimonial_partner` | `/app/patrimonios` |
+| `client_partner` | `client + patrimonial_partner` | `/app` |
+| `certified_agent` | `certified_agent` | `/app/agente` |
+| `service_provider` | `service_provider` | `/app/servicos` |
+| `supervisor` | `supervisor` | `/app/admin` |
+| `administrator` | `administrator` | `/app/admin` |
+| `super_administrator` | `super_administrator` | `/app/super` |
+| `founder` | `founder **ou** co_founder` | `/app/fundador` |
+
+Sem ExperienceMode UI: `auditor`, Board, Investor ⚪/🔴. KAI não é papel.
+
+## 2. MODE_LENS — códigos de permissão por experiência
+
+Fonte: `apps/web/modules/shell/role-experience.ts` → `MODE_LENS`.
+
+| Permissão | Cli | PP | C+P | Ag | Pr | Sup | Adm | Super | Found |
+|----------|---|---|---|---|---|---|---|---|---|
+| `admin.panel` | — | — | — | — | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `agent.operate` | — | — | — | 🟢 | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `audit.read` | — | — | — | — | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `contracts.manage` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `executive.panel` | — | — | — | — | — | — | — | 🟢 | 🟢 |
+| `finance.manage` | — | — | — | — | — | — | — | 🟢 | 🟢 |
+| `finance.read` | — | — | — | — | — | — | 🟢 | 🟢 | 🟢 |
+| `founder.manage` | — | — | — | — | — | — | — | — | 🟢 |
+| `housing.explore` | 🟢 | — | 🟢 | 🟢 | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `moderation.manage` | — | — | — | — | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `platform.access` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `properties.manage` | — | 🟢 | 🟢 | — | — | — | — | — | — |
+| `properties.review` | — | — | — | — | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `reputation.manage` | 🟢 | 🟢 | 🟢 | 🟢 | — | — | 🟢 | 🟢 | 🟢 |
+| `services.operate` | — | — | — | — | 🟢 | — | — | — | — |
+| `trust.manage` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+
+Notas: `services.operate` aparece no lens do Prestador; path `/app/servicos` também aceita `platform.access`. Códigos adicionais podem existir só na BD sem lens UI.
+
+## 3. Path rules (canAccessPath)
+
+| Prefixo | Permissões efectivas exigidas (any) |
+|---------|--------------------------------------|
+| `/app/patrimonios` | `properties.manage` |
+| `/app/habitacao` | `housing.explore` |
+| `/app/agente` | `agent.operate` |
+| `/app/admin` | `admin.panel` **ou** `properties.review` |
+| `/app/confianca` | `trust.manage` |
+| `/app/contratos` | `contracts.manage` |
+| `/app/super` | `finance.manage` **ou** `founder.manage` |
+| `/app/servicos` | `services.operate` **ou** `platform.access` |
+| `/app/fundador` | sem PATH_RULE (bootstrap) |
+
+## 4. Matriz gigante Papel × capacidade
+
+Colunas: Dashboard/Home · Menu principal · Ver · Criar · Editar · Aprovar · Pendenciar · Escalar · Chat · Avaliar · Gestão users.
+
+| Papel | Dashboard | Menu | Ver | Criar | Editar | Aprovar | Pendenciar | Escalar | Chat | Avaliar | Gestão users |
+|-------|-----------|------|-----|-------|--------|---------|------------|---------|------|---------|--------------|
+| Cliente | /app/habitacao/explorar | Explorar+Cliente | 🟢 feed | 🔴 património alheio | 🔴 | 🔴 | 🔴 | 🔴 | 🟡 list/pairing | 🟢 social/reviews | 🔴 |
+| PP | /app/patrimonios | Parceiro+geral | 🟢 próprios | 🟢 activar | 🟢 próprios | 🔴 auto | 🔴 | 🔴 | 🟡 | 🟡 | 🔴 |
+| C+P | /app | Cliente+Parceiro | 🟢 | 🟢 | 🟢 próprios | 🔴 | 🔴 | 🔴 | 🟡 | 🟢/🟡 | 🔴 |
+| Agente | /app/agente | Agente+explorar | 🟢 atribuídos | 🟡 visitas/rel | 🟡 parcial | 🔴 | 🔴 | 🔴 reporta Sup | 🟡 | 🟡 | 🔴 |
+| Prestador | /app/servicos | Prestador | 🟢 inbox | 🟡 orçamento | 🟡 execução | 🔴 | 🔴 | 🔴 | 🟡 | 🟡 avaliação | 🔴 |
+| Supervisor | /app/admin | Admin+agente | 🟢 fila | 🟡 assign | 🔴 património PP | 🔴 | 🟢 | 🟢→Admin | 🟡 | 🟡 | 🟡 assign agentes |
+| Admin | /app/admin | Admin | 🟢 | 🟡 users ops | 🔴 como PP | 🟢 | 🟢 | 🟢→Super | 🟡 | 🟡 moderação | 🟡 /admin/utilizadores |
+| Super | /app/super | Super+Admin | 🟢 | 🟡 | 🔴 cockpit PP | 🟢 | 🟢 | 🟢→Founder | 🟡 | 🟡 | 🟡 supervisão |
+| Founder | /app/fundador | Fundador+Super+Admin | 🟢 | promote | 🔴 cockpit PP | 🟢 | 🟢 | 🟢 topo | 🟡 | 🟡 | 🟢 institutional promote |
+| Co-Founder | modo founder | como Founder | 🟢 | 🟡/🟢 | 🔴 | 🟢 adminish | 🟢 | 🟢 | 🟡 | 🟡 | 🟡 (Owner-only founders) |
+| Auditor | sem mode UI | — | 🔵 DB | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 UI |
+| Board/Investor | — | — | 🔴/⚪ | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| KAI | camada AI | fila | 🟢 score | — | — | — | — | — | — | — | — |
+
+## 5. Matriz Acção × Papel
+
+| Acção | Cli | PP | C+P | Ag | Pr | Sup | Adm | Super | Found |
+|-------|-----|----|-----|----|----|-----|-----|-------|-------|
+| Registar conta self-serve Cliente/PP | 🟢 | 🟢 | 🟢 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| Seleccionar experiência | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Explorar habitação | 🟢 | 🔴* | 🟢 | 🟢 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Activar património próprio | 🔴 | 🟢 | 🟢 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| Submeter publicação | 🔴 | 🟢 | 🟢 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| Gostar/Favoritar/Comentar/Perguntar/Partilhar/Denunciar | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Pedir visita | 🟢 | 🟡 | 🟢 | 🟡 | 🔴 | 🟡 | 🟡 | 🟡 | 🟡 |
+| Celebrar contrato (UI contratos) | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Inbox prestador fluxo Pedido→Avaliação | 🔴 | 🔴 | 🔴 | 🔴 | 🟡 | 🔴 | 🔴 | 🔴 | 🔴 |
+| Ver fila publicação | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| pending / request_docs / visit / corrections | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| approve publicação | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 |
+| reject publicação | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 |
+| assign publication review | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Criar escalação operacional | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Ack/resolve escalação | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Abrir Super Command | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 |
+| Founder Center tabs | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟡 atalho | 🟢 |
+| Bootstrap claim Owner | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔵 se aberto | 🟢 conta real |
+| founder_promote_user | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 Owner |
+| Alterar comissão 35% UI | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| Alterar comissão via RPC | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 |
+| Feature flags UI | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟡 | 🟢 |
+| KOCC | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 |
+| Revisão confiança `/app/confianca/revisao` | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Moderação panel completo | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 |
+| Chat list | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Chat start_direct sem pairing | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
+| Ledger / Pay real completo | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
+| Board dashboard | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+
+\* PP puro sem `housing.explore` no lens não explora; C+P e ops com housing.explore sim.
+
+## 6. Mapa de escalação
+
+```
+[Supervisor] --escalation.create--> [Administrador]
+       |                                   |
+       +---- pode alvo directo ----------+--> [Superadministrador] --> [Founder]
+Statuses (targetsForMode)
+
+Estados: open -> acknowledged -> resolved | cancelled
+Audit: escalation.create | acknowledged | resolved
+UI: EscalationPanel em /app/admin#escalacoes e Founder tab Escalações
+Gate: properties.review (ou founder) — Cliente/Agente/PP bloqueados no smoke
+```
+
+## 7. Mapa de promoção
+
+```
+Self-serve onboarding: client, patrimonial_partner
+Ops assign (Admin utilizadores / processos): certified_agent (operacional)
+Institutional RPC founder_promote_user (motivo obrigatório, sem demo):
+  Owner -> founder | co_founder | super_administrator | administrator | supervisor | auditor
+  Só Owner promove founders
+Bootstrap único: founder_bootstrap_claim -> primeiro Owner (fecha mecanismo)
+```
+
+| De → Para | Mecanismo | Estado |
+|-----------|-----------|--------|
+| Visitante → Cliente/PP | onboarding papeis | 🟢 |
+| Conta → Agente | atribuição ops / roles | 🟢/🟡 UI |
+| Conta → Prestador | role service_provider | 🟢 demo validada |
+| Conta → Supervisor/Admin/Super | founder_promote_user | 🟢 |
+| Conta → Co-Founder | promote co_founder | 🟢 |
+| Conta → Owner | bootstrap claim | 🔵 aberto no snap; demos 🔴 |
+| Conta → Auditor | promote auditor | 🔵 DB / 🔴 UI mode |
+| Qualquer → Board/Investor UI | — | ⚪/🔴 |
+
+## 8. Decisões de publicação × papel
+
+| Decisão | Supervisor | Admin | Super | Founder | Outros |
+|---------|------------|-------|-------|---------|--------|
+| approve | 🔴 | 🟢 | 🟢 | 🟢 | 🔴 |
+| reject | 🔴 | 🟢 | 🟢 | 🟢 | 🔴 |
+| pending | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 |
+| request_corrections | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 |
+| request_documents | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 |
+| request_technical_visit | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 |
+| assign | 🟢 | 🟢 | 🟢 | 🟢 | 🔴 |
+
+Efeito approve validado: `lifecycle_status = janela_premium` (pós-deploy).
+
+## 9. Menus por experiência (inventário nav.ts)
+
+- **`client`:** home, mensagens, explorar, residencia, favoritos, visitas, futuro, propostas, contratos, confianca, centroConfianca, centroSegurança, financeiro, mudanca, encontrar, concierge, garantia, assistencia, servicos, conta
+- **`patrimonial_partner`:** home, mensagens, patrimonios, ativar, relatorios, contratos, confianca, centros, financeiro, garantia, servicos, planos, conta
+- **`client_partner`:** união cliente+parceiro (explorar… + patrimonios/ativar/planos)
+- **`certified_agent`:** home, mensagens, explorar, futuro, contratos, confianca, centros, agente, financeiro, concierge, assistencia, servicos, conta
+- **`service_provider`:** home, mensagens, contratos, centros, financeiro, servicosPrestador, conta
+- **`supervisor`:** home, mensagens, contratos, confianca, centros, agente, admin, financeiro, servicos, escalacoes, conta (+ concierge/assistencia conforme items)
+- **`administrator`:** como supervisor + finance.read no lens; sem item super (falta finance.manage)
+- **`super_administrator`:** admin + super + centros + agente + financeiro + escalacoes + …
+- **`founder`:** fundador + super + admin + escalacoes + geral alargado
+
+## 10. Comissão 35%
+
+- Tabela `platform_commission_params` (seed SQL 0036).
+- RPC `founder_set_commission_param` — Founder-only.
+- Select autenticado possível; insert/update/delete revogados a authenticated excepto via RPC.
+- Frontend: **nenhuma UI** de edição de comissão 🔴.
+- Documentar a ops: alterar só via RPC/DB com conta Founder — nunca pedir ecrã inexistente.
+
+## 11. Backlog de ausências (honestidade)
+
+| Item | Estado | Notas |
+|------|--------|-------|
+| Board ExperienceMode / dashboard | ⚪/🔴 | Fora Beta 1.6 |
+| Investor cockpit | ⚪/🔴 | Idem |
+| Auditor ExperienceMode | 🔴 UI / 🔵 DB | Promote target existe |
+| UI comissão 35% | 🔴 | RPC only |
+| Founder financeiro profundo no Center | ⚪ | Link Super only |
+| Chat start_direct sem pairing | 🟡 | List OK |
+| Prestador Pedido→Pagamento E2E | 🟡 | UI fluxo mínimo |
+| Auto-escalação SLA contínua | ⚪ | Adiado SPRINT_BETA_1_6 |
+| Exclusividade premium por produto | ⚪ | Adiado |
+| Pesquisa global topbar | ⚪ | Adiado |
+| Medalhas | ⚪ | Adiado |
+| Gestão pós-remodelação completa | ⚪ | Adiado |
+| Rede prestadores Valor+ completa | 🔴/⚪ | |
+| Motor ICK A–G automático completo | 🟡 | Simplificado |
+| Owner real claimado em produção | 🔵 | Bootstrap aberto no snap |
+
+## 12. Matriz lifecycle — quem muda estado
+
+| Estado / transição | Actor típico |
+|--------------------|--------------|
+| rascunho | PP |
+| submetido | PP |
+| em_analise_kai / em_analise_admin | sistema / fila |
+| pendente / correcoes / docs / inspecao | Supervisor/Adminish via decisões |
+| janela_premium | Adminish approve + trigger |
+| publicado | promote janela / tempo |
+| reservado/contrato/arrendado/… | contratos/triggers 🟡 |
+| arquivado | reject |
+
+## 13. Matriz confiança
+
+| Capacidade | Cliente | PP | Agente | Prestador | Supervisor | Admin+ |
+|------------|---------|----|--------|-----------|------------|--------|
+| Centro Confiança próprio | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Submeter docs | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| Revisão `/app/confianca/revisao` | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 |
+| Ver KYC/UTS/ICK no menu | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+
+## 14. Matriz financeira
+
+| Capacidade | Campo | Supervisor | Admin | Super | Founder |
+|------------|-------|------------|-------|-------|---------|
+| `/app/financeiro` | 🟡 | 🟡 | 🟡 | 🟡 | 🟡 |
+| Super Ledger/Pay | 🔴 | 🔴 | 🔴 | 🟡 | 🟡 |
+| finance.read lens | — | — | 🟢 | 🟢 | 🟢 |
+| finance.manage lens | — | — | — | 🟢 | 🟢 |
+| Comissão RPC | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 |
+| Comissão UI | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+
+## 15. Diagrama governação completo
+
+```
+                    [Founder/Owner]
+                     /    |     \
+            promote /  flags \  escalation topo
+                   /      |     \
+          [Co-Founder] [Super] [KOCC/Audit]
+                         |
+                      [Admin]
+                         |
+                   [Supervisor]
+                    /    |    \
+              [Agente] [PP] [Prestador]
+                         \
+                      [Cliente]
+
+        lateral: KAI (score)
+        fora: Auditor(DB) · Board · Investor
+```
+
+## 16. Checklists de governação (ops)
+
+### 16.1 Antes de promover
+
+- Confirmar user_id real
+- Confirmar não é demo.*
+- Motivo escrito
+- Papel alvo correcto
+- Rever audit após promote
+
+### 16.2 Antes de approve
+
+- ID PP
+- Docs
+- Fotos fachada/rua/>=5
+- GPS
+- Consistência
+- KAI issues tratados ou aceites
+- Notas se necessário
+
+### 16.3 Antes de pending
+
+- Escolher codes oficiais
+- Solução clara para o PP
+- Assign owner do processo
+- SLA / escalação se bloqueado
+
+## 17. Fontes de verdade (obrigatório)
+
+- `apps/web/modules/shell/role-experience.ts` — ExperienceMode, MODE_LENS, homes, path rules
+- `apps/web/modules/shell/role-operating-matrix.ts` — missões, mustDo/mustNot, CTAs, cockpitHint
+- `apps/web/modules/shell/nav.ts` — SHELL_NAV_ITEMS
+- `apps/web/modules/administracao/services/publication-review-client.ts` — decisões
+- `apps/web/modules/administracao/components/EscalationPanel.tsx` — cadeia
+- `apps/web/modules/kocc/components/FounderCenterClient.tsx` — tabs
+- `apps/web/modules/kocc/services/institutional-client.ts` — claim/promote
+- `packages/types/src/index.ts` — PermissionCode base
+- SQL `0036_trust_governance_gate.sql` — reasons, commission, review
+- SQL `0037_four_pillars_governance.sql` — audit/moderation pillars
+- SQL `0038_lifecycle_social_founder_ops.sql` — lifecycle, social, founder ops
+- SQL `0039_ops_roles_visual_gate.sql` — supervisor gate approve/reject
+- SQL `0040_ops_matrix_experiences.sql` — matrix experiences
+- `docs/product/ROLE_OPERATING_VALIDATION_POST_DEPLOY.md`
+- `docs/product/SPRINT_BETA_1_6.md`
+- `docs/product/MANUAL_PLATFORM_AUDIT_SNAP_2026-08-09.md`
+- `docs/help/MANUAL_UTILIZADOR_COMPLETO_v2.md`
+- `docs/help/MANUAL_OPERACIONAL_ADMINISTRATIVO_v2.md`
+
+Fim da Matriz de Papéis, Permissões e Governação v2.
+
+## 18. Detalhe MODE_LENS por experiência (narrativa)
+
+### 18.1 `client`
+
+Permissões no lens: `platform.access`, `housing.explore`, `contracts.manage`, `reputation.manage`, `trust.manage`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.2 `patrimonial_partner`
+
+Permissões no lens: `platform.access`, `properties.manage`, `contracts.manage`, `trust.manage`, `reputation.manage`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.3 `client_partner`
+
+Permissões no lens: `platform.access`, `housing.explore`, `properties.manage`, `contracts.manage`, `trust.manage`, `reputation.manage`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.4 `certified_agent`
+
+Permissões no lens: `platform.access`, `agent.operate`, `housing.explore`, `contracts.manage`, `reputation.manage`, `trust.manage`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.5 `service_provider`
+
+Permissões no lens: `platform.access`, `services.operate`, `contracts.manage`, `trust.manage`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.6 `supervisor`
+
+Permissões no lens: `platform.access`, `admin.panel`, `properties.review`, `audit.read`, `moderation.manage`, `housing.explore`, `trust.manage`, `contracts.manage`, `agent.operate`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.7 `administrator`
+
+Permissões no lens: `platform.access`, `admin.panel`, `properties.review`, `audit.read`, `moderation.manage`, `trust.manage`, `contracts.manage`, `housing.explore`, `agent.operate`, `reputation.manage`, `finance.read`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.8 `super_administrator`
+
+Permissões no lens: `platform.access`, `admin.panel`, `properties.review`, `audit.read`, `moderation.manage`, `executive.panel`, `trust.manage`, `contracts.manage`, `housing.explore`, `agent.operate`, `reputation.manage`, `finance.manage`, `finance.read`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+### 18.9 `founder`
+
+Permissões no lens: `platform.access`, `admin.panel`, `properties.review`, `audit.read`, `moderation.manage`, `executive.panel`, `founder.manage`, `trust.manage`, `contracts.manage`, `housing.explore`, `agent.operate`, `reputation.manage`, `finance.manage`, `finance.read`
+
+A UI só mostra acções se a sessão real também tiver o código. Sem intersecção ⇒ item oculto / ForbiddenPanel.
+
+
+## 19. Matriz de rotas autenticadas (existência)
+
+| Rota | Cliente | PP | Agente | Prestador | Supervisor | Admin | Super | Founder |
+|------|---------|----|--------|-----------|------------|-------|-------|---------|
+| `/app` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/habitacao/explorar` | 🟢 | —/🔴 | 🟢 | — | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/patrimonios` | 🔴 | 🟢 | 🔴 | 🔴 | 🔴 | 🔴* | 🔴* | 🔴* |
+| `/app/patrimonios/novo` | 🔴 | 🟢 | 🔴 | 🔴 | 🔴 | 🔴* | 🔴* | 🔴* |
+| `/app/parceiro/planos` | 🔴 | 🟢 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 |
+| `/app/agente` | 🔴 | 🔴 | 🟢 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/servicos` | 🟢 | 🟢 | 🟢 | 🟢 provider | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/admin` | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/admin/utilizadores` | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/admin#escalacoes` | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/super` | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 |
+| `/app/fundador` | 🔵 onboarding | 🔵 | 🔵 | 🔵 | 🔵 | 🔵 | 🔵 | 🟢 center |
+| `/app/confianca/revisao` | 🔴 | 🔴 | 🔴 | 🔴 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/mensagens` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/centro-confianca` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/centro-seguranca` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/financeiro` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/contratos` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/perfil` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/app/ajuda` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+| `/documentacao` | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 | 🟢 |
+
+\* Lens mitiga; perms DB podem ainda incluir `properties.manage` em Super/Admin (nota pós-deploy).
+
+## 20. Matriz de eventos de auditoria (amostra)
+
+| Evento | Quem dispara | Onde ver |
+|--------|--------------|----------|
+| publication.assign | Supervisor/Adminish | AuditCenter |
+| decisão publicação (approve/pending/…) | Adminish/Supervisor conforme | AuditCenter |
+| escalation.create | ops com review | AuditCenter |
+| escalation acknowledged/resolved | alvo/responsável | AuditCenter |
+| institutional.promote | Owner/Founder | AuditCenter |
+| founder bootstrap claim | conta real | audit institucional |
+| social like/favorite/comment/ask/report | utilizadores ficha | persistência social + moderação se report |
+
+## 21. Regras de ouro da governação
+
+1. Nunca documentar ecrã que não exista no código.
+2. Supervisor nunca aprova/rejeita — mesmo que a UI mostre botão, o RPC bloqueia.
+3. Comissão 35% não tem frontend — Founder RPC/DB.
+4. Demos não governam produção.
+5. Experiência UI não escala permissões reais.
+6. KAI informa; humanos decidem.
+7. Board/Investor/Auditor sem mode UI nesta versão.
+8. Em dúvida: validar `ROLE_OPERATING_VALIDATION_POST_DEPLOY.md` + SQL.
+
+## 22. Índice cruzado com manuais
+
+| Tema | Manual utilizador | Manual ops | Esta matriz |
+|------|-------------------|------------|-------------|
+| Fichas Cliente/PP/Agente/Prestador | §§5–8 | — | §§4–5 |
+| Fichas Supervisor–Founder | — | §§5–8 | §§4–5 |
+| Pendência / Approve | §17 | §§13–14 | §8 |
+| Escalações | nota | §15 | §6 |
+| Promote / bootstrap | — | §§9–11 | §7 |
+| MODE_LENS | §3 | — | §§2,18 |
+| Comissão | §16 | §17 | §10 |
+| Backlog | várias 🟡 | várias | §11 |
+
+Fim alargado da matriz v2.
+e:Td2e,# Perguntas Frequentes — Kuteka
 
 **FAQ · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
@@ -520,7 +3388,7 @@ Nas páginas `/termos`, `/privacidade` e `/cookies`, também acessíveis a parti
 ---
 
 _Não encontrou a resposta que procurava? Contacte-nos em `/contacto` — a nossa equipa responde em dias úteis, 09:00–18:00 (WAT)._
-c:Td05,# Glossário — Kuteka
+f:Td05,# Glossário — Kuteka
 
 **Glossário · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
@@ -567,41 +3435,47 @@ Termos e siglas utilizados na plataforma Kuteka, por ordem alfabética.
 ---
 
 _Não encontrou um termo? Contacte-nos em `/contacto` e ajudaremos a esclarecer._
-d:T80a,# Novidades — Kuteka
+10:T8e9,# Novidades — Kuteka Beta
 
-**Novidades · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
+**Versão 1.0 Beta · Fonte de conteúdo para o Centro de Ajuda (`/app/ajuda`)**
 
-Actualizações recentes da plataforma e roteiro público de evolução.
-
----
-
-## Últimas actualizações
-
-- **5 de Agosto de 2026** — Publicação do Centro de Documentação Kuteka, com Manual do Utilizador, FAQ, Glossário, Novidades e Estado dos Serviços num único hub (`/app/ajuda` e `/documentacao`).
-- **5 de Agosto de 2026** — Publicação da Política de Cookies (`/cookies`), complementando os Termos de Utilização e a Política de Privacidade.
-- **5 de Agosto de 2026** — Confirmação do arranque oficial da **Kuteka v1.0 Beta**: núcleo gratuito, serviços pay-per-use, Kuteka Pay como motor único de pagamentos e `custody_mode = none`.
-
-Esta secção será actualizada progressivamente à medida que novas funcionalidades forem publicadas.
+Notas curtas, em estilo de changelog, sobre o que muda na Beta. Actualizar a cada Sprint Beta fechada. Linguagem para o utilizador final — sem termos internos de engenharia.
 
 ---
 
-## Roteiro público
+## 9 de Agosto de 2026
 
-A Kuteka evolui por **versões comerciais**, alinhadas com o roteiro interno de produto:
+**Manuais operacionais oficiais v2 (PDF + Word).**
 
-| Versão                 | Foco                                                                                       |
-| ---------------------- | ------------------------------------------------------------------------------------------ |
-| **v1.0 Beta** (actual) | Lançamento em produção, operação mínima, núcleo gratuito + serviços pay-per-use em sandbox |
-| **v1.5**               | Activação de pagamentos reais e reforço de SLA de suporte                                  |
-| **v2.0**               | Motor de recomendações KAI, marketplace mais maduro e expansão de idiomas                  |
-| **v3.0**               | Ecossistema alargado — API pública, white label e expansão geográfica                      |
+- Publicado o **Manual completo do utilizador** (Cliente, Parceiro, Agente, Prestador).
+- Publicado o **Manual operacional e administrativo** (Supervisor, Admin, Super Admin, Founder) com tutoriais de pendência, aprovação, escalação e Founder Center.
+- Publicada a **Matriz de papéis, permissões e governação**.
+- Centro de Documentação (`/documentacao` e `/app/ajuda`) reorganizado por papel (`/app/ajuda/cliente`, `/app/ajuda/supervisor`, etc.).
+- Cada funcionalidade está marcada com o estado real da plataforma (implementado / parcial / planeado). Não inventamos ecrãs.
 
-As datas de transição entre versões dependem da validação de negócio, de parcerias de pagamento e de requisitos regulatórios, pelo que este roteiro é indicativo e pode ser ajustado. Actualizações relevantes serão sempre comunicadas nesta página.
+## 6 de Agosto de 2026
+
+**Documentos e ajuda actualizados.**
+
+- Publicada a **Política de Cookies** (a página `/cookies` chega numa próxima actualização; o texto completo já está disponível a pedido em contacto@kutekalink.com).
+- Novo conteúdo no Centro de Ajuda: Perguntas Frequentes, Glossário e Estado dos Serviços, para ficar mais fácil perceber o que está disponível, em acesso antecipado ou a chegar em breve.
+- Nenhuma alteração de funcionalidade nesta actualização — foco em transparência e documentação.
+
+## 5 de Agosto de 2026
+
+**Manual do Utilizador e documentos legais em versão 1.0 Beta.**
+
+- Publicados os Termos de Utilização e a Política de Privacidade, com versões para descarregar em PDF e Word.
+- Publicado o Manual do Utilizador completo em `/app/ajuda`, organizado por papel (Cliente, Parceiro Patrimonial, Agente Certificado, Prestador, Administração).
 
 ---
 
-_Tem sugestões para o roteiro? Contacte-nos em `/contacto`._
-e:T853,# Estado dos Serviços — Kuteka
+## Como esta página é actualizada
+
+Cada nova entrada corresponde ao fecho de uma Sprint Beta ou a uma alteração visível para o utilizador. Não se listam aqui alterações internas de engenharia sem impacto visível. Ver [SPRINT_BETA_CHARTER.md](../product/SPRINT_BETA_CHARTER.md) para o calendário de sprints.
+
+**Ver também:** [FAQ_v1.md](./FAQ_v1.md) · [ESTADO_SERVICOS_v1.md](./ESTADO_SERVICOS_v1.md)
+11:T853,# Estado dos Serviços — Kuteka
 
 **Estado dos Serviços · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
@@ -631,16 +3505,16 @@ Se detectar uma anomalia não reflectida nesta página, contacte-nos através de
 ---
 
 _Esta página é indicativa e não substitui uma monitorização automatizada em tempo real, ainda em preparação para uma versão futura da plataforma._
-0:{"P":null,"b":"lHi_5cp76mAY9EKEWLeEk","p":"","c":["","app","ajuda",""],"i":false,"f":[[["",{"children":["(app)",{"children":["app",{"children":["ajuda",{"children":["__PAGE__",{}]}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/7f92f74c7c7c7b81.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L7",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(app)",["$","$1","c",{"children":[null,["$","$L8",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}]]}],{"children":["app",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["ajuda",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L9",null,{"docs":{"manual":"$a","faq":"$b","glossario":"$c","novidades":"$d","estado":"$e"},"basePath":"/app/ajuda"}],null,"$Lf"]}],{},null,false]},null,false]},null,false]},null,false]},null,false],"$L10",false]],"m":"$undefined","G":["$11",[]],"s":false,"S":true}
-12:I[56974,[],"OutletBoundary"]
-14:I[41795,[],"AsyncMetadataOutlet"]
-16:I[56974,[],"ViewportBoundary"]
-18:I[56974,[],"MetadataBoundary"]
-19:"$Sreact.suspense"
-f:["$","$L12",null,{"children":["$L13",["$","$L14",null,{"promise":"$@15"}]]}]
-10:["$","$1","h",{"children":[null,[["$","$L16",null,{"children":"$L17"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$L18",null,{"children":["$","div",null,{"hidden":true,"children":["$","$19",null,{"fallback":null,"children":"$L1a"}]}]}]]}]
-17:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-13:null
-1b:I[27803,[],"IconMark"]
-15:{"metadata":[["$","title","0",{"children":"Centro de Documentação Kuteka · Manual, FAQ, Glossário · Kuteka"}],["$","meta","1",{"name":"description","content":"PropTech africana de património e confiança. Habitação com transparência em Angola."}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"icon","href":"/favicon.svg"}],["$","$L1b","4",{}]],"error":null,"digest":"$undefined"}
-1a:"$15:metadata"
+0:{"P":null,"b":"r8WUep78EWloa6mEylKxO","p":"","c":["","app","ajuda",""],"i":false,"f":[[["",{"children":["(app)",{"children":["app",{"children":["ajuda",{"children":["__PAGE__",{}]}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/90898f585bd9cef0.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L7",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(app)",["$","$1","c",{"children":[null,["$","$L8",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]}]]}],{"children":["app",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["ajuda",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L9",null,{"docs":{"manual":"$a","manualUtilizador":"$b","manualOperacional":"$c","matrizGovernanca":"$d","faq":"$e","glossario":"$f","novidades":"$10","estado":"$11"},"basePath":"/app/ajuda"}],null,"$L12"]}],{},null,false]},null,false]},null,false]},null,false]},null,false],"$L13",false]],"m":"$undefined","G":["$14",[]],"s":false,"S":true}
+15:I[56974,[],"OutletBoundary"]
+17:I[41795,[],"AsyncMetadataOutlet"]
+19:I[56974,[],"ViewportBoundary"]
+1b:I[56974,[],"MetadataBoundary"]
+1c:"$Sreact.suspense"
+12:["$","$L15",null,{"children":["$L16",["$","$L17",null,{"promise":"$@18"}]]}]
+13:["$","$1","h",{"children":[null,[["$","$L19",null,{"children":"$L1a"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$L1b",null,{"children":["$","div",null,{"hidden":true,"children":["$","$1c",null,{"fallback":null,"children":"$L1d"}]}]}]]}]
+1a:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+16:null
+1e:I[27803,[],"IconMark"]
+18:{"metadata":[["$","title","0",{"children":"Centro de Documentação Kuteka · Manuais, Matriz, FAQ · Kuteka"}],["$","meta","1",{"name":"description","content":"PropTech africana de património e confiança. Habitação com transparência em Angola."}],["$","meta","2",{"name":"robots","content":"noindex, nofollow"}],["$","link","3",{"rel":"icon","href":"/favicon.svg"}],["$","$L1e","4",{}]],"error":null,"digest":"$undefined"}
+1d:"$18:metadata"
