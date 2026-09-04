@@ -36,8 +36,9 @@ Nota: a mensagem “push bloqueado/403” nos documentos históricos da versão 
 
 ## P3 — Fecho documental
 
-**PENDENTE** (prep concluída; arquivo só após Founder confirmar `main` estável).  
-Não apagar ponte nem `cursor/fase0-publish-9893` agora.
+**PREPARADO** — `main` segura em `6da1549` (PR #3 merged).  
+Registo: `KUTEKA_FASE0_P3_ENCERRAMENTO_2026-09-04.md`.  
+Arquivo da ponte e das branches de publicação **não executado**. **Não apagar** até OK explícito do Founder.
 
 ## P4 — Bloqueado
 
