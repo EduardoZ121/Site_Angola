@@ -16,8 +16,50 @@ import {
   verifyEmailOtpCode,
 } from '../services/auth-client';
 import { applyDestinationGate } from '../lib/destination-gate';
+import { canAccessAdminPanel } from '@kuteka/auth';
+import { fetchAuthorizationContext } from '@kuteka/database';
 
 const COOLDOWN_SECONDS = 60;
+
+async function resolveVerifiedDestination(next: string | null): Promise<string> {
+  if (!isSupabaseConfigured()) {
+    return applyDestinationGate({
+      hasSession: true,
+      emailVerified: true,
+      roleCodes: [],
+      next,
+    });
+  }
+  try {
+    const client = createBrowserClient();
+    const {
+      data: { user },
+    } = await client.auth.getUser();
+    if (!user) {
+      return applyDestinationGate({
+        hasSession: true,
+        emailVerified: true,
+        roleCodes: [],
+        next,
+      });
+    }
+    const ctx = await fetchAuthorizationContext(client, user.id, user.email ?? null);
+    return applyDestinationGate({
+      hasSession: true,
+      emailVerified: true,
+      roleCodes: ctx.roles,
+      hasAdminPanel: canAccessAdminPanel(ctx),
+      next,
+    });
+  } catch {
+    return applyDestinationGate({
+      hasSession: true,
+      emailVerified: true,
+      roleCodes: [],
+      next,
+    });
+  }
+}
 
 function maskEmail(email: string): string {
   const [local, domain] = email.split('@');
@@ -44,6 +86,14 @@ export function VerifyPanel() {
   const [challengeId, setChallengeId] = useState<string | null>(null);
   const [sandboxHint, setSandboxHint] = useState<string | null>(null);
   const [verifying, setVerifying] = useState(false);
+  const [readyHref, setReadyHref] = useState(() =>
+    applyDestinationGate({
+      hasSession: true,
+      emailVerified: true,
+      roleCodes: [],
+      next,
+    }),
+  );
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -54,6 +104,16 @@ export function VerifyPanel() {
   useEffect(() => {
     if (emailParam) setEmail(emailParam);
   }, [emailParam]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void resolveVerifiedDestination(next).then((href) => {
+      if (!cancelled) setReadyHref(href);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [next]);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
@@ -82,7 +142,9 @@ export function VerifyPanel() {
         const dest = applyDestinationGate({
           hasSession: true,
           emailVerified: true,
-          roleCodes: Array.isArray(roleCodes) ? roleCodes.filter((r): r is string => typeof r === 'string') : [],
+          roleCodes: Array.isArray(roleCodes)
+            ? roleCodes.filter((r): r is string => typeof r === 'string')
+            : [],
           next,
         });
         router.replace(dest);
@@ -135,22 +197,12 @@ export function VerifyPanel() {
       setError(result.message);
       return;
     }
-    const ctaHref = applyDestinationGate({
-      hasSession: true,
-      emailVerified: true,
-      roleCodes: [],
-      next,
-    });
+    const ctaHref = await resolveVerifiedDestination(next);
     router.push(ctaHref);
   }
 
   if (already) {
-    const ctaHref = applyDestinationGate({
-      hasSession: true,
-      emailVerified: true,
-      roleCodes: [],
-      next,
-    });
+    const ctaHref = readyHref;
     return (
       <div className="flex flex-col gap-6">
         <div

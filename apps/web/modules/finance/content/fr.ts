@@ -78,6 +78,8 @@ export const financeCopyFr: FinanceCopy = {
     'Crée un payment intent de test lié à un module. En sandbox, renvoie auto_capture_ready.',
   payEngineWebhookHint:
     'Simule des événements de passerelle (succeeded/failed/cancelled/expired) sur un intent sandbox.',
+  commissionViaHint:
+    'Voie B = take rates marketplace/services (cette table). La commission d’activation de 35 % est la voie A, réservée au Founder (`platform_commission_params`), et ne s’édite pas ici.',
   createIntent: "Créer l'intent",
   simulateWebhook: 'Simuler le webhook',
   setDefaultGateway: 'Définir par défaut',

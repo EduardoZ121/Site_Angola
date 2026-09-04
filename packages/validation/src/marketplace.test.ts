@@ -46,6 +46,9 @@ describe('marketplace schemas', () => {
 
   it('defaults payment gateway to sandbox', () => {
     expect(marketplacePayOrderSchema.parse({ orderId: UUID }).gatewayCode).toBe('sandbox');
+    expect(
+      marketplacePayOrderSchema.safeParse({ orderId: UUID, gatewayCode: 'stripe' }).success,
+    ).toBe(false);
   });
 
   it('bounds rating between 1 and 5', () => {

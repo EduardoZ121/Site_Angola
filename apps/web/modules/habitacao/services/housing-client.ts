@@ -56,7 +56,15 @@ export type HousingPropertyRow = {
   review_status?: string | null;
   general_visible_at?: string | null;
   premium_visible_at?: string | null;
+  lifecycle_status?: string | null;
 };
+
+const MARKET_LIFECYCLES = new Set([
+  'publicado',
+  'janela_premium',
+  'em_negociacao',
+  'disponivel_novamente',
+]);
 
 /**
  * Mercado Kuteka (D3): inventário DEMO não é oferta pública.
@@ -72,7 +80,26 @@ export function isHousingRowPubliclyVisible(row: HousingPropertyRow, now = Date.
     const premiumAt = Date.parse(row.premium_visible_at);
     if (!Number.isNaN(premiumAt) && premiumAt > now) return false;
   }
+  if (row.lifecycle_status && !MARKET_LIFECYCLES.has(row.lifecycle_status)) return false;
   return true;
+}
+
+/** CTA “avisar-me” só em contexto de disponibilidade futura (KUT-REQ-011). */
+export function shouldOfferAvailabilityNotify(row: HousingPropertyRow, now = Date.now()): boolean {
+  if (row.is_demo) return false;
+  const life = row.lifecycle_status;
+  if (
+    life === 'libertacao_prevista' ||
+    life === 'temporariamente_indisponivel' ||
+    life === 'em_manutencao'
+  ) {
+    return true;
+  }
+  if (row.expected_available_on) {
+    const availableAt = Date.parse(row.expected_available_on);
+    if (!Number.isNaN(availableAt) && availableAt > now) return true;
+  }
+  return false;
 }
 
 export type ClientPreferencesRow = {
@@ -212,10 +239,10 @@ function filterByQuery(rows: HousingPropertyRow[], query?: string | null): Housi
 }
 
 const PROPERTY_SELECT_CORE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score, review_status, general_visible_at, premium_visible_at';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score, review_status, general_visible_at, premium_visible_at, lifecycle_status';
 
 const PROPERTY_SELECT_FUTURE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score, review_status, general_visible_at, premium_visible_at';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score, review_status, general_visible_at, premium_visible_at, lifecycle_status';
 
 /**
  * Paginated explore — foundation for infinite feed at scale.
@@ -271,7 +298,12 @@ export async function exploreActivePropertiesPage(
     if (error) return { ok: false, message: copy.loadError };
 
     let rows = filterByQuery((data as unknown as HousingPropertyRow[]) ?? [], params.query).filter(
-      (row) => isHousingRowPubliclyVisible(row),
+      (row) => {
+        if (futureOnly) {
+          return !row.is_demo && Boolean(row.expected_available_on);
+        }
+        return isHousingRowPubliclyVisible(row);
+      },
     );
     const hasMore = rows.length > limit;
     if (hasMore) rows = rows.slice(0, limit);

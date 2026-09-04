@@ -9,6 +9,10 @@ import {
 import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
+import {
+  isHousingRowPubliclyVisible,
+  type HousingPropertyRow,
+} from '@/modules/habitacao/services/housing-client';
 import { getAgenteCopy } from '../content';
 
 export type AgentPropertyRow = {
@@ -43,7 +47,7 @@ export type AgentAssignmentRow = {
 };
 
 const PROPERTY_SELECT =
-  'id, code, title, property_type, purpose, province, city, address_line, status, created_at';
+  'id, code, title, property_type, purpose, province, city, address_line, status, created_at, is_demo, review_status, premium_visible_at, lifecycle_status';
 
 export async function getAgentPreferences(): Promise<
   { ok: true; data: AgentPreferencesRow | null } | { ok: false; message: string }
@@ -144,7 +148,10 @@ export async function exploreActiveProperties(
 
     const { data, error } = await query;
     if (error) return { ok: false, message: copy.loadError };
-    return { ok: true, data: (data as AgentPropertyRow[]) ?? [] };
+    const rows = ((data as HousingPropertyRow[]) ?? []).filter((row) =>
+      isHousingRowPubliclyVisible(row),
+    );
+    return { ok: true, data: rows as AgentPropertyRow[] };
   } catch {
     return { ok: false, message: copy.loadError };
   }
@@ -166,6 +173,9 @@ export async function getActiveProperty(
       .maybeSingle();
 
     if (error || !data) return { ok: false, message: copy.loadError };
+    if (!isHousingRowPubliclyVisible(data as HousingPropertyRow)) {
+      return { ok: false, message: copy.loadError };
+    }
     return { ok: true, data: data as AgentPropertyRow };
   } catch {
     return { ok: false, message: copy.loadError };

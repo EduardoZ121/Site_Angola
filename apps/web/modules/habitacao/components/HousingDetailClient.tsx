@@ -24,6 +24,7 @@ import {
   expressInterest,
   getActiveProperty,
   listMyInterests,
+  shouldOfferAvailabilityNotify,
   type HousingPropertyRow,
 } from '../services/housing-client';
 
@@ -202,12 +203,17 @@ export function HousingDetailClient({ id }: { id: string }) {
                     </Link>
                   ) : null}
                   {canAgent ? (
-                    <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
+                    <Link
+                      href="/app/agente"
+                      className={cn(buttonVariants({ variant: 'secondary' }))}
+                    >
                       {copy.goAgent}
                     </Link>
                   ) : null}
                 </div>
-                {canExplore ? <NotifyAvailabilityButton propertyId={id} /> : null}
+                {canExplore && row && shouldOfferAvailabilityNotify(row) ? (
+                  <NotifyAvailabilityButton propertyId={id} />
+                ) : null}
                 <MessagePropertyOwnerButton
                   propertyId={id}
                   ownerId={row.owner_id}

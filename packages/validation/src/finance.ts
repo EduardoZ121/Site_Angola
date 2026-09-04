@@ -40,7 +40,7 @@ export const financeQuoteSchema = z.object({
 export const financeSandboxPaymentSchema = z.object({
   productCode: z.string().trim().min(2).max(80),
   urgencyBand: z.enum(FINANCE_URGENCY_BANDS).optional().nullable(),
-  gatewayCode: z.string().trim().min(2).max(40).default('sandbox'),
+  gatewayCode: z.literal('sandbox').default('sandbox'),
   description: z.string().trim().max(500).optional().nullable(),
 });
 
@@ -235,7 +235,7 @@ export const kutekaPayCreateIntentSchema = z.object({
   referenceType: z.string().trim().max(64).optional().nullable(),
   referenceId: z.string().uuid().optional().nullable(),
   urgencyBand: z.enum(FINANCE_URGENCY_BANDS).optional().nullable(),
-  gatewayCode: z.enum(KUTEKA_PAY_ADAPTER_CODES).optional().nullable(),
+  gatewayCode: z.literal('sandbox').optional().nullable(),
   idempotencyKey: z.string().trim().min(6).max(120).optional().nullable(),
   description: z.string().trim().max(500).optional().nullable(),
   amountOverride: z.number().nonnegative().max(100_000_000).optional().nullable(),
@@ -257,7 +257,7 @@ export const kutekaPaySimulateWebhookSchema = z.object({
 });
 
 export const kutekaPaySetDefaultGatewaySchema = z.object({
-  gatewayCode: z.enum(KUTEKA_PAY_ADAPTER_CODES),
+  gatewayCode: z.literal('sandbox'),
 });
 
 export type KutekaPayCreateIntentInput = z.infer<typeof kutekaPayCreateIntentSchema>;
