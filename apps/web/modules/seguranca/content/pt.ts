@@ -52,6 +52,8 @@ export const segurancaCopyPt = {
   emailChange: {
     title: 'Alterar email',
     hint: 'Pedido com confirmação dupla (código no email actual e no novo). Em beta os códigos podem aparecer aqui (beta_inline).',
+    inactiveHint:
+      'Preparada, não activada (D5). O email da conta não se altera neste teste. A identidade continua a ser o utilizador, não o endereço.',
     newEmailLabel: 'Novo email',
     request: 'Pedir alteração',
     oldCodeLabel: 'Código do email actual',

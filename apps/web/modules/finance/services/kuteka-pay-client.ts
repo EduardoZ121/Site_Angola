@@ -101,7 +101,7 @@ export async function createIntent(
       p_reference_type: parsed.data.referenceType ?? null,
       p_reference_id: parsed.data.referenceId ?? null,
       p_urgency_band: parsed.data.urgencyBand ?? null,
-      p_gateway_code: parsed.data.gatewayCode ?? null,
+      p_gateway_code: 'sandbox',
       p_idempotency_key: parsed.data.idempotencyKey ?? null,
       p_description: parsed.data.description ?? null,
       p_metadata: {},
@@ -235,8 +235,11 @@ export async function setDefaultGateway(
   }
   try {
     const client = createBrowserClient();
+    if (parsed.data.gatewayCode !== 'sandbox') {
+      return { ok: false, message: copy().saveError };
+    }
     const { error } = await client.rpc('kuteka_pay_set_default_gateway', {
-      p_code: parsed.data.gatewayCode,
+      p_code: 'sandbox',
     });
     if (error) return { ok: false, message: error.message || copy().saveError };
     return { ok: true };

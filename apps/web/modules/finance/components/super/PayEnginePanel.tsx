@@ -184,11 +184,7 @@ export function PayEnginePanel({ canManage }: PanelProps) {
                   setDefaultGatewayCode(e.target.value as (typeof KUTEKA_PAY_ADAPTER_CODES)[number])
                 }
               >
-                {KUTEKA_PAY_ADAPTER_CODES.map((code) => (
-                  <option key={code} value={code}>
-                    {code}
-                  </option>
-                ))}
+                <option value="sandbox">sandbox</option>
               </select>
             </div>
             <Button type="submit" loading={busy === 'default'}>
@@ -260,11 +256,7 @@ export function PayEnginePanel({ canManage }: PanelProps) {
                   setGateway(e.target.value as (typeof KUTEKA_PAY_ADAPTER_CODES)[number])
                 }
               >
-                {KUTEKA_PAY_ADAPTER_CODES.map((code) => (
-                  <option key={code} value={code}>
-                    {code}
-                  </option>
-                ))}
+                <option value="sandbox">sandbox</option>
               </select>
             </div>
             <div className="sm:col-span-4">

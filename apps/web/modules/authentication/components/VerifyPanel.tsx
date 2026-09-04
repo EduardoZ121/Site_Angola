@@ -3,6 +3,9 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, type FormEvent } from 'react';
+import { createBrowserClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '../lib/supabase-config';
+import { resolveEmailVerified } from '../lib/destination-gate';
 import { Button, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
@@ -28,9 +31,10 @@ export function VerifyPanel() {
   const copy = getAuthCopy(locale);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const email = searchParams.get('email') ?? '';
+  const emailParam = searchParams.get('email') ?? '';
   const next = searchParams.get('next');
   const already = searchParams.get('confirmed') === '1';
+  const [email, setEmail] = useState(emailParam);
 
   const [cooldown, setCooldown] = useState(0);
   const [message, setMessage] = useState<string | null>(null);
@@ -46,6 +50,50 @@ export function VerifyPanel() {
     const t = setTimeout(() => setCooldown((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [cooldown]);
+
+  useEffect(() => {
+    if (emailParam) setEmail(emailParam);
+  }, [emailParam]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const client = createBrowserClient();
+        const {
+          data: { user },
+        } = await client.auth.getUser();
+        if (cancelled || !user) return;
+        if (!emailParam && user.email) setEmail(user.email);
+        const { data: profile } = await client
+          .from('profiles')
+          .select('email_verified_at')
+          .eq('id', user.id)
+          .maybeSingle();
+        const verified = resolveEmailVerified({
+          authConfirmedAt: user.email_confirmed_at,
+          profileVerifiedAt: profile?.email_verified_at ?? null,
+        });
+        if (!verified) return;
+        const { data: roleCodes } = await client.rpc('get_user_role_codes', {
+          p_user_id: user.id,
+        });
+        const dest = applyDestinationGate({
+          hasSession: true,
+          emailVerified: true,
+          roleCodes: Array.isArray(roleCodes) ? roleCodes.filter((r): r is string => typeof r === 'string') : [],
+          next,
+        });
+        router.replace(dest);
+      } catch {
+        /* stay on verify */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [emailParam, next, router]);
 
   async function onResend() {
     if (!email || cooldown > 0) return;

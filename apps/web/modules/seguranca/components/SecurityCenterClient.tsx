@@ -21,10 +21,6 @@ import {
   revokeSecuritySession,
   verifySecurityOtp,
 } from '../services/security-client';
-import {
-  confirmEmailChange,
-  requestEmailChange,
-} from '@/modules/kocc/services/institutional-client';
 
 function verifiedBadge(ok: boolean, copy: SegurancaCopy) {
   return ok ? (
@@ -58,11 +54,6 @@ export function SecurityCenterClient() {
   const [sandboxHint, setSandboxHint] = useState<string | null>(null);
   const [actionMsg, setActionMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [newEmail, setNewEmail] = useState('');
-  const [emailRequestId, setEmailRequestId] = useState<string | null>(null);
-  const [oldEmailCode, setOldEmailCode] = useState('');
-  const [newEmailCode, setNewEmailCode] = useState('');
-  const [betaEmailHint, setBetaEmailHint] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -129,50 +120,6 @@ export function SecurityCenterClient() {
     if (result.ok) void load();
   }
 
-  async function onRequestEmailChange() {
-    setBusy(true);
-    setActionMsg(null);
-    setBetaEmailHint(null);
-    const result = await requestEmailChange(newEmail.trim());
-    setBusy(false);
-    if (!result.ok) {
-      setActionMsg(result.message);
-      return;
-    }
-    setEmailRequestId(result.data.requestId);
-    if (result.data.delivery === 'beta_inline' && result.data.oldCode && result.data.newCode) {
-      setBetaEmailHint(
-        copy.emailChange.betaCodesHint
-          .replace('{old}', result.data.oldCode)
-          .replace('{new}', result.data.newCode),
-      );
-    }
-    setActionMsg(copy.emailChange.requested);
-  }
-
-  async function onConfirmEmailChange() {
-    if (!emailRequestId) return;
-    setBusy(true);
-    setActionMsg(null);
-    const result = await confirmEmailChange({
-      requestId: emailRequestId,
-      oldCode: oldEmailCode,
-      newCode: newEmailCode,
-    });
-    setBusy(false);
-    if (!result.ok) {
-      setActionMsg(result.message);
-      return;
-    }
-    setActionMsg(copy.emailChange.completed);
-    setEmailRequestId(null);
-    setOldEmailCode('');
-    setNewEmailCode('');
-    setBetaEmailHint(null);
-    setNewEmail('');
-    void load();
-  }
-
   const activeDevices = snap?.devices.filter((d) => !d.revoked_at) ?? [];
   const openSessions = snap?.sessions.filter((s) => !s.revoked_at) ?? [];
 
@@ -232,70 +179,8 @@ export function SecurityCenterClient() {
                 <h2 id="email-change" className="kuteka-detail-title">
                   {copy.emailChange.title}
                 </h2>
-                <p className="mt-1 text-sm text-slate-600">{copy.emailChange.hint}</p>
-                <div className="mt-4 flex flex-col gap-3 sm:max-w-md">
-                  <label className="text-sm font-medium text-slate-800" htmlFor="sec-new-email">
-                    {copy.emailChange.newEmailLabel}
-                  </label>
-                  <input
-                    id="sec-new-email"
-                    type="email"
-                    className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-slate-900"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                    autoComplete="email"
-                  />
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    loading={busy}
-                    disabled={busy || !newEmail.includes('@')}
-                    onClick={() => void onRequestEmailChange()}
-                  >
-                    {copy.emailChange.request}
-                  </Button>
-                  {betaEmailHint ? <p className="text-sm text-amber-800">{betaEmailHint}</p> : null}
-                  {emailRequestId ? (
-                    <>
-                      <label className="text-sm font-medium text-slate-800" htmlFor="sec-old-code">
-                        {copy.emailChange.oldCodeLabel}
-                      </label>
-                      <input
-                        id="sec-old-code"
-                        className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 tracking-[0.35em] text-slate-900"
-                        value={oldEmailCode}
-                        onChange={(e) =>
-                          setOldEmailCode(e.target.value.replace(/\D/g, '').slice(0, 6))
-                        }
-                        inputMode="numeric"
-                        maxLength={6}
-                        placeholder="••••••"
-                      />
-                      <label className="text-sm font-medium text-slate-800" htmlFor="sec-new-code">
-                        {copy.emailChange.newCodeLabel}
-                      </label>
-                      <input
-                        id="sec-new-code"
-                        className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 tracking-[0.35em] text-slate-900"
-                        value={newEmailCode}
-                        onChange={(e) =>
-                          setNewEmailCode(e.target.value.replace(/\D/g, '').slice(0, 6))
-                        }
-                        inputMode="numeric"
-                        maxLength={6}
-                        placeholder="••••••"
-                      />
-                      <Button
-                        type="button"
-                        loading={busy}
-                        disabled={busy || oldEmailCode.length !== 6 || newEmailCode.length !== 6}
-                        onClick={() => void onConfirmEmailChange()}
-                      >
-                        {copy.emailChange.confirm}
-                      </Button>
-                    </>
-                  ) : null}
-                </div>
+                <p className="mt-1 text-sm text-slate-600">{copy.emailChange.inactiveHint}</p>
+                <p className="mt-2 text-sm font-medium text-slate-800">{session?.email ?? '—'}</p>
               </section>
 
               <section className="kuteka-detail-panel grid gap-4 p-5 sm:grid-cols-3">

@@ -128,6 +128,7 @@ export async function exploreActiveProperties(
       .from('properties')
       .select(PROPERTY_SELECT)
       .eq('status', 'active')
+      .eq('is_demo', false)
       .is('deleted_at', null)
       .order('created_at', { ascending: false });
 
@@ -160,6 +161,7 @@ export async function getActiveProperty(
       .select(PROPERTY_SELECT)
       .eq('id', id)
       .eq('status', 'active')
+      .eq('is_demo', false)
       .is('deleted_at', null)
       .maybeSingle();
 
