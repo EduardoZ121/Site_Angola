@@ -24,7 +24,11 @@ Nota: a mensagem “push bloqueado/403” nos documentos históricos da versão 
 
 ## P1 — Decisões Founder
 
-**PREPARADO** — ficha única em `KUTEKA_FASE0_FECHO_OPERACIONAL_2026-09-04.md`. Aguarda decisão do Founder / pareceres.
+| ID | Estado |
+|----|--------|
+| D1, D3, D4, D5, D7 | **DECIDIDO** 2026-09-04 — ver [`KUT-GOV-002_FOUNDER_DECISIONS_D1_D3_D4_D5_D7_2026-09-04.md`](../governance/KUT-GOV-002_FOUNDER_DECISIONS_D1_D3_D4_D5_D7_2026-09-04.md) |
+| D-LEG / D-LEG-RENT | **PENDENTE** — requer advogado |
+| D-FIN / D-FIN-RENT | **PENDENTE** — requer contabilista |
 
 ## P2 — Pedidos profissionais
 

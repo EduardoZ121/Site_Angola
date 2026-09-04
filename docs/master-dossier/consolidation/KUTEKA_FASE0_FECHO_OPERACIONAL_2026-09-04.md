@@ -89,10 +89,10 @@ Makiese Vicente — Founder, Kuteka
 Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 
 ### D1 — Comissão 35% (fonte única)
-- **Estado:** Duas vias técnicas documentadas (C2). Regra de negócio 35% fechada; fonte de verdade aberta.
+- **Estado:** **DECIDIDO — A** (2026-09-04). Fonte = `platform_commission_params` Founder-only.
 - **Opções:** (A) params Founder-only · (B) Super UI · (C) Híbrido · (D) Manter dual até data X
 - **Recomendação documental:** A como fonte estratégica; B alinhado depois. Sem unificar código.
-- **Decisão necessária:** Escolher A/B/C/D.
+- **Decisão necessária:** — registada. Unificação de código **não** autorizada.
 - **Profissional:** Founder
 
 ### D-LEG-RENT — Renda + liquidação PP
@@ -124,31 +124,31 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Contabilista + Founder
 
 ### D3 — DEMO / Beta
-- **Estado:** Charter v2 exige honestidade; política exacta aberta.
+- **Estado:** **DECIDIDO — DEMO INTERNAL ONLY** (2026-09-04).
 - **Opções:** Demo interno only · Badge ilustrativo · Bloquear demo em prod
 - **Recomendação documental:** Demo interno only; sem rótulo “Demo” ao público.
-- **Decisão necessária:** Escolher uma das três opções.
+- **Decisão necessária:** — registada. Sem misturar DEMO com Beta público.
 - **Profissional:** Founder
 
 ### D4 — Growth Engine N0–N5
-- **Estado:** Paper only (C8). Código Growth bloqueado.
+- **Estado:** **DECIDIDO — N1** (2026-09-04). Teto = instrumentação. Código Growth bloqueado.
 - **Opções:** N0 nada · N1 instrumentação · N2 partilha · N3+ referral/campanhas
 - **Recomendação documental:** N0 ou N1 na Beta pública até parecer legal de campanhas.
-- **Decisão necessária:** Fixar nível máximo na Beta.
+- **Decisão necessária:** — registada. Sem activar N2+.
 - **Profissional:** Founder (+ advogado se N3+)
 
 ### D5 — Alteração de email Founder/Co-Founder
-- **Estado:** ADR-027 preparado; não activado.
+- **Estado:** **DECIDIDO — A / NÃO ACTIVAR** (2026-09-04).
 - **Opções:** (A) Manter preparado · (B) Activar com testes §29.12
 - **Recomendação documental:** Manter não activado até testes + autorização dedicada.
-- **Decisão necessária:** A ou B.
+- **Decisão necessária:** — registada.
 - **Profissional:** Founder
 
 ### D7 — Papel do contabilista
-- **Estado:** RACI menciona papel futuro; sem login definido.
+- **Estado:** **DECIDIDO — B / SEM LOGIN** (2026-09-04).
 - **Opções:** (A) Login read-only futuro · (B) Offline · (C) Export Founder-only
 - **Recomendação documental:** Começar B ou C até o volume justificar login.
-- **Decisão necessária:** Escolher canal de entrega.
+- **Decisão necessária:** — registada. Sem criar role/RBAC.
 - **Profissional:** Founder + Contabilista
 
 ---

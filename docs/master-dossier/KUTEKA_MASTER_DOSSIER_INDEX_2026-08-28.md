@@ -95,14 +95,17 @@
 | [`../../product/SPRINT_BETA_CHARTER.md`](../../product/SPRINT_BETA_CHARTER.md) v1.4 | Mantido; v2 complementa |
 | [`../../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md`](../../finance/ARQUITETURA_FINANCEIRA_KUTEKA.md) | Base FIN-001 |
 
-## Decisões Founder pendentes (documentadas, não bloqueiam Fase 0)
+## Decisões Founder (Fase 0)
 
-| ID | Tema |
-|----|------|
-| D1 | Fonte única comissão 35% |
-| D3 | Política demo Beta |
-| D4 | Growth nível na Beta |
-| D5 | Activar alteração email §29 |
+| ID | Tema | Estado |
+|----|------|--------|
+| D1 | Fonte única comissão 35% | **DECIDIDO — A** (2026-09-04) |
+| D3 | Política demo Beta | **DECIDIDO — DEMO INTERNAL ONLY** |
+| D4 | Growth nível na Beta | **DECIDIDO — N1** |
+| D5 | Activar alteração email §29 | **DECIDIDO — A / NÃO ACTIVAR** |
+| D7 | Papel contabilista | **DECIDIDO — B / SEM LOGIN** |
+| D-LEG / D-LEG-RENT | Parecer jurídico | **PENDENTE** |
+| D-FIN / D-FIN-RENT | Parecer contabilístico | **PENDENTE** |
 
 ---
 

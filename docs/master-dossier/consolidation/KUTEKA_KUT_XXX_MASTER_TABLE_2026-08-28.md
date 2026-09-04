@@ -259,7 +259,7 @@
 | **Riscos** | Duas fontes comissão; alteração comercial não autorizada |
 | **Prioridade** | P0 |
 | **Classificação** | D |
-| **Acção proposta** | Documentar política C2; Founder escolhe fonte verdade (D1) — unificação código fase posterior |
+| **Acção proposta** | Política C2 documentada; D1 **DECIDIDO — A** (2026-09-04). Unificação código fase posterior (não autorizada).
 
 ### KUT-FIN-006
 

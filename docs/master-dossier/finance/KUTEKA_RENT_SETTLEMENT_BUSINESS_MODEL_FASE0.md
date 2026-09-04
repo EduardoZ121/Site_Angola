@@ -81,7 +81,7 @@ Cliente ──(renda)──► Infraestrutura pagamento (PSP/gateway)
 ## 5. Comissão Kuteka
 
 - Regra existente **inalterada:** comissão activação **35%** (1.º mês intermediação) — Founder-only — ver [C2](./C2_KUT-FIN-005_DUAL_COMMISSION_PATHS.md) e POL-005.
-- **D1 pendente:** fonte técnica única (`platform_commission_params` vs `finance_commission_rules`).
+- **D1 DECIDIDO — A** (2026-09-04): fonte técnica = `platform_commission_params` Founder-only. Unificação de código **não** autorizada.
 - Vigência, retroactividade e alteração: conforme políticas já documentadas (**sem retroactividade**).
 
 ---
