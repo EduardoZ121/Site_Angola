@@ -256,7 +256,7 @@ function AppShellInner({ children }: { children: ReactNode }) {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [copy.app.loadError]);
+  }, [copy.app.loadError, setLocale]);
 
   useEffect(() => {
     if (authRedirect) router.replace(authRedirect);
