@@ -45,7 +45,7 @@ Adoptada provisoriamente a seguinte atribuição canónica de IDs financeiros:
 ## Implementação
 
 - **Fase 0:** apenas documentação e referências cruzadas
-- **Fases futuras:** migrations/RPC/UI **somente** após `AUTORIZO: FASE X` e decisão D1 (fonte comissão)
+- **Fases futuras:** migrations/RPC/UI **somente** após `AUTORIZO: FASE X` (D1 já **DECIDIDO — A**; não autoriza implementação)
 
 ## Referências
 

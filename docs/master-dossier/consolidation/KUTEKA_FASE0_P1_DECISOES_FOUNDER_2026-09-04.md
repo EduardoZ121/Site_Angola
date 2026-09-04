@@ -9,6 +9,7 @@ Regra: **recomendação técnica/documental apenas**. Jurídico/fiscal = profiss
 - **Opções:** A · B · Híbrido · Manter dual até data X
 - **Recomendação documental:** Preferir **A como fonte estratégica** + B alinhado depois (híbrido documentado) — **sujeito a D1 Founder**; não unificar código até `AUTORIZO`
 - **Aprova:** Founder
+- **Estado:** **DECIDIDO — A** (2026-09-04). Fonte = `platform_commission_params` Founder-only. Sem unificação de código.
 
 ### D-LEG-RENT — Renda + liquidação PP
 - **Situação:** Requisito negócio documentado; estrutura legal aberta
@@ -37,21 +38,25 @@ Regra: **recomendação técnica/documental apenas**. Jurídico/fiscal = profiss
 - **Opções:** Demo interno only · Badge ilustrativo · Bloquear demo em prod
 - **Recomendação documental:** Demo **interno only** + nunca rótulo "Demo" ao público (alinhado KOS) — Founder confirma
 - **Aprova:** Founder
+- **Estado:** **DECIDIDO — DEMO INTERNAL ONLY** (2026-09-04). Sem misturar DEMO com Beta público.
 
 ### D4 — Growth N0–N5
 - **Situação:** Paper only; código bloqueado
 - **Opções:** N0–N5
 - **Recomendação documental:** **N0 ou N1** na Beta pública até parecer legal campanhas
 - **Aprova:** Founder (+ advogado se N3+)
+- **Estado:** **DECIDIDO — N1** (2026-09-04). Teto = instrumentação. Sem código Growth.
 
 ### D5 — Email Founder/Co-Founder
 - **Situação:** ADR-027 preparado; não activado
 - **Opções:** Manter preparado · Activar com testes 29.12
 - **Recomendação:** **Manter não activado** até suite testes + `AUTORIZO` dedicado
 - **Aprova:** Founder
+- **Estado:** **DECIDIDO — A / NÃO ACTIVAR** (2026-09-04).
 
 ### D7 — Papel contabilista
 - **Situação:** RACI menciona role futuro
 - **Opções:** Login read-only · Offline · Export Founder-only
 - **Recomendação documental:** Começar **offline / export Founder** até volume justificar login
 - **Aprova:** Founder + Contabilista
+- **Estado:** **DECIDIDO — B / SEM LOGIN** (2026-09-04). Canal off-platform. D-FIN/D-FIN-RENT pendentes.

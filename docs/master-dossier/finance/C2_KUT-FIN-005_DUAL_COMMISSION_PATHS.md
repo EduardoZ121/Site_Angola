@@ -53,20 +53,20 @@ As duas vias **podem produzir valores diferentes** se não forem alinhadas manua
 
 | Risco | Severidade | Mitigação Fase 0 |
 |-------|------------|------------------|
-| Super altera comissão sem alinhar Founder param | Alta | Documentar; decisão D1 pendente |
+| Super altera comissão sem alinhar Founder param | Alta | D1 **DECIDIDO — A**: fonte = `platform_commission_params` Founder-only. Unificação de código **não** autorizada. |
 | Founder altera param sem refletir regras Super | Alta | Checklist reconciliação manual |
 | Utilizador vê preço inconsistente | Média | Sandbox only até unificação |
 
-## Decisão Founder pendente (D1)
+## Decisão Founder (D1) — DECIDIDO 2026-09-04
 
 **Fonte única de verdade** para comissão de activação 35%:
 
-- [ ] Via A — `platform_commission_params` (Founder-only)
+- [x] Via A — `platform_commission_params` (Founder-only) — **DECIDIDO**
 - [ ] Via B — `finance_commission_rules` (Super UI)
 - [ ] Híbrido documentado (A = default estratégico; B = derivação operacional)
 - [ ] Manter dual até data X
 
-**Unificação de código:** tarefa **posterior**, bloqueada até D1 resolvido.
+**Unificação de código:** tarefa **posterior**, **ainda bloqueada**. D1 não autoriza SQL, RPC, UI, migrations nem Fase 1.
 
 ## Sequência recomendada pós-D1
 

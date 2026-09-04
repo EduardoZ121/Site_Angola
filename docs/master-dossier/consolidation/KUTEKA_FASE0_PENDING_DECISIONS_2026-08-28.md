@@ -4,7 +4,7 @@
 |-------|-------|
 | **Versão** | 1.0 |
 | **Data** | 2026-08-28 |
-| **Estado** | Activo — **não resolver unilateralmente** |
+| **Estado** | D1, D3, D4, D5, D7 = **DECIDIDO** (2026-09-04). D-LEG / D-LEG-RENT / D-FIN / D-FIN-RENT = **PENDENTE**. |
 | **Formato** | Cada item = `DECISÃO PENDENTE` conforme autorização final Fase 0 |
 
 > Regra: nenhuma destas questões autoriza código, migration, deploy ou alteração substantiva até decisão explícita do responsável indicado.
@@ -21,6 +21,8 @@
 | **Consequências documentadas** | Divergência preços; risco Super alterar sem alinhar Founder; unificação código bloqueada até decisão |
 | **Responsável** | **Founder** |
 | **Momento** | Antes de `AUTORIZO: FASE X — unificação comissão` |
+| **Estado** | **DECIDIDO — A** (2026-09-04) |
+| **Decisão** | Fonte única = `platform_commission_params`, Founder-only. Sem unificação de código. |
 
 ---
 
@@ -34,6 +36,8 @@
 | **Consequências documentadas** | Percepção enganosa; métricas Beta inválidas; confiança |
 | **Responsável** | **Founder** |
 | **Momento** | Antes de ciclo Beta público amplo (BETA-40) |
+| **Estado** | **DECIDIDO — DEMO INTERNAL ONLY** (2026-09-04) |
+| **Decisão** | DEMO exclusivamente interno. Não misturar com utilizadores ou métricas do Beta público. |
 
 ---
 
@@ -47,6 +51,8 @@
 | **Consequências documentadas** | Scope creep; confusão Pay vs pontos; compliance campanhas |
 | **Responsável** | **Founder** |
 | **Momento** | Antes de qualquer código Growth Engine |
+| **Estado** | **DECIDIDO — N1** (2026-09-04) |
+| **Decisão** | Teto Beta pública = N1 instrumentação. Sem referral, campanhas ou N2+. Sem autorização de código. |
 
 ---
 
@@ -60,6 +66,8 @@
 | **Consequências documentadas** | Activar cedo sem testes = regressão RBAC/audit; adiar = dependência email pessoal |
 | **Responsável** | **Founder** |
 | **Momento** | Fase dedicada identidade + suite testes ADR-027 |
+| **Estado** | **DECIDIDO — A / NÃO ACTIVAR** (2026-09-04) |
+| **Decisão** | Manter preparado documentalmente. Não activar o fluxo de email. |
 
 ---
 
@@ -73,6 +81,8 @@
 | **Consequências documentadas** | RACI incompleto; acesso indevido a dados financeiros |
 | **Responsável** | **Founder** + **Contabilista** |
 | **Momento** | Antes de FIN-008 operacional e pagamentos reais |
+| **Estado** | **DECIDIDO — B / SEM LOGIN** (2026-09-04) |
+| **Decisão** | Sem login RBAC. Canal documental/off-platform. D-FIN / D-FIN-RENT continuam pendentes. |
 
 ---
 

@@ -5,7 +5,7 @@
 | **Versão** | 0.1-DRAFT |
 | **Data** | 2026-08-28 |
 | **Tipo** | Arquitectura em papel — **sem implementação funcional** |
-| **Autorização código** | Bloqueada — decisão D4 (nível Growth na Beta) |
+| **Autorização código** | Bloqueada — D4 **DECIDIDO — N1** (teto Beta). Sem código Growth até `AUTORIZO: FASE 1`. |
 
 ## 1. Filosofia
 
@@ -91,9 +91,11 @@ Funil: Impressão → … → Receita — por campanha, custo vs valor.
 
 Campanhas sorteio/prémios/dinheiro → **validação jurídica antes activação** (GROWTH-13).
 
-## 11. Decisão Founder pendente (D4)
+## 11. Decisão Founder (D4) — DECIDIDO 2026-09-04
 
-Activar na Beta pública até que nível? [ ] N0 [ ] N1 [ ] N2 [ ] N3+
+Teto da Beta pública: **N1 — instrumentação**. [ ] N0 [x] N1 [ ] N2 [ ] N3+
+
+Esta decisão **não** autoriza código, referral, campanhas nem recompensas.
 
 ## 12. Conflito documental
 

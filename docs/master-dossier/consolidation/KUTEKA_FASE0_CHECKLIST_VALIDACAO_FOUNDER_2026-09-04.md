@@ -13,7 +13,7 @@
 | 9 | Pack enviado ao advogado | **REQUER DECISÃO DO FOUNDER** (envio) |
 | 10 | Pack enviado ao contabilista | **REQUER DECISÃO DO FOUNDER** (envio) |
 | 11 | Pareceres LEG/FIN | **REQUER ADVOGADO** / **REQUER CONTABILISTA** |
-| 12 | Decisões D1, D3, D4, D5, D7 | **REQUER DECISÃO DO FOUNDER** |
+| 12 | Decisões D1, D3, D4, D5, D7 | **DECIDIDO** 2026-09-04 |
 | 13 | `AUTORIZO: FASE 1` | **BLOQUEADO** — não iniciar |
 
 **Assinatura Founder:** _________________ Data: _______

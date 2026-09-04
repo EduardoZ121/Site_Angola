@@ -87,7 +87,7 @@ Ver documento dedicado: [C2_KUT-FIN-005_DUAL_COMMISSION_PATHS.md](./C2_KUT-FIN-0
 - Activacao 35%: Founder/Owner only
 - Versionamento de alterações
 - Sem retroactividade
-- Duas vias actuais documentadas; unificação pendente D1
+- Duas vias actuais documentadas; D1 **DECIDIDO — A** (`platform_commission_params`). Unificação de código **não** autorizada.
 
 ---
 

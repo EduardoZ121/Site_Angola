@@ -57,11 +57,11 @@
 
 | ID | Tema | Estado |
 |----|------|--------|
-| D1 | Fonte comissão 35% | ☐ Pendente |
-| D3 | Política demo Beta | ☐ Pendente |
-| D4 | Growth nível Beta | ☐ Pendente |
-| D5 | Activar email change | ☐ Pendente |
-| D7 | Papel contabilista | ☐ Pendente |
+| D1 | Fonte comissão 35% | ✅ DECIDIDO — A |
+| D3 | Política demo Beta | ✅ DECIDIDO — DEMO INTERNAL ONLY |
+| D4 | Growth nível Beta | ✅ DECIDIDO — N1 |
+| D5 | Activar email change | ✅ DECIDIDO — A / NÃO ACTIVAR |
+| D7 | Papel contabilista | ✅ DECIDIDO — B / SEM LOGIN |
 
 ---
 
