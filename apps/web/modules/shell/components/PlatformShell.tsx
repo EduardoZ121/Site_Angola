@@ -192,13 +192,16 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
               </button>
               <div className="min-w-0 md:hidden">
                 <BrandMark href="/app" variant="inline" tone="light" size="md" />
+                <p className="truncate text-[11px] font-semibold text-[#fde68a]">
+                  {shell.institutional.badge}
+                </p>
               </div>
               <div className="hidden min-w-0 md:block">
                 <p
                   id={titleId}
                   className="truncate text-sm font-semibold tracking-wide text-slate-100"
                 >
-                  {shell.areaTitle}
+                  {shell.institutional.badge}
                 </p>
                 <p className="truncate text-xs font-semibold text-[#fde68a]">
                   {modeBadgeLabel(mode, locale)}

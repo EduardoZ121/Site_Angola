@@ -24,6 +24,7 @@ import {
   expressInterest,
   getActiveProperty,
   listMyInterests,
+  shouldOfferAvailabilityNotify,
   type HousingPropertyRow,
 } from '../services/housing-client';
 
@@ -35,6 +36,7 @@ export function HousingDetailClient({ id }: { id: string }) {
     sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');
   const canContracts =
     sessionStatus === 'ready' && !!session?.permissions.includes('contracts.manage');
+  const canAgent = sessionStatus === 'ready' && !!session?.permissions.includes('agent.operate');
 
   const [row, setRow] = useState<HousingPropertyRow | null>(null);
   const [media, setMedia] = useState<PropertyMediaRow[]>([]);
@@ -200,11 +202,18 @@ export function HousingDetailClient({ id }: { id: string }) {
                       {copy.detail.prepareContract}
                     </Link>
                   ) : null}
-                  <Link href="/app/agente" className={cn(buttonVariants({ variant: 'secondary' }))}>
-                    {copy.goAgent}
-                  </Link>
+                  {canAgent ? (
+                    <Link
+                      href="/app/agente"
+                      className={cn(buttonVariants({ variant: 'secondary' }))}
+                    >
+                      {copy.goAgent}
+                    </Link>
+                  ) : null}
                 </div>
-                {canExplore ? <NotifyAvailabilityButton propertyId={id} /> : null}
+                {canExplore && row && shouldOfferAvailabilityNotify(row) ? (
+                  <NotifyAvailabilityButton propertyId={id} />
+                ) : null}
                 <MessagePropertyOwnerButton
                   propertyId={id}
                   ownerId={row.owner_id}
@@ -215,7 +224,9 @@ export function HousingDetailClient({ id }: { id: string }) {
               <FlowNextSteps
                 title={copy.detail.nextTitle}
                 steps={[
-                  { href: '/app/agente', label: copy.detail.stepAgent, primary: true },
+                  ...(canAgent
+                    ? [{ href: '/app/agente', label: copy.detail.stepAgent, primary: true }]
+                    : []),
                   ...(canContracts
                     ? [{ href: '/app/contratos', label: copy.detail.stepContract }]
                     : []),

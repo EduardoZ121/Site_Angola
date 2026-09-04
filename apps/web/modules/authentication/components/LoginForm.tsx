@@ -7,7 +7,7 @@ import { loginSchema } from '@kuteka/validation';
 import { canAccessAdminPanel } from '@kuteka/auth';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
-import { applyDestinationGate } from '../lib/destination-gate';
+import { applyDestinationGate, resolveEmailVerified } from '../lib/destination-gate';
 import { signIn } from '../services/auth-client';
 import { isSupabaseConfigured } from '../lib/supabase-config';
 import { createBrowserClient } from '@/lib/supabase/client';
@@ -70,7 +70,21 @@ export function LoginForm() {
           data: { user },
         } = await client.auth.getUser();
         if (user) {
-          const verified = Boolean(user.email_confirmed_at);
+          let profileVerifiedAt: string | null = null;
+          try {
+            const { data: profile } = await client
+              .from('profiles')
+              .select('email_verified_at')
+              .eq('id', user.id)
+              .maybeSingle();
+            profileVerifiedAt = profile?.email_verified_at ?? null;
+          } catch {
+            profileVerifiedAt = null;
+          }
+          const verified = resolveEmailVerified({
+            authConfirmedAt: user.email_confirmed_at,
+            profileVerifiedAt,
+          });
           let roleCodes: string[] = [];
           let hasAdminPanel = false;
           if (verified) {

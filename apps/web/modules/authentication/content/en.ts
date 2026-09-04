@@ -163,7 +163,7 @@ export const authCopyEn: AuthCopy = {
     welcomeSubtitle: 'Your account is almost ready. Let’s finish a quick setup.',
     roles: {
       title: 'How do you want to use Kuteka?',
-      hint: 'Tell us how you plan to use Kuteka. You can change or add roles later.',
+      hint: 'Choose the role to activate. Exploring as a Client does not grant Partner, Agent or Admin powers. Partner is only assigned if you select it. Agent and Admin are never self-assigned.',
       client: 'Client',
       clientDesc: 'Search, book or manage your housing journey.',
       partner: 'Patrimonial Partner',
@@ -228,5 +228,6 @@ export const authCopyEn: AuthCopy = {
     configMissing:
       'The authenticated area requires Supabase configuration. Set the environment variables and try again.',
     loginRequired: 'You need to sign in to access this area.',
+    continuing: 'Continuing…',
   },
 };

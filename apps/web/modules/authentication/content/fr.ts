@@ -164,7 +164,7 @@ export const authCopyFr: AuthCopy = {
     welcomeSubtitle: 'Votre compte est presque prêt. Terminons une configuration rapide.',
     roles: {
       title: 'Comment voulez-vous utiliser Kuteka ?',
-      hint: 'Indiquez comment vous souhaitez utiliser Kuteka. Vous pourrez modifier ou ajouter des rôles plus tard.',
+      hint: 'Choisissez le rôle à activer. Explorer en Client n’accorde pas les pouvoirs Partenaire, Agent ou Admin. Le Partenaire n’est activé que si vous le cochez. Agent et Admin ne sont jamais auto-attribués.',
       client: 'Client',
       clientDesc: 'Rechercher, réserver ou gérer votre parcours logement.',
       partner: 'Partenaire patrimonial',
@@ -231,5 +231,6 @@ export const authCopyFr: AuthCopy = {
     configMissing:
       'La zone authentifiée nécessite la configuration Supabase. Définissez les variables d’environnement et réessayez.',
     loginRequired: 'Vous devez vous connecter pour accéder à cette zone.',
+    continuing: 'Poursuite…',
   },
 };

@@ -164,7 +164,7 @@ export const authCopyEs: AuthCopy = {
     welcomeSubtitle: 'Su cuenta está casi lista. Completemos una configuración rápida.',
     roles: {
       title: '¿Cómo quiere usar Kuteka?',
-      hint: 'Indique cómo pretende usar Kuteka. Puede cambiar o añadir roles más tarde.',
+      hint: 'Elija el rol a activar. Explorar como Cliente no concede poderes de Socio, Agente o Admin. El Socio solo se activa si lo marca. Agente y Admin nunca se autoasignan.',
       client: 'Cliente',
       clientDesc: 'Buscar, reservar o gestionar su recorrido habitacional.',
       partner: 'Socio Patrimonial',
@@ -232,5 +232,6 @@ export const authCopyEs: AuthCopy = {
     configMissing:
       'El área autenticada requiere la configuración de Supabase. Defina las variables de entorno e inténtelo de nuevo.',
     loginRequired: 'Debe iniciar sesión para acceder a esta área.',
+    continuing: 'Continuando…',
   },
 };

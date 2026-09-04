@@ -55,7 +55,7 @@ export const marketplaceOrderIdSchema = z.object({
 
 export const marketplacePayOrderSchema = z.object({
   orderId: z.string().uuid(),
-  gatewayCode: z.string().trim().min(2).max(40).default('sandbox'),
+  gatewayCode: z.literal('sandbox').default('sandbox'),
 });
 
 export const marketplaceCancelOrderSchema = z.object({

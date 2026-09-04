@@ -27,6 +27,12 @@ describe('finance validation', () => {
       gatewayCode: 'sandbox',
     });
     expect(ok.success).toBe(true);
+    expect(
+      financeSandboxPaymentSchema.safeParse({
+        productCode: 'kuteka_plus.monthly',
+        gatewayCode: 'stripe',
+      }).success,
+    ).toBe(false);
   });
 
   it('requires positive credit grant', () => {
@@ -87,6 +93,12 @@ describe('kuteka pay engine validation', () => {
     expect(
       kutekaPayCreateIntentSchema.safeParse({
         productCode: 'kuteka_plus.monthly',
+        gatewayCode: 'multicaixa',
+      }).success,
+    ).toBe(false);
+    expect(
+      kutekaPayCreateIntentSchema.safeParse({
+        productCode: 'kuteka_plus.monthly',
         moduleCode: 'crypto',
       }).success,
     ).toBe(false);
@@ -124,8 +136,11 @@ describe('kuteka pay engine validation', () => {
         event: 'refunded',
       }).success,
     ).toBe(false);
-    expect(kutekaPaySetDefaultGatewaySchema.safeParse({ gatewayCode: 'multicaixa' }).success).toBe(
+    expect(kutekaPaySetDefaultGatewaySchema.safeParse({ gatewayCode: 'sandbox' }).success).toBe(
       true,
+    );
+    expect(kutekaPaySetDefaultGatewaySchema.safeParse({ gatewayCode: 'multicaixa' }).success).toBe(
+      false,
     );
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyDestinationGate } from './destination-gate';
+import { applyDestinationGate, resolveEmailVerified } from './destination-gate';
 
 describe('applyDestinationGate (R1)', () => {
   it('sends anonymous users to login preserving next', () => {
@@ -35,6 +35,22 @@ describe('applyDestinationGate (R1)', () => {
         roleCodes: [],
       }),
     ).toBe('/auth/onboarding/papeis');
+  });
+
+  it('treats Kuteka profile verification as email verified', () => {
+    expect(resolveEmailVerified({ authConfirmedAt: null, profileVerifiedAt: null })).toBe(false);
+    expect(
+      resolveEmailVerified({
+        authConfirmedAt: null,
+        profileVerifiedAt: '2026-09-04T00:00:00Z',
+      }),
+    ).toBe(true);
+    expect(
+      resolveEmailVerified({
+        authConfirmedAt: '2026-09-04T00:00:00Z',
+        profileVerifiedAt: null,
+      }),
+    ).toBe(true);
   });
 
   it('resolves safe next when fully onboarded', () => {

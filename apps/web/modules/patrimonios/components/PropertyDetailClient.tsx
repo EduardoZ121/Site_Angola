@@ -143,11 +143,15 @@ export function PropertyDetailClient({ id }: { id: string }) {
               title={copy.nextSteps.suggestedTitle}
               kaiHint={copy.nextSteps.suggestedHint}
               steps={[
-                {
-                  href: `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`,
-                  label: copy.seeInHousing,
-                  primary: true,
-                },
+                ...(row.status === 'active'
+                  ? [
+                      {
+                        href: `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`,
+                        label: copy.seeInHousing,
+                        primary: true,
+                      },
+                    ]
+                  : []),
                 { href: '/app/centro-confianca', label: copy.nextSteps.trustCenter },
                 { href: '/app/contratos/novo', label: copy.nextSteps.createContract },
               ]}

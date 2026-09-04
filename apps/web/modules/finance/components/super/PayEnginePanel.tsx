@@ -3,7 +3,6 @@
 import { FormEvent, useCallback, useEffect, useState } from 'react';
 import {
   FINANCE_URGENCY_BANDS,
-  KUTEKA_PAY_ADAPTER_CODES,
   KUTEKA_PAY_MODULE_CODES,
   KUTEKA_PAY_WEBHOOK_EVENTS,
 } from '@kuteka/validation';
@@ -47,13 +46,12 @@ export function PayEnginePanel({ canManage }: PanelProps) {
   const [moduleCode, setModuleCode] =
     useState<(typeof KUTEKA_PAY_MODULE_CODES)[number]>('smart_move');
   const [urgency, setUrgency] = useState<(typeof FINANCE_URGENCY_BANDS)[number]>('urgent_30');
-  const [gateway, setGateway] = useState<(typeof KUTEKA_PAY_ADAPTER_CODES)[number]>('sandbox');
+  const [gateway, setGateway] = useState<'sandbox'>('sandbox');
 
   const [webhookIntent, setWebhookIntent] = useState('');
   const [webhookEvent, setWebhookEvent] =
     useState<(typeof KUTEKA_PAY_WEBHOOK_EVENTS)[number]>('succeeded');
-  const [defaultGateway, setDefaultGatewayCode] =
-    useState<(typeof KUTEKA_PAY_ADAPTER_CODES)[number]>('sandbox');
+  const [defaultGateway, setDefaultGatewayCode] = useState<'sandbox'>('sandbox');
 
   const load = useCallback(async () => {
     const [health, ints, prods] = await Promise.all([
@@ -64,7 +62,7 @@ export function PayEnginePanel({ canManage }: PanelProps) {
     if (health.ok) {
       setAdapters(health.data);
       const current = health.data.find((a) => a.is_default);
-      if (current) setDefaultGatewayCode(current.code as (typeof KUTEKA_PAY_ADAPTER_CODES)[number]);
+      if (current?.code === 'sandbox') setDefaultGatewayCode('sandbox');
     }
     if (ints.ok) {
       setIntents(ints.data);
@@ -180,15 +178,11 @@ export function PayEnginePanel({ canManage }: PanelProps) {
                 id="pe-default"
                 className={selectClass}
                 value={defaultGateway}
-                onChange={(e) =>
-                  setDefaultGatewayCode(e.target.value as (typeof KUTEKA_PAY_ADAPTER_CODES)[number])
-                }
+                onChange={(e) => {
+                  if (e.target.value === 'sandbox') setDefaultGatewayCode('sandbox');
+                }}
               >
-                {KUTEKA_PAY_ADAPTER_CODES.map((code) => (
-                  <option key={code} value={code}>
-                    {code}
-                  </option>
-                ))}
+                <option value="sandbox">sandbox</option>
               </select>
             </div>
             <Button type="submit" loading={busy === 'default'}>
@@ -256,15 +250,11 @@ export function PayEnginePanel({ canManage }: PanelProps) {
                 id="pe-gateway"
                 className={selectClass}
                 value={gateway}
-                onChange={(e) =>
-                  setGateway(e.target.value as (typeof KUTEKA_PAY_ADAPTER_CODES)[number])
-                }
+                onChange={(e) => {
+                  if (e.target.value === 'sandbox') setGateway('sandbox');
+                }}
               >
-                {KUTEKA_PAY_ADAPTER_CODES.map((code) => (
-                  <option key={code} value={code}>
-                    {code}
-                  </option>
-                ))}
+                <option value="sandbox">sandbox</option>
               </select>
             </div>
             <div className="sm:col-span-4">

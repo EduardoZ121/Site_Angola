@@ -68,13 +68,15 @@ export const financeCopyPt = {
   custodyNote: 'Modo de custódia: none (sem escrow). O dinheiro não fica na Kuteka.',
   sandboxHint: 'Ambiente de teste — sem dinheiro real até activar Multicaixa/EMIS/Stripe.',
   payEngineHint:
-    'Motor de pagamento unificado: todos os módulos usam kuteka_pay_*. Saúde dos adaptadores (sandbox|multicaixa|emis|stripe|wise|bank_transfer).',
+    'Motor de pagamento unificado em SANDBOX. Sem dinheiro real, sem custódia, sem gateway live neste teste.',
   payEngineDefaultHint:
-    'Define o adaptador base usado quando um módulo não indica gateway. Fase B: sandbox por omissão.',
+    'Beta: o adaptador por omissão está bloqueado em sandbox. Os outros nomes de gateway permanecem na tabela, sem cobrança real.',
   payEngineIntentHint:
     'Cria um payment intent de teste ligado a um módulo. Em sandbox devolve auto_capture_ready.',
   payEngineWebhookHint:
     'Simula eventos de gateway (succeeded/failed/cancelled/expired) sobre um intent sandbox.',
+  commissionViaHint:
+    'Via B = take-rate de marketplace/serviços (esta tabela). A comissão de activação de 35% é Via A, Founder-only (`platform_commission_params`) e não se edita aqui.',
   createIntent: 'Criar intent',
   simulateWebhook: 'Simular webhook',
   setDefaultGateway: 'Definir por omissão',

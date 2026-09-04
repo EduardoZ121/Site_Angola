@@ -56,15 +56,23 @@ export type HousingPropertyRow = {
   review_status?: string | null;
   general_visible_at?: string | null;
   premium_visible_at?: string | null;
+  lifecycle_status?: string | null;
 };
 
+const MARKET_LIFECYCLES = new Set([
+  'publicado',
+  'janela_premium',
+  'em_negociacao',
+  'disponivel_novamente',
+]);
+
 /**
- * Real listings need Admin approval. Inventário Beta (`is_demo`) permanece visível.
- * Após aprovação, `premium_visible_at` marca o início da janela; o exclusividade
- * premium-only (~6h) entra na Fase B — até lá todos vêem a partir de premium_visible_at.
+ * Mercado Kuteka (D3): inventário DEMO não é oferta pública.
+ * Dados `is_demo` permanecem na BD (KOCC / contas internas). Não apagar.
+ * Listagens reais precisam de aprovação + janela de visibilidade.
  */
 export function isHousingRowPubliclyVisible(row: HousingPropertyRow, now = Date.now()): boolean {
-  if (row.is_demo) return true;
+  if (row.is_demo) return false;
   if (row.status !== 'active') return false;
   const review = row.review_status ?? 'approved';
   if (review !== 'approved') return false;
@@ -72,7 +80,26 @@ export function isHousingRowPubliclyVisible(row: HousingPropertyRow, now = Date.
     const premiumAt = Date.parse(row.premium_visible_at);
     if (!Number.isNaN(premiumAt) && premiumAt > now) return false;
   }
+  if (row.lifecycle_status && !MARKET_LIFECYCLES.has(row.lifecycle_status)) return false;
   return true;
+}
+
+/** CTA “avisar-me” só em contexto de disponibilidade futura (KUT-REQ-011). */
+export function shouldOfferAvailabilityNotify(row: HousingPropertyRow, now = Date.now()): boolean {
+  if (row.is_demo) return false;
+  const life = row.lifecycle_status;
+  if (
+    life === 'libertacao_prevista' ||
+    life === 'temporariamente_indisponivel' ||
+    life === 'em_manutencao'
+  ) {
+    return true;
+  }
+  if (row.expected_available_on) {
+    const availableAt = Date.parse(row.expected_available_on);
+    if (!Number.isNaN(availableAt) && availableAt > now) return true;
+  }
+  return false;
 }
 
 export type ClientPreferencesRow = {
@@ -212,10 +239,10 @@ function filterByQuery(rows: HousingPropertyRow[], query?: string | null): Housi
 }
 
 const PROPERTY_SELECT_CORE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score, review_status, general_visible_at, premium_visible_at';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, kuteka_score, review_status, general_visible_at, premium_visible_at, lifecycle_status';
 
 const PROPERTY_SELECT_FUTURE =
-  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score, review_status, general_visible_at, premium_visible_at';
+  'id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, expected_available_on, availability_note, kuteka_score, review_status, general_visible_at, premium_visible_at, lifecycle_status';
 
 /**
  * Paginated explore — foundation for infinite feed at scale.
@@ -240,11 +267,15 @@ export async function exploreActivePropertiesPage(
     if (futureOnly) {
       const today = new Date().toISOString().slice(0, 10);
       query = query
+        .eq('is_demo', false)
         .not('expected_available_on', 'is', null)
         .gte('expected_available_on', today)
         .order('expected_available_on', { ascending: true });
     } else {
-      query = query.eq('status', 'active').order('created_at', { ascending: false });
+      query = query
+        .eq('status', 'active')
+        .eq('is_demo', false)
+        .order('created_at', { ascending: false });
     }
 
     if (params.purpose && params.purpose !== 'both') {
@@ -267,7 +298,12 @@ export async function exploreActivePropertiesPage(
     if (error) return { ok: false, message: copy.loadError };
 
     let rows = filterByQuery((data as unknown as HousingPropertyRow[]) ?? [], params.query).filter(
-      (row) => isHousingRowPubliclyVisible(row),
+      (row) => {
+        if (futureOnly) {
+          return !row.is_demo && Boolean(row.expected_available_on);
+        }
+        return isHousingRowPubliclyVisible(row);
+      },
     );
     const hasMore = rows.length > limit;
     if (hasMore) rows = rows.slice(0, limit);
@@ -315,7 +351,9 @@ export async function getActiveProperty(
       .maybeSingle();
 
     if (!enriched.error && enriched.data) {
-      return { ok: true, data: enriched.data as unknown as HousingPropertyRow };
+      const row = enriched.data as unknown as HousingPropertyRow;
+      if (!isHousingRowPubliclyVisible(row)) return { ok: false, message: copy.loadError };
+      return { ok: true, data: row };
     }
 
     const v13 = await client
@@ -327,7 +365,9 @@ export async function getActiveProperty(
       .maybeSingle();
 
     if (!v13.error && v13.data) {
-      return { ok: true, data: v13.data as unknown as HousingPropertyRow };
+      const row = v13.data as unknown as HousingPropertyRow;
+      if (!isHousingRowPubliclyVisible(row)) return { ok: false, message: copy.loadError };
+      return { ok: true, data: row };
     }
 
     const core = await client
@@ -339,7 +379,9 @@ export async function getActiveProperty(
       .maybeSingle();
 
     if (core.error || !core.data) return { ok: false, message: copy.loadError };
-    return { ok: true, data: core.data as unknown as HousingPropertyRow };
+    const row = core.data as unknown as HousingPropertyRow;
+    if (!isHousingRowPubliclyVisible(row)) return { ok: false, message: copy.loadError };
+    return { ok: true, data: row };
   } catch {
     return { ok: false, message: copy.loadError };
   }

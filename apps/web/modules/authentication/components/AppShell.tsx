@@ -10,7 +10,9 @@ import { LocaleProvider, useLocale } from '@/modules/i18n/LocaleProvider';
 import { normalizeLocale, type AppLocale } from '@/modules/i18n/types';
 import { PlatformShell } from '@/modules/shell/components/PlatformShell';
 import { RoleExperienceProvider } from '@/modules/shell/components/RoleExperienceProvider';
+import { useRouter } from 'next/navigation';
 import { getAuthCopy } from '../content';
+import { applyDestinationGate, resolveEmailVerified } from '../lib/destination-gate';
 import { isPublicSupabaseConfigured } from '../lib/public-config';
 import { AppSessionContext, type AppSessionData } from './app-session';
 import { BrandMark } from './BrandMark';
@@ -63,6 +65,7 @@ function readSessionCache(): AppSessionData | null {
       roles: asStringArray(parsed.roles),
       permissions: asStringArray(parsed.permissions),
       locale: typeof parsed.locale === 'string' ? parsed.locale : null,
+      emailVerified: typeof parsed.emailVerified === 'boolean' ? parsed.emailVerified : undefined,
     };
   } catch {
     return null;
@@ -85,6 +88,8 @@ function writeSessionCache(data: AppSessionData | null) {
 function AppShellInner({ children }: { children: ReactNode }) {
   const { locale, setLocale } = useLocale();
   const copy = getAuthCopy(locale);
+  const router = useRouter();
+  const [authRedirect, setAuthRedirect] = useState<string | null>(null);
   const cachedRef = useRef<AppSessionData | null | undefined>(undefined);
   if (cachedRef.current === undefined) {
     cachedRef.current =
@@ -138,7 +143,11 @@ function AppShellInner({ children }: { children: ReactNode }) {
 
         const [{ data: profile, error: profileError }, rolesResult, permissionsResult] =
           await Promise.all([
-            client.from('profiles').select('display_name, locale').eq('id', user.id).maybeSingle(),
+            client
+              .from('profiles')
+              .select('display_name, locale, email_verified_at')
+              .eq('id', user.id)
+              .maybeSingle(),
             client.rpc('get_user_role_codes', { p_user_id: user.id }),
             client.rpc('get_user_permission_codes', { p_user_id: user.id }),
           ]);
@@ -161,13 +170,27 @@ function AppShellInner({ children }: { children: ReactNode }) {
           return;
         }
 
+        const emailVerified = resolveEmailVerified({
+          authConfirmedAt: user.email_confirmed_at,
+          profileVerifiedAt:
+            profile && 'email_verified_at' in profile
+              ? (profile.email_verified_at as string | null)
+              : null,
+        });
         const next: AppSessionData = {
           email: user.email ?? null,
           displayName: profile?.display_name?.trim() || null,
           roles: asStringArray(rolesResult.data),
           permissions: asStringArray(permissionsResult.data),
           locale: typeof profile?.locale === 'string' ? profile.locale : null,
+          emailVerified,
         };
+        const dest = applyDestinationGate({
+          hasSession: true,
+          emailVerified,
+          roleCodes: next.roles,
+        });
+        setAuthRedirect(dest.startsWith('/auth') ? dest : null);
         setSession(next);
         writeSessionCache(next);
         setSessionError(null);
@@ -233,7 +256,11 @@ function AppShellInner({ children }: { children: ReactNode }) {
       cancelled = true;
       subscription.unsubscribe();
     };
-  }, [copy.app.loadError]);
+  }, [copy.app.loadError, setLocale]);
+
+  useEffect(() => {
+    if (authRedirect) router.replace(authRedirect);
+  }, [authRedirect, router]);
 
   if (gate === 'config') {
     return (
@@ -282,6 +309,14 @@ function AppShellInner({ children }: { children: ReactNode }) {
             {copy.login.submit}
           </Link>
         </div>
+      </div>
+    );
+  }
+
+  if (authRedirect) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 px-6">
+        <p className="text-sm text-slate-600">{copy.app.continuing}</p>
       </div>
     );
   }

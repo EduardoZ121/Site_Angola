@@ -25,7 +25,14 @@ export default function LogoutPage() {
     (async () => {
       try {
         if (isSupabaseConfigured()) {
-          await signOut();
+          const result = await signOut();
+          if (!result.ok) {
+            if (!cancelled) {
+              setError(result.message);
+              setDone(true);
+            }
+            return;
+          }
         }
         if (!cancelled) {
           setDone(true);

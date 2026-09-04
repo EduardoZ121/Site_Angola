@@ -392,7 +392,7 @@ export async function createSandboxPayment(
     const { data, error } = await client.rpc('finance_create_sandbox_payment', {
       p_product_code: parsed.data.productCode,
       p_urgency_band: parsed.data.urgencyBand ?? null,
-      p_gateway_code: parsed.data.gatewayCode ?? 'sandbox',
+      p_gateway_code: 'sandbox',
       p_description: parsed.data.description ?? null,
     });
     if (error || !data) return { ok: false, message: error?.message ?? copy.payError };
