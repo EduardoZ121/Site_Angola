@@ -34,7 +34,13 @@ Clientes · PP · patrimónios · imóveis · Prestadores · Agentes · procura 
 
 - Badge **KUTEKA BETA** visível
 - Estados: Em breve · Acesso antecipado · Beta · Em preparação · Disponível mediante verificação
-- **Não** usar DEMO para enganar — demo interno OK; público vê "Exemplo/Ilustrativo" se necessário (decisão D3)
+- **D3 / DEC-2026-005 (2026-09-04) — DEMO INTERNAL ONLY** (prevalece sobre qualquer menção anterior neste charter):
+  - dados, contas e cenários DEMO são **exclusivamente internos**;
+  - DEMO **não** pode ser apresentado a utilizadores do Beta público;
+  - DEMO **não** deve contaminar métricas ou dados do Beta público;
+  - **não** existe DEMO público nem badge “Exemplo/Ilustrativo” para o público;
+  - **não** usar DEMO para enganar.
+  - Regra documental. **Não** autoriza código, isolamento técnico, RBAC/RLS nem Fase 1.
 
 ## 4. Beta ≠ desenvolver tudo
 
@@ -87,5 +93,6 @@ Charter v1.4 (Sprints numeradas) **mantém-se** para governação operacional. C
 
 | Versão | Data | Alteração |
 |--------|------|-----------|
+| 2.0.1 | 2026-09-04 | §3 alinhado a D3 DEMO INTERNAL ONLY — sem DEMO público |
 | 2.0 | 2026-08-28 | Ecossistema + aprendizagem (Doc 3) |
 | 1.4 | 2026-08-08 | Sprints Beta 1–5 |

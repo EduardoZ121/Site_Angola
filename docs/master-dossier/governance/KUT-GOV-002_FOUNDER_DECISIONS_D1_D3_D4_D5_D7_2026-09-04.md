@@ -43,7 +43,7 @@ Estas cinco decisões **deixam de estar pendentes**. D-LEG, D-LEG-RENT, D-FIN e 
 | **Data** | 2026-09-04 |
 | **Documentos afectados** | Beta Charter v2 §3, Doc3 BETA-04, QA Playbook T4, KUT-GOV-002 |
 | **Justificação / consequências** | Dados, contas e cenários DEMO permanecem exclusivamente internos. Não misturar DEMO com utilizadores ou métricas do Beta público. |
-| **Dependências / bloqueios** | Não autoriza código, flags ou alterações de produção. Charter v2 §3 ainda menciona “Exemplo/Ilustrativo” público como hipótese — **contradição documental** registada; não resolvida aqui. |
+| **Dependências / bloqueios** | Não autoriza código, flags ou alterações de produção. Charter v2 §3 alinhado a esta decisão (2026-09-04). |
 
 ---
 
