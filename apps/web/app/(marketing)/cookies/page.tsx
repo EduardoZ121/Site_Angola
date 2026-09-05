@@ -15,7 +15,7 @@ export default function CookiesPage() {
     <InstitutionalDocument
       title="Política de Cookies"
       subtitle="Como a Kuteka utiliza cookies e tecnologias similares, e como pode gerir as suas preferências."
-      versionNote="Versão 1.0 Beta · Vigência 6 de Agosto de 2026 · privacidade@kutekalink.com"
+      versionNote="Versão 1.0 Beta · Vigência 5 de Agosto de 2026 · privacidade@kutekalink.com"
       markdown={markdown}
       downloads={[
         { label: 'Descarregar PDF', href: '/docs/POLITICA_COOKIES_v1.pdf' },

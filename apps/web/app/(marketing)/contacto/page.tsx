@@ -3,7 +3,7 @@ import { ContactClient } from '@/modules/shell/components/ContactClient';
 
 export const metadata: Metadata = {
   title: 'Contacto',
-  robots: { index: false, follow: false },
+  robots: { index: true, follow: true },
 };
 
 export default function ContactPage() {

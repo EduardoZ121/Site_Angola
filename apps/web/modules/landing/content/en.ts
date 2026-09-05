@@ -2,9 +2,9 @@ import type { LandingCopy } from './pt';
 
 export const landingCopyEn: LandingCopy = {
   seo: {
-    title: 'Kuteka — Legacy. Trust. Housing.',
+    title: 'Kuteka — Property. Trust. Housing.',
     description:
-      'African property-tech built on legacy and trust. Protect, grow and track your real estate assets in Angola — with transparency and professionalism.',
+      'African property-tech built on property and trust. Protect, grow and track your real estate assets in Angola — with transparency and professionalism.',
   },
   topbar: {
     brand: 'Kuteka',
@@ -13,18 +13,18 @@ export const landingCopyEn: LandingCopy = {
   },
   hero: {
     eyebrow: 'Kuteka · Angola',
-    title: 'Legacy. Trust. Housing.',
+    title: 'Property. Trust. Housing.',
     subtitle:
       'The platform that protects, grows and tracks your real estate assets — with transparency and professionalism.',
     primaryCta: 'Get started',
     secondaryCta: 'Explore',
     imageAlt:
-      'Contemporary residential environment — an atmosphere of legacy and dignified housing',
+      'Contemporary residential environment — an atmosphere of property and dignified housing',
   },
   difference: {
     id: 'diferenca',
     title: 'Why Kuteka is different',
-    intro: "We're not a listings site. We're a platform built on legacy and trust.",
+    intro: "We're not a listings site. We're a platform built on property and trust.",
     pillars: [
       {
         id: 'trust',
@@ -33,7 +33,7 @@ export const landingCopyEn: LandingCopy = {
       },
       {
         id: 'patrimony',
-        title: 'Legacy, not just properties',
+        title: 'Property, not just listings',
         text: 'Every asset can be activated, tracked and grown in value over time.',
       },
       {

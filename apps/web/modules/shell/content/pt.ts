@@ -53,7 +53,7 @@ export const shellCopyPt = {
     help: 'Centro de Ajuda',
     helpHint: 'Manual, FAQ e tutoriais',
     contact: 'Contactar a Kuteka',
-    contactHint: 'WhatsApp, telefone, email e chat',
+    contactHint: 'Email e documentação pública',
     logout: 'Terminar sessão',
   },
   settingsPage: {
@@ -96,12 +96,12 @@ export const shellCopyPt = {
   },
   contactPage: {
     title: 'Contactar a Kuteka',
-    subtitle: 'Escolha o canal mais conveniente para a sua equipa.',
+    subtitle: 'Escreva-nos por email ou consulte a documentação pública.',
     whatsapp: 'WhatsApp',
     phone: 'Telefone',
     email: 'Email',
     chat: 'Chat',
-    helpCenter: 'Centro de Ajuda',
+    helpCenter: 'Documentação',
     hours: 'Atendimento em dias úteis, 09:00–18:00 (WAT)',
   },
   items: {
@@ -113,7 +113,7 @@ export const shellCopyPt = {
     futuro: 'Disponibilidade futura',
     propostas: 'Propostas',
     patrimonios: 'Patrimónios',
-    ativar: 'Ativar Património',
+    ativar: 'Activar Património',
     habitacao: 'Habitação',
     agente: 'Agente',
     mensagens: 'Mensagens',

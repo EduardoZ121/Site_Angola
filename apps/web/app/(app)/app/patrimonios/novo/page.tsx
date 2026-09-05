@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { ActivatePropertyForm } from '@/modules/patrimonios/components/ActivatePropertyForm';
 
 export const metadata: Metadata = {
-  title: 'Ativar Património',
+  title: 'Activar Património',
   robots: { index: false, follow: false },
 };
 

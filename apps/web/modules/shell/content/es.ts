@@ -54,7 +54,7 @@ export const shellCopyEs: ShellCopy = {
     help: 'Centro de Ayuda',
     helpHint: 'Manual, FAQ y tutoriales',
     contact: 'Contactar a Kuteka',
-    contactHint: 'WhatsApp, teléfono, email y chat',
+    contactHint: 'Email y documentación pública',
     logout: 'Cerrar sesión',
   },
   settingsPage: {
@@ -97,12 +97,12 @@ export const shellCopyEs: ShellCopy = {
   },
   contactPage: {
     title: 'Contactar a Kuteka',
-    subtitle: 'Elija el canal más conveniente para su equipo.',
+    subtitle: 'Escríbanos por email o consulte la documentación pública.',
     whatsapp: 'WhatsApp',
     phone: 'Teléfono',
     email: 'Email',
     chat: 'Chat',
-    helpCenter: 'Centro de Ayuda',
+    helpCenter: 'Documentación',
     hours: 'Atención en días laborables, 09:00–18:00 (WAT)',
   },
   items: {

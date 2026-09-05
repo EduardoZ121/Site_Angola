@@ -53,8 +53,10 @@ export const authCopyFr: AuthCopy = {
       placeholder: 'Répétez le mot de passe',
     },
     terms: {
-      label: 'J’accepte les Conditions d’utilisation',
+      label: 'J’accepte les',
       linkLabel: 'Conditions d’utilisation',
+      connector: 'et la',
+      privacyLinkLabel: 'Politique de confidentialité',
     },
     submit: 'Créer un compte',
     submitLoading: 'Création du compte…',

@@ -53,8 +53,10 @@ export const authCopyEs: AuthCopy = {
       placeholder: 'Repita la contraseña',
     },
     terms: {
-      label: 'Acepto los Términos de uso',
+      label: 'Acepto los',
       linkLabel: 'Términos de uso',
+      connector: 'y la',
+      privacyLinkLabel: 'Política de privacidad',
     },
     submit: 'Crear cuenta',
     submitLoading: 'Creando cuenta…',

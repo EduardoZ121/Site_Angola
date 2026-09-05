@@ -51,7 +51,7 @@ export function LandingTopbar() {
           <Link
             href={c.routes.enter}
             className={cn(
-              'hidden min-h-11 items-center px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 sm:inline-flex',
+              'inline-flex min-h-11 items-center px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500',
               light ? 'text-slate-600 hover:text-slate-900' : 'text-slate-200 hover:text-white',
             )}
           >

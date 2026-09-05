@@ -183,6 +183,10 @@ export function RegisterForm() {
           {copy.register.terms.label}{' '}
           <Link href="/termos" className="auth-link">
             {copy.register.terms.linkLabel}
+          </Link>{' '}
+          {copy.register.terms.connector}{' '}
+          <Link href="/privacidade" className="auth-link">
+            {copy.register.terms.privacyLinkLabel}
           </Link>
         </span>
       </label>

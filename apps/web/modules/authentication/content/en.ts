@@ -52,8 +52,10 @@ export const authCopyEn: AuthCopy = {
       placeholder: 'Repeat the password',
     },
     terms: {
-      label: 'I accept the Terms of use',
+      label: 'I accept the',
       linkLabel: 'Terms of use',
+      connector: 'and the',
+      privacyLinkLabel: 'Privacy policy',
     },
     submit: 'Create account',
     submitLoading: 'Creating account…',
