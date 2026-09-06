@@ -296,6 +296,10 @@ export const shellCopyFr: ShellCopy = {
     sending: 'Envoi…',
     success: 'Merci — votre contribution a été enregistrée.',
     error: 'Envoi impossible. Réessayez.',
+    publicCtaTitle: 'Retour Beta',
+    publicCtaBody:
+      'Pour signaler un bug ou envoyer une suggestion, connectez-vous. Votre contribution est enregistrée dans le Panneau Beta.',
+    publicCtaButton: 'Se connecter et envoyer un retour',
   },
   firstActions: {
     title: 'Votre première action utile',

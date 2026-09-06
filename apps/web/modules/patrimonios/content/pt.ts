@@ -10,7 +10,7 @@ export const patrimoniosCopyPt = {
   activating: 'A activar…',
   activated: 'Património activado.',
   submittedForReview:
-    'Património submetido. Está Em análise pela Administração e só será publicado após aprovação.',
+    'Património no inventário Kuteka (não publicado). Em análise pela Administração — só entra no mercado após aprovação.',
   backToList: 'Voltar aos patrimónios',
   needPartner: 'Para activar património precisa do papel Parceiro Patrimonial na sua conta.',
   activateRole: 'Activar papel Parceiro',
@@ -151,12 +151,13 @@ export const patrimoniosCopyPt = {
     both: 'Venda e arrendamento',
   },
   statuses: {
-    draft: 'Em avaliação / rascunho',
-    active: 'Activo (publicado)',
+    draft: 'Inventário (não publicado)',
+    active: 'No mercado (publicado)',
     archived: 'Arquivado',
   },
   listHeading: 'Os seus patrimónios',
-  listHint: 'Anúncios e patrimónios sob gestão — o Cliente encontra os publicados em Habitação.',
+  listHint:
+    'Inventário Kuteka ≠ mercado público. Só patrimónios «No mercado» aparecem em Habitação; o resto fica no inventário privado até aprovação.',
   mvpNote:
     'Após a finalidade comercial, indique os serviços Kuteka e o nível de gestão. Serviços de gestão/avaliação exigem avaliação técnica antes da publicação plena.',
   detailNote:

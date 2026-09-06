@@ -152,13 +152,13 @@ export const patrimoniosCopyEn: PatrimoniosCopy = {
     both: 'Sale and rent',
   },
   statuses: {
-    draft: 'Under review / draft',
-    active: 'Active (published)',
+    draft: 'Inventory (unpublished)',
+    active: 'On market (published)',
     archived: 'Archived',
   },
   listHeading: 'Your properties',
   listHint:
-    'Listings and properties under management — the Client finds published ones under Housing.',
+    'Kuteka inventory ≠ public market. Only «On market» properties appear in Housing; others stay private until approval.',
   mvpNote:
     'After the commercial purpose, indicate the Kuteka services and the management level. Management/evaluation services require a technical assessment before full publication.',
   detailNote:

@@ -290,7 +290,24 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
             </Link>
           </section>
         </>
-      ) : null}
+      ) : (
+        <section className="kuteka-detail-panel flex flex-col gap-3 p-5" id="feedback-beta">
+          <h2 className="kuteka-detail-title">{shell.betaFeedback.publicCtaTitle}</h2>
+          <p className="kuteka-detail-body">{shell.betaFeedback.publicCtaBody}</p>
+          <Link
+            href="/auth/entrar?next=%2Fapp%2Fajuda"
+            className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+          >
+            {shell.betaFeedback.publicCtaButton}
+          </Link>
+          <Link
+            href="/contacto"
+            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+          >
+            {h.contactCta}
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

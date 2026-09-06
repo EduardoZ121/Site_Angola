@@ -35,7 +35,8 @@ export const authCopyFr: AuthCopy = {
   },
   register: {
     title: 'Créer un compte',
-    subtitle: 'Commencez en quelques minutes. Un compte, vos rôles, votre espace Kuteka.',
+    subtitle:
+      'Bêta publique : commencez en quelques minutes. Un compte, vos rôles, votre espace Kuteka.',
     email: {
       label: 'E-mail',
       hint: 'Nous utilisons l’e-mail pour protéger et récupérer le compte.',
@@ -194,6 +195,10 @@ export const authCopyFr: AuthCopy = {
     title: 'Tableau de bord Kuteka',
     welcome: 'Bienvenue',
     welcomeAnonymous: 'Bienvenue sur la plateforme',
+    betaWelcomeTitle: 'Bienvenue sur la Bêta publique',
+    betaWelcomeBody:
+      'Explorez, signalez des problèmes et aidez à améliorer Kuteka. Les retours authentifiés arrivent au Panneau Bêta (KOCC).',
+    betaWelcomeCta: 'Envoyer un retour',
     emailLabel: 'E-mail',
     userFallback: 'Utilisateur Kuteka',
     active: 'Compte actif',

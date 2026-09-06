@@ -153,13 +153,13 @@ export const patrimoniosCopyEs: PatrimoniosCopy = {
     both: 'Venta y alquiler',
   },
   statuses: {
-    draft: 'En evaluación / borrador',
-    active: 'Activo (publicado)',
+    draft: 'Inventario (no publicado)',
+    active: 'En el mercado (publicado)',
     archived: 'Archivado',
   },
   listHeading: 'Sus patrimonios',
   listHint:
-    'Anuncios y patrimonios bajo gestión — el Cliente encuentra los publicados en Vivienda.',
+    'Inventario Kuteka ≠ mercado público. Solo los patrimonios «En el mercado» aparecen en Vivienda; el resto permanece en el inventario privado hasta aprobación.',
   mvpNote:
     'Después de la finalidad comercial, indique los servicios de Kuteka y el nivel de gestión. Los servicios de gestión/evaluación requieren una evaluación técnica antes de la publicación completa.',
   detailNote:

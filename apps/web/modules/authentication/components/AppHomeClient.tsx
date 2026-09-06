@@ -109,6 +109,19 @@ export function AppHomeClient() {
         </div>
       </header>
 
+      <aside className="kuteka-detail-panel flex flex-col gap-2 border border-brand-200/70 bg-brand-50/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-slate-900">{copy.app.betaWelcomeTitle}</p>
+          <p className="text-sm text-stone-700">{copy.app.betaWelcomeBody}</p>
+        </div>
+        <Link
+          href="/app/ajuda"
+          className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit shrink-0')}
+        >
+          {copy.app.betaWelcomeCta}
+        </Link>
+      </aside>
+
       <RoleMissionPanel mode={mode} />
 
       <RoleHomeDashboard session={session} />

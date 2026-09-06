@@ -292,6 +292,10 @@ export const shellCopyPt = {
     sending: 'A enviar…',
     success: 'Obrigado — o seu contributo foi registado.',
     error: 'Não conseguimos enviar. Tente novamente.',
+    publicCtaTitle: 'Feedback Beta',
+    publicCtaBody:
+      'Para reportar um bug ou enviar uma sugestão, inicie sessão. O contributo fica registado no Painel Beta.',
+    publicCtaButton: 'Entrar e enviar feedback',
   },
   firstActions: {
     title: 'A sua primeira acção útil',

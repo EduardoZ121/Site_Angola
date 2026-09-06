@@ -292,6 +292,10 @@ export const shellCopyEn: ShellCopy = {
     sending: 'Sending…',
     success: 'Thank you — your contribution was recorded.',
     error: 'We could not send it. Please try again.',
+    publicCtaTitle: 'Beta feedback',
+    publicCtaBody:
+      'To report a bug or send a suggestion, sign in. Your contribution is recorded in the Beta Panel.',
+    publicCtaButton: 'Sign in and send feedback',
   },
   firstActions: {
     title: 'Your first useful action',

@@ -11,6 +11,7 @@ import { getLandingCopy } from '../content';
 /**
  * Topbar: transparent over hero → glass on scroll.
  * Past the hero, switches to a light glass so it stays discreet on white sections (PASSO 1 §A).
+ * Includes a slim public Beta notice row (Sprint A P0) — not a hero overlay.
  */
 export function LandingTopbar() {
   const { locale } = useLocale();
@@ -68,6 +69,42 @@ export function LandingTopbar() {
           </Link>
         </nav>
       </div>
+
+      {c.betaNotice ? (
+        <div
+          role="status"
+          className={cn(
+            'border-t',
+            light
+              ? 'border-slate-200/80 bg-slate-50/90 text-slate-800'
+              : 'border-white/10 bg-slate-950/55 text-slate-100',
+          )}
+        >
+          <div className="mx-auto flex max-w-6xl flex-col gap-1.5 px-4 py-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6">
+            <p className="text-xs leading-snug sm:text-sm">
+              <span className="font-semibold">{c.betaNotice.label}</span>
+              <span className="mx-1.5 opacity-60" aria-hidden>
+                ·
+              </span>
+              {c.betaNotice.text}
+            </p>
+            <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm">
+              <Link
+                href={c.routes.start}
+                className="font-medium underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+              >
+                {c.betaNotice.primaryCta}
+              </Link>
+              <Link
+                href={c.betaNotice.docsHref}
+                className="opacity-90 underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+              >
+                {c.betaNotice.secondaryCta}
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }

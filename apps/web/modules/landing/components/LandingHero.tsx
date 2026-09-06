@@ -13,7 +13,7 @@ export function LandingHero() {
   return (
     <section
       aria-labelledby="landing-hero-title"
-      className="relative flex min-h-[100svh] items-end overflow-hidden pb-16 pt-28 sm:items-center sm:pb-24 sm:pt-32"
+      className="relative flex min-h-[100svh] items-end overflow-hidden pb-16 pt-36 sm:items-center sm:pb-24 sm:pt-40"
     >
       <Image
         src="/images/hero.jpg"
