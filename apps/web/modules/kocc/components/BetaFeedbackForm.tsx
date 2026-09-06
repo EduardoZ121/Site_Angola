@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@kuteka/ui';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getShellCopy } from '@/modules/shell/content';
-import { submitBetaFeedback } from '../services/kocc-client';
+import { submitBetaFeedback, trackBetaFeature } from '../services/kocc-client';
 
 type BetaFeedbackFormProps = {
   pagePath?: string;
@@ -39,6 +39,10 @@ export function BetaFeedbackForm({ pagePath }: BetaFeedbackFormProps) {
     }
     setBody('');
     setMessage(copy.success);
+    void trackBetaFeature(
+      kind === 'bug' ? 'beta.feedback.bug' : 'beta.feedback.suggestion',
+      kind === 'bug' ? 'Bug Beta' : 'Sugestão Beta',
+    );
   }
 
   return (

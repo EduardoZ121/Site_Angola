@@ -1,12 +1,13 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { BetaFeedbackForm } from '@/modules/kocc/components/BetaFeedbackForm';
+import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
 import { getShellCopy } from '../content';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
@@ -148,6 +149,10 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
   const { locale } = useLocale();
   const shell = getShellCopy(locale);
   const h = shell.helpPage;
+
+  useEffect(() => {
+    void trackBetaFeature('help.center', 'Centro de ajuda');
+  }, []);
   const searchParams = useSearchParams();
   const requestedSection = searchParams?.get('sec');
   const section: SectionId = isSectionId(requestedSection) ? requestedSection : 'manual';
