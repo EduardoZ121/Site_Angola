@@ -73,6 +73,7 @@ export function ExploreListClient() {
         city: nextFilters.city || null,
         propertyType: nextFilters.propertyType || null,
         query: nextFilters.query || null,
+        futureAvailability: nextFilters.futureAvailability,
         offset: nextOffset,
         limit: PAGE_SIZE,
       });

@@ -153,10 +153,7 @@ export function PricingPanel({ canManage }: PanelProps) {
       </SoftListSlot>
 
       {canManage ? (
-        <PanelSection
-          title={copy.setCommission}
-          description="Take-rate configurável por categoria."
-        >
+        <PanelSection title={copy.setCommission} description={copy.commissionViaHint}>
           <form className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4" onSubmit={onSetCommission}>
             <div>
               <Label htmlFor="c-code">Código</Label>

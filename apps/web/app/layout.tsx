@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'https://kutekalink.com'),
   title: {
     default: 'Kuteka — Património. Confiança. Habitação.',
     template: '%s · Kuteka',
@@ -26,7 +26,10 @@ export const metadata: Metadata = {
   description:
     'PropTech africana de património e confiança. Habitação com transparência em Angola.',
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
   },
 };
 

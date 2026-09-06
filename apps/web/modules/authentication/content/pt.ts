@@ -50,8 +50,10 @@ export const authCopyPt = {
     },
     confirm: { label: 'Confirmar password', placeholder: 'Repita a password' },
     terms: {
-      label: 'Aceito os Termos de utilização',
+      label: 'Aceito os',
       linkLabel: 'Termos de utilização',
+      connector: 'e a',
+      privacyLinkLabel: 'Política de privacidade',
     },
     submit: 'Criar conta',
     submitLoading: 'A criar conta…',
@@ -145,7 +147,7 @@ export const authCopyPt = {
     welcomeSubtitle: 'A sua conta está quase pronta. Vamos concluir uma configuração rápida.',
     roles: {
       title: 'Como quer usar a Kuteka?',
-      hint: 'Indique como pretende usar a Kuteka. Pode alterar ou acrescentar papéis mais tarde.',
+      hint: 'Escolha o papel que quer activar. Intenção de explorar não atribui poderes: só Cliente se o seleccionar. Parceiro só se o marcar explicitamente. Agente e Administração nunca são auto-atribuídos.',
       client: 'Cliente',
       clientDesc: 'Procurar, reservar ou gerir o seu percurso habitacional.',
       partner: 'Parceiro Patrimonial',
@@ -180,7 +182,7 @@ export const authCopyPt = {
     dashboardHint: 'A plataforma está pronta — escolha uma acção ou abra um módulo.',
     todayTitle: 'O que pretende fazer hoje?',
     todayHint: 'Atalhos para as acções mais usadas nos módulos activos.',
-    quickActivateProperty: 'Ativar Património',
+    quickActivateProperty: 'Activar Património',
     quickExploreHousing: 'Explorar Habitação',
     quickAgent: 'Área do Agente',
     quickAdmin: 'Administração',
@@ -211,6 +213,7 @@ export const authCopyPt = {
     configMissing:
       'A área autenticada requer a configuração do Supabase. Defina as variáveis de ambiente e volte a tentar.',
     loginRequired: 'É necessário entrar para aceder a esta área.',
+    continuing: 'A continuar…',
   },
 } as const;
 

@@ -2,7 +2,7 @@
 
 **FAQ · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
-Contacto de suporte: contacto@kutekalink.com · Centro de Documentação na app: `/app/ajuda`
+Contacto de suporte: contacto@kutekalink.com · Documentação pública: `/documentacao` · Na app (com sessão): `/app/ajuda`
 
 ---
 
@@ -53,7 +53,7 @@ No hub financeiro (`/app/financeiro`) e no serviço específico que originou a c
 ## Suporte
 
 **13. Como contacto a equipa Kuteka?**
-Através da página de Contacto (`/contacto`), que reúne WhatsApp, telefone, email e chat, ou pelo Centro de Documentação (`/app/ajuda`).
+Através da página de Contacto (`/contacto`) — email `contacto@kutekalink.com` — ou pelo Centro de Documentação público (`/documentacao`). Com sessão iniciada, use também `/app/ajuda`.
 
 **14. Onde consulto os Termos de Utilização, a Política de Privacidade e a Política de Cookies?**
 Nas páginas `/termos`, `/privacidade` e `/cookies`, também acessíveis a partir do Centro de Documentação e do rodapé do site.

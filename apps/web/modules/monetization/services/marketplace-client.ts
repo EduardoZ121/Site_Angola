@@ -250,7 +250,7 @@ export async function payOrder(input: MarketplacePayOrderInput): Promise<ActionR
   if (!parsed.success) return { ok: false, message: copy().actionError };
   return callRpc('marketplace_pay_order', {
     p_order_id: parsed.data.orderId,
-    p_gateway_code: parsed.data.gatewayCode,
+    p_gateway_code: 'sandbox',
   });
 }
 

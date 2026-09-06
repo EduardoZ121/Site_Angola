@@ -1,5 +1,13 @@
 import { resolveSafeNextPath } from '@kuteka/auth';
 
+/** Auth email_confirmed_at OR profiles.email_verified_at (Kuteka OTP). */
+export function resolveEmailVerified(flags: {
+  authConfirmedAt?: string | null;
+  profileVerifiedAt?: string | null;
+}): boolean {
+  return Boolean(flags.authConfirmedAt || flags.profileVerifiedAt);
+}
+
 export interface DestinationGateInput {
   /** Authenticated session present */
   hasSession: boolean;

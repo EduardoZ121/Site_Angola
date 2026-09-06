@@ -25,8 +25,10 @@ type Props = {
 };
 
 function renderInline(text: string): ReactNode[] {
-  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g);
+  // Bold, code, and markdown links [label](/path) or [label](https://...)
+  const parts = text.split(/(\*\*[^*]+\*\*|`[^`]+`|\[[^\]]+\]\([^)]+\))/g);
   return parts.map((part, i) => {
+    if (!part) return null;
     if (part.startsWith('**') && part.endsWith('**')) {
       return (
         <strong key={i} className="font-semibold text-slate-900">
@@ -44,7 +46,36 @@ function renderInline(text: string): ReactNode[] {
         </code>
       );
     }
-    return part;
+    const linkMatch = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
+    if (linkMatch) {
+      const label = linkMatch[1] ?? '';
+      const href = linkMatch[2] ?? '';
+      if (!label || !href) return <span key={i}>{part}</span>;
+      const external = /^https?:\/\//i.test(href);
+      if (external) {
+        return (
+          <a
+            key={i}
+            href={href}
+            target="_blank"
+            rel="noreferrer"
+            className="font-medium text-brand-700 underline underline-offset-2"
+          >
+            {label}
+          </a>
+        );
+      }
+      return (
+        <Link
+          key={i}
+          href={href}
+          className="font-medium text-brand-700 underline underline-offset-2"
+        >
+          {label}
+        </Link>
+      );
+    }
+    return <span key={i}>{part}</span>;
   });
 }
 

@@ -24,7 +24,7 @@ describe('getLandingCopy(pt)', () => {
 describe('getLandingCopy — locale packs stay in their own language', () => {
   it('renders English copy without Portuguese leaking in', () => {
     const en = getLandingCopy('en');
-    expect(en.hero.title).toBe('Legacy. Trust. Housing.');
+    expect(en.hero.title).toBe('Property. Trust. Housing.');
     expect(en.hero.title).not.toContain('Património');
     expect(en.topbar.enter).toBe('Sign in');
     expect(en.difference.pillars).toHaveLength(3);

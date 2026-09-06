@@ -1,7 +1,9 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
+import { createBrowserClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured } from '../lib/supabase-config';
 import { resolveSafeNextPath } from '@kuteka/auth';
 import { onboardingRolesSchema, type SelfServeRoleCode } from '@kuteka/validation';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
@@ -19,6 +21,23 @@ export function OnboardingRolesForm() {
   const [roles, setRoles] = useState<SelfServeRoleCode[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [submitState, setSubmitState] = useState<SubmitState>('disabled');
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+    let cancelled = false;
+    void createBrowserClient()
+      .auth.getUser()
+      .then(({ data: { user } }) => {
+        if (cancelled) return;
+        if (!user) router.replace(`/auth/entrar?next=${encodeURIComponent('/auth/onboarding/papeis')}`);
+      })
+      .catch(() => {
+        /* keep form; submit will fail with session error */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [router]);
 
   function toggle(role: SelfServeRoleCode) {
     setRoles((prev) => (prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]));

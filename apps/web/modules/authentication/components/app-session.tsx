@@ -8,6 +8,8 @@ export type AppSessionData = {
   roles: string[];
   permissions: string[];
   locale?: string | null;
+  /** Auth confirmed OR profiles.email_verified_at */
+  emailVerified?: boolean;
 };
 
 type AppSessionContextValue = {

@@ -5,8 +5,8 @@ export const patrimoniosCopyPt = {
   emptyTitle: 'Nenhum património activado',
   empty:
     'Active o primeiro património com fotografias ou vídeos, serviços pretendidos e nível de gestão. O inventário Beta já está disponível em Habitação.',
-  emptyCta: 'Ativar o primeiro património',
-  activate: 'Ativar Património',
+  emptyCta: 'Activar o primeiro património',
+  activate: 'Activar Património',
   activating: 'A activar…',
   activated: 'Património activado.',
   submittedForReview:

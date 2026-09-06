@@ -70,13 +70,15 @@ export const financeCopyEn: FinanceCopy = {
   custodyNote: 'Custody mode: none (no escrow). Money never sits with Kuteka.',
   sandboxHint: 'Test environment — no real money until Multicaixa/EMIS/Stripe are activated.',
   payEngineHint:
-    'Unified payment engine: every module uses kuteka_pay_*. Adapter health (sandbox|multicaixa|emis|stripe|wise|bank_transfer).',
+    'Unified payment engine in SANDBOX. No real money, no custody, no live gateway in this test.',
   payEngineDefaultHint:
-    'Sets the base adapter used when a module does not specify a gateway. Phase B: sandbox by default.',
+    'Beta: the default adapter is locked to sandbox. Other gateway names stay in the table with no live charge.',
   payEngineIntentHint:
     'Creates a test payment intent linked to a module. In sandbox it returns auto_capture_ready.',
   payEngineWebhookHint:
     'Simulates gateway events (succeeded/failed/cancelled/expired) on a sandbox intent.',
+  commissionViaHint:
+    'Via B = marketplace/service take rates (this table). The 35% activation commission is Via A, Founder-only (`platform_commission_params`) and is not edited here.',
   createIntent: 'Create intent',
   simulateWebhook: 'Simulate webhook',
   setDefaultGateway: 'Set as default',

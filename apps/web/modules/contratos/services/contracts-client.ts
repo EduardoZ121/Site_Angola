@@ -75,6 +75,7 @@ export async function listContracts(): Promise<
       .from('property_contracts')
       .select(CONTRACT_SELECT)
       .is('deleted_at', null)
+      .eq('is_demo', false)
       .order('created_at', { ascending: false })
       .limit(100);
 
@@ -96,6 +97,7 @@ export async function getContract(
       .select(CONTRACT_SELECT)
       .eq('id', id)
       .is('deleted_at', null)
+      .eq('is_demo', false)
       .maybeSingle();
 
     if (error || !data) {
@@ -117,6 +119,7 @@ export async function listContractProperties(): Promise<
       .from('properties')
       .select('id, code, title, purpose, price_aoa')
       .eq('status', 'active')
+      .eq('is_demo', false)
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .limit(100);

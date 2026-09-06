@@ -140,6 +140,7 @@ export async function listServiceProviders(
       )
       .is('deleted_at', null)
       .eq('active', true)
+      .eq('is_demo', false)
       .order('rating', { ascending: false });
     if (category && category !== 'all') q = q.eq('category', category);
     const { data, error } = await q.limit(50);

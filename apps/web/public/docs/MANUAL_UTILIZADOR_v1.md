@@ -2,7 +2,7 @@
 
 **Manual do Utilizador / Centro de Ajuda · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
-Contacto de suporte: contacto@kutekalink.com · Centro de Ajuda na app: `/app/ajuda`
+Contacto de suporte: contacto@kutekalink.com · Documentação pública: `/documentacao` · Na app (com sessão): `/app/ajuda`
 
 ---
 
@@ -161,7 +161,7 @@ Na Beta, a cobrança destes serviços passa pelo **Kuteka Pay em sandbox** até 
 ### 5.1 Activar património
 
 1. Mude para a experiência **Parceiro Patrimonial**.
-2. Abra `/app/patrimonios/novo` (**Ativar Património**).
+2. Abra `/app/patrimonios/novo` (**Activar Património**).
 3. Preencha localização, tipologia, condições, preços e media.
 4. Publique e acompanhe em `/app/patrimonios`.
 
@@ -429,14 +429,15 @@ O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reem
 
 ## 17. Contactos e suporte
 
-| Canal           | Utilização                 |
-| --------------- | -------------------------- |
-| Centro de Ajuda | `/app/ajuda`               |
-| Contacto        | `/contacto`                |
-| Email geral     | contacto@kutekalink.com    |
-| Privacidade     | privacidade@kutekalink.com |
-| Jurídico        | juridico@kutekalink.com    |
-| Site            | https://kutekalink.com     |
+| Canal                 | Utilização                 |
+| --------------------- | -------------------------- |
+| Centro de Ajuda (app) | `/app/ajuda`               |
+| Documentação pública  | `/documentacao`            |
+| Contacto              | `/contacto`                |
+| Email geral           | contacto@kutekalink.com    |
+| Privacidade           | privacidade@kutekalink.com |
+| Jurídico              | juridico@kutekalink.com    |
+| Site                  | https://kutekalink.com     |
 
 Horário de atendimento de referência na Beta: dias úteis, 09:00–18:00 (WAT), salvo comunicação em contrário.
 

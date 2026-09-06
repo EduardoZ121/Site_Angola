@@ -54,6 +54,8 @@ export const segurancaCopyEs: SegurancaCopy = {
   emailChange: {
     title: 'Cambiar email',
     hint: 'Confirmación doble (código en el email actual y el nuevo). En beta los códigos pueden aparecer aquí (beta_inline).',
+    inactiveHint:
+      'Preparado, no activado (D5). El email de la cuenta no se cambia en esta prueba. La identidad sigue siendo el usuario, no la dirección.',
     newEmailLabel: 'Nuevo email',
     request: 'Solicitar cambio',
     oldCodeLabel: 'Código del email actual',
