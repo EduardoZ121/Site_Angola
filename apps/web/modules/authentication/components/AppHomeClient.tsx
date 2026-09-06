@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
@@ -15,6 +16,7 @@ import {
   ROLE_HOME_CTA_LABELS_PT,
 } from '@/modules/shell/role-operating-matrix';
 import { getAuthCopy } from '../content';
+import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
 import { useAppSession } from './app-session';
 
 /**
@@ -26,6 +28,11 @@ export function AppHomeClient() {
   const copy = getAuthCopy(locale);
   const { session, status, error } = useAppSession();
   const { mode, effectivePermissions } = useRoleExperience();
+
+  useEffect(() => {
+    if (status !== 'ready' || !session) return;
+    void trackBetaFeature('app.home', 'App home');
+  }, [status, session]);
 
   if (status === 'error' || (status === 'ready' && !session)) {
     return (

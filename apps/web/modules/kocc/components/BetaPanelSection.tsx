@@ -3,8 +3,13 @@
 import { Badge } from '@kuteka/ui';
 import { PanelSection } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
 import { publicStatusLabel } from '../lib/status-labels';
-import type { KoccBetaMetrics, KoccFeatureUsage } from '../services/kocc-client';
+import type {
+  KoccBetaFeedbackRow,
+  KoccBetaMetrics,
+  KoccFeatureUsage,
+} from '../services/kocc-client';
 
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
@@ -68,9 +73,19 @@ type BetaPanelSectionProps = {
   metrics: KoccBetaMetrics | null;
   loading: boolean;
   loadError: string | null;
+  inbox?: KoccBetaFeedbackRow[];
+  inboxLoading?: boolean;
+  inboxError?: string | null;
 };
 
-export function BetaPanelSection({ metrics, loading, loadError }: BetaPanelSectionProps) {
+export function BetaPanelSection({
+  metrics,
+  loading,
+  loadError,
+  inbox = [],
+  inboxLoading = false,
+  inboxError = null,
+}: BetaPanelSectionProps) {
   const merged = mergeUsage(metrics?.featuresMostUsed, metrics?.featureUsageProxy);
   const most = [...merged].sort((a, b) => b.count - a.count).slice(0, 6);
   const least = [...merged].sort((a, b) => a.count - b.count).slice(0, 6);
@@ -145,6 +160,44 @@ export function BetaPanelSection({ metrics, loading, loadError }: BetaPanelSecti
                 </ul>
               </div>
             ) : null}
+
+            <div>
+              <p className="text-sm font-semibold text-slate-900">Inbox de triagem Beta</p>
+              <p className="mt-1 text-xs text-slate-500">
+                Relatos recentes de <code>/app/ajuda</code> (tabela <code>beta_feedback</code>, RLS
+                operacional). Não substitui reclamações operacionais nem avaliações de contrato.
+              </p>
+              {inboxError ? <p className="mt-2 text-sm text-amber-800">{inboxError}</p> : null}
+              <SoftListSlot pending={inboxLoading && inbox.length === 0}>
+                {inbox.length === 0 && !inboxLoading ? (
+                  <p className="mt-2 text-sm text-slate-500">Ainda sem relatos na inbox.</p>
+                ) : (
+                  <ul className="mt-2 divide-y divide-slate-100">
+                    {inbox.map((row) => (
+                      <li key={row.id} className="flex flex-col gap-1 py-2.5">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <Badge variant={row.kind === 'bug' ? 'default' : 'brand'}>
+                            {betaFeedbackKindLabel(row.kind)}
+                          </Badge>
+                          <span className="font-mono text-xs text-slate-500">
+                            {new Date(row.created_at).toLocaleString('pt-AO', {
+                              dateStyle: 'short',
+                              timeStyle: 'short',
+                            })}
+                          </span>
+                          {row.page_path ? (
+                            <span className="truncate font-mono text-xs text-slate-500">
+                              {row.page_path}
+                            </span>
+                          ) : null}
+                        </div>
+                        <p className="whitespace-pre-wrap text-sm text-slate-800">{row.body}</p>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </SoftListSlot>
+            </div>
           </div>
         ) : !loading ? (
           <p className="text-sm text-slate-500">
