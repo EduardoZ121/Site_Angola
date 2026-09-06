@@ -1,0 +1,107 @@
+1:"$Sreact.fragment"
+2:I[35695,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-c2d1d46ec7841640.js"],""]
+3:I[76366,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","6367","static/chunks/6367-fc0708ba4aad586c.js","7177","static/chunks/app/layout-c2d1d46ec7841640.js"],"Providers"]
+4:I[27719,[],""]
+5:I[89645,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1980","static/chunks/1980-1bbab8cc1b002aac.js","8039","static/chunks/app/error-1dfc4b0eb83380c5.js"],"default"]
+6:I[38427,[],""]
+7:I[85415,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-1bbab8cc1b002aac.js","4345","static/chunks/app/not-found-79b4efd10d6e5378.js"],"default"]
+8:I[54272,["6098","static/chunks/c3cbed07-ca49c3c3d86f8859.js","4573","static/chunks/4573-8765300bdcbcaac8.js","3184","static/chunks/3184-c158e7b34e7b0c01.js","1614","static/chunks/1614-2126f9e0128e2bd1.js","1980","static/chunks/1980-1bbab8cc1b002aac.js","194","static/chunks/194-7c361257c775bde5.js","8710","static/chunks/app/(marketing)/cookies/page-d694a827b3d7caeb.js"],"InstitutionalDocument"]
+c:I[40545,["4573","static/chunks/4573-8765300bdcbcaac8.js","1980","static/chunks/1980-1bbab8cc1b002aac.js","4219","static/chunks/app/global-error-d6d0bcb3189a12f4.js"],"default"]
+:HL["/_next/static/media/bb3ef058b751a6ad-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/media/e4af272ccee01ff0-s.p.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["/_next/static/css/9ba71ffa112af641.css","style"]
+9:T2485,# Política de Cookies — Kuteka
+
+**Versão 1.0 Beta** · **Vigência: 5 de Agosto de 2026** · **Responsável pelo tratamento:** operador da plataforma Kuteka · **Contacto DPO/privacidade:** privacidade@kutekalink.com · **Geral:** contacto@kutekalink.com · **Site:** https://kutekalink.com
+
+---
+
+> **Nota sobre o estatuto Beta.** A plataforma Kuteka encontra-se, à data de vigência desta política, em fase Beta (versão 1.0). O painel de preferências de cookies dentro da própria plataforma está em desenvolvimento; até à sua publicação, a gestão de cookies é feita através das definições do navegador, conforme descrito na secção 6. Esta política será actualizada assim que o painel estiver disponível.
+
+## 1. O que são cookies
+
+Cookies são pequenos ficheiros de texto guardados no seu dispositivo (computador, telemóvel ou tablet) quando visita um sítio web ou utiliza uma aplicação. Servem para reconhecer o dispositivo em visitas subsequentes, manter sessões activas, lembrar preferências e recolher informação sobre a utilização do serviço.
+
+Esta política descreve como a Kuteka (adiante «Kuteka», «plataforma», «nós» ou «nosso»), acessível em https://kutekalink.com, utiliza cookies e tecnologias similares — como armazenamento local (`localStorage`), armazenamento de sessão (`sessionStorage`) e identificadores técnicos — nos seus sítios e aplicações.
+
+Esta Política de Cookies complementa a nossa [Política de Privacidade](/privacidade) e os [Termos de Utilização](/termos), devendo os três documentos ser lidos em conjunto.
+
+## 2. Tipos de cookies que utilizamos
+
+Classificamos os cookies e tecnologias similares utilizados na Kuteka em quatro categorias:
+
+| Categoria                   | Finalidade                                                                                                                                                                     | Necessita consentimento?                                                              |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| **Essenciais**              | Autenticação, manutenção de sessão, segurança, protecção contra fraude e funcionamento básico da plataforma (por exemplo, guardar o token de sessão ou o idioma seleccionado). | Não — indispensáveis à prestação do serviço                                           |
+| **Preferências**            | Recordar escolhas do utilizador, como idioma da interface, moeda de exibição ou tema visual, para personalizar a experiência entre visitas.                                    | Não, quando estritamente funcionais; sim quando ultrapassam o estritamente necessário |
+| **Analíticos / desempenho** | Compreender, de forma agregada, como a plataforma é utilizada (páginas visitadas, tempos de resposta, erros), para melhorar os serviços.                                       | Sim                                                                                   |
+| **Terceiros / marketing**   | Cookies colocados por serviços de terceiros integrados na plataforma (por exemplo, gateways de pagamento ou ferramentas de comunicação), quando aplicável.                     | Sim, salvo quando estritamente necessários à funcionalidade solicitada                |
+
+## 3. Cookies e armazenamento utilizados na Beta
+
+Na versão actual (1.0 Beta), a Kuteka utiliza principalmente cookies e armazenamento **essenciais e de preferências**. Ainda não activámos cookies de publicidade de terceiros. A tabela seguinte resume os principais itens conhecidos nesta fase; será actualizada à medida que novas integrações forem activadas.
+
+| Nome / tipo                                           | Categoria    | Finalidade                                                                                 | Duração aproximada                         |
+| ----------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------ | ------------------------------------------ |
+| Token de sessão / autenticação (Supabase Auth)        | Essencial    | Manter a sessão iniciada e proteger o acesso à conta                                       | Sessão / até expirar ou terminar sessão    |
+| `kuteka-locale`                                       | Preferências | Guardar o idioma seleccionado (Português, English, Français, Español)                      | Persistente, até alteração pelo utilizador |
+| Preferências de tema e moeda                          | Preferências | Guardar o tema visual e a moeda de exibição (AOA/Kz)                                       | Persistente, até alteração pelo utilizador |
+| Identificadores técnicos de segurança                 | Essencial    | Prevenção de fraude, protecção de formulários e limitação de tentativas (por exemplo, OTP) | Curta duração, técnica                     |
+| Cookies de fornecedores de pagamento (quando activos) | Terceiros    | Processamento de pagamentos através do Kuteka Pay                                          | Definida pelo respectivo fornecedor        |
+
+Não utilizamos cookies para perfis de publicidade comportamental nem vendemos dados de navegação a terceiros.
+
+## 4. Base de legitimidade
+
+Os cookies essenciais são utilizados com fundamento na necessidade de execução do contrato de prestação de serviços e no nosso interesse legítimo em assegurar a segurança da plataforma, pelo que não dependem de consentimento prévio. Os cookies de preferências que ultrapassem o estritamente funcional, os cookies analíticos e os cookies de terceiros não essenciais dependem do **consentimento** do utilizador, que pode ser dado, recusado ou retirado a qualquer momento nos termos da secção 6.
+
+## 5. Cookies de terceiros
+
+Alguns serviços integrados na Kuteka podem colocar os seus próprios cookies quando o utilizador interage com essas funcionalidades — por exemplo, gateways de pagamento no momento de processar uma transacção do Kuteka Pay. Estes terceiros são responsáveis pelas suas próprias políticas de cookies, que recomendamos consultar. A Kuteka selecciona parceiros que ofereçam garantias adequadas de segurança e protecção de dados, conforme descrito na nossa Política de Privacidade.
+
+## 6. Como gerir as suas preferências de cookies
+
+Nesta fase Beta, a gestão de cookies pode ser feita através de:
+
+- **Definições do navegador** — a generalidade dos navegadores (Chrome, Safari, Firefox, Edge, etc.) permite bloquear, eliminar ou ser notificado sobre cookies. Consulte a secção de ajuda do seu navegador para instruções específicas.
+- **Terminar sessão** — ao terminar a sessão na Kuteka (`/auth/sair`), os cookies e tokens de autenticação associados à sessão são invalidados.
+- **Painel de preferências de cookies (em desenvolvimento)** — estamos a preparar um painel próprio, dentro da plataforma, para gerir de forma granular o consentimento a cookies não essenciais. Assim que estiver disponível, esta política será actualizada com instruções de utilização.
+
+A desactivação de cookies essenciais pode impedir o funcionamento correcto da plataforma, incluindo a manutenção da sessão iniciada. A recusa de cookies de preferências ou analíticos não essenciais não impede o acesso às funcionalidades principais, mas pode limitar a personalização da experiência.
+
+## 7. Transferências e partilha
+
+Quando os cookies envolverem prestadores externos (por exemplo, infra-estrutura de autenticação ou pagamentos), a informação recolhida pode ser tratada de acordo com as salvaguardas descritas na nossa [Política de Privacidade](/privacidade), incluindo, quando aplicável, transferências internacionais sujeitas a garantias adequadas.
+
+## 8. Alterações a esta política
+
+Esta Política de Cookies poderá ser actualizada para reflectir alterações na plataforma, em novas integrações de terceiros ou na legislação aplicável — nomeadamente com a introdução do painel de preferências de cookies mencionado na secção 6. Publicaremos a versão actualizada em https://kutekalink.com, com indicação da respectiva data de vigência. Tratando-se de uma plataforma em fase Beta, recomendamos a consulta periódica desta política.
+
+## 9. Contactos
+
+Para qualquer questão relacionada com esta Política de Cookies, utilize os seguintes contactos:
+
+| Assunto                                               | Contacto                   |
+| ----------------------------------------------------- | -------------------------- |
+| Privacidade / Encarregado de Protecção de Dados (DPO) | privacidade@kutekalink.com |
+| Contacto geral                                        | contacto@kutekalink.com    |
+| Sítio institucional                                   | https://kutekalink.com     |
+
+---
+
+_Esta Política de Cookies deve ser lida em conjunto com a [Política de Privacidade](/privacidade) e os [Termos de Utilização](/termos) da Kuteka._
+
+**Luanda, 5 de Agosto de 2026.**
+0:{"P":null,"b":"SQGLJzgvDflFQ7VTJJmY7","p":"","c":["","cookies",""],"i":false,"f":[[["",{"children":["(marketing)",{"children":["cookies",{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/9ba71ffa112af641.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"pt","suppressHydrationWarning":true,"children":["$","body",null,{"className":"__variable_f367f3 __variable_3c557b font-sans","children":[["$","$L2",null,{"src":"/kuteka-config.js","strategy":"beforeInteractive"}],["$","$L3",null,{"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$5","errorStyles":[],"errorScripts":[],"template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","$L7",null,{}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":["(marketing)",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["cookies",["$","$1","c",{"children":[null,["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","$L8",null,{"title":"Política de Cookies","subtitle":"Como a Kuteka utiliza cookies e tecnologias similares, e como pode gerir as suas preferências.","versionNote":"Versão 1.0 Beta · Vigência 5 de Agosto de 2026 · privacidade@kutekalink.com","markdown":"$9","downloads":[{"label":"Descarregar PDF","href":"/docs/POLITICA_COOKIES_v1.pdf"},{"label":"Descarregar Word","href":"/docs/POLITICA_COOKIES_v1.docx"},{"label":"Markdown","href":"/docs/POLITICA_COOKIES_v1.md"}]}],null,"$La"]}],{},null,false]},null,false]},null,false]},null,false],"$Lb",false]],"m":"$undefined","G":["$c",[]],"s":false,"S":true}
+d:I[56974,[],"OutletBoundary"]
+f:I[41795,[],"AsyncMetadataOutlet"]
+11:I[56974,[],"ViewportBoundary"]
+13:I[56974,[],"MetadataBoundary"]
+14:"$Sreact.suspense"
+a:["$","$Ld",null,{"children":["$Le",["$","$Lf",null,{"promise":"$@10"}]]}]
+b:["$","$1","h",{"children":[null,[["$","$L11",null,{"children":"$L12"}],["$","meta",null,{"name":"next-size-adjust","content":""}]],["$","$L13",null,{"children":["$","div",null,{"hidden":true,"children":["$","$14",null,{"fallback":null,"children":"$L15"}]}]}]]}]
+12:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+e:null
+16:I[27803,[],"IconMark"]
+10:{"metadata":[["$","title","0",{"children":"Política de Cookies · Kuteka · Kuteka"}],["$","meta","1",{"name":"description","content":"Política de Cookies da Kuteka — tipos de cookies, finalidades e como gerir as suas preferências na plataforma."}],["$","meta","2",{"name":"robots","content":"index, follow"}],["$","link","3",{"rel":"icon","href":"/favicon.svg","type":"image/svg+xml"}],["$","link","4",{"rel":"icon","href":"/favicon.ico","sizes":"any"}],["$","$L16","5",{}]],"error":null,"digest":"$undefined"}
+15:"$10:metadata"
