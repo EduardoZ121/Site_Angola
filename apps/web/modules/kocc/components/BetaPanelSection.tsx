@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { Badge } from '@kuteka/ui';
 import { PanelSection } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
@@ -10,6 +11,8 @@ import type {
   KoccBetaMetrics,
   KoccFeatureUsage,
 } from '../services/kocc-client';
+
+type InboxFilter = 'all' | 'feedback' | 'bug';
 
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
@@ -86,9 +89,14 @@ export function BetaPanelSection({
   inboxLoading = false,
   inboxError = null,
 }: BetaPanelSectionProps) {
+  const [inboxFilter, setInboxFilter] = useState<InboxFilter>('all');
   const merged = mergeUsage(metrics?.featuresMostUsed, metrics?.featureUsageProxy);
   const most = [...merged].sort((a, b) => b.count - a.count).slice(0, 6);
   const least = [...merged].sort((a, b) => a.count - b.count).slice(0, 6);
+  const filteredInbox = useMemo(() => {
+    if (inboxFilter === 'all') return inbox;
+    return inbox.filter((row) => row.kind === inboxFilter);
+  }, [inbox, inboxFilter]);
 
   return (
     <PanelSection
@@ -178,12 +186,40 @@ export function BetaPanelSection({
             métricas agregadas. Não substitui reclamações operacionais nem avaliações de contrato.
           </p>
           {inboxError ? <p className="mt-2 text-sm text-amber-800">{inboxError}</p> : null}
+          {inbox.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-2 text-xs">
+              {(
+                [
+                  ['all', 'Todos'],
+                  ['bug', 'Bugs'],
+                  ['feedback', 'Sugestões'],
+                ] as const
+              ).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={
+                    inboxFilter === value
+                      ? 'rounded border border-slate-800 bg-slate-900 px-2 py-1 text-white'
+                      : 'rounded border border-slate-200 bg-white px-2 py-1 text-slate-700'
+                  }
+                  onClick={() => setInboxFilter(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          ) : null}
           <SoftListSlot pending={inboxLoading && inbox.length === 0}>
-            {inbox.length === 0 && !inboxLoading ? (
+            {inbox.length === 0 && !inboxLoading && !inboxError ? (
               <p className="mt-2 text-sm text-slate-500">Ainda sem relatos na inbox.</p>
-            ) : (
+            ) : null}
+            {inbox.length > 0 && filteredInbox.length === 0 ? (
+              <p className="mt-2 text-sm text-slate-500">Nenhum relato neste filtro.</p>
+            ) : null}
+            {filteredInbox.length > 0 ? (
               <ul className="mt-2 divide-y divide-slate-100">
-                {inbox.map((row) => (
+                {filteredInbox.map((row) => (
                   <li key={row.id} className="flex flex-col gap-1 py-2.5">
                     <div className="flex flex-wrap items-center gap-2">
                       <Badge variant={row.kind === 'bug' ? 'default' : 'brand'}>
@@ -205,7 +241,7 @@ export function BetaPanelSection({
                   </li>
                 ))}
               </ul>
-            )}
+            ) : null}
           </SoftListSlot>
         </div>
       </div>

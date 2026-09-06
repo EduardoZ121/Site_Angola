@@ -3,6 +3,12 @@
 import { createBrowserClient } from '@/lib/supabase/client';
 import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
 import { getFinanceCopy } from '@/modules/finance/content';
+import {
+  isValidBetaFeedbackBody,
+  isValidBetaFeedbackKind,
+  normalizeBetaFeedbackBody,
+  sanitizeBetaPagePath,
+} from '../lib/beta-feedback-submit';
 import type { KoccOperationalStatus } from '../lib/status-labels';
 
 export type KoccFlagRow = {
@@ -154,11 +160,18 @@ export async function submitBetaFeedback(input: {
 }): Promise<Result<{ id: string }>> {
   const copy = errors();
   try {
+    if (!isValidBetaFeedbackKind(input.kind)) {
+      return { ok: false, message: copy.saveError };
+    }
+    const body = normalizeBetaFeedbackBody(input.body);
+    if (!isValidBetaFeedbackBody(body)) {
+      return { ok: false, message: copy.saveError };
+    }
     const client = createBrowserClient();
     const { data, error } = await client.rpc('kocc_submit_beta_feedback', {
       p_kind: input.kind,
-      p_body: input.body,
-      p_page_path: input.pagePath ?? null,
+      p_body: body,
+      p_page_path: sanitizeBetaPagePath(input.pagePath),
     });
     if (error) return { ok: false, message: error.message || copy.saveError };
     const row = data as { id?: string } | null;
