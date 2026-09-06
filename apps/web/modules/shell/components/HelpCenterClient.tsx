@@ -283,23 +283,19 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
 
       {!publicMode ? (
         <>
-          <BetaFeedbackForm pagePath={basePath} />
+          <BetaFeedbackForm pagePath={`${basePath}?sec=${section}`} />
           <section
             className="kuteka-detail-panel flex flex-col gap-3 p-5"
             id="reclamacao-operacional"
           >
-            <h2 className="kuteka-detail-title">Reclamação operacional</h2>
-            <p className="kuteka-detail-body">
-              Feedback de produto e bugs usam o formulário Beta acima. Para uma reclamação
-              operacional (serviço, conduta, incumprimento), abra uma escalação na área de
-              administração ou contacte a Kuteka — não misture com o canal Beta.
-            </p>
+            <h2 className="kuteka-detail-title">{shell.betaFeedback.complaintTitle}</h2>
+            <p className="kuteka-detail-body">{shell.betaFeedback.complaintBody}</p>
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/app/admin"
                 className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
               >
-                Área de administração
+                {shell.betaFeedback.complaintAdminCta}
               </Link>
               <Link
                 href="/contacto"

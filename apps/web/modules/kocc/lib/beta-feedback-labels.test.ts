@@ -4,7 +4,7 @@ import { betaFeedbackKindLabel } from './beta-feedback-labels';
 describe('betaFeedbackKindLabel', () => {
   it('labels known kinds', () => {
     expect(betaFeedbackKindLabel('bug')).toBe('Bug');
-    expect(betaFeedbackKindLabel('feedback')).toBe('Feedback');
+    expect(betaFeedbackKindLabel('feedback')).toBe('Sugestão');
   });
 
   it('passes through unknown kinds', () => {

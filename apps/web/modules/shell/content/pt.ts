@@ -296,6 +296,10 @@ export const shellCopyPt = {
     publicCtaBody:
       'Para reportar um bug ou enviar uma sugestão, inicie sessão. O contributo fica registado no Painel Beta.',
     publicCtaButton: 'Entrar e enviar feedback',
+    complaintTitle: 'Reclamação operacional',
+    complaintBody:
+      'Feedback de produto e bugs usam o formulário Beta acima. Para uma reclamação operacional (serviço, conduta, incumprimento), abra uma escalação na área de administração ou contacte a Kuteka — não misture com o canal Beta.',
+    complaintAdminCta: 'Área de administração',
   },
   firstActions: {
     title: 'A sua primeira acção útil',

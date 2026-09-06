@@ -45,3 +45,11 @@
 - Uma só Inbox (KOCC), um só form (`BetaFeedbackForm`), um só submit RPC
 - Reclamação operacional = bridge textual para admin/contacto — **não** segundo inbox
 - Feature-tracking alargado / Product Insights → **não** expandido neste período (lista deps apenas)
+
+## Hardening adicional (bloqueio write)
+
+- Metrics empty-state gated on `!loadError` (parity with inbox).
+- Kind label aligned to **Sugestão**; Help `?sec=` allowlisted on `page_path`.
+- Body strips C0 controls; complaint bridge i18n; render.yaml header lock test.
+- Telemetry: RPC `beta.feedback` + client `beta.feedback.bug|suggestion` are **distinct codes** (not double-count of same key).
+- GOV-BF-01…05 / 0043 / 0044 unchanged — not applied.

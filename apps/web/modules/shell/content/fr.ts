@@ -300,6 +300,10 @@ export const shellCopyFr: ShellCopy = {
     publicCtaBody:
       'Pour signaler un bug ou envoyer une suggestion, connectez-vous. Votre contribution est enregistrée dans le Panneau Beta.',
     publicCtaButton: 'Se connecter et envoyer un retour',
+    complaintTitle: 'Réclamation opérationnelle',
+    complaintBody:
+      'Les retours produit et bugs utilisent le formulaire Beta ci-dessus. Pour une réclamation opérationnelle (service, conduite, manquement), ouvrez une escalation dans l’administration ou contactez Kuteka — ne mélangez pas avec le canal Beta.',
+    complaintAdminCta: 'Espace d’administration',
   },
   firstActions: {
     title: 'Votre première action utile',

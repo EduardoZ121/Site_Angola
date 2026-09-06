@@ -296,6 +296,10 @@ export const shellCopyEs: ShellCopy = {
     publicCtaBody:
       'Para reportar un error o enviar una sugerencia, inicie sesión. Su aporte queda registrado en el Panel Beta.',
     publicCtaButton: 'Entrar y enviar feedback',
+    complaintTitle: 'Reclamación operacional',
+    complaintBody:
+      'El feedback de producto y los errores usan el formulario Beta de arriba. Para una reclamación operacional (servicio, conducta, incumplimiento), abra una escalación en administración o contacte a Kuteka — no lo mezcle con el canal Beta.',
+    complaintAdminCta: 'Área de administración',
   },
   firstActions: {
     title: 'Su primera acción útil',

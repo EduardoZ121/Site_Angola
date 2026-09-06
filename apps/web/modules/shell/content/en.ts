@@ -296,6 +296,10 @@ export const shellCopyEn: ShellCopy = {
     publicCtaBody:
       'To report a bug or send a suggestion, sign in. Your contribution is recorded in the Beta Panel.',
     publicCtaButton: 'Sign in and send feedback',
+    complaintTitle: 'Operational complaint',
+    complaintBody:
+      'Product feedback and bugs use the Beta form above. For an operational complaint (service, conduct, breach), open an escalation in the admin area or contact Kuteka — do not mix it with the Beta channel.',
+    complaintAdminCta: 'Administration area',
   },
   firstActions: {
     title: 'Your first useful action',

@@ -13,8 +13,13 @@ describe('sanitizeBetaPagePath', () => {
     expect(sanitizeBetaPagePath('   ')).toBeNull();
   });
 
-  it('strips query and hash', () => {
+  it('strips unknown query and hash', () => {
     expect(sanitizeBetaPagePath('/app/ajuda?x=1#y')).toBe('/app/ajuda');
+  });
+
+  it('keeps allowlisted Help Center sec', () => {
+    expect(sanitizeBetaPagePath('/app/ajuda?sec=faq')).toBe('/app/ajuda?sec=faq');
+    expect(sanitizeBetaPagePath('/app/ajuda?sec=evil')).toBe('/app/ajuda');
   });
 
   it('extracts pathname from absolute URL', () => {
@@ -32,6 +37,7 @@ describe('sanitizeBetaPagePath', () => {
 describe('beta feedback body/kind', () => {
   it('normalizes and validates body length', () => {
     expect(normalizeBetaFeedbackBody('  hi  ')).toBe('hi');
+    expect(normalizeBetaFeedbackBody('a\u0000bc')).toBe('abc');
     expect(isValidBetaFeedbackBody('ab')).toBe(false);
     expect(isValidBetaFeedbackBody('abc')).toBe(true);
   });

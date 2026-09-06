@@ -169,7 +169,7 @@ export function BetaPanelSection({
                 </div>
               ) : null}
             </div>
-          ) : !loading ? (
+          ) : !loading && !loadError ? (
             <p className="text-sm text-slate-500">
               Sem métricas. Confirme que a migration <code>0035_kocc_beta_panel.sql</code> foi
               aplicada no Supabase remoto e que a conta tem <code>finance.manage</code>.
