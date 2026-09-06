@@ -1,6 +1,6 @@
 # Sprint B — ciclo completo (auditoria aprofundada)
 
-**Estado código local:** `400b473e` + harden submit/inbox filter (este ciclo).  
+**Estado código local:** `de1fa086` + harden submit/inbox filter (este ciclo).  
 **Fonte:** `EduardoZ121/Site_Angola` · migrations `0035`, `0042`.
 
 ## Mapa do ciclo pedido vs. o que existe
