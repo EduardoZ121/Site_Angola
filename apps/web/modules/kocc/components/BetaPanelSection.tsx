@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { Badge } from '@kuteka/ui';
 import { PanelSection } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { filterBetaInboxRows, type BetaInboxFilter } from '../lib/beta-feedback-inbox';
 import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
 import { publicStatusLabel } from '../lib/status-labels';
 import type {
@@ -11,8 +12,6 @@ import type {
   KoccBetaMetrics,
   KoccFeatureUsage,
 } from '../services/kocc-client';
-
-type InboxFilter = 'all' | 'feedback' | 'bug';
 
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
@@ -89,14 +88,14 @@ export function BetaPanelSection({
   inboxLoading = false,
   inboxError = null,
 }: BetaPanelSectionProps) {
-  const [inboxFilter, setInboxFilter] = useState<InboxFilter>('all');
+  const [inboxFilter, setInboxFilter] = useState<BetaInboxFilter>('all');
   const merged = mergeUsage(metrics?.featuresMostUsed, metrics?.featureUsageProxy);
   const most = [...merged].sort((a, b) => b.count - a.count).slice(0, 6);
   const least = [...merged].sort((a, b) => a.count - b.count).slice(0, 6);
-  const filteredInbox = useMemo(() => {
-    if (inboxFilter === 'all') return inbox;
-    return inbox.filter((row) => row.kind === inboxFilter);
-  }, [inbox, inboxFilter]);
+  const filteredInbox = useMemo(
+    () => filterBetaInboxRows(inbox, inboxFilter),
+    [inbox, inboxFilter],
+  );
 
   return (
     <PanelSection
