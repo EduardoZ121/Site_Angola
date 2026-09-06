@@ -11,6 +11,7 @@ import {
 } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { GO_LIVE_READINESS, goLiveReadinessSummary } from '../lib/go-live-readiness';
+import { formatBetaActorHint } from '../lib/beta-feedback-actor';
 import { KOCC_STATUS_OPTIONS, adminStatusLabel, publicStatusLabel } from '../lib/status-labels';
 import {
   listAudit,
@@ -339,7 +340,9 @@ export function KoccCenterClient({ canManage }: PanelProps) {
                 </p>
                 <p className="text-xs text-slate-500">
                   {new Date(entry.created_at).toLocaleString('pt-PT')}
-                  {entry.actor_id ? ` · ${entry.actor_id.slice(0, 8)}` : ''}
+                  {(formatBetaActorHint(entry.actor_id) &&
+                    ` · ${formatBetaActorHint(entry.actor_id)}`) ||
+                    ''}
                 </p>
               </div>
               {entry.after_state && typeof entry.after_state.operational_status === 'string' ? (

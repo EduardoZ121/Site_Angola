@@ -5,6 +5,7 @@ import { Badge } from '@kuteka/ui';
 import { PanelSection } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { filterBetaInboxRows, type BetaInboxFilter } from '../lib/beta-feedback-inbox';
+import { formatBetaActorHint } from '../lib/beta-feedback-actor';
 import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
 import { shouldShowSoftEmpty } from '../lib/soft-empty-gate';
 import { publicStatusLabel } from '../lib/status-labels';
@@ -244,11 +245,17 @@ export function BetaPanelSection({
                           {row.page_path}
                         </span>
                       ) : null}
-                      {row.actor_id ? (
-                        <span className="font-mono text-xs text-slate-500" title={row.actor_id}>
-                          actor:{row.actor_id.slice(0, 8)}
-                        </span>
-                      ) : null}
+                      {(() => {
+                        const hint = formatBetaActorHint(row.actor_id);
+                        return hint ? (
+                          <span
+                            className="font-mono text-xs text-slate-500"
+                            title={row.actor_id ?? undefined}
+                          >
+                            {hint}
+                          </span>
+                        ) : null;
+                      })()}
                     </div>
                     <p className="whitespace-pre-wrap text-sm text-slate-800">{row.body}</p>
                   </li>
