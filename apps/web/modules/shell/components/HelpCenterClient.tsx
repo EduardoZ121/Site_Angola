@@ -293,16 +293,16 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
             <p className="kuteka-detail-body">{shell.betaFeedback.complaintBody}</p>
             <div className="flex flex-wrap gap-3">
               <Link
-                href="/app/admin"
+                href="/contacto"
+                className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+              >
+                {h.contactCta}
+              </Link>
+              <Link
+                href="/app/admin#escalacoes"
                 className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
               >
                 {shell.betaFeedback.complaintAdminCta}
-              </Link>
-              <Link
-                href="/contacto"
-                className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
-              >
-                {h.contactCta}
               </Link>
             </div>
           </section>

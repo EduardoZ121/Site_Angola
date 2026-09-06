@@ -298,8 +298,8 @@ export const shellCopyEs: ShellCopy = {
     publicCtaButton: 'Entrar y enviar feedback',
     complaintTitle: 'Reclamación operacional',
     complaintBody:
-      'El feedback de producto y los errores usan el formulario Beta de arriba. Para una reclamación operacional (servicio, conducta, incumplimiento), abra una escalación en administración o contacte a Kuteka — no lo mezcle con el canal Beta.',
-    complaintAdminCta: 'Área de administración',
+      'El feedback de producto y los errores usan el formulario Beta de arriba. Para una reclamación operacional (servicio, conducta, incumplimiento), contacte a Kuteka. El equipo ops con acceso de administración puede abrir la cola de escalaciones — no lo mezcle con el canal Beta.',
+    complaintAdminCta: 'Cola de escalaciones (ops)',
   },
   firstActions: {
     title: 'Su primera acción útil',

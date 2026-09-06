@@ -244,6 +244,11 @@ export function BetaPanelSection({
                           {row.page_path}
                         </span>
                       ) : null}
+                      {row.actor_id ? (
+                        <span className="font-mono text-xs text-slate-500" title={row.actor_id}>
+                          actor:{row.actor_id.slice(0, 8)}
+                        </span>
+                      ) : null}
                     </div>
                     <p className="whitespace-pre-wrap text-sm text-slate-800">{row.body}</p>
                   </li>

@@ -302,8 +302,8 @@ export const shellCopyFr: ShellCopy = {
     publicCtaButton: 'Se connecter et envoyer un retour',
     complaintTitle: 'Réclamation opérationnelle',
     complaintBody:
-      'Les retours produit et bugs utilisent le formulaire Beta ci-dessus. Pour une réclamation opérationnelle (service, conduite, manquement), ouvrez une escalation dans l’administration ou contactez Kuteka — ne mélangez pas avec le canal Beta.',
-    complaintAdminCta: 'Espace d’administration',
+      'Les retours produit et bugs utilisent le formulaire Beta ci-dessus. Pour une réclamation opérationnelle (service, conduite, manquement), contactez Kuteka. L’équipe ops avec accès admin peut ouvrir la file d’escalations — ne mélangez pas avec le canal Beta.',
+    complaintAdminCta: 'File d’escalations (ops)',
   },
   firstActions: {
     title: 'Votre première action utile',

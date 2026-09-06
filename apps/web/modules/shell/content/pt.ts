@@ -298,8 +298,8 @@ export const shellCopyPt = {
     publicCtaButton: 'Entrar e enviar feedback',
     complaintTitle: 'Reclamação operacional',
     complaintBody:
-      'Feedback de produto e bugs usam o formulário Beta acima. Para uma reclamação operacional (serviço, conduta, incumprimento), abra uma escalação na área de administração ou contacte a Kuteka — não misture com o canal Beta.',
-    complaintAdminCta: 'Área de administração',
+      'Feedback de produto e bugs usam o formulário Beta acima. Para uma reclamação operacional (serviço, conduta, incumprimento), contacte a Kuteka. A equipa operacional com acesso de administração pode abrir a fila de escalações — não misture com o canal Beta.',
+    complaintAdminCta: 'Fila de escalações (ops)',
   },
   firstActions: {
     title: 'A sua primeira acção útil',
