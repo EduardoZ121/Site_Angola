@@ -4,7 +4,7 @@ Usar após push/PR/merge/deploy em `EduardoZ121/Site_Angola`. Não requer novas 
 
 ## Pré-voo local (já corrido no agente)
 
-- [x] `npm test` — 137 testes
+- [x] `npm test` — 147 testes
 - [x] `tsc --noEmit`
 - [ ] `npm run build` (export estático) — validar neste ciclo
 - [x] Patches A/B + harden regeneráveis

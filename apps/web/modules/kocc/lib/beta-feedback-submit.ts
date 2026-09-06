@@ -1,11 +1,13 @@
 /** Client-side guards for beta_feedback submit — mirrors migration 0035 checks. */
 
+import { HELP_SECTION_IDS } from '@/modules/shell/lib/help-sections';
+
 const MAX_BODY = 4000;
 const MIN_BODY = 3;
 const MAX_PAGE_PATH = 500;
 
 /** Help Center sections — only these query values are preserved on page_path. */
-const ALLOWED_SEC = new Set(['manual', 'faq', 'glossario', 'novidades', 'estado']);
+const ALLOWED_SEC = new Set<string>(HELP_SECTION_IDS);
 
 /**
  * Sanitize page_path for submit.

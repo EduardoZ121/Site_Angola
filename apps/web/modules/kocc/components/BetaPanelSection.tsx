@@ -6,6 +6,7 @@ import { PanelSection } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { filterBetaInboxRows, type BetaInboxFilter } from '../lib/beta-feedback-inbox';
 import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
+import { shouldShowSoftEmpty } from '../lib/soft-empty-gate';
 import { publicStatusLabel } from '../lib/status-labels';
 import type {
   KoccBetaFeedbackRow,
@@ -169,7 +170,11 @@ export function BetaPanelSection({
                 </div>
               ) : null}
             </div>
-          ) : !loading && !loadError ? (
+          ) : shouldShowSoftEmpty({
+              pending: loading,
+              hasItems: Boolean(metrics),
+              hasError: Boolean(loadError),
+            }) ? (
             <p className="text-sm text-slate-500">
               Sem métricas. Confirme que a migration <code>0035_kocc_beta_panel.sql</code> foi
               aplicada no Supabase remoto e que a conta tem <code>finance.manage</code>.
@@ -210,7 +215,11 @@ export function BetaPanelSection({
             </div>
           ) : null}
           <SoftListSlot pending={inboxLoading && inbox.length === 0}>
-            {inbox.length === 0 && !inboxLoading && !inboxError ? (
+            {shouldShowSoftEmpty({
+              pending: inboxLoading,
+              hasItems: inbox.length > 0,
+              hasError: Boolean(inboxError),
+            }) ? (
               <p className="mt-2 text-sm text-slate-500">Ainda sem relatos na inbox.</p>
             ) : null}
             {inbox.length > 0 && filteredInbox.length === 0 ? (

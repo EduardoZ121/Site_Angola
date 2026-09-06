@@ -8,9 +8,10 @@ import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { BetaFeedbackForm } from '@/modules/kocc/components/BetaFeedbackForm';
 import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
-import { getShellCopy } from '../content';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
+import { getShellCopy } from '../content';
+import { HELP_SECTION_IDS, isHelpSectionId, type HelpSectionId } from '../lib/help-sections';
 
 export type HelpCenterProps = {
   /** Markdown sources for every section of the Documentation Center. */
@@ -24,11 +25,11 @@ export type HelpCenterProps = {
   publicMode?: boolean;
 };
 
-const SECTION_IDS = ['manual', 'faq', 'glossario', 'novidades', 'estado'] as const;
-type SectionId = (typeof SECTION_IDS)[number];
+type SectionId = HelpSectionId;
+const SECTION_IDS = HELP_SECTION_IDS;
 
 function isSectionId(value: string | null | undefined): value is SectionId {
-  return !!value && (SECTION_IDS as readonly string[]).includes(value);
+  return isHelpSectionId(value);
 }
 
 /** ASCII slug used for in-page heading anchors (e.g. `#roteiro-publico`). */

@@ -22,8 +22,9 @@ export function institutionalBadge(
   );
 
   if (roleOrFlags.isSystemDemo || roles.includes('system_demo')) {
+    // Sprint A hygiene: never surface the internal word "Demo" to end users.
     return {
-      label: 'System Demo',
+      label: 'Conta de sistema',
       className: 'bg-slate-200 text-slate-800 ring-1 ring-slate-400',
     };
   }

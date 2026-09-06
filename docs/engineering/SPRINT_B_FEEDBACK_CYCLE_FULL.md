@@ -53,3 +53,7 @@
 - Body strips C0 controls; complaint bridge i18n; render.yaml header lock test.
 - Telemetry: RPC `beta.feedback` + client `beta.feedback.bug|suggestion` are **distinct codes** (not double-count of same key).
 - GOV-BF-01…05 / 0043 / 0044 unchanged — not applied.
+
+## Tip local (bloqueio write)
+
+`1f5433a7`+ soft-empty gate / help-sec parity / Conta de sistema badge. GOV-BF/0043/0044 intactos.
