@@ -1,12 +1,12 @@
 # Kuteka Beta Charter v2 — Ecossistema e Aprendizagem
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 2.0 |
-| **Data** | 2026-08-28 |
+| Campo                     | Valor                                                               |
+| ------------------------- | ------------------------------------------------------------------- |
+| **Versão**                | 2.0                                                                 |
+| **Data**                  | 2026-08-28                                                          |
 | **Substitui/Complementa** | [SPRINT_BETA_CHARTER.md v1.4](../../product/SPRINT_BETA_CHARTER.md) |
-| **Autorização** | FASE 0 documentação |
-| **Estado** | Activo como charter estratégico Beta pública |
+| **Autorização**           | FASE 0 documentação                                                 |
+| **Estado**                | Activo como charter estratégico Beta pública                        |
 
 ## 1. Objectivo da Beta pública
 
@@ -20,10 +20,10 @@ Clientes · PP · patrimónios · imóveis · Prestadores · Agentes · procura 
 
 ## 2. Dois universos
 
-| Universo | Definição |
-|----------|-----------|
-| **Inventário Kuteka** | Tudo registado (mesmo não publicável) |
-| **Mercado Kuteka** | Verificado, aprovado, disponível publicamente |
+| Universo              | Definição                                     |
+| --------------------- | --------------------------------------------- |
+| **Inventário Kuteka** | Tudo registado (mesmo não publicável)         |
+| **Mercado Kuteka**    | Verificado, aprovado, disponível publicamente |
 
 **Regras:**
 
@@ -46,8 +46,8 @@ Clientes · PP · patrimónios · imóveis · Prestadores · Agentes · procura 
 
 Prioridades durante Beta:
 
-1. Estabilidade 2. Segurança 3. Confiança 4. UX 5. Desempenho  
-6. Recolha dados 7. Feedback 8. Bugs 9. Melhoria fluxos existentes
+1. Estabilidade 2. Segurança 3. Confiança 4. UX 5. Desempenho
+2. Recolha dados 7. Feedback 8. Bugs 9. Melhoria fluxos existentes
 
 Nova feature só se: bloqueio real · segurança · operação · dados · evidência procura.
 
@@ -78,11 +78,11 @@ Nova feature justificada por: **Dados + Feedback + Bug + Segurança + Objectivo 
 
 ## 9. Documentos Beta associados
 
-| Documento | ID |
-|-----------|-----|
-| [Scorecard](./KUTEKA_BETA_SCORECARD_v0.1.md) | C7 |
-| [QA Playbook](./KUTEKA_BETA_QA_PLAYBOOK_v0.1.md) | C7 |
-| [Mapa reutilização](./KUTEKA_BETA_REUSE_MAP_v0.1.md) | C7 |
+| Documento                                                                      | ID  |
+| ------------------------------------------------------------------------------ | --- |
+| [Scorecard](./KUTEKA_BETA_SCORECARD_v0.1.md)                                   | C7  |
+| [QA Playbook](./KUTEKA_BETA_QA_PLAYBOOK_v0.1.md)                               | C7  |
+| [Mapa reutilização](./KUTEKA_BETA_REUSE_MAP_v0.1.md)                           | C7  |
 | [Doc 3 validação](../consolidation/KUTEKA_DOC3_VALIDATION_TABLE_2026-08-28.md) | C10 |
 
 ## 10. Relação com Sprints Beta 1–5
@@ -91,8 +91,8 @@ Charter v1.4 (Sprints numeradas) **mantém-se** para governação operacional. C
 
 ## Histórico
 
-| Versão | Data | Alteração |
-|--------|------|-----------|
-| 2.0.1 | 2026-09-04 | §3 alinhado a D3 DEMO INTERNAL ONLY — sem DEMO público |
-| 2.0 | 2026-08-28 | Ecossistema + aprendizagem (Doc 3) |
-| 1.4 | 2026-08-08 | Sprints Beta 1–5 |
+| Versão | Data       | Alteração                                              |
+| ------ | ---------- | ------------------------------------------------------ |
+| 2.0.1  | 2026-09-04 | §3 alinhado a D3 DEMO INTERNAL ONLY — sem DEMO público |
+| 2.0    | 2026-08-28 | Ecossistema + aprendizagem (Doc 3)                     |
+| 1.4    | 2026-08-08 | Sprints Beta 1–5                                       |

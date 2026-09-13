@@ -1,11 +1,11 @@
 # C2 — KUT-FIN-005: Duas vias de comissão (documentado, não unificado)
 
-| Campo | Valor |
-|-------|-------|
-| **ID** | C2 · **KUT-FIN-005** |
-| **Versão** | 1.0 |
-| **Data** | 2026-08-28 |
-| **Estado** | Documentado — **sem alteração SQL/RPC/UI** |
+| Campo                | Valor                                                                          |
+| -------------------- | ------------------------------------------------------------------------------ |
+| **ID**               | C2 · **KUT-FIN-005**                                                           |
+| **Versão**           | 1.0                                                                            |
+| **Data**             | 2026-08-28                                                                     |
+| **Estado**           | Documentado — **sem alteração SQL/RPC/UI**                                     |
 | **Regra de negócio** | Comissão de activação **35%** controlada **exclusivamente pelo Founder/Owner** |
 
 ## Regra permanente (negócio)
@@ -17,16 +17,16 @@
 
 ## Via A — `platform_commission_params` + `founder_set_commission_param`
 
-| Aspecto | Detalhe |
-|---------|---------|
-| **Tabela** | `public.platform_commission_params` |
-| **RPC** | `public.founder_set_commission_param(p_code, p_value_numeric, p_notes)` |
-| **Migration** | `supabase/migrations/0036_trust_governance_gate.sql` (override em `0037`) |
-| **Seed default** | `activation_intermediation_first_month_pct = 35.0000` (percent) |
-| **Autorização** | `is_platform_owner()` OR `is_founder()` |
-| **UI plataforma** | **Nenhuma** — acesso via RPC/SQL apenas |
-| **Auditoria** | `updated_at`, `updated_by` na tabela |
-| **Modelo** | Parâmetros versionáveis por `code` (chave-valor) |
+| Aspecto           | Detalhe                                                                   |
+| ----------------- | ------------------------------------------------------------------------- |
+| **Tabela**        | `public.platform_commission_params`                                       |
+| **RPC**           | `public.founder_set_commission_param(p_code, p_value_numeric, p_notes)`   |
+| **Migration**     | `supabase/migrations/0036_trust_governance_gate.sql` (override em `0037`) |
+| **Seed default**  | `activation_intermediation_first_month_pct = 35.0000` (percent)           |
+| **Autorização**   | `is_platform_owner()` OR `is_founder()`                                   |
+| **UI plataforma** | **Nenhuma** — acesso via RPC/SQL apenas                                   |
+| **Auditoria**     | `updated_at`, `updated_by` na tabela                                      |
+| **Modelo**        | Parâmetros versionáveis por `code` (chave-valor)                          |
 
 ### Quando usar (intenção documental)
 
@@ -34,14 +34,14 @@ Parâmetros estratégicos de plataforma definidos pelo Founder/Owner, especialme
 
 ## Via B — `finance_commission_rules` + `finance_set_commission`
 
-| Aspecto | Detalhe |
-|---------|---------|
-| **Tabela** | `public.finance_commission_rules` |
-| **RPC** | `public.finance_set_commission(...)` |
-| **Migration** | `supabase/migrations/0021_finance_infra_fase_a.sql` |
-| **UI** | Super Command → painel financeiro / `PricingPanel` |
-| **Autorização** | Permissões finance Super (`finance.*`) |
-| **Modelo** | Regras por produto/serviço/canal com percentuais, flags, vigência |
+| Aspecto         | Detalhe                                                           |
+| --------------- | ----------------------------------------------------------------- |
+| **Tabela**      | `public.finance_commission_rules`                                 |
+| **RPC**         | `public.finance_set_commission(...)`                              |
+| **Migration**   | `supabase/migrations/0021_finance_infra_fase_a.sql`               |
+| **UI**          | Super Command → painel financeiro / `PricingPanel`                |
+| **Autorização** | Permissões finance Super (`finance.*`)                            |
+| **Modelo**      | Regras por produto/serviço/canal com percentuais, flags, vigência |
 
 ### Quando usar (intenção documental)
 
@@ -51,11 +51,11 @@ Regras comerciais operacionais geridas pelo Super Admin no cockpit financeiro (m
 
 As duas vias **podem produzir valores diferentes** se não forem alinhadas manualmente. Exemplo: 35% em `platform_commission_params` vs regra distinta em `finance_commission_rules`.
 
-| Risco | Severidade | Mitigação Fase 0 |
-|-------|------------|------------------|
-| Super altera comissão sem alinhar Founder param | Alta | Documentar; decisão D1 pendente |
-| Founder altera param sem refletir regras Super | Alta | Checklist reconciliação manual |
-| Utilizador vê preço inconsistente | Média | Sandbox only até unificação |
+| Risco                                           | Severidade | Mitigação Fase 0                |
+| ----------------------------------------------- | ---------- | ------------------------------- |
+| Super altera comissão sem alinhar Founder param | Alta       | Documentar; decisão D1 pendente |
+| Founder altera param sem refletir regras Super  | Alta       | Checklist reconciliação manual  |
+| Utilizador vê preço inconsistente               | Média      | Sandbox only até unificação     |
 
 ## Decisão Founder pendente (D1)
 

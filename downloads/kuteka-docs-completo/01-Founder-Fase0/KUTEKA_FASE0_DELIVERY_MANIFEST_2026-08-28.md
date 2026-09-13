@@ -1,30 +1,30 @@
 # FASE 0 — Manifesto de entrega
 
-| Campo | Valor |
-|-------|-------|
-| **ID** | KUTEKA-FASE0-MANIFEST |
-| **Versão** | 1.1 |
-| **Data entrega** | 2026-08-28 |
+| Campo               | Valor                                                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **ID**              | KUTEKA-FASE0-MANIFEST                                                                                               |
+| **Versão**          | 1.1                                                                                                                 |
+| **Data entrega**    | 2026-08-28                                                                                                          |
 | **Auditoria final** | 2026-08-28 — ver [`KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md`](./KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md) |
-| **Autorização** | `AUTORIZO: FASE 0 — documentação [C1–C10]` |
-| **Código alterado** | **NENHUM** |
-| **Migrations** | **NENHUMA** |
-| **Deploy** | **NENHUM** |
+| **Autorização**     | `AUTORIZO: FASE 0 — documentação [C1–C10]`                                                                          |
+| **Código alterado** | **NENHUM**                                                                                                          |
+| **Migrations**      | **NENHUMA**                                                                                                         |
+| **Deploy**          | **NENHUM**                                                                                                          |
 
 ## Escopo executado
 
-| Bloco | Descrição | Estado |
-|-------|-----------|--------|
-| C1 | Normalização FIN (FIN-002–010) | ✅ |
-| C2 | Documentação dual path comissão FIN-005 | ✅ |
-| C3 | Packs Finance + Legal + STR-001 | ✅ |
-| C4 | Pack Governance + Protocolo FASE 0 | ✅ |
-| C5 | Pack Compliance (POL/CMP/BCP/DRP/INC/DOC) | ✅ |
-| C6 | ADR-027 identidade Founder | ✅ |
-| C7 | Beta Charter v2 + scorecard + QA + reuse | ✅ |
-| C8 | Growth Architecture paper | ✅ |
-| C9 | Templates MIN/INC/Decision/ADVICE spec | ✅ |
-| C10 | Master Table 65 IDs + Doc3 table 80 itens | ✅ |
+| Bloco | Descrição                                 | Estado |
+| ----- | ----------------------------------------- | ------ |
+| C1    | Normalização FIN (FIN-002–010)            | ✅     |
+| C2    | Documentação dual path comissão FIN-005   | ✅     |
+| C3    | Packs Finance + Legal + STR-001           | ✅     |
+| C4    | Pack Governance + Protocolo FASE 0        | ✅     |
+| C5    | Pack Compliance (POL/CMP/BCP/DRP/INC/DOC) | ✅     |
+| C6    | ADR-027 identidade Founder                | ✅     |
+| C7    | Beta Charter v2 + scorecard + QA + reuse  | ✅     |
+| C8    | Growth Architecture paper                 | ✅     |
+| C9    | Templates MIN/INC/Decision/ADVICE spec    | ✅     |
+| C10   | Master Table 65 IDs + Doc3 table 80 itens | ✅     |
 
 ## Garantias não-destruição
 
@@ -64,22 +64,22 @@ Confirmado: **zero** alterações a RBAC, RLS, menus, Pay, comissões (SQL/RPC/U
 
 ## Métricas consolidadas
 
-| Conjunto | Contagem |
-|----------|----------|
-| KUT-XXX Master Table | **65** IDs |
-| Doc 3 validation | **80** itens |
-| Novos KUT-FIN | FIN-009, FIN-010 |
+| Conjunto             | Contagem         |
+| -------------------- | ---------------- |
+| KUT-XXX Master Table | **65** IDs       |
+| Doc 3 validation     | **80** itens     |
+| Novos KUT-FIN        | FIN-009, FIN-010 |
 
 ## Paragem
 
 Fase 0 documental **concluída** (auditoria final 2026-08-28).
 
-| Artefacto | Ficheiro |
-|-----------|----------|
-| Auditoria final | [`KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md`](./KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md) |
-| Handover | [`KUTEKA_FASE0_HANDOVER_2026-08-28.md`](./KUTEKA_FASE0_HANDOVER_2026-08-28.md) |
-| Checklist | [`KUTEKA_FASE0_DELIVERY_CHECKLIST_2026-08-28.md`](./KUTEKA_FASE0_DELIVERY_CHECKLIST_2026-08-28.md) |
-| Decisões pendentes | [`KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md`](./KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md) |
+| Artefacto          | Ficheiro                                                                                           |
+| ------------------ | -------------------------------------------------------------------------------------------------- |
+| Auditoria final    | [`KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md`](./KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md) |
+| Handover           | [`KUTEKA_FASE0_HANDOVER_2026-08-28.md`](./KUTEKA_FASE0_HANDOVER_2026-08-28.md)                     |
+| Checklist          | [`KUTEKA_FASE0_DELIVERY_CHECKLIST_2026-08-28.md`](./KUTEKA_FASE0_DELIVERY_CHECKLIST_2026-08-28.md) |
+| Decisões pendentes | [`KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md`](./KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md)   |
 
 Publicação GitHub: **pendente** (fora desta execução).
 

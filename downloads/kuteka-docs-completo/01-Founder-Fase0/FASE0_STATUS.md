@@ -2,36 +2,36 @@
 
 ## P0 — Publicação e packs
 
-| Item | Estado |
-|------|--------|
-| Versão final consolidada (docs + downloads) | **CONCLUÍDO** nesta branch ponte |
-| Push `vicentemakiese/Site_Angola` | **PENDENTE** — 403 cursor[bot] sem write |
-| Hash / versão oficial documentada | **CONCLUÍDO** — ver Versão Oficial |
-| Checklist Founder (validação) | **REQUER DECISÃO DO FOUNDER** |
-| Pack Advogado | **CONCLUÍDO** (pronto a enviar) |
-| Pack Contabilista | **CONCLUÍDO** (pronto a enviar) |
+| Item                                        | Estado                                   |
+| ------------------------------------------- | ---------------------------------------- |
+| Versão final consolidada (docs + downloads) | **CONCLUÍDO** nesta branch ponte         |
+| Push `vicentemakiese/Site_Angola`           | **PENDENTE** — 403 cursor[bot] sem write |
+| Hash / versão oficial documentada           | **CONCLUÍDO** — ver Versão Oficial       |
+| Checklist Founder (validação)               | **REQUER DECISÃO DO FOUNDER**            |
+| Pack Advogado                               | **CONCLUÍDO** (pronto a enviar)          |
+| Pack Contabilista                           | **CONCLUÍDO** (pronto a enviar)          |
 
 ## P1 — Decisões Founder
 
-| ID | Estado |
-|----|--------|
+| ID                 | Estado                                       |
+| ------------------ | -------------------------------------------- |
 | D1, D3, D4, D5, D7 | **REQUER DECISÃO DO FOUNDER** (ficha pronta) |
-| D-LEG / D-LEG-RENT | **REQUER ADVOGADO** (+ Founder) |
-| D-FIN / D-FIN-RENT | **REQUER CONTABILISTA** (+ Founder) |
+| D-LEG / D-LEG-RENT | **REQUER ADVOGADO** (+ Founder)              |
+| D-FIN / D-FIN-RENT | **REQUER CONTABILISTA** (+ Founder)          |
 
 ## P2 — Pareceres
 
-| Item | Estado |
-|------|--------|
+| Item                                          | Estado                |
+| --------------------------------------------- | --------------------- |
 | Pedidos ADVICE-001/002/003 + Termos + LEG-011 | **PRONTO PARA ENVIO** |
 
 ## P3 — Fecho documental
 
-| Item | Estado |
-|------|--------|
+| Item                  | Estado                                                               |
+| --------------------- | -------------------------------------------------------------------- |
 | Prep BCP/DRP promoção | **PENDENTE** (script/nota pronta; execução após publish Site_Angola) |
-| Merge fork → oficial | **PENDENTE** (após write + validação Founder) |
-| Arquivar branch ponte | **PENDENTE** (só após Site_Angola confirmado) |
+| Merge fork → oficial  | **PENDENTE** (após write + validação Founder)                        |
+| Arquivar branch ponte | **PENDENTE** (só após Site_Angola confirmado)                        |
 
 ## P4 — Bloqueado
 

@@ -1,9 +1,9 @@
 # Fase 0 — Fecho operacional (P1 / P2 / P3)
 
-| Campo | Valor |
-|-------|-------|
-| **Data** | 2026-09-04 |
-| **Base** | `main` `84a357b` · PR #1 merged |
+| Campo     | Valor                                                                 |
+| --------- | --------------------------------------------------------------------- |
+| **Data**  | 2026-09-04                                                            |
+| **Base**  | `main` `84a357b` · PR #1 merged                                       |
 | **Regra** | Sem parecer jurídico, fiscal ou contabilístico inventado. Sem Fase 1. |
 
 **ZIP oficial:** https://github.com/vicentemakiese/Site_Angola/raw/main/downloads/Kuteka_Documentacao_Completa.zip  
@@ -89,6 +89,7 @@ Makiese Vicente — Founder, Kuteka
 Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 
 ### D1 — Comissão 35% (fonte única)
+
 - **Estado:** **DECIDIDO — A** (2026-09-04). Fonte = `platform_commission_params` Founder-only.
 - **Opções:** (A) params Founder-only · (B) Super UI · (C) Híbrido · (D) Manter dual até data X
 - **Recomendação documental:** A como fonte estratégica; B alinhado depois. Sem unificar código.
@@ -96,6 +97,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Founder
 
 ### D-LEG-RENT — Renda + liquidação PP
+
 - **Estado:** KUT-BIZ-RENT-001 documentado; estrutura legal aberta.
 - **Opções:** (A) agregador + PSP split · (B) Kuteka só comissão, PP recebe directo · (C) híbrido gestão · (D) advogado especifica
 - **Recomendação documental:** Não decidir sem parecer. Enviar pack advogado.
@@ -103,6 +105,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Advogado + Founder
 
 ### D-FIN-RENT — Contabilização renda
+
 - **Estado:** Fluxo documentado; classificação aberta.
 - **Opções:** Conforme plano de contas e parecer (pass-through vs receita bruta).
 - **Recomendação documental:** Não decidir sem parecer. Enviar pack contabilista.
@@ -110,6 +113,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Contabilista + Founder
 
 ### D-LEG — LEG-001–003
+
 - **Estado:** Outlines; Pay real bloqueado.
 - **Opções:** Validado / Pendente / Rejeitado por instrumento.
 - **Recomendação documental:** Pedir ADVICE-001. Sem activar Pay.
@@ -117,6 +121,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Advogado + Founder
 
 ### D-FIN — Comissão 35% fiscal
+
 - **Estado:** 35% de negócio fechada; tratamento fiscal aberto.
 - **Opções:** Conforme parecer do contabilista.
 - **Recomendação documental:** Pedir ADVICE-002. Não alterar os 35%.
@@ -124,6 +129,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Contabilista + Founder
 
 ### D3 — DEMO / Beta
+
 - **Estado:** **DECIDIDO — DEMO INTERNAL ONLY** (2026-09-04).
 - **Opções:** Demo interno only · Badge ilustrativo · Bloquear demo em prod
 - **Recomendação documental:** Demo interno only; sem rótulo “Demo” ao público.
@@ -131,6 +137,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Founder
 
 ### D4 — Growth Engine N0–N5
+
 - **Estado:** **DECIDIDO — N1** (2026-09-04). Teto = instrumentação. Código Growth bloqueado.
 - **Opções:** N0 nada · N1 instrumentação · N2 partilha · N3+ referral/campanhas
 - **Recomendação documental:** N0 ou N1 na Beta pública até parecer legal de campanhas.
@@ -138,6 +145,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Founder (+ advogado se N3+)
 
 ### D5 — Alteração de email Founder/Co-Founder
+
 - **Estado:** **DECIDIDO — A / NÃO ACTIVAR** (2026-09-04).
 - **Opções:** (A) Manter preparado · (B) Activar com testes §29.12
 - **Recomendação documental:** Manter não activado até testes + autorização dedicada.
@@ -145,6 +153,7 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 - **Profissional:** Founder
 
 ### D7 — Papel do contabilista
+
 - **Estado:** **DECIDIDO — B / SEM LOGIN** (2026-09-04).
 - **Opções:** (A) Login read-only futuro · (B) Offline · (C) Export Founder-only
 - **Recomendação documental:** Começar B ou C até o volume justificar login.
@@ -156,26 +165,31 @@ Recomendação = documental/operacional. Jurídico/fiscal só após parecer.
 ## P2 — Pedidos prontos a enviar
 
 ### ADVICE-001 — Kuteka Pay / regulatório
+
 - **Validar:** Enquadramento legal do Pay em Angola; custódia vs processamento; BNA; pré-requisitos para activação real.
 - **Anexos:** LEG-003, KUT-BIZ-RENT-001, D-LEG-RENT, pack `02-Advogado`.
 - **Destinatário:** Advogado
 
 ### ADVICE-002 — Comissões
+
 - **Validar:** Tratamento contabilístico/fiscal da comissão 35% e dos splits.
 - **Anexos:** C2, FIN-005, FIN pack, pack `03-Contabilista`.
 - **Destinatário:** Contabilista
 
 ### ADVICE-003 — Facturação
+
 - **Validar:** Documentos fiscais mínimos quando houver cobrança real (renda/serviços).
 - **Anexos:** FIN-008, Arquitectura Financeira §14.
 - **Destinatário:** Contabilista
 
 ### Revisão Termos / Privacidade / Cookies v1
+
 - **Validar:** Aprovar, corrigir ou bloquear os três instrumentos v1 **antes** de Pay real.
 - **Anexos:** `02-Advogado/TERMOS_UTILIZACAO_v1`, `POLITICA_PRIVACIDADE_v1`, `POLITICA_COOKIES_v1`.
 - **Destinatário:** Advogado
 
 ### Revisão LEG-011 — Termos PP vs modelo renda
+
 - **Validar:** Cláusulas mínimas para cobrança de renda, liquidação do saldo ao PP, comissão Kuteka e fim de contrato.
 - **Anexos:** KUT-BIZ-RENT-001, D-LEG-RENT, Termos v1.
 - **Destinatário:** Advogado
@@ -186,13 +200,13 @@ Registar respostas no template `KUT-ADVICE`. **Não simular pareceres.**
 
 ## P3 — O que pode ser arquivado depois (não agora)
 
-| Item | Estado agora | Arquivar só depois de |
-|------|----------------|------------------------|
-| Ponte `EduardoZ121/Meu-site-222` / `kuteka-fase0-export-e12272f` | Intacta @ `a327caff` | Founder confirmar `main` estável |
-| Branch `cursor/fase0-publish-9893` | Intacta @ `f4f2911` | Mesma confirmação |
-| BCP/DRP v0.9 em `docs/operations/` | Válidos; cópias no pack | Promoção KUT-BCP/DRP só com OK Founder (D-BCP) — **não executar** |
-| Outlines LEG/FIN 🔴 | Incompletos à espera de parecer | Completar só com texto do profissional |
-| Docs duplicados (dossier + downloads + ZIP) | Intencional (leitura + envio) | Não apagar; opcionalmente marcar downloads como cópia de envio |
+| Item                                                             | Estado agora                    | Arquivar só depois de                                             |
+| ---------------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------- |
+| Ponte `EduardoZ121/Meu-site-222` / `kuteka-fase0-export-e12272f` | Intacta @ `a327caff`            | Founder confirmar `main` estável                                  |
+| Branch `cursor/fase0-publish-9893`                               | Intacta @ `f4f2911`             | Mesma confirmação                                                 |
+| BCP/DRP v0.9 em `docs/operations/`                               | Válidos; cópias no pack         | Promoção KUT-BCP/DRP só com OK Founder (D-BCP) — **não executar** |
+| Outlines LEG/FIN 🔴                                              | Incompletos à espera de parecer | Completar só com texto do profissional                            |
+| Docs duplicados (dossier + downloads + ZIP)                      | Intencional (leitura + envio)   | Não apagar; opcionalmente marcar downloads como cópia de envio    |
 
 **Não apagar** branches, ZIPs nem ficheiros importantes automaticamente.
 

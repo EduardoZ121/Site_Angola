@@ -1,27 +1,27 @@
 # Kuteka Beta Scorecard v0.1
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 0.1 |
-| **Data** | 2026-08-28 |
-| **Uso** | Medir sucesso Beta (BETA-33, BETA-34) — **não** vanity metrics |
+| Campo      | Valor                                                          |
+| ---------- | -------------------------------------------------------------- |
+| **Versão** | 0.1                                                            |
+| **Data**   | 2026-08-28                                                     |
+| **Uso**    | Medir sucesso Beta (BETA-33, BETA-34) — **não** vanity metrics |
 
 ## Definição de sucesso
 
 Beta bem-sucedida quando há evidência de:
 
-| Dimensão | Indicador | Meta inicial (ajustável Founder) | Fonte dados |
-|----------|-----------|----------------------------------|-------------|
-| Utilizadores reais | Registos não-demo activos | TBD | Auth + KOCC |
-| Património real | Imóveis registados (inventário) | TBD | properties |
-| Procura real | Alertas/pesquisas guardadas | TBD | availability_notify |
-| Prestadores | Perfis iniciados vs publicados | TBD | service_providers |
-| Feedback | Volume + taxa contextual | TBD | beta_feedback |
-| Qualidade | Bugs P0/P1 fechados | TBD | KOCC + flags |
-| UX | TOP 10 problemas identificados | Lista fechada | Learning panel |
-| Retenção | Utilizadores activos semana 2 | TBD | Analytics |
-| Confiança | KYC completos vs registos | TBD | Trust |
-| Melhoria | Métrica pós-correcção | TBD | Antes/depois |
+| Dimensão           | Indicador                       | Meta inicial (ajustável Founder) | Fonte dados         |
+| ------------------ | ------------------------------- | -------------------------------- | ------------------- |
+| Utilizadores reais | Registos não-demo activos       | TBD                              | Auth + KOCC         |
+| Património real    | Imóveis registados (inventário) | TBD                              | properties          |
+| Procura real       | Alertas/pesquisas guardadas     | TBD                              | availability_notify |
+| Prestadores        | Perfis iniciados vs publicados  | TBD                              | service_providers   |
+| Feedback           | Volume + taxa contextual        | TBD                              | beta_feedback       |
+| Qualidade          | Bugs P0/P1 fechados             | TBD                              | KOCC + flags        |
+| UX                 | TOP 10 problemas identificados  | Lista fechada                    | Learning panel      |
+| Retenção           | Utilizadores activos semana 2   | TBD                              | Analytics           |
+| Confiança          | KYC completos vs registos       | TBD                              | Trust               |
+| Melhoria           | Métrica pós-correcção           | TBD                              | Antes/depois        |
 
 ## Anti-padrões (BETA-34)
 

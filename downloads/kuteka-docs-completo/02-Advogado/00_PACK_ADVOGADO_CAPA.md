@@ -7,15 +7,15 @@
 
 ## Conteúdo do pack (pasta `02-Advogado` + modelo renda)
 
-| Ficheiro | Uso |
-|----------|-----|
-| `KUT-LEG_PACK_DRAFTS_v0.1` | Mapa LEG-001–043 |
-| `TERMOS_UTILIZACAO_v1` | Termos publicados |
-| `POLITICA_PRIVACIDADE_v1` | Privacidade |
-| `POLITICA_COOKIES_v1` | Cookies |
-| `KUT-POL_CMP_BCP_DRP_INC_PACK_v0.1` | Políticas / compliance |
-| `KUTEKA_RENT_SETTLEMENT_BUSINESS_MODEL_FASE0` | Modelo renda + liquidação PP |
-| `KUTEKA_FASE0_PENDING_DECISIONS` (secções D-LEG, D-LEG-RENT) | Questões abertas |
+| Ficheiro                                                     | Uso                          |
+| ------------------------------------------------------------ | ---------------------------- |
+| `KUT-LEG_PACK_DRAFTS_v0.1`                                   | Mapa LEG-001–043             |
+| `TERMOS_UTILIZACAO_v1`                                       | Termos publicados            |
+| `POLITICA_PRIVACIDADE_v1`                                    | Privacidade                  |
+| `POLITICA_COOKIES_v1`                                        | Cookies                      |
+| `KUT-POL_CMP_BCP_DRP_INC_PACK_v0.1`                          | Políticas / compliance       |
+| `KUTEKA_RENT_SETTLEMENT_BUSINESS_MODEL_FASE0`                | Modelo renda + liquidação PP |
+| `KUTEKA_FASE0_PENDING_DECISIONS` (secções D-LEG, D-LEG-RENT) | Questões abertas             |
 
 **Download ZIP:**  
 https://github.com/EduardoZ121/Meu-site-222/raw/kuteka-fase0-export-e12272f/downloads/Kuteka_Documentacao_Completa.zip  

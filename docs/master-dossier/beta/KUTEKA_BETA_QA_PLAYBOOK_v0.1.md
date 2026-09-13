@@ -1,9 +1,9 @@
 # Kuteka Beta QA Playbook v0.1
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 0.1 |
-| **Data** | 2026-08-28 |
+| Campo          | Valor                    |
+| -------------- | ------------------------ |
+| **Versão**     | 0.1                      |
+| **Data**       | 2026-08-28               |
 | **Referência** | BETA-37, BETA-39 (Doc 3) |
 
 ## Testes obrigatórios antes de declarar ciclo aprendizagem (BETA-40)
@@ -59,10 +59,10 @@ KAI classifica/agrupa **sem** decisões críticas autónomas.
 ## Registo de execução
 
 | Teste | Data | Executor | Pass/Fail | Notas |
-|-------|------|----------|-----------|-------|
-| T1 | | | | |
-| T2 | | | | |
-| ... | | | | |
+| ----- | ---- | -------- | --------- | ----- |
+| T1    |      |          |           |       |
+| T2    |      |          |           |       |
+| ...   |      |          |           |       |
 
 ## Ambiente
 

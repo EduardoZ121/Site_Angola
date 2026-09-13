@@ -7,15 +7,15 @@
 
 ## Conteúdo do pack (pasta `03-Contabilista` + modelo renda)
 
-| Ficheiro | Uso |
-|----------|-----|
-| `KUT-FIN_PACK_DRAFTS_v0.1` | FIN-001–010 |
-| `C1_FIN_ID_NORMALIZATION` | IDs financeiros |
-| `C2_KUT-FIN-005_DUAL_COMMISSION_PATHS` | Comissão 35% (duas vias técnicas) |
-| `ARQUITETURA_FINANCEIRA_KUTEKA` | Base financeira v1.0 |
-| `KUT-STR-001_BUSINESS_MODEL_CANVAS` | Modelo de negócio |
+| Ficheiro                                      | Uso                               |
+| --------------------------------------------- | --------------------------------- |
+| `KUT-FIN_PACK_DRAFTS_v0.1`                    | FIN-001–010                       |
+| `C1_FIN_ID_NORMALIZATION`                     | IDs financeiros                   |
+| `C2_KUT-FIN-005_DUAL_COMMISSION_PATHS`        | Comissão 35% (duas vias técnicas) |
+| `ARQUITETURA_FINANCEIRA_KUTEKA`               | Base financeira v1.0              |
+| `KUT-STR-001_BUSINESS_MODEL_CANVAS`           | Modelo de negócio                 |
 | `KUTEKA_RENT_SETTLEMENT_BUSINESS_MODEL_FASE0` | Fluxo renda / comissão / saldo PP |
-| Pending decisions (D-FIN, D-FIN-RENT, D7) | Questões abertas |
+| Pending decisions (D-FIN, D-FIN-RENT, D7)     | Questões abertas                  |
 
 **Download ZIP:**  
 https://github.com/EduardoZ121/Meu-site-222/raw/kuteka-fase0-export-e12272f/downloads/Kuteka_Documentacao_Completa.zip  

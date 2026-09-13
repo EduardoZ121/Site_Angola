@@ -29,14 +29,14 @@ Informação introduzida **uma vez** deve ser reutilizada automaticamente pelos 
 
 ## Referências rápidas
 
-| Documento | Uso |
-|-----------|-----|
-| `docs/product/SPRINT_BETA_CHARTER.md` | Ciclos Beta + regra permanente |
-| `docs/product/GO_LIVE_READINESS.md` | Bloco Zero (checklist vivo) |
-| `docs/product/KUTEKA_ROADMAP_MASTER.md` | Maturidade plataforma |
-| `docs/product/KUTEKA_OPERATING_SYSTEM.md` | Operação da empresa (KOS) |
-| `docs/operations/` | BCP / DRP v0.9 |
-| KOCC | `/app/super` → separador KOCC (migration `0032`) |
+| Documento                                 | Uso                                              |
+| ----------------------------------------- | ------------------------------------------------ |
+| `docs/product/SPRINT_BETA_CHARTER.md`     | Ciclos Beta + regra permanente                   |
+| `docs/product/GO_LIVE_READINESS.md`       | Bloco Zero (checklist vivo)                      |
+| `docs/product/KUTEKA_ROADMAP_MASTER.md`   | Maturidade plataforma                            |
+| `docs/product/KUTEKA_OPERATING_SYSTEM.md` | Operação da empresa (KOS)                        |
+| `docs/operations/`                        | BCP / DRP v0.9                                   |
+| KOCC                                      | `/app/super` → separador KOCC (migration `0032`) |
 
 ## Deploy
 
