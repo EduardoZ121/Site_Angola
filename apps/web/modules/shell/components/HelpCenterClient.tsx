@@ -11,7 +11,7 @@ import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
 import { getShellCopy } from '../content';
-import { HELP_SECTION_IDS, isHelpSectionId, type HelpSectionId } from '../lib/help-sections';
+import { isHelpSectionId, type HelpSectionId } from '../lib/help-sections';
 
 export type HelpCenterProps = {
   /** Markdown sources for every section of the Documentation Center. */
@@ -26,7 +26,6 @@ export type HelpCenterProps = {
 };
 
 type SectionId = HelpSectionId;
-const SECTION_IDS = HELP_SECTION_IDS;
 
 function isSectionId(value: string | null | undefined): value is SectionId {
   return isHelpSectionId(value);

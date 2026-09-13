@@ -56,7 +56,8 @@ export class SandboxSmsOtpProvider implements SmsOtpProvider {
   }): Promise<SmsSendResult> {
     // Architecture-ready: log shape only; never ship real SMS from sandbox.
     if (typeof console !== 'undefined') {
-      console.info('[kuteka:sms:sandbox]', {
+      // Sandbox trace only (no real SMS); warn keeps eslint no-console allowlist.
+      console.warn('[kuteka:sms:sandbox]', {
         to: input.toE164,
         purpose: input.purpose,
         codeLength: input.code.length,

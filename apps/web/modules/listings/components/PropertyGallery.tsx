@@ -25,8 +25,8 @@ function GalleryThumb({ url, kind }: { url: string; kind: 'image' | 'video' }) {
       />
     );
   }
-  // eslint-disable-next-line @next/next/no-img-element
   return (
+    // eslint-disable-next-line @next/next/no-img-element -- gallery thumbs use raw URLs (incl. data/blob)
     <img src={url} alt="" className="h-16 w-24 object-cover" loading="lazy" decoding="async" />
   );
 }
