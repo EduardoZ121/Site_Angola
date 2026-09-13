@@ -19,6 +19,7 @@ import {
   type PlatformStats,
 } from '../services/admin-client';
 import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
+import { AdminBetaInboxPanel } from './AdminBetaInboxPanel';
 import { AuditCenterPanel } from './AuditCenterPanel';
 import { EscalationPanel } from './EscalationPanel';
 import { KosAnalyticsPanel } from './KosAnalyticsPanel';
@@ -151,6 +152,8 @@ export function AdminHubClient() {
             <p className="text-sm text-slate-500">{copy.mvpNote}</p>
 
             <KosAnalyticsPanel />
+
+            <AdminBetaInboxPanel />
 
             <PublicationReviewQueue />
 
