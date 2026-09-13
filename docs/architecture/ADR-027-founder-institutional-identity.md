@@ -1,11 +1,11 @@
 # ADR-027 — Identidade institucional Founder / Co-Founder
 
-| Campo | Valor |
-|-------|-------|
-| **Status** | Accepted (Fase 0 — preparação) |
-| **Date** | 2026-08-28 |
-| **Deciders** | Founder |
-| **Relates** | ADR-026 (Security Center), `0036` founders, Doc 3 §29 |
+| Campo             | Valor                                                                 |
+| ----------------- | --------------------------------------------------------------------- |
+| **Status**        | Accepted (Fase 0 — preparação)                                        |
+| **Date**          | 2026-08-28                                                            |
+| **Deciders**      | Founder                                                               |
+| **Relates**       | ADR-026 (Security Center), `0036` founders, Doc 3 §29                 |
 | **Implementação** | **AGORA:** auditar compatibilidade. **FUTURO:** fluxo alteração email |
 
 ## Context
@@ -32,12 +32,12 @@ Determinadas por: `user_id`, `founders`, papéis RBAC, RLS, backend — **nunca*
 
 ### 3. Alteração de dados institucionais
 
-| Actor | Pode alterar |
-|-------|--------------|
-| Founder | Apenas **próprios** dados (futuro: email via Security Center) |
-| Co-Founder | Apenas **próprios** dados |
-| Super Admin | **Não** email/identidade institucional de fundadores |
-| Qualquer outro | **Bloqueado** |
+| Actor          | Pode alterar                                                  |
+| -------------- | ------------------------------------------------------------- |
+| Founder        | Apenas **próprios** dados (futuro: email via Security Center) |
+| Co-Founder     | Apenas **próprios** dados                                     |
+| Super Admin    | **Não** email/identidade institucional de fundadores          |
+| Qualquer outro | **Bloqueado**                                                 |
 
 Founder **não** edita Co-Founder (e vice-versa) via UI normal. Excepções = procedimento institucional + audit + possível intervenção legal.
 
@@ -59,13 +59,13 @@ Requisitos: email válido/disponível, sessão autenticada, recovery method, con
 
 ### 6. Estado actual plataforma (auditoria Fase 0)
 
-| Requisito | Estado |
-|-----------|--------|
-| `founders.user_id` | 🟢 `0036`, `0040` |
-| RBAC por user_id | 🟢 |
-| Security Center OTP | 🟡 ADR-026 |
+| Requisito                   | Estado                     |
+| --------------------------- | -------------------------- |
+| `founders.user_id`          | 🟢 `0036`, `0040`          |
+| RBAC por user_id            | 🟢                         |
+| Security Center OTP         | 🟡 ADR-026                 |
 | Fluxo email change completo | 🟡 preparado, não activado |
-| Testes §29.12 | 🔴 plano documentado |
+| Testes §29.12               | 🔴 plano documentado       |
 
 ## Consequences
 

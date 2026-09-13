@@ -1,11 +1,11 @@
 # KUT-FIN Pack — Rascunhos v0.1
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 0.1-DRAFT |
-| **Data** | 2026-08-28 |
+| Campo      | Valor                                     |
+| ---------- | ----------------------------------------- |
+| **Versão** | 0.1-DRAFT                                 |
+| **Data**   | 2026-08-28                                |
 | **Estado** | Rascunho — aguarda contabilista + Founder |
-| **IDs** | KUT-FIN-001 a KUT-FIN-010 |
+| **IDs**    | KUT-FIN-001 a KUT-FIN-010                 |
 
 > **Aviso:** Rascunhos operacionais. Não substituem parecer contabilístico ou fiscal. Validar antes de Pay real.
 
@@ -35,13 +35,13 @@
 
 **Fluxos a documentar:**
 
-| Fluxo | Pagador | Receptor | Documento | Estado código |
-|-------|---------|----------|-----------|---------------|
-| Serviço marketplace | Cliente | Prestador + Kuteka comissão | Invoice | Sandbox 🟢 |
-| Activacao arrendamento | Cliente | Kuteka comissão 35% + saldo PP | TBD | Param 🟡 |
-| **Renda PP (cobrança + liquidação)** | Cliente | PP (saldo) + Kuteka (comissão) | [KUT-BIZ-RENT-001](./KUTEKA_RENT_SETTLEMENT_BUSINESS_MODEL_FASE0.md) | Requisito 🟡 — D-LEG/D-FIN |
-| Kuteka Pay intent | Cliente | Gateway stub | Ledger entry | Sandbox 🟢 |
-| Reembolso | Kuteka/PSP | Cliente | Credit note | RPC 🟢 |
+| Fluxo                                | Pagador    | Receptor                       | Documento                                                            | Estado código              |
+| ------------------------------------ | ---------- | ------------------------------ | -------------------------------------------------------------------- | -------------------------- |
+| Serviço marketplace                  | Cliente    | Prestador + Kuteka comissão    | Invoice                                                              | Sandbox 🟢                 |
+| Activacao arrendamento               | Cliente    | Kuteka comissão 35% + saldo PP | TBD                                                                  | Param 🟡                   |
+| **Renda PP (cobrança + liquidação)** | Cliente    | PP (saldo) + Kuteka (comissão) | [KUT-BIZ-RENT-001](./KUTEKA_RENT_SETTLEMENT_BUSINESS_MODEL_FASE0.md) | Requisito 🟡 — D-LEG/D-FIN |
+| Kuteka Pay intent                    | Cliente    | Gateway stub                   | Ledger entry                                                         | Sandbox 🟢                 |
+| Reembolso                            | Kuteka/PSP | Cliente                        | Credit note                                                          | RPC 🟢                     |
 
 **Entregável:** diagrama Mermaid + tabela (incluir em revisão contabilista).
 
@@ -51,13 +51,13 @@
 
 **Objectivo:** Matriz Processo × Papel (R/A/C/I) para operações financeiras críticas.
 
-| Processo | Founder | Super | Admin | Contabilista* | Cliente |
-|----------|---------|-------|-------|---------------|---------|
-| Definir comissão activação 35% | **A/R** | I | — | C | — |
-| Alterar regra comercial Super | I | **A/R** | — | C | — |
-| Reconciliação mensal | I | **A** | C | **R** | — |
-| Aprovar reembolso | I | **A/R** | C | I | I |
-| Activar Pay real | **A** | C | — | C | — |
+| Processo                       | Founder | Super   | Admin | Contabilista* | Cliente |
+| ------------------------------ | ------- | ------- | ----- | ------------- | ------- |
+| Definir comissão activação 35% | **A/R** | I       | —     | C             | —       |
+| Alterar regra comercial Super  | I       | **A/R** | —     | C             | —       |
+| Reconciliação mensal           | I       | **A**   | C     | **R**         | —       |
+| Aprovar reembolso              | I       | **A/R** | C     | I             | I       |
+| Activar Pay real               | **A**   | C       | —     | C             | —       |
 
 *Contabilista: role futuro — ver decisão D7.
 
@@ -97,13 +97,13 @@ Ver documento dedicado: [C2_KUT-FIN-005_DUAL_COMMISSION_PATHS.md](./C2_KUT-FIN-0
 
 **Estados Kuteka Pay (sandbox):** mapear estados RPC existentes → política.
 
-| Estado | Significado | Acção permitida |
-|--------|-------------|-----------------|
-| draft | Intenção criada | Cancelar |
-| awaiting_payment | Aguarda PSP | Retry/timeout |
-| paid | Confirmado ledger | Reembolso condicionado |
-| failed | Falha gateway | Notificar + retry |
-| refunded | Reembolsado | Audit only |
+| Estado           | Significado       | Acção permitida        |
+| ---------------- | ----------------- | ---------------------- |
+| draft            | Intenção criada   | Cancelar               |
+| awaiting_payment | Aguarda PSP       | Retry/timeout          |
+| paid             | Confirmado ledger | Reembolso condicionado |
+| failed           | Falha gateway     | Notificar + retry      |
+| refunded         | Reembolsado       | Audit only             |
 
 ---
 
@@ -141,7 +141,7 @@ Ver documento dedicado: [C2_KUT-FIN-005_DUAL_COMMISSION_PATHS.md](./C2_KUT-FIN-0
 
 ---
 
-## KUT-FIN-009 — Refund Policy *(novo ID)*
+## KUT-FIN-009 — Refund Policy _(novo ID)_
 
 **Objectivo:** Procedimento financeiro operacional de reembolso.
 
@@ -161,16 +161,16 @@ Ver documento dedicado: [C2_KUT-FIN-005_DUAL_COMMISSION_PATHS.md](./C2_KUT-FIN-0
 
 ---
 
-## KUT-FIN-010 — Payment Responsibility Matrix *(novo ID)*
+## KUT-FIN-010 — Payment Responsibility Matrix _(novo ID)_
 
 **Objectivo:** Quem é responsável financeiramente por cada tipo de pagamento.
 
-| Tipo pagamento | Responsável primário | Backup | Escalation |
-|----------------|---------------------|--------|------------|
-| Taxa serviço Cliente | Cliente | — | Super |
-| Comissão activação | Parceiro/Cliente* | Kuteka cobrança | Founder |
-| Payout Prestador | Kuteka Pay | Super | Founder |
-| Reembolso | Kuteka (PSP) | Super | Founder + contabilista |
+| Tipo pagamento       | Responsável primário | Backup          | Escalation             |
+| -------------------- | -------------------- | --------------- | ---------------------- |
+| Taxa serviço Cliente | Cliente              | —               | Super                  |
+| Comissão activação   | Parceiro/Cliente*    | Kuteka cobrança | Founder                |
+| Payout Prestador     | Kuteka Pay           | Super           | Founder                |
+| Reembolso            | Kuteka (PSP)         | Super           | Founder + contabilista |
 
 *Conforme modelo comercial validado — ver FIN-001.
 
@@ -178,6 +178,6 @@ Ver documento dedicado: [C2_KUT-FIN-005_DUAL_COMMISSION_PATHS.md](./C2_KUT-FIN-0
 
 ## Histórico de versões
 
-| Versão | Data | Alteração |
-|--------|------|-----------|
+| Versão    | Data       | Alteração                                |
+| --------- | ---------- | ---------------------------------------- |
 | 0.1-DRAFT | 2026-08-28 | Criação Fase 0; normalização FIN-009/010 |

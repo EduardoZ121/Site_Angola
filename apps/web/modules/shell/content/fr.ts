@@ -296,6 +296,14 @@ export const shellCopyFr: ShellCopy = {
     sending: 'Envoi…',
     success: 'Merci — votre contribution a été enregistrée.',
     error: 'Envoi impossible. Réessayez.',
+    publicCtaTitle: 'Retour Beta',
+    publicCtaBody:
+      'Pour signaler un bug ou envoyer une suggestion, connectez-vous. Votre contribution est enregistrée dans le Panneau Beta.',
+    publicCtaButton: 'Se connecter et envoyer un retour',
+    complaintTitle: 'Réclamation opérationnelle',
+    complaintBody:
+      'Les retours produit et bugs utilisent le formulaire Beta ci-dessus. Pour une réclamation opérationnelle (service, conduite, manquement), contactez Kuteka. L’équipe ops avec accès admin peut ouvrir la file d’escalations — ne mélangez pas avec le canal Beta.',
+    complaintAdminCta: 'File d’escalations (ops)',
   },
   firstActions: {
     title: 'Votre première action utile',

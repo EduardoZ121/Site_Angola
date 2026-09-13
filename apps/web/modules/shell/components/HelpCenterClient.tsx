@@ -1,15 +1,17 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { BetaFeedbackForm } from '@/modules/kocc/components/BetaFeedbackForm';
-import { getShellCopy } from '../content';
+import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
+import { getShellCopy } from '../content';
+import { isHelpSectionId, type HelpSectionId } from '../lib/help-sections';
 
 export type HelpCenterProps = {
   /** Markdown sources for every section of the Documentation Center. */
@@ -23,11 +25,10 @@ export type HelpCenterProps = {
   publicMode?: boolean;
 };
 
-const SECTION_IDS = ['manual', 'faq', 'glossario', 'novidades', 'estado'] as const;
-type SectionId = (typeof SECTION_IDS)[number];
+type SectionId = HelpSectionId;
 
 function isSectionId(value: string | null | undefined): value is SectionId {
-  return !!value && (SECTION_IDS as readonly string[]).includes(value);
+  return isHelpSectionId(value);
 }
 
 /** ASCII slug used for in-page heading anchors (e.g. `#roteiro-publico`). */
@@ -148,6 +149,10 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
   const { locale } = useLocale();
   const shell = getShellCopy(locale);
   const h = shell.helpPage;
+
+  useEffect(() => {
+    void trackBetaFeature('help.center', 'Centro de ajuda');
+  }, []);
   const searchParams = useSearchParams();
   const requestedSection = searchParams?.get('sec');
   const section: SectionId = isSectionId(requestedSection) ? requestedSection : 'manual';
@@ -278,7 +283,28 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
 
       {!publicMode ? (
         <>
-          <BetaFeedbackForm pagePath={basePath} />
+          <BetaFeedbackForm pagePath={`${basePath}?sec=${section}`} />
+          <section
+            className="kuteka-detail-panel flex flex-col gap-3 p-5"
+            id="reclamacao-operacional"
+          >
+            <h2 className="kuteka-detail-title">{shell.betaFeedback.complaintTitle}</h2>
+            <p className="kuteka-detail-body">{shell.betaFeedback.complaintBody}</p>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/contacto"
+                className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+              >
+                {h.contactCta}
+              </Link>
+              <Link
+                href="/app/admin#escalacoes"
+                className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+              >
+                {shell.betaFeedback.complaintAdminCta}
+              </Link>
+            </div>
+          </section>
           <section className="kuteka-detail-panel flex flex-col gap-3 p-5" id="videos">
             <h2 className="kuteka-detail-title">{h.videos}</h2>
             <p className="kuteka-detail-body">{shell.helpExtra.videosPending}</p>
@@ -290,7 +316,24 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
             </Link>
           </section>
         </>
-      ) : null}
+      ) : (
+        <section className="kuteka-detail-panel flex flex-col gap-3 p-5" id="feedback-beta">
+          <h2 className="kuteka-detail-title">{shell.betaFeedback.publicCtaTitle}</h2>
+          <p className="kuteka-detail-body">{shell.betaFeedback.publicCtaBody}</p>
+          <Link
+            href="/auth/entrar?next=%2Fapp%2Fajuda"
+            className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
+          >
+            {shell.betaFeedback.publicCtaButton}
+          </Link>
+          <Link
+            href="/contacto"
+            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+          >
+            {h.contactCta}
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

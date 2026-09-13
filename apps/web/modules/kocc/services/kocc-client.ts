@@ -3,6 +3,12 @@
 import { createBrowserClient } from '@/lib/supabase/client';
 import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
 import { getFinanceCopy } from '@/modules/finance/content';
+import {
+  isValidBetaFeedbackBody,
+  isValidBetaFeedbackKind,
+  normalizeBetaFeedbackBody,
+  sanitizeBetaPagePath,
+} from '../lib/beta-feedback-submit';
 import type { KoccOperationalStatus } from '../lib/status-labels';
 
 export type KoccFlagRow = {
@@ -154,11 +160,18 @@ export async function submitBetaFeedback(input: {
 }): Promise<Result<{ id: string }>> {
   const copy = errors();
   try {
+    if (!isValidBetaFeedbackKind(input.kind)) {
+      return { ok: false, message: copy.saveError };
+    }
+    const body = normalizeBetaFeedbackBody(input.body);
+    if (!isValidBetaFeedbackBody(body)) {
+      return { ok: false, message: copy.saveError };
+    }
     const client = createBrowserClient();
     const { data, error } = await client.rpc('kocc_submit_beta_feedback', {
       p_kind: input.kind,
-      p_body: input.body,
-      p_page_path: input.pagePath ?? null,
+      p_body: body,
+      p_page_path: sanitizeBetaPagePath(input.pagePath),
     });
     if (error) return { ok: false, message: error.message || copy.saveError };
     const row = data as { id?: string } | null;
@@ -177,5 +190,35 @@ export async function trackBetaFeature(code: string, label?: string): Promise<vo
     });
   } catch {
     /* non-blocking telemetry */
+  }
+}
+
+/** Ops triage row — SELECT allowed only via existing RLS (finance.manage | admin.panel). */
+export type KoccBetaFeedbackRow = {
+  id: string;
+  kind: 'feedback' | 'bug' | string;
+  body: string;
+  page_path: string | null;
+  actor_id: string | null;
+  created_at: string;
+};
+
+/**
+ * Recent beta_feedback for KOCC triage inbox.
+ * Reuses table + RLS from migration 0035 — no new schema.
+ */
+export async function listRecentBetaFeedback(limit = 40): Promise<Result<KoccBetaFeedbackRow[]>> {
+  const copy = errors();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('beta_feedback')
+      .select('id, kind, body, page_path, actor_id, created_at')
+      .order('created_at', { ascending: false })
+      .limit(Math.min(Math.max(limit, 1), 100));
+    if (error) return { ok: false, message: error.message || copy.loadError };
+    return { ok: true, data: (data ?? []) as KoccBetaFeedbackRow[] };
+  } catch {
+    return { ok: false, message: copy.loadError };
   }
 }

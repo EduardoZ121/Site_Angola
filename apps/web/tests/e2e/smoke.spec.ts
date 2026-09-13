@@ -7,7 +7,7 @@ test('landing hero communicates positioning', async ({ page }) => {
   );
   await expect(page.getByRole('link', { name: 'Começar' }).first()).toBeVisible();
   await expect(page.getByRole('link', { name: 'Explorar' })).toBeVisible();
-  await expect(page.getByText('Kuteka · Angola', { exact: true })).toBeVisible();
+  await expect(page.getByText('Kuteka · Beta pública · Angola', { exact: true })).toBeVisible();
 });
 
 test('landing difference and how-it-works sections render', async ({ page }) => {

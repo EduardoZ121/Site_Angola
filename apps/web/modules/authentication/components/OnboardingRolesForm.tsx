@@ -29,7 +29,8 @@ export function OnboardingRolesForm() {
       .auth.getUser()
       .then(({ data: { user } }) => {
         if (cancelled) return;
-        if (!user) router.replace(`/auth/entrar?next=${encodeURIComponent('/auth/onboarding/papeis')}`);
+        if (!user)
+          router.replace(`/auth/entrar?next=${encodeURIComponent('/auth/onboarding/papeis')}`);
       })
       .catch(() => {
         /* keep form; submit will fail with session error */

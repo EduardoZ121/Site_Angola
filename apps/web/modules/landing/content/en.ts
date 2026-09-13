@@ -12,10 +12,10 @@ export const landingCopyEn: LandingCopy = {
     start: 'Get started',
   },
   hero: {
-    eyebrow: 'Kuteka · Angola',
+    eyebrow: 'Kuteka · Public Beta · Angola',
     title: 'Property. Trust. Housing.',
     subtitle:
-      'The platform that protects, grows and tracks your real estate assets — with transparency and professionalism.',
+      'The platform that protects, grows and tracks your real estate assets — with transparency and professionalism. This public Beta is learning with you.',
     primaryCta: 'Get started',
     secondaryCta: 'Explore',
     imageAlt:
@@ -84,6 +84,13 @@ export const landingCopyEn: LandingCopy = {
     start: '/auth/registar',
     enter: '/auth/entrar',
     exploreHash: '#diferenca',
+  },
+  betaNotice: {
+    label: 'Public Beta',
+    text: 'Create an account in minutes, explore safely, and tell us what to improve.',
+    primaryCta: 'Create account',
+    secondaryCta: 'Docs and feedback',
+    docsHref: '/documentacao',
   },
   skipToContent: 'Skip to content',
 };

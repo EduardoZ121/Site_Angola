@@ -292,6 +292,14 @@ export const shellCopyEn: ShellCopy = {
     sending: 'Sending…',
     success: 'Thank you — your contribution was recorded.',
     error: 'We could not send it. Please try again.',
+    publicCtaTitle: 'Beta feedback',
+    publicCtaBody:
+      'To report a bug or send a suggestion, sign in. Your contribution is recorded in the Beta Panel.',
+    publicCtaButton: 'Sign in and send feedback',
+    complaintTitle: 'Operational complaint',
+    complaintBody:
+      'Product feedback and bugs use the Beta form above. For an operational complaint (service, conduct, breach), contact Kuteka. Ops staff with admin access can open the escalations queue — do not mix it with the Beta channel.',
+    complaintAdminCta: 'Escalations queue (ops)',
   },
   firstActions: {
     title: 'Your first useful action',

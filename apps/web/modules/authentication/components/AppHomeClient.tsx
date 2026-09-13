@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PlatformFeed } from '@/modules/shell/components/PlatformFeed';
@@ -15,6 +16,7 @@ import {
   ROLE_HOME_CTA_LABELS_PT,
 } from '@/modules/shell/role-operating-matrix';
 import { getAuthCopy } from '../content';
+import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
 import { useAppSession } from './app-session';
 
 /**
@@ -26,6 +28,11 @@ export function AppHomeClient() {
   const copy = getAuthCopy(locale);
   const { session, status, error } = useAppSession();
   const { mode, effectivePermissions } = useRoleExperience();
+
+  useEffect(() => {
+    if (status !== 'ready' || !session) return;
+    void trackBetaFeature('app.home', 'App home');
+  }, [status, session]);
 
   if (status === 'error' || (status === 'ready' && !session)) {
     return (
@@ -108,6 +115,19 @@ export function AppHomeClient() {
           ))}
         </div>
       </header>
+
+      <aside className="kuteka-detail-panel flex flex-col gap-2 border border-brand-200/70 bg-brand-50/50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-slate-900">{copy.app.betaWelcomeTitle}</p>
+          <p className="text-sm text-stone-700">{copy.app.betaWelcomeBody}</p>
+        </div>
+        <Link
+          href="/app/ajuda"
+          className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit shrink-0')}
+        >
+          {copy.app.betaWelcomeCta}
+        </Link>
+      </aside>
 
       <RoleMissionPanel mode={mode} />
 

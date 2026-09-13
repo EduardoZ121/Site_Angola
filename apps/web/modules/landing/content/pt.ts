@@ -52,6 +52,13 @@ export type LandingCopy = {
     enter: string;
     exploreHash: string;
   };
+  betaNotice: {
+    label: string;
+    text: string;
+    primaryCta: string;
+    secondaryCta: string;
+    docsHref: string;
+  };
   skipToContent: string;
 };
 
@@ -71,10 +78,10 @@ export const landingCopyPt: LandingCopy = {
     start: 'Começar',
   },
   hero: {
-    eyebrow: 'Kuteka · Angola',
+    eyebrow: 'Kuteka · Beta pública · Angola',
     title: 'Património. Confiança. Habitação.',
     subtitle:
-      'A plataforma que protege, valoriza e acompanha o seu património imobiliário — com transparência e profissionalismo.',
+      'A plataforma que protege, valoriza e acompanha o seu património imobiliário — com transparência e profissionalismo. Esta Beta pública está a aprender consigo.',
     primaryCta: 'Começar',
     secondaryCta: 'Explorar',
     imageAlt: 'Ambiente residencial contemporâneo — atmosfera de património e habitação digna',
@@ -142,6 +149,13 @@ export const landingCopyPt: LandingCopy = {
     start: '/auth/registar',
     enter: '/auth/entrar',
     exploreHash: '#diferenca',
+  },
+  betaNotice: {
+    label: 'Beta pública',
+    text: 'Registe-se em minutos, explore com segurança e diga-nos o que melhorar.',
+    primaryCta: 'Criar conta',
+    secondaryCta: 'Documentação e feedback',
+    docsHref: '/documentacao',
   },
   skipToContent: 'Ir para o conteúdo',
 };

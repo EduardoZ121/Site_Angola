@@ -292,6 +292,14 @@ export const shellCopyPt = {
     sending: 'A enviar…',
     success: 'Obrigado — o seu contributo foi registado.',
     error: 'Não conseguimos enviar. Tente novamente.',
+    publicCtaTitle: 'Feedback Beta',
+    publicCtaBody:
+      'Para reportar um bug ou enviar uma sugestão, inicie sessão. O contributo fica registado no Painel Beta.',
+    publicCtaButton: 'Entrar e enviar feedback',
+    complaintTitle: 'Reclamação operacional',
+    complaintBody:
+      'Feedback de produto e bugs usam o formulário Beta acima. Para uma reclamação operacional (serviço, conduta, incumprimento), contacte a Kuteka. A equipa operacional com acesso de administração pode abrir a fila de escalações — não misture com o canal Beta.',
+    complaintAdminCta: 'Fila de escalações (ops)',
   },
   firstActions: {
     title: 'A sua primeira acção útil',

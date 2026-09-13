@@ -1,9 +1,9 @@
 # KUT-POL / CMP / BCP / DRP / INC — Compliance Pack v0.1
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 0.1-DRAFT |
-| **Data** | 2026-08-28 |
+| Campo      | Valor           |
+| ---------- | --------------- |
+| **Versão** | 0.1-DRAFT       |
+| **Data**   | 2026-08-28      |
 | **Estado** | Rascunho Fase 0 |
 
 ---
@@ -21,6 +21,7 @@
 ## KUT-POL-002 — Política de Protecção de Dados
 
 **Base:** [`POLITICA_PRIVACIDADE_v1.md`](../../legal/POLITICA_PRIVACIDADE_v1.md) → promover a POL-002 formal
+
 - Bases legais, retenção, direitos titular, DPO contacto
 
 ---
@@ -130,6 +131,6 @@ Bloqueado até LEG-003 + ADVICE-001. Classificação **D**.
 
 ## Histórico
 
-| Versão | Data | Alteração |
-|--------|------|-----------|
+| Versão    | Data       | Alteração              |
+| --------- | ---------- | ---------------------- |
 | 0.1-DRAFT | 2026-08-28 | Fase 0 compliance pack |

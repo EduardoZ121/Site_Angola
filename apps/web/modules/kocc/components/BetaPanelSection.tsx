@@ -1,10 +1,19 @@
 'use client';
 
+import { useMemo, useState } from 'react';
 import { Badge } from '@kuteka/ui';
 import { PanelSection } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { filterBetaInboxRows, type BetaInboxFilter } from '../lib/beta-feedback-inbox';
+import { formatBetaActorHint } from '../lib/beta-feedback-actor';
+import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
+import { shouldShowSoftEmpty } from '../lib/soft-empty-gate';
 import { publicStatusLabel } from '../lib/status-labels';
-import type { KoccBetaMetrics, KoccFeatureUsage } from '../services/kocc-client';
+import type {
+  KoccBetaFeedbackRow,
+  KoccBetaMetrics,
+  KoccFeatureUsage,
+} from '../services/kocc-client';
 
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
@@ -68,12 +77,27 @@ type BetaPanelSectionProps = {
   metrics: KoccBetaMetrics | null;
   loading: boolean;
   loadError: string | null;
+  inbox?: KoccBetaFeedbackRow[];
+  inboxLoading?: boolean;
+  inboxError?: string | null;
 };
 
-export function BetaPanelSection({ metrics, loading, loadError }: BetaPanelSectionProps) {
+export function BetaPanelSection({
+  metrics,
+  loading,
+  loadError,
+  inbox = [],
+  inboxLoading = false,
+  inboxError = null,
+}: BetaPanelSectionProps) {
+  const [inboxFilter, setInboxFilter] = useState<BetaInboxFilter>('all');
   const merged = mergeUsage(metrics?.featuresMostUsed, metrics?.featureUsageProxy);
   const most = [...merged].sort((a, b) => b.count - a.count).slice(0, 6);
   const least = [...merged].sort((a, b) => a.count - b.count).slice(0, 6);
+  const filteredInbox = useMemo(
+    () => filterBetaInboxRows(inbox, inboxFilter),
+    [inbox, inboxFilter],
+  );
 
   return (
     <PanelSection
@@ -81,78 +105,166 @@ export function BetaPanelSection({ metrics, loading, loadError }: BetaPanelSecti
       description="Indicadores em tempo real para decidir quando a Kuteka sai da fase Beta. Inventário de demonstração aparece como Inventário Beta — nunca como «Demo» para o utilizador final."
     >
       {loadError ? <p className="mb-3 text-sm text-amber-800">{loadError}</p> : null}
-      <SoftListSlot pending={loading && !metrics}>
-        {metrics ? (
-          <div className="flex flex-col gap-4">
-            <p className="text-xs text-slate-500">
-              Actualizado:{' '}
-              {new Date(metrics.generatedAt).toLocaleString('pt-AO', {
-                dateStyle: 'short',
-                timeStyle: 'medium',
-              })}
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-              <MetricCard label="Utilizadores Beta" value={String(metrics.betaUsers)} />
-              <MetricCard
-                label="Patrimónios reais"
-                value={String(metrics.propertiesReal)}
-                hint={`Inventário Beta: ${metrics.propertiesBetaInventory}`}
-              />
-              <MetricCard
-                label="Visitas em acompanhamento"
-                value={String(metrics.visitsScheduled)}
-                hint="Interesses activos (proxy de visitas)"
-              />
-              <MetricCard
-                label="Contratos iniciados"
-                value={String(metrics.contractsStarted)}
-                hint="Reais · rascunho / pendente / activo"
-              />
-              <MetricCard label="Feedback recebido" value={String(metrics.feedbackReceived)} />
-              <MetricCard label="Bugs reportados" value={String(metrics.bugsReported)} />
-              <MetricCard
-                label="Onboarding concluído"
-                value={`${metrics.onboardingCompletionRate}%`}
-                hint="Contas com pelo menos um papel"
-              />
-              <MetricCard label="KIS / KYC (≥ nível 2)" value={`${metrics.kisCompletionRate}%`} />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <FeatureList
-                title="Funcionalidades mais utilizadas"
-                rows={most}
-                empty="Ainda sem eventos de utilização."
-              />
-              <FeatureList
-                title="Funcionalidades menos utilizadas"
-                rows={least}
-                empty="Ainda sem eventos de utilização."
-              />
-            </div>
-
-            {(metrics.modulesOperational?.length ?? 0) > 0 ? (
-              <div>
-                <p className="text-sm font-semibold text-slate-900">Estado dos módulos</p>
-                <ul className="mt-2 flex flex-wrap gap-2">
-                  {metrics.modulesOperational.map((mod) => (
-                    <li key={mod.code}>
-                      <Badge variant={mod.enabled ? 'brand' : 'default'}>
-                        {mod.label}: {publicStatusLabel(mod.status)}
-                      </Badge>
-                    </li>
-                  ))}
-                </ul>
+      <div className="flex flex-col gap-4">
+        <SoftListSlot pending={loading && !metrics}>
+          {metrics ? (
+            <div className="flex flex-col gap-4">
+              <p className="text-xs text-slate-500">
+                Actualizado:{' '}
+                {new Date(metrics.generatedAt).toLocaleString('pt-AO', {
+                  dateStyle: 'short',
+                  timeStyle: 'medium',
+                })}
+              </p>
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                <MetricCard label="Utilizadores Beta" value={String(metrics.betaUsers)} />
+                <MetricCard
+                  label="Patrimónios reais"
+                  value={String(metrics.propertiesReal)}
+                  hint={`Inventário Beta: ${metrics.propertiesBetaInventory}`}
+                />
+                <MetricCard
+                  label="Visitas em acompanhamento"
+                  value={String(metrics.visitsScheduled)}
+                  hint="Interesses activos (proxy de visitas)"
+                />
+                <MetricCard
+                  label="Contratos iniciados"
+                  value={String(metrics.contractsStarted)}
+                  hint="Reais · rascunho / pendente / activo"
+                />
+                <MetricCard label="Feedback recebido" value={String(metrics.feedbackReceived)} />
+                <MetricCard label="Bugs reportados" value={String(metrics.bugsReported)} />
+                <MetricCard
+                  label="Onboarding concluído"
+                  value={`${metrics.onboardingCompletionRate}%`}
+                  hint="Contas com pelo menos um papel"
+                />
+                <MetricCard label="KIS / KYC (≥ nível 2)" value={`${metrics.kisCompletionRate}%`} />
               </div>
-            ) : null}
-          </div>
-        ) : !loading ? (
-          <p className="text-sm text-slate-500">
-            Sem métricas. Confirme que a migration <code>0035_kocc_beta_panel.sql</code> foi
-            aplicada no Supabase remoto.
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <FeatureList
+                  title="Funcionalidades mais utilizadas"
+                  rows={most}
+                  empty="Ainda sem eventos de utilização."
+                />
+                <FeatureList
+                  title="Funcionalidades menos utilizadas"
+                  rows={least}
+                  empty="Ainda sem eventos de utilização."
+                />
+              </div>
+
+              {(metrics.modulesOperational?.length ?? 0) > 0 ? (
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Estado dos módulos</p>
+                  <ul className="mt-2 flex flex-wrap gap-2">
+                    {metrics.modulesOperational.map((mod) => (
+                      <li key={mod.code}>
+                        <Badge variant={mod.enabled ? 'brand' : 'default'}>
+                          {mod.label}: {publicStatusLabel(mod.status)}
+                        </Badge>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          ) : shouldShowSoftEmpty({
+              pending: loading,
+              hasItems: Boolean(metrics),
+              hasError: Boolean(loadError),
+            }) ? (
+            <p className="text-sm text-slate-500">
+              Sem métricas. Confirme que a migration <code>0035_kocc_beta_panel.sql</code> foi
+              aplicada no Supabase remoto e que a conta tem <code>finance.manage</code>.
+            </p>
+          ) : null}
+        </SoftListSlot>
+
+        <div>
+          <p className="text-sm font-semibold text-slate-900">Inbox de triagem Beta</p>
+          <p className="mt-1 text-xs text-slate-500">
+            Relatos recentes de <code>/app/ajuda</code> (tabela <code>beta_feedback</code>, RLS
+            operacional: <code>finance.manage</code> ou <code>admin.panel</code>). Independente das
+            métricas agregadas. Não substitui reclamações operacionais nem avaliações de contrato.
           </p>
-        ) : null}
-      </SoftListSlot>
+          {inboxError ? <p className="mt-2 text-sm text-amber-800">{inboxError}</p> : null}
+          {inbox.length > 0 ? (
+            <div className="mt-2 flex flex-wrap gap-2 text-xs">
+              {(
+                [
+                  ['all', 'Todos'],
+                  ['bug', 'Bugs'],
+                  ['feedback', 'Sugestões'],
+                ] as const
+              ).map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={
+                    inboxFilter === value
+                      ? 'rounded border border-slate-800 bg-slate-900 px-2 py-1 text-white'
+                      : 'rounded border border-slate-200 bg-white px-2 py-1 text-slate-700'
+                  }
+                  onClick={() => setInboxFilter(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          ) : null}
+          <SoftListSlot pending={inboxLoading && inbox.length === 0}>
+            {shouldShowSoftEmpty({
+              pending: inboxLoading,
+              hasItems: inbox.length > 0,
+              hasError: Boolean(inboxError),
+            }) ? (
+              <p className="mt-2 text-sm text-slate-500">Ainda sem relatos na inbox.</p>
+            ) : null}
+            {inbox.length > 0 && filteredInbox.length === 0 ? (
+              <p className="mt-2 text-sm text-slate-500">Nenhum relato neste filtro.</p>
+            ) : null}
+            {filteredInbox.length > 0 ? (
+              <ul className="mt-2 divide-y divide-slate-100">
+                {filteredInbox.map((row) => (
+                  <li key={row.id} className="flex flex-col gap-1 py-2.5">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Badge variant={row.kind === 'bug' ? 'default' : 'brand'}>
+                        {betaFeedbackKindLabel(row.kind)}
+                      </Badge>
+                      <span className="font-mono text-xs text-slate-500">
+                        {new Date(row.created_at).toLocaleString('pt-AO', {
+                          dateStyle: 'short',
+                          timeStyle: 'short',
+                        })}
+                      </span>
+                      {row.page_path ? (
+                        <span className="truncate font-mono text-xs text-slate-500">
+                          {row.page_path}
+                        </span>
+                      ) : null}
+                      {(() => {
+                        const hint = formatBetaActorHint(row.actor_id);
+                        return hint ? (
+                          <span
+                            className="font-mono text-xs text-slate-500"
+                            title={row.actor_id ?? undefined}
+                          >
+                            {hint}
+                          </span>
+                        ) : null;
+                      })()}
+                    </div>
+                    <p className="whitespace-pre-wrap text-sm text-slate-800">{row.body}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </SoftListSlot>
+        </div>
+      </div>
     </PanelSection>
   );
 }

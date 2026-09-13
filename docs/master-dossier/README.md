@@ -1,12 +1,12 @@
 # Kuteka — Master Dossier
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 0.1 |
-| **Data** | 2026-08-28 |
-| **Fase** | FASE 0 — documentação e normalização (C1–C10) |
-| **Autorização** | `AUTORIZO: FASE 0 — documentação [C1–C10]` |
-| **Repositório** | `EduardoZ121/Site_Angola` |
+| Campo           | Valor                                         |
+| --------------- | --------------------------------------------- |
+| **Versão**      | 0.1                                           |
+| **Data**        | 2026-08-28                                    |
+| **Fase**        | FASE 0 — documentação e normalização (C1–C10) |
+| **Autorização** | `AUTORIZO: FASE 0 — documentação [C1–C10]`    |
+| **Repositório** | `EduardoZ121/Site_Angola`                     |
 
 ## Propósito
 
@@ -20,16 +20,16 @@ Ver **[KUTEKA_MASTER_DOSSIER_INDEX_2026-08-28.md](./KUTEKA_MASTER_DOSSIER_INDEX_
 
 ## Estrutura
 
-| Pasta | Conteúdo |
-|-------|----------|
-| [`finance/`](./finance/) | C1 normalização FIN, C2 dual path, pack KUT-FIN |
-| [`legal/`](./legal/) | Pack KUT-LEG (rascunhos para revisão advogado) |
-| [`governance/`](./governance/) | Protocolo FASE 0, KUT-GOV, Governed Development |
-| [`compliance/`](./compliance/) | KUT-POL, KUT-CMP, BCP, DRP, INC |
-| [`beta/`](./beta/) | Beta Charter v2, scorecard, QA playbook |
-| [`growth/`](./growth/) | Growth Architecture (papel) |
-| [`templates/`](./templates/) | Atas, incidentes, decision register |
-| [`consolidation/`](./consolidation/) | Master Table KUT-XXX, Doc 3, manifesto Fase 0 |
+| Pasta                                | Conteúdo                                        |
+| ------------------------------------ | ----------------------------------------------- |
+| [`finance/`](./finance/)             | C1 normalização FIN, C2 dual path, pack KUT-FIN |
+| [`legal/`](./legal/)                 | Pack KUT-LEG (rascunhos para revisão advogado)  |
+| [`governance/`](./governance/)       | Protocolo FASE 0, KUT-GOV, Governed Development |
+| [`compliance/`](./compliance/)       | KUT-POL, KUT-CMP, BCP, DRP, INC                 |
+| [`beta/`](./beta/)                   | Beta Charter v2, scorecard, QA playbook         |
+| [`growth/`](./growth/)               | Growth Architecture (papel)                     |
+| [`templates/`](./templates/)         | Atas, incidentes, decision register             |
+| [`consolidation/`](./consolidation/) | Master Table KUT-XXX, Doc 3, manifesto Fase 0   |
 
 ## Documentos relacionados (fora do dossiê)
 

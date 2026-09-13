@@ -1,10 +1,10 @@
 # Kuteka Growth Engine — Architecture Paper v0.1
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 0.1-DRAFT |
-| **Data** | 2026-08-28 |
-| **Tipo** | Arquitectura em papel — **sem implementação funcional** |
+| Campo                  | Valor                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------- |
+| **Versão**             | 0.1-DRAFT                                                                               |
+| **Data**               | 2026-08-28                                                                              |
+| **Tipo**               | Arquitectura em papel — **sem implementação funcional**                                 |
 | **Autorização código** | Bloqueada — D4 **DECIDIDO — N1** (teto Beta). Sem código Growth até `AUTORIZO: FASE 1`. |
 
 ## 1. Filosofia
@@ -20,19 +20,19 @@ Activação → Utilização → Conversão → Retenção → Mais valor
 
 ## 2. Níveis de maturidade (GROWTH-22)
 
-| Nível | Conteúdo | Estado alvo Beta | Código Fase 0 |
-|-------|----------|------------------|---------------|
-| **N1** | Instrumentação: events, analytics, audit | Preparar spec | ❌ Não |
-| **N2** | Partilha: WhatsApp, copy link, attribution | Parcial 🟡 share imóvel | ❌ Não |
-| **N3** | Referral: convite → registo → acção elegível | Desactivado | ❌ Não |
-| **N4** | Campanhas Prestadores/Parceiros | Desactivado | ❌ Não |
-| **N5** | Growth Intelligence (KAI recomenda) | Desactivado | ❌ Não |
+| Nível  | Conteúdo                                     | Estado alvo Beta        | Código Fase 0 |
+| ------ | -------------------------------------------- | ----------------------- | ------------- |
+| **N1** | Instrumentação: events, analytics, audit     | Preparar spec           | ❌ Não        |
+| **N2** | Partilha: WhatsApp, copy link, attribution   | Parcial 🟡 share imóvel | ❌ Não        |
+| **N3** | Referral: convite → registo → acção elegível | Desactivado             | ❌ Não        |
+| **N4** | Campanhas Prestadores/Parceiros              | Desactivado             | ❌ Não        |
+| **N5** | Growth Intelligence (KAI recomenda)          | Desactivado             | ❌ Não        |
 
 ## 3. Regra fundamental — Pontos Kuteka ≠ Dinheiro (GROWTH-15.1)
 
-| Sistema | Domínio | Ledger |
-|---------|---------|--------|
-| **Kuteka Pay** | Dinheiro real, transacções, PSP | `finance_*` ledger |
+| Sistema           | Domínio                                  | Ledger                     |
+| ----------------- | ---------------------------------------- | -------------------------- |
+| **Kuteka Pay**    | Dinheiro real, transacções, PSP          | `finance_*` ledger         |
 | **Pontos Kuteka** | Participação, gamificação, elegibilidade | **Ledger separado futuro** |
 
 **Proibido:**
@@ -73,15 +73,15 @@ Growth Overview (futuro Founder Center):
 
 Por mecanismo, checklist antes de ACTIVAR:
 
-| Dimensão | Referral | Rewards | Campanhas |
-|----------|----------|---------|-----------|
-| Produto | | | |
-| Segurança | | | |
-| Anti-fraude | | | |
-| Analytics | | | |
-| Compliance | D advogado | D advogado | D advogado |
-| Orçamento | | | |
-| **Estado** | AGUARDAR | AGUARDAR | AGUARDAR |
+| Dimensão    | Referral   | Rewards    | Campanhas  |
+| ----------- | ---------- | ---------- | ---------- |
+| Produto     |            |            |            |
+| Segurança   |            |            |            |
+| Anti-fraude |            |            |            |
+| Analytics   |            |            |            |
+| Compliance  | D advogado | D advogado | D advogado |
+| Orçamento   |            |            |            |
+| **Estado**  | AGUARDAR   | AGUARDAR   | AGUARDAR   |
 
 ## 9. Analytics campanha (GROWTH-20)
 
@@ -109,6 +109,6 @@ Doc 3 Growth "primeiro lançamento" vs Sprint Beta freeze — **Growth funcional
 
 ## Histórico
 
-| Versão | Data | Alteração |
-|--------|------|-----------|
+| Versão    | Data       | Alteração         |
+| --------- | ---------- | ----------------- |
 | 0.1-DRAFT | 2026-08-28 | Fase 0 paper only |

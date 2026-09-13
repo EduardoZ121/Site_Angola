@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next';
+import { SECURITY_HEADERS } from './lib/security-headers';
 
 const isStaticExport = process.env.STATIC_EXPORT === '1';
 
@@ -18,6 +19,14 @@ const nextConfig: NextConfig = {
     unoptimized: isStaticExport,
   },
   poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: SECURITY_HEADERS.map(({ key, value }) => ({ key, value })),
+      },
+    ];
+  },
   ...(isStaticExport
     ? {
         output: 'export' as const,

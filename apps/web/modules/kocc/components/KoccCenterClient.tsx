@@ -11,14 +11,17 @@ import {
 } from '@/modules/finance/components/super/shared';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { GO_LIVE_READINESS, goLiveReadinessSummary } from '../lib/go-live-readiness';
+import { formatBetaActorHint } from '../lib/beta-feedback-actor';
 import { KOCC_STATUS_OPTIONS, adminStatusLabel, publicStatusLabel } from '../lib/status-labels';
 import {
   listAudit,
   listBetaMetrics,
   listFlags,
+  listRecentBetaFeedback,
   parseCsvList,
   upsertFlag,
   type KoccAuditRow,
+  type KoccBetaFeedbackRow,
   type KoccBetaMetrics,
   type KoccFlagRow,
   type KoccUpsertFlagInput,
@@ -80,12 +83,16 @@ export function KoccCenterClient({ canManage }: PanelProps) {
   const [betaMetrics, setBetaMetrics] = useState<KoccBetaMetrics | null>(null);
   const [betaLoading, setBetaLoading] = useState(true);
   const [betaError, setBetaError] = useState<string | null>(null);
+  const [betaInbox, setBetaInbox] = useState<KoccBetaFeedbackRow[]>([]);
+  const [betaInboxLoading, setBetaInboxLoading] = useState(true);
+  const [betaInboxError, setBetaInboxError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const [flagsRes, auditRes, metricsRes] = await Promise.all([
+    const [flagsRes, auditRes, metricsRes, inboxRes] = await Promise.all([
       listFlags(),
       listAudit(30),
       listBetaMetrics(),
+      listRecentBetaFeedback(40),
     ]);
     if (flagsRes.ok) {
       setFlags(flagsRes.data);
@@ -107,7 +114,15 @@ export function KoccCenterClient({ canManage }: PanelProps) {
       setBetaMetrics(null);
       setBetaError(metricsRes.message);
     }
+    if (inboxRes.ok) {
+      setBetaInbox(inboxRes.data);
+      setBetaInboxError(null);
+    } else {
+      setBetaInbox([]);
+      setBetaInboxError(inboxRes.message);
+    }
     setBetaLoading(false);
+    setBetaInboxLoading(false);
     setLoading(false);
   }, [setError]);
 
@@ -159,7 +174,14 @@ export function KoccCenterClient({ canManage }: PanelProps) {
     <div className="flex flex-col gap-4">
       <Feedback error={error} message={message} />
 
-      <BetaPanelSection metrics={betaMetrics} loading={betaLoading} loadError={betaError} />
+      <BetaPanelSection
+        metrics={betaMetrics}
+        loading={betaLoading}
+        loadError={betaError}
+        inbox={betaInbox}
+        inboxLoading={betaInboxLoading}
+        inboxError={betaInboxError}
+      />
 
       <PanelSection
         title="Controlo Operacional (KOCC)"
@@ -318,7 +340,9 @@ export function KoccCenterClient({ canManage }: PanelProps) {
                 </p>
                 <p className="text-xs text-slate-500">
                   {new Date(entry.created_at).toLocaleString('pt-PT')}
-                  {entry.actor_id ? ` · ${entry.actor_id.slice(0, 8)}` : ''}
+                  {(formatBetaActorHint(entry.actor_id) &&
+                    ` · ${formatBetaActorHint(entry.actor_id)}`) ||
+                    ''}
                 </p>
               </div>
               {entry.after_state && typeof entry.after_state.operational_status === 'string' ? (

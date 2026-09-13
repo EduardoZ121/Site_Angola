@@ -1,29 +1,29 @@
 # FASE 0 — Handover Founder / Co-Founder
 
-| Campo | Valor |
-|-------|-------|
-| **Versão** | 1.0 |
-| **Data** | 2026-08-28 |
-| **Commit local** | `e12272f` (+ revisão final auditoria) |
-| **Branch** | `cursor/fase-0-master-dossier-f96b` |
-| **Repo canonical** | `EduardoZ121/Site_Angola` |
-| **Fork backup** | `vicentemakiese/Site_Angola` (criado; publicação pendente) |
+| Campo              | Valor                                                      |
+| ------------------ | ---------------------------------------------------------- |
+| **Versão**         | 1.0                                                        |
+| **Data**           | 2026-08-28                                                 |
+| **Commit local**   | `e12272f` (+ revisão final auditoria)                      |
+| **Branch**         | `cursor/fase-0-master-dossier-f96b`                        |
+| **Repo canonical** | `EduardoZ121/Site_Angola`                                  |
+| **Fork backup**    | `vicentemakiese/Site_Angola` (criado; publicação pendente) |
 
 ---
 
 ## 1. O que foi concluído
 
-| Bloco | Entrega |
-|-------|---------|
-| **C1–C10** | Master Dossier completo — ver [Manifest v1.1](./KUTEKA_FASE0_DELIVERY_MANIFEST_2026-08-28.md) |
-| **65 KUT-IDs** | Master Table normalizada (FIN-009/010 incluídos) |
-| **80 itens Doc 3** | Tabela validação §29 + Beta + Growth |
-| **ADR-027** | Identidade institucional Founder/Co-Founder |
-| **Packs** | FIN, LEG, GOV, POL/CMP/BCP/DRP/INC |
-| **Beta v2** | Charter + scorecard + QA + reuse map |
-| **Growth** | Architecture paper (papel only) |
-| **Templates** | MIN, INC, Decision Register, ADVICE spec |
-| **Auditoria final** | [Relatório](./KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md) |
+| Bloco               | Entrega                                                                                       |
+| ------------------- | --------------------------------------------------------------------------------------------- |
+| **C1–C10**          | Master Dossier completo — ver [Manifest v1.1](./KUTEKA_FASE0_DELIVERY_MANIFEST_2026-08-28.md) |
+| **65 KUT-IDs**      | Master Table normalizada (FIN-009/010 incluídos)                                              |
+| **80 itens Doc 3**  | Tabela validação §29 + Beta + Growth                                                          |
+| **ADR-027**         | Identidade institucional Founder/Co-Founder                                                   |
+| **Packs**           | FIN, LEG, GOV, POL/CMP/BCP/DRP/INC                                                            |
+| **Beta v2**         | Charter + scorecard + QA + reuse map                                                          |
+| **Growth**          | Architecture paper (papel only)                                                               |
+| **Templates**       | MIN, INC, Decision Register, ADVICE spec                                                      |
+| **Auditoria final** | [Relatório](./KUTEKA_FASE0_FINAL_AUDIT_REPORT_2026-08-28.md)                                  |
 
 **Garantia:** zero código, migrations, deploy, RBAC/RLS/Pay alterados nesta Fase 0.
 
@@ -43,15 +43,15 @@
 
 ## 3. O que permanece pendente
 
-| Área | Pendência |
-|------|-----------|
-| **GitHub oficial** | Push branch `cursor/fase-0-master-dossier-f96b` → `EduardoZ121/Site_Angola` |
-| **Fork** | Publicar Fase 0 em `vicentemakiese/Site_Angola` quando Integrations + agente novo |
-| **Decisões D1,D3,D4,D5,D7** | Ver [registo](./KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md) |
-| **Advogado** | LEG-001–003 P0; pareceres ADVICE |
-| **Contabilista** | FIN-008; ADVICE-002; D7 |
-| **BCP/DRP KUT** | Promoção v0.9 → KUT-BCP-001/DRP-001 (documental) |
-| **Implementação Doc 3** | Majoritariamente 🔴/🟡 — specs only Fase 0 |
+| Área                        | Pendência                                                                         |
+| --------------------------- | --------------------------------------------------------------------------------- |
+| **GitHub oficial**          | Push branch `cursor/fase-0-master-dossier-f96b` → `EduardoZ121/Site_Angola`       |
+| **Fork**                    | Publicar Fase 0 em `vicentemakiese/Site_Angola` quando Integrations + agente novo |
+| **Decisões D1,D3,D4,D5,D7** | Ver [registo](./KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md)                     |
+| **Advogado**                | LEG-001–003 P0; pareceres ADVICE                                                  |
+| **Contabilista**            | FIN-008; ADVICE-002; D7                                                           |
+| **BCP/DRP KUT**             | Promoção v0.9 → KUT-BCP-001/DRP-001 (documental)                                  |
+| **Implementação Doc 3**     | Majoritariamente 🔴/🟡 — specs only Fase 0                                        |
 
 ---
 
@@ -79,14 +79,17 @@
 - Preservar agente/sessão até publicação confirmada
 
 ### Advogado
+
 - Revisar LEG pack rascunhos P0
 - Registar pareceres (spec ADVICE)
 
 ### Contabilista
+
 - Validar FIN-001, FIN-005, FIN-008
 - Parecer ADVICE-002; papel D7
 
 ### GitHub / infra
+
 - Write access repo canonical ou fork
 - **Não** usar PAT no agente
 
@@ -105,13 +108,13 @@
 
 ## 6. Onde encontrar tudo
 
-| Documento | Caminho |
-|-----------|---------|
-| Índice | `docs/master-dossier/KUTEKA_MASTER_DOSSIER_INDEX_2026-08-28.md` |
-| Master Table | `docs/master-dossier/consolidation/KUTEKA_KUT_XXX_MASTER_TABLE_2026-08-28.md` |
-| Doc 3 | `docs/master-dossier/consolidation/KUTEKA_DOC3_VALIDATION_TABLE_2026-08-28.md` |
-| Checklist entrega | `docs/master-dossier/consolidation/KUTEKA_FASE0_DELIVERY_CHECKLIST_2026-08-28.md` |
-| Decisões pendentes | `docs/master-dossier/consolidation/KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md` |
+| Documento          | Caminho                                                                           |
+| ------------------ | --------------------------------------------------------------------------------- |
+| Índice             | `docs/master-dossier/KUTEKA_MASTER_DOSSIER_INDEX_2026-08-28.md`                   |
+| Master Table       | `docs/master-dossier/consolidation/KUTEKA_KUT_XXX_MASTER_TABLE_2026-08-28.md`     |
+| Doc 3              | `docs/master-dossier/consolidation/KUTEKA_DOC3_VALIDATION_TABLE_2026-08-28.md`    |
+| Checklist entrega  | `docs/master-dossier/consolidation/KUTEKA_FASE0_DELIVERY_CHECKLIST_2026-08-28.md` |
+| Decisões pendentes | `docs/master-dossier/consolidation/KUTEKA_FASE0_PENDING_DECISIONS_2026-08-28.md`  |
 
 ---
 

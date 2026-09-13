@@ -12,10 +12,10 @@ export const landingCopyFr: LandingCopy = {
     start: 'Commencer',
   },
   hero: {
-    eyebrow: 'Kuteka · Angola',
+    eyebrow: 'Kuteka · Bêta publique · Angola',
     title: 'Patrimoine. Confiance. Logement.',
     subtitle:
-      'La plateforme qui protège, valorise et suit votre patrimoine immobilier — avec transparence et professionnalisme.',
+      'La plateforme qui protège, valorise et suit votre patrimoine immobilier — avec transparence et professionnalisme. Cette Bêta publique apprend avec vous.',
     primaryCta: 'Commencer',
     secondaryCta: 'Explorer',
     imageAlt:
@@ -85,6 +85,13 @@ export const landingCopyFr: LandingCopy = {
     start: '/auth/registar',
     enter: '/auth/entrar',
     exploreHash: '#diferenca',
+  },
+  betaNotice: {
+    label: 'Bêta publique',
+    text: 'Créez un compte en quelques minutes, explorez en toute sécurité et dites-nous quoi améliorer.',
+    primaryCta: 'Créer un compte',
+    secondaryCta: 'Documentation et retours',
+    docsHref: '/documentacao',
   },
   skipToContent: 'Aller au contenu',
 };

@@ -156,13 +156,13 @@ export const patrimoniosCopyFr: PatrimoniosCopy = {
     both: 'Vente et location',
   },
   statuses: {
-    draft: 'En évaluation / brouillon',
-    active: 'Actif (publié)',
+    draft: 'Inventaire (non publié)',
+    active: 'Sur le marché (publié)',
     archived: 'Archivé',
   },
   listHeading: 'Vos patrimoines',
   listHint:
-    'Annonces et patrimoines sous gestion — le Client trouve les biens publiés dans Habitat.',
+    'Inventaire Kuteka ≠ marché public. Seuls les biens « Sur le marché » apparaissent dans Logement ; le reste reste dans l’inventaire privé jusqu’à approbation.',
   mvpNote:
     'Après la vocation commerciale, indiquez les services Kuteka et le niveau de gestion. Les services de gestion/évaluation nécessitent une évaluation technique avant la publication complète.',
   detailNote:

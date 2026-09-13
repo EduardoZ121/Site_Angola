@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@kuteka/database';
+import { applySecurityHeaders } from '@/lib/security-headers';
 
 /**
- * Correlation id + optional Supabase session refresh + light /app guards.
+ * Correlation id + security headers + optional Supabase session refresh + light /app guards.
  */
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -11,13 +12,17 @@ export async function middleware(request: NextRequest) {
 
   const correlationId = request.headers.get('x-correlation-id') ?? crypto.randomUUID();
   response.headers.set('x-correlation-id', correlationId);
+  applySecurityHeaders(response.headers);
 
   if (
     request.nextUrl.pathname.startsWith('/dev') &&
     process.env.NODE_ENV === 'production' &&
     process.env.NEXT_PUBLIC_ENABLE_DEV_TOOLS !== 'true'
   ) {
-    return NextResponse.redirect(new URL('/', request.url));
+    const redirect = NextResponse.redirect(new URL('/', request.url));
+    redirect.headers.set('x-correlation-id', correlationId);
+    applySecurityHeaders(redirect.headers);
+    return redirect;
   }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -44,6 +49,7 @@ export async function middleware(request: NextRequest) {
             request: { headers: request.headers },
           });
           response.headers.set('x-correlation-id', correlationId);
+          applySecurityHeaders(response.headers);
           for (const { name, value, options } of cookiesToSet) {
             response.cookies.set(name, value, options);
           }
@@ -60,6 +66,7 @@ export async function middleware(request: NextRequest) {
       login.searchParams.set('next', `${path}${request.nextUrl.search}`);
       const redirect = NextResponse.redirect(login);
       redirect.headers.set('x-correlation-id', correlationId);
+      applySecurityHeaders(redirect.headers);
       return redirect;
     }
   }
