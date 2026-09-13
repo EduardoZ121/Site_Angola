@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /app/
+Disallow: /api/
+Disallow: /auth/onboarding/
+Disallow: /dev/
+
+Host: https://kutekalink.com
+Sitemap: https://kutekalink.com/sitemap.xml

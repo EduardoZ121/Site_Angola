@@ -1,0 +1,6 @@
+{
+  "status": "ok",
+  "service": "kuteka-web",
+  "mode": "static",
+  "check": "health.json"
+}
