@@ -11,6 +11,7 @@ import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import {
+  buildAuthEmailRedirect,
   issueEmailVerificationOtp,
   resendVerification,
   verifyEmailOtpCode,
@@ -23,12 +24,7 @@ const COOLDOWN_SECONDS = 60;
 
 async function resolveVerifiedDestination(next: string | null): Promise<string> {
   if (!isSupabaseConfigured()) {
-    return applyDestinationGate({
-      hasSession: true,
-      emailVerified: true,
-      roleCodes: [],
-      next,
-    });
+    return '/auth/entrar/';
   }
   try {
     const client = createBrowserClient();
@@ -36,12 +32,9 @@ async function resolveVerifiedDestination(next: string | null): Promise<string> 
       data: { user },
     } = await client.auth.getUser();
     if (!user) {
-      return applyDestinationGate({
-        hasSession: true,
-        emailVerified: true,
-        roleCodes: [],
-        next,
-      });
+      // Never pretend verification succeeded without a session.
+      const q = next ? `?next=${encodeURIComponent(next)}` : '';
+      return `/auth/entrar/${q}`;
     }
     const ctx = await fetchAuthorizationContext(client, user.id, user.email ?? null);
     return applyDestinationGate({
@@ -52,12 +45,7 @@ async function resolveVerifiedDestination(next: string | null): Promise<string> 
       next,
     });
   } catch {
-    return applyDestinationGate({
-      hasSession: true,
-      emailVerified: true,
-      roleCodes: [],
-      next,
-    });
+    return '/auth/entrar/';
   }
 }
 
@@ -164,9 +152,10 @@ export function VerifyPanel() {
     setMessage(null);
     setSandboxHint(null);
 
-    const otpIssue = await issueEmailVerificationOtp({ email });
+    const redirectTo = buildAuthEmailRedirect('/auth/verificar', next);
+    const otpIssue = await issueEmailVerificationOtp({ email, emailRedirectTo: redirectTo });
     if (!otpIssue.ok) {
-      const fallback = await resendVerification({ email });
+      const fallback = await resendVerification({ email, emailRedirectTo: redirectTo });
       setLoading(false);
       if (!fallback.ok) {
         setError(fallback.message);
@@ -179,7 +168,8 @@ export function VerifyPanel() {
 
     setLoading(false);
     if (otpIssue.data.challengeId) setChallengeId(otpIssue.data.challengeId);
-    if (otpIssue.data.sandboxCode) {
+    // Never surface sandbox OTP codes in production builds.
+    if (otpIssue.data.sandboxCode && process.env.NODE_ENV !== 'production') {
       setSandboxHint(copy.verify.sandboxHint.replace('{code}', otpIssue.data.sandboxCode));
     }
     setMessage(copy.verify.resendSuccess);

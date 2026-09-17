@@ -44,10 +44,10 @@ function mapAuthError(
   if (isRateLimitMessage(`${msg} ${code}`, error.status)) {
     return { ok: false, code: 'rate_limited', message: authCopy().common.rateLimited };
   }
+  // Do not map every HTTP 422 to duplicate — SMTP/validation failures also use 422.
   if (
-    /already|registered|exists|user_already/i.test(msg) ||
     code === 'user_already_exists' ||
-    error.status === 422
+    /already.?registered|user.?already|email.?exists|already.?exists/i.test(msg)
   ) {
     return {
       ok: false,
@@ -80,6 +80,16 @@ function getClient() {
   } catch {
     return null;
   }
+}
+
+/** Canonical Auth email redirect (static export uses trailingSlash). */
+export function buildAuthEmailRedirect(path: string, next?: string | null): string {
+  if (typeof window === 'undefined') return path;
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  const withSlash = normalized.endsWith('/') ? normalized : `${normalized}/`;
+  const url = new URL(withSlash, window.location.origin);
+  if (next?.trim()) url.searchParams.set('next', next.trim());
+  return url.toString();
 }
 
 export async function signUp(input: {
@@ -221,14 +231,21 @@ export async function updatePassword(input: { password: string }): Promise<AuthC
   }
 }
 
-export async function resendVerification(input: { email: string }): Promise<AuthClientResult> {
+export async function resendVerification(input: {
+  email: string;
+  emailRedirectTo?: string;
+}): Promise<AuthClientResult> {
   const client = getClient();
   if (!client) return configError();
 
   try {
+    const emailRedirectTo =
+      input.emailRedirectTo ??
+      (typeof window !== 'undefined' ? buildAuthEmailRedirect('/auth/verificar') : undefined);
     const { error } = await client.auth.resend({
       type: 'signup',
       email: input.email,
+      options: emailRedirectTo ? { emailRedirectTo } : undefined,
     });
     if (error) {
       return mapAuthError(
@@ -245,6 +262,7 @@ export async function resendVerification(input: { email: string }): Promise<Auth
 /** Dual path: Supabase email OTP (link companion) + Kuteka security_issue_otp sandbox/app code. */
 export async function issueEmailVerificationOtp(input: {
   email: string;
+  emailRedirectTo?: string;
 }): Promise<
   AuthClientResult<{ challengeId?: string; sandboxCode?: string; supabaseOtpRequested: boolean }>
 > {
@@ -253,9 +271,13 @@ export async function issueEmailVerificationOtp(input: {
 
   let supabaseOtpRequested = false;
   try {
+    const emailRedirectTo =
+      input.emailRedirectTo ??
+      (typeof window !== 'undefined' ? buildAuthEmailRedirect('/auth/verificar') : undefined);
     const { error: resendError } = await client.auth.resend({
       type: 'signup',
       email: input.email,
+      options: emailRedirectTo ? { emailRedirectTo } : undefined,
     });
     supabaseOtpRequested = !resendError;
   } catch {

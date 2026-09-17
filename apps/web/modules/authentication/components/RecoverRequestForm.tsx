@@ -5,7 +5,7 @@ import { useState, type FormEvent } from 'react';
 import { recoverSchema } from '@kuteka/validation';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
-import { resetPasswordForEmail } from '../services/auth-client';
+import { buildAuthEmailRedirect, resetPasswordForEmail } from '../services/auth-client';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
 /**
@@ -44,7 +44,7 @@ export function RecoverRequestForm() {
     setSubmitState('loading');
     const redirectTo =
       typeof window !== 'undefined'
-        ? `${window.location.origin}/auth/recuperar/confirmar`
+        ? buildAuthEmailRedirect('/auth/recuperar/confirmar')
         : undefined;
 
     const result = await resetPasswordForEmail({
