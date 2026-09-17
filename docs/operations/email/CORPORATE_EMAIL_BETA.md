@@ -12,44 +12,43 @@ Cloudflare Email Routing
 kutekalink@gmail.com
 ```
 
-### Auth / transactional
+### Auth / transactional — VALIDADO 2026-09-17
 
 ```
 Kuteka App (signUp / reset / resend)
         ↓
-Supabase Auth
+Supabase Auth (Confirm email ON, autoconfirm OFF)
         ↓
 Custom SMTP (smtp.resend.com:465, user resend)
         ↓
 Resend
         ↓
 From: Kuteka <no-reply@kutekalink.com>
+        ↓
+Inbox (Gmail verificado em teste real)
 ```
 
 **Oficial:** remetente no **apex** `kutekalink.com` (`no-reply@kutekalink.com`).  
-**Obsoleto (não usar):** `mail.kutekalink.com` / `noreply@mail.kutekalink.com` — proposta antiga do kit bridge; DNS live e SMTP Dashboard usam o apex.
+**Obsoleto:** `mail.kutekalink.com` / `noreply@mail.kutekalink.com`.
 
-O frontend **não** envia confirmação via API Resend. O pacote estático de produção não inclui mailer server-side.
+O frontend **não** envia confirmação via API Resend directa. Produção estática usa Supabase Auth + SMTP.
 
-## Estado produção (2026-09-17)
+## Estado produção
 
-| Item                 | Estado                                                                 |
-| -------------------- | ---------------------------------------------------------------------- |
-| `mailer_autoconfirm` | **`false`** (corrigido no Dashboard)                                   |
-| Confirm email        | **ON**                                                                 |
-| Custom SMTP          | **ON** · sender `no-reply@kutekalink.com`                              |
-| Entrega Resend       | **Ainda a falhar** — signup devolve `Error sending confirmation email` |
+| Item                 | Estado                                    |
+| -------------------- | ----------------------------------------- |
+| `mailer_autoconfirm` | `false`                                   |
+| Confirm email        | ON                                        |
+| Custom SMTP + Resend | ON · entrega Gmail **validada**           |
+| Assunto típico       | _Confirm your email address_              |
+| UI F2                | `/auth/verificar/` — link + OTP 6 dígitos |
 
-### Próximo passo ops (único bloqueio de envio)
+### Notas ops
 
-Revalidar no Dashboard a **password SMTP** (= Resend API key válida) e o domínio `kutekalink.com` em Resend → Domains. Sem alterar DNS nem arquitectura.
-
-Redirects mínimos:
-
-- Site URL: `https://kutekalink.com`
-- `https://kutekalink.com/auth/verificar` e `…/auth/verificar/`
-- `https://kutekalink.com/auth/recuperar/confirmar` e `…/confirmar/`
+- Resend pode rejeitar destinos como `@example.com`; usar emails reais nos smokes.
+- Confirmar Logs no [Resend Dashboard](https://resend.com/emails) após cada smoke (agente sem `RESEND_API_KEY`).
+- Redirects mínimos: Site URL `https://kutekalink.com`; `/auth/verificar/` e `/auth/recuperar/confirmar/` (com/sem trailing slash).
 
 ## Futuro Google Workspace
 
-Trocar apenas MX/Routing humano no apex; manter SMTP Auth → Resend no apex (ou subdomínio dedicado se no futuro se isolar reputação).
+Trocar apenas MX/Routing humano no apex; manter SMTP Auth → Resend no apex.

@@ -1,52 +1,51 @@
 # Checklist — confirmação de e-mail (produção)
 
 Projecto: `vhqwitbrpqaiutjbundo` → https://kutekalink.com  
-Remetente oficial: `no-reply@kutekalink.com` (apex). **Obsoleto:** `mail.kutekalink.com` / `noreply@mail.*`.
+Remetente oficial: `Kuteka <no-reply@kutekalink.com>` (apex).  
+**Obsoleto:** `mail.kutekalink.com` / `noreply@mail.*`.
 
-## Estado revalidado 2026-09-17 (após toggle Dashboard)
+## Estado — VALIDADO em produção (2026-09-17)
 
-| Check                                          | Resultado                                                                     |
-| ---------------------------------------------- | ----------------------------------------------------------------------------- |
-| `GET /auth/v1/settings` → `mailer_autoconfirm` | **`false`** ✅                                                                |
-| Confirm email / Email provider                 | ON (confirmado pelo fundador)                                                 |
-| Custom SMTP                                    | ON · `smtp.resend.com:465` · user `resend` · sender `no-reply@kutekalink.com` |
-| `POST /auth/v1/signup` (email fresco)          | **HTTP 500** `Error sending confirmation email` (`unexpected_failure`)        |
+Teste real por utilizador externo:
 
-**Leitura:** Auth já exige confirmação (não auto-confirma). A cadeia parte no **envio SMTP → Resend**. O frontend `signUp()` + `emailRedirectTo` estão correctos; o bloqueio actual é a entrega no Dashboard/Resend (password SMTP / domínio / template).
+| Passo                         | Resultado                                                                           |
+| ----------------------------- | ----------------------------------------------------------------------------------- |
+| `/auth/registar/`             | Conta criada                                                                        |
+| Supabase Auth → SMTP → Resend | E-mail enviado                                                                      |
+| Inbox Gmail                   | Recebido; remetente **Kuteka**; assunto _Confirm your email address_; link presente |
+| `/auth/verificar/`            | Abre; UI com link + código 6 dígitos                                                |
 
-| #   | Onde                     | Acção                                                                         | Estado                 |
-| --- | ------------------------ | ----------------------------------------------------------------------------- | ---------------------- |
-| 1   | Auth → Providers → Email | Confirm ON · autoconfirm OFF                                                  | ✅ feito               |
-| 2   | Auth → URL Configuration | Site URL + redirects `/auth/verificar/` + `/auth/recuperar/confirmar/`        | ⬜ verificar           |
-| 3   | Auth → SMTP              | Re-guardar password = Resend API key actual; sender `no-reply@kutekalink.com` | ⬜ **bloqueio actual** |
-| 4   | Resend → Domains         | `kutekalink.com` Verified; API key com permissão de envio                     | ⬜ verificar           |
-| 5   | Resend → Logs            | Após signup bem-sucedido deve aparecer evento                                 | ⬜ após 3–4            |
-| 6   | App                      | `/auth/registar/` → email fresco → inbox + link → `/auth/verificar/`          | ⬜ após 3–5            |
+| Check técnico                         | Resultado                                                           |
+| ------------------------------------- | ------------------------------------------------------------------- |
+| `mailer_autoconfirm`                  | **`false`**                                                         |
+| Confirm email / Email provider        | ON                                                                  |
+| Custom SMTP                           | ON · `smtp.resend.com:465` · `resend` · `no-reply@kutekalink.com`   |
+| Probe API (domínio não-`example.com`) | `confirmation_sent_at` preenchido; sem `access_token`               |
+| Probe `*@example.com`                 | Pode falhar no Resend (domínio reservado) — **não** usar como prova |
 
-### Verificação pós-SMTP (sem secrets)
+| #   | Item                                                | Estado                                                              |
+| --- | --------------------------------------------------- | ------------------------------------------------------------------- |
+| 1   | Confirm ON · autoconfirm OFF                        | ✅                                                                  |
+| 2   | SMTP Resend + sender apex                           | ✅                                                                  |
+| 3   | Entrega Gmail (teste humano)                        | ✅                                                                  |
+| 4   | Redirects `/auth/verificar/` (trailing slash)       | ✅ no código SoT; live ainda em build anterior até deploy do branch |
+| 5   | Resend Logs (UI Dashboard)                          | ⬜ confirmar visualmente no Resend (sem API key no agente)          |
+| 6   | Password recovery smoke                             | ⬜ teste humano residual                                            |
+| 7   | Push/PR branch `cursor/auth-email-confirm-fix-f96b` | ⬜ bloqueado 403 `cursor[bot]`                                      |
 
-```bash
-# Deve continuar false:
-curl -sS "$URL/auth/v1/settings" -H "apikey: $ANON" | jq .mailer_autoconfirm
+## Fluxo canónico (código)
 
-# Signup fresco: HTTP 200, confirmation_sent_at preenchido, sem access_token
-curl -sS -X POST "$URL/auth/v1/signup" -H "apikey: $ANON" -H "Authorization: Bearer $ANON" \
-  -H "Content-Type: application/json" \
-  -d '{"email":"teste-novo@example.com","password":"ProbeTest123!aa"}'
+```
+/auth/registar/ → signUp({ emailRedirectTo: …/auth/verificar/ })
+  → (sem sessão) /auth/verificar/?email=
+  → link email OU OTP 6 dígitos → sessão confirmada
+/auth/recuperar/ → resetPasswordForEmail(…/auth/recuperar/confirmar/)
 ```
 
-### Acção Dashboard exacta (SMTP)
+## Código na branch (ainda por push)
 
-1. Abrir https://supabase.com/dashboard/project/vhqwitbrpqaiutjbundo/settings/auth
-2. Secção **SMTP Settings** → confirmar Host/Port/User/Sender
-3. Colar de novo a **Resend API key** no campo password (não partilhar no chat)
-4. Guardar → repetir signup de teste → abrir Resend Logs
-
-## Código (branch `cursor/auth-email-confirm-fix-f96b`)
-
-- `emailRedirectTo` com trailing slash (static export)
-- `needsEmailVerification` = email não confirmado (inclui sessão sem confirm)
-- Erro GoTrue “Error sending confirmation email” → mensagem clara ao utilizador
-- Resend F2: não fingir sucesso se Supabase `resend` falhou
-- `VerifyPanel`: `onAuthStateChange` após link de confirmação
-- Docs alinhadas a `no-reply@kutekalink.com`
+- trailing slash em `emailRedirectTo`
+- `needsEmailVerification` = não confirmado
+- erro SMTP mapeado; resend sem falso sucesso
+- `VerifyPanel` com `onAuthStateChange` após link
+- prebuilt estático actualizado
