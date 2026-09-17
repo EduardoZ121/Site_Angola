@@ -35,6 +35,28 @@ function isRateLimitMessage(msg: string, status?: number): boolean {
   );
 }
 
+/** Supabase GoTrue when Confirm email is ON but SMTP/Resend fails to deliver. */
+export function isMailDeliveryFailure(msg: string, code?: string): boolean {
+  const hay = `${msg} ${code ?? ''}`.toLowerCase();
+  return (
+    hay.includes('error sending confirmation email') ||
+    hay.includes('error sending recovery email') ||
+    hay.includes('error sending magic link') ||
+    hay.includes('error sending email') ||
+    hay.includes('unable to send email') ||
+    hay.includes('failed to send email')
+  );
+}
+
+/** Pure helper — unconfirmed users must complete F2 even if a session exists. */
+export function computeNeedsEmailVerification(input: {
+  emailConfirmedAt: string | null | undefined;
+  hasSession: boolean;
+}): boolean {
+  void input.hasSession;
+  return !Boolean(input.emailConfirmedAt);
+}
+
 function mapAuthError(
   error: { message?: string; status?: number; code?: string },
   fallback: string,
@@ -43,6 +65,13 @@ function mapAuthError(
   const code = error.code ?? '';
   if (isRateLimitMessage(`${msg} ${code}`, error.status)) {
     return { ok: false, code: 'rate_limited', message: authCopy().common.rateLimited };
+  }
+  if (isMailDeliveryFailure(msg, code)) {
+    return {
+      ok: false,
+      code: 'generic',
+      message: `${authCopy().common.mailDeliveryFailed} ${authCopy().common.nextStepRetry}`,
+    };
   }
   // Do not map every HTTP 422 to duplicate — SMTP/validation failures also use 422.
   if (
@@ -110,7 +139,10 @@ export async function signUp(input: {
     });
 
     if (error) {
-      return mapAuthError(error, authCopy().common.networkError);
+      return mapAuthError(
+        error,
+        `${authCopy().register.submitFailed} ${authCopy().common.nextStepRetry}`,
+      );
     }
 
     // Supabase may return empty identities for existing email (anti-enumeration on some projects)
@@ -122,13 +154,15 @@ export async function signUp(input: {
       };
     }
 
-    const confirmed = Boolean(data.user?.email_confirmed_at);
     const hasSession = Boolean(data.session);
-    // With mailer_autoconfirm, email may be confirmed even if session is omitted.
+    // Confirm-required (production): always send unconfirmed users to F2, even with a session.
     return {
       ok: true,
       data: {
-        needsEmailVerification: !hasSession && !confirmed,
+        needsEmailVerification: computeNeedsEmailVerification({
+          emailConfirmedAt: data.user?.email_confirmed_at,
+          hasSession,
+        }),
         hasSession,
       },
     };

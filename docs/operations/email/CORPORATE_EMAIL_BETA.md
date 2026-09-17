@@ -27,39 +27,28 @@ From: Kuteka <no-reply@kutekalink.com>
 ```
 
 **Oficial:** remetente no **apex** `kutekalink.com` (`no-reply@kutekalink.com`).  
-**Obsoleto (não usar):** `mail.kutekalink.com` / `noreply@mail.kutekalink.com` — eram proposta do kit bridge; DNS live e SMTP Dashboard usam o apex.
+**Obsoleto (não usar):** `mail.kutekalink.com` / `noreply@mail.kutekalink.com` — proposta antiga do kit bridge; DNS live e SMTP Dashboard usam o apex.
 
 O frontend **não** envia confirmação via API Resend. O pacote estático de produção não inclui mailer server-side.
 
-## Bloqueio conhecido (2026-09-17)
+## Estado produção (2026-09-17)
 
-API pública `/auth/v1/settings` reporta:
+| Item                 | Estado                                                                 |
+| -------------------- | ---------------------------------------------------------------------- |
+| `mailer_autoconfirm` | **`false`** (corrigido no Dashboard)                                   |
+| Confirm email        | **ON**                                                                 |
+| Custom SMTP          | **ON** · sender `no-reply@kutekalink.com`                              |
+| Entrega Resend       | **Ainda a falhar** — signup devolve `Error sending confirmation email` |
 
-`mailer_autoconfirm: true`
+### Próximo passo ops (único bloqueio de envio)
 
-Com isto, `signUp` devolve sessão + `email_confirmed_at` imediatamente e **`confirmation_sent_at` fica null** — nenhum e-mail chega ao Resend.
+Revalidar no Dashboard a **password SMTP** (= Resend API key válida) e o domínio `kutekalink.com` em Resend → Domains. Sem alterar DNS nem arquitectura.
 
-### Acção Dashboard (obrigatória)
+Redirects mínimos:
 
-Projecto: `vhqwitbrpqaiutjbundo` (ligado a kutekalink.com)
-
-1. **Authentication → Providers → Email**
-   - Enable email confirmations: **ON**
-   - Automatic / autoconfirm: **OFF**
-2. **Authentication → URL Configuration**
-   - Site URL: `https://kutekalink.com`
-   - Redirect URLs (mínimo):
-     - `https://kutekalink.com/auth/verificar`
-     - `https://kutekalink.com/auth/verificar/`
-     - `https://kutekalink.com/auth/recuperar/confirmar`
-     - `https://kutekalink.com/auth/recuperar/confirmar/`
-     - `https://www.kutekalink.com/**` (se www for usado)
-3. **Authentication → SMTP**
-   - Host `smtp.resend.com`, port `465`, user `resend`
-   - Password = Resend API key (secret)
-   - Sender email `no-reply@kutekalink.com`, name `Kuteka`
-4. Resend: domínio `kutekalink.com` verificado (DKIM apex / `send.` já observados publicamente)
-5. Teste: novo email em `/auth/registar` → log no Resend + inbox
+- Site URL: `https://kutekalink.com`
+- `https://kutekalink.com/auth/verificar` e `…/auth/verificar/`
+- `https://kutekalink.com/auth/recuperar/confirmar` e `…/confirmar/`
 
 ## Futuro Google Workspace
 

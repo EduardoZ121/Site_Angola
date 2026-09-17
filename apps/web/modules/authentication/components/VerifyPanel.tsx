@@ -106,14 +106,17 @@ export function VerifyPanel() {
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     let cancelled = false;
-    void (async () => {
+    let unsubscribe: (() => void) | undefined;
+
+    async function redirectIfVerified(user: {
+      id: string;
+      email?: string | null;
+      email_confirmed_at?: string | null;
+    }) {
+      if (cancelled || !user) return;
+      if (!emailParam && user.email) setEmail(user.email);
       try {
         const client = createBrowserClient();
-        const {
-          data: { user },
-        } = await client.auth.getUser();
-        if (cancelled || !user) return;
-        if (!emailParam && user.email) setEmail(user.email);
         const { data: profile } = await client
           .from('profiles')
           .select('email_verified_at')
@@ -123,10 +126,11 @@ export function VerifyPanel() {
           authConfirmedAt: user.email_confirmed_at,
           profileVerifiedAt: profile?.email_verified_at ?? null,
         });
-        if (!verified) return;
+        if (!verified || cancelled) return;
         const { data: roleCodes } = await client.rpc('get_user_role_codes', {
           p_user_id: user.id,
         });
+        if (cancelled) return;
         const dest = applyDestinationGate({
           hasSession: true,
           emailVerified: true,
@@ -139,9 +143,25 @@ export function VerifyPanel() {
       } catch {
         /* stay on verify */
       }
-    })();
+    }
+
+    try {
+      const client = createBrowserClient();
+      void client.auth.getUser().then(({ data: { user } }) => {
+        if (user) void redirectIfVerified(user);
+      });
+      const { data } = client.auth.onAuthStateChange((_event, session) => {
+        const nextUser = session?.user;
+        if (nextUser) void redirectIfVerified(nextUser);
+      });
+      unsubscribe = () => data.subscription.unsubscribe();
+    } catch {
+      /* stay on verify */
+    }
+
     return () => {
       cancelled = true;
+      unsubscribe?.();
     };
   }, [emailParam, next, router]);
 
@@ -172,7 +192,14 @@ export function VerifyPanel() {
     if (otpIssue.data.sandboxCode && process.env.NODE_ENV !== 'production') {
       setSandboxHint(copy.verify.sandboxHint.replace('{code}', otpIssue.data.sandboxCode));
     }
-    setMessage(copy.verify.resendSuccess);
+    if (otpIssue.data.supabaseOtpRequested) {
+      setMessage(copy.verify.resendSuccess);
+    } else if (otpIssue.data.sandboxCode && process.env.NODE_ENV !== 'production') {
+      setMessage(copy.verify.resendPartialSuccess);
+    } else {
+      // Do not claim the confirmation email was sent when Supabase resend failed.
+      setError(`${copy.actions.resendEmailFailed} ${copy.common.nextStepRetry}`);
+    }
     setCooldown(COOLDOWN_SECONDS);
   }
 

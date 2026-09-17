@@ -16,6 +16,8 @@ export const authCopyPt = {
       'Demasiados pedidos neste momento. Aguarde cerca de uma hora e tente novamente — ou entre se já criou a conta.',
     sessionExpired: 'A sua sessão expirou ou não foi iniciada. Entre novamente para continuar.',
     sessionInvalid: 'Sessão inválida. Entre novamente para continuar.',
+    mailDeliveryFailed:
+      'Não foi possível enviar o email de confirmação neste momento. A conta pode não ter sido criada — tente novamente mais tarde ou use outro email.',
     showPassword: 'Mostrar',
     hidePassword: 'Ocultar',
   },
@@ -58,6 +60,7 @@ export const authCopyPt = {
     submit: 'Criar conta',
     submitLoading: 'A criar conta…',
     submitSuccess: 'Conta criada',
+    submitFailed: 'Não foi possível criar a conta.',
     ctaLogin: 'Já tem conta? Entrar',
     duplicate: {
       title: 'Este email já tem uma conta Kuteka.',
@@ -82,6 +85,8 @@ export const authCopyPt = {
     resend: 'Reenviar email e código',
     resendLoading: 'A reenviar…',
     resendSuccess: 'Email e código reenviados. Verifique também a pasta de Spam.',
+    resendPartialSuccess:
+      'Código de teste gerado, mas o email de confirmação não foi enviado. Verifique a configuração SMTP ou tente mais tarde.',
     cooldown: 'Pode reenviar dentro de {seconds}s.',
     confirming: 'Estamos a confirmar a sua conta…',
     already: {

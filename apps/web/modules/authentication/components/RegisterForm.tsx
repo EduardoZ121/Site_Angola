@@ -87,7 +87,7 @@ export function RegisterForm() {
       return;
     }
 
-    // Autoconfirm: prefer onboarding when session exists; otherwise enter with same email.
+    // Confirm-required: F2 first. Confirmed + session → onboarding. Else login.
     if (result.data.hasSession) {
       const dest = next
         ? `/auth/onboarding/papeis?next=${encodeURIComponent(next)}`
