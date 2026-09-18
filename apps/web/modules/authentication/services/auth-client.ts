@@ -35,6 +35,28 @@ function isRateLimitMessage(msg: string, status?: number): boolean {
   );
 }
 
+/** Supabase GoTrue when Confirm email is ON but SMTP/Resend fails to deliver. */
+export function isMailDeliveryFailure(msg: string, code?: string): boolean {
+  const hay = `${msg} ${code ?? ''}`.toLowerCase();
+  return (
+    hay.includes('error sending confirmation email') ||
+    hay.includes('error sending recovery email') ||
+    hay.includes('error sending magic link') ||
+    hay.includes('error sending email') ||
+    hay.includes('unable to send email') ||
+    hay.includes('failed to send email')
+  );
+}
+
+/** Pure helper — unconfirmed users must complete F2 even if a session exists. */
+export function computeNeedsEmailVerification(input: {
+  emailConfirmedAt: string | null | undefined;
+  hasSession: boolean;
+}): boolean {
+  void input.hasSession;
+  return !Boolean(input.emailConfirmedAt);
+}
+
 function mapAuthError(
   error: { message?: string; status?: number; code?: string },
   fallback: string,
@@ -44,10 +66,17 @@ function mapAuthError(
   if (isRateLimitMessage(`${msg} ${code}`, error.status)) {
     return { ok: false, code: 'rate_limited', message: authCopy().common.rateLimited };
   }
+  if (isMailDeliveryFailure(msg, code)) {
+    return {
+      ok: false,
+      code: 'generic',
+      message: `${authCopy().common.mailDeliveryFailed} ${authCopy().common.nextStepRetry}`,
+    };
+  }
+  // Do not map every HTTP 422 to duplicate — SMTP/validation failures also use 422.
   if (
-    /already|registered|exists|user_already/i.test(msg) ||
     code === 'user_already_exists' ||
-    error.status === 422
+    /already.?registered|user.?already|email.?exists|already.?exists/i.test(msg)
   ) {
     return {
       ok: false,
@@ -82,6 +111,16 @@ function getClient() {
   }
 }
 
+/** Canonical Auth email redirect (static export uses trailingSlash). */
+export function buildAuthEmailRedirect(path: string, next?: string | null): string {
+  if (typeof window === 'undefined') return path;
+  const normalized = path.startsWith('/') ? path : `/${path}`;
+  const withSlash = normalized.endsWith('/') ? normalized : `${normalized}/`;
+  const url = new URL(withSlash, window.location.origin);
+  if (next?.trim()) url.searchParams.set('next', next.trim());
+  return url.toString();
+}
+
 export async function signUp(input: {
   email: string;
   password: string;
@@ -100,7 +139,10 @@ export async function signUp(input: {
     });
 
     if (error) {
-      return mapAuthError(error, authCopy().common.networkError);
+      return mapAuthError(
+        error,
+        `${authCopy().register.submitFailed} ${authCopy().common.nextStepRetry}`,
+      );
     }
 
     // Supabase may return empty identities for existing email (anti-enumeration on some projects)
@@ -112,13 +154,15 @@ export async function signUp(input: {
       };
     }
 
-    const confirmed = Boolean(data.user?.email_confirmed_at);
     const hasSession = Boolean(data.session);
-    // With mailer_autoconfirm, email may be confirmed even if session is omitted.
+    // Confirm-required (production): always send unconfirmed users to F2, even with a session.
     return {
       ok: true,
       data: {
-        needsEmailVerification: !hasSession && !confirmed,
+        needsEmailVerification: computeNeedsEmailVerification({
+          emailConfirmedAt: data.user?.email_confirmed_at,
+          hasSession,
+        }),
         hasSession,
       },
     };
@@ -221,14 +265,21 @@ export async function updatePassword(input: { password: string }): Promise<AuthC
   }
 }
 
-export async function resendVerification(input: { email: string }): Promise<AuthClientResult> {
+export async function resendVerification(input: {
+  email: string;
+  emailRedirectTo?: string;
+}): Promise<AuthClientResult> {
   const client = getClient();
   if (!client) return configError();
 
   try {
+    const emailRedirectTo =
+      input.emailRedirectTo ??
+      (typeof window !== 'undefined' ? buildAuthEmailRedirect('/auth/verificar') : undefined);
     const { error } = await client.auth.resend({
       type: 'signup',
       email: input.email,
+      options: emailRedirectTo ? { emailRedirectTo } : undefined,
     });
     if (error) {
       return mapAuthError(
@@ -245,6 +296,7 @@ export async function resendVerification(input: { email: string }): Promise<Auth
 /** Dual path: Supabase email OTP (link companion) + Kuteka security_issue_otp sandbox/app code. */
 export async function issueEmailVerificationOtp(input: {
   email: string;
+  emailRedirectTo?: string;
 }): Promise<
   AuthClientResult<{ challengeId?: string; sandboxCode?: string; supabaseOtpRequested: boolean }>
 > {
@@ -253,9 +305,13 @@ export async function issueEmailVerificationOtp(input: {
 
   let supabaseOtpRequested = false;
   try {
+    const emailRedirectTo =
+      input.emailRedirectTo ??
+      (typeof window !== 'undefined' ? buildAuthEmailRedirect('/auth/verificar') : undefined);
     const { error: resendError } = await client.auth.resend({
       type: 'signup',
       email: input.email,
+      options: emailRedirectTo ? { emailRedirectTo } : undefined,
     });
     supabaseOtpRequested = !resendError;
   } catch {

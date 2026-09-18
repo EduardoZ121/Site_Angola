@@ -11,6 +11,7 @@ import { cn } from '@kuteka/shared';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
 import {
+  buildAuthEmailRedirect,
   issueEmailVerificationOtp,
   resendVerification,
   verifyEmailOtpCode,
@@ -23,12 +24,7 @@ const COOLDOWN_SECONDS = 60;
 
 async function resolveVerifiedDestination(next: string | null): Promise<string> {
   if (!isSupabaseConfigured()) {
-    return applyDestinationGate({
-      hasSession: true,
-      emailVerified: true,
-      roleCodes: [],
-      next,
-    });
+    return '/auth/entrar/';
   }
   try {
     const client = createBrowserClient();
@@ -36,12 +32,9 @@ async function resolveVerifiedDestination(next: string | null): Promise<string> 
       data: { user },
     } = await client.auth.getUser();
     if (!user) {
-      return applyDestinationGate({
-        hasSession: true,
-        emailVerified: true,
-        roleCodes: [],
-        next,
-      });
+      // Never pretend verification succeeded without a session.
+      const q = next ? `?next=${encodeURIComponent(next)}` : '';
+      return `/auth/entrar/${q}`;
     }
     const ctx = await fetchAuthorizationContext(client, user.id, user.email ?? null);
     return applyDestinationGate({
@@ -52,12 +45,7 @@ async function resolveVerifiedDestination(next: string | null): Promise<string> 
       next,
     });
   } catch {
-    return applyDestinationGate({
-      hasSession: true,
-      emailVerified: true,
-      roleCodes: [],
-      next,
-    });
+    return '/auth/entrar/';
   }
 }
 
@@ -118,14 +106,17 @@ export function VerifyPanel() {
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     let cancelled = false;
-    void (async () => {
+    let unsubscribe: (() => void) | undefined;
+
+    async function redirectIfVerified(user: {
+      id: string;
+      email?: string | null;
+      email_confirmed_at?: string | null;
+    }) {
+      if (cancelled || !user) return;
+      if (!emailParam && user.email) setEmail(user.email);
       try {
         const client = createBrowserClient();
-        const {
-          data: { user },
-        } = await client.auth.getUser();
-        if (cancelled || !user) return;
-        if (!emailParam && user.email) setEmail(user.email);
         const { data: profile } = await client
           .from('profiles')
           .select('email_verified_at')
@@ -135,10 +126,11 @@ export function VerifyPanel() {
           authConfirmedAt: user.email_confirmed_at,
           profileVerifiedAt: profile?.email_verified_at ?? null,
         });
-        if (!verified) return;
+        if (!verified || cancelled) return;
         const { data: roleCodes } = await client.rpc('get_user_role_codes', {
           p_user_id: user.id,
         });
+        if (cancelled) return;
         const dest = applyDestinationGate({
           hasSession: true,
           emailVerified: true,
@@ -151,9 +143,25 @@ export function VerifyPanel() {
       } catch {
         /* stay on verify */
       }
-    })();
+    }
+
+    try {
+      const client = createBrowserClient();
+      void client.auth.getUser().then(({ data: { user } }) => {
+        if (user) void redirectIfVerified(user);
+      });
+      const { data } = client.auth.onAuthStateChange((_event, session) => {
+        const nextUser = session?.user;
+        if (nextUser) void redirectIfVerified(nextUser);
+      });
+      unsubscribe = () => data.subscription.unsubscribe();
+    } catch {
+      /* stay on verify */
+    }
+
     return () => {
       cancelled = true;
+      unsubscribe?.();
     };
   }, [emailParam, next, router]);
 
@@ -164,9 +172,10 @@ export function VerifyPanel() {
     setMessage(null);
     setSandboxHint(null);
 
-    const otpIssue = await issueEmailVerificationOtp({ email });
+    const redirectTo = buildAuthEmailRedirect('/auth/verificar', next);
+    const otpIssue = await issueEmailVerificationOtp({ email, emailRedirectTo: redirectTo });
     if (!otpIssue.ok) {
-      const fallback = await resendVerification({ email });
+      const fallback = await resendVerification({ email, emailRedirectTo: redirectTo });
       setLoading(false);
       if (!fallback.ok) {
         setError(fallback.message);
@@ -179,10 +188,18 @@ export function VerifyPanel() {
 
     setLoading(false);
     if (otpIssue.data.challengeId) setChallengeId(otpIssue.data.challengeId);
-    if (otpIssue.data.sandboxCode) {
+    // Never surface sandbox OTP codes in production builds.
+    if (otpIssue.data.sandboxCode && process.env.NODE_ENV !== 'production') {
       setSandboxHint(copy.verify.sandboxHint.replace('{code}', otpIssue.data.sandboxCode));
     }
-    setMessage(copy.verify.resendSuccess);
+    if (otpIssue.data.supabaseOtpRequested) {
+      setMessage(copy.verify.resendSuccess);
+    } else if (otpIssue.data.sandboxCode && process.env.NODE_ENV !== 'production') {
+      setMessage(copy.verify.resendPartialSuccess);
+    } else {
+      // Do not claim the confirmation email was sent when Supabase resend failed.
+      setError(`${copy.actions.resendEmailFailed} ${copy.common.nextStepRetry}`);
+    }
     setCooldown(COOLDOWN_SECONDS);
   }
 

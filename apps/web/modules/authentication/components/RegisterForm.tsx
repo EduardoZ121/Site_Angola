@@ -6,7 +6,7 @@ import { useState, type FormEvent } from 'react';
 import { passwordRules, registerSchema } from '@kuteka/validation';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getAuthCopy } from '../content';
-import { signUp } from '../services/auth-client';
+import { buildAuthEmailRedirect, signUp } from '../services/auth-client';
 import { PasswordRules } from './PasswordRules';
 import { SubmitButton, type SubmitState } from './SubmitButton';
 
@@ -59,9 +59,7 @@ export function RegisterForm() {
 
     setSubmitState('loading');
     const redirectTo =
-      typeof window !== 'undefined'
-        ? `${window.location.origin}/auth/verificar${next ? `?next=${encodeURIComponent(next)}` : ''}`
-        : undefined;
+      typeof window !== 'undefined' ? buildAuthEmailRedirect('/auth/verificar', next) : undefined;
 
     const result = await signUp({
       email: parsed.data.email,
@@ -89,7 +87,7 @@ export function RegisterForm() {
       return;
     }
 
-    // Autoconfirm: prefer onboarding when session exists; otherwise enter with same email.
+    // Confirm-required: F2 first. Confirmed + session → onboarding. Else login.
     if (result.data.hasSession) {
       const dest = next
         ? `/auth/onboarding/papeis?next=${encodeURIComponent(next)}`

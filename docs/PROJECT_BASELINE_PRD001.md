@@ -35,7 +35,7 @@
 | Fluxo              | Rotas                                                 | Capacidade                                           |
 | ------------------ | ----------------------------------------------------- | ---------------------------------------------------- |
 | F1 Registo         | `/auth/registar`                                      | Email + password (regras R4); termos; anti-enum (R6) |
-| F2 Verificar email | `/auth/verificar`                                     | Confirmação / reenvio; compatível com autoconfirm    |
+| F2 Verificar email | `/auth/verificar`                                     | Confirmação / reenvio (confirm-required em produção) |
 | F3 Entrar          | `/auth/entrar`                                        | Login; `next` seguro (R3)                            |
 | F4 Sair            | `/auth/sair`                                          | Terminar sessão                                      |
 | F5 Recuperar       | `/auth/recuperar` · `/auth/recuperar/confirmar`       | Reset password                                       |
@@ -142,15 +142,15 @@ legacy/                     Protótipo Vite — não usar
 
 ## 5. Estado do Supabase
 
-| Campo           | Valor                                                                                     |
-| --------------- | ----------------------------------------------------------------------------------------- |
-| Project ref     | `vhqwitbrpqaiutjbundo`                                                                    |
-| Região          | eu-west-1                                                                                 |
-| URL             | `https://vhqwitbrpqaiutjbundo.supabase.co`                                                |
-| Auth Site URL   | `https://kutekalink.com`                                                                  |
-| Runtime cliente | `/kuteka-config.js` (anon key pública)                                                    |
-| Secrets CI/CD   | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`  |
-| Nota ops        | Free tier: limites de email; `mailer_autoconfirm` usado para desbloquear fluxos em testes |
+| Campo           | Valor                                                                                                                      |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Project ref     | `vhqwitbrpqaiutjbundo`                                                                                                     |
+| Região          | eu-west-1                                                                                                                  |
+| URL             | `https://vhqwitbrpqaiutjbundo.supabase.co`                                                                                 |
+| Auth Site URL   | `https://kutekalink.com`                                                                                                   |
+| Runtime cliente | `/kuteka-config.js` (anon key pública)                                                                                     |
+| Secrets CI/CD   | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`                                   |
+| Nota ops        | Produção: Confirm email ON, `mailer_autoconfirm` OFF; SMTP Resend `no-reply@kutekalink.com` — ver `docs/operations/email/` |
 
 ---
 
