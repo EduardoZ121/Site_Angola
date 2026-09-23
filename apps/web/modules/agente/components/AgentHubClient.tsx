@@ -13,10 +13,13 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getAgenteCopy } from '../content';
 import { AGENT_DEMO_PIPELINE } from '../demo/pipeline';
 import {
+  assignPropertyInterestToSelf,
   getAgentPreferences,
   listMyAssignments,
+  listOpenPropertyInterestLeads,
   saveAgentPreferences,
   type AgentAssignmentRow,
+  type PropertyInterestLeadRow,
 } from '../services/agent-client';
 
 const PURPOSES = ['rent', 'sale', 'both'] as const;
@@ -33,6 +36,8 @@ export function AgentHubClient() {
   const [province, setProvince] = useState('');
   const [city, setCity] = useState('');
   const [assignments, setAssignments] = useState<AgentAssignmentRow[]>([]);
+  const [leads, setLeads] = useState<PropertyInterestLeadRow[]>([]);
+  const [assigningLeadId, setAssigningLeadId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -46,7 +51,11 @@ export function AgentHubClient() {
         return;
       }
       setLoading(true);
-      const [prefs, list] = await Promise.all([getAgentPreferences(), listMyAssignments()]);
+      const [prefs, list, leadList] = await Promise.all([
+        getAgentPreferences(),
+        listMyAssignments(),
+        listOpenPropertyInterestLeads(),
+      ]);
       if (cancelled) return;
       if (!prefs.ok) setError(prefs.message);
       else if (prefs.data) {
@@ -56,6 +65,8 @@ export function AgentHubClient() {
       }
       if (!list.ok) setError(list.message);
       else setAssignments(list.data);
+      if (!leadList.ok) setError(leadList.message);
+      else setLeads(leadList.data);
       setLoading(false);
     }
     if (sessionStatus === 'error') {
@@ -84,6 +95,26 @@ export function AgentHubClient() {
       return;
     }
     setMessage(copy.saved);
+  }
+
+  async function onClaimLead(interestId: string) {
+    setAssigningLeadId(interestId);
+    setError(null);
+    setMessage(null);
+    const result = await assignPropertyInterestToSelf(interestId);
+    setAssigningLeadId(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    setMessage(copy.leadAssigned);
+    setLeads((prev) =>
+      prev.map((lead) =>
+        lead.id === interestId
+          ? { ...lead, assigned_agent_id: lead.assigned_agent_id ?? 'self', status: 'assigned' }
+          : lead,
+      ),
+    );
   }
 
   return (
@@ -305,6 +336,45 @@ export function AgentHubClient() {
                   Inventário do Agente
                 </Link>
               </div>
+            </section>
+
+            <section id="leads" className="flex flex-col gap-3">
+              <div>
+                <Heading level={2}>{copy.leadsTitle}</Heading>
+                <Text className="mt-1 text-sm text-slate-600">{copy.leadsHint}</Text>
+              </div>
+              {leads.length === 0 && !loading ? (
+                <p className="text-sm text-slate-500">{copy.leadsEmpty}</p>
+              ) : (
+                <ul className="flex flex-col gap-2">
+                  {leads.map((lead) => (
+                    <li
+                      key={lead.id}
+                      className="flex flex-col gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
+                    >
+                      <div>
+                        <p className="font-medium text-slate-900">
+                          {lead.property?.title ?? lead.property_id}
+                        </p>
+                        <p className="text-xs text-slate-500">
+                          {lead.status}
+                          {lead.assigned_agent_id ? ` · ${copy.leadOwned}` : ''}
+                        </p>
+                      </div>
+                      {!lead.assigned_agent_id ? (
+                        <Button
+                          type="button"
+                          size="sm"
+                          loading={assigningLeadId === lead.id}
+                          onClick={() => void onClaimLead(lead.id)}
+                        >
+                          {copy.claimLead}
+                        </Button>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </section>
 
             <section className="flex max-w-xl flex-col gap-4">

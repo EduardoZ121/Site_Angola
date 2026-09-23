@@ -7,12 +7,14 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { filterBetaInboxRows, type BetaInboxFilter } from '../lib/beta-feedback-inbox';
 import { formatBetaActorHint } from '../lib/beta-feedback-actor';
 import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
+import { BETA_FEEDBACK_STATUSES, betaFeedbackStatusLabel } from '../lib/beta-feedback-status';
 import { shouldShowSoftEmpty } from '../lib/soft-empty-gate';
 import { publicStatusLabel } from '../lib/status-labels';
-import type {
-  KoccBetaFeedbackRow,
-  KoccBetaMetrics,
-  KoccFeatureUsage,
+import {
+  updateBetaFeedbackStatus,
+  type KoccBetaFeedbackRow,
+  type KoccBetaMetrics,
+  type KoccFeatureUsage,
 } from '../services/kocc-client';
 
 function MetricCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
@@ -80,6 +82,7 @@ type BetaPanelSectionProps = {
   inbox?: KoccBetaFeedbackRow[];
   inboxLoading?: boolean;
   inboxError?: string | null;
+  onInboxChange?: (rows: KoccBetaFeedbackRow[]) => void;
 };
 
 export function BetaPanelSection({
@@ -89,8 +92,11 @@ export function BetaPanelSection({
   inbox = [],
   inboxLoading = false,
   inboxError = null,
+  onInboxChange,
 }: BetaPanelSectionProps) {
   const [inboxFilter, setInboxFilter] = useState<BetaInboxFilter>('all');
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
   const merged = mergeUsage(metrics?.featuresMostUsed, metrics?.featureUsageProxy);
   const most = [...merged].sort((a, b) => b.count - a.count).slice(0, 6);
   const least = [...merged].sort((a, b) => a.count - b.count).slice(0, 6);
@@ -98,6 +104,19 @@ export function BetaPanelSection({
     () => filterBetaInboxRows(inbox, inboxFilter),
     [inbox, inboxFilter],
   );
+
+  async function onStatusChange(id: string, status: string) {
+    setUpdatingId(id);
+    setStatusError(null);
+    const res = await updateBetaFeedbackStatus({ id, status });
+    setUpdatingId(null);
+    if (!res.ok) {
+      setStatusError(res.message);
+      return;
+    }
+    const next = inbox.map((row) => (row.id === id ? { ...row, ...res.data } : row));
+    onInboxChange?.(next);
+  }
 
   return (
     <PanelSection
@@ -178,7 +197,8 @@ export function BetaPanelSection({
             }) ? (
             <p className="text-sm text-slate-500">
               Sem métricas. Confirme que a migration <code>0035_kocc_beta_panel.sql</code> foi
-              aplicada no Supabase remoto e que a conta tem <code>finance.manage</code>.
+              aplicada no Supabase remoto e que a conta tem <code>finance.manage</code> ou é
+              Founder.
             </p>
           ) : null}
         </SoftListSlot>
@@ -187,17 +207,22 @@ export function BetaPanelSection({
           <p className="text-sm font-semibold text-slate-900">Inbox de triagem Beta</p>
           <p className="mt-1 text-xs text-slate-500">
             Relatos recentes de <code>/app/ajuda</code> (tabela <code>beta_feedback</code>, RLS
-            operacional: <code>finance.manage</code> ou <code>admin.panel</code>). Independente das
-            métricas agregadas. Não substitui reclamações operacionais nem avaliações de contrato.
+            operacional + Founder). Actualize o estado; a alteração fica em <code>audit_logs</code>.
+            Sem upload de screenshots (use <code>page_context</code>).
           </p>
           {inboxError ? <p className="mt-2 text-sm text-amber-800">{inboxError}</p> : null}
+          {statusError ? <p className="mt-2 text-sm text-amber-800">{statusError}</p> : null}
           {inbox.length > 0 ? (
             <div className="mt-2 flex flex-wrap gap-2 text-xs">
               {(
                 [
                   ['all', 'Todos'],
+                  ['open', 'Abertos'],
                   ['bug', 'Bugs'],
                   ['feedback', 'Sugestões'],
+                  ['avaliacao', 'Avaliações'],
+                  ['reclamacao', 'Reclamações'],
+                  ['resolvido', 'Fechados'],
                 ] as const
               ).map(([value, label]) => (
                 <button
@@ -229,10 +254,13 @@ export function BetaPanelSection({
             {filteredInbox.length > 0 ? (
               <ul className="mt-2 divide-y divide-slate-100">
                 {filteredInbox.map((row) => (
-                  <li key={row.id} className="flex flex-col gap-1 py-2.5">
+                  <li key={row.id} className="flex flex-col gap-2 py-2.5">
                     <div className="flex flex-wrap items-center gap-2">
                       <Badge variant={row.kind === 'bug' ? 'default' : 'brand'}>
                         {betaFeedbackKindLabel(row.kind)}
+                      </Badge>
+                      <Badge variant="default">
+                        {betaFeedbackStatusLabel(row.status ?? 'received')}
                       </Badge>
                       <span className="font-mono text-xs text-slate-500">
                         {new Date(row.created_at).toLocaleString('pt-AO', {
@@ -258,6 +286,23 @@ export function BetaPanelSection({
                       })()}
                     </div>
                     <p className="whitespace-pre-wrap text-sm text-slate-800">{row.body}</p>
+                    {onInboxChange ? (
+                      <label className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                        <span>Estado</span>
+                        <select
+                          className="rounded border border-slate-200 bg-white px-2 py-1 text-xs text-slate-800"
+                          value={row.status ?? 'received'}
+                          disabled={updatingId === row.id}
+                          onChange={(e) => void onStatusChange(row.id, e.target.value)}
+                        >
+                          {BETA_FEEDBACK_STATUSES.map((status) => (
+                            <option key={status} value={status}>
+                              {betaFeedbackStatusLabel(status)}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+                    ) : null}
                   </li>
                 ))}
               </ul>

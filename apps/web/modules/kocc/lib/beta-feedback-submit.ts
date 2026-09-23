@@ -1,6 +1,7 @@
-/** Client-side guards for beta_feedback submit — mirrors migration 0035 checks. */
+/** Client-side guards for beta_feedback submit — mirrors migrations 0035 + 0046. */
 
 import { HELP_SECTION_IDS } from '@/modules/shell/lib/help-sections';
+import { isValidBetaFeedbackKindExpanded, type BetaFeedbackKind } from './beta-feedback-status';
 
 const MAX_BODY = 4000;
 const MIN_BODY = 3;
@@ -69,6 +70,12 @@ export function isValidBetaFeedbackBody(body: string): boolean {
   return len >= MIN_BODY && len <= MAX_BODY;
 }
 
+/** Legacy narrow check — feedback|bug only (pre-0046 forms). */
 export function isValidBetaFeedbackKind(kind: string): kind is 'feedback' | 'bug' {
   return kind === 'feedback' || kind === 'bug';
+}
+
+/** Expanded kinds from migration 0046 (avaliacao / reclamacao). */
+export function isValidBetaFeedbackKindAny(kind: string): kind is BetaFeedbackKind {
+  return isValidBetaFeedbackKindExpanded(kind);
 }

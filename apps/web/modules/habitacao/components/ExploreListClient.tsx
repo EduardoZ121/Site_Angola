@@ -307,20 +307,28 @@ export function ExploreListClient() {
                   title={copy.emptyTitle}
                   description={copy.empty}
                   action={
-                    <Button
-                      type="button"
-                      variant="primary"
-                      onClick={() => {
-                        setPurpose('');
-                        setProvince('');
-                        setCity('');
-                        setPropertyType('');
-                        setQuery('');
-                        applyFilters({});
-                      }}
-                    >
-                      {copy.emptyCta}
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        type="button"
+                        variant="primary"
+                        onClick={() => {
+                          setPurpose('');
+                          setProvince('');
+                          setCity('');
+                          setPropertyType('');
+                          setQuery('');
+                          applyFilters({});
+                        }}
+                      >
+                        {copy.emptyCta}
+                      </Button>
+                      <Link
+                        href="/app/encontrar-casa"
+                        className={cn(buttonVariants({ variant: 'secondary' }))}
+                      >
+                        {copy.captureDemandCta}
+                      </Link>
+                    </div>
                   }
                 />
               ) : null}

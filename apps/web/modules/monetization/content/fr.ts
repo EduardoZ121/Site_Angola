@@ -221,6 +221,9 @@ export const monetizationCopyFr: MonetizationCopy = {
     subtitle:
       'Prestataire → devis → acceptation → exécution → paiement (Kuteka Pay) → évaluation. La commission reste dans le Ledger (take-rate B2B — sans séquestre).',
     smartMoveLink: 'Déménagement intelligent',
+    becomeProvider: 'Activer le rôle Prestataire',
+    becomeProviderHint:
+      'Pour recevoir des demandes, activez le rôle Prestataire dans l’onboarding.',
     tabs: {
       providers: 'Prestataires',
       myOrders: 'Mes demandes',

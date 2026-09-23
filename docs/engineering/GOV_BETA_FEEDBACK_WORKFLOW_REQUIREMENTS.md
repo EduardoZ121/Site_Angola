@@ -1,7 +1,7 @@
 # GOV — Requisitos para ciclo de estados / responsável / resolução (Beta feedback)
 
-**Estado:** isolado — **não implementar** sem decisão Founder.  
-**Objectivo:** mapear o que os documentos e a arquitectura **já exigem ou já oferecem**, sem inventar um segundo sistema de tickets.
+**Estado:** **autorizado e implementado** (migrations 0043–0046 + UI Admin/KOCC).  
+**Objectivo:** ciclo Doc3 em `beta_feedback` sem segundo sistema de tickets; screenshots ficam fora (usar `page_context`).
 
 Fonte documental: Doc 3 tabela BETA (`docs/master-dossier/consolidation/KUTEKA_DOC3_VALIDATION_TABLE_2026-08-28.md`).  
 Fonte schema: `supabase/migrations/0035_kocc_beta_panel.sql` (+ métricas em `0042_beta_sandbox_visibility_guards.sql`).  

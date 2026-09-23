@@ -5,6 +5,8 @@ describe('betaFeedbackKindLabel', () => {
   it('labels known kinds', () => {
     expect(betaFeedbackKindLabel('bug')).toBe('Bug');
     expect(betaFeedbackKindLabel('feedback')).toBe('Sugestão');
+    expect(betaFeedbackKindLabel('avaliacao')).toBe('Avaliação');
+    expect(betaFeedbackKindLabel('reclamacao')).toBe('Reclamação');
   });
 
   it('passes through unknown kinds', () => {

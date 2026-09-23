@@ -1,0 +1,32 @@
+-- SQL-doc regression: expected permission / trigger matrix (critical tables).
+-- Not executed in CI as a live DB test — encodes contracts mirrored by
+-- packages/auth CRITICAL_RLS_MATRIX + apps/web ops availability-notify unit tests.
+--
+-- properties SELECT (0004):
+--   ✓ owner_id = auth.uid()
+--   ✓ admin.panel
+--   ✗ other client
+--
+-- beta_feedback INSERT (0035 + 0045):
+--   ✓ via kocc_submit_beta_feedback (own actor)
+--   ✗ direct INSERT as authenticated (revoked)
+--
+-- beta_feedback SELECT (0035 + 0043):
+--   ✓ finance.manage | Founder (user_has_founder_or_permission)
+--   ✓ admin.panel
+--   ✗ plain client
+--
+-- finance.manage:
+--   ✗ client role alone
+--   ✓ super_administrator / explicit finance.manage grant
+--
+-- availability notify (0047):
+--   UPDATE properties status draft→active OR lifecycle→publicado
+--   ⇒ notify_user for each open availability_notify_requests; mark notified
+--
+-- assign_property_interest (0048):
+--   ✓ agent.operate self-assign
+--   ✓ admin.panel assign to agent
+--   ✗ client
+
+select 1 as rls_matrix_doc_ok;

@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CRITICAL_RLS_MATRIX,
   canAccessAdminPanel,
   canAccessPlatform,
+  canManageFinance,
+  canSelectBetaFeedback,
+  canSelectPropertyRow,
+  canSubmitBetaFeedback,
   emptyAuthorizationContext,
   userHasAnyPermission,
   userHasPermission,
@@ -57,5 +62,42 @@ describe('RBAC helpers (DB-resolved permissions)', () => {
         ctx({ roles: ['administrator'], permissions: ['platform.access', 'admin.panel'] }),
       ),
     ).toBe(true);
+  });
+});
+
+describe('CRITICAL_RLS_MATRIX regression', () => {
+  const client = ctx({ roles: ['client'], permissions: ['platform.access', 'housing.explore'] });
+  const admin = ctx({
+    roles: ['administrator'],
+    permissions: ['platform.access', 'admin.panel'],
+  });
+  const finance = ctx({
+    roles: ['super_administrator'],
+    permissions: ['platform.access', 'finance.manage', 'admin.panel'],
+  });
+
+  it('properties: own select yes; other client no; admin yes', () => {
+    expect(CRITICAL_RLS_MATRIX.properties.selectOwn).toBe(true);
+    expect(canSelectPropertyRow(client, 'user-1')).toBe(true);
+    expect(canSelectPropertyRow(client, 'other-owner')).toBe(
+      CRITICAL_RLS_MATRIX.properties.selectOtherAsClient,
+    );
+    expect(canSelectPropertyRow(admin, 'other-owner')).toBe(
+      CRITICAL_RLS_MATRIX.properties.selectAsAdmin,
+    );
+  });
+
+  it('beta_feedback: client cannot select; ops can; client can submit', () => {
+    expect(canSelectBetaFeedback(client)).toBe(CRITICAL_RLS_MATRIX.beta_feedback.selectAsClient);
+    expect(canSelectBetaFeedback(admin)).toBe(CRITICAL_RLS_MATRIX.beta_feedback.selectAsOps);
+    expect(canSelectBetaFeedback(finance)).toBe(true);
+    expect(canSubmitBetaFeedback(client)).toBe(true);
+    expect(canSubmitBetaFeedback(null)).toBe(false);
+  });
+
+  it('finance: deny client; require finance.manage', () => {
+    expect(canManageFinance(client)).toBe(CRITICAL_RLS_MATRIX.finance.manageAsClient);
+    expect(canManageFinance(finance)).toBe(true);
+    expect(CRITICAL_RLS_MATRIX.finance.manageRequires).toBe('finance.manage');
   });
 });

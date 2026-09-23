@@ -312,3 +312,76 @@ export async function activateAssignment(
     return { ok: false, message: copy.saveError };
   }
 }
+
+export type PropertyInterestLeadRow = {
+  id: string;
+  client_id: string;
+  property_id: string;
+  status: string;
+  notes: string | null;
+  assigned_agent_id: string | null;
+  created_at: string;
+  property?: AgentPropertyRow | null;
+};
+
+/** Open leads (property_interests) visible to the agent via existing RLS. */
+export async function listOpenPropertyInterestLeads(): Promise<
+  { ok: true; data: PropertyInterestLeadRow[] } | { ok: false; message: string }
+> {
+  const copy = getAgenteCopy(resolveUiLocale());
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('property_interests')
+      .select(
+        `id, client_id, property_id, status, notes, assigned_agent_id, created_at, property:properties (${PROPERTY_SELECT})`,
+      )
+      .in('status', ['submitted', 'reviewing', 'assigned'])
+      .order('created_at', { ascending: false })
+      .limit(40);
+
+    if (error) return { ok: false, message: copy.loadError };
+    const rows = (data ?? []).map((item) => {
+      const nested = item.property;
+      const property = Array.isArray(nested)
+        ? ((nested[0] as AgentPropertyRow | undefined) ?? null)
+        : ((nested as AgentPropertyRow | null) ?? null);
+      return {
+        id: item.id as string,
+        client_id: item.client_id as string,
+        property_id: item.property_id as string,
+        status: item.status as string,
+        notes: (item.notes as string | null) ?? null,
+        assigned_agent_id: (item.assigned_agent_id as string | null) ?? null,
+        created_at: item.created_at as string,
+        property,
+      } satisfies PropertyInterestLeadRow;
+    });
+    return { ok: true, data: rows };
+  } catch {
+    return { ok: false, message: copy.loadError };
+  }
+}
+
+/** Self-assign lead via assign_property_interest RPC (0048) + audit. */
+export async function assignPropertyInterestToSelf(
+  interestId: string,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getAgenteCopy(resolveUiLocale());
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.rpc('assign_property_interest', {
+      p_interest_id: interestId,
+      p_agent_id: null,
+    });
+    if (error) {
+      if (error.code === '42501' || error.message?.toLowerCase().includes('permission')) {
+        return { ok: false, message: copy.forbidden };
+      }
+      return { ok: false, message: error.message || copy.saveError };
+    }
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}

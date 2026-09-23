@@ -46,6 +46,13 @@ export const agenteCopyEs: AgenteCopy = {
     'Concéntrese en la cobertura y los seguimientos. Las visitas, propuestas y la Academia se introducirán en fases posteriores.',
   viewHousingInventory: 'Ver inventario',
   activateAgentAdmin: 'Activar agente (Admin)',
+  leadsTitle: 'Leads de interés',
+  leadsHint:
+    'Intereses de clientes en patrimonios de su cobertura. Asuma la propiedad del lead (auditado).',
+  leadsEmpty: 'Sin leads abiertos visibles en esta cobertura.',
+  claimLead: 'Asumir lead',
+  leadAssigned: 'Lead asignado a usted.',
+  leadOwned: 'asignado',
   nextSteps: {
     title: 'Continuar el flujo Kuteka',
     viewActiveProperties: 'Ver patrimonios activos',

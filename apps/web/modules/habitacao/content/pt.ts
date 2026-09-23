@@ -18,6 +18,7 @@ export const habitacaoCopyPt = {
   emptyTitle: 'Sem resultados nesta exploração',
   empty: 'Ajuste filtros ou pesquisa. O inventário Beta Kuteka deve aparecer sem filtros.',
   emptyCta: 'Limpar filtros',
+  captureDemandCta: 'Registar procura (Encontrar Casa)',
   backToHub: 'Voltar à Habitação',
   backToExplore: 'Voltar à exploração',
   detailTitle: 'Detalhe da habitação',

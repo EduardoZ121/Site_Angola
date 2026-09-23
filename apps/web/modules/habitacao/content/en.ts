@@ -21,6 +21,7 @@ export const habitacaoCopyEn: HabitacaoCopy = {
   empty:
     'Adjust filters or search terms. The Kuteka Beta inventory should appear with no filters applied.',
   emptyCta: 'Clear filters',
+  captureDemandCta: 'Capture demand (Find Home)',
   backToHub: 'Back to Housing',
   backToExplore: 'Back to exploration',
   detailTitle: 'Housing detail',
