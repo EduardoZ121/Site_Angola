@@ -34,6 +34,7 @@ import { getPatrimoniosCopy } from '../content';
 import { activateProperty } from '../services/properties-client';
 import type { LocalMediaDraft } from '../services/property-media-client';
 import { PropertyMediaEditor } from './PropertyMediaEditor';
+import { PropertyCompletenessChecklist } from './PropertyCompletenessChecklist';
 
 const DRAFT_STORAGE_KEY = 'kuteka.activate-property.draft';
 
@@ -1232,6 +1233,26 @@ export function ActivatePropertyForm() {
                 <dd className="kuteka-detail-value">{media.length}</dd>
               </div>
             </dl>
+            <PropertyCompletenessChecklist
+              row={{
+                title,
+                purpose,
+                property_type: propertyType,
+                price_aoa: priceAoa.trim() ? Number(priceAoa) : null,
+                bedrooms: bedrooms.trim() ? Number(bedrooms) : null,
+                bathrooms: bathrooms.trim() ? Number(bathrooms) : null,
+                province,
+                city,
+                address_line: addressLine,
+                media_count: media.length,
+                cover_image_url: media.find((m) => m.isPrimary)?.publicUrl ?? media[0]?.publicUrl,
+                documents_url: null,
+                identity_confirmed: Boolean(session?.permissions.includes('properties.manage')),
+                status: 'draft',
+                lifecycle_status: null,
+                review_status: null,
+              }}
+            />
             <div className="flex flex-col gap-2">
               <FieldLabel htmlFor="notes">{copy.fields.notes}</FieldLabel>
               <Textarea

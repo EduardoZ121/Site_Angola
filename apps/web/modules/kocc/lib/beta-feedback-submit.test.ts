@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   isValidBetaFeedbackBody,
   isValidBetaFeedbackKind,
+  isValidBetaFeedbackKindAny,
   normalizeBetaFeedbackBody,
   sanitizeBetaPagePath,
 } from './beta-feedback-submit';
@@ -42,9 +43,15 @@ describe('beta feedback body/kind', () => {
     expect(isValidBetaFeedbackBody('abc')).toBe(true);
   });
 
-  it('accepts only feedback|bug', () => {
+  it('accepts only feedback|bug (legacy)', () => {
     expect(isValidBetaFeedbackKind('feedback')).toBe(true);
     expect(isValidBetaFeedbackKind('bug')).toBe(true);
     expect(isValidBetaFeedbackKind('ticket')).toBe(false);
+    expect(isValidBetaFeedbackKind('avaliacao')).toBe(false);
+  });
+
+  it('accepts expanded kinds via isValidBetaFeedbackKindAny', () => {
+    expect(isValidBetaFeedbackKindAny('avaliacao')).toBe(true);
+    expect(isValidBetaFeedbackKindAny('reclamacao')).toBe(true);
   });
 });

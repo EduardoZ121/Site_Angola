@@ -21,6 +21,7 @@ export const habitacaoCopyFr: HabitacaoCopy = {
   empty:
     'Ajustez les filtres ou la recherche. L’inventaire Bêta Kuteka devrait apparaître sans filtre.',
   emptyCta: 'Effacer les filtres',
+  captureDemandCta: 'Enregistrer la demande (Trouver un logement)',
   backToHub: 'Retour à Habitat',
   backToExplore: 'Retour à l’exploration',
   detailTitle: 'Détail du logement',

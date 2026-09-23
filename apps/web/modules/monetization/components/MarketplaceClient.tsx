@@ -176,6 +176,15 @@ export function MarketplaceClient() {
                 {copy.smartMoveLink}
               </Link>
             ) : null}
+            {!isProviderMode && ready && ctx && !ctx.isProvider ? (
+              <Link
+                href="/auth/onboarding/papeis"
+                className={cn(buttonVariants({ variant: 'secondary' }))}
+                title={copy.becomeProviderHint}
+              >
+                {copy.becomeProvider}
+              </Link>
+            ) : null}
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>
               {common.financeiro}
             </Link>

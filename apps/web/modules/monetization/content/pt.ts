@@ -219,6 +219,9 @@ export const monetizationCopyPt = {
     subtitle:
       'Prestador → orçamento → aceitação → execução → pagamento (Kuteka Pay) → avaliação. A comissão fica no Ledger (take-rate B2B — sem escrow).',
     smartMoveLink: 'Mudança Inteligente',
+    becomeProvider: 'Activar papel Prestador',
+    becomeProviderHint:
+      'Para receber pedidos precisa do papel Prestador de Serviços no onboarding de papéis.',
     tabs: {
       providers: 'Prestadores',
       myOrders: 'Os meus pedidos',

@@ -1,16 +1,6 @@
--- PROPOSAL ONLY — do not apply without Founder approval (RBAC surface change).
+-- APPLIED as supabase/migrations/0043_beta_feedback_founder_read_access.sql
+-- (Founder authorization — kuteka ecosystem execution)
+-- Original proposal retained for history.
+
 -- Align beta_feedback SELECT + kocc_beta_metrics with user_has_founder_or_permission.
 -- Pattern already used since 0036_trust_governance_gate.sql.
-
--- drop policy if exists beta_feedback_select_ops on public.beta_feedback;
--- create policy beta_feedback_select_ops
---   on public.beta_feedback for select to authenticated
---   using (
---     public.user_has_founder_or_permission(auth.uid(), 'finance.manage')
---     or public.user_has_permission(auth.uid(), 'admin.panel')
---   );
---
--- Then recreate kocc_beta_metrics() replacing:
---   not public.user_has_permission(v_actor, 'finance.manage')
--- with:
---   not public.user_has_founder_or_permission(v_actor, 'finance.manage')

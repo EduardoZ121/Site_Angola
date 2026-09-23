@@ -6,9 +6,11 @@ import { getFinanceCopy } from '@/modules/finance/content';
 import {
   isValidBetaFeedbackBody,
   isValidBetaFeedbackKind,
+  isValidBetaFeedbackKindAny,
   normalizeBetaFeedbackBody,
   sanitizeBetaPagePath,
 } from '../lib/beta-feedback-submit';
+import { isBetaFeedbackStatus, sanitizeBetaPageContext } from '../lib/beta-feedback-status';
 import type { KoccOperationalStatus } from '../lib/status-labels';
 
 export type KoccFlagRow = {
@@ -154,13 +156,14 @@ export async function listBetaMetrics(): Promise<Result<KoccBetaMetrics>> {
 }
 
 export async function submitBetaFeedback(input: {
-  kind: 'feedback' | 'bug';
+  kind: 'feedback' | 'bug' | 'avaliacao' | 'reclamacao';
   body: string;
   pagePath?: string;
+  pageContext?: Record<string, unknown> | null;
 }): Promise<Result<{ id: string }>> {
   const copy = errors();
   try {
-    if (!isValidBetaFeedbackKind(input.kind)) {
+    if (!isValidBetaFeedbackKindAny(input.kind) && !isValidBetaFeedbackKind(input.kind)) {
       return { ok: false, message: copy.saveError };
     }
     const body = normalizeBetaFeedbackBody(input.body);
@@ -172,6 +175,7 @@ export async function submitBetaFeedback(input: {
       p_kind: input.kind,
       p_body: body,
       p_page_path: sanitizeBetaPagePath(input.pagePath),
+      p_page_context: sanitizeBetaPageContext(input.pageContext) ?? {},
     });
     if (error) return { ok: false, message: error.message || copy.saveError };
     const row = data as { id?: string } | null;
@@ -193,19 +197,22 @@ export async function trackBetaFeature(code: string, label?: string): Promise<vo
   }
 }
 
-/** Ops triage row — SELECT allowed only via existing RLS (finance.manage | admin.panel). */
+/** Ops triage row — SELECT allowed only via existing RLS (finance.manage | admin.panel | Founder). */
 export type KoccBetaFeedbackRow = {
   id: string;
-  kind: 'feedback' | 'bug' | string;
+  kind: 'feedback' | 'bug' | 'avaliacao' | 'reclamacao' | string;
   body: string;
   page_path: string | null;
   actor_id: string | null;
   created_at: string;
+  status?: string | null;
+  page_context?: Record<string, unknown> | null;
+  resolution_notes?: string | null;
 };
 
 /**
  * Recent beta_feedback for KOCC triage inbox.
- * Reuses table + RLS from migration 0035 — no new schema.
+ * Reuses table + RLS from migrations 0035 / 0043 / 0046.
  */
 export async function listRecentBetaFeedback(limit = 40): Promise<Result<KoccBetaFeedbackRow[]>> {
   const copy = errors();
@@ -213,12 +220,37 @@ export async function listRecentBetaFeedback(limit = 40): Promise<Result<KoccBet
     const client = createBrowserClient();
     const { data, error } = await client
       .from('beta_feedback')
-      .select('id, kind, body, page_path, actor_id, created_at')
+      .select(
+        'id, kind, body, page_path, actor_id, created_at, status, page_context, resolution_notes',
+      )
       .order('created_at', { ascending: false })
       .limit(Math.min(Math.max(limit, 1), 100));
     if (error) return { ok: false, message: error.message || copy.loadError };
     return { ok: true, data: (data ?? []) as KoccBetaFeedbackRow[] };
   } catch {
     return { ok: false, message: copy.loadError };
+  }
+}
+
+export async function updateBetaFeedbackStatus(input: {
+  id: string;
+  status: string;
+  resolutionNotes?: string | null;
+}): Promise<Result<KoccBetaFeedbackRow>> {
+  const copy = errors();
+  try {
+    if (!isBetaFeedbackStatus(input.status)) {
+      return { ok: false, message: copy.saveError };
+    }
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('kocc_update_beta_feedback_status', {
+      p_id: input.id,
+      p_status: input.status,
+      p_resolution_notes: input.resolutionNotes ?? null,
+    });
+    if (error) return { ok: false, message: error.message || copy.saveError };
+    return { ok: true, data: data as KoccBetaFeedbackRow };
+  } catch {
+    return { ok: false, message: copy.saveError };
   }
 }

@@ -181,6 +181,7 @@ export function KoccCenterClient({ canManage }: PanelProps) {
         inbox={betaInbox}
         inboxLoading={betaInboxLoading}
         inboxError={betaInboxError}
+        onInboxChange={setBetaInbox}
       />
 
       <PanelSection

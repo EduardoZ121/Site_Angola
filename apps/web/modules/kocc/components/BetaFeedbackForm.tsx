@@ -31,6 +31,14 @@ export function BetaFeedbackForm({ pagePath }: BetaFeedbackFormProps) {
       kind,
       body,
       pagePath: pagePath ?? (typeof window !== 'undefined' ? window.location.pathname : undefined),
+      pageContext:
+        typeof window !== 'undefined'
+          ? {
+              locale,
+              viewport: `${window.innerWidth}x${window.innerHeight}`,
+              path: window.location.pathname,
+            }
+          : { locale },
     });
     setBusy(false);
     if (!res.ok) {

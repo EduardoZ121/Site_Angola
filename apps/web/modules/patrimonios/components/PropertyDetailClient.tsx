@@ -16,6 +16,7 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getPatrimoniosCopy } from '../content';
 import { getProperty, type PropertyRow } from '../services/properties-client';
 import { listPropertyMedia, type PropertyMediaRow } from '../services/property-media-client';
+import { PropertyCompletenessChecklist } from './PropertyCompletenessChecklist';
 
 export function PropertyDetailClient({ id }: { id: string }) {
   const { locale } = useLocale();
@@ -121,6 +122,8 @@ export function PropertyDetailClient({ id }: { id: string }) {
               }
               purposeLabel={copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
             />
+
+            <PropertyCompletenessChecklist row={row} mediaCount={media.length} />
 
             <ListingPerformanceCockpit
               propertyId={row.id}
