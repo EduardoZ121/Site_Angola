@@ -74,8 +74,9 @@ export function AdminBetaInboxPanel() {
         </h2>
         <Text className="text-sm text-slate-500">
           Relatos de <code className="text-xs">/app/ajuda</code>. Visível com{' '}
-          <code className="text-xs">admin.panel</code>, <code className="text-xs">finance.manage</code>{' '}
-          ou Founder. Actualize o estado com auditoria.
+          <code className="text-xs">admin.panel</code>,{' '}
+          <code className="text-xs">finance.manage</code> ou Founder. Actualize o estado com
+          auditoria.
         </Text>
       </div>
 

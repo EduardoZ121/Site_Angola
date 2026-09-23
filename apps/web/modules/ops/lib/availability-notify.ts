@@ -16,8 +16,7 @@ export function shouldNotifyAvailabilityOnPropertyUpdate(
   transition: AvailabilityNotifyPropertyTransition,
 ): boolean {
   if (transition.deletedAt) return false;
-  const becameActive =
-    transition.newStatus === 'active' && transition.oldStatus !== 'active';
+  const becameActive = transition.newStatus === 'active' && transition.oldStatus !== 'active';
   const becamePublicado =
     transition.newLifecycle === 'publicado' && transition.oldLifecycle !== 'publicado';
   return becameActive || becamePublicado;

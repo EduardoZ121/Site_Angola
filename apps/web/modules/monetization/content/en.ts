@@ -220,8 +220,7 @@ export const monetizationCopyEn: MonetizationCopy = {
       'Provider → quote → acceptance → execution → payment (Kuteka Pay) → rating. The commission stays in the Ledger (B2B take-rate — no escrow).',
     smartMoveLink: 'Smart Move',
     becomeProvider: 'Activate Provider role',
-    becomeProviderHint:
-      'To receive requests, add the Service Provider role in onboarding.',
+    becomeProviderHint: 'To receive requests, add the Service Provider role in onboarding.',
     tabs: {
       providers: 'Providers',
       myOrders: 'My requests',

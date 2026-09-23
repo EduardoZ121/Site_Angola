@@ -26,12 +26,7 @@ export type PropertyCompletenessInput = {
 };
 
 export type PropertyCompletenessItemId =
-  | 'photos'
-  | 'characteristics'
-  | 'docs'
-  | 'identity'
-  | 'purpose'
-  | 'activation_request';
+  'photos' | 'characteristics' | 'docs' | 'identity' | 'purpose' | 'activation_request';
 
 export type PropertyCompletenessResult = {
   percent: number;
@@ -60,8 +55,7 @@ function hasPhotos(row: PropertyCompletenessInput): boolean {
 function hasCharacteristics(row: PropertyCompletenessInput): boolean {
   const hasRooms = row.bedrooms != null || row.bathrooms != null;
   const hasArea = row.area_total_m2 != null || row.area_useful_m2 != null;
-  const hasLocation =
-    hasText(row.province) || hasText(row.city) || hasText(row.address_line);
+  const hasLocation = hasText(row.province) || hasText(row.city) || hasText(row.address_line);
   return hasRooms || hasArea || hasLocation;
 }
 

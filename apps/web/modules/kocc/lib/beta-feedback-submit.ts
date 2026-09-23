@@ -1,10 +1,7 @@
 /** Client-side guards for beta_feedback submit — mirrors migrations 0035 + 0046. */
 
 import { HELP_SECTION_IDS } from '@/modules/shell/lib/help-sections';
-import {
-  isValidBetaFeedbackKindExpanded,
-  type BetaFeedbackKind,
-} from './beta-feedback-status';
+import { isValidBetaFeedbackKindExpanded, type BetaFeedbackKind } from './beta-feedback-status';
 
 const MAX_BODY = 4000;
 const MIN_BODY = 3;

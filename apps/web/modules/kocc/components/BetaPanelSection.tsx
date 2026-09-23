@@ -7,10 +7,7 @@ import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { filterBetaInboxRows, type BetaInboxFilter } from '../lib/beta-feedback-inbox';
 import { formatBetaActorHint } from '../lib/beta-feedback-actor';
 import { betaFeedbackKindLabel } from '../lib/beta-feedback-labels';
-import {
-  BETA_FEEDBACK_STATUSES,
-  betaFeedbackStatusLabel,
-} from '../lib/beta-feedback-status';
+import { BETA_FEEDBACK_STATUSES, betaFeedbackStatusLabel } from '../lib/beta-feedback-status';
 import { shouldShowSoftEmpty } from '../lib/soft-empty-gate';
 import { publicStatusLabel } from '../lib/status-labels';
 import {
@@ -210,8 +207,8 @@ export function BetaPanelSection({
           <p className="text-sm font-semibold text-slate-900">Inbox de triagem Beta</p>
           <p className="mt-1 text-xs text-slate-500">
             Relatos recentes de <code>/app/ajuda</code> (tabela <code>beta_feedback</code>, RLS
-            operacional + Founder). Actualize o estado; a alteração fica em{' '}
-            <code>audit_logs</code>. Sem upload de screenshots (use <code>page_context</code>).
+            operacional + Founder). Actualize o estado; a alteração fica em <code>audit_logs</code>.
+            Sem upload de screenshots (use <code>page_context</code>).
           </p>
           {inboxError ? <p className="mt-2 text-sm text-amber-800">{inboxError}</p> : null}
           {statusError ? <p className="mt-2 text-sm text-amber-800">{statusError}</p> : null}

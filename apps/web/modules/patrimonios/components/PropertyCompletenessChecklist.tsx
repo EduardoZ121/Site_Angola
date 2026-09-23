@@ -59,14 +59,7 @@ export function PropertyCompletenessChecklist({
         ).map((id) => {
           const done = result.done.includes(id);
           return (
-            <li
-              key={id}
-              className={
-                done
-                  ? 'text-sm text-emerald-800'
-                  : 'text-sm text-stone-600'
-              }
-            >
+            <li key={id} className={done ? 'text-sm text-emerald-800' : 'text-sm text-stone-600'}>
               <span aria-hidden="true">{done ? '✓ ' : '○ '}</span>
               {PROPERTY_COMPLETENESS_LABELS_PT[id]}
               {!done ? <span className="text-stone-400"> — pendente</span> : null}

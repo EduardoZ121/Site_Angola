@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-  propertyCompleteness,
-  type PropertyCompletenessInput,
-} from './property-completeness';
+import { propertyCompleteness, type PropertyCompletenessInput } from './property-completeness';
 
 const base: PropertyCompletenessInput = {
   title: 'Apartamento Talatona',
@@ -52,8 +49,12 @@ describe('propertyCompleteness', () => {
 
   it('counts activation via lifecycle or active status', () => {
     expect(
-      propertyCompleteness({ ...base, lifecycle_status: null, review_status: null, status: 'draft' })
-        .missing,
+      propertyCompleteness({
+        ...base,
+        lifecycle_status: null,
+        review_status: null,
+        status: 'draft',
+      }).missing,
     ).toContain('activation_request');
     expect(
       propertyCompleteness({
