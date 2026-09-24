@@ -35,15 +35,17 @@ describe('company vault', () => {
     ).toMatch(/privacidade/i);
   });
 
-  it('regroups published contacts only when the profile is still empty', () => {
+  it('fills empty contacts from the published card and keeps an Owner replacement', () => {
     const filled = profileFromRpc({});
     expect(filled.email).toBe(PUBLISHED_COMPANY_CONTACTS.email);
-    expect(filled.privacyEmail).toBe('privacidade@kutekalink.com');
-    expect(filled.legalEmail).toBe('juridico@kutekalink.com');
-    expect(filled.phoneSecondary).toBe('');
+    expect(filled.phone).toBe('+244 957 871 557');
+    expect(filled.phoneSecondary).toBe('+244 935 404 400');
+    expect(filled.whatsapp).toBe('+244 935 404 400');
+    expect(filled.facebook).toBe('');
     expect(filled.iban).toBe('');
-    expect(profileFromRpc({ email: 'novo@kutekalink.com' }).email).toBe('novo@kutekalink.com');
-    expect(profileFromRpc({ email: 'novo@kutekalink.com' }).privacyEmail).toBe('');
+    const replaced = profileFromRpc({ email: 'novo@kutekalink.com' });
+    expect(replaced.email).toBe('novo@kutekalink.com');
+    expect(replaced.phone).toBe('+244 957 871 557');
   });
 
   it('requires a second code of at least 8 characters', () => {

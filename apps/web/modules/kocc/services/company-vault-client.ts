@@ -90,9 +90,10 @@ export async function fetchPublicCompanyContacts(): Promise<PublishedCompanyCont
       privacyEmail: str('privacyEmail', fallback.privacyEmail),
       legalEmail: str('legalEmail', fallback.legalEmail),
       website: str('website', fallback.website),
-      phone: str('phone', ''),
-      phoneSecondary: str('phoneSecondary', ''),
-      whatsapp: str('whatsapp', ''),
+      phone: str('phone', fallback.phone),
+      phoneSecondary: str('phoneSecondary', fallback.phoneSecondary),
+      whatsapp: str('whatsapp', fallback.whatsapp),
+      facebook: str('facebook', ''),
       address: str('address', ''),
       otherContacts: '',
     };

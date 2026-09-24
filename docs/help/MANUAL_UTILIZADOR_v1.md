@@ -2,7 +2,7 @@
 
 **Manual do Utilizador / Centro de Ajuda · Versão 1.0 Beta · 5 de Agosto de 2026 · https://kutekalink.com**
 
-Contacto de suporte: contacto@kutekalink.com · Centro de Ajuda na app: `/app/ajuda`
+Contacto de suporte: contacto@kutekalink.com · Telefone +244 957 871 557 · WhatsApp Business +244 935 404 400 · Centro de Ajuda na app: `/app/ajuda`
 
 ---
 
@@ -40,6 +40,10 @@ A Kuteka é uma plataforma **B2B2C** de gestão patrimonial e imobiliária em An
 O núcleo de exploração (pesquisa, favoritos, conta) é **gratuito**. Serviços de valor acrescentado são **pay-per-use**, planos de parceiro, Kuteka Plus opcional e comissões. Nesta fase **não há carteira nem escrow**: a Kuteka não segura dinheiro do cliente (`custody_mode = none`).
 
 Produção pública: **https://kutekalink.com**
+
+![Página inicial da Kuteka](/docs/manual/inicio.png)
+
+![Página de contacto](/docs/manual/contacto.png)
 
 ---
 
@@ -429,14 +433,19 @@ O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reem
 
 ## 17. Contactos e suporte
 
-| Canal           | Utilização                 |
-| --------------- | -------------------------- |
-| Centro de Ajuda | `/app/ajuda`               |
-| Contacto        | `/contacto`                |
-| Email geral     | contacto@kutekalink.com    |
-| Privacidade     | privacidade@kutekalink.com |
-| Jurídico        | juridico@kutekalink.com    |
-| Site            | https://kutekalink.com     |
+| Canal                         | Utilização                                      |
+| ----------------------------- | ----------------------------------------------- |
+| Centro de Ajuda               | `/app/ajuda`                                    |
+| Contacto                      | `/contacto`                                     |
+| Email geral                   | contacto@kutekalink.com                         |
+| Privacidade                   | privacidade@kutekalink.com                      |
+| Jurídico                      | juridico@kutekalink.com                         |
+| Telefone                      | +244 957 871 557                                |
+| Segundo telefone              | +244 935 404 400                                |
+| WhatsApp Business             | +244 935 404 400                                |
+| Facebook                      | campo no perfil da empresa — página ainda vazia |
+| Site                          | https://kutekalink.com                          |
+| Banco e IBAN                  | ainda não preenchidos; só o Founder Owner       |
 
 Horário de atendimento de referência na Beta: dias úteis, 09:00–18:00 (WAT), salvo comunicação em contrário.
 

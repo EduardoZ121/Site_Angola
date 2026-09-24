@@ -156,6 +156,22 @@ function BlockView({ block }: { block: MdBlock }) {
       );
     case 'hr':
       return <hr className="my-8 border-slate-200" />;
+    case 'image':
+      if (!block.src.startsWith('/docs/') && !block.src.startsWith('https://kutekalink.com/')) {
+        return null;
+      }
+      return (
+        <figure className="mt-4">
+          <img
+            src={block.src}
+            alt={block.alt}
+            className="w-full rounded-kuteka border border-slate-200"
+          />
+          {block.alt ? (
+            <figcaption className="mt-1 text-xs text-slate-500">{block.alt}</figcaption>
+          ) : null}
+        </figure>
+      );
     default:
       return null;
   }

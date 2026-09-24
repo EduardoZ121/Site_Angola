@@ -55,9 +55,22 @@ export function ContactClient() {
           </p>
           <ContactLine label="Privacidade" value={contacts.privacyEmail} mailto />
           <ContactLine label="Jurídico" value={contacts.legalEmail} mailto />
-          <ContactLine label="Telefone" value={contacts.phone} />
-          <ContactLine label="Segundo telefone" value={contacts.phoneSecondary} />
-          <ContactLine label="WhatsApp" value={contacts.whatsapp} />
+          <ContactLine label="Telefone" value={contacts.phone} href={telHref(contacts.phone)} />
+          <ContactLine
+            label="Segundo telefone"
+            value={contacts.phoneSecondary}
+            href={telHref(contacts.phoneSecondary)}
+          />
+          <ContactLine
+            label="WhatsApp Business"
+            value={contacts.whatsapp}
+            href={whatsappHref(contacts.whatsapp)}
+          />
+          <ContactLine
+            label="Facebook"
+            value={contacts.facebook}
+            href={contacts.facebook.startsWith('http') ? contacts.facebook : undefined}
+          />
           <ContactLine label="Endereço" value={contacts.address} />
         </div>
         <LanguageSwitcher variant="compact" />
@@ -100,21 +113,38 @@ export function ContactClient() {
   );
 }
 
+function telHref(value: string): string | undefined {
+  const digits = value.replace(/\D/g, '');
+  return digits ? `tel:+${digits}` : undefined;
+}
+
+function whatsappHref(value: string): string | undefined {
+  const digits = value.replace(/\D/g, '');
+  return digits ? `https://wa.me/${digits}` : undefined;
+}
+
 function ContactLine({
   label,
   value,
   mailto = false,
+  href,
 }: {
   label: string;
   value: string;
   mailto?: boolean;
+  href?: string;
 }) {
   if (!value.trim()) return null;
+  const link = href ?? (mailto ? `mailto:${value}` : undefined);
   return (
     <p className="mt-1 text-sm text-slate-600">
       {label}:{' '}
-      {mailto ? (
-        <a className="font-medium text-brand-700 underline" href={`mailto:${value}`}>
+      {link ? (
+        <a
+          className="font-medium text-brand-700 underline"
+          href={link}
+          {...(link.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
+        >
           {value}
         </a>
       ) : (

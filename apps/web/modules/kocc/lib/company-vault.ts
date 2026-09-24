@@ -19,6 +19,7 @@ export const EMPTY_COMPANY_PROFILE: CompanyProfileInput = {
   phone: '',
   phoneSecondary: '',
   whatsapp: '',
+  facebook: '',
   email: '',
   privacyEmail: '',
   legalEmail: '',
@@ -61,7 +62,9 @@ export function validateCompanyProfile(input: CompanyProfileInput): string | nul
   ) {
     return 'O telefone é demasiado longo.';
   }
-  if (input.website.trim().length > 200) return 'O site é demasiado longo.';
+  if (input.website.trim().length > 200 || input.facebook.trim().length > 200) {
+    return 'O site ou o Facebook é demasiado longo.';
+  }
   return null;
 }
 
@@ -87,6 +90,7 @@ export function profileFromRpc(raw: Record<string, unknown>): CompanyProfileInpu
     phone: str('phone'),
     phoneSecondary: str('phoneSecondary'),
     whatsapp: str('whatsapp'),
+    facebook: str('facebook'),
     email: str('email'),
     privacyEmail: str('privacyEmail'),
     legalEmail: str('legalEmail'),
