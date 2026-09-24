@@ -162,6 +162,7 @@ function BlockView({ block }: { block: MdBlock }) {
       }
       return (
         <figure className="mt-4">
+          {/* eslint-disable-next-line @next/next/no-img-element -- manual screenshots are static files */}
           <img
             src={block.src}
             alt={block.alt}
