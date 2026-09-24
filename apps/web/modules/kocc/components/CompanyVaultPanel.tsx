@@ -29,7 +29,8 @@ const CONTACT_FIELDS: {
   { key: 'website', label: 'Site', autoComplete: 'url', maxLength: 200 },
   { key: 'phone', label: 'Telefone oficial', autoComplete: 'tel' },
   { key: 'phoneSecondary', label: 'Segundo telefone', autoComplete: 'tel' },
-  { key: 'whatsapp', label: 'WhatsApp oficial', autoComplete: 'tel' },
+  { key: 'whatsapp', label: 'WhatsApp Business', autoComplete: 'tel' },
+  { key: 'facebook', label: 'Facebook', autoComplete: 'url', maxLength: 200 },
   { key: 'address', label: 'Endereço', maxLength: 240 },
 ];
 
@@ -176,10 +177,10 @@ export function CompanyVaultPanel() {
           Perfil da Kuteka
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          Contactos que já estavam no site, nos termos e na privacidade, reunidos aqui. Banco, IBAN
-          e telefones ainda não existiam: ficam vazios até os preencher. Só o Founder Owner
-          substitui estes dados, com um segundo código verificado no servidor. Não é a senha da
-          conta e não fica guardado neste browser. Separado dos dados bancários pessoais.
+          Contactos oficiais da Kuteka. O telefone é +244 957 871 557. O segundo telefone e o
+          WhatsApp Business são +244 935 404 400. O Facebook fica vazio até colar a página. Banco e
+          IBAN ainda não existem. Só o Founder Owner substitui estes dados, com um segundo código
+          verificado no servidor. Não é a senha da conta e não fica guardado neste browser.
         </p>
       </div>
 
@@ -356,9 +357,9 @@ function PublishedContacts() {
     ['Privacidade', published.privacyEmail],
     ['Jurídico', published.legalEmail],
     ['Site', published.website],
-    ['Telefone', 'Ainda não publicado'],
-    ['Segundo telefone', 'Ainda não existe'],
-    ['WhatsApp', 'Ainda não publicado'],
+    ['Telefone', published.phone],
+    ['Segundo telefone / WhatsApp Business', published.phoneSecondary],
+    ['Facebook', 'Campo pronto — ainda sem página'],
     ['Endereço', 'Ainda não publicado'],
     ['Banco e IBAN', 'Ainda não existem'],
   ];

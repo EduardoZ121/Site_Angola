@@ -1,7 +1,7 @@
 /**
- * Official Kuteka contacts already published on the site, terms and privacy policy.
- * Phones, WhatsApp, address and bank details were not published — they stay empty
- * until the Founder Owner fills them. No invented numbers.
+ * Official Kuteka contacts.
+ * Phones given by the Founder Owner. Facebook is a field with no page yet.
+ * Bank details stay empty until the Owner fills them.
  */
 export type PublishedCompanyContacts = {
   email: string;
@@ -11,6 +11,7 @@ export type PublishedCompanyContacts = {
   phone: string;
   phoneSecondary: string;
   whatsapp: string;
+  facebook: string;
   address: string;
   otherContacts: string;
 };
@@ -20,18 +21,24 @@ export const PUBLISHED_COMPANY_CONTACTS: PublishedCompanyContacts = {
   privacyEmail: 'privacidade@kutekalink.com',
   legalEmail: 'juridico@kutekalink.com',
   website: 'https://kutekalink.com',
-  phone: '',
-  phoneSecondary: '',
-  whatsapp: '',
+  phone: '+244 957 871 557',
+  phoneSecondary: '+244 935 404 400',
+  whatsapp: '+244 935 404 400',
+  facebook: '',
   address: '',
   otherContacts: 'Email de envio automático (não é contacto público): no-reply@kutekalink.com',
 };
 
 const CONTACT_KEYS = Object.keys(PUBLISHED_COMPANY_CONTACTS) as (keyof PublishedCompanyContacts)[];
 
-/** Fill the profile only when no official contact has been stored yet. */
+/** Fill each empty contact from the published value. A value the Owner set is kept. */
 export function mergePublishedContacts<T extends PublishedCompanyContacts>(profile: T): T {
-  const untouched = CONTACT_KEYS.every((key) => !String(profile[key] ?? '').trim());
-  if (!untouched) return profile;
-  return { ...profile, ...PUBLISHED_COMPANY_CONTACTS };
+  const next = { ...profile };
+  for (const key of CONTACT_KEYS) {
+    const published = PUBLISHED_COMPANY_CONTACTS[key];
+    if (!String(next[key] ?? '').trim() && published) {
+      next[key] = published as T[typeof key];
+    }
+  }
+  return next;
 }

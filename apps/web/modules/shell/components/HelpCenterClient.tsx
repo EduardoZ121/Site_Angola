@@ -65,6 +65,17 @@ function renderInline(text: string) {
   });
 }
 
+function ManualImage({ alt, src }: { alt: string; src: string }) {
+  if (!src.startsWith('/docs/') && !src.startsWith('https://kutekalink.com/')) return null;
+  return (
+    <figure className="mt-3">
+      {/* eslint-disable-next-line @next/next/no-img-element -- manual screenshots are static files */}
+      <img src={src} alt={alt} className="w-full rounded-kuteka border border-slate-200" />
+      {alt ? <figcaption className="mt-1 text-xs text-slate-500">{alt}</figcaption> : null}
+    </figure>
+  );
+}
+
 function BlockView({ block }: { block: MdBlock }) {
   switch (block.type) {
     case 'h1':
@@ -140,6 +151,8 @@ function BlockView({ block }: { block: MdBlock }) {
       );
     case 'hr':
       return <hr className="my-6 border-slate-200" />;
+    case 'image':
+      return <ManualImage alt={block.alt} src={block.src} />;
     default:
       return null;
   }

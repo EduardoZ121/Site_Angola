@@ -4,6 +4,7 @@ export type MdBlock =
   | { type: 'quote'; text: string }
   | { type: 'ul' | 'ol'; items: string[] }
   | { type: 'table'; rows: string[][] }
+  | { type: 'image'; alt: string; src: string }
   | { type: 'hr' };
 
 /** Lightweight Markdown subset for institutional documents (headings, lists, tables, quotes). */
@@ -25,6 +26,13 @@ export function parseMarkdownDocument(md: string): MdBlock[] {
     if (line.trim() === '---') {
       flush();
       blocks.push({ type: 'hr' });
+      i += 1;
+      continue;
+    }
+    const image = line.trim().match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/);
+    if (image) {
+      flush();
+      blocks.push({ type: 'image', alt: image[1] ?? '', src: image[2] ?? '' });
       i += 1;
       continue;
     }
