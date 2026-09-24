@@ -14,6 +14,7 @@ import { RoleMissionPanel } from '@/modules/shell/components/RoleMissionPanel';
 import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 import { FounderOnboardingClient } from './FounderOnboardingClient';
 import { InstitutionalCenterClient } from './InstitutionalCenterClient';
+import { CompanyVaultPanel } from './CompanyVaultPanel';
 import { KoccCenterClient } from './KoccCenterClient';
 import {
   bootstrapStatus,
@@ -164,33 +165,42 @@ export function FounderCenterClient() {
               </nav>
 
               {tab === 'empresa' ? (
-                <section className="kuteka-detail-panel flex flex-col gap-3 p-5">
-                  <h2 className="text-sm font-semibold text-slate-900">Empresa · identidade</h2>
-                  <dl className="grid gap-2 text-sm sm:grid-cols-2">
-                    <div>
-                      <dt className="text-xs uppercase tracking-wide text-slate-500">Email</dt>
-                      <dd className="font-medium text-slate-900">{session?.email ?? '—'}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs uppercase tracking-wide text-slate-500">user_id</dt>
-                      <dd className="break-all font-mono text-xs text-slate-800">
-                        {identity?.userId ?? '—'}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs uppercase tracking-wide text-slate-500">Papéis</dt>
-                      <dd className="text-slate-800">{roles.join(', ') || '—'}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-xs uppercase tracking-wide text-slate-500">Owner</dt>
-                      <dd className="text-slate-800">{identity?.isOwner ? 'Sim' : 'Não'}</dd>
-                    </div>
-                  </dl>
-                  <p className="text-sm text-slate-600">
-                    Fluxo: Empresa → Pessoas → Operação → Financeiro → Segurança → KOCC → Auditoria.
-                    Financeiro profundo continua no Super (sem redesenho nesta sprint).
-                  </p>
-                </section>
+                <>
+                  <section className="kuteka-detail-panel flex flex-col gap-3 p-5">
+                    <h2 className="text-sm font-semibold text-slate-900">Empresa · identidade</h2>
+                    <dl className="grid gap-2 text-sm sm:grid-cols-2">
+                      <div>
+                        <dt className="text-xs uppercase tracking-wide text-slate-500">Email</dt>
+                        <dd className="font-medium text-slate-900">{session?.email ?? '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs uppercase tracking-wide text-slate-500">user_id</dt>
+                        <dd className="break-all font-mono text-xs text-slate-800">
+                          {identity?.userId ?? '—'}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs uppercase tracking-wide text-slate-500">Papéis</dt>
+                        <dd className="text-slate-800">{roles.join(', ') || '—'}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs uppercase tracking-wide text-slate-500">Owner</dt>
+                        <dd className="text-slate-800">{identity?.isOwner ? 'Sim' : 'Não'}</dd>
+                      </div>
+                    </dl>
+                    <p className="text-sm text-slate-600">
+                      Fluxo: Empresa → Pessoas → Operação → Financeiro → Segurança → KOCC →
+                      Auditoria. Financeiro profundo continua no Super (sem redesenho nesta sprint).
+                    </p>
+                    {identity?.isOwner ? null : (
+                      <p className="text-sm text-slate-700">
+                        O IBAN, o telefone e os contactos oficiais da Kuteka só podem ser alterados
+                        pelo Founder Owner, numa área separada dos dados pessoais.
+                      </p>
+                    )}
+                  </section>
+                  {identity?.isOwner ? <CompanyVaultPanel /> : null}
+                </>
               ) : null}
 
               {tab === 'pessoas' ? <InstitutionalCenterClient canManage={canManage} /> : null}

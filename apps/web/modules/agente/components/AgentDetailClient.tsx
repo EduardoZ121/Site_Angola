@@ -75,13 +75,11 @@ export function AgentDetailClient({ id }: { id: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex flex-col gap-2">
-          <Heading level={1}>{row?.title ?? copy.detailTitle}</Heading>
-          {row ? <p className="font-mono text-sm text-slate-500">{row.code}</p> : null}
-        </div>
-        {row ? <Badge variant="success">Activo</Badge> : null}
-      </header>
+      {!row ? (
+        <header className="kuteka-detail-panel p-5">
+          <Heading level={1}>{copy.detailTitle}</Heading>
+        </header>
+      ) : null}
 
       <SoftListSlot pending={loading && !row}>
         {error && !row ? (
@@ -111,42 +109,51 @@ export function AgentDetailClient({ id }: { id: string }) {
 
         {row ? (
           <>
-            <dl className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  {copy.fields.type}
-                </dt>
-                <dd className="mt-1 text-slate-900">
-                  {copy.types[row.property_type as keyof typeof copy.types] ?? row.property_type}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  {copy.fields.purpose}
-                </dt>
-                <dd className="mt-1 text-slate-900">
-                  {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  {copy.fields.province}
-                </dt>
-                <dd className="mt-1 text-slate-900">{row.province || '—'}</dd>
-              </div>
-              <div>
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  {copy.fields.city}
-                </dt>
-                <dd className="mt-1 text-slate-900">{row.city || '—'}</dd>
-              </div>
-              <div className="sm:col-span-2">
-                <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                  {copy.fields.address}
-                </dt>
-                <dd className="mt-1 text-slate-900">{row.address_line || '—'}</dd>
-              </div>
-            </dl>
+            <section className="kuteka-detail-panel flex flex-col gap-4 p-5">
+              <header className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex flex-col gap-2">
+                  <Heading level={1}>{row.title}</Heading>
+                  <p className="font-mono text-sm text-stone-600">{row.code}</p>
+                </div>
+                <Badge variant="success">Activo</Badge>
+              </header>
+              <dl className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {copy.fields.type}
+                  </dt>
+                  <dd className="mt-1 text-slate-900">
+                    {copy.types[row.property_type as keyof typeof copy.types] ?? row.property_type}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {copy.fields.purpose}
+                  </dt>
+                  <dd className="mt-1 text-slate-900">
+                    {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {copy.fields.province}
+                  </dt>
+                  <dd className="mt-1 text-slate-900">{row.province || '—'}</dd>
+                </div>
+                <div>
+                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {copy.fields.city}
+                  </dt>
+                  <dd className="mt-1 text-slate-900">{row.city || '—'}</dd>
+                </div>
+                <div className="sm:col-span-2">
+                  <dt className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                    {copy.fields.address}
+                  </dt>
+                  <dd className="mt-1 text-slate-900">{row.address_line || '—'}</dd>
+                </div>
+              </dl>
+            </section>
 
             {canOperate ? (
               <section className="flex max-w-xl flex-col gap-3 rounded-kuteka border border-slate-200 bg-white px-4 py-4">

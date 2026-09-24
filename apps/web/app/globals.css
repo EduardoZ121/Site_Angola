@@ -277,8 +277,17 @@ body {
   max-width: 36rem;
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #cbd5e1;
+  color: #f8fafc;
   text-shadow: 0 1px 10px rgba(2, 6, 23, 0.4);
+}
+
+.kuteka-module-intro__title,
+.kuteka-module-intro__subtitle {
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  padding: 0.08rem 0.35rem;
+  border-radius: 0.3rem;
+  background-color: rgba(2, 6, 23, 0.72);
 }
 
 @media (min-width: 640px) {
@@ -609,6 +618,23 @@ body {
   display: flex;
   flex-direction: column;
   max-height: min(85dvh, 36rem);
+}
+
+/* Shared header popovers (messages, bell, account).
+   On narrow screens they used to anchor to the button with a near-viewport width,
+   so the app frame clipped them. Pin every panel to the screen margins instead. */
+@media (max-width: 767px) {
+  .kuteka-account-panel {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 4.25rem);
+    right: 12px;
+    left: 12px;
+    width: auto;
+    max-width: none;
+    max-height: min(70dvh, calc(100dvh - 5.75rem - env(safe-area-inset-top, 0px)));
+    margin-top: 0;
+    z-index: 80;
+  }
 }
 
 .kuteka-notif-panel {
