@@ -57,13 +57,19 @@ export const GO_LIVE_READINESS: GoLiveReadinessItem[] = [
     key: 'observability',
     label: 'Auditoria e monitorização operacional (KOCC)',
     status: 'in_progress',
-    note: 'Painel Beta no código (migration 0035); aplicar no remoto.',
+    note: 'KOCC activo. A activação do Founder está em Founder Center → Activação.',
   },
   {
     key: 'beta_panel',
     label: 'Painel Beta — métricas e feedback estruturado',
+    status: 'done',
+    note: 'Métricas no KOCC e formulário em /app/ajuda. Sem upload de capturas de ecrã.',
+  },
+  {
+    key: 'company_vault',
+    label: 'Perfil institucional da empresa (só Founder Owner)',
     status: 'in_progress',
-    note: 'UI em /app/super → KOCC; formulário em /app/ajuda.',
+    note: 'Contactos gravados. Falta o segundo código, o IBAN e a página de Facebook.',
   },
 ];
 

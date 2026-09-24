@@ -7,7 +7,7 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { AuditCenterPanel } from '@/modules/administracao/components/AuditCenterPanel';
 import { EscalationPanel } from '@/modules/administracao/components/EscalationPanel';
-import { FeatureFlagsPanel } from '@/modules/finance/components/super/FeatureFlagsPanel';
+import { ActivationReadinessPanel } from './ActivationReadinessPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { RoleMissionPanel } from '@/modules/shell/components/RoleMissionPanel';
@@ -42,7 +42,7 @@ const TABS: { key: TabKey; label: string }[] = [
   { key: 'seguranca', label: 'Segurança' },
   { key: 'kocc', label: 'KOCC' },
   { key: 'auditoria', label: 'Auditoria' },
-  { key: 'flags', label: 'Feature Flags' },
+  { key: 'flags', label: 'Activação' },
   { key: 'escalacoes', label: 'Escalações' },
 ];
 
@@ -105,7 +105,7 @@ export function FounderCenterClient() {
           <p className="kuteka-detail-eyebrow">Founder / Owner</p>
           <Heading level={1}>Founder Center</Heading>
           <Text className="mt-2 text-slate-700">
-            Missão: governação institucional. Hoje: pessoas, flags, KOCC, métricas e escalações.
+            Missão: governação institucional. Hoje: pessoas, activação, KOCC, métricas e escalações.
             Escalone problemas apenas no topo da hierarquia — ou resolva via Super / Admin.
           </Text>
           <div className="mt-3 flex flex-wrap gap-2">
@@ -268,7 +268,7 @@ export function FounderCenterClient() {
 
               {tab === 'kocc' ? <KoccCenterClient canManage={canManage} /> : null}
               {tab === 'auditoria' ? <AuditCenterPanel /> : null}
-              {tab === 'flags' ? <FeatureFlagsPanel canManage={canManage} /> : null}
+              {tab === 'flags' ? <ActivationReadinessPanel canManage={canManage} /> : null}
               {tab === 'escalacoes' ? <EscalationPanel /> : null}
             </>
           )}
