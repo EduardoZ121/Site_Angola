@@ -37,7 +37,8 @@ export type ShellNavLabelKey =
   | 'servicos'
   | 'planos'
   | 'fundador'
-  | 'escalacoes';
+  | 'escalacoes'
+  | 'contabilista';
 
 export type ShellNavItem = {
   id: string;
@@ -267,6 +268,15 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     status: 'active',
     requiresPermission: 'finance.manage',
     experiences: ['super_administrator', 'founder'],
+    group: 'admin',
+  },
+  {
+    id: 'contabilista',
+    labelKey: 'contabilista',
+    href: '/app/contabilista',
+    status: 'active',
+    requiresAnyPermission: ['finance.read', 'finance.manage', 'founder.manage'],
+    experiences: ['administrator', 'super_administrator', 'founder'],
     group: 'admin',
   },
   {

@@ -479,6 +479,38 @@ export async function setCampaignActive(
   }
 }
 
+/** Campanha promocional na tabela que já existe. Nasce inactiva: o Founder publica. */
+export async function createProviderCampaign(input: {
+  name: string;
+  description: string;
+  discountPct: number | null;
+}): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getFinanceCopy(resolveUiLocale()).errors;
+  const name = input.name.trim();
+  if (name.length < 3) return { ok: false, message: 'Indique o nome da campanha.' };
+  try {
+    const client = createBrowserClient();
+    const code = `promo-${Date.now().toString(36)}`;
+    const { error } = await client.from('finance_campaigns').insert({
+      code,
+      name,
+      description: input.description.trim(),
+      discount_pct: input.discountPct,
+      active: false,
+      product_codes: [],
+      metadata: {
+        kind: 'provider_promotion',
+        stage: 'founder_review',
+        payment: 'blocked_beta',
+      },
+    });
+    if (error) return { ok: false, message: error.message || copy.forbidden };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
 export async function listMyConsents(): Promise<
   { ok: true; data: FinanceConsentRow[] } | { ok: false; message: string }
 > {

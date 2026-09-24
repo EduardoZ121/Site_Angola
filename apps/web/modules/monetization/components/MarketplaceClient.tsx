@@ -39,6 +39,7 @@ import {
   type MarketplaceContext,
   type ServiceOrderDetail,
 } from '@/modules/monetization/services/marketplace-client';
+import { ProviderNetworkNav } from './ProviderNetworkNav';
 
 type TabKey = 'providers' | 'orders' | 'inbox';
 
@@ -188,6 +189,9 @@ export function MarketplaceClient() {
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>
               {common.financeiro}
             </Link>
+          </div>
+          <div className="mt-4">
+            <ProviderNetworkNav current="/app/servicos" />
           </div>
         </header>
 

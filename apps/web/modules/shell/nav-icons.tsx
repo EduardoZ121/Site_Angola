@@ -332,6 +332,7 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   planos: IconPlan,
   fundador: IconSuper,
   escalacoes: IconAdmin,
+  contabilista: IconFinance,
 };
 
 export function NavIcon({

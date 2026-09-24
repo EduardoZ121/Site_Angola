@@ -32,6 +32,7 @@ import {
   type PaymentReminderRow,
 } from '@/modules/monetization/services/monetization-client';
 import { getFinanceHubCopy } from '../content';
+import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 
 /**
  * User-facing finance hub — pay-per-use sandbox + invoices.
@@ -47,6 +48,7 @@ function openHtml(html: string) {
 export function FinanceHubClient() {
   const { locale } = useLocale();
   const hubCopy = getFinanceHubCopy(locale);
+  const { mode } = useRoleExperience();
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
   const ready = sessionStatus === 'ready';
   const [products, setProducts] = useState<FinanceProductRow[]>([]);
@@ -168,6 +170,11 @@ export function FinanceHubClient() {
             via Kuteka Pay (sandbox até Multicaixa/EMIS).
           </Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
+          {mode === 'founder' || mode === 'super_administrator' || mode === 'administrator' ? (
+            <Link href="/app/contabilista" className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-4')}>
+              Cockpit do contabilista
+            </Link>
+          ) : null}
         </header>
 
         {error ? (

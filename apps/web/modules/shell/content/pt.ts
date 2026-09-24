@@ -135,6 +135,7 @@ export const shellCopyPt = {
     planos: 'Planos Parceiro',
     fundador: 'Founder Center',
     escalacoes: 'Escalações',
+    contabilista: 'Contabilista',
   },
   routeBlocked: {
     title: 'Área indisponível neste papel',
