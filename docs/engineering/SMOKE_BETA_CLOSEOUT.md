@@ -21,15 +21,20 @@ curl -sI https://kutekalink.com/ | grep -iE 'content-security|strict-transport|x
 
 Esperado (após CF rules): 6 headers. Hoje pode falhar parcialmente → ver `docs/security/PRODUCTION_EDGE_HEADERS.md`.
 
-## Autenticado (credencial de teste necessária — bloqueio C se ausente)
+## Autenticado (credencial de teste necessária)
 
 1. Login conta com papel cliente → `/app/ajuda` → submeter sugestão e bug → sucesso.
 2. Login conta `finance.manage` → `/app/super` KOCC → métricas + inbox com linhas.
-3. Login conta só `admin.panel` → `/app/admin` → secção Inbox Beta com linhas; métricas podem falhar sem mascarar inbox.
-4. Confirmar empty ≠ error (falha de SELECT não mostra «Ainda sem relatos»).
+3. No cartão do relato: idioma, ecrã e caminho (`page_context`). Mudar estado (ex. `em_analise`) e gravar uma nota interna. A nota não gera aviso ao autor.
+4. Estado terminal (`resolvido`) não oferece saltos para `em_desenvolvimento`; reabrir só `em_analise` ou `received`.
+5. Login conta só `admin.panel` → `/app/admin` → secção Inbox Beta com o mesmo cartão; métricas podem falhar sem mascarar inbox.
+6. Confirmar empty ≠ error (falha de SELECT não mostra «Ainda sem relatos»).
+7. Agente: hub → lead aberto → «Assumir lead» (RPC `assign_property_interest`).
+8. Parceiro: checklist de completude na ficha do património.
 
 ## Não testar nesta Beta
 
-- Workflow GOV-BF / tickets / 0043–45
-- Pagamentos reais / Kuteka Pay live
-- Fork Vicente
+- Aviso ao autor quando o relato fica resolvido (BETA-23, Founder off)
+- Screenshots no feedback
+- Pagamentos reais / Kuteka Pay live / custódia
+- Growth Engine, Delegation Engine, Board, scraping AGT

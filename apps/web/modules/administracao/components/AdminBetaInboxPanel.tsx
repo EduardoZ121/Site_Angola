@@ -6,15 +6,10 @@
  * Status updates via kocc_update_beta_feedback_status (0046) with audit.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { Badge, Text } from '@kuteka/ui';
+import { Text } from '@kuteka/ui';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { BetaFeedbackInboxItem } from '@/modules/kocc/components/BetaFeedbackInboxItem';
 import { filterBetaInboxRows, type BetaInboxFilter } from '@/modules/kocc/lib/beta-feedback-inbox';
-import { formatBetaActorHint } from '@/modules/kocc/lib/beta-feedback-actor';
-import { betaFeedbackKindLabel } from '@/modules/kocc/lib/beta-feedback-labels';
-import {
-  BETA_FEEDBACK_STATUSES,
-  betaFeedbackStatusLabel,
-} from '@/modules/kocc/lib/beta-feedback-status';
 import { shouldShowSoftEmpty } from '@/modules/kocc/lib/soft-empty-gate';
 import {
   listRecentBetaFeedback,
@@ -51,9 +46,9 @@ export function AdminBetaInboxPanel() {
 
   const filtered = useMemo(() => filterBetaInboxRows(inbox, filter), [inbox, filter]);
 
-  async function onStatusChange(id: string, status: string) {
+  async function onStatusChange(id: string, status: string, resolutionNotes?: string | null) {
     setUpdatingId(id);
-    const res = await updateBetaFeedbackStatus({ id, status });
+    const res = await updateBetaFeedbackStatus({ id, status, resolutionNotes });
     setUpdatingId(null);
     if (!res.ok) {
       setError(res.message);
@@ -75,8 +70,8 @@ export function AdminBetaInboxPanel() {
         <Text className="text-sm text-slate-500">
           Relatos de <code className="text-xs">/app/ajuda</code>. Visível com{' '}
           <code className="text-xs">admin.panel</code>,{' '}
-          <code className="text-xs">finance.manage</code> ou Founder. Actualize o estado com
-          auditoria.
+          <code className="text-xs">finance.manage</code> ou Founder. Contexto de página e nota
+          interna ficam nesta fila; o autor não recebe aviso.
         </Text>
       </div>
 
@@ -125,54 +120,15 @@ export function AdminBetaInboxPanel() {
         {filtered.length > 0 ? (
           <ul className="divide-y divide-slate-100">
             {filtered.map((row) => (
-              <li key={row.id} className="flex flex-col gap-2 py-2.5">
-                <div className="flex flex-wrap items-center gap-2">
-                  <Badge variant={row.kind === 'bug' ? 'default' : 'brand'}>
-                    {betaFeedbackKindLabel(row.kind)}
-                  </Badge>
-                  <Badge variant="default">
-                    {betaFeedbackStatusLabel(row.status ?? 'received')}
-                  </Badge>
-                  <span className="font-mono text-xs text-slate-500">
-                    {new Date(row.created_at).toLocaleString('pt-AO', {
-                      dateStyle: 'short',
-                      timeStyle: 'short',
-                    })}
-                  </span>
-                  {row.page_path ? (
-                    <span className="truncate font-mono text-xs text-slate-500">
-                      {row.page_path}
-                    </span>
-                  ) : null}
-                  {(() => {
-                    const hint = formatBetaActorHint(row.actor_id);
-                    return hint ? (
-                      <span
-                        className="font-mono text-xs text-slate-500"
-                        title={row.actor_id ?? undefined}
-                      >
-                        {hint}
-                      </span>
-                    ) : null;
-                  })()}
-                </div>
-                <p className="whitespace-pre-wrap text-sm text-slate-800">{row.body}</p>
-                <label className="flex flex-wrap items-center gap-2 text-xs text-slate-600">
-                  <span>Estado</span>
-                  <select
-                    className="rounded border border-slate-200 bg-white px-2 py-1 text-xs text-slate-800"
-                    value={row.status ?? 'received'}
-                    disabled={updatingId === row.id}
-                    onChange={(e) => void onStatusChange(row.id, e.target.value)}
-                  >
-                    {BETA_FEEDBACK_STATUSES.map((status) => (
-                      <option key={status} value={status}>
-                        {betaFeedbackStatusLabel(status)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </li>
+              <BetaFeedbackInboxItem
+                key={row.id}
+                row={row}
+                busy={updatingId === row.id}
+                canEdit
+                onSave={({ status, resolutionNotes }) =>
+                  void onStatusChange(row.id, status, resolutionNotes)
+                }
+              />
             ))}
           </ul>
         ) : null}

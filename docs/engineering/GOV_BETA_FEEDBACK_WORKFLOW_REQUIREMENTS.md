@@ -11,18 +11,18 @@ Padrões adjacentes existentes (referência de reutilização, **não** adopçã
 
 ## 1. O que o Doc 3 pede (requisitos declarados)
 
-| ID      | Requisito                                   | Prioridade Doc3 | Estado actual no código/schema                               |
-| ------- | ------------------------------------------- | --------------- | ------------------------------------------------------------ |
-| BETA-13 | Feedback não escondido                      | P0              | ✅ `/app/ajuda` + CTAs Sprint A                              |
-| BETA-14 | Widget contextual in-page                   | P0 / Spec C     | 🔴 fora do P0 A/B (OPEN) — não construir agora               |
-| BETA-15 | Tipos: BUG/UX/Sugestão/Reclamação/Avaliação | P1              | 🟡 schema só `feedback` \| `bug`                             |
-| BETA-16 | Contexto rico (device/version/…)            | P1              | 🟡 só `page_path`; `metadata` existe mas RPC não preenche    |
-| BETA-19 | Dashboard triagem KOCC                      | P1              | 🟡 métricas + inbox read-only (P0 B)                         |
-| BETA-21 | KAI não decide                              | P0              | ✅ N/A no canal actual                                       |
-| BETA-22 | Ciclo estados NOVO→FECHADO                  | P1              | 🔴 **inexistente**                                           |
-| BETA-23 | Ack + resolução ao user                     | P2              | 🔴 **inexistente**                                           |
-| BETA-24 | Reclamação ≠ feedback produto               | P1              | 🟡 bridge textual Help → admin/contacto (sem 2.ª inbox)      |
-| BETA-30 | Privacidade / isolamento                    | P1              | 🟡 RLS ops-only SELECT; user não lê o próprio SELECT directo |
+| ID      | Requisito                                   | Prioridade Doc3 | Estado actual no código/schema                                                                   |
+| ------- | ------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------ |
+| BETA-13 | Feedback não escondido                      | P0              | ✅ `/app/ajuda` + CTAs Sprint A                                                                  |
+| BETA-14 | Widget contextual in-page                   | P0 / Spec C     | 🔴 fora do P0 — não construir agora                                                              |
+| BETA-15 | Tipos: BUG/UX/Sugestão/Reclamação/Avaliação | P1              | 🟡 schema `feedback` \| `bug` \| `avaliacao` \| `reclamacao`; formulário Ajuda só os 2 primeiros |
+| BETA-16 | Contexto rico (device/version/…)            | P1              | ✅ `page_context` (idioma, ecrã, caminho) gravado e visível na inbox; sem screenshots            |
+| BETA-19 | Dashboard triagem KOCC                      | P1              | ✅ métricas + inbox KOCC/Admin com estados                                                       |
+| BETA-21 | KAI não decide                              | P0              | ✅ N/A no canal actual                                                                           |
+| BETA-22 | Ciclo estados NOVO→FECHADO                  | P1              | ✅ `0046` received → … → resolvido / duplicado / nao_reproduzivel                                |
+| BETA-23 | Ack + resolução ao user                     | P2              | 🔴 **desligado de propósito** (Founder: só nota interna)                                         |
+| BETA-24 | Reclamação ≠ feedback produto               | P1              | 🟡 kind `reclamacao` no schema; Ajuda continua a enfatizar feedback/bug                          |
+| BETA-30 | Privacidade / isolamento                    | P1              | 🟡 RLS ops-only SELECT; user não lê o próprio SELECT directo                                     |
 
 **Conclusão documental:** estados, responsável, resolução e notificação ao autor são **P1/P2 no Doc 3**, não bloqueiam o fecho técnico do canal P0 (captura + inbox + métricas). BETA-40 (loop aprendizagem fechado) depende explicitamente de 14–23 — é critério de **ciclo produto**, não de publish A/B.
 
@@ -51,45 +51,29 @@ Não são propostas activas — só inventário de compatibilidade arquitectóni
 
 1. **`operational_escalations` (0040)** — já tem `status` (`open|acknowledged|resolved|cancelled`), `assignee_id`, `resolved_by`, `resolved_at`, `resolution_notes`, RLS select, mutação via RPC (INSERT/UPDATE direct revogados a `authenticated`). É o paralelo mais próximo de “fila ops com dono e fecho”.
 2. **`platform_feature_flag_audit` (0032)** — trilha before/after para flags KOCC; **não** cobre `beta_feedback`.
-3. **`user_has_founder_or_permission`** — padrão pós-0036 usado noutros módulos; gap Founder em feedback está isolado na proposta **0043** (não aplicada).
+3. **`user_has_founder_or_permission`** — padrão pós-0036. Founder lê `beta_feedback` via **0043** (aplicada).
 
 **Regra:** reutilizar um destes padrões **só após** decisão; não copiar escalations para feedback “por ocupação”.
 
 ---
 
-## 4. Requisitos mínimos _se_ Founder autorizar ciclo de estados (checklist de decisão)
+## 4. Decisões já tomadas (0043–0046, aplicadas 2026-09-23)
 
-Para cumprir BETA-22/23 sem segundo produto, a decisão tem de fechar:
+1. Estados **só internos** (ops). O autor **não** é notificado (BETA-23 continua off).
+2. Modelo = colunas em `beta_feedback`, não `operational_escalations`.
+3. Máquina: `received` → `em_analise` → `classificado` → `em_desenvolvimento` → `resolvido` | `duplicado` | `nao_reproduzivel`. Reabrir só para `em_analise` ou `received`.
+4. Sem `assignee_id` nesta Beta.
+5. Mutação só via RPC `kocc_update_beta_feedback_status` + `audit_logs`.
+6. Nota interna opcional (`resolution_notes`). Não é mensagem ao autor.
+7. `page_context` visível na inbox KOCC e Admin. Screenshots continuam proibidos.
 
-1. **Âmbito:** estados só internos (ops) vs visíveis ao autor (BETA-23)?
-2. **Modelo:** estender `beta_feedback` vs encaminhar reclamações graves para `operational_escalations` (BETA-24) e manter feedback produto read-only?
-3. **Máquina de estados:** aceitar o set de escalations (`open→acknowledged→resolved|cancelled`) ou outro conjunto Doc3 “NOVO→…→FECHADO”?
-4. **Responsável:** campo `assignee_id`? quem pode atribuir (`finance.manage`, `admin.panel`, Founder)?
-5. **Mutação:** RPC security definer (padrão 0040) vs policy UPDATE directa?
-6. **Auditoria:** tabela dedicada vs reutilizar `audit_logs` / padrão flag audit?
-7. **Notificação ao user (BETA-23):** canal mensagens existente vs email vs só badge in-app — e retenção/privacidade (BETA-29/30)?
-8. **Tipos (BETA-15):** expandir `kind` check constraint ou mapear UX→`feedback`, Reclamação→escalation?
+## 5. Ainda aberto (não implementar sem o Founder)
 
-Sem respostas a 1–2 (e preferencialmente 3–5), **não há implementação segura**.
-
----
-
-## 5. Decisões pendentes (para o Founder) — isoladas
-
-| ID        | Pergunta                                                                                             | Bloqueia A/B P0?                                |
-| --------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| GOV-BF-01 | Autorizar **0043** (Founder read métricas/inbox)?                                                    | Não (ops com permissões actuais bastam)         |
-| GOV-BF-02 | Autorizar ciclo de estados em `beta_feedback` **ou** rotear resolução via `operational_escalations`? | Não para P0                                     |
-| GOV-BF-03 | BETA-15: manter 2 kinds ou expandir para 5 tipos?                                                    | Não para P0                                     |
-| GOV-BF-04 | BETA-23: obrigatório ainda em Beta público controlado?                                               | Não (P2 Doc3)                                   |
-| GOV-BF-05 | Aplicar **0044** (truncate `page_path` no servidor)?                                                 | Não — hardening opcional, sem GOV de autoridade |
-
----
-
-## 6. Posição técnica recomendada (sem executar)
-
-- **Fechar A+B** com captura + inbox + métricas + bridge reclamação (já preparado).
-- **Não** inventar workflow de tickets enquanto GOV-BF-02 estiver aberto.
-- Preferir, _quando_ houver decisão: **reutilizar** RPC+revoke UPDATE (padrão 0040) em vez de policy UPDATE aberta; e **separar** reclamação operacional (BETA-24) do canal produto.
-
-0043 e 0044 permanecem **propostas não aplicadas**.
+| ID        | Pergunta                                                           | Estado                    |
+| --------- | ------------------------------------------------------------------ | ------------------------- |
+| GOV-BF-01 | Founder read                                                       | Fechado — `0043` aplicada |
+| GOV-BF-02 | Ciclo de estados em `beta_feedback`                                | Fechado — `0046` aplicada |
+| GOV-BF-03 | Formulário Ajuda: manter 2 kinds ou expor `avaliacao`/`reclamacao` | Aberto — schema já tem 4  |
+| GOV-BF-04 | BETA-23 ack ao autor                                               | Aberto — **off**          |
+| GOV-BF-05 | Path guard                                                         | Fechado — `0044` aplicada |
+| GOV-BF-06 | Widget in-page (BETA-14) e screenshots                             | Aberto — não construir    |
