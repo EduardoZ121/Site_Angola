@@ -1,16 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
+import { PUBLISHED_COMPANY_CONTACTS, type PublishedCompanyContacts } from '@/lib/official-company';
+import { fetchPublicCompanyContacts } from '@/modules/kocc/services/company-vault-client';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { getLandingCopy } from '@/modules/landing/content';
 import { getShellCopy } from '../content';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
-/** Public contact channels — only verified production contacts (no placeholder phones). */
+/** Public contact channels — published defaults until the Owner replaces them. */
 const CHANNELS = {
-  email: 'mailto:contacto@kutekalink.com',
   docs: '/documentacao',
   signIn: '/auth/entrar',
 } as const;
@@ -20,9 +22,20 @@ export function ContactClient() {
   const shell = getShellCopy(locale);
   const landing = getLandingCopy(locale);
   const c = shell.contactPage;
+  const [contacts, setContacts] = useState<PublishedCompanyContacts>(PUBLISHED_COMPANY_CONTACTS);
+
+  useEffect(() => {
+    let cancelled = false;
+    void fetchPublicCompanyContacts().then((next) => {
+      if (!cancelled) setContacts(next);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const items = [
-    { id: 'email', label: c.email, href: CHANNELS.email, external: true },
+    { id: 'email', label: c.email, href: `mailto:${contacts.email}`, external: true },
     { id: 'help', label: c.helpCenter, href: CHANNELS.docs, external: false },
     { id: 'signin', label: landing.topbar.enter, href: CHANNELS.signIn, external: false },
   ];
@@ -36,10 +49,16 @@ export function ContactClient() {
           <p className="mt-2 text-sm font-semibold text-slate-600">{c.hours}</p>
           <p className="mt-3 text-sm text-slate-600">
             Email:{' '}
-            <a className="font-medium text-brand-700 underline" href={CHANNELS.email}>
-              contacto@kutekalink.com
+            <a className="font-medium text-brand-700 underline" href={`mailto:${contacts.email}`}>
+              {contacts.email}
             </a>
           </p>
+          <ContactLine label="Privacidade" value={contacts.privacyEmail} mailto />
+          <ContactLine label="Jurídico" value={contacts.legalEmail} mailto />
+          <ContactLine label="Telefone" value={contacts.phone} />
+          <ContactLine label="Segundo telefone" value={contacts.phoneSecondary} />
+          <ContactLine label="WhatsApp" value={contacts.whatsapp} />
+          <ContactLine label="Endereço" value={contacts.address} />
         </div>
         <LanguageSwitcher variant="compact" />
       </div>
@@ -78,5 +97,29 @@ export function ContactClient() {
         </Link>
       </div>
     </main>
+  );
+}
+
+function ContactLine({
+  label,
+  value,
+  mailto = false,
+}: {
+  label: string;
+  value: string;
+  mailto?: boolean;
+}) {
+  if (!value.trim()) return null;
+  return (
+    <p className="mt-1 text-sm text-slate-600">
+      {label}:{' '}
+      {mailto ? (
+        <a className="font-medium text-brand-700 underline" href={`mailto:${value}`}>
+          {value}
+        </a>
+      ) : (
+        <span className="font-medium text-slate-800">{value}</span>
+      )}
+    </p>
   );
 }

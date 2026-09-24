@@ -1,15 +1,12 @@
-export type CompanyProfileInput = {
+import { mergePublishedContacts, type PublishedCompanyContacts } from '@/lib/official-company';
+
+export type CompanyProfileInput = PublishedCompanyContacts & {
   bankName: string;
   iban: string;
   accountNumber: string;
   accountHolder: string;
   currency: string;
   paymentNotes: string;
-  phone: string;
-  whatsapp: string;
-  email: string;
-  address: string;
-  otherContacts: string;
 };
 
 export const EMPTY_COMPANY_PROFILE: CompanyProfileInput = {
@@ -20,8 +17,12 @@ export const EMPTY_COMPANY_PROFILE: CompanyProfileInput = {
   currency: 'AOA',
   paymentNotes: '',
   phone: '',
+  phoneSecondary: '',
   whatsapp: '',
   email: '',
+  privacyEmail: '',
+  legalEmail: '',
+  website: '',
   address: '',
   otherContacts: '',
 };
@@ -33,20 +34,34 @@ export function normalizeIban(value: string): string {
   return value.replace(/\s+/g, '').toUpperCase();
 }
 
+function emailError(value: string, label: string): string | null {
+  const email = value.trim();
+  if (email && !EMAIL_RE.test(email)) return `${label} inválido.`;
+  return null;
+}
+
 /** Client-side gate. The database repeats these checks and is the authority. */
 export function validateCompanyProfile(input: CompanyProfileInput): string | null {
   const iban = normalizeIban(input.iban);
   if (iban && !IBAN_RE.test(iban))
     return 'IBAN inválido. Use o formato internacional, sem espaços.';
-  const email = input.email.trim();
-  if (email && !EMAIL_RE.test(email)) return 'Email oficial inválido.';
+  const emailIssue =
+    emailError(input.email, 'Email oficial') ||
+    emailError(input.privacyEmail, 'Email de privacidade') ||
+    emailError(input.legalEmail, 'Email jurídico');
+  if (emailIssue) return emailIssue;
   const currency = input.currency.trim().toUpperCase();
   if (currency && !/^[A-Z]{3}$/.test(currency))
     return 'A moeda deve ter 3 letras, por exemplo AOA.';
   if (input.bankName.trim().length > 80) return 'O nome do banco é demasiado longo.';
-  if (input.phone.trim().length > 32 || input.whatsapp.trim().length > 32) {
+  if (
+    input.phone.trim().length > 32 ||
+    input.phoneSecondary.trim().length > 32 ||
+    input.whatsapp.trim().length > 32
+  ) {
     return 'O telefone é demasiado longo.';
   }
+  if (input.website.trim().length > 200) return 'O site é demasiado longo.';
   return null;
 }
 
@@ -62,7 +77,7 @@ export function profileFromRpc(raw: Record<string, unknown>): CompanyProfileInpu
   updatedAt: string | null;
 } {
   const str = (key: string) => (raw[key] == null ? '' : String(raw[key]));
-  return {
+  const profile = mergePublishedContacts({
     bankName: str('bankName'),
     iban: str('iban'),
     accountNumber: str('accountNumber'),
@@ -70,10 +85,17 @@ export function profileFromRpc(raw: Record<string, unknown>): CompanyProfileInpu
     currency: str('currency') || 'AOA',
     paymentNotes: str('paymentNotes'),
     phone: str('phone'),
+    phoneSecondary: str('phoneSecondary'),
     whatsapp: str('whatsapp'),
     email: str('email'),
+    privacyEmail: str('privacyEmail'),
+    legalEmail: str('legalEmail'),
+    website: str('website'),
     address: str('address'),
     otherContacts: str('otherContacts'),
+  });
+  return {
+    ...profile,
     updatedAt: raw.updatedAt != null ? String(raw.updatedAt) : null,
   };
 }
