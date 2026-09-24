@@ -12,20 +12,21 @@ Foi usado para classificar o que a Beta **já decidida** precisa para ser utiliz
 
 ## Matriz (resumo executivo)
 
-| Área                           | Estado                     | Notas                                              |
-| ------------------------------ | -------------------------- | -------------------------------------------------- |
-| Landing Beta messaging         | A — produção               | Hero Beta pública validado                         |
-| Registo / login / onboarding   | A — código+prod HTML       | Auth client-side em static export                  |
-| App home + Ajuda feedback      | A — código                 | RPC `kocc_submit_beta_feedback`                    |
-| KOCC métricas + inbox          | A — código; B — smoke auth | Inbox ≠ metrics; RLS finance.manage \| admin.panel |
-| Admin vê inbox                 | A — closeout               | `AdminBetaInboxPanel` no hub admin                 |
-| Headers segurança edge         | C — Cloudflare             | Código+Render+meta OK; edge live incompleto        |
-| Health check static            | A — closeout               | `/health.json`                                     |
-| GOV-BF / 0043 / 0044 / 0045    | D — Founder                | Proposals only, não aplicadas                      |
-| Kuteka Pay / comissões / AML   | D — Founder + legal        | Fora do escopo Beta técnica                        |
-| Founder Center delegação total | D / parcial                | Existente; não expandir sem autorização            |
-| BCP/DRP disciplina             | B — docs                   | DRP v0.9; restore drill pendente                   |
-| Vicentemakiese fork            | Nunca                      | Bloqueado por política                             |
+| Área                           | Estado                     | Notas                                                   |
+| ------------------------------ | -------------------------- | ------------------------------------------------------- |
+| Landing Beta messaging         | A — produção               | Hero Beta pública validado                              |
+| Registo / login / onboarding   | A — código+prod HTML       | Auth client-side em static export                       |
+| App home + Ajuda feedback      | A — código                 | RPC `kocc_submit_beta_feedback`                         |
+| KOCC métricas + inbox          | A — código; B — smoke auth | Inbox ≠ metrics; RLS finance.manage \| admin.panel      |
+| Admin vê inbox                 | A — closeout               | `AdminBetaInboxPanel` no hub admin                      |
+| Headers segurança edge         | C — Cloudflare             | Código+Render+meta OK; edge live incompleto             |
+| Health check static            | A — closeout               | `/health.json`                                          |
+| GOV-BF / 0043 / 0044 / 0045    | A — aplicado 2026-09-23    | Remoto `vhqwitbrpqaiutjbundo`; ver migrations 0043–0048 |
+| Triagem inbox contexto + nota  | A — código                 | `page_context` visível; nota interna; sem ack ao autor  |
+| Kuteka Pay / comissões / AML   | D — Founder + legal        | Fora do escopo Beta técnica                             |
+| Founder Center delegação total | D / parcial                | Existente; não expandir sem autorização                 |
+| BCP/DRP disciplina             | B — docs                   | DRP v0.9; restore drill pendente                        |
+| Vicentemakiese fork            | Nunca                      | Bloqueado por política                                  |
 
 ## Ciclo Beta Feedback (decidido e implementado)
 
@@ -37,7 +38,7 @@ Foi usado para classificar o que a Beta **já decidida** precisa para ser utiliz
   → Admin Hub inbox (closeout)
 ```
 
-Não inventa workflow de tickets / estados FECHADO (GOV-BF).
+Não inventa um segundo produto de tickets. Estados vivem em `beta_feedback` (0046). O autor não é notificado.
 
 ## Classificação A/B/C/D (critério mandato)
 
