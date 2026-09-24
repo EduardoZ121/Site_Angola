@@ -1,6 +1,7 @@
 'use client';
 
 import { createBrowserClient } from '@/lib/supabase/client';
+import { PUBLISHED_COMPANY_CONTACTS, type PublishedCompanyContacts } from '@/lib/official-company';
 import { profileFromRpc, vaultErrorMessage, type CompanyProfileInput } from '../lib/company-vault';
 
 type Result<T> = { ok: true; data: T } | { ok: false; message: string };
@@ -70,6 +71,33 @@ export async function readCompanyProfile(code: string): Promise<Result<CompanyPr
     return { ok: true, data: profileFromRpc(asObject(data)) };
   } catch (error) {
     return fail(error instanceof Error ? error : null, 'load');
+  }
+}
+
+export async function fetchPublicCompanyContacts(): Promise<PublishedCompanyContacts> {
+  const fallback = { ...PUBLISHED_COMPANY_CONTACTS, otherContacts: '' };
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('kuteka_public_company_contacts');
+    if (error || !data) return fallback;
+    const row = asObject(data);
+    const str = (key: keyof PublishedCompanyContacts, published: string) => {
+      const value = row[key] == null ? '' : String(row[key]).trim();
+      return value || published;
+    };
+    return {
+      email: str('email', fallback.email),
+      privacyEmail: str('privacyEmail', fallback.privacyEmail),
+      legalEmail: str('legalEmail', fallback.legalEmail),
+      website: str('website', fallback.website),
+      phone: str('phone', ''),
+      phoneSecondary: str('phoneSecondary', ''),
+      whatsapp: str('whatsapp', ''),
+      address: str('address', ''),
+      otherContacts: '',
+    };
+  } catch {
+    return fallback;
   }
 }
 

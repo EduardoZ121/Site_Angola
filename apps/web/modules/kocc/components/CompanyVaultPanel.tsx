@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Button } from '@kuteka/ui';
+import { PUBLISHED_COMPANY_CONTACTS } from '@/lib/official-company';
 import {
   EMPTY_COMPANY_PROFILE,
   validateCompanyProfile,
@@ -16,16 +17,28 @@ import {
   type CompanyVaultStatus,
 } from '../services/company-vault-client';
 
-const FIELDS: { key: keyof CompanyProfileInput; label: string; autoComplete?: string }[] = [
+const CONTACT_FIELDS: {
+  key: keyof CompanyProfileInput;
+  label: string;
+  autoComplete?: string;
+  maxLength?: number;
+}[] = [
+  { key: 'email', label: 'Email geral', autoComplete: 'email' },
+  { key: 'privacyEmail', label: 'Email de privacidade', autoComplete: 'email' },
+  { key: 'legalEmail', label: 'Email jurídico', autoComplete: 'email' },
+  { key: 'website', label: 'Site', autoComplete: 'url', maxLength: 200 },
+  { key: 'phone', label: 'Telefone oficial', autoComplete: 'tel' },
+  { key: 'phoneSecondary', label: 'Segundo telefone', autoComplete: 'tel' },
+  { key: 'whatsapp', label: 'WhatsApp oficial', autoComplete: 'tel' },
+  { key: 'address', label: 'Endereço', maxLength: 240 },
+];
+
+const BANK_FIELDS: { key: keyof CompanyProfileInput; label: string }[] = [
   { key: 'bankName', label: 'Banco' },
-  { key: 'iban', label: 'IBAN da empresa', autoComplete: 'off' },
+  { key: 'iban', label: 'IBAN da empresa' },
   { key: 'accountNumber', label: 'Número da conta' },
   { key: 'accountHolder', label: 'Titular' },
   { key: 'currency', label: 'Moeda' },
-  { key: 'phone', label: 'Telefone oficial', autoComplete: 'tel' },
-  { key: 'whatsapp', label: 'WhatsApp oficial', autoComplete: 'tel' },
-  { key: 'email', label: 'Email oficial', autoComplete: 'email' },
-  { key: 'address', label: 'Endereço' },
 ];
 
 /**
@@ -163,11 +176,14 @@ export function CompanyVaultPanel() {
           Perfil da Kuteka
         </h2>
         <p className="mt-2 text-sm text-slate-700">
-          Banco, IBAN, telefone, WhatsApp, email e endereço oficiais da empresa. Separado dos dados
-          bancários pessoais do Founder. Só o Owner entra, e só com um segundo código verificado no
-          servidor. Esse código não fica guardado neste browser.
+          Contactos que já estavam no site, nos termos e na privacidade, reunidos aqui. Banco, IBAN
+          e telefones ainda não existiam: ficam vazios até os preencher. Só o Founder Owner
+          substitui estes dados, com um segundo código verificado no servidor. Não é a senha da
+          conta e não fica guardado neste browser. Separado dos dados bancários pessoais.
         </p>
       </div>
+
+      <PublishedContacts />
 
       {loading ? <p className="text-sm text-slate-600">A verificar o cofre…</p> : null}
 
@@ -236,20 +252,33 @@ export function CompanyVaultPanel() {
 
       {unlocked ? (
         <form className="flex flex-col gap-4" onSubmit={(event) => void onSave(event)}>
+          <p className="text-sm font-semibold text-slate-800">Contactos oficiais</p>
           <div className="grid gap-3 sm:grid-cols-2">
-            {FIELDS.map((field) => (
-              <label key={field.key} className="flex flex-col gap-1 text-sm">
-                <span className="font-medium text-slate-800">{field.label}</span>
-                <input
-                  value={profile[field.key]}
-                  autoComplete={field.autoComplete ?? 'off'}
-                  maxLength={field.key === 'address' ? 240 : 120}
-                  onChange={(event) =>
-                    setProfile((prev) => ({ ...prev, [field.key]: event.target.value }))
-                  }
-                  className="kuteka-ops-input"
-                />
-              </label>
+            {CONTACT_FIELDS.map((field) => (
+              <ProfileField
+                key={field.key}
+                label={field.label}
+                value={profile[field.key]}
+                autoComplete={field.autoComplete}
+                maxLength={field.maxLength ?? 120}
+                onChange={(value) => setProfile((prev) => ({ ...prev, [field.key]: value }))}
+              />
+            ))}
+          </div>
+          <p className="text-sm font-semibold text-slate-800">Dados bancários da empresa</p>
+          <p className="text-sm text-slate-600">
+            Ainda não havia banco nem IBAN publicados. Preencha quando quiser. Continuam invisíveis
+            no site público.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {BANK_FIELDS.map((field) => (
+              <ProfileField
+                key={field.key}
+                label={field.label}
+                value={profile[field.key]}
+                maxLength={120}
+                onChange={(value) => setProfile((prev) => ({ ...prev, [field.key]: value }))}
+              />
             ))}
           </div>
           <label className="flex flex-col gap-1 text-sm">
@@ -317,6 +346,63 @@ export function CompanyVaultPanel() {
         </form>
       ) : null}
     </section>
+  );
+}
+
+function PublishedContacts() {
+  const published = PUBLISHED_COMPANY_CONTACTS;
+  const rows = [
+    ['Email geral', published.email],
+    ['Privacidade', published.privacyEmail],
+    ['Jurídico', published.legalEmail],
+    ['Site', published.website],
+    ['Telefone', 'Ainda não publicado'],
+    ['Segundo telefone', 'Ainda não existe'],
+    ['WhatsApp', 'Ainda não publicado'],
+    ['Endereço', 'Ainda não publicado'],
+    ['Banco e IBAN', 'Ainda não existem'],
+  ];
+  return (
+    <div className="rounded-kuteka border border-slate-200 bg-white px-3 py-3">
+      <p className="text-sm font-semibold text-slate-900">O que já estava espalhado no site</p>
+      <dl className="mt-2 grid gap-2 text-sm sm:grid-cols-2">
+        {rows.map(([label, value]) => (
+          <div key={label}>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              {label}
+            </dt>
+            <dd className="text-slate-800">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
+
+function ProfileField({
+  label,
+  value,
+  onChange,
+  autoComplete,
+  maxLength,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  autoComplete?: string;
+  maxLength: number;
+}) {
+  return (
+    <label className="flex flex-col gap-1 text-sm">
+      <span className="font-medium text-slate-800">{label}</span>
+      <input
+        value={value}
+        autoComplete={autoComplete ?? 'off'}
+        maxLength={maxLength}
+        onChange={(event) => onChange(event.target.value)}
+        className="kuteka-ops-input"
+      />
+    </label>
   );
 }
 
