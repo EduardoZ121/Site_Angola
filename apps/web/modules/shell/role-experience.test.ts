@@ -83,4 +83,19 @@ describe('role experience', () => {
     expect(homePathForExperience('service_provider')).toBe('/app/servicos');
     expect(homePathForExperience('supervisor')).toBe('/app/admin');
   });
+
+  it('blocks the accountant cockpit without finance read', () => {
+    const client = permissionsForExperience('client', [
+      'platform.access',
+      'housing.explore',
+      'finance.read',
+    ]);
+    expect(canAccessPath('/app/contabilista', client).ok).toBe(false);
+    const founder = permissionsForExperience('founder', [
+      'platform.access',
+      'finance.read',
+      'founder.manage',
+    ]);
+    expect(canAccessPath('/app/contabilista', founder).ok).toBe(true);
+  });
 });

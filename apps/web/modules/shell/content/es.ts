@@ -136,6 +136,7 @@ export const shellCopyEs: ShellCopy = {
     planos: 'Planes Socio',
     fundador: 'Founder Center',
     escalacoes: 'Escalaciones',
+    contabilista: 'Contable',
   },
   routeBlocked: {
     title: 'Área no disponible en este rol',

@@ -248,6 +248,18 @@ export function FounderCenterClient() {
                   >
                     Abrir Super · Receitas e Pay
                   </Link>
+                  <Link
+                    href="/app/contabilista"
+                    className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+                  >
+                    Cockpit do contabilista
+                  </Link>
+                  <Link
+                    href="/app/servicos/rede"
+                    className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+                  >
+                    Rede de prestadores
+                  </Link>
                 </section>
               ) : null}
 

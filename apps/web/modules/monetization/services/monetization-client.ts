@@ -151,6 +151,92 @@ export async function listServiceProviders(
   }
 }
 
+export async function getServiceProvider(
+  id: string,
+): Promise<{ ok: true; data: ServiceProviderRow | null } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('service_providers')
+      .select(
+        'id,business_name,category,description,phone,province,municipality,take_rate_code,rating,active,is_demo',
+      )
+      .eq('id', id)
+      .is('deleted_at', null)
+      .maybeSingle();
+    if (error) return { ok: false, message: error.message || copy().loadError };
+    return { ok: true, data: (data as ServiceProviderRow | null) ?? null };
+  } catch {
+    return { ok: false, message: copy().loadError };
+  }
+}
+
+/** Fila de aprovação. Só devolve linhas se a conta tiver finance.manage (RLS). */
+export async function listProvidersForReview(): Promise<
+  { ok: true; data: ServiceProviderRow[] } | { ok: false; message: string }
+> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('service_providers')
+      .select(
+        'id,business_name,category,description,phone,province,municipality,take_rate_code,rating,active,is_demo',
+      )
+      .is('deleted_at', null)
+      .order('business_name');
+    if (error) return { ok: false, message: error.message || copy().loadError };
+    return { ok: true, data: (data ?? []) as ServiceProviderRow[] };
+  } catch {
+    return { ok: false, message: copy().loadError };
+  }
+}
+
+export async function registerServiceProvider(input: {
+  businessName: string;
+  category: string;
+  description: string;
+  phone: string;
+  province: string;
+  municipality: string;
+}): Promise<{ ok: true } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { data: authData, error: authError } = await client.auth.getUser();
+    const userId = authData.user?.id;
+    if (authError || !userId) return { ok: false, message: copy().actionError };
+    const { error } = await client.from('service_providers').insert({
+      user_id: userId,
+      business_name: input.businessName.trim(),
+      category: input.category,
+      description: input.description.trim(),
+      phone: input.phone.trim(),
+      province: input.province.trim(),
+      municipality: input.municipality.trim(),
+      active: false,
+      is_demo: false,
+      created_by: userId,
+    });
+    if (error) return { ok: false, message: error.message || copy().actionError };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy().actionError };
+  }
+}
+
+export async function setProviderActive(
+  id: string,
+  active: boolean,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.from('service_providers').update({ active }).eq('id', id);
+    if (error) return { ok: false, message: error.message || copy().actionError };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy().actionError };
+  }
+}
+
 export async function listServiceOrders(): Promise<
   { ok: true; data: ServiceOrderRow[] } | { ok: false; message: string }
 > {

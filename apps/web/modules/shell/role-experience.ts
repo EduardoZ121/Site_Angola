@@ -196,6 +196,7 @@ const PATH_RULES: PathRule[] = [
   { prefix: '/app/contratos', permissions: ['contracts.manage'] },
   { prefix: '/app/super', permissions: ['finance.manage', 'founder.manage'] },
   { prefix: '/app/servicos', permissions: ['services.operate', 'platform.access'] },
+  { prefix: '/app/contabilista', permissions: ['finance.read', 'finance.manage', 'founder.manage'] },
   // /app/fundador is open to any signed-in account (bootstrap) — no PATH_RULE.
 ];
 
