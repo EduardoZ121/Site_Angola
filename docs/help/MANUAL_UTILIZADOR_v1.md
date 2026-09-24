@@ -433,19 +433,19 @@ O utilizador vê intenções de pagamento, estado (pendente, pago, falhado, reem
 
 ## 17. Contactos e suporte
 
-| Canal                         | Utilização                                      |
-| ----------------------------- | ----------------------------------------------- |
-| Centro de Ajuda               | `/app/ajuda`                                    |
-| Contacto                      | `/contacto`                                     |
-| Email geral                   | contacto@kutekalink.com                         |
-| Privacidade                   | privacidade@kutekalink.com                      |
-| Jurídico                      | juridico@kutekalink.com                         |
-| Telefone                      | +244 957 871 557                                |
-| Segundo telefone              | +244 935 404 400                                |
-| WhatsApp Business             | +244 935 404 400                                |
-| Facebook                      | campo no perfil da empresa — página ainda vazia |
-| Site                          | https://kutekalink.com                          |
-| Banco e IBAN                  | ainda não preenchidos; só o Founder Owner       |
+| Canal             | Utilização                                      |
+| ----------------- | ----------------------------------------------- |
+| Centro de Ajuda   | `/app/ajuda`                                    |
+| Contacto          | `/contacto`                                     |
+| Email geral       | contacto@kutekalink.com                         |
+| Privacidade       | privacidade@kutekalink.com                      |
+| Jurídico          | juridico@kutekalink.com                         |
+| Telefone          | +244 957 871 557                                |
+| Segundo telefone  | +244 935 404 400                                |
+| WhatsApp Business | +244 935 404 400                                |
+| Facebook          | campo no perfil da empresa — página ainda vazia |
+| Site              | https://kutekalink.com                          |
+| Banco e IBAN      | ainda não preenchidos; só o Founder Owner       |
 
 Horário de atendimento de referência na Beta: dias úteis, 09:00–18:00 (WAT), salvo comunicação em contrário.
 
