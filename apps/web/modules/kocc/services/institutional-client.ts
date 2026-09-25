@@ -34,7 +34,13 @@ export type InstitutionalIdentity = {
 };
 
 export type PromoteTargetRole =
-  'founder' | 'co_founder' | 'super_administrator' | 'administrator' | 'supervisor' | 'auditor';
+  | 'founder'
+  | 'co_founder'
+  | 'super_administrator'
+  | 'administrator'
+  | 'supervisor'
+  | 'auditor'
+  | 'accountant';
 
 export type EmailChangeRequest = {
   requestId: string;
@@ -131,6 +137,95 @@ export async function promoteUser(input: {
       p_reason: input.reason,
     });
     if (error) return { ok: false, message: error.message || copy.saveError };
+    return { ok: true, data: asObject(data) };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export async function revokeOperationalTask(input: {
+  userId: string;
+  role: PromoteTargetRole;
+  reason: string;
+}): Promise<Result<Record<string, unknown>>> {
+  const copy = errors();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('founder_revoke_operational_task', {
+      p_user_id: input.userId,
+      p_target_role: input.role,
+      p_reason: input.reason,
+    });
+    if (error) {
+      const message = error.message?.toLowerCase() ?? '';
+      if (message.includes('founder_revoke_operational_task') || message.includes('could not find')) {
+        return {
+          ok: false,
+          message:
+            'A retirada ainda não está na base. O que já foi feito continua no rasto. Falta aplicar a migração 0057.',
+        };
+      }
+      return { ok: false, message: error.message || copy.saveError };
+    }
+    return { ok: true, data: asObject(data) };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
+
+export type OperationalTaskTerm = {
+  userId: string;
+  role: string;
+  endsOn: string;
+};
+
+export async function listOperationalTaskTerms(): Promise<Result<OperationalTaskTerm[]>> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('list_operational_task_terms');
+    if (error) return { ok: true, data: [] };
+    const rows = Array.isArray(data) ? data : [];
+    return {
+      ok: true,
+      data: rows.map((row) => {
+        const item = asObject(row);
+        return {
+          userId: String(item.userId ?? ''),
+          role: String(item.role ?? ''),
+          endsOn: String(item.endsOn ?? '').slice(0, 10),
+        };
+      }),
+    };
+  } catch {
+    return { ok: true, data: [] };
+  }
+}
+
+export async function setOperationalTaskEnd(input: {
+  userId: string;
+  role: PromoteTargetRole;
+  endsOn: string;
+  reason: string;
+}): Promise<Result<Record<string, unknown>>> {
+  const copy = errors();
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client.rpc('founder_set_operational_task_end', {
+      p_user_id: input.userId,
+      p_target_role: input.role,
+      p_ends_on: input.endsOn,
+      p_reason: input.reason,
+    });
+    if (error) {
+      const message = error.message?.toLowerCase() ?? '';
+      if (message.includes('founder_set_operational_task_end') || message.includes('could not find')) {
+        return {
+          ok: false,
+          message: 'A data de fim ainda não está na base. Falta aplicar a migração 0058. A tarefa não foi apagada.',
+        };
+      }
+      return { ok: false, message: error.message || copy.saveError };
+    }
     return { ok: true, data: asObject(data) };
   } catch {
     return { ok: false, message: copy.saveError };

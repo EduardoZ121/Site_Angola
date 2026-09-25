@@ -1,12 +1,17 @@
 import type { ExperienceMode } from './role-experience';
 import type { AppLocale } from '@/modules/i18n/types';
 
+export type NoticeStatus = 'unread' | 'read' | 'archived' | 'action';
+
 export type ShellNotification = {
   id: string;
   title: string;
   body: string;
   href: string;
   unread?: boolean;
+  status?: NoticeStatus;
+  /** Quem deve agir: Cliente, Agente ou Cargo. */
+  audience?: string;
 };
 
 type Catalog = Record<ExperienceMode, ShellNotification[]>;
@@ -283,6 +288,15 @@ const CATALOG: Record<AppLocale, Catalog> = {
         unread: true,
       },
     ],
+    accountant: [
+      {
+        id: 'acc1',
+        title: 'Fecho por preparar',
+        body: 'Abra o cockpit e os documentos que o contabilista e o jurista devem ler.',
+        href: '/app/contabilista',
+        unread: true,
+      },
+    ],
   },
   en: {
     client: [
@@ -552,6 +566,15 @@ const CATALOG: Record<AppLocale, Catalog> = {
         title: 'Audit',
         body: 'Recent institutional events to review.',
         href: '/app/fundador',
+        unread: true,
+      },
+    ],
+    accountant: [
+      {
+        id: 'acc1',
+        title: 'Monthly close to prepare',
+        body: 'Open the cockpit and the documents for the accountant and the lawyer.',
+        href: '/app/contabilista',
         unread: true,
       },
     ],
@@ -827,6 +850,15 @@ const CATALOG: Record<AppLocale, Catalog> = {
         unread: true,
       },
     ],
+    accountant: [
+      {
+        id: 'acc1',
+        title: 'Clôture à préparer',
+        body: 'Ouvrez le cockpit et les documents pour le comptable et le juriste.',
+        href: '/app/contabilista',
+        unread: true,
+      },
+    ],
   },
   es: {
     client: [
@@ -1099,16 +1131,34 @@ const CATALOG: Record<AppLocale, Catalog> = {
         unread: true,
       },
     ],
+    accountant: [
+      {
+        id: 'acc1',
+        title: 'Cierre por preparar',
+        body: 'Abra el cockpit y los documentos para el contable y el jurista.',
+        href: '/app/contabilista',
+        unread: true,
+      },
+    ],
   },
 };
+
+const ACTION_IDS = new Set(['c2', 'p2', 'a2', 'acc1']);
+
+export function noticeStatus(item: ShellNotification): NoticeStatus {
+  if (item.status) return item.status;
+  if (ACTION_IDS.has(item.id) && item.unread !== false) return 'action';
+  return item.unread === false ? 'read' : 'unread';
+}
 
 export function notificationsForMode(
   mode: ExperienceMode,
   locale: AppLocale = 'pt',
 ): ShellNotification[] {
-  return CATALOG[locale][mode] ?? CATALOG.pt[mode] ?? [];
+  const rows = CATALOG[locale][mode] ?? CATALOG.pt[mode] ?? [];
+  return rows.map((item) => ({ ...item, status: noticeStatus(item) }));
 }
 
 export function unreadCount(items: readonly ShellNotification[]): number {
-  return items.filter((item) => item.unread !== false).length;
+  return items.filter((item) => noticeStatus(item) === 'unread').length;
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import type { AppSessionData } from '@/modules/authentication/components/app-session';
 import { getIdentidadeCopy } from '@/modules/identidade/content';
@@ -25,6 +26,7 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { getShellCopy } from '../content';
 import type { ExperienceMode } from '../role-experience';
 import { FlowNextSteps, type FlowStep } from './FlowNextSteps';
+import { RoleReadingPanel } from './RoleReadingPanel';
 import { useRoleExperience } from './RoleExperienceProvider';
 import { operatingProfileFor, ROLE_HOME_CTA_LABELS_PT } from '../role-operating-matrix';
 
@@ -81,6 +83,24 @@ function panelsForMode(mode: ExperienceMode, s: OpsStats | null, loading: boolea
       return <AdminOpsCockpit s={s} loading={loading} executive />;
     case 'founder':
       return <FounderOpsCockpit s={s} loading={loading} />;
+    case 'accountant':
+      return (
+        <section className="kuteka-detail-panel flex flex-col gap-3 p-5">
+          <h2 className="text-sm font-semibold text-slate-900">Trabalho do contabilista</h2>
+          <p className="text-sm text-slate-700">
+            Leia o que já está no financeiro, prepare o fecho e aprove os documentos. Não muda o Founder, não liga dinheiro e não apaga auditoria.
+          </p>
+          <Link href="/app/contabilista" className="text-sm font-semibold text-brand-700 underline">
+            Abrir cockpit
+          </Link>
+          <Link href="/app/aprovacoes" className="text-sm font-semibold text-brand-700 underline">
+            Documentos para o contabilista e o jurista
+          </Link>
+          <Link href="/app/financeiro" className="text-sm font-semibold text-brand-700 underline">
+            Facturas e pagamentos de teste
+          </Link>
+        </section>
+      );
     default:
       return <ClientOpsCockpit s={s} loading={loading} />;
   }
@@ -147,6 +167,7 @@ export function RoleHomeDashboard({ session }: RoleHomeDashboardProps) {
         kaiHint={shell.firstActions.kaiHint}
         steps={firstSteps}
       />
+      <RoleReadingPanel compact />
       <KaiInsightCards insights={insights} />
       {panelsForMode(mode, stats, loading)}
     </div>

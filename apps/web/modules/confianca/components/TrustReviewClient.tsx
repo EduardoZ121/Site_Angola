@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
@@ -31,6 +31,8 @@ export function TrustReviewClient() {
   const [message, setMessage] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [reasons, setReasons] = useState<Record<string, string>>({});
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('');
 
   async function reload() {
     const result = await listPendingTrustDocuments();
@@ -72,6 +74,27 @@ export function TrustReviewClient() {
     };
   }, [allowed, sessionStatus]);
 
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return rows.filter((row) => {
+      if (status && row.status !== status) return false;
+      if (!q) return true;
+      const label = copy.docTypes[row.doc_type as keyof typeof copy.docTypes] ?? row.doc_type;
+      return (
+        label.toLowerCase().includes(q) ||
+        row.user_id.toLowerCase().includes(q) ||
+        (row.notes ?? '').toLowerCase().includes(q) ||
+        row.doc_type.toLowerCase().includes(q)
+      );
+    });
+  }, [copy.docTypes, query, rows, status]);
+
+  const statusCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of rows) counts.set(row.status, (counts.get(row.status) ?? 0) + 1);
+    return [...counts.entries()];
+  }, [rows]);
+
   async function onReview(documentId: string, status: 'accepted' | 'rejected' | 'under_review') {
     setBusyId(documentId);
     setMessage(null);
@@ -103,7 +126,7 @@ export function TrustReviewClient() {
               href="/app/admin"
               className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
             >
-              Dashboard Admin
+              Painel de administração
             </Link>
           ) : null}
         </header>
@@ -134,9 +157,54 @@ export function TrustReviewClient() {
               <EmptyState title={copy.emptyReviewTitle} description={copy.emptyReview} />
             ) : null}
 
-            {!loading && rows.length > 0 ? (
+            {rows.length > 0 ? (
+              <div className="flex flex-col gap-2">
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Procurar tipo, nota ou identificador"
+                  aria-label="Procurar documento de confiança"
+                  className="kuteka-ops-input w-full"
+                />
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setStatus('')}
+                    className={cn(
+                      'rounded-kuteka border px-3 py-1.5 text-xs font-semibold',
+                      status === ''
+                        ? 'border-slate-900 bg-slate-900 text-white'
+                        : 'border-slate-300 bg-white text-slate-700',
+                    )}
+                  >
+                    Todos · {rows.length}
+                  </button>
+                  {statusCounts.map(([code, count]) => (
+                    <button
+                      key={code}
+                      type="button"
+                      onClick={() => setStatus(code)}
+                      className={cn(
+                        'rounded-kuteka border px-3 py-1.5 text-xs font-semibold',
+                        status === code
+                          ? 'border-slate-900 bg-slate-900 text-white'
+                          : 'border-slate-300 bg-white text-slate-700',
+                      )}
+                    >
+                      {copy.statuses[code as keyof typeof copy.statuses] ?? code} · {count}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {rows.length > 0 && shown.length === 0 ? (
+              <EmptyState title="Nenhum documento neste filtro" description="Mude a pesquisa ou o estado." />
+            ) : null}
+
+            {shown.length > 0 ? (
               <ul className="flex flex-col gap-4">
-                {rows.map((row) => {
+                {shown.map((row) => {
                   const busy = busyId === row.id;
                   return (
                     <li

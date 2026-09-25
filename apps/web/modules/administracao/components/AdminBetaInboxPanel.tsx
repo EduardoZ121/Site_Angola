@@ -22,6 +22,7 @@ export function AdminBetaInboxPanel() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<BetaInboxFilter>('all');
+  const [query, setQuery] = useState('');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -44,7 +45,14 @@ export function AdminBetaInboxPanel() {
     };
   }, []);
 
-  const filtered = useMemo(() => filterBetaInboxRows(inbox, filter), [inbox, filter]);
+  const filtered = useMemo(() => {
+    const rows = filterBetaInboxRows(inbox, filter);
+    const q = query.trim().toLowerCase();
+    if (!q) return rows;
+    return rows.filter((row) =>
+      [row.body, row.page_path, row.kind, row.status].filter(Boolean).join(' ').toLowerCase().includes(q),
+    );
+  }, [inbox, filter, query]);
 
   async function onStatusChange(id: string, status: string, resolutionNotes?: string | null) {
     setUpdatingId(id);
@@ -65,13 +73,13 @@ export function AdminBetaInboxPanel() {
     >
       <div className="flex flex-col gap-1">
         <h2 id="admin-beta-inbox-heading" className="text-sm font-semibold text-slate-800">
-          Inbox Beta (triagem)
+          Caixa Beta (triagem)
         </h2>
         <Text className="text-sm text-slate-500">
           Relatos de <code className="text-xs">/app/ajuda</code>. Visível com{' '}
           <code className="text-xs">admin.panel</code>,{' '}
           <code className="text-xs">finance.manage</code> ou Founder. Contexto de página e nota
-          interna ficam nesta fila; o autor não recebe aviso.
+          interna ficam nesta fila. Quando o relato fecha, o autor recebe um aviso no sino.
         </Text>
       </div>
 
@@ -83,7 +91,7 @@ export function AdminBetaInboxPanel() {
             [
               ['all', 'Todos'],
               ['open', 'Abertos'],
-              ['bug', 'Bugs'],
+              ['bug', 'Erros'],
               ['feedback', 'Sugestões'],
               ['avaliacao', 'Avaliações'],
               ['reclamacao', 'Reclamações'],
@@ -104,6 +112,16 @@ export function AdminBetaInboxPanel() {
             </button>
           ))}
         </div>
+      ) : null}
+
+      {inbox.length > 0 ? (
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Procurar texto ou página"
+          aria-label="Procurar relato Beta"
+          className="kuteka-ops-input w-full"
+        />
       ) : null}
 
       <SoftListSlot pending={loading && inbox.length === 0}>

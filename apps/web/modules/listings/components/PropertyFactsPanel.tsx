@@ -1,6 +1,9 @@
 'use client';
 
+import { FormEvent, useEffect, useState } from 'react';
 import { formatAoa } from '@/lib/format/aoa';
+import { createBrowserClient } from '@/lib/supabase/client';
+import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { getListingsCopy } from '../content';
@@ -38,6 +41,20 @@ type PropertyFactsPanelProps = {
 export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFactsPanelProps) {
   const { locale } = useLocale();
   const copy = getListingsCopy(locale).facts;
+  const { session } = useAppSession();
+  const [canEdit, setCanEdit] = useState(false);
+  const [video, setVideo] = useState(row.video_url ?? '');
+  const [tour, setTour] = useState(row.virtual_tour_url ?? '');
+  const [plan, setPlan] = useState(row.floor_plan_url ?? '');
+  const [docs, setDocs] = useState(row.documents_url ?? '');
+  const [shown, setShown] = useState({
+    video: row.video_url ?? '',
+    tour: row.virtual_tour_url ?? '',
+    plan: row.floor_plan_url ?? '',
+    docs: row.documents_url ?? '',
+  });
+  const [mediaNote, setMediaNote] = useState<string | null>(null);
+  const [savingMedia, setSavingMedia] = useState(false);
   const amenityLabels = getAmenityLabels(locale);
   const conservationLabels = getConservationLabels(locale);
   const constructionLabels = getConstructionLabels(locale);
@@ -48,6 +65,73 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
   function yesNo(value: boolean | null | undefined): string | null {
     if (value == null) return null;
     return value ? copy.yes : copy.no;
+  }
+
+  useEffect(() => {
+    let cancelled = false;
+    async function check() {
+      if (!session?.permissions.includes('properties.manage')) {
+        setCanEdit(false);
+        return;
+      }
+      const client = createBrowserClient();
+      const { data } = await client.auth.getUser();
+      if (!cancelled) setCanEdit(data.user?.id === row.owner_id);
+    }
+    void check();
+    return () => {
+      cancelled = true;
+    };
+  }, [row.owner_id, session]);
+
+  function cleanUrl(value: string): string | null | false {
+    const text = value.trim();
+    if (!text) return null;
+    try {
+      const url = new URL(text);
+      if (url.protocol !== 'https:' && url.protocol !== 'http:') return false;
+      return url.toString();
+    } catch {
+      return false;
+    }
+  }
+
+  async function saveMedia(event: FormEvent) {
+    event.preventDefault();
+    const next = {
+      video: cleanUrl(video),
+      tour: cleanUrl(tour),
+      plan: cleanUrl(plan),
+      docs: cleanUrl(docs),
+    };
+    if (next.video === false || next.tour === false || next.plan === false || next.docs === false) {
+      setMediaNote(copy.mediaInvalid);
+      return;
+    }
+    setSavingMedia(true);
+    setMediaNote(null);
+    const client = createBrowserClient();
+    const { error } = await client
+      .from('properties')
+      .update({
+        video_url: next.video,
+        virtual_tour_url: next.tour,
+        floor_plan_url: next.plan,
+        documents_url: next.docs,
+      })
+      .eq('id', row.id);
+    setSavingMedia(false);
+    if (error) {
+      setMediaNote(copy.mediaInvalid);
+      return;
+    }
+    setShown({
+      video: next.video ?? '',
+      tour: next.tour ?? '',
+      plan: next.plan ?? '',
+      docs: next.docs ?? '',
+    });
+    setMediaNote(copy.mediaSaved);
   }
 
   function areaValue(n: number): string {
@@ -191,55 +275,48 @@ export function PropertyFactsPanel({ row, typeLabel, purposeLabel }: PropertyFac
       ) : null}
 
       <div className="mt-6 flex flex-wrap gap-2">
-        {row.video_url ? (
-          <a
-            href={row.video_url}
-            target="_blank"
-            rel="noreferrer"
-            className="kuteka-detail-chip kuteka-detail-chip--accent"
-          >
+        {shown.video ? (
+          <a href={shown.video} target="_blank" rel="noreferrer" className="kuteka-detail-chip kuteka-detail-chip--accent">
             {copy.video}
           </a>
         ) : (
           <span className="kuteka-detail-chip">{copy.videoSoon}</span>
         )}
-        {row.virtual_tour_url ? (
-          <a
-            href={row.virtual_tour_url}
-            target="_blank"
-            rel="noreferrer"
-            className="kuteka-detail-chip kuteka-detail-chip--accent"
-          >
+        {shown.tour ? (
+          <a href={shown.tour} target="_blank" rel="noreferrer" className="kuteka-detail-chip kuteka-detail-chip--accent">
             {copy.tour}
           </a>
         ) : (
           <span className="kuteka-detail-chip">{copy.tourSoon}</span>
         )}
-        {row.floor_plan_url ? (
-          <a
-            href={row.floor_plan_url}
-            target="_blank"
-            rel="noreferrer"
-            className="kuteka-detail-chip kuteka-detail-chip--accent"
-          >
+        {shown.plan ? (
+          <a href={shown.plan} target="_blank" rel="noreferrer" className="kuteka-detail-chip kuteka-detail-chip--accent">
             {copy.floorPlan}
           </a>
         ) : (
           <span className="kuteka-detail-chip">{copy.floorPlanSoon}</span>
         )}
-        {row.documents_url ? (
-          <a
-            href={row.documents_url}
-            target="_blank"
-            rel="noreferrer"
-            className="kuteka-detail-chip kuteka-detail-chip--accent"
-          >
+        {shown.docs ? (
+          <a href={shown.docs} target="_blank" rel="noreferrer" className="kuteka-detail-chip kuteka-detail-chip--accent">
             {copy.documents}
           </a>
         ) : (
           <span className="kuteka-detail-chip">{copy.documentsOnRequest}</span>
         )}
       </div>
+      {canEdit ? (
+        <form onSubmit={saveMedia} className="mt-4 flex flex-col gap-2">
+          <p className="kuteka-detail-meta">{copy.mediaHint}</p>
+          <input value={video} onChange={(e) => setVideo(e.target.value)} placeholder={copy.video} className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm" />
+          <input value={tour} onChange={(e) => setTour(e.target.value)} placeholder={copy.tour} className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm" />
+          <input value={plan} onChange={(e) => setPlan(e.target.value)} placeholder={copy.floorPlan} className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm" />
+          <input value={docs} onChange={(e) => setDocs(e.target.value)} placeholder={copy.documents} className="rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm" />
+          {mediaNote ? <p className="text-sm text-slate-700">{mediaNote}</p> : null}
+          <button type="submit" disabled={savingMedia} className="kuteka-detail-chip kuteka-detail-chip--accent w-fit">
+            {savingMedia ? copy.mediaSaving : copy.mediaSave}
+          </button>
+        </form>
+      ) : null}
     </section>
   );
 }

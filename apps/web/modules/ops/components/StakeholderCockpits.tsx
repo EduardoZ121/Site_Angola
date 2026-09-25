@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { fetchPlatformStats } from '@/modules/administracao/services/admin-client';
 import { getOpsCopy } from '../content';
 import { formatAoa, formatDays } from '../format';
 import type { OpsStats } from '../types';
@@ -18,21 +20,18 @@ export function ClientOpsCockpit({ s, loading }: { s: OpsStats | null; loading: 
       title={c.title}
       subtitle={c.subtitle}
       stats={[
-        { label: c.daysRemaining, value: formatDays(active?.daysRemaining, locale) },
+        { label: c.daysRemaining, value: formatDays(active?.daysRemaining, locale), href: '/app/contratos' },
         {
           label: c.nextRent,
-          value:
-            active?.nextPaymentAmountAoa != null ? formatAoa(active.nextPaymentAmountAoa) : '—',
+          value: active?.nextPaymentAmountAoa != null ? formatAoa(active.nextPaymentAmountAoa) : '—',
+          href: '/app/financeiro',
         },
-        { label: c.paymentsPaid, value: String(s?.paymentsPaid ?? 0) },
-        { label: c.late, value: String(s?.paymentsLate ?? 0) },
-        { label: c.maintenanceOpen, value: String(s?.maintenanceOpen ?? 0) },
-        { label: c.interests, value: String(s?.interests ?? 0) },
-        { label: c.deposit, value: formatAoa(active?.depositAoa) },
-        {
-          label: c.contractStatus,
-          value: active?.status ?? c.noActiveContract,
-        },
+        { label: c.paymentsPaid, value: String(s?.paymentsPaid ?? 0), href: '/app/financeiro' },
+        { label: c.late, value: String(s?.paymentsLate ?? 0), href: '/app/financeiro' },
+        { label: c.maintenanceOpen, value: String(s?.maintenanceOpen ?? 0), href: '/app/assistencia' },
+        { label: c.interests, value: String(s?.interests ?? 0), href: '/app/habitacao?vista=interesses' },
+        { label: c.deposit, value: formatAoa(active?.depositAoa), href: '/app/contratos' },
+        { label: c.contractStatus, value: active?.status ?? c.noActiveContract, href: '/app/contratos' },
       ]}
       links={[
         { href: '/app/habitacao?vista=residencia', label: c.linkResidence, primary: true },
@@ -72,21 +71,18 @@ export function PartnerOpsCockpit({ s, loading }: { s: OpsStats | null; loading:
       title={c.title}
       subtitle={c.subtitle}
       stats={[
-        { label: c.monthlyRevenue, value: formatAoa(s?.monthlyRevenueAoa) },
-        { label: c.annualRevenue, value: formatAoa(s?.annualRevenueAoa) },
-        { label: c.occupancy, value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—' },
-        { label: c.occupied, value: String(s?.propertiesOccupied ?? 0) },
-        { label: c.available, value: String(s?.propertiesAvailable ?? 0) },
-        { label: c.soonFree, value: String(s?.propertiesFutureFree ?? 0) },
-        { label: c.activeContracts, value: String(s?.partnerContractsActive ?? 0) },
-        { label: c.expiring, value: String(s?.partnerContractsExpiring ?? 0) },
-        { label: c.interested, value: String(s?.pipelineInterests ?? 0) },
-        { label: c.visits30, value: String(s?.pipelineVisits30 ?? 0) },
-        { label: c.proposals30, value: String(s?.pipelineProposals30 ?? 0) },
-        {
-          label: c.rating,
-          value: s?.reviewAvg != null ? `${s.reviewAvg.toFixed(1)}★` : '—',
-        },
+        { label: c.monthlyRevenue, value: formatAoa(s?.monthlyRevenueAoa), href: '/app/financeiro' },
+        { label: c.annualRevenue, value: formatAoa(s?.annualRevenueAoa), href: '/app/financeiro' },
+        { label: c.occupancy, value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—', href: '/app/patrimonios' },
+        { label: c.occupied, value: String(s?.propertiesOccupied ?? 0), href: '/app/patrimonios' },
+        { label: c.available, value: String(s?.propertiesAvailable ?? 0), href: '/app/patrimonios' },
+        { label: c.soonFree, value: String(s?.propertiesFutureFree ?? 0), href: '/app/habitacao/explorar?disponibilidade=futura' },
+        { label: c.activeContracts, value: String(s?.partnerContractsActive ?? 0), href: '/app/contratos?estado=active' },
+        { label: c.expiring, value: String(s?.partnerContractsExpiring ?? 0), href: '/app/contratos' },
+        { label: c.interested, value: String(s?.pipelineInterests ?? 0), href: '/app/habitacao/explorar' },
+        { label: c.visits30, value: String(s?.pipelineVisits30 ?? 0), href: '/app/agente' },
+        { label: c.proposals30, value: String(s?.pipelineProposals30 ?? 0), href: '/app/contratos' },
+        { label: c.rating, value: s?.reviewAvg != null ? `${s.reviewAvg.toFixed(1)}★` : '—', href: '/app/confianca' },
       ]}
       links={[
         { href: '/app/patrimonios', label: c.linkProperties, primary: true },
@@ -121,12 +117,12 @@ export function AgentOpsCockpit({ s, loading }: { s: OpsStats | null; loading: b
       title={c.title}
       subtitle={c.subtitle}
       stats={[
-        { label: c.assigned, value: String(s?.assignments ?? 0) },
-        { label: c.contracts, value: String(s?.agentContracts ?? 0) },
-        { label: c.futureReleases, value: String(s?.propertiesFutureFree ?? 0) },
-        { label: c.networkInterests, value: String(s?.pipelineInterests ?? 0) },
-        { label: c.visits30, value: String(s?.pipelineVisits30 ?? 0) },
-        { label: c.proposals30, value: String(s?.pipelineProposals30 ?? 0) },
+        { label: c.assigned, value: String(s?.assignments ?? 0), href: '/app/agente' },
+        { label: c.contracts, value: String(s?.agentContracts ?? 0), href: '/app/contratos?estado=active' },
+        { label: c.futureReleases, value: String(s?.propertiesFutureFree ?? 0), href: '/app/habitacao/explorar?disponibilidade=futura' },
+        { label: c.networkInterests, value: String(s?.pipelineInterests ?? 0), href: '/app/habitacao/explorar' },
+        { label: c.visits30, value: String(s?.pipelineVisits30 ?? 0), href: '/app/agente' },
+        { label: c.proposals30, value: String(s?.pipelineProposals30 ?? 0), href: '/app/contratos' },
       ]}
       links={[
         { href: '/app/agente', label: c.linkCrm, primary: true },
@@ -146,12 +142,12 @@ export function SupervisorOpsCockpit({ s, loading }: { s: OpsStats | null; loadi
       title="Cockpit do Supervisor"
       subtitle="Processos atribuídos, análise de patrimónios, pendências, SLA, contacto PP e escalação."
       stats={[
-        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0) },
-        { label: 'Parceiros', value: String(s?.partnersCount ?? 0) },
-        { label: 'Agentes', value: String(s?.agentsCount ?? 0) },
-        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
-        { label: 'Libertações futuras', value: String(s?.propertiesFutureFree ?? 0) },
-        { label: 'Interessados (rede)', value: String(s?.pipelineInterests ?? 0) },
+        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0), href: '/app/confianca/revisao' },
+        { label: 'Parceiros', value: String(s?.partnersCount ?? 0), href: '/app/admin/utilizadores?papel=patrimonial_partner' },
+        { label: 'Agentes', value: String(s?.agentsCount ?? 0), href: '/app/admin/utilizadores?papel=certified_agent' },
+        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0), href: '/app/contratos?estado=active' },
+        { label: 'Libertações futuras', value: String(s?.propertiesFutureFree ?? 0), href: '/app/habitacao/explorar?disponibilidade=futura' },
+        { label: 'Interessados (rede)', value: String(s?.pipelineInterests ?? 0), href: '/app/admin#pendentes' },
       ]}
       links={[
         { href: '/app/admin', label: 'Central de Trabalho', primary: true },
@@ -176,6 +172,16 @@ export function SupervisorOpsCockpit({ s, loading }: { s: OpsStats | null; loadi
 }
 
 export function FounderOpsCockpit({ s, loading }: { s: OpsStats | null; loading: boolean }) {
+  const [realUsers, setRealUsers] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    void fetchPlatformStats().then((result) => {
+      if (!cancelled && result.ok) setRealUsers(result.data.profiles);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   return (
     <OpsCockpitShell
       loading={loading}
@@ -183,15 +189,12 @@ export function FounderOpsCockpit({ s, loading }: { s: OpsStats | null; loading:
       title="Founder Center · visão executiva"
       subtitle="Governação, pessoas institucionais, flags, KOCC, auditoria e escalações no topo."
       stats={[
-        { label: 'Utilizadores', value: String(s?.users ?? 0) },
-        { label: 'Parceiros', value: String(s?.partnersCount ?? 0) },
-        { label: 'Agentes', value: String(s?.agentsCount ?? 0) },
-        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
-        {
-          label: 'Ocupação',
-          value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—',
-        },
-        { label: 'Receita mensal', value: formatAoa(s?.monthlyRevenueAoa) },
+        { label: 'Utilizadores', value: realUsers != null ? String(realUsers) : s ? String(s.users) : '—', href: '/app/admin/utilizadores', settled: realUsers != null },
+        { label: 'Parceiros', value: String(s?.partnersCount ?? 0), href: '/app/admin/utilizadores?papel=patrimonial_partner' },
+        { label: 'Agentes', value: String(s?.agentsCount ?? 0), href: '/app/admin/utilizadores?papel=certified_agent' },
+        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0), href: '/app/contratos?estado=active' },
+        { label: 'Ocupação', value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—', href: '/app/patrimonios' },
+        { label: 'Receita mensal', value: formatAoa(s?.monthlyRevenueAoa), href: '/app/super?tab=revenue' },
       ]}
       links={[
         { href: '/app/fundador', label: 'Founder Center', primary: true },
@@ -218,9 +221,9 @@ export function ProviderOpsCockpit({ s, loading }: { s: OpsStats | null; loading
       title="Fluxo mínimo operacional"
       subtitle="Pedido → Orçamento → Aceite → Serviço → Agenda → Evidências → Conclusão → Pagamento → Avaliação."
       stats={[
-        { label: 'Manutenções abertas (rede)', value: String(s?.maintenanceOpen ?? 0) },
-        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0) },
-        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0) },
+        { label: 'Manutenções abertas (rede)', value: String(s?.maintenanceOpen ?? 0), href: '/app/servicos' },
+        { label: 'Contratos activos', value: String(s?.contractsActiveTotal ?? 0), href: '/app/contratos?estado=active' },
+        { label: 'Confiança pendente', value: String(s?.trustPending ?? 0), href: '/app/centro-confianca' },
       ]}
       links={[
         { href: '/app/servicos', label: 'Inbox de serviços', primary: true },
@@ -250,26 +253,20 @@ export function AdminOpsCockpit({
       title={executive ? c.titleExec : c.title}
       subtitle={executive ? c.subtitleExec : c.subtitle}
       stats={[
-        { label: c.users, value: String(s?.users ?? 0) },
-        { label: c.contractsActive, value: String(s?.contractsActiveTotal ?? 0) },
-        { label: c.contractsCompleted, value: String(s?.contractsCompletedTotal ?? 0) },
-        { label: c.soonFree, value: String(s?.propertiesFutureFree ?? 0) },
-        { label: c.newClients, value: String(s?.clientsCount ?? 0) },
-        { label: c.partners, value: String(s?.partnersCount ?? 0) },
-        { label: c.agents, value: String(s?.agentsCount ?? 0) },
-        { label: c.trustPending, value: String(s?.trustPending ?? 0) },
+        { label: c.users, value: String(s?.users ?? 0), href: '/app/admin/utilizadores' },
+        { label: c.contractsActive, value: String(s?.contractsActiveTotal ?? 0), href: '/app/contratos?estado=active' },
+        { label: c.contractsCompleted, value: String(s?.contractsCompletedTotal ?? 0), href: '/app/contratos?estado=completed' },
+        { label: c.soonFree, value: String(s?.propertiesFutureFree ?? 0), href: '/app/habitacao/explorar?disponibilidade=futura' },
+        { label: c.newClients, value: String(s?.clientsCount ?? 0), href: '/app/admin/utilizadores?papel=client' },
+        { label: c.partners, value: String(s?.partnersCount ?? 0), href: '/app/admin/utilizadores?papel=patrimonial_partner' },
+        { label: c.agents, value: String(s?.agentsCount ?? 0), href: '/app/admin/utilizadores?papel=certified_agent' },
+        { label: c.trustPending, value: String(s?.trustPending ?? 0), href: '/app/confianca/revisao' },
         ...(executive
           ? [
-              {
-                label: c.avgOccupancy,
-                value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—',
-              },
-              {
-                label: c.avgRelease,
-                value: s?.avgDaysToFree != null ? `${s.avgDaysToFree}d` : '—',
-              },
-              { label: c.monthlyRevenue, value: formatAoa(s?.monthlyRevenueAoa) },
-              { label: c.annualRevenue, value: formatAoa(s?.annualRevenueAoa) },
+              { label: c.avgOccupancy, value: s?.occupancyPct != null ? `${s.occupancyPct}%` : '—', href: '/app/patrimonios' },
+              { label: c.avgRelease, value: s?.avgDaysToFree != null ? `${s.avgDaysToFree}d` : '—', href: '/app/habitacao/explorar?disponibilidade=futura' },
+              { label: c.monthlyRevenue, value: formatAoa(s?.monthlyRevenueAoa), href: '/app/contabilista' },
+              { label: c.annualRevenue, value: formatAoa(s?.annualRevenueAoa), href: '/app/contabilista' },
             ]
           : []),
       ]}

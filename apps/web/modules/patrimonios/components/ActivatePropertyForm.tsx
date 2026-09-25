@@ -34,6 +34,7 @@ import { getPatrimoniosCopy } from '../content';
 import { activateProperty } from '../services/properties-client';
 import type { LocalMediaDraft } from '../services/property-media-client';
 import { PropertyMediaEditor } from './PropertyMediaEditor';
+import { FutureAvailabilityNote } from './FutureAvailabilityNote';
 import { PropertyCompletenessChecklist } from './PropertyCompletenessChecklist';
 
 const DRAFT_STORAGE_KEY = 'kuteka.activate-property.draft';
@@ -111,6 +112,9 @@ type ActivatePropertyDraft = {
   nearMarkets: boolean | null;
   nearTransport: boolean | null;
   commissionSettlement: (typeof COMMISSION_SETTLEMENTS)[number] | '';
+  notYetAvailable: boolean;
+  expectedAvailableOn: string;
+  availabilityNote: string;
   media: MediaDraftMeta[];
   savedAt: string;
 };
@@ -269,6 +273,9 @@ export function ActivatePropertyForm() {
   const [commissionSettlement, setCommissionSettlement] = useState<
     (typeof COMMISSION_SETTLEMENTS)[number] | ''
   >('');
+  const [notYetAvailable, setNotYetAvailable] = useState(false);
+  const [expectedAvailableOn, setExpectedAvailableOn] = useState('');
+  const [availabilityNote, setAvailabilityNote] = useState('');
   const [media, setMedia] = useState<LocalMediaDraft[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [infoMessage, setInfoMessage] = useState<string | null>(null);
@@ -331,6 +338,9 @@ export function ActivatePropertyForm() {
       nearMarkets,
       nearTransport,
       commissionSettlement,
+      notYetAvailable,
+      expectedAvailableOn,
+      availabilityNote,
       media: mediaToMeta(media),
       savedAt: new Date().toISOString(),
     };
@@ -405,6 +415,9 @@ export function ActivatePropertyForm() {
     ) {
       setCommissionSettlement(draft.commissionSettlement ?? '');
     }
+    setNotYetAvailable(Boolean(draft.notYetAvailable));
+    setExpectedAvailableOn(draft.expectedAvailableOn ?? '');
+    setAvailabilityNote(draft.availabilityNote ?? '');
     setMedia(metaToMedia(Array.isArray(draft.media) ? draft.media : []));
     const restoredStep =
       typeof draft.step === 'number' && draft.step >= 0 && draft.step < totalSteps ? draft.step : 0;
@@ -524,6 +537,9 @@ export function ActivatePropertyForm() {
         addressLine,
         streetNumber,
         notes,
+        notYetAvailable,
+        expectedAvailableOn: notYetAvailable ? expectedAvailableOn : '',
+        availabilityNote: notYetAvailable ? availabilityNote : '',
         priceAoa: parseNum(priceAoa),
         bedrooms: parseNum(bedrooms),
         bathrooms: parseNum(bathrooms),
@@ -719,6 +735,42 @@ export function ActivatePropertyForm() {
                 placeholder={copy.fields.pricePlaceholder}
               />
             </div>
+            <label className="flex items-start gap-2 text-sm text-slate-800">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={notYetAvailable}
+                onChange={(event) => setNotYetAvailable(event.target.checked)}
+              />
+              <span>Este imóvel ainda não está disponível. Quero registá-lo na mesma.</span>
+            </label>
+            {notYetAvailable ? (
+              <div className="flex flex-col gap-3">
+                <FutureAvailabilityNote />
+                <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="available-on">Data prevista, se souber</FieldLabel>
+                  <Input
+                    id="available-on"
+                    type="date"
+                    value={expectedAvailableOn}
+                    onChange={(event) => setExpectedAvailableOn(event.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <FieldLabel htmlFor="available-note">Porque ainda não está livre</FieldLabel>
+                  <Textarea
+                    id="available-note"
+                    value={availabilityNote}
+                    onChange={(event) => setAvailabilityNote(event.target.value)}
+                    rows={2}
+                    placeholder="Ex.: o inquilino sai no fim do contrato. Sem data certa também serve."
+                  />
+                </div>
+                <p className="text-xs text-slate-600">
+                  Fica em análise. Não entra como disponível hoje. Depois da aprovação, o cliente vê a data em Explorar com disponibilidade futura e pode pedir aviso.
+                </p>
+              </div>
+            ) : null}
             <div className="flex flex-col gap-2">
               <FieldLabel htmlFor="commissionSettlement">
                 {copy.fields.commissionSettlement}
@@ -1209,6 +1261,14 @@ export function ActivatePropertyForm() {
               <div>
                 <dt className="kuteka-detail-label">{copy.fields.purpose}</dt>
                 <dd className="kuteka-detail-value">{copy.purposes[purpose]}</dd>
+              </div>
+              <div>
+                <dt className="kuteka-detail-label">Disponibilidade</dt>
+                <dd className="kuteka-detail-value">
+                  {notYetAvailable
+                    ? `Ainda não disponível${expectedAvailableOn ? ` · ${expectedAvailableOn}` : ''}`
+                    : 'Pode ser tratado como disponível após aprovação'}
+                </dd>
               </div>
               <div>
                 <dt className="kuteka-detail-label">{copy.fields.price}</dt>

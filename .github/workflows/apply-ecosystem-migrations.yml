@@ -1,4 +1,4 @@
-name: Apply ecosystem migrations (0043–0048)
+name: Apply pending migrations 0052-0059
 
 on:
   workflow_dispatch:
@@ -8,22 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: supabase/setup-cli@v1
-        with:
-          version: latest
-      - name: Push migrations
+      - name: Apply 0052 to 0059 in one run
         env:
-          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
           SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
-          SUPABASE_PROJECT_REF: vhqwitbrpqaiutjbundo
         run: |
-          if [ -n "$SUPABASE_DB_URL" ]; then
-            supabase db push --db-url "$SUPABASE_DB_URL"
-          elif [ -n "$SUPABASE_ACCESS_TOKEN" ]; then
-            echo "SUPABASE_ACCESS_TOKEN present but SUPABASE_DB_URL missing."
-            echo "Add GitHub secret SUPABASE_DB_URL (postgres connection string) and re-run."
-            exit 1
-          else
-            echo "Missing SUPABASE_DB_URL / SUPABASE_ACCESS_TOKEN secrets."
+          if [ -z "$SUPABASE_DB_URL" ]; then
+            echo "Falta o segredo SUPABASE_DB_URL no repositório."
             exit 1
           fi
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+          psql "$SUPABASE_DB_URL" -v ON_ERROR_STOP=1 -f supabase/APPLY_0052_0059_DE_UMA_VEZ.sql

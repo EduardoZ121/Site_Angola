@@ -229,8 +229,13 @@ export async function setProviderActive(
 ): Promise<{ ok: true } | { ok: false; message: string }> {
   try {
     const client = createBrowserClient();
-    const { error } = await client.from('service_providers').update({ active }).eq('id', id);
-    if (error) return { ok: false, message: error.message || copy().actionError };
+    const { error } = await client.rpc('activate_service_provider', {
+      p_id: id,
+      p_active: active,
+    });
+    if (!error) return { ok: true };
+    const fallback = await client.from('service_providers').update({ active }).eq('id', id);
+    if (fallback.error) return { ok: false, message: error.message || fallback.error.message || copy().actionError };
     return { ok: true };
   } catch {
     return { ok: false, message: copy().actionError };

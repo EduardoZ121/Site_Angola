@@ -5,8 +5,16 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Badge, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { PropertyCard } from '@/modules/habitacao/components/PropertyCard';
-import { exploreActivePropertiesPage } from '@/modules/habitacao/services/housing-client';
+import { readRetiredDemoCodes, rememberRetiredDemo, withDemoShowcase } from '@/modules/habitacao/lib/demo-showcase';
+import {
+  exploreActivePropertiesPage,
+  listDemoPublications,
+  retireDemoPublication,
+  type HousingPropertyRow,
+} from '@/modules/habitacao/services/housing-client';
+import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { useRoleExperience } from './RoleExperienceProvider';
 import { getShellCopy } from '../content';
 import { appendFeedPage, type FeedStreamItem } from '../feed/feed-stream';
 import { SoftListSlot } from './SoftListSlot';
@@ -64,12 +72,14 @@ const FeedLinkCard = memo(function FeedLinkCard({
 
 const FeedListing = memo(function FeedListing({
   item,
+  onRetireDemo,
 }: {
   item: Extract<FeedStreamItem, { kind: 'listing' }>;
+  onRetireDemo?: () => void;
 }) {
   return (
     <div className="kuteka-feed-item">
-      <PropertyCard row={item.row} />
+      <PropertyCard row={item.row} onRetireDemo={onRetireDemo} />
     </div>
   );
 });
@@ -80,6 +90,8 @@ const FeedListing = memo(function FeedListing({
  */
 export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
   const { locale } = useLocale();
+  const { session } = useAppSession();
+  const { mode } = useRoleExperience();
   const shell = getShellCopy(locale);
   const feed = shell.feed;
   const [items, setItems] = useState<FeedStreamItem[]>([]);
@@ -112,8 +124,14 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
         return;
       }
 
+      let rows = result.data.rows;
+      if (nextOffset === 0) {
+        const demos = await listDemoPublications();
+        rows = withDemoShowcase(rows, demos, readRetiredDemoCodes());
+      }
+
       setError(null);
-      setItems((prev) => appendFeedPage(prev, result.data.rows, nextPageIndex, locale));
+      setItems((prev) => appendFeedPage(prev, rows, nextPageIndex, locale));
       setOffset(result.data.nextOffset);
       setPageIndex(nextPageIndex + 1);
       setHasMore(result.data.hasMore);
@@ -160,6 +178,18 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
     observer.observe(node);
     return () => observer.disconnect();
   }, [canExplore, hydrated, hasMore, offset, pageIndex, loadPage]);
+
+  const canRetireDemo =
+    mode === 'founder' ||
+    mode === 'administrator' ||
+    mode === 'super_administrator' ||
+    !!session?.permissions.includes('admin.panel');
+
+  function retireDemo(row: HousingPropertyRow) {
+    rememberRetiredDemo(row.code);
+    void retireDemoPublication(row.id);
+    setItems((prev) => prev.filter((item) => item.kind !== 'listing' || item.row.code !== row.code));
+  }
 
   if (!canExplore) {
     return (
@@ -218,7 +248,13 @@ export function PlatformFeed({ canExplore }: { canExplore: boolean }) {
                 />
               );
             }
-            return <FeedListing key={item.key} item={item} />;
+            return (
+              <FeedListing
+                key={item.key}
+                item={item}
+                onRetireDemo={canRetireDemo && item.row.is_demo ? () => retireDemo(item.row) : undefined}
+              />
+            );
           })}
 
           <div ref={sentinelRef} className="h-8 w-full" aria-hidden />

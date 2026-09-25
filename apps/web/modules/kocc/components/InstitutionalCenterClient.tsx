@@ -35,6 +35,7 @@ const PROMOTE_ROLES: { value: PromoteTargetRole; label: string }[] = [
   { value: 'administrator', label: 'Administrator' },
   { value: 'supervisor', label: 'Supervisor' },
   { value: 'auditor', label: 'Auditor' },
+  { value: 'accountant', label: 'Contabilista' },
 ];
 
 function isDemoEmail(email: string | null): boolean {
@@ -49,6 +50,7 @@ function roleLabel(row: InstitutionalDirectoryRow): string {
   if (row.roles.includes('administrator')) return 'Admin';
   if (row.roles.includes('supervisor')) return 'Supervisor';
   if (row.roles.includes('auditor')) return 'Auditor';
+  if (row.roles.includes('accountant')) return 'Contabilista';
   return row.roles[0] ?? '—';
 }
 
@@ -137,9 +139,112 @@ export function InstitutionalCenterClient({ canManage }: PanelProps) {
     await load();
   }
 
+  async function onNameAccountant(event: FormEvent) {
+    event.preventDefault();
+    if (!canPromote) return;
+    const selected = directory.find((r) => r.user_id === userId);
+    if (selected && (selected.is_system_demo || isDemoEmail(selected.email))) {
+      setError('Contas demo.* não podem ser nomeadas.');
+      return;
+    }
+    if (!userId) {
+      setError('Escolha a pessoa ou cole o user_id.');
+      return;
+    }
+    if (reason.trim().length < 3) {
+      setError('Indique um motivo (mín. 3 caracteres).');
+      return;
+    }
+    setRole('accountant');
+    setBusy('promote');
+    setMessage(null);
+    const result = await promoteUser({ userId, role: 'accountant', reason: reason.trim() });
+    setBusy(null);
+    if (!result.ok) {
+      setError(result.message);
+      return;
+    }
+    setMessage(
+      'Contabilista nomeado. Lê o financeiro, prepara o fecho e anexa documentos. Não muda o Founder, não muda flags, não apaga auditoria e não mexe em dinheiro.',
+    );
+    setReason('');
+    await load();
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Feedback error={error} message={message} />
+
+      <PanelSection title="Nomear Contabilista">
+        <p className="mb-3 text-sm text-slate-700">
+          A pessoa cria a conta real, abre o Founder Center e copia o user_id. Aqui escolhe-a e
+          indica o motivo. O papel fica no Audit Center. Não remove o Founder de ninguém.
+        </p>
+        <ul className="mb-3 list-disc space-y-1 pl-5 text-sm text-slate-700">
+          <li>Pode ler o financeiro, preparar o fecho e anexar documentos de trabalho.</li>
+          <li>Não muda o Founder, o Co-Founder nem o Super Admin.</li>
+          <li>Não liga nem desliga flags, não altera comissões e não apaga auditoria.</li>
+          <li>Não movimenta dinheiro, não paga a AGT e não lê mensagens privadas.</li>
+        </ul>
+        <form className="flex flex-col gap-3 sm:max-w-lg" onSubmit={(e) => void onNameAccountant(e)}>
+          <label className="text-sm font-medium text-slate-800">
+            Pessoa
+            <select
+              className={`${selectClass} mt-1`}
+              value={promotable.some((r) => r.user_id === userId) ? userId : ''}
+              onChange={(e) => setUserId(e.target.value)}
+              disabled={!canPromote || !!busy}
+            >
+              <option value="">— escolher no directório ou colar o user_id —</option>
+              {promotable.map((row) => (
+                <option key={row.user_id} value={row.user_id}>
+                  {(row.email ?? row.display_name ?? row.user_id) +
+                    (row.roles.includes('accountant') ? ' · já é contabilista' : '')}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm font-medium text-slate-800">
+            user_id
+            <input
+              className={`${selectClass} mt-1 font-mono text-xs`}
+              value={userId}
+              onChange={(e) => setUserId(e.target.value.trim())}
+              disabled={!canPromote || !!busy}
+              placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            />
+          </label>
+          <label className="text-sm font-medium text-slate-800">
+            Motivo da nomeação
+            <textarea
+              className={`${textareaClass} mt-1`}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              disabled={!canPromote || !!busy}
+              rows={3}
+              placeholder="Ex.: Nomeação do contabilista da Kuteka para o fecho mensal."
+            />
+          </label>
+          <Button
+            type="submit"
+            disabled={!canPromote || busy === 'promote' || !userId || reason.trim().length < 3}
+            loading={busy === 'promote'}
+          >
+            Promover a Contabilista
+          </Button>
+        </form>
+        <p className="mt-3 text-sm text-slate-600">
+          Depois da nomeação, a pessoa entra, muda a experiência para Contabilista e abre o{' '}
+          <Link href="/app/contabilista" className="font-semibold underline">
+            cockpit
+          </Link>{' '}
+          e os{' '}
+          <Link href="/app/aprovacoes" className="font-semibold underline">
+            documentos para aprovar
+          </Link>
+          .
+        </p>
+      </PanelSection>
 
       <PanelSection title="Como entrar como Founder">
         <ol className="list-decimal space-y-1 pl-5 text-sm text-slate-700">
@@ -382,6 +487,11 @@ export function InstitutionalCenterClient({ canManage }: PanelProps) {
                 </option>
               ))}
             </select>
+            {role === 'accountant' ? (
+              <span className="mt-1 block text-xs font-normal text-slate-600">
+                Este papel só lê e prepara. Não altera Founder, flags, auditoria nem dinheiro.
+              </span>
+            ) : null}
           </label>
           <label className="text-sm font-medium text-slate-800">
             Motivo

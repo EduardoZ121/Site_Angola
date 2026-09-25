@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 
-type Stat = { label: string; value: string };
+type Stat = { label: string; value: string; href?: string; settled?: boolean };
 type LinkItem = { href: string; label: string; primary?: boolean };
 
 export function OpsCockpitShell({
@@ -30,12 +30,29 @@ export function OpsCockpitShell({
       <h2 className="kuteka-detail-title mt-1">{title}</h2>
       <p className="kuteka-detail-body mt-1">{subtitle}</p>
       <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <li key={stat.label} className="kuteka-role-stat">
-            <p className="kuteka-role-stat__value">{loading ? '…' : stat.value}</p>
-            <p className="kuteka-role-stat__label">{stat.label}</p>
-          </li>
-        ))}
+        {stats.map((stat) => {
+          const body = (
+            <>
+              <p className="kuteka-role-stat__value">{loading && !stat.settled ? '…' : stat.value}</p>
+              <p className="kuteka-role-stat__label">{stat.label}</p>
+              {stat.href ? <p className="mt-2 text-xs font-semibold text-[#08263f]">Abrir</p> : null}
+            </>
+          );
+          if (!stat.href) {
+            return (
+              <li key={stat.label} className="kuteka-role-stat">
+                {body}
+              </li>
+            );
+          }
+          return (
+            <li key={stat.label}>
+              <Link href={stat.href} className="kuteka-role-stat block transition hover:border-slate-900">
+                {body}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
       {children}
       <div className="mt-4 flex flex-wrap gap-2">

@@ -60,6 +60,7 @@ export function FindHomeClient() {
   const common = getMonetizationCopy(locale).common;
   const dateLocale = LOCALE_INTL_TAG[locale];
   const [rows, setRows] = useState<FindHomeRequestDetail[]>([]);
+  const [listQuery, setListQuery] = useState('');
   const [events, setEvents] = useState<Record<string, FindHomeEvent[]>>({});
   const [openTimeline, setOpenTimeline] = useState<string | null>(null);
   const [uid, setUid] = useState<string | null>(null);
@@ -150,6 +151,17 @@ export function FindHomeClient() {
       copy.municipalityPlaceholder,
     ],
   ];
+
+  const q = listQuery.trim().toLowerCase();
+  const shownRows = q
+    ? rows.filter((row) =>
+        [row.province, row.municipality, row.typology, row.status, row.match_notes, row.kai_notes]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(q),
+      )
+    : rows;
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
@@ -248,8 +260,20 @@ export function FindHomeClient() {
               <h2 className="kuteka-detail-title">{copy.requestsTitle}</h2>
               {canOperate ? <Badge variant="default">{copy.operatorBadge}</Badge> : null}
             </div>
+            {rows.length > 0 ? (
+              <input
+                value={listQuery}
+                onChange={(event) => setListQuery(event.target.value)}
+                placeholder="Procurar zona, tipologia ou estado"
+                aria-label="Procurar pedido de casa"
+                className="kuteka-ops-input mt-3 w-full"
+              />
+            ) : null}
+            {rows.length > 0 && shownRows.length === 0 ? (
+              <p className="mt-2 text-sm text-slate-500">Nenhum pedido neste filtro.</p>
+            ) : null}
             <ul className="mt-3 divide-y divide-slate-200">
-              {rows.map((row) => {
+              {shownRows.map((row) => {
                 const owned = row.client_id === uid;
                 const busy = busyId === row.id;
                 const sla = slaLabel(row, common);

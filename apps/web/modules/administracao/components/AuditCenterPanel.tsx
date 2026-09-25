@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Text } from '@kuteka/ui';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
@@ -27,6 +27,7 @@ export function AuditCenterPanel() {
   const [items, setItems] = useState<AuditLogRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -49,6 +50,18 @@ export function AuditCenterPanel() {
     };
   }, []);
 
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter((row) =>
+      [row.action, row.actor_name, row.actor_id, row.entity_type, row.entity_id, row.reason, ...(row.actor_roles ?? [])]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(q),
+    );
+  }, [items, query]);
+
   return (
     <section className="flex flex-col gap-3" aria-labelledby="audit-center-heading">
       <div className="flex flex-col gap-1">
@@ -56,6 +69,7 @@ export function AuditCenterPanel() {
           {copy.auditTitle}
         </h2>
         <Text className="text-sm text-slate-500">{copy.auditHint}</Text>
+        <p className="text-xs text-slate-500">Últimos 40 registos visíveis. A pesquisa não apaga o histórico.</p>
       </div>
 
       <SoftListSlot pending={loading && items.length === 0}>
@@ -70,8 +84,21 @@ export function AuditCenterPanel() {
         ) : null}
 
         {items.length > 0 ? (
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Procurar acção, pessoa ou motivo"
+            aria-label="Procurar na auditoria"
+            className="kuteka-ops-input w-full"
+          />
+        ) : null}
+        {items.length > 0 && shown.length === 0 ? (
+          <p className="text-sm text-slate-500">Nenhum registo neste filtro.</p>
+        ) : null}
+
+        {shown.length > 0 ? (
           <ul className="flex flex-col gap-3">
-            {items.map((row) => {
+            {shown.map((row) => {
               const entity =
                 row.entity_type || row.entity_id
                   ? [row.entity_type, row.entity_id].filter(Boolean).join(' · ')

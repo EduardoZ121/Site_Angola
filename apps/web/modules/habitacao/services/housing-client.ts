@@ -10,6 +10,7 @@ import { writeAuditLog } from '@kuteka/database';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
 import { getHabitacaoCopy } from '../content';
+import { openingAllows } from '@/modules/kocc/lib/opening-settings';
 
 import { HOUSING_ENRICHED_SELECT, HOUSING_ENRICHED_SELECT_V13 } from '@/modules/listings/types';
 
@@ -336,6 +337,40 @@ export async function exploreActiveProperties(
   return { ok: true, data: page.data.rows };
 }
 
+export async function listDemoPublications(): Promise<HousingPropertyRow[]> {
+  try {
+    const client = createBrowserClient();
+    const { data, error } = await client
+      .from('properties')
+      .select(PROPERTY_SELECT_CORE)
+      .eq('is_demo', true)
+      .eq('status', 'active')
+      .is('deleted_at', null)
+      .order('code', { ascending: true })
+      .limit(8);
+    if (error || !data) return [];
+    return data as unknown as HousingPropertyRow[];
+  } catch {
+    return [];
+  }
+}
+
+export async function retireDemoPublication(id: string): Promise<{ ok: boolean }> {
+  try {
+    const client = createBrowserClient();
+    const rpc = await client.rpc('retire_demo_publication', { p_id: id });
+    if (!rpc.error) return { ok: true };
+    const fallback = await client
+      .from('properties')
+      .update({ deleted_at: new Date().toISOString(), status: 'archived' })
+      .eq('id', id)
+      .eq('is_demo', true);
+    return { ok: !fallback.error };
+  } catch {
+    return { ok: false };
+  }
+}
+
 export async function getActiveProperty(
   id: string,
 ): Promise<{ ok: true; data: HousingPropertyRow } | { ok: false; message: string }> {
@@ -352,8 +387,8 @@ export async function getActiveProperty(
 
     if (!enriched.error && enriched.data) {
       const row = enriched.data as unknown as HousingPropertyRow;
-      if (!isHousingRowPubliclyVisible(row)) return { ok: false, message: copy.loadError };
-      return { ok: true, data: row };
+      if (row.is_demo || isHousingRowPubliclyVisible(row)) return { ok: true, data: row };
+      return { ok: false, message: copy.loadError };
     }
 
     const v13 = await client
@@ -366,8 +401,8 @@ export async function getActiveProperty(
 
     if (!v13.error && v13.data) {
       const row = v13.data as unknown as HousingPropertyRow;
-      if (!isHousingRowPubliclyVisible(row)) return { ok: false, message: copy.loadError };
-      return { ok: true, data: row };
+      if (row.is_demo || isHousingRowPubliclyVisible(row)) return { ok: true, data: row };
+      return { ok: false, message: copy.loadError };
     }
 
     const core = await client
@@ -380,15 +415,15 @@ export async function getActiveProperty(
 
     if (core.error || !core.data) return { ok: false, message: copy.loadError };
     const row = core.data as unknown as HousingPropertyRow;
-    if (!isHousingRowPubliclyVisible(row)) return { ok: false, message: copy.loadError };
-    return { ok: true, data: row };
+    if (row.is_demo || isHousingRowPubliclyVisible(row)) return { ok: true, data: row };
+    return { ok: false, message: copy.loadError };
   } catch {
     return { ok: false, message: copy.loadError };
   }
 }
 
 export async function expressInterest(
-  input: ExpressInterestInput,
+  input: ExpressInterestInput & { visitOn?: string | null; visitWindow?: string | null },
 ): Promise<{ ok: true; id: string } | { ok: false; message: string }> {
   const copy = getHabitacaoCopy(resolveUiLocale());
   const parsed = expressInterestSchema.safeParse(input);
@@ -396,19 +431,70 @@ export async function expressInterest(
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.interestError };
   }
 
+  const visitOn = input.visitOn?.trim() || '';
+  if (visitOn) {
+    const gate = await openingAllows('visits_open');
+    if (!gate.ok) return gate;
+  }
+  const visitWindow = input.visitWindow === 'manha' || input.visitWindow === 'tarde' ? input.visitWindow : 'qualquer';
+  const windowLabel = visitWindow === 'manha' ? 'manhã' : visitWindow === 'tarde' ? 'tarde' : 'qualquer hora';
+  const visitNote = visitOn ? `Pedido de visita: ${visitOn} · ${windowLabel}` : null;
+  const notes = [visitNote, parsed.data.notes].filter(Boolean).join('\n') || null;
+
   try {
     const client = createBrowserClient();
+    if (visitOn) {
+      const visit = await client.rpc('request_property_visit', {
+        p_property_id: parsed.data.propertyId,
+        p_visit_on: visitOn,
+        p_window: visitWindow,
+      });
+      if (!visit.error && visit.data) return { ok: true, id: visit.data as string };
+      const visitMessage = visit.error?.message?.toLowerCase() ?? '';
+      if (visitMessage.includes('property not available')) {
+        return {
+          ok: false,
+          message:
+            'Este imóvel ainda não está publicado para pedido. O interesse só entra quando a ficha estiver activa.',
+        };
+      }
+    }
     const { data, error } = await client.rpc('express_property_interest', {
       p_property_id: parsed.data.propertyId,
-      p_notes: parsed.data.notes ?? null,
+      p_notes: notes,
     });
     if (error) {
-      if (error.message?.toLowerCase().includes('housing.explore')) {
+      const message = error.message?.toLowerCase() ?? '';
+      if (message.includes('housing.explore')) {
         return { ok: false, message: copy.forbidden };
+      }
+      if (message.includes('property not available')) {
+        return {
+          ok: false,
+          message:
+            'Este imóvel ainda não está publicado para pedido. O interesse só entra quando a ficha estiver activa.',
+        };
       }
       return { ok: false, message: copy.interestError };
     }
     return { ok: true, id: data as string };
+  } catch {
+    return { ok: false, message: copy.interestError };
+  }
+}
+
+export async function cancelMyVisitRequest(
+  propertyId: string,
+): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getHabitacaoCopy(resolveUiLocale());
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.rpc('express_property_interest', {
+      p_property_id: propertyId,
+      p_notes: 'Pedido de visita cancelado pelo cliente.',
+    });
+    if (error) return { ok: false, message: copy.interestError };
+    return { ok: true };
   } catch {
     return { ok: false, message: copy.interestError };
   }

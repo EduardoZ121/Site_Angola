@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
@@ -22,9 +22,18 @@ import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProv
 import { AdminBetaInboxPanel } from './AdminBetaInboxPanel';
 import { AuditCenterPanel } from './AuditCenterPanel';
 import { EscalationPanel } from './EscalationPanel';
+import { ContinuityRiskPanel } from '@/modules/kocc/components/ContinuityRiskPanel';
+import { OpeningSettingsPanel } from '@/modules/kocc/components/OpeningSettingsPanel';
 import { KosAnalyticsPanel } from './KosAnalyticsPanel';
 import { ModerationCenterPanel } from './ModerationCenterPanel';
 import { PublicationReviewQueue } from './PublicationReviewQueue';
+
+function interestStatus(status: string): string {
+  if (status === 'submitted') return 'Enviado';
+  if (status === 'reviewing') return 'Em análise';
+  if (status === 'assigned') return 'Atribuído';
+  return status;
+}
 
 function hasAdminAccess(permissions: string[] | undefined): boolean {
   if (!permissions?.length) return false;
@@ -43,8 +52,21 @@ export function AdminHubClient() {
 
   const [stats, setStats] = useState<PlatformStats | null>(null);
   const [pending, setPending] = useState<AdminInterestRow[]>([]);
+  const [pendingQuery, setPendingQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const shownPending = useMemo(() => {
+    const q = pendingQuery.trim().toLowerCase();
+    if (!q) return pending;
+    return pending.filter((row) =>
+      [row.property_title, row.property_id, row.status, row.client_id]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(q),
+    );
+  }, [pending, pendingQuery]);
 
   useEffect(() => {
     let cancelled = false;
@@ -112,6 +134,12 @@ export function AdminHubClient() {
                 Escalações
               </Link>
               <Link
+                href="/app/servicos/area"
+                className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
+              >
+                Aprovar prestadores
+              </Link>
+              <Link
                 href="/app/habitacao/explorar"
                 className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit shrink-0')}
               >
@@ -132,6 +160,9 @@ export function AdminHubClient() {
             </div>
           ) : null}
         </header>
+
+        {allowed ? <OpeningSettingsPanel /> : null}
+        {allowed ? <ContinuityRiskPanel /> : null}
 
         {accessPending ? <SoftListSlot pending /> : null}
         {denied ? (
@@ -180,27 +211,29 @@ export function AdminHubClient() {
                   <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {(
                       [
-                        ['profiles', stats.profiles],
-                        ['properties', stats.properties_active],
-                        ['agents', stats.roles_certified_agent],
-                        ['assignments', stats.agent_assignments_active],
-                        ['trust', stats.trust_pending ?? 0],
-                        ['interests', stats.interests_pending ?? 0],
-                        ['demo', stats.properties_demo ?? 0],
-                        ['contractsActive', stats.contracts_active ?? 0],
-                        ['contractsPending', stats.contracts_pending ?? 0],
+                        ['profiles', stats.profiles, '/app/admin/utilizadores'],
+                        ['properties', stats.properties_active, '/app/habitacao/explorar'],
+                        ['agents', stats.roles_certified_agent, '/app/admin/utilizadores?papel=certified_agent'],
+                        ['assignments', stats.agent_assignments_active, '/app/agente'],
+                        ['trust', stats.trust_pending ?? 0, '/app/confianca/revisao'],
+                        ['interests', stats.interests_pending ?? 0, '/app/admin#pendentes'],
+                        ['demo', stats.properties_demo ?? 0, '/app/habitacao/explorar'],
+                        ['contractsActive', stats.contracts_active ?? 0, '/app/contratos?estado=active'],
+                        ['contractsPending', stats.contracts_pending ?? 0, '/app/contratos?estado=pending_acceptance'],
                       ] as const
-                    ).map(([key, value]) => (
-                      <li
-                        key={key}
-                        className="rounded-kuteka border border-slate-200 bg-white px-4 py-4"
-                      >
-                        <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
-                          {copy.stats[key]}
-                        </p>
-                        <p className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
-                          {value}
-                        </p>
+                    ).map(([key, value, href]) => (
+                      <li key={key}>
+                        <Link
+                          href={href}
+                          className="block rounded-kuteka border border-slate-200 bg-white px-4 py-4 transition hover:border-slate-900"
+                        >
+                          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                            {copy.stats[key]}
+                          </p>
+                          <p className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
+                            {value}
+                          </p>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -210,7 +243,7 @@ export function AdminHubClient() {
                 ) : null}
               </section>
 
-              <section className="mt-8 flex flex-col gap-3" aria-labelledby="pending-heading">
+              <section className="mt-8 flex flex-col gap-3" id="pendentes" aria-labelledby="pending-heading">
                 <div className="flex flex-col gap-1">
                   <h2 id="pending-heading" className="text-sm font-semibold text-slate-800">
                     {copy.pendingTitle}
@@ -221,8 +254,20 @@ export function AdminHubClient() {
                   <EmptyState title={copy.pendingTitle} description={copy.emptyPending} />
                 ) : null}
                 {pending.length > 0 ? (
+                  <input
+                    value={pendingQuery}
+                    onChange={(event) => setPendingQuery(event.target.value)}
+                    placeholder="Procurar imóvel ou estado"
+                    aria-label="Procurar interesses pendentes"
+                    className="kuteka-ops-input w-full"
+                  />
+                ) : null}
+                {pending.length > 0 && shownPending.length === 0 ? (
+                  <p className="text-sm text-slate-500">Nenhum interesse neste filtro.</p>
+                ) : null}
+                {shownPending.length > 0 ? (
                   <ul className="flex flex-col gap-2">
-                    {pending.map((row) => (
+                    {shownPending.map((row) => (
                       <li
                         key={row.id}
                         className="flex flex-col gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-between"
@@ -232,7 +277,7 @@ export function AdminHubClient() {
                             {row.property_title ?? row.property_id}
                           </p>
                           <p className="text-sm text-slate-500">
-                            {new Date(row.created_at).toLocaleString('pt-PT')} · {row.status}
+                            {new Date(row.created_at).toLocaleString('pt-PT')} · {interestStatus(row.status)}
                           </p>
                         </div>
                         <Link

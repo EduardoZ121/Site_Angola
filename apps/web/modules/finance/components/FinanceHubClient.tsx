@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Heading, Input, Label, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
@@ -38,6 +38,19 @@ import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProv
  * User-facing finance hub — pay-per-use sandbox + invoices.
  * Free exploration remains free; this is for optional paid services.
  */
+function moneyStatus(status: string): string {
+  if (status === 'draft') return 'Rascunho';
+  if (status === 'issued') return 'Emitida';
+  if (status === 'paid') return 'Paga';
+  if (status === 'pending') return 'Pendente';
+  if (status === 'scheduled') return 'Agendado';
+  if (status === 'sent') return 'Enviado';
+  if (status === 'cancelled' || status === 'canceled') return 'Cancelada';
+  if (status === 'open') return 'Aberta';
+  if (status === 'sandbox') return 'Teste';
+  return status;
+}
+
 function openHtml(html: string) {
   const blob = new Blob([html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
@@ -65,6 +78,15 @@ export function FinanceHubClient() {
   const [redeemBusy, setRedeemBusy] = useState(false);
   const [invoiceBusy, setInvoiceBusy] = useState<string | null>(null);
   const [consentBusy, setConsentBusy] = useState<string | null>(null);
+  const [invoiceQuery, setInvoiceQuery] = useState('');
+
+  const shownInvoices = useMemo(() => {
+    const q = invoiceQuery.trim().toLowerCase();
+    if (!q) return invoices;
+    return invoices.filter((inv) =>
+      [inv.number, inv.status, moneyStatus(inv.status), inv.currency].join(' ').toLowerCase().includes(q),
+    );
+  }, [invoiceQuery, invoices]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -312,7 +334,7 @@ export function FinanceHubClient() {
                     {r.offset_label.toUpperCase()} · {r.scheduled_for} · {r.channel}
                   </span>
                   <Badge variant={r.status === 'scheduled' ? 'warning' : 'success'}>
-                    {r.status}
+                    {moneyStatus(r.status)}
                   </Badge>
                 </li>
               ))}
@@ -324,15 +346,25 @@ export function FinanceHubClient() {
 
           <section className="kuteka-detail-panel p-5">
             <h2 className="kuteka-detail-title">As minhas faturas</h2>
+            <p className="mt-1 text-sm text-slate-500">Últimas 10 visíveis. Esta lista não liga um pagamento.</p>
+            {invoices.length > 0 ? (
+              <input
+                value={invoiceQuery}
+                onChange={(event) => setInvoiceQuery(event.target.value)}
+                placeholder="Procurar número ou estado"
+                aria-label="Procurar fatura"
+                className="kuteka-ops-input mt-3 w-full"
+              />
+            ) : null}
             <ul className="mt-3 divide-y divide-slate-200">
-              {invoices.map((inv) => (
+              {shownInvoices.map((inv) => (
                 <li
                   key={inv.id}
                   className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm"
                 >
                   <span className="font-mono">{inv.number}</span>
                   <span className="flex items-center gap-2">
-                    {formatAoaAmount(Number(inv.total), inv.currency)} · {inv.status}
+                    {formatAoaAmount(Number(inv.total), inv.currency)} · {moneyStatus(inv.status)}
                     <Button
                       type="button"
                       size="sm"
@@ -347,6 +379,9 @@ export function FinanceHubClient() {
               ))}
               {invoices.length === 0 ? (
                 <li className="py-3 text-sm text-slate-500">Ainda sem faturas.</li>
+              ) : null}
+              {invoices.length > 0 && shownInvoices.length === 0 ? (
+                <li className="py-3 text-sm text-slate-500">Nenhuma fatura neste filtro.</li>
               ) : null}
             </ul>
           </section>

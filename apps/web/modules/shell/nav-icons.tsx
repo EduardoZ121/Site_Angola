@@ -329,10 +329,14 @@ const ICONS: Record<ShellNavLabelKey, (props: IconProps) => ReactElement> = {
   garantia: IconShield,
   assistencia: IconTools,
   servicos: IconTools,
+  serPrestador: IconTools,
   planos: IconPlan,
   fundador: IconSuper,
   escalacoes: IconAdmin,
   contabilista: IconFinance,
+  aprovacoes: IconContract,
+  juridico: IconShield,
+  processos: IconContract,
 };
 
 export function NavIcon({

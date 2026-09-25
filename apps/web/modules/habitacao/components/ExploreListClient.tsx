@@ -10,13 +10,18 @@ import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
+import { ExperiencePulse } from '@/modules/kocc/components/ExperiencePulse';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getHabitacaoCopy } from '../content';
+import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
+import { readRetiredDemoCodes, rememberRetiredDemo, withDemoShowcase } from '../lib/demo-showcase';
 import {
   exploreActivePropertiesPage,
   getClientPreferences,
+  listDemoPublications,
+  retireDemoPublication,
   type HousingPropertyRow,
 } from '../services/housing-client';
 import { PropertyCard } from './PropertyCard';
@@ -38,6 +43,7 @@ export function ExploreListClient() {
   const searchParams = useSearchParams();
   const futureMode = searchParams?.get('disponibilidade') === 'futura';
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { mode } = useRoleExperience();
   const canExplore =
     sessionStatus === 'ready' && !!session?.permissions.includes('housing.explore');
   const accessPending = sessionStatus === 'loading';
@@ -83,8 +89,22 @@ export function ExploreListClient() {
         if (replace) setRows([]);
         setHasMore(false);
       } else {
+        const openFeed =
+          replace &&
+          nextOffset === 0 &&
+          !nextFilters.futureAvailability &&
+          !nextFilters.query &&
+          !nextFilters.purpose &&
+          !nextFilters.province &&
+          !nextFilters.city &&
+          !nextFilters.propertyType;
+        let nextRows = result.data.rows;
+        if (openFeed) {
+          const demos = await listDemoPublications();
+          nextRows = withDemoShowcase(nextRows, demos, readRetiredDemoCodes());
+        }
         setError(null);
-        setRows((prev) => (replace ? result.data.rows : [...prev, ...result.data.rows]));
+        setRows((prev) => (replace ? nextRows : [...prev, ...result.data.rows]));
         setOffset(result.data.nextOffset);
         setHasMore(result.data.hasMore);
       }
@@ -95,6 +115,18 @@ export function ExploreListClient() {
     },
     [],
   );
+
+  const canRetireDemo =
+    mode === 'founder' ||
+    mode === 'administrator' ||
+    mode === 'super_administrator' ||
+    !!session?.permissions.includes('admin.panel');
+
+  async function retireDemo(row: HousingPropertyRow) {
+    rememberRetiredDemo(row.code);
+    await retireDemoPublication(row.id);
+    setRows((prev) => prev.filter((item) => item.code !== row.code));
+  }
 
   function applyFilters(next: Filters) {
     setFilters(next);
@@ -333,12 +365,20 @@ export function ExploreListClient() {
                 />
               ) : null}
 
+              {rows.some((row) => row.is_demo) ? (
+                <p className="text-sm text-slate-600">
+                  As fichas com a marca Demo não são ofertas reais. Um administrador retira-as uma a uma.
+                </p>
+              ) : null}
               {rows.length > 0 ? (
                 <>
                   <ul className="grid gap-4 sm:grid-cols-2">
                     {rows.map((row) => (
                       <li key={row.id} className="kuteka-feed-item">
-                        <PropertyCard row={row} />
+                        <PropertyCard
+                          row={row}
+                          onRetireDemo={canRetireDemo && row.is_demo ? () => void retireDemo(row) : undefined}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -352,6 +392,8 @@ export function ExploreListClient() {
                 </>
               ) : null}
             </SoftListSlot>
+
+            <ExperiencePulse pagePath="/app/habitacao/explorar" />
 
             <FlowNextSteps
               title="Depois de explorar"

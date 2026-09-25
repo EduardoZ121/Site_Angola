@@ -75,7 +75,11 @@ export function CreateContractForm() {
       } else {
         setError(null);
         setProperties(result.data);
-        const first = result.data[0];
+        const preset =
+          typeof window !== 'undefined'
+            ? new URLSearchParams(window.location.search).get('imovel') ?? ''
+            : '';
+        const first = result.data.find((property) => property.id === preset) ?? result.data[0];
         if (first) {
           setPropertyId(first.id);
           setPurpose(first.purpose === 'sale' ? 'sale' : 'rent');

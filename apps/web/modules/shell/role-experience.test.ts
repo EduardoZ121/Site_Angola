@@ -98,4 +98,16 @@ describe('role experience', () => {
     ]);
     expect(canAccessPath('/app/contabilista', founder).ok).toBe(true);
   });
+
+  it('sends the accountant home to the cockpit and blocks clients from it', () => {
+    expect(homePathForExperience('accountant')).toBe('/app/contabilista');
+    const accountant = permissionsForExperience('accountant', [
+      'platform.access',
+      'finance.read',
+      'finance.manage',
+    ]);
+    expect(accountant).toContain('finance.read');
+    expect(accountant).not.toContain('finance.manage');
+    expect(canAccessPath('/app/contabilista', accountant).ok).toBe(true);
+  });
 });

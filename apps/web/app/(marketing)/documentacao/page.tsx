@@ -21,6 +21,23 @@ export default function DocumentacaoPage() {
         </Link>
         <LanguageSwitcher variant="compact" />
       </div>
+      <nav className="flex flex-wrap gap-3 text-sm font-semibold">
+        <Link href="/documentacao/contabilista" className="underline">
+          Pacote do contabilista
+        </Link>
+        <Link href="/documentacao/jurista" className="underline">
+          Pacote do jurista
+        </Link>
+        <Link href="/termos" className="underline">
+          Termos
+        </Link>
+        <Link href="/privacidade" className="underline">
+          Privacidade
+        </Link>
+        <Link href="/cookies" className="underline">
+          Cookies
+        </Link>
+      </nav>
       <HelpCenterClient docs={docs} basePath="/documentacao" publicMode />
     </main>
   );

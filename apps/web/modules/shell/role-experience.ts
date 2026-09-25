@@ -13,7 +13,8 @@ export type ExperienceMode =
   | 'supervisor'
   | 'administrator'
   | 'super_administrator'
-  | 'founder';
+  | 'founder'
+  | 'accountant';
 
 export type NavGroup = 'geral' | 'cliente' | 'parceiro' | 'agente' | 'prestador' | 'admin';
 
@@ -29,6 +30,7 @@ export const EXPERIENCE_LABELS: Record<ExperienceMode, string> = {
   administrator: 'Administrador',
   super_administrator: 'Superadministrador',
   founder: 'Founder / Owner',
+  accountant: 'Contabilista',
 };
 
 /** Permissions exposed in the UI for each experience mode. */
@@ -119,6 +121,7 @@ const MODE_LENS: Record<ExperienceMode, readonly string[]> = {
     'finance.manage',
     'finance.read',
   ],
+  accountant: ['platform.access', 'finance.read'],
 };
 
 export function availableExperiences(roles: readonly string[]): ExperienceMode[] {
@@ -136,6 +139,7 @@ export function availableExperiences(roles: readonly string[]): ExperienceMode[]
   if (set.has('administrator')) modes.push('administrator');
   if (set.has('super_administrator')) modes.push('super_administrator');
   if (set.has('founder') || set.has('co_founder')) modes.push('founder');
+  if (set.has('accountant')) modes.push('accountant');
 
   return modes;
 }
@@ -147,6 +151,7 @@ export function defaultExperience(roles: readonly string[]): ExperienceMode {
   if (available.includes('super_administrator')) return 'super_administrator';
   if (available.includes('administrator')) return 'administrator';
   if (available.includes('supervisor')) return 'supervisor';
+  if (available.includes('accountant')) return 'accountant';
   if (available.includes('certified_agent')) return 'certified_agent';
   if (available.includes('service_provider')) return 'service_provider';
   if (available.includes('client_partner')) return 'client_partner';
@@ -197,6 +202,7 @@ const PATH_RULES: PathRule[] = [
   { prefix: '/app/super', permissions: ['finance.manage', 'founder.manage'] },
   { prefix: '/app/servicos', permissions: ['services.operate', 'platform.access'] },
   { prefix: '/app/contabilista', permissions: ['finance.read', 'finance.manage', 'founder.manage'] },
+  { prefix: '/app/aprovacoes', permissions: ['finance.read', 'finance.manage', 'founder.manage', 'platform.access'] },
   // /app/fundador is open to any signed-in account (bootstrap) — no PATH_RULE.
 ];
 
@@ -233,6 +239,8 @@ export function homePathForExperience(mode: ExperienceMode): string {
       return '/app/super';
     case 'founder':
       return '/app/fundador';
+    case 'accountant':
+      return '/app/contabilista';
     default:
       return '/app';
   }

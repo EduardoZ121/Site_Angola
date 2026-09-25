@@ -10,6 +10,7 @@ import { createBrowserClient } from '@/lib/supabase/client';
 import { resolveUiLocale } from '@/modules/i18n/resolve-locale';
 import { ENRICHED_PROPERTY_SELECT, ENRICHED_PROPERTY_SELECT_V13 } from '@/modules/listings/types';
 import { getPatrimoniosCopy } from '../content';
+import { openingAllows } from '@/modules/kocc/lib/opening-settings';
 import { uploadPropertyMedia, type LocalMediaDraft } from './property-media-client';
 
 export type PropertyRow = {
@@ -84,6 +85,8 @@ export type PropertyRow = {
   near_markets?: boolean | null;
   near_transport?: boolean | null;
   lifecycle_status?: string | null;
+  expected_available_on?: string | null;
+  availability_note?: string | null;
   kuteka_score?: number | null;
   last_maintenance_at?: string | null;
   last_inspection_at?: string | null;
@@ -219,6 +222,8 @@ export async function activateProperty(
   if (!parsed.success) {
     return { ok: false, message: parsed.error.issues[0]?.message ?? copy.saveError };
   }
+  const gate = await openingAllows('publications_open');
+  if (!gate.ok) return gate;
 
   try {
     const client = createBrowserClient();
@@ -233,7 +238,7 @@ export async function activateProperty(
     const needsEval = propertyRequiresEvaluation(v.requestedServices, v.managementLevel);
     // Publication gate (Beta 1.6): never publish on create — always draft + in review.
     const publishStatus = 'draft';
-    const lifecycleStatus = 'rascunho';
+    const lifecycleStatus = v.notYetAvailable ? 'libertacao_prevista' : 'rascunho';
     const reviewStatus = 'in_review';
     const code = newPropertyCode();
 
@@ -346,6 +351,17 @@ export async function activateProperty(
     }
 
     const propertyId = insertResult.data.id as string;
+
+    if (v.notYetAvailable) {
+      await client
+        .from('properties')
+        .update({
+          lifecycle_status: 'libertacao_prevista',
+          expected_available_on: v.expectedAvailableOn || null,
+          availability_note: v.availabilityNote || null,
+        })
+        .eq('id', propertyId);
+    }
 
     if (mediaDrafts.length) {
       const mediaResult = await uploadPropertyMedia(propertyId, mediaDrafts);

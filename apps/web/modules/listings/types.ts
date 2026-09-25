@@ -98,6 +98,7 @@ export type ContractReviewRow = {
   comment: string | null;
   dimensions: Record<string, number> | null;
   created_at: string;
+  is_demo?: boolean | null;
   owner_reply?: string | null;
   owner_replied_at?: string | null;
   agent_reply?: string | null;
@@ -109,7 +110,8 @@ const MANUAL_OPS_COLUMNS =
 
 export const ENRICHED_PROPERTY_SELECT =
   'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, updated_at, description, video_url, virtual_tour_url, floor_plan_url, documents_url, year_built, renovated_year, area_useful_m2, area_total_m2, floors, bathrooms, parking_spaces, monthly_condo_aoa, condo_rules, amenities, latitude, longitude, location_exact, neighborhood, nearby_notes, ' +
-  MANUAL_OPS_COLUMNS;
+  MANUAL_OPS_COLUMNS +
+  ', expected_available_on, availability_note';
 
 export const HOUSING_ENRICHED_SELECT =
   'id, owner_id, code, title, property_type, purpose, province, city, address_line, status, notes, price_aoa, bedrooms, cover_image_url, is_demo, created_at, description, video_url, virtual_tour_url, floor_plan_url, documents_url, year_built, renovated_year, area_useful_m2, area_total_m2, floors, bathrooms, parking_spaces, monthly_condo_aoa, condo_rules, amenities, latitude, longitude, location_exact, neighborhood, nearby_notes, ' +

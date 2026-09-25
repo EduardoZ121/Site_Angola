@@ -7,6 +7,9 @@ import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { AuditCenterPanel } from '@/modules/administracao/components/AuditCenterPanel';
 import { EscalationPanel } from '@/modules/administracao/components/EscalationPanel';
+import { OwnerDelegationPanel } from './OwnerDelegationPanel';
+import { OpeningSettingsPanel } from './OpeningSettingsPanel';
+import { ContinuityRiskPanel } from './ContinuityRiskPanel';
 import { ActivationReadinessPanel } from './ActivationReadinessPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
@@ -122,6 +125,12 @@ export function FounderCenterClient() {
               Central de Trabalho
             </Link>
             <Link
+              href="/app/processos"
+              className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+            >
+              Processos e continuidade
+            </Link>
+            <Link
               href="/app/centro-seguranca"
               className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
             >
@@ -231,7 +240,19 @@ export function FounderCenterClient() {
                     >
                       Revisão de Confiança
                     </Link>
+                    <Link
+                      href="/app/processos"
+                      className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+                    >
+                      Quem continua sem o Founder
+                    </Link>
                   </div>
+                  <p className="text-sm text-slate-600">
+                    Pontos, convites e vouchers de crescimento continuam desligados. Não há saldo promocional a confundir com dinheiro.
+                  </p>
+                  <OwnerDelegationPanel />
+                  <OpeningSettingsPanel />
+                  <ContinuityRiskPanel />
                 </section>
               ) : null}
 
@@ -253,6 +274,18 @@ export function FounderCenterClient() {
                     className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
                   >
                     Cockpit do contabilista
+                  </Link>
+                  <Link
+                    href="/app/aprovacoes"
+                    className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+                  >
+                    Documentos para o contabilista e o jurista
+                  </Link>
+                  <Link
+                    href="/app/juridico"
+                    className={cn(buttonVariants({ variant: 'secondary' }), 'w-fit')}
+                  >
+                    Mesa do jurista
                   </Link>
                   <Link
                     href="/app/servicos/rede"

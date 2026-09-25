@@ -5,8 +5,8 @@ import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { getConfiancaCopy } from '@/modules/confianca/content';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
-import { inventoryBadge } from '@/modules/kocc/lib/public-label';
 import { getHabitacaoCopy } from '../content';
+import { availabilityLabel } from '../lib/visit-request';
 import type { HousingPropertyRow } from '../services/housing-client';
 
 type PropertyCardProps = {
@@ -16,14 +16,16 @@ type PropertyCardProps = {
    *  `kuteka_score` when omitted. */
   ratingAvg?: number | null;
   ratingCount?: number | null;
+  onRetireDemo?: () => void;
 };
 
-function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProps) {
+function PropertyCardComponent({ row, ratingAvg, ratingCount, onRetireDemo }: PropertyCardProps) {
   const { locale } = useLocale();
   const copy = getHabitacaoCopy(locale);
   const trustCopy = getConfiancaCopy(locale).trustCard;
   const href = `/app/habitacao/detalhe?id=${encodeURIComponent(row.id)}`;
   const kutekaScore = row.kuteka_score != null ? Math.round(Number(row.kuteka_score)) : null;
+  const later = availabilityLabel(row);
   const hasRating = ratingAvg != null && (ratingCount ?? 0) > 0;
 
   return (
@@ -50,9 +52,8 @@ function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProp
           <Badge variant="brand">
             {copy.purposes[row.purpose as keyof typeof copy.purposes] ?? row.purpose}
           </Badge>
-          {inventoryBadge(row.is_demo, locale) ? (
-            <Badge variant="default">{inventoryBadge(row.is_demo, locale)}</Badge>
-          ) : null}
+          {row.is_demo ? <Badge variant="warning">Demo</Badge> : null}
+          {later ? <Badge variant="warning">{later}</Badge> : null}
         </div>
         <div>
           <h3 className="text-base font-semibold text-slate-900">
@@ -86,12 +87,23 @@ function PropertyCardComponent({ row, ratingAvg, ratingCount }: PropertyCardProp
             </p>
           ) : null}
         </div>
-        <Link
-          href={href}
-          className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'mt-auto w-fit')}
-        >
-          {copy.openDetail}
-        </Link>
+        <div className="mt-auto flex flex-wrap gap-2">
+          <Link
+            href={href}
+            className={cn(buttonVariants({ variant: 'secondary', size: 'sm' }), 'w-fit')}
+          >
+            {copy.openDetail}
+          </Link>
+          {row.is_demo && onRetireDemo ? (
+            <button
+              type="button"
+              onClick={onRetireDemo}
+              className="text-sm font-semibold text-rose-800 underline-offset-2 hover:underline"
+            >
+              Retirar Demo
+            </button>
+          ) : null}
+        </div>
       </div>
     </article>
   );

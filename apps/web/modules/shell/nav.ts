@@ -35,10 +35,14 @@ export type ShellNavLabelKey =
   | 'garantia'
   | 'assistencia'
   | 'servicos'
+  | 'serPrestador'
   | 'planos'
   | 'fundador'
   | 'escalacoes'
-  | 'contabilista';
+  | 'contabilista'
+  | 'aprovacoes'
+  | 'juridico'
+  | 'processos';
 
 export type ShellNavItem = {
   id: string;
@@ -132,7 +136,8 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/contratos',
     status: 'active',
     requiresPermission: 'contracts.manage',
-    experiences: ['client', 'client_partner'],
+    // O mesmo destino que Contratos. Não mostrar os dois.
+    experiences: [],
     group: 'cliente',
   },
   // ── Parceiro ─────────────────────────────────────────────────────────────
@@ -157,7 +162,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
   {
     id: 'relatorios',
     labelKey: 'relatorios',
-    href: '/app',
+    href: '/app/patrimonios',
     status: 'active',
     requiresPermission: 'properties.manage',
     experiences: ['patrimonial_partner', 'client_partner'],
@@ -276,7 +281,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     href: '/app/contabilista',
     status: 'active',
     requiresAnyPermission: ['finance.read', 'finance.manage', 'founder.manage'],
-    experiences: ['administrator', 'super_administrator', 'founder'],
+    experiences: ['administrator', 'super_administrator', 'founder', 'accountant'],
     group: 'admin',
   },
   {
@@ -294,6 +299,7 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
       'supervisor',
       'service_provider',
       'founder',
+      'accountant',
     ],
     group: 'geral',
   },
@@ -355,6 +361,23 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     group: 'geral',
   },
   {
+    id: 'serPrestador',
+    labelKey: 'serPrestador',
+    href: '/app/servicos/tornar-se',
+    status: 'active',
+    experiences: [
+      'client',
+      'client_partner',
+      'patrimonial_partner',
+      'certified_agent',
+      'founder',
+      'administrator',
+      'super_administrator',
+      'supervisor',
+    ],
+    group: 'geral',
+  },
+  {
     id: 'planos',
     labelKey: 'planos',
     href: '/app/parceiro/planos',
@@ -372,6 +395,23 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     group: 'prestador',
   },
   {
+    id: 'juridico',
+    labelKey: 'juridico',
+    href: '/app/juridico',
+    status: 'active',
+    experiences: ['founder', 'administrator', 'super_administrator', 'accountant'],
+    group: 'admin',
+  },
+  {
+    id: 'aprovacoes',
+    labelKey: 'aprovacoes',
+    href: '/app/aprovacoes',
+    status: 'active',
+    requiresAnyPermission: ['finance.read', 'finance.manage', 'founder.manage'],
+    experiences: ['founder', 'accountant', 'administrator', 'super_administrator'],
+    group: 'admin',
+  },
+  {
     id: 'fundador',
     labelKey: 'fundador',
     href: '/app/fundador',
@@ -387,6 +427,13 @@ export const SHELL_NAV_ITEMS: readonly ShellNavItem[] = [
     requiresAnyPermission: ['admin.panel', 'properties.review'],
     experiences: ['supervisor', 'administrator', 'super_administrator', 'founder'],
     group: 'admin',
+  },
+  {
+    id: 'processos',
+    labelKey: 'processos',
+    href: '/app/processos',
+    status: 'active',
+    group: 'geral',
   },
   {
     id: 'conta',

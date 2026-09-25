@@ -324,7 +324,18 @@ export type PropertyInterestLeadRow = {
   property?: AgentPropertyRow | null;
 };
 
-/** Open leads (property_interests) visible to the agent via existing RLS. */
+export async function acceptVisitRequest(id: string, notes: string | null): Promise<{ ok: true } | { ok: false; message: string }> {
+  const copy = getAgenteCopy(resolveUiLocale());
+  const next = `${notes ?? ''}\nVisita aceite pelo agente. A hora exacta combina-se por mensagem.`.trim();
+  try {
+    const client = createBrowserClient();
+    const { error } = await client.from('property_interests').update({ notes: next }).eq('id', id);
+    if (error) return { ok: false, message: error.message || copy.saveError };
+    return { ok: true };
+  } catch {
+    return { ok: false, message: copy.saveError };
+  }
+}
 export async function listOpenPropertyInterestLeads(): Promise<
   { ok: true; data: PropertyInterestLeadRow[] } | { ok: false; message: string }
 > {

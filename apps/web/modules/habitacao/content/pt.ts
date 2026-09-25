@@ -84,8 +84,8 @@ export const habitacaoCopyPt = {
       visitas: 'Visitas',
     },
     visits: {
-      title: 'Visitas & acompanhamento',
-      description: 'Pedidos de interesse e estados de acompanhamento (visita / proposta).',
+      title: 'Pedidos de visita',
+      description: 'Só os pedidos em que indicou um dia. Não é um calendário com hora marcada.',
     },
     favorites: {
       title: 'Favoritos / Interesses',

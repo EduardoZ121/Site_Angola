@@ -11,6 +11,7 @@ import { trackBetaFeature } from '@/modules/kocc/services/kocc-client';
 import { parseMarkdownDocument, type MdBlock } from '@/modules/institutional/lib/parse-markdown';
 import type { HelpDocs } from '@/modules/institutional/lib/help-docs';
 import { getShellCopy } from '../content';
+import { RoleReadingPanel } from './RoleReadingPanel';
 import { isHelpSectionId, type HelpSectionId } from '../lib/help-sections';
 
 export type HelpCenterProps = {
@@ -203,7 +204,11 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
     { label: shell.helpExtra.contactSupport, href: '/contacto' },
     ...(publicMode
       ? []
-      : [{ label: shell.helpExtra.securityCenter, href: '/app/centro-seguranca' }]),
+      : [
+          { label: shell.helpExtra.securityCenter, href: '/app/centro-seguranca' },
+          { label: 'Contabilista e jurista', href: '/app/aprovacoes' },
+          { label: 'Processos e continuidade', href: '/app/processos' },
+        ]),
   ];
 
   return (
@@ -234,6 +239,8 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
           </a>
         </div>
       </header>
+
+      {!publicMode ? <RoleReadingPanel /> : null}
 
       <section className="kuteka-detail-panel p-5" aria-label="Secções do Centro de Documentação">
         <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -297,12 +304,13 @@ function HelpCenterInner({ docs, basePath = '/app/ajuda', publicMode = false }: 
       {!publicMode ? (
         <>
           <BetaFeedbackForm pagePath={`${basePath}?sec=${section}`} />
-          <section
-            className="kuteka-detail-panel flex flex-col gap-3 p-5"
-            id="reclamacao-operacional"
-          >
-            <h2 className="kuteka-detail-title">{shell.betaFeedback.complaintTitle}</h2>
-            <p className="kuteka-detail-body">{shell.betaFeedback.complaintBody}</p>
+          <section className="flex flex-col gap-3" id="reclamacao-operacional">
+            <BetaFeedbackForm
+              pagePath={`${basePath}?sec=${section}`}
+              kinds={['reclamacao']}
+              title={shell.betaFeedback.complaintTitle}
+              subtitle={shell.betaFeedback.complaintBody}
+            />
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/contacto"

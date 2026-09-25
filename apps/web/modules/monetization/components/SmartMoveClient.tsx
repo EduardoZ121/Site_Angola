@@ -61,6 +61,7 @@ export function SmartMoveClient() {
   const dateLocale = LOCALE_INTL_TAG[locale];
   const ready = sessionStatus === 'ready';
   const [rows, setRows] = useState<SmartMoveRequestDetail[]>([]);
+  const [listQuery, setListQuery] = useState('');
   const [contracts, setContracts] = useState<{ id: string; code: string; title: string }[]>([]);
   const [uid, setUid] = useState<string | null>(null);
   const [canOperate, setCanOperate] = useState(false);
@@ -182,6 +183,17 @@ export function SmartMoveClient() {
     await load();
   }
 
+  const q = listQuery.trim().toLowerCase();
+  const shownRows = q
+    ? rows.filter((row) =>
+        [row.urgency_band, row.status, row.target_exit_on, row.match_notes, row.failure_reason]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(q),
+      )
+    : rows;
+
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
       <div className="flex flex-col gap-5">
@@ -271,8 +283,20 @@ export function SmartMoveClient() {
               <h2 className="kuteka-detail-title">{copy.requestsTitle}</h2>
               {canOperate ? <Badge variant="default">{copy.operatorBadge}</Badge> : null}
             </div>
+            {rows.length > 0 ? (
+              <input
+                value={listQuery}
+                onChange={(event) => setListQuery(event.target.value)}
+                placeholder="Procurar estado, data ou nota"
+                aria-label="Procurar pedido de mudança"
+                className="kuteka-ops-input mt-3 w-full"
+              />
+            ) : null}
+            {rows.length > 0 && shownRows.length === 0 ? (
+              <p className="mt-2 text-sm text-slate-500">Nenhum pedido neste filtro.</p>
+            ) : null}
             <ul className="mt-3 divide-y divide-slate-200">
-              {rows.map((r) => {
+              {shownRows.map((r) => {
                 const busy = busyId === r.id;
                 const owned = r.client_id === uid;
                 const sla = slaLabel(r, common);

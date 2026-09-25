@@ -7,7 +7,7 @@ import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
-import { inventoryBadge } from '@/modules/kocc/lib/public-label';
+import { ExperiencePulse } from '@/modules/kocc/components/ExperiencePulse';
 import { PropertyShowcase } from '@/modules/listings/components/PropertyShowcase';
 import { MessagePropertyOwnerButton } from '@/modules/mensagens/components/MessagePropertyOwnerButton';
 import {
@@ -19,6 +19,8 @@ import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { NotifyAvailabilityButton } from '@/modules/ops/components/NotifyAvailabilityButton';
+import { availabilityLabel } from '../lib/visit-request';
+import { showcaseById } from '../lib/demo-showcase';
 import { getHabitacaoCopy } from '../content';
 import {
   expressInterest,
@@ -46,6 +48,8 @@ export function HousingDetailClient({ id }: { id: string }) {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [hasInterest, setHasInterest] = useState(false);
+  const [visitOn, setVisitOn] = useState('');
+  const [visitWindow, setVisitWindow] = useState('qualquer');
 
   useEffect(() => {
     let cancelled = false;
@@ -58,8 +62,15 @@ export function HousingDetailClient({ id }: { id: string }) {
       ]);
       if (cancelled) return;
       if (!prop.ok) {
-        setError(prop.message);
-        setRow(null);
+        const demo = showcaseById(id);
+        if (demo) {
+          setError(null);
+          setRow(demo);
+          setActiveUrl(demo.cover_image_url);
+        } else {
+          setError(prop.message);
+          setRow(null);
+        }
       } else {
         setError(null);
         setRow(prop.data);
@@ -89,7 +100,7 @@ export function HousingDetailClient({ id }: { id: string }) {
     setBusy(true);
     setMessage(null);
     setError(null);
-    const result = await expressInterest({ propertyId: id });
+    const result = await expressInterest({ propertyId: id, visitOn, visitWindow });
     setBusy(false);
     if (!result.ok) {
       setError(result.message);
@@ -115,9 +126,7 @@ export function HousingDetailClient({ id }: { id: string }) {
           {row ? (
             <div className="flex flex-wrap gap-2">
               <Badge variant="success">Activo</Badge>
-              {inventoryBadge(row.is_demo, locale) ? (
-                <Badge variant="default">{inventoryBadge(row.is_demo, locale)}</Badge>
-              ) : null}
+              {row.is_demo ? <Badge variant="warning">Demo</Badge> : null}
             </div>
           ) : null}
         </header>
@@ -152,6 +161,11 @@ export function HousingDetailClient({ id }: { id: string }) {
 
           {row ? (
             <>
+              {availabilityLabel(row) ? (
+                <p className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+                  {availabilityLabel(row)}. Ainda não está livre para entrada. Pode pedir aviso quando abrir.
+                </p>
+              ) : null}
               <PropertyShowcase
                 row={row}
                 media={media}
@@ -177,8 +191,36 @@ export function HousingDetailClient({ id }: { id: string }) {
               ) : null}
 
               <div className="kuteka-detail-panel flex flex-col gap-3 p-4">
+                {canExplore && !row.is_demo && !hasInterest ? (
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label className="flex flex-col gap-1 text-sm text-slate-800">
+                      Data preferida para visita
+                      <input
+                        type="date"
+                        value={visitOn}
+                        onChange={(event) => setVisitOn(event.target.value)}
+                        className="rounded-kuteka border border-slate-300 bg-white px-3 py-2"
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1 text-sm text-slate-800">
+                      Altura do dia
+                      <select
+                        value={visitWindow}
+                        onChange={(event) => setVisitWindow(event.target.value)}
+                        className="rounded-kuteka border border-slate-300 bg-white px-3 py-2"
+                      >
+                        <option value="qualquer">Qualquer hora</option>
+                        <option value="manha">Manhã</option>
+                        <option value="tarde">Tarde</option>
+                      </select>
+                    </label>
+                    <p className="text-xs text-slate-600 sm:col-span-2">
+                      A data é um pedido, não uma marcação confirmada. O agente vê o pedido. Não há calendário separado.
+                    </p>
+                  </div>
+                ) : null}
                 <div className="flex flex-wrap gap-3">
-                  {canExplore ? (
+                  {canExplore && !row.is_demo ? (
                     <Button
                       type="button"
                       variant="primary"
@@ -221,6 +263,7 @@ export function HousingDetailClient({ id }: { id: string }) {
                 />
               </div>
 
+              <ExperiencePulse pagePath="/app/habitacao/detalhe" context={{ propertyId: id }} />
               <FlowNextSteps
                 title={copy.detail.nextTitle}
                 steps={[

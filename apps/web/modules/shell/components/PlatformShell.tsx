@@ -33,6 +33,14 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
   const items = visibleNavItems(effectivePermissions, mode);
   const groups = groupNavItems(items);
   const showGroupHeaders = mode === 'client_partner' || groups.length > 2;
+  const [query, setQuery] = useState('');
+  const q = query.trim().toLowerCase();
+  const filteredGroups = groups
+    .map(({ group, items: groupItems }) => ({
+      group,
+      items: groupItems.filter((item) => !q || shell.items[item.labelKey].toLowerCase().includes(q)),
+    }))
+    .filter((group) => group.items.length > 0);
 
   return (
     <div className="flex flex-col gap-3 p-3">
@@ -43,7 +51,19 @@ function NavList({ pathname, onNavigate }: { pathname: string; onNavigate?: () =
         <p className="mt-0.5 text-sm font-bold text-white">{modeBadgeLabel(mode, locale)}</p>
       </div>
 
-      {groups.map(({ group, items: groupItems }) => (
+      <input
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        placeholder="Procurar destino"
+        aria-label="Procurar no menu"
+        className="w-full rounded-kuteka border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-slate-300"
+      />
+
+      {filteredGroups.length === 0 ? (
+        <p className="px-3 text-sm text-slate-300">Nenhum destino neste menu.</p>
+      ) : null}
+
+      {filteredGroups.map(({ group, items: groupItems }) => (
         <div key={group}>
           {showGroupHeaders && group !== 'geral' ? (
             <p className="mb-1 px-3 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-slate-400">
@@ -172,9 +192,9 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
       </aside>
 
       <div className="relative z-10 flex min-h-0 min-w-0 flex-1 flex-col">
-        <header className="kuteka-glass-chrome z-30 shrink-0 border-b border-white/10">
-          <div className="flex items-center justify-between gap-3 px-4 py-3.5 sm:px-6">
-            <div className="flex min-w-0 items-center gap-3">
+        <header className="kuteka-glass-chrome kuteka-topbar-shell z-30 shrink-0 border-b border-white/10">
+          <div className="kuteka-topbar">
+            <div className="kuteka-topbar-brand">
               <button
                 type="button"
                 className={cn(
@@ -191,10 +211,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
                 </span>
               </button>
               <div className="min-w-0 md:hidden">
-                <BrandMark href="/app" variant="inline" tone="light" size="md" />
-                <p className="truncate text-[11px] font-semibold text-[#fde68a]">
-                  {shell.institutional.badge}
-                </p>
+                <BrandMark href="/app" variant="inline" tone="light" size="sm" />
               </div>
               <div className="hidden min-w-0 md:block">
                 <p
@@ -209,7 +226,7 @@ export function PlatformShell({ children, session, sessionStatus }: PlatformShel
               </div>
             </div>
 
-            <div className="flex items-center gap-1 text-slate-100 sm:gap-2">
+            <div className="kuteka-topbar-actions text-slate-100">
               <TopbarActions />
               <UserMenu session={session} sessionStatus={sessionStatus} roleLabels={roleLabels} />
             </div>

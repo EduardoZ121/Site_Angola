@@ -9,6 +9,7 @@ import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate'
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 import { listServiceOrders } from '@/modules/monetization/services/monetization-client';
+import { OpeningSettingsPanel } from '@/modules/kocc/components/OpeningSettingsPanel';
 import {
   formatAoaAmount,
   listCampaigns,
@@ -61,6 +62,27 @@ const CLOSE_ITEMS = [
   'Validação do contabilista',
 ];
 
+type WorkFile = {
+  id: string;
+  name: string;
+  note: string;
+  size: number;
+  addedAt: string;
+};
+
+const FILE_KEY = 'kuteka-accountant-files';
+
+function readWorkFiles(): WorkFile[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = window.localStorage.getItem(FILE_KEY);
+    const parsed = raw ? (JSON.parse(raw) as WorkFile[]) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Cockpit de leitura sobre Kuteka Pay, facturas, reembolsos e campanhas.
  * Não cria livro paralelo, não calcula imposto e não paga a AGT.
@@ -70,6 +92,7 @@ export function AccountantCockpitClient() {
   const { mode } = useRoleExperience();
   const allowed =
     mode === 'founder' ||
+    mode === 'accountant' ||
     mode === 'super_administrator' ||
     mode === 'administrator' ||
     Boolean(session?.permissions.includes('finance.read')) ||
@@ -83,6 +106,8 @@ export function AccountantCockpitClient() {
   const [commissionTotal, setCommissionTotal] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
   const [checked, setChecked] = useState<Record<string, boolean>>({});
+  const [files, setFiles] = useState<WorkFile[]>([]);
+  const [fileNote, setFileNote] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -107,6 +132,10 @@ export function AccountantCockpitClient() {
   }, []);
 
   useEffect(() => {
+    setFiles(readWorkFiles());
+  }, []);
+
+  useEffect(() => {
     if (status === 'ready' && allowed) void load();
     else if (status === 'ready') setLoading(false);
   }, [allowed, load, status]);
@@ -122,6 +151,35 @@ export function AccountantCockpitClient() {
   const closePct = Math.round(
     (CLOSE_ITEMS.filter((item) => checked[item]).length / CLOSE_ITEMS.length) * 100,
   );
+
+  function attachFile(file: File | null) {
+    if (!file) return;
+    const next: WorkFile = {
+      id: `${Date.now()}-${file.name}`,
+      name: file.name,
+      note: fileNote.trim(),
+      size: file.size,
+      addedAt: new Date().toISOString(),
+    };
+    const saved = [next, ...files].slice(0, 30);
+    setFiles(saved);
+    setFileNote('');
+    try {
+      window.localStorage.setItem(FILE_KEY, JSON.stringify(saved));
+    } catch {
+      /* the list still shows in this session */
+    }
+  }
+
+  function removeFile(id: string) {
+    const saved = files.filter((item) => item.id !== id);
+    setFiles(saved);
+    try {
+      window.localStorage.setItem(FILE_KEY, JSON.stringify(saved));
+    } catch {
+      /* ignore */
+    }
+  }
 
   function downloadPackage() {
     const lines = [
@@ -151,7 +209,19 @@ export function AccountantCockpitClient() {
             e não mexe no dinheiro dos clientes. O fecho desta página não fecha o mês na base.
           </Text>
           {session?.email ? <p className="kuteka-detail-meta mt-2">{session.email}</p> : null}
+          <div className="mt-3 flex flex-wrap gap-3 text-sm font-semibold">
+            <Link href="/app/aprovacoes" className="underline">
+              Documentos para o contabilista e o jurista
+            </Link>
+            <Link href="/app/financeiro" className="underline">
+              Facturas
+            </Link>
+            <Link href="/app/fundador?tab=pessoas" className="underline">
+              Promover alguém a Contabilista
+            </Link>
+          </div>
         </header>
+        {allowed ? <OpeningSettingsPanel /> : null}
 
         {!allowed ? (
           <p className="rounded-kuteka border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-950">
@@ -179,10 +249,10 @@ export function AccountantCockpitClient() {
             <SoftListSlot pending={loading}>
               {tab === 'painel' ? (
                 <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                  <Metric label="Facturas visíveis" value={formatAoaAmount(invoiceTotal)} hint={`${invoices.length} documentos`} />
-                  <Metric label="Reembolsos visíveis" value={formatAoaAmount(refundTotal)} hint={`${refunds.length} movimentos`} />
-                  <Metric label="Comissão de serviços" value={formatAoaAmount(commissionTotal)} hint={`${orderCount} pedidos visíveis`} />
-                  <Metric label="Preparação do fecho" value={`${closePct}%`} hint="Não fecha o período" />
+                  <Metric label="Facturas visíveis" value={formatAoaAmount(invoiceTotal)} hint={`${invoices.length} documentos`} onOpen={() => setTab('facturacao')} />
+                  <Metric label="Reembolsos visíveis" value={formatAoaAmount(refundTotal)} hint={`${refunds.length} movimentos`} onOpen={() => setTab('pagamentos')} />
+                  <Metric label="Comissão de serviços" value={formatAoaAmount(commissionTotal)} hint={`${orderCount} pedidos visíveis`} onOpen={() => setTab('receitas')} />
+                  <Metric label="Preparação do fecho" value={`${closePct}%`} hint="Não fecha o período" onOpen={() => setTab('fecho')} />
                 </section>
               ) : null}
 
@@ -299,12 +369,52 @@ export function AccountantCockpitClient() {
               ) : null}
 
               {tab === 'documentos' ? (
-                <section className="kuteka-detail-panel p-5 text-sm text-slate-700">
-                  <h2 className="font-semibold text-slate-900">Documentos em falta</h2>
-                  <ul className="mt-2 list-disc pl-5">
-                    <li>Comprovativo bancário do período — por receber</li>
-                    <li>Validação fiscal do contabilista — por receber</li>
+                <section className="kuteka-detail-panel flex flex-col gap-3 p-5 text-sm text-slate-700">
+                  <h2 className="font-semibold text-slate-900">Documentos de trabalho</h2>
+                  <p>
+                    Anexe o nome do comprovativo e uma nota. O ficheiro não vai para um banco nem para a AGT.
+                    Fica nesta conta, neste navegador, até o remover.
+                  </p>
+                  <ul className="list-disc pl-5">
+                    <li>Comprovativo bancário do período — por receber, se o contabilista o tiver</li>
+                    <li>Validação fiscal — continua no <Link href="/app/aprovacoes" className="underline">parecer</Link></li>
                     <li>Factura certificada AGT — desligada</li>
+                  </ul>
+                  <label className="text-sm font-medium text-slate-800">
+                    Nota
+                    <input
+                      className="mt-1 w-full rounded-kuteka border border-slate-300 px-3 py-2"
+                      value={fileNote}
+                      onChange={(event) => setFileNote(event.target.value)}
+                      placeholder="Ex.: extracto de Agosto, ainda não conciliado"
+                    />
+                  </label>
+                  <label className="w-fit cursor-pointer rounded-kuteka border border-slate-300 bg-white px-3 py-2 text-sm font-semibold text-slate-900">
+                    Anexar documento
+                    <input
+                      type="file"
+                      className="sr-only"
+                      onChange={(event) => {
+                        attachFile(event.target.files?.[0] ?? null);
+                        event.target.value = '';
+                      }}
+                    />
+                  </label>
+                  <ul className="divide-y divide-slate-200">
+                    {files.map((item) => (
+                      <li key={item.id} className="flex items-start justify-between gap-3 py-2">
+                        <span>
+                          <span className="font-medium text-slate-900">{item.name}</span>
+                          <span className="mt-0.5 block text-xs text-slate-600">
+                            {item.note || 'Sem nota'} · {new Date(item.addedAt).toLocaleString('pt-AO')}
+                          </span>
+                        </span>
+                        <button type="button" className="text-xs font-semibold text-red-700" onClick={() => removeFile(item.id)}>
+                          Remover
+                        </button>
+                      </li>
+                    ))}
+                    {files.length === 0 ? <li className="py-2 text-slate-600">Ainda não há anexos neste navegador.</li> : null}
                   </ul>
                 </section>
               ) : null}
@@ -329,11 +439,18 @@ export function AccountantCockpitClient() {
                 <section className="kuteka-detail-panel p-5 text-sm text-slate-700">
                   <h2 className="font-semibold text-slate-900">O que precisa de atenção</h2>
                   <ul className="mt-2 list-disc pl-5">
-                    <li>Papel de contabilista ainda não existe. Quem entra aqui é Founder, Super ou Admin.</li>
-                    <li>Despesas da empresa ainda não têm livro.</li>
-                    <li>Pagamento à AGT bloqueado.</li>
-                    <li>Fecho mensal não tranca o período.</li>
-                    <li>KAI fiscal não dá parecer jurídico.</li>
+                    <li>
+                      O Founder nomeia o contabilista em{' '}
+                      <Link href="/app/fundador?tab=pessoas" className="underline">Pessoas</Link>.
+                      O papel só lê, prepara o fecho e anexa documentos.
+                    </li>
+                    <li>Despesas da empresa ainda não têm livro. O contabilista define as categorias.</li>
+                    <li>Pagamento à AGT bloqueado. Não há botão de dinheiro real.</li>
+                    <li>O fecho mensal não tranca o período.</li>
+                    <li>
+                      Os textos para aprovar estão em{' '}
+                      <Link href="/app/aprovacoes" className="underline">Aprovações</Link>.
+                    </li>
                   </ul>
                 </section>
               ) : null}
@@ -357,12 +474,22 @@ export function AccountantCockpitClient() {
   );
 }
 
-function Metric({ label, value, hint }: { label: string; value: string; hint: string }) {
+function Metric({
+  label,
+  value,
+  hint,
+  onOpen,
+}: {
+  label: string;
+  value: string;
+  hint: string;
+  onOpen?: () => void;
+}) {
   return (
-    <article className="kuteka-detail-panel p-4">
+    <button type="button" onClick={onOpen} className="kuteka-detail-panel p-4 text-left transition hover:border-slate-900">
       <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
       <p className="mt-1 text-lg font-semibold text-slate-900">{value}</p>
       <p className="text-xs text-slate-600">{hint}</p>
-    </article>
+    </button>
   );
 }

@@ -16,6 +16,7 @@ import type { ExperienceMode } from '../role-experience';
 import { useInstitutionalIdentity } from '../hooks/useInstitutionalIdentity';
 import { institutionalBadge } from '../lib/institutional-badge';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { isInsidePopover, ViewportPopover } from './ViewportPopover';
 import { useRoleExperience } from './RoleExperienceProvider';
 
 type UserMenuProps = {
@@ -385,7 +386,9 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
   useEffect(() => {
     if (!open) return;
     const onPointer = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+      const target = event.target;
+      if (rootRef.current?.contains(target as Node) || isInsidePopover(target)) return;
+      setOpen(false);
     };
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
@@ -436,11 +439,12 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
       </button>
 
       {open ? (
-        <div
+        <ViewportPopover
+          open={open}
+          anchorRef={rootRef}
           id={menuId}
           role="menu"
-          aria-label={shell.userMenuAria}
-          className="kuteka-account-panel kuteka-account-panel--menu"
+          label={shell.userMenuAria}
         >
           <div className="kuteka-account-panel__head">
             <Link
@@ -568,7 +572,7 @@ export function UserMenu({ session, sessionStatus, roleLabels }: UserMenuProps) 
               </Link>
             </div>
           </div>
-        </div>
+        </ViewportPopover>
       ) : null}
     </div>
   );

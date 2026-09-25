@@ -28,6 +28,9 @@ import { FeatureFlagsPanel } from './super/FeatureFlagsPanel';
 import { CampaignsPanel } from './super/CampaignsPanel';
 import { KoccCenterClient } from '@/modules/kocc/components/KoccCenterClient';
 import { InstitutionalCenterClient } from '@/modules/kocc/components/InstitutionalCenterClient';
+import { OwnerDelegationPanel } from '@/modules/kocc/components/OwnerDelegationPanel';
+import { ContinuityRiskPanel } from '@/modules/kocc/components/ContinuityRiskPanel';
+import { OpeningSettingsPanel } from '@/modules/kocc/components/OpeningSettingsPanel';
 
 type TabKey =
   | 'revenue'
@@ -88,6 +91,18 @@ export function SuperCommandCenter() {
 
   const [tab, setTab] = useState<TabKey>('revenue');
 
+  function openTab(next: TabKey) {
+    setTab(next);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('tab', next);
+      window.history.replaceState(null, '', `${url.pathname}${url.search}`);
+    } catch {
+      /* ignore */
+    }
+    document.getElementById('super-command-nav')?.scrollIntoView({ block: 'start' });
+  }
+
   useEffect(() => {
     try {
       const raw = new URLSearchParams(window.location.search).get('tab');
@@ -95,6 +110,12 @@ export function SuperCommandCenter() {
     } catch {
       /* ignore */
     }
+    function sync() {
+      const raw = new URLSearchParams(window.location.search).get('tab');
+      setTab(initialTab(raw));
+    }
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
   }, []);
 
   const tabs: { key: TabKey; label: string }[] = [
@@ -119,7 +140,7 @@ export function SuperCommandCenter() {
   ];
 
   const panels: Record<TabKey, ReactNode> = {
-    revenue: <RevenuePanel />,
+    revenue: <RevenuePanel onOpen={(next) => openTab(initialTab(next))} />,
     catalog: <CatalogPanel canManage={canManage} />,
     pricing: <PricingPanel canManage={canManage} />,
     credits: <CreditsPanel canManage={canManage} />,
@@ -136,7 +157,12 @@ export function SuperCommandCenter() {
     flags: <FeatureFlagsPanel canManage={canManage} />,
     campaigns: <CampaignsPanel canManage={canManage} />,
     kocc: <KoccCenterClient canManage={canManage} />,
-    institutional: <InstitutionalCenterClient canManage={canManage} />,
+    institutional: (
+      <div className="flex flex-col gap-4">
+        <InstitutionalCenterClient canManage={canManage} />
+        <OwnerDelegationPanel readOnly />
+      </div>
+    ),
   };
 
   return (
@@ -174,12 +200,16 @@ export function SuperCommandCenter() {
           </div>
         </header>
 
+        {canRead ? <OpeningSettingsPanel /> : null}
+        {canRead ? <ContinuityRiskPanel /> : null}
+
         {accessPending ? <SoftListSlot pending /> : null}
         {denied ? <ForbiddenPanel message={copy.forbidden} /> : null}
 
         {canRead ? (
           <>
             <nav
+              id="super-command-nav"
               className="kuteka-detail-panel flex flex-wrap gap-2 p-3"
               aria-label="Secções do Centro de Comando"
             >
@@ -190,7 +220,7 @@ export function SuperCommandCenter() {
                   size="sm"
                   variant={tab === t.key ? 'primary' : 'ghost'}
                   aria-pressed={tab === t.key}
-                  onClick={() => setTab(t.key)}
+                  onClick={() => openTab(t.key)}
                 >
                   {t.label}
                 </Button>

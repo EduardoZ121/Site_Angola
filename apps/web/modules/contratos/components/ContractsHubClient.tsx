@@ -40,6 +40,17 @@ export function ContractsHubClient() {
   const [rows, setRows] = useState<ContractRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
+
+  useEffect(() => {
+    try {
+      const estado = new URLSearchParams(window.location.search).get('estado');
+      if (estado) setStatusFilter(estado);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,6 +89,18 @@ export function ContractsHubClient() {
       demo: rows.filter((row) => row.is_demo).length,
     };
   }, [rows]);
+
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return rows.filter((row) => {
+      if (statusFilter === 'demo' && !row.is_demo) return false;
+      if (statusFilter && statusFilter !== 'demo' && row.status !== statusFilter) return false;
+      if (!q) return true;
+      const property = getContractProperty(row);
+      const hay = `${row.code} ${row.title} ${property?.title ?? ''} ${row.property_id}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }, [query, rows, statusFilter]);
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
@@ -121,15 +144,21 @@ export function ContractsHubClient() {
             >
               {(
                 [
-                  [copy.stats.active, stats.active],
-                  [copy.stats.pending, stats.pending],
-                  [copy.stats.completed, stats.completed],
-                  [copy.stats.betaInventory, stats.demo],
+                  ['active', copy.stats.active, stats.active],
+                  ['pending_acceptance', copy.stats.pending, stats.pending],
+                  ['completed', copy.stats.completed, stats.completed],
+                  ['demo', copy.stats.betaInventory, stats.demo],
                 ] as const
-              ).map(([label, value]) => (
-                <div
-                  key={label}
-                  className="rounded-kuteka border border-slate-200 bg-white px-4 py-3"
+              ).map(([key, label, value]) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setStatusFilter((current) => (current === key ? '' : key))}
+                  className={
+                    statusFilter === key
+                      ? 'rounded-kuteka border border-brand-400 bg-brand-50 px-4 py-3 text-left'
+                      : 'rounded-kuteka border border-slate-200 bg-white px-4 py-3 text-left'
+                  }
                 >
                   <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                     {label}
@@ -137,7 +166,7 @@ export function ContractsHubClient() {
                   <p className="mt-1 text-2xl font-semibold tracking-tight text-slate-900">
                     {value}
                   </p>
-                </div>
+                </button>
               ))}
             </section>
 
@@ -176,8 +205,27 @@ export function ContractsHubClient() {
                 />
               ) : null}
               {rows.length > 0 ? (
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Procurar código, título ou património"
+                    aria-label="Procurar contrato"
+                    className="kuteka-ops-input w-full"
+                  />
+                  {statusFilter ? (
+                    <button type="button" className="text-sm font-semibold text-brand-700 underline" onClick={() => setStatusFilter('')}>
+                      Limpar filtro
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
+              {rows.length > 0 && shown.length === 0 ? (
+                <EmptyState title="Nenhum contrato neste filtro" description="Mude a pesquisa ou o estado." />
+              ) : null}
+              {shown.length > 0 ? (
                 <ul className="grid gap-4 lg:grid-cols-2">
-                  {rows.map((row) => {
+                  {shown.map((row) => {
                     const property = getContractProperty(row);
                     return (
                       <li
@@ -234,7 +282,7 @@ export function ContractsHubClient() {
             <FlowNextSteps
               title="Depois do contrato"
               steps={[
-                { href: '/app', label: 'Preparar pagamento', primary: true },
+                { href: '/app', label: 'Voltar ao painel', primary: true },
                 { href: '/app/confianca', label: 'Rever Confiança' },
                 ...(canAdmin ? [{ href: '/app/admin', label: 'Administração' }] : []),
               ]}

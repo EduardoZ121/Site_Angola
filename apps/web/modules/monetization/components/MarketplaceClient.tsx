@@ -179,11 +179,10 @@ export function MarketplaceClient() {
             ) : null}
             {!isProviderMode && ready && ctx && !ctx.isProvider ? (
               <Link
-                href="/auth/onboarding/papeis"
-                className={cn(buttonVariants({ variant: 'secondary' }))}
-                title={copy.becomeProviderHint}
+                href="/app/servicos/tornar-se"
+                className={cn(buttonVariants({ variant: 'primary' }))}
               >
-                {copy.becomeProvider}
+                Registar a minha empresa
               </Link>
             ) : null}
             <Link href="/app/financeiro" className={cn(buttonVariants({ variant: 'ghost' }))}>

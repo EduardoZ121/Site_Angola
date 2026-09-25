@@ -22,7 +22,8 @@ export type RoleHomeCta = {
     | 'security'
     | 'kocc'
     | 'moderation'
-    | 'escalations';
+    | 'escalations'
+    | 'accountantDesk';
   primary?: boolean;
 };
 
@@ -211,6 +212,28 @@ export const ROLE_OPERATING_MATRIX: Record<ExperienceMode, RoleOperatingProfile>
     ],
     cockpitHint: 'Empresa → Pessoas → Operação → Financeiro → Segurança → KOCC → Auditoria',
   },
+  accountant: {
+    mission: 'Preparar o fecho mensal e organizar documentos. Não substitui a AGT nem o Founder.',
+    reportsTo: 'Founder / Owner',
+    mustDo: [
+      'Ler facturas, reembolsos e comissões',
+      'Preparar o fecho e anexar observações',
+      'Ler e comentar os documentos de aprovação',
+    ],
+    mustNot: [
+      'Mudar o Founder',
+      'Mudar Feature Flags',
+      'Apagar auditoria',
+      'Movimentar dinheiro',
+      'Alterar comissões',
+    ],
+    homeCtas: [
+      { href: '/app/contabilista', labelKey: 'accountantDesk', primary: true },
+      { href: '/app/aprovacoes', labelKey: 'trust' },
+      { href: '/app/financeiro', labelKey: 'contracts' },
+    ],
+    cockpitHint: 'Cockpit → Facturas → Documentos para o contabilista e o jurista',
+  },
 };
 
 export const ROLE_HOME_CTA_LABELS_PT: Record<RoleHomeCta['labelKey'], string> = {
@@ -228,6 +251,7 @@ export const ROLE_HOME_CTA_LABELS_PT: Record<RoleHomeCta['labelKey'], string> = 
   kocc: 'KOCC operacional',
   moderation: 'Utilizadores / Moderação',
   escalations: 'Escalações',
+  accountantDesk: 'Cockpit do contabilista',
 };
 
 export function operatingProfileFor(mode: ExperienceMode): RoleOperatingProfile {

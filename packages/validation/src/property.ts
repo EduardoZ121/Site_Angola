@@ -195,6 +195,14 @@ export const activatePropertySchema = z
     nearTransport: optionalBool,
     commissionSettlement: z.enum(COMMISSION_SETTLEMENTS).optional().nullable(),
     status: z.enum(PROPERTY_STATUSES).optional(),
+    notYetAvailable: z.boolean().optional(),
+    expectedAvailableOn: z
+      .string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, 'Indique a data como AAAA-MM-DD.')
+      .optional()
+      .or(z.literal('')),
+    availabilityNote: z.string().trim().max(300).optional().or(z.literal('')),
   })
   .superRefine((data, ctx) => {
     if (

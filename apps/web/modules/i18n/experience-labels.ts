@@ -13,6 +13,7 @@ const ROLE_NAME: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Administrador',
     super_administrator: 'Superadministrador',
     founder: 'Founder / Owner',
+    accountant: 'Contabilista',
   },
   en: {
     client: 'Client',
@@ -24,6 +25,7 @@ const ROLE_NAME: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Administrator',
     super_administrator: 'Super Administrator',
     founder: 'Founder / Owner',
+    accountant: 'Accountant',
   },
   fr: {
     client: 'Client',
@@ -35,6 +37,7 @@ const ROLE_NAME: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Administrateur',
     super_administrator: 'Superadministrateur',
     founder: 'Founder / Owner',
+    accountant: 'Comptable',
   },
   es: {
     client: 'Cliente',
@@ -46,6 +49,7 @@ const ROLE_NAME: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Administrador',
     super_administrator: 'Superadministrador',
     founder: 'Founder / Owner',
+    accountant: 'Contable',
   },
 };
 
@@ -61,6 +65,7 @@ const MODE_BADGE: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Modo Administrador',
     super_administrator: 'Modo Superadministrador',
     founder: 'Modo Founder / Owner',
+    accountant: 'Modo Contabilista',
   },
   en: {
     client: 'Client Mode',
@@ -72,6 +77,7 @@ const MODE_BADGE: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Administrator Mode',
     super_administrator: 'Super Administrator Mode',
     founder: 'Founder / Owner Mode',
+    accountant: 'Accountant Mode',
   },
   fr: {
     client: 'Mode Client',
@@ -83,6 +89,7 @@ const MODE_BADGE: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Mode Administrateur',
     super_administrator: 'Mode Superadministrateur',
     founder: 'Mode Founder / Owner',
+    accountant: 'Mode Comptable',
   },
   es: {
     client: 'Modo Cliente',
@@ -94,6 +101,7 @@ const MODE_BADGE: Record<AppLocale, Record<ExperienceMode, string>> = {
     administrator: 'Modo Administrador',
     super_administrator: 'Modo Superadministrador',
     founder: 'Modo Founder / Owner',
+    accountant: 'Modo Contable',
   },
 };
 

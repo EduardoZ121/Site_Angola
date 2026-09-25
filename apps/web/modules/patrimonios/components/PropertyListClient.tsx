@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Heading, Text, Badge, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { formatAoa } from '@/lib/format/aoa';
@@ -12,8 +12,10 @@ import { FlowNextSteps } from '@/modules/shell/components/FlowNextSteps';
 import { ForbiddenPanel } from '@/modules/shell/components/ForbiddenPanel';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { FutureAvailabilityNote } from './FutureAvailabilityNote';
 import { getPatrimoniosCopy } from '../content';
 import { listMyProperties, type PropertyRow } from '../services/properties-client';
+import { propertyCompleteness } from '../lib/property-completeness';
 import { PartnerLifecyclePanel } from './PartnerLifecyclePanel';
 
 export function PropertyListClient() {
@@ -29,6 +31,8 @@ export function PropertyListClient() {
   const [rows, setRows] = useState<PropertyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('');
 
   useEffect(() => {
     let cancelled = false;
@@ -59,6 +63,25 @@ export function PropertyListClient() {
       cancelled = true;
     };
   }, [canManage, sessionStatus]);
+
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return rows.filter((row) => {
+      if (status && row.status !== status) return false;
+      if (!q) return true;
+      return [row.title, row.code, row.city, row.province, row.property_type]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(q);
+    });
+  }, [query, rows, status]);
+
+  const statusCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of rows) counts.set(row.status, (counts.get(row.status) ?? 0) + 1);
+    return [...counts.entries()];
+  }, [rows]);
 
   const nextSteps = [
     ...(canHousing
@@ -95,6 +118,7 @@ export function PropertyListClient() {
             ) : null}
           </div>
         </header>
+        {canManage ? <FutureAvailabilityNote /> : null}
 
         {accessPending ? <SoftListSlot pending /> : null}
         {denied ? (
@@ -147,8 +171,51 @@ export function PropertyListClient() {
                   </h2>
                   <Text className="text-sm text-stone-700">{copy.listHint}</Text>
                 </div>
+                <div className="flex flex-col gap-2">
+                  <input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    placeholder="Procurar título, código ou cidade"
+                    aria-label="Procurar património"
+                    className="kuteka-ops-input w-full"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setStatus('')}
+                      className={cn(
+                        'rounded-kuteka border px-3 py-1.5 text-xs font-semibold',
+                        status === ''
+                          ? 'border-slate-900 bg-slate-900 text-white'
+                          : 'border-slate-300 bg-white text-slate-700',
+                      )}
+                    >
+                      Todos · {rows.length}
+                    </button>
+                    {statusCounts.map(([code, count]) => (
+                      <button
+                        key={code}
+                        type="button"
+                        onClick={() => setStatus(code)}
+                        className={cn(
+                          'rounded-kuteka border px-3 py-1.5 text-xs font-semibold',
+                          status === code
+                            ? 'border-slate-900 bg-slate-900 text-white'
+                            : 'border-slate-300 bg-white text-slate-700',
+                        )}
+                      >
+                        {copy.statuses[code as keyof typeof copy.statuses] ?? code} · {count}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                {shown.length === 0 ? (
+                  <p className="text-sm text-slate-600">Nenhum património neste filtro.</p>
+                ) : null}
                 <ul className="grid gap-4 sm:grid-cols-2">
-                  {rows.map((row) => (
+                  {shown.map((row) => {
+                    const completeness = propertyCompleteness(row);
+                    return (
                     <li key={row.id}>
                       <Link
                         href={`/app/patrimonios/detalhe?id=${row.id}`}
@@ -182,10 +249,21 @@ export function PropertyListClient() {
                             {row.province ? `, ${row.province}` : ''}
                           </p>
                           <p className="font-mono text-xs text-stone-600">{row.code}</p>
+                          {row.lifecycle_status === 'libertacao_prevista' ? (
+                            <p className="text-xs font-medium text-amber-900">
+                              Ainda não disponível
+                              {row.expected_available_on ? ` · ${row.expected_available_on}` : ''}
+                            </p>
+                          ) : null}
+                          <p className="text-xs font-semibold text-slate-600">
+                            {completeness.percent}% completo
+                            {completeness.missing.length > 0 ? ' · ainda há campos por preencher' : ''}
+                          </p>
                         </div>
                       </Link>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               </section>
             ) : null}

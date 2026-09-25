@@ -10,7 +10,7 @@ export const opsCopyEn: OpsCopy = {
   client: {
     eyebrow: 'Client · Residence',
     title: 'Housing management centre',
-    subtitle: 'Contract, payments, calendar, communications and exit intent.',
+    subtitle: 'Contract, payments and exit intent. Visit requests live under Housing.',
     daysRemaining: 'Days remaining',
     nextRent: 'Next rent',
     paymentsPaid: 'Payments made',
@@ -26,8 +26,8 @@ export const opsCopyEn: OpsCopy = {
     linkExplore: 'Explore',
     currentProperty: 'Current property',
     exitLabel: 'Exit',
-    calendarHint: 'Calendar: next payment {due} · renewal / inspections in the residence hub.',
-    empty: 'No active contract yet — explore housing or follow proposals.',
+    calendarHint: 'Next payment {due}. This is not a visit calendar.',
+    empty: 'No active contract yet. Explore housing. Visit requests are under Housing → Visits.',
   },
   partner: {
     eyebrow: 'Property Partner',
@@ -107,9 +107,9 @@ export const opsCopyEn: OpsCopy = {
   resident: {
     eyebrow: 'Client · Residence',
     title: 'Housing management',
-    subtitle: 'Current contract, payments, calendar, communications and exit intent.',
+    subtitle: 'Current contract, payments and exit intent. Visit requests are under Housing.',
     loading: 'Loading cockpit…',
-    noContractBody: 'You do not have an active contract yet. Explore housing or follow proposals.',
+    noContractBody: 'You do not have an active contract yet. Explore housing. Visit requests are under Housing → Visits.',
     exploreHousing: 'Explore Housing',
     contractTitle: 'Current contract',
     statusLabel: 'Status',

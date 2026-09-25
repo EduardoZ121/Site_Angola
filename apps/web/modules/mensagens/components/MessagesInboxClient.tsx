@@ -9,6 +9,8 @@ import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { SessionStatusGate } from '@/modules/shell/components/SessionStatusGate';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
+import { EXPERIENCE_LABELS } from '@/modules/shell/role-experience';
 import { getMensagensCopy } from '../content';
 import { canReleaseContacts, roleLabel } from '../lib/contact-policy';
 import {
@@ -54,6 +56,7 @@ export function MessagesInboxClient({
   const { locale } = useLocale();
   const copy = getMensagensCopy(locale);
   const { session, status: sessionStatus, error: sessionError } = useAppSession();
+  const { mode } = useRoleExperience();
 
   const [conversations, setConversations] = useState<ChatConversationSummary[]>([]);
   const [loadingList, setLoadingList] = useState(true);
@@ -405,6 +408,9 @@ export function MessagesInboxClient({
                   onSubmit={onSend}
                   className="flex flex-col gap-2 border-t border-slate-200 pt-3"
                 >
+                  <p className="text-xs text-slate-500">
+                    A escrever com o papel {EXPERIENCE_LABELS[mode]}. A caixa continua a ser da conta: ainda não há uma caixa separada por papel.
+                  </p>
                   <Textarea
                     value={composerValue}
                     onChange={(e) => setComposerValue(e.target.value)}

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Label, Text, Textarea } from '@kuteka/ui';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
+import { cn } from '@kuteka/shared';
 import { EmptyState } from '@/modules/shell/components/EmptyState';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
 import { getAdministracaoCopy } from '../content';
@@ -12,6 +13,14 @@ import {
   type ContentReportRow,
   type ContentReportStatus,
 } from '../services/governance-client';
+
+function statusLabel(status: string): string {
+  if (status === 'open') return 'Aberto';
+  if (status === 'reviewing') return 'Em análise';
+  if (status === 'resolved') return 'Resolvido';
+  if (status === 'dismissed') return 'Arquivado';
+  return status;
+}
 
 function localeTag(locale: string): string {
   return locale === 'en' ? 'en-GB' : `${locale}-PT`;
@@ -26,6 +35,8 @@ export function ModerationCenterPanel() {
   const [message, setMessage] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [notes, setNotes] = useState<Record<string, string>>({});
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState('');
 
   async function reload() {
     const result = await listContentReports(50);
@@ -58,6 +69,25 @@ export function ModerationCenterPanel() {
       cancelled = true;
     };
   }, []);
+
+  const shown = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return items.filter((row) => {
+      if (status && row.status !== status) return false;
+      if (!q) return true;
+      return [row.target_kind, row.target_id, row.reason_code, row.details, row.property_id]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(q);
+    });
+  }, [items, query, status]);
+
+  const statusCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of items) counts.set(row.status, (counts.get(row.status) ?? 0) + 1);
+    return [...counts.entries()];
+  }, [items]);
 
   async function onResolve(row: ContentReportRow, status: ContentReportStatus) {
     setBusyId(row.id);
@@ -104,8 +134,51 @@ export function ModerationCenterPanel() {
         ) : null}
 
         {items.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Procurar motivo, alvo ou detalhe"
+              aria-label="Procurar relatório de moderação"
+              className="kuteka-ops-input w-full"
+            />
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setStatus('')}
+                className={cn(
+                  'rounded-kuteka border px-3 py-1.5 text-xs font-semibold',
+                  status === '' ? 'border-slate-900 bg-slate-900 text-white' : 'border-slate-300 bg-white text-slate-700',
+                )}
+              >
+                Todos · {items.length}
+              </button>
+              {statusCounts.map(([code, count]) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setStatus(code)}
+                  className={cn(
+                    'rounded-kuteka border px-3 py-1.5 text-xs font-semibold',
+                    status === code
+                      ? 'border-slate-900 bg-slate-900 text-white'
+                      : 'border-slate-300 bg-white text-slate-700',
+                  )}
+                >
+                  {statusLabel(code)} · {count}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
+        {items.length > 0 && shown.length === 0 ? (
+          <p className="text-sm text-slate-500">Nenhum relatório neste filtro.</p>
+        ) : null}
+
+        {shown.length > 0 ? (
           <ul className="flex flex-col gap-3">
-            {items.map((row) => {
+            {shown.map((row) => {
               const busy = busyId === row.id;
               return (
                 <li
@@ -126,7 +199,7 @@ export function ModerationCenterPanel() {
                       </time>
                     </div>
                     <Badge variant="brand" className="w-fit">
-                      {row.status}
+                      {statusLabel(row.status)}
                     </Badge>
                   </div>
 

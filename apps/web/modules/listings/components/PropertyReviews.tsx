@@ -1,10 +1,16 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { createBrowserClient } from '@/lib/supabase/client';
 import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
+import {
+  acceptPropertyContract,
+  completePropertyContract,
+} from '@/modules/contratos/services/contracts-client';
+import { openingAllows } from '@/modules/kocc/lib/opening-settings';
 import { getListingsCopy, type ListingsCopy } from '../content';
 import type { ContractReviewRow } from '../types';
 
@@ -28,12 +34,15 @@ type EligibleContract = {
   id: string;
   code: string;
   status: string;
+  client_id?: string | null;
+  partner_id?: string | null;
+  agent_id?: string | null;
 };
 
 const SELECT_FULL =
-  'id, contract_id, property_id, reviewer_id, subject_kind, subject_user_id, rating, comment, dimensions, created_at, owner_reply, owner_replied_at, agent_reply, agent_replied_at';
+  'id, contract_id, property_id, reviewer_id, subject_kind, subject_user_id, rating, comment, dimensions, created_at, is_demo, owner_reply, owner_replied_at, agent_reply, agent_replied_at';
 const SELECT_CORE =
-  'id, contract_id, property_id, reviewer_id, subject_kind, subject_user_id, rating, comment, dimensions, created_at';
+  'id, contract_id, property_id, reviewer_id, subject_kind, subject_user_id, rating, comment, dimensions, created_at, is_demo';
 
 /**
  * Reputação Airbnb-style — estrelas, média, histórico e respostas.
@@ -52,6 +61,9 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
 
   const [rows, setRows] = useState<ContractReviewRow[]>([]);
   const [contracts, setContracts] = useState<EligibleContract[]>([]);
+  const [openContracts, setOpenContracts] = useState<EligibleContract[]>([]);
+  const [actorId, setActorId] = useState<string | null>(null);
+  const [movingId, setMovingId] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [contractId, setContractId] = useState('');
   const [subjectKind, setSubjectKind] = useState('property');
@@ -95,16 +107,18 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
           if (uid) {
             const { data: contractsData } = await client
               .from('property_contracts')
-              .select('id, code, status')
+              .select('id, code, status, client_id, partner_id, agent_id')
               .eq('property_id', propertyId)
-              .eq('status', 'completed')
               .is('deleted_at', null)
               .or(`client_id.eq.${uid},partner_id.eq.${uid},agent_id.eq.${uid}`)
               .limit(12);
             if (!cancelled) {
               const list = (contractsData as EligibleContract[]) ?? [];
-              setContracts(list);
-              if (list[0]) setContractId(list[0].id);
+              const done = list.filter((row) => row.status === 'completed');
+              setActorId(uid);
+              setContracts(done);
+              setOpenContracts(list.filter((row) => row.status !== 'completed' && row.status !== 'cancelled'));
+              if (done[0]) setContractId(done[0].id);
             }
           }
         }
@@ -129,6 +143,11 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
     setFormOk(null);
     if (!contractId) {
       setFormError(reviewsCopy.needContractError);
+      return;
+    }
+    const gate = await openingAllows('reviews_open');
+    if (!gate.ok) {
+      setFormError(gate.message);
       return;
     }
     setSubmitting(true);
@@ -168,6 +187,32 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
     setSubmitting(false);
   }
 
+  async function moveContract(id: string, kind: 'accept' | 'complete') {
+    setMovingId(id);
+    setFormError(null);
+    const result =
+      kind === 'accept'
+        ? await acceptPropertyContract({ contractId: id })
+        : await completePropertyContract({ contractId: id });
+    setMovingId(null);
+    if (!result.ok) {
+      setFormError(result.message);
+      return;
+    }
+    if (kind === 'complete') {
+      const row = openContracts.find((item) => item.id === id);
+      if (row) {
+        setContracts((prev) => [...prev, { ...row, status: 'completed' }]);
+        setContractId(id);
+      }
+      setOpenContracts((prev) => prev.filter((item) => item.id !== id));
+      return;
+    }
+    setOpenContracts((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, status: 'active' } : item)),
+    );
+  }
+
   async function submitReply(reviewId: string, kind: 'owner' | 'agent') {
     const text = replyDrafts[reviewId]?.trim();
     if (!text) return;
@@ -183,11 +228,15 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
     }
   }
 
+  const realRows = rows.filter((row) => !row.is_demo);
+  const demoRows = rows.filter((row) => row.is_demo);
   const avg =
-    rows.length > 0 ? rows.reduce((sum, row) => sum + Number(row.rating), 0) / rows.length : null;
+    realRows.length > 0
+      ? realRows.reduce((sum, row) => sum + Number(row.rating), 0) / realRows.length
+      : null;
 
   const bySubject = Object.keys(subjectLabels).map((key) => {
-    const subset = rows.filter((r) => r.subject_kind === key);
+    const subset = realRows.filter((r) => r.subject_kind === key);
     const mean =
       subset.length > 0 ? subset.reduce((s, r) => s + Number(r.rating), 0) / subset.length : null;
     return { key, label: subjectLabels[key], mean, count: subset.length };
@@ -212,12 +261,15 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
             <p className="kuteka-detail-meta mt-1">
               {reviewsCopy.averageTemplate
                 .replace('{avg}', avg.toFixed(1))
-                .replace('{count}', String(rows.length))}
+                .replace('{count}', String(realRows.length))}
             </p>
           </div>
         ) : null}
       </div>
 
+      {demoRows.length > 0 ? (
+        <p className="kuteka-detail-meta mt-3">{reviewsCopy.demoNote}</p>
+      ) : null}
       {bySubject.some((s) => s.count > 0) ? (
         <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {bySubject
@@ -244,7 +296,73 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
         >
           <h3 className="kuteka-detail-subtitle">{reviewsCopy.writeTitle}</h3>
           {contracts.length === 0 ? (
-            <p className="kuteka-detail-body">{reviewsCopy.unavailable}</p>
+            <div className="flex flex-col gap-3">
+              <p className="kuteka-detail-body">{reviewsCopy.unavailable}</p>
+              <p className="kuteka-detail-meta">{reviewsCopy.pathLead}</p>
+              {openContracts.map((row) => {
+                const canAccept =
+                  (row.status === 'pending_acceptance' || row.status === 'draft') &&
+                  (row.client_id === actorId || !!session?.permissions.includes('admin.panel'));
+                const canComplete =
+                  row.status === 'active' &&
+                  (row.partner_id === actorId ||
+                    row.agent_id === actorId ||
+                    !!session?.permissions.includes('admin.panel'));
+                return (
+                  <div key={row.id} className="flex flex-wrap items-center gap-2">
+                    <Link
+                      href={`/app/contratos/detalhe?id=${encodeURIComponent(row.id)}`}
+                      className="text-sm font-semibold text-brand-800 underline"
+                    >
+                      {row.code} ·{' '}
+                      {row.status === 'draft'
+                        ? reviewsCopy.statusDraft
+                        : row.status === 'pending_acceptance'
+                          ? reviewsCopy.statusPending
+                          : row.status === 'active'
+                            ? reviewsCopy.statusActive
+                            : row.status}
+                    </Link>
+                    {canAccept ? (
+                      <button
+                        type="button"
+                        className="kuteka-detail-chip kuteka-detail-chip--accent"
+                        disabled={movingId === row.id}
+                        onClick={() => void moveContract(row.id, 'accept')}
+                      >
+                        {reviewsCopy.acceptContract}
+                      </button>
+                    ) : null}
+                    {canComplete ? (
+                      <button
+                        type="button"
+                        className="kuteka-detail-chip kuteka-detail-chip--accent"
+                        disabled={movingId === row.id}
+                        onClick={() => void moveContract(row.id, 'complete')}
+                      >
+                        {reviewsCopy.completeContract}
+                      </button>
+                    ) : null}
+                  </div>
+                );
+              })}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={`/app/contratos/novo?imovel=${encodeURIComponent(propertyId)}`}
+                  className="text-sm font-semibold text-brand-800 underline"
+                >
+                  {reviewsCopy.prepareContract}
+                </Link>
+                <Link href="/app/contratos" className="text-sm font-semibold text-slate-700 underline">
+                  {reviewsCopy.seeContracts}
+                </Link>
+              </div>
+              {formError ? (
+                <p className="text-sm text-amber-900" role="alert">
+                  {formError}
+                </p>
+              ) : null}
+            </div>
           ) : (
             <>
               <div className="grid gap-3 sm:grid-cols-2">
@@ -347,8 +465,14 @@ export function PropertyReviews({ propertyId }: { propertyId: string }) {
                     <span className="kuteka-detail-chip kuteka-detail-chip--accent">
                       {subjectLabels[row.subject_kind] ?? row.subject_kind}
                     </span>
-                    <span className="kuteka-detail-chip">{reviewsCopy.reviewerVerifiedLabel}</span>
-                    <span className="kuteka-detail-chip">{reviewsCopy.contractConfirmedBadge}</span>
+                    {row.is_demo ? (
+                      <span className="kuteka-detail-chip">{reviewsCopy.demoBadge}</span>
+                    ) : (
+                      <>
+                        <span className="kuteka-detail-chip">{reviewsCopy.reviewerVerifiedLabel}</span>
+                        <span className="kuteka-detail-chip">{reviewsCopy.contractConfirmedBadge}</span>
+                      </>
+                    )}
                   </div>
                   <Stars rating={Number(row.rating)} ariaTemplate={reviewsCopy.starsAriaTemplate} />
                 </div>

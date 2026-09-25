@@ -32,6 +32,7 @@ export function ProviderCampaignsClient() {
     mode === 'super_administrator' ||
     Boolean(session?.permissions.includes('finance.manage'));
   const [rows, setRows] = useState<FinanceCampaignRow[]>([]);
+  const [listQuery, setListQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -87,6 +88,13 @@ export function ProviderCampaignsClient() {
     setMessage(row.active ? 'Campanha retirada.' : 'Campanha publicada na lista existente.');
     await load();
   }
+
+  const q = listQuery.trim().toLowerCase();
+  const shownRows = q
+    ? rows.filter((row) =>
+        [row.name, row.description, row.code].filter(Boolean).join(' ').toLowerCase().includes(q),
+      )
+    : rows;
 
   return (
     <SessionStatusGate status={status} error={sessionError}>
@@ -149,8 +157,20 @@ export function ProviderCampaignsClient() {
         )}
 
         <SoftListSlot pending={loading && rows.length === 0}>
+          {rows.length > 0 ? (
+            <input
+              value={listQuery}
+              onChange={(event) => setListQuery(event.target.value)}
+              placeholder="Procurar campanha"
+              aria-label="Procurar campanha"
+              className="kuteka-ops-input w-full"
+            />
+          ) : null}
+          {rows.length > 0 && shownRows.length === 0 ? (
+            <p className="text-sm text-slate-500">Nenhuma campanha neste filtro.</p>
+          ) : null}
           <ul className="divide-y divide-slate-200 rounded-kuteka border border-slate-200 bg-white px-4">
-            {rows.map((row) => (
+            {shownRows.map((row) => (
               <li key={row.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
                 <div>
                   <p className="font-medium text-slate-900">{row.name}</p>

@@ -11,7 +11,7 @@ export const opsCopyFr: OpsCopy = {
   client: {
     eyebrow: 'Client · Résidence',
     title: 'Centre de gestion du logement',
-    subtitle: 'Contrat, paiements, calendrier, communications et intention de départ.',
+    subtitle: 'Contrat, paiements et intention de départ. Les visites demandées sont dans Logement.',
     daysRemaining: 'Jours restants',
     nextRent: 'Prochain loyer',
     paymentsPaid: 'Paiements effectués',
@@ -27,9 +27,8 @@ export const opsCopyFr: OpsCopy = {
     linkExplore: 'Explorer',
     currentProperty: 'Bien actuel',
     exitLabel: 'Départ',
-    calendarHint:
-      'Calendrier : prochain paiement {due} · renouvellement / inspections dans le hub résidence.',
-    empty: 'Pas encore de contrat actif — explorez le logement ou suivez les propositions.',
+    calendarHint: 'Prochain paiement {due}. Ce n’est pas un calendrier de visites.',
+    empty: 'Pas encore de contrat actif. Explorez le logement. Les visites demandées sont dans Logement → Visites.',
   },
   partner: {
     eyebrow: 'Partenaire patrimonial',
@@ -110,10 +109,10 @@ export const opsCopyFr: OpsCopy = {
   resident: {
     eyebrow: 'Client · Résidence',
     title: 'Gestion du logement',
-    subtitle: 'Contrat actuel, paiements, calendrier, communications et intention de départ.',
+    subtitle: 'Contrat actuel, paiements et intention de départ. Les visites demandées sont dans Logement.',
     loading: 'Chargement du cockpit…',
     noContractBody:
-      'Vous n’avez pas encore de contrat actif. Explorez le logement ou suivez les propositions.',
+      'Vous n’avez pas encore de contrat actif. Explorez le logement. Les visites demandées sont dans Logement → Visites.',
     exploreHousing: 'Explorer l’habitat',
     contractTitle: 'Contrat actuel',
     statusLabel: 'État',

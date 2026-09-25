@@ -107,6 +107,7 @@ export function PublicationReviewQueue() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, ItemDraft>>({});
   const [bucket, setBucket] = useState<WorkBucket>('all');
+  const [query, setQuery] = useState('');
 
   async function reload() {
     const [queueResult, reasonsResult] = await Promise.all([listQueue(), listPendingReasons()]);
@@ -143,9 +144,25 @@ export function PublicationReviewQueue() {
   }, []);
 
   const filtered = useMemo(() => {
-    if (bucket === 'all') return items;
-    return items.filter((item) => bucketOf(item).includes(bucket));
-  }, [items, bucket]);
+    const base = bucket === 'all' ? items : items.filter((item) => bucketOf(item).includes(bucket));
+    const q = query.trim().toLowerCase();
+    if (!q) return base;
+    return base.filter((item) => {
+      const blob = [
+        item.title,
+        item.property_code,
+        item.city,
+        item.province,
+        item.owner_name,
+        item.property_id,
+        item.review_status,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      return blob.includes(q);
+    });
+  }, [items, bucket, query]);
 
   const bucketCounts = useMemo(() => {
     const counts: Record<WorkBucket, number> = {
@@ -285,6 +302,16 @@ export function PublicationReviewQueue() {
         ))}
       </div>
 
+      {items.length > 0 ? (
+        <input
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Procurar título, código, cidade ou parceiro"
+          aria-label="Procurar na fila de publicação"
+          className="kuteka-ops-input w-full"
+        />
+      ) : null}
+
       <SoftListSlot pending={loading && items.length === 0}>
         {message ? (
           <div className="rounded-kuteka border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-950">
@@ -297,8 +324,11 @@ export function PublicationReviewQueue() {
           </div>
         ) : null}
 
-        {!loading && filtered.length === 0 ? (
+        {!loading && items.length === 0 ? (
           <EmptyState title={copy.publicationQueueTitle} description={copy.emptyQueue} />
+        ) : null}
+        {!loading && items.length > 0 && filtered.length === 0 ? (
+          <EmptyState title="Nada neste filtro" description="Mude a pesquisa ou o estado da fila." />
         ) : null}
 
         {filtered.length > 0 ? (

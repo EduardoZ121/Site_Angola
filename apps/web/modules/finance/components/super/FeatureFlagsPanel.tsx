@@ -49,7 +49,11 @@ export function FeatureFlagsPanel({ canManage }: PanelProps) {
         >
           <ul className="divide-y divide-slate-200">
             {flags.map((f) => (
-              <li key={f.code} className="flex flex-wrap items-center justify-between gap-2 py-3">
+              <li
+                key={f.code}
+                className="flex flex-wrap items-center justify-between gap-2 py-3"
+                title={`${f.label}. ${f.description ?? ''} Estado: ${f.enabled ? 'ligado' : 'desligado'}. Se desligar, o módulo deixa de ser usado nas operações novas. Recomendação: não desligar o que já tem pagamentos ou contratos em curso.`}
+              >
                 <div>
                   <p className="font-medium text-slate-900">{f.label}</p>
                   <p className="text-sm text-slate-600">{f.description}</p>

@@ -45,6 +45,7 @@ export function AssistenciaClient() {
   const common = getMonetizationCopy(locale).common;
   const dateLocale = LOCALE_INTL_TAG[locale];
   const [rows, setRows] = useState<AssistenciaRequestDetail[]>([]);
+  const [listQuery, setListQuery] = useState('');
   const [events, setEvents] = useState<Record<string, AssistenciaEvent[]>>({});
   const [openTimeline, setOpenTimeline] = useState<string | null>(null);
   const [uid, setUid] = useState<string | null>(null);
@@ -125,6 +126,17 @@ export function AssistenciaClient() {
       else setError(result.message);
     }
   }
+
+  const q = listQuery.trim().toLowerCase();
+  const shownRows = q
+    ? rows.filter((row) =>
+        [row.category, row.urgency, row.status, row.notes, row.operator_notes, row.failure_reason]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(q),
+      )
+    : rows;
 
   return (
     <SessionStatusGate status={sessionStatus} error={sessionError}>
@@ -223,8 +235,20 @@ export function AssistenciaClient() {
               <h2 className="kuteka-detail-title">{copy.requestsTitle}</h2>
               {canOperate ? <Badge variant="default">{copy.operatorBadge}</Badge> : null}
             </div>
+            {rows.length > 0 ? (
+              <input
+                value={listQuery}
+                onChange={(event) => setListQuery(event.target.value)}
+                placeholder="Procurar categoria, nota ou estado"
+                aria-label="Procurar assistência"
+                className="kuteka-ops-input mt-3 w-full"
+              />
+            ) : null}
+            {rows.length > 0 && shownRows.length === 0 ? (
+              <p className="mt-2 text-sm text-slate-500">Nenhum pedido neste filtro.</p>
+            ) : null}
             <ul className="mt-3 divide-y divide-slate-200">
-              {rows.map((row) => {
+              {shownRows.map((row) => {
                 const owned = row.client_id === uid;
                 const busy = busyId === row.id;
                 return (

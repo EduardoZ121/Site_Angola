@@ -41,7 +41,7 @@ export const agenteCopyEn: AgenteCopy = {
   detailTitle: 'Property for follow-up',
   openDetail: 'Open listing',
   mvpNote:
-    'Focus on coverage and follow-ups. Visits, proposals and the Academy will be introduced in later phases.',
+    'Visit requests are already in this area, under Visits. Proposals and the Academy are not separate screens yet.',
   viewHousingInventory: 'View inventory',
   activateAgentAdmin: 'Activate agent (Admin)',
   leadsTitle: 'Interest leads',

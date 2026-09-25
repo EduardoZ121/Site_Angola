@@ -1,8 +1,10 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Heading, Text } from '@kuteka/ui';
+import { createBrowserClient } from '@/lib/supabase/client';
 import { SoftListSlot } from '@/modules/shell/components/SoftListSlot';
+import { useAppSession } from '@/modules/authentication/components/app-session';
 import { useRoleExperience } from '@/modules/shell/components/RoleExperienceProvider';
 import {
   ESCALATION_PRIORITY_LABELS,
@@ -28,6 +30,20 @@ function targetsForMode(mode: string): EscalationTarget[] {
   return ['administrator', 'super_administrator', 'founder'];
 }
 
+function statusLabel(status: string, notes?: string | null): string {
+  if (status === 'cancelled' && notes?.includes('Cargo recusado')) return 'Recusada';
+  if (status === 'cancelled' && notes?.includes('Anulada')) return 'Anulada';
+  if (status === 'open') return 'Aberta';
+  if (status === 'acknowledged') return 'Cargo aceite';
+  if (status === 'resolved') return 'Resolvida';
+  if (status === 'cancelled') return 'Cancelada';
+  return status;
+}
+
+function holdsTarget(roles: string[], target: EscalationTarget): boolean {
+  return roles.includes(target);
+}
+
 function dueLabel(dueAt: string | null): string {
   if (!dueAt) return 'Sem prazo';
   const ms = new Date(dueAt).getTime() - Date.now();
@@ -49,7 +65,11 @@ type EscalationPanelProps = {
  */
 export function EscalationPanel({ propertyId, reviewId, compact }: EscalationPanelProps) {
   const { mode } = useRoleExperience();
+  const { session } = useAppSession();
+  const [userId, setUserId] = useState<string | null>(null);
   const [rows, setRows] = useState<OperationalEscalation[]>([]);
+  const [listQuery, setListQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -76,8 +96,32 @@ export function EscalationPanel({ propertyId, reviewId, compact }: EscalationPan
   }, [reload]);
 
   useEffect(() => {
+    const client = createBrowserClient();
+    void client.auth.getUser().then(({ data }) => setUserId(data.user?.id ?? null));
+  }, []);
+
+  useEffect(() => {
     setTarget(defaultTarget(mode));
   }, [mode]);
+
+  const shown = useMemo(() => {
+    const q = listQuery.trim().toLowerCase();
+    return rows.filter((row) => {
+      if (statusFilter && row.status !== statusFilter) return false;
+      if (!q) return true;
+      return [row.reason, row.created_by_role, row.created_by_name, row.property_title, row.status, statusLabel(row.status)]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(q);
+    });
+  }, [listQuery, rows, statusFilter]);
+
+  const statusCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of rows) counts.set(row.status, (counts.get(row.status) ?? 0) + 1);
+    return [...counts.entries()];
+  }, [rows]);
 
   async function onCreate() {
     setBusy(true);
@@ -101,25 +145,32 @@ export function EscalationPanel({ propertyId, reviewId, compact }: EscalationPan
     await reload();
   }
 
-  async function onResolve(id: string, status: 'acknowledged' | 'resolved' | 'cancelled') {
+  async function onResolve(
+    id: string,
+    status: 'acknowledged' | 'resolved' | 'cancelled',
+    resolutionNotes: string,
+  ) {
     setBusy(true);
     setError(null);
     const result = await resolveOperationalEscalation({
       escalationId: id,
       status,
-      resolutionNotes:
-        status === 'acknowledged'
-          ? 'Assumida pelo responsável'
-          : status === 'resolved'
-            ? 'Resolvida na operação'
-            : 'Cancelada',
+      resolutionNotes,
     });
     setBusy(false);
     if (!result.ok) {
       setError(result.message);
       return;
     }
-    setMessage(`Escalação marcada como ${status}.`);
+    setMessage(
+      status === 'acknowledged'
+        ? 'Cargo aceite. O caso fica consigo.'
+        : resolutionNotes.includes('Cargo recusado')
+          ? 'Cargo recusado. Quem abriu vê a recusa.'
+          : resolutionNotes.includes('Anulada')
+            ? 'Escalação anulada.'
+            : 'Escalação resolvida.',
+    );
     await reload();
   }
 
@@ -137,8 +188,7 @@ export function EscalationPanel({ propertyId, reviewId, compact }: EscalationPan
           Escalações operacionais
         </Heading>
         <Text className="mt-1 text-sm text-slate-600">
-          Supervisor → Admin → Super Admin → Founder · motivo, prioridade, prazo, estado e
-          auditoria. Abertas: {openCount}.
+          Supervisor → Admin → Super Admin → Founder. Quem tem o cargo de destino pode aceitar ou recusar o caso. Aceitar não muda o papel da conta. Abertas: {openCount}.
         </Text>
       </div>
 
@@ -218,8 +268,33 @@ export function EscalationPanel({ propertyId, reviewId, compact }: EscalationPan
       </div>
 
       <SoftListSlot pending={loading}>
+        <p className="text-xs text-slate-500">Últimas 40 escalações visíveis. O prazo é o que já está gravado.</p>
+        {rows.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <input
+              value={listQuery}
+              onChange={(event) => setListQuery(event.target.value)}
+              placeholder="Procurar motivo, pessoa ou imóvel"
+              aria-label="Procurar escalação"
+              className="kuteka-ops-input w-full"
+            />
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={() => setStatusFilter('')} className={statusFilter === '' ? 'rounded-kuteka border border-slate-900 bg-slate-900 px-3 py-1 text-xs font-semibold text-white' : 'rounded-kuteka border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700'}>
+                Todas · {rows.length}
+              </button>
+              {statusCounts.map(([code, count]) => (
+                <button key={code} type="button" onClick={() => setStatusFilter(code)} className={statusFilter === code ? 'rounded-kuteka border border-slate-900 bg-slate-900 px-3 py-1 text-xs font-semibold text-white' : 'rounded-kuteka border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-700'}>
+                  {statusLabel(code)} · {count}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+        {rows.length > 0 && shown.length === 0 ? (
+          <p className="text-sm text-slate-500">Nenhuma escalação neste filtro.</p>
+        ) : null}
         <ul className="flex flex-col gap-2">
-          {rows.map((row) => (
+          {shown.map((row) => (
             <li
               key={row.id}
               className="flex flex-col gap-2 rounded-kuteka border border-slate-200 bg-white px-4 py-3"
@@ -242,42 +317,69 @@ export function EscalationPanel({ propertyId, reviewId, compact }: EscalationPan
                     {ESCALATION_PRIORITY_LABELS[row.priority]}
                   </Badge>
                   <Badge variant={row.status === 'open' ? 'warning' : 'success'}>
-                    {row.status}
+                    {statusLabel(row.status, row.resolution_notes)}
                   </Badge>
                 </div>
               </div>
-              {(row.status === 'open' || row.status === 'acknowledged') && (
+              {row.resolution_notes ? (
+                <p className="text-xs text-slate-600">{row.resolution_notes}</p>
+              ) : null}
+              {(row.status === 'open' || row.status === 'acknowledged') && userId ? (
                 <div className="flex flex-wrap gap-2">
-                  {row.status === 'open' ? (
+                  {row.status === 'open' &&
+                  holdsTarget(session?.roles ?? [], row.target_level) &&
+                  row.created_by !== userId ? (
+                    <>
+                      <Button
+                        type="button"
+                        size="sm"
+                        disabled={busy}
+                        onClick={() =>
+                          void onResolve(row.id, 'acknowledged', 'Cargo aceite. A pessoa escalada assume o caso.')
+                        }
+                      >
+                        Aceitar o cargo
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="secondary"
+                        disabled={busy}
+                        onClick={() =>
+                          void onResolve(
+                            row.id,
+                            'cancelled',
+                            'Cargo recusado. A escalação volta a quem a abriu.',
+                          )
+                        }
+                      >
+                        Recusar o cargo
+                      </Button>
+                    </>
+                  ) : null}
+                  {row.status === 'acknowledged' ? (
                     <Button
                       type="button"
                       size="sm"
-                      variant="secondary"
                       disabled={busy}
-                      onClick={() => void onResolve(row.id, 'acknowledged')}
+                      onClick={() => void onResolve(row.id, 'resolved', 'Resolvida na operação')}
                     >
-                      Assumir
+                      Resolver
                     </Button>
                   ) : null}
-                  <Button
-                    type="button"
-                    size="sm"
-                    disabled={busy}
-                    onClick={() => void onResolve(row.id, 'resolved')}
-                  >
-                    Resolver
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="ghost"
-                    disabled={busy}
-                    onClick={() => void onResolve(row.id, 'cancelled')}
-                  >
-                    Cancelar
-                  </Button>
+                  {row.status === 'open' && row.created_by === userId ? (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      disabled={busy}
+                      onClick={() => void onResolve(row.id, 'cancelled', 'Anulada por quem abriu.')}
+                    >
+                      Anular
+                    </Button>
+                  ) : null}
                 </div>
-              )}
+              ) : null}
             </li>
           ))}
           {!loading && rows.length === 0 ? (

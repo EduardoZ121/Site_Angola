@@ -41,7 +41,7 @@ export const agenteCopyPt = {
   detailTitle: 'Património para acompanhamento',
   openDetail: 'Abrir ficha',
   mvpNote:
-    'Foque-se em cobertura e acompanhamentos. Visitas, propostas e Academia serão introduzidas em fases seguintes.',
+    'Os pedidos de visita já estão nesta área, em Visitas. Proposta e Academia ainda não existem como ecrã próprio.',
   viewHousingInventory: 'Ver inventário',
   activateAgentAdmin: 'Activar agente (Admin)',
   leadsTitle: 'Leads de interesse',

@@ -43,7 +43,7 @@ export const agenteCopyFr: AgenteCopy = {
   detailTitle: 'Patrimoine à suivre',
   openDetail: 'Ouvrir la fiche',
   mvpNote:
-    'Concentrez-vous sur la couverture et les suivis. Les visites, propositions et l’Académie seront introduites dans les phases suivantes.',
+    'Les demandes de visite sont déjà dans cet espace, sous Visites. Proposition et Académie ne sont pas encore des écrans à part.',
   viewHousingInventory: 'Voir l’inventaire',
   activateAgentAdmin: 'Activer l’agent (Admin)',
   leadsTitle: 'Leads d’intérêt',

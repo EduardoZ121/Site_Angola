@@ -5,7 +5,8 @@ describe('role notifications', () => {
   it('returns client notifications with unread count', () => {
     const items = notificationsForMode('client', 'pt');
     expect(items.length).toBeGreaterThanOrEqual(5);
-    expect(unreadCount(items)).toBe(items.length);
+    expect(unreadCount(items)).toBe(items.filter((item) => item.status === 'unread').length);
+    expect(items.some((item) => item.status === 'action')).toBe(true);
     expect(items.some((i) => i.title.includes('imóveis'))).toBe(true);
   });
 

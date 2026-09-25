@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Badge, Button, Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { useAppSession } from '@/modules/authentication/components/app-session';
@@ -23,7 +23,7 @@ const TODAY = [
   { href: '/app/servicos', label: 'Pedidos e serviços' },
   { href: '/app/mensagens', label: 'Mensagens' },
   { href: '/app/servicos/campanhas', label: 'Campanhas' },
-  { href: '/app/financeiro', label: 'Saldo e comissões' },
+  { href: '/app/financeiro', label: 'Financeiro (leitura)' },
   { href: '/app/servicos/encontrar', label: 'A minha ficha pública' },
 ];
 
@@ -37,6 +37,7 @@ export function ProviderAreaClient() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -75,6 +76,18 @@ export function ProviderAreaClient() {
   }
 
   const pending = queue.filter((row) => !row.active);
+  const shownQueue = useMemo(() => {
+    const base = pending.length > 0 ? pending : queue;
+    const q = query.trim().toLowerCase();
+    if (!q) return base;
+    return base.filter((row) =>
+      [row.business_name, providerCategoryLabel(row.category), row.phone]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+        .includes(q),
+    );
+  }, [pending, query, queue]);
 
   return (
     <SessionStatusGate status={status} error={sessionError}>
@@ -85,7 +98,7 @@ export function ProviderAreaClient() {
           <Text className="mt-1 text-slate-700">
             {isProvider
               ? `Hoje tem ${inboxCount} pedido(s) na caixa. O pagamento continua no Kuteka Pay de teste.`
-              : 'Se ainda não é prestador, envie o pedido. O Founder aprova aqui, sem criar outra rede.'}
+              : 'O pedido de empresa fica pendente até um Administrador, o Super Admin ou um Founder o activar. Não precisa de ser o Owner.'}
           </Text>
           <div className="mt-4">
             <ProviderNetworkNav current="/app/servicos/area" />
@@ -113,13 +126,22 @@ export function ProviderAreaClient() {
         {canManage ? (
           <SoftListSlot pending={loading}>
             <section className="kuteka-detail-panel p-5">
-              <h2 className="text-sm font-semibold text-slate-900">Aprovação do Founder</h2>
+              <h2 className="text-sm font-semibold text-slate-900">Aprovar empresas</h2>
               <p className="mt-1 text-sm text-slate-600">
-                Pendente não é público. Activo aparece em Encontrar prestador. Suspender tira a ficha da lista.
+                Pendente não é público. Administrador, Super Admin ou Founder podem activar. O Owner não é obrigatório.
                 Não há estado “rejeitado” separado: isso exigiria uma coluna nova.
               </p>
+              {queue.length > 0 ? (
+                <input
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="Procurar nome ou categoria"
+                  aria-label="Procurar na fila de prestadores"
+                  className="kuteka-ops-input mt-3 w-full"
+                />
+              ) : null}
               <ul className="mt-3 divide-y divide-slate-200">
-                {(pending.length > 0 ? pending : queue).map((row) => (
+                {shownQueue.map((row) => (
                   <li key={row.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
                     <div>
                       <p className="font-medium text-slate-900">{row.business_name}</p>
@@ -142,6 +164,9 @@ export function ProviderAreaClient() {
                   </li>
                 ))}
                 {queue.length === 0 ? <li className="py-3 text-sm text-slate-600">Sem prestadores visíveis para esta conta.</li> : null}
+                {queue.length > 0 && shownQueue.length === 0 ? (
+                  <li className="py-3 text-sm text-slate-600">Nenhum prestador neste filtro.</li>
+                ) : null}
               </ul>
             </section>
           </SoftListSlot>

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Heading, Text, buttonVariants } from '@kuteka/ui';
 import { cn } from '@kuteka/shared';
 import { createBrowserClient } from '@/lib/supabase/client';
@@ -10,7 +10,9 @@ import { useLocale } from '@/modules/i18n/LocaleProvider';
 import { LOCALE_INTL_TAG } from '@/modules/i18n/types';
 import { ResidentOpsClient } from '@/modules/ops/components/ResidentOpsClient';
 import { getHabitacaoCopy } from '../content';
+import { visitRequestState } from '../lib/visit-request';
 import { PreferencesForm } from './PreferencesForm';
+import { cancelMyVisitRequest } from '../services/housing-client';
 
 type InterestRow = {
   id: string;
@@ -31,6 +33,7 @@ export function ClientHubClient() {
   const vista = params?.get('vista') || 'preferencias';
   const [interests, setInterests] = useState<InterestRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [cancelId, setCancelId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -64,6 +67,25 @@ export function ClientHubClient() {
     };
   }, []);
 
+  const searchSince = useMemo(() => {
+    if (interests.length === 0) return null;
+    return interests.reduce((oldest, row) => (row.created_at < oldest ? row.created_at : oldest), interests[0]!.created_at);
+  }, [interests]);
+  const searchDays = searchSince
+    ? Math.max(0, Math.floor((Date.now() - new Date(searchSince).getTime()) / 86_400_000))
+    : null;
+  const shown = vista === 'visitas'
+    ? interests.filter((row) => visitRequestState(row.notes) !== 'none')
+    : interests;
+
+  function interestStatus(status: string): string {
+    if (status === 'submitted') return 'Enviado';
+    if (status === 'reviewing') return 'Em análise';
+    if (status === 'assigned') return 'Atribuído';
+    if (status === 'closed') return 'Fechado';
+    return status;
+  }
+
   return (
     <div className="flex flex-col gap-5">
       <header className="kuteka-detail-panel flex flex-col gap-3 p-5 sm:flex-row sm:items-end sm:justify-between">
@@ -79,6 +101,25 @@ export function ClientHubClient() {
           {copy.explore}
         </Link>
       </header>
+
+      <section className="kuteka-detail-panel p-5">
+        <h2 className="text-sm font-semibold text-slate-900">Tempo de procura</h2>
+        {loading ? <p className="mt-1 text-sm text-slate-600">{copy.hub.loading}</p> : null}
+        {!loading && !searchSince ? (
+          <p className="mt-1 text-sm text-slate-600">
+            Ainda sem interesses registados. A data só aparece quando existir um pedido real.
+          </p>
+        ) : null}
+        {!loading && searchSince ? (
+          <p className="mt-1 text-sm text-slate-700">
+            Interesse mais antigo visível: {new Date(searchSince).toLocaleDateString(LOCALE_INTL_TAG[locale])}
+            {searchDays != null ? ` · ${searchDays} dia(s).` : '.'} Não há elevação automática para assistência prioritária. Essa regra comercial ainda não está activa.
+          </p>
+        ) : null}
+        <Link href="/app/habitacao/explorar" className="mt-2 inline-block text-sm font-semibold text-brand-700 underline">
+          Ver oportunidades
+        </Link>
+      </section>
 
       <nav
         className="kuteka-detail-panel flex flex-wrap gap-2 px-4 py-3"
@@ -120,12 +161,18 @@ export function ClientHubClient() {
             {vista === 'visitas' ? copy.hub.visits.title : copy.hub.favorites.title}
           </h2>
           <p className="kuteka-detail-meta mt-1">
-            {vista === 'visitas' ? copy.hub.visits.description : copy.hub.favorites.description}
+            {vista === 'visitas'
+              ? 'Só aparecem os pedidos em que indicou um dia. Aceite significa que o agente viu o pedido. A hora exacta combina-se por mensagem.'
+              : copy.hub.favorites.description}
           </p>
           {loading ? <p className="kuteka-detail-meta mt-4">{copy.hub.loading}</p> : null}
-          {!loading && interests.length === 0 ? (
+          {!loading && shown.length === 0 ? (
             <div className="mt-4 flex flex-col gap-3">
-              <p className="kuteka-detail-body">{copy.hub.emptyInterests}</p>
+              <p className="kuteka-detail-body">
+                {vista === 'visitas'
+                  ? 'Ainda não pediu visita. Abra a ficha de um imóvel e indique o dia.'
+                  : copy.hub.emptyInterests}
+              </p>
               <Link
                 href="/app/habitacao/explorar"
                 className={cn(buttonVariants({ variant: 'primary', size: 'sm' }), 'w-fit')}
@@ -134,9 +181,9 @@ export function ClientHubClient() {
               </Link>
             </div>
           ) : null}
-          {interests.length > 0 ? (
+          {shown.length > 0 ? (
             <ul className="mt-4 flex flex-col gap-3">
-              {interests.map((row) => (
+              {shown.map((row) => (
                 <li key={row.id} className="kuteka-detail-review">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
@@ -149,9 +196,39 @@ export function ClientHubClient() {
                       </p>
                     </div>
                     <span className="kuteka-detail-chip kuteka-detail-chip--accent">
-                      {row.status}
+                      {interestStatus(row.status)}
                     </span>
                   </div>
+                  {row.notes ? <p className="mt-2 text-sm text-slate-700">{row.notes}</p> : null}
+                  {visitRequestState(row.notes) === 'accepted' ? (
+                    <p className="mt-1 text-xs font-medium text-emerald-800">O agente aceitou o pedido.</p>
+                  ) : null}
+                  {visitRequestState(row.notes) === 'cancelled' ? (
+                    <p className="mt-1 text-xs font-medium text-slate-500">Pedido cancelado por si.</p>
+                  ) : null}
+                  {vista === 'visitas' && visitRequestState(row.notes) === 'requested' ? (
+                    <button
+                      type="button"
+                      className="mt-2 text-sm font-semibold text-slate-700 underline"
+                      disabled={cancelId === row.id}
+                      onClick={() => {
+                        setCancelId(row.id);
+                        void cancelMyVisitRequest(row.property_id).then((result) => {
+                          setCancelId(null);
+                          if (!result.ok) return;
+                          setInterests((prev) =>
+                            prev.map((item) =>
+                              item.id === row.id
+                                ? { ...item, notes: 'Pedido de visita cancelado pelo cliente.' }
+                                : item,
+                            ),
+                          );
+                        });
+                      }}
+                    >
+                      {cancelId === row.id ? 'A cancelar…' : 'Cancelar pedido'}
+                    </button>
+                  ) : null}
                   <p className="kuteka-detail-meta mt-2">
                     {new Date(row.created_at).toLocaleDateString(LOCALE_INTL_TAG[locale])}
                   </p>

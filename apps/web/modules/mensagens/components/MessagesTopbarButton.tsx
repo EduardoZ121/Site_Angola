@@ -12,6 +12,7 @@ import {
   unreadTotal,
   type ChatConversationSummary,
 } from '../services/chat-client';
+import { isInsidePopover, ViewportPopover } from '@/modules/shell/components/ViewportPopover';
 
 /** Topbar entry point for Kuteka Chat — icon + unread badge + preview dropdown. */
 export function MessagesTopbarButton() {
@@ -57,7 +58,9 @@ export function MessagesTopbarButton() {
   useEffect(() => {
     if (!open) return;
     const onPointer = (event: MouseEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+      const target = event.target;
+      if (rootRef.current?.contains(target as Node) || isInsidePopover(target)) return;
+      setOpen(false);
     };
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setOpen(false);
@@ -102,7 +105,7 @@ export function MessagesTopbarButton() {
       </button>
 
       {open ? (
-        <div id={panelId} className="kuteka-account-panel kuteka-notif-panel" role="dialog">
+        <ViewportPopover open={open} anchorRef={rootRef} id={panelId} label={copy.topbar.title}>
           <div className="kuteka-account-panel__head">
             <p className="kuteka-account-panel__title">{copy.topbar.title}</p>
             <p className="kuteka-account-panel__meta">
@@ -145,7 +148,7 @@ export function MessagesTopbarButton() {
               {copy.topbar.viewAll}
             </Link>
           </div>
-        </div>
+        </ViewportPopover>
       ) : null}
     </div>
   );

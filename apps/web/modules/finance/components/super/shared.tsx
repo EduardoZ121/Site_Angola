@@ -1,18 +1,47 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, type ReactNode } from 'react';
 
 export type PanelProps = {
   canManage: boolean;
 };
 
-export function Metric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-kuteka border border-slate-200 bg-slate-50 px-4 py-3">
+export function Metric({
+  label,
+  value,
+  href,
+  onOpen,
+}: {
+  label: string;
+  value: string;
+  href?: string;
+  onOpen?: () => void;
+}) {
+  const body = (
+    <>
       <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
       <p className="mt-1 text-xl font-semibold tabular-nums text-slate-900">{value}</p>
-    </div>
+      {href || onOpen ? <p className="mt-2 text-xs font-semibold text-[#08263f]">Abrir tratamento</p> : null}
+    </>
   );
+  const className =
+    'rounded-kuteka border border-slate-200 bg-slate-50 px-4 py-3 text-left transition hover:border-slate-900';
+  if (onOpen) {
+    return (
+      <button type="button" onClick={onOpen} className={`${className} w-full`}>
+        {body}
+      </button>
+    );
+  }
+  if (href) {
+    return (
+      <Link href={href} className={`${className} block`}>
+        {body}
+      </Link>
+    );
+  }
+  return <div className="rounded-kuteka border border-slate-200 bg-slate-50 px-4 py-3">{body}</div>;
 }
 
 export function PanelSection({

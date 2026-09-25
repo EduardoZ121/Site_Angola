@@ -10,7 +10,7 @@ export const opsCopyPt = {
   client: {
     eyebrow: 'Cliente · Residência',
     title: 'Centro de gestão da habitação',
-    subtitle: 'Contrato, pagamentos, calendário, comunicações e intenção de saída.',
+    subtitle: 'Contrato, pagamentos e intenção de saída. As visitas pedidas estão em Habitação.',
     daysRemaining: 'Dias restantes',
     nextRent: 'Próxima renda',
     paymentsPaid: 'Pagamentos feitos',
@@ -26,9 +26,8 @@ export const opsCopyPt = {
     linkExplore: 'Explorar',
     currentProperty: 'Imóvel actual',
     exitLabel: 'Saída',
-    calendarHint:
-      'Calendário: próximo pagamento {due} · renovação / inspeções no hub de residência.',
-    empty: 'Ainda sem contrato activo — explore habitação ou acompanhe propostas.',
+    calendarHint: 'Próximo pagamento {due}. Isto não é um calendário de visitas.',
+    empty: 'Ainda sem contrato activo. Explore habitação. Os pedidos de visita estão em Habitação → Visitas.',
   },
   partner: {
     eyebrow: 'Parceiro Patrimonial',
@@ -108,9 +107,9 @@ export const opsCopyPt = {
   resident: {
     eyebrow: 'Cliente · Residência',
     title: 'Gestão da habitação',
-    subtitle: 'Contrato actual, pagamentos, calendário, comunicações e intenção de saída.',
+    subtitle: 'Contrato actual, pagamentos e intenção de saída. As visitas pedidas estão em Habitação.',
     loading: 'A carregar cockpit…',
-    noContractBody: 'Ainda não tem um contrato activo. Explore habitação ou acompanhe propostas.',
+    noContractBody: 'Ainda não tem um contrato activo. Explore habitação. Os pedidos de visita estão em Habitação → Visitas.',
     exploreHousing: 'Explorar Habitação',
     contractTitle: 'Contrato actual',
     statusLabel: 'Estado',

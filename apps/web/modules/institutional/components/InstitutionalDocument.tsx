@@ -178,6 +178,17 @@ function BlockView({ block }: { block: MdBlock }) {
   }
 }
 
+export function MarkdownArticle({ markdown }: { markdown: string }) {
+  const blocks = parseMarkdownDocument(markdown).filter((block) => block.type !== 'h1');
+  return (
+    <article>
+      {blocks.map((block, i) => (
+        <BlockView key={i} block={block} />
+      ))}
+    </article>
+  );
+}
+
 export function InstitutionalDocument({
   title,
   subtitle,

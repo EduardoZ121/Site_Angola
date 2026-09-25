@@ -10,6 +10,7 @@ import {
   status,
   type KutekaPayIntentResult,
 } from '../services/kuteka-pay-client';
+import { openingAllows } from '@/modules/kocc/lib/opening-settings';
 
 /**
  * useKutekaPay — hook partilhado para qualquer módulo iniciar pagamentos via o
@@ -22,6 +23,11 @@ export function useKutekaPay() {
   const [lastIntent, setLastIntent] = useState<KutekaPayIntentResult | null>(null);
 
   const start = useCallback(async (input: KutekaPayCreateIntentInput) => {
+    const gate = await openingAllows('payments_open');
+    if (!gate.ok) {
+      setError(gate.message);
+      return gate;
+    }
     setBusy(true);
     setError(null);
     const res = await createIntent(input);
@@ -35,6 +41,11 @@ export function useKutekaPay() {
   }, []);
 
   const settle = useCallback(async (input: KutekaPayCreateIntentInput) => {
+    const gate = await openingAllows('payments_open');
+    if (!gate.ok) {
+      setError(gate.message);
+      return gate;
+    }
     setBusy(true);
     setError(null);
     const res = await createAndSettle(input);
